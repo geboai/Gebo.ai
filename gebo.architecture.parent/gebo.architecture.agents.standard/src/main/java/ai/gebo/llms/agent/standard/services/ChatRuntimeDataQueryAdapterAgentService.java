@@ -124,7 +124,8 @@ public class ChatRuntimeDataQueryAdapterAgentService
 				: null;
 		final List<AgentsExchangeMessage<String>> out = new ArrayList<>();
 		for (String target : targets) {
-			out.add(new AgentsExchangeMessage<String>(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT,
+			// a forwarder: the query is delivered to each target as its input
+			out.add(new AgentsExchangeMessage<String>(session.getId(), getProducedMessageSemantic(),
 					contextAgentPersona.getNetworkAgentName(), agentRole, target, query, 1));
 		}
 		if (LOGGER.isDebugEnabled()) {

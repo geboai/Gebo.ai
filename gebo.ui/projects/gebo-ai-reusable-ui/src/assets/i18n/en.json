@@ -256,13 +256,6 @@
         "summary": "Gebo.ai setup is missing some mandatory step",
         "detail": "Please review the red steps of the setup process"
       },
-      "agentSetupSection": {
-        "label": "Configure Agent Services",
-        "description": "Configure Agent Services and their available tools"
-      },
-      "AgentAddBtn": {
-        "label": "Add agent"
-      },
       "MainPanel": {
         "label": "Setup Agents"
       },
@@ -271,9 +264,6 @@
       },
       "DescriptionHeader": {
         "label": "Description"
-      },
-      "EditAgentBtn": {
-        "label": "Edit agent"
       },
       "ExitMandatorySetupPopupBtn": {
         "label": "Exit setup checklist"
@@ -317,6 +307,10 @@
       "agenticChatNetworksSetupSection": {
         "label": "Agentic chat networks",
         "description": "Choose the network of agents the chats with knowledge bases and the free chats are handed to."
+      },
+      "agentsNetworksSetupSection": {
+        "label": "Agents/Networks of agents",
+        "description": "Configure the networks of agents and their agents; copy a system network to have one of your own"
       }
     },
     "ConfluenceWizardComponent": {
@@ -3423,6 +3417,9 @@
       },
       "PreviewGeboTitle": {
         "label": "Displaying content"
+      },
+      "ReceivedResponsesBadge": {
+        "help": "Chat responses received while streaming this answer"
       }
     },
     "ChangeDescriptionComponent": {
@@ -3447,8 +3444,8 @@
         "help": "LLms provider driver"
       },
       "functions": {
-        "label": "Chat model callable functions",
-        "help": "List of functions available to the chat model"
+        "label": "Tools of the chat model",
+        "help": "The tools the chat model calls in the chats that are not agentic: the ones chosen on the chat model's configuration"
       },
       "NameCol": {
         "label": "Name"
@@ -3462,6 +3459,25 @@
       },
       "CloseBtn": {
         "help": "Close"
+      },
+      "NoModelToolsHint": {
+        "label": "The chat model calls no tool"
+      },
+      "agentsTools": {
+        "label": "Agents of the network and their tools",
+        "help": "The agentic chats are handed to this network of agents: each agent calls only the tools listed under it"
+      },
+      "NetworkLabel": {
+        "label": "Network"
+      },
+      "ServiceLabel": {
+        "label": "Service"
+      },
+      "EveryToolMountedHint": {
+        "label": "every registered tool is mounted"
+      },
+      "NoAgentToolsHint": {
+        "label": "This agent calls no tool"
       }
     },
     "DocumentRefComponent": {
@@ -3781,7 +3797,7 @@
       },
       "maxGeneratedTokens": {
         "label": "Max number of generated tokens",
-        "help": "Maximum number of tokens the model may generate for one answer, its reasoning included (if empty, a default sized on the model's context window applies: 4K below 30K tokens, 8K up to 120K, 10K above, where the provider requires one)"
+        "help": "Maximum number of tokens the model may generate for one answer, its reasoning included (if empty, a default sized on the model's context window applies: 4K below 30K tokens, 8K up to 120K, 10K above)"
       },
       "thinking": {
         "label": "Thinking efforts",
@@ -4474,6 +4490,9 @@
       "GeneralInfosTab": {
         "label": "General infos"
       },
+      "LanguageModelsSettingsTab": {
+        "label": "Language models settings"
+      },
       "UseChatModelLabel": {
         "label": "Use chat model"
       },
@@ -4491,9 +4510,6 @@
       },
       "RagSettingsTab": {
         "label": "RAG settings"
-      },
-      "LanguageModelTab": {
-        "label": "Large language model & usable tools settings"
       },
       "UseEmbeddingModelLabel": {
         "label": "Use embedding model"
@@ -4535,10 +4551,6 @@
       "topK": {
         "label": "Considered document fragments (TopK)",
         "help": "In the retrieval-augmented generation, Top N found considered document fragments in semantic search"
-      },
-      "enabledFunctions": {
-        "label": "Enabled functions call for this RAG chat",
-        "help": "Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base"
       },
       "prompt": {
         "label": "Prompt",
@@ -6296,19 +6308,11 @@
       },
       "mainLoopPromptUseCode": {
         "label": "Choose main loop prompt template",
-        "help": "Choose the Agent main loop prompt."
-      },
-      "maxLoopIterations": {
-        "label": "Max number of Agent loops",
-        "help": "Set the maximum number of Agent loops (this will result in a much refined result)."
-      },
-      "subscribeAllTools": {
-        "label": "Enable all available tools",
-        "help": "When this flag is checked all the available tools will be assigned when this agents run"
+        "help": "The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only."
       },
       "enabledFunctions": {
-        "label": "Enabled functions call for this Agent",
-        "help": "Functionalities that could be used by the Agent while performing its work"
+        "label": "Tools of this agent",
+        "help": "Mount every registered tool, or pick the ones this agent may call: by category, by name, or one by one."
       },
       "temperature": {
         "label": "Temperature",
@@ -6324,6 +6328,67 @@
       },
       "warnSystemAgent": {
         "label": "This is a default system agent, you cannot change its configuration"
+      },
+      "CopyBtn": {
+        "label": "Copy"
+      },
+      "CopyConfirmation": {
+        "message": "The changes not saved are not copied and will be lost: copy the saved agent?",
+        "header": "Copy the agent"
+      },
+      "COPY-ERROR": {
+        "summary": "Copy failed"
+      },
+      "ServiceTypesHint": {
+        "label": "In a network it accepts"
+      },
+      "ServiceRouterHint": {
+        "label": "and sends commands typed on each agent it talks to"
+      },
+      "ServiceProducesHint": {
+        "label": "and produces"
+      },
+      "ServiceWriterHint": {
+        "label": "; it answers the user directly, so it is the single output node of a network"
+      },
+      "agentRoleCode": {
+        "label": "Agent role",
+        "help": "The role the agent plays, from the role library the prompts are built with. Mandatory."
+      },
+      "AgentRoleSelect": {
+        "placeholder": "Choose the role"
+      },
+      "adaptedAgentNetworkCode": {
+        "label": "Delegates to network",
+        "help": "The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service."
+      },
+      "AdaptedNetworkSelect": {
+        "placeholder": "Choose the network"
+      },
+      "agentNetworkServiceCode": {
+        "label": "Network runs on",
+        "help": "The network service factory of the adapted network, taken from the network."
+      },
+      "PromptTemplateTab": {
+        "label": "Prompt template"
+      },
+      "CustomizePromptBtn": {
+        "label": "Customize prompt"
+      },
+      "UseStandardPromptBtn": {
+        "label": "Use standard prompt"
+      },
+      "PromptCustomizedHint": {
+        "label": "This agent runs the prompt below, a copy of the template edited for it; the standard template is no longer followed."
+      },
+      "PromptStandardHint": {
+        "label": "This agent runs the standard template chosen above. Customize it to edit a copy here."
+      },
+      "CustomizePromptConfirmation": {
+        "message": "Customizing the prompt requires advanced LLM prompting skills: do you want to go further?",
+        "header": "Customize the prompt",
+        "acceptLabel": "Yes",
+        "rejectLabel": "No"
       }
     }
   },
@@ -7238,7 +7303,7 @@
       },
       "maxLoopIteration": {
         "label": "Max Loop Iterations",
-        "help": "Set the maximum loop iterations of the network."
+        "help": "How many times the controller of the network may act: the coordination cycles of a router, the search and rewrite cycles of a single agent answering the user."
       },
       "code": {
         "label": "Unique Code",
@@ -7276,6 +7341,289 @@
       },
       "SecurityAccessSettingsTab": {
         "label": "Security access settings"
+      },
+      "CopyBtn": {
+        "label": "Copy"
+      },
+      "CopyConfirmation": {
+        "message": "The changes not saved are not copied and will be lost: copy the saved network of agents?",
+        "header": "Copy the network of agents"
+      },
+      "CANNOT-DELETE": {
+        "detail": "This is a system network of agents: it cannot be changed nor deleted, copy it to have one of your own"
+      },
+      "COPY-ERROR": {
+        "summary": "Copy failed"
+      },
+      "ReadOnlyNetworkWarning": {
+        "label": "This is a system network of agents: it cannot be changed, copy it to have one of your own."
+      },
+      "ContractLabel": {
+        "label": "Contract"
+      },
+      "StreamsOneWriterBadge": {
+        "label": "streams one writer",
+        "help": "The factory streams the answer of exactly one participant answering the user directly"
+      },
+      "NoContractWarning": {
+        "label": "Choose on the general tab the factory the network runs on"
+      },
+      "PaletteTitle": {
+        "label": "Agent services"
+      },
+      "PaletteEmpty": {
+        "label": "No agent service is registered."
+      },
+      "EmptyNetworkTitle": {
+        "label": "No agents in the network yet"
+      },
+      "EmptyNetworkHint": {
+        "label": "Add an input adapter from the palette: it is the node that receives the network input."
+      },
+      "LegendInputPort": {
+        "label": "Left port: the input the agent accepts"
+      },
+      "LegendOutputPort": {
+        "label": "Right port: what it produces, a router sends commands, a responder replies to whoever asked"
+      },
+      "LegendDraw": {
+        "label": "Drag from a right port to a node to let them talk; click an edge to remove it from the inspector"
+      },
+      "InspectorParticipantTab": {
+        "label": "Participant"
+      },
+      "InspectorConfigurationTab": {
+        "label": "Agent configuration"
+      },
+      "EdgeLabel": {
+        "label": "Link"
+      },
+      "InspectorEmpty": {
+        "label": "Select a node of the graph, or add a service from the palette."
+      },
+      "ParticipantConfigLabel": {
+        "label": "Agent configuration"
+      },
+      "UnknownServiceWarning": {
+        "label": "The configuration runs a service that is not registered."
+      },
+      "ContextualNameLabel": {
+        "label": "Contextual name"
+      },
+      "NetworkNameLabel": {
+        "label": "Network name"
+      },
+      "DuplicateNameWarning": {
+        "label": "is used twice: give one a contextual name"
+      },
+      "RoleInNetworkLabel": {
+        "label": "Role in the network"
+      },
+      "InputNodeLabel": {
+        "label": "Network input node"
+      },
+      "InputNodeOkHint": {
+        "label": "accepts the input of the contract"
+      },
+      "InputNodeNoHint": {
+        "label": "cannot: its input is not the input of the contract"
+      },
+      "OutputNodeLabel": {
+        "label": "Network output node"
+      },
+      "WriterOutputHint": {
+        "label": "a writer is always an output node"
+      },
+      "OutputNodeOkHint": {
+        "label": "produces the output of the contract"
+      },
+      "OutputNodeNoHint": {
+        "label": "does not produce the output of the contract: another output node must"
+      },
+      "TalksToLabel": {
+        "label": "Talks to"
+      },
+      "TalksToNobody": {
+        "label": "nobody"
+      },
+      "RouterTalksHint": {
+        "label": "A router sends each target a command typed on that target's input; it needs at least one."
+      },
+      "ForwarderTalksHint": {
+        "label": "A forwarder delivers its output as the input of each target; it needs at least one and the types must match."
+      },
+      "ResponderTalksHint": {
+        "label": "Its reply goes to whoever asked and is shared in the session; this list tells the model whom it may address."
+      },
+      "CapabilitiesLabel": {
+        "label": "Capabilities"
+      },
+      "NotifyUserLabel": {
+        "label": "May notify the user"
+      },
+      "CanCallToolsLabel": {
+        "label": "May call its tools"
+      },
+      "CanCallOtherAgentsLabel": {
+        "label": "May delegate to other agents"
+      },
+      "PolicyLabel": {
+        "label": "Communication policy"
+      },
+      "PolicyHint": {
+        "label": "Stored with the participant; the runtime does not enforce it yet."
+      },
+      "SystemAgentHint": {
+        "label": "System agent: read only, copy it from its editor to change it."
+      },
+      "CfgServiceLabel": {
+        "label": "Service"
+      },
+      "CfgRoleLabel": {
+        "label": "Role"
+      },
+      "CfgNoRoleWarning": {
+        "label": "required: the backend refuses a configuration without a role"
+      },
+      "CfgPromptLabel": {
+        "label": "Main loop prompt"
+      },
+      "CfgModelLabel": {
+        "label": "Chat model"
+      },
+      "CfgDefaultModel": {
+        "label": "system default"
+      },
+      "CfgToolsLabel": {
+        "label": "Tools"
+      },
+      "CfgAllTools": {
+        "label": "every registered tool"
+      },
+      "CfgAdaptedNetworkLabel": {
+        "label": "Delegates to network"
+      },
+      "CfgMissingWarning": {
+        "label": "The configuration does not exist."
+      },
+      "ChecksTitle": {
+        "label": "Checks"
+      },
+      "ChecksValid": {
+        "label": "valid, can save"
+      },
+      "ChecksErrors": {
+        "label": "error(s)"
+      },
+      "ChecksWarnings": {
+        "label": "warning(s), can save"
+      },
+      "AgentsListTitle": {
+        "label": "Agents in the Network"
+      },
+      "AgentsListHint": {
+        "label": "Click a row to open the participant in the graph."
+      },
+      "NameHeader": {
+        "label": "Network Agent Name"
+      },
+      "ConfigurationHeader": {
+        "label": "Agent Configuration"
+      },
+      "ServiceHeader": {
+        "label": "Service"
+      },
+      "TypesHeader": {
+        "label": "Input → output"
+      },
+      "RoleHeader": {
+        "label": "Role"
+      },
+      "CommunicatesWithHeader": {
+        "label": "Talks to"
+      },
+      "AgentsListEmpty": {
+        "label": "No agents in the network yet"
+      },
+      "PolicyAllowAll": {
+        "label": "Allow all"
+      },
+      "PolicyDenyAll": {
+        "label": "Deny all"
+      },
+      "PolicyAllowList": {
+        "label": "Allow list"
+      },
+      "PolicyDenyList": {
+        "label": "Deny list"
+      },
+      "PaletteForwarders": {
+        "label": "Input adapters"
+      },
+      "PaletteRouters": {
+        "label": "Routers"
+      },
+      "PaletteResponders": {
+        "label": "Workers"
+      },
+      "PaletteWriters": {
+        "label": "Writers, answer the user"
+      },
+      "PaletteNetworkAdapters": {
+        "label": "Networks as agents"
+      },
+      "ValidateBtn": {
+        "label": "Validate now"
+      },
+      "ClearAllBtn": {
+        "label": "Clear all"
+      },
+      "RemoveEdgeBtn": {
+        "label": "Remove"
+      },
+      "RemoveParticipantBtn": {
+        "label": "Remove from the network"
+      },
+      "OpenConfigEditorBtn": {
+        "label": "Open the editor"
+      },
+      "NewConfigFromInspectorBtn": {
+        "label": "New"
+      },
+      "agentsNetworkServiceFactoryId": {
+        "label": "Runs on",
+        "help": "The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce."
+      },
+      "FactorySelect": {
+        "placeholder": "Choose the factory the network runs on"
+      },
+      "ParticipantConfigSelect": {
+        "placeholder": "Choose the configuration"
+      },
+      "ContextualNameInput": {
+        "placeholder": "Optional, makes the name unique"
+      },
+      "AddTargetSelect": {
+        "placeholder": "Add an agent to talk to"
+      },
+      "RemoveParticipantConfirmation": {
+        "header": "Remove the participant"
+      },
+      "ClearNetworkConfirmation": {
+        "message": "Remove every agent from the network?",
+        "header": "Clear the network"
+      },
+      "ControllerLabel": {
+        "label": "Controller of the network"
+      },
+      "ControllerOnHint": {
+        "label": "the network's max loop iterations are the times this participant may act"
+      },
+      "ControllerCanHint": {
+        "label": "a router or an output node can be the controller, the one the network counts its loop on"
+      },
+      "ControllerNoHint": {
+        "label": "only a router or an output node can be the controller"
       }
     }
   },
@@ -8151,8 +8499,69 @@
   },
   "GeboAIChooseLLMFunctionsModule": {
     "GeboAIChooseLLMFunctionscomponent": {
-      "TreeSelect": {
-        "placeholder": "Select functions"
+      "EveryToolsBtn": {
+        "label": "Every tool"
+      },
+      "ChosenToolsBtn": {
+        "label": "Chosen tools"
+      },
+      "ClearChoiceBtn": {
+        "label": "Clear choice"
+      },
+      "EveryToolsHint": {
+        "label": "every registered tool is mounted"
+      },
+      "ChosenCountHint": {
+        "label": "tools chosen"
+      },
+      "ChosenCountHint2": {
+        "label": "tools chosen"
+      },
+      "EveryToolsChoiceHint": {
+        "label": "The choice below is kept but not used while every tool is mounted."
+      },
+      "NoToolChosenHint": {
+        "label": "No tool chosen: pick them below, by category or one by one."
+      },
+      "AllCategoriesBtn": {
+        "label": "All"
+      },
+      "LoadingHint": {
+        "label": "Loading the tools…"
+      },
+      "NoneOfTheseBtn": {
+        "label": "none of these"
+      },
+      "AllOfTheseBtn": {
+        "label": "all of these"
+      },
+      "NoMatchHint": {
+        "label": "No tool matches."
+      },
+      "SearchToolInput": {
+        "placeholder": "Find a tool by name or by what it does"
+      },
+      "BuiltInToolsHint": {
+        "label": "Built in and never listed here: notifyUser, with which the agent tells the user what it is doing; the participant's \"may notify the user\" flag governs it."
+      }
+    }
+  },
+  "AgentsNetworksSetupWizardModule": {
+    "AgentsNetworksSetupWizardComponent": {
+      "MainPanel": {
+        "label": "Agents and Agents Networks"
+      },
+      "AgentsNetworksHint": {
+        "label": "An agent works within the network of agents it takes part in: open a network to configure it and its agents. The system networks are read-only: copy one from its editor to have a network of agents of your own."
+      },
+      "CodeHeader": {
+        "label": "Code"
+      },
+      "DescriptionHeader": {
+        "label": "Description"
+      },
+      "ConfigureBtn": {
+        "label": "configure"
       }
     }
   }

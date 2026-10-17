@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.acl.AclGrantType;
@@ -51,6 +52,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -87,12 +89,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			ChatProfilesRepository chatProfilesRepository, IGRuntimeChatProfileChatModelDao chatProfileModelsDao,
 			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
 			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
-			IGSecurityAuditLoggerService securityAuditLoggerService) {
+			IGSecurityAuditLoggerService securityAuditLoggerService,
+			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
-				securityAuditLoggerService);
+				securityAuditLoggerService, agentsToolsDescriber);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -265,8 +268,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGConfigurableChatModel chatModel = runtime.getChatModel();
 			GBaseChatModelConfig config = (GBaseChatModelConfig) chatModel.getConfig();
 			GBaseChatModelChoice modelChoice = (GBaseChatModelChoice) config.getChoosedModel();
+			// the tools the chat model can call are its own: a profile chooses none
 			List<ToolCategoriesTree> functionsTree = callbacksRepoPattern
-					.getEnabledToolsTree(runtime.getChatProfile().getEnabledFunctions());
+					.getEnabledToolsTree(config.getEnabledFunctions());
 			List<String> kbCodes = runtime.getChatProfile().getKnowledgeBaseCodes();
 			List<GKnowledgeBase> list = knowledgeBaseVisibilityService.visiblesAndChildKnowledgebases(kbCodes);
 			// Builds a list of GBaseObject from visible knowledge bases
@@ -276,7 +280,10 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				b.setDescription(x.getDescription());
 				return b;
 			}).toList();
-			return new GeboChatUserInfo(config.getModelTypeCode(), modelChoice, kbases, functionsTree);
+			GeboChatUserInfo infos = new GeboChatUserInfo(config.getModelTypeCode(), modelChoice, kbases,
+					functionsTree);
+			infos.setAgentsTools(agentsTools(runtime.getChatProfile()));
+			return infos;
 		} else
 			throw new RuntimeException("Unknown chat profile code" + chatProfileCode);
 	}

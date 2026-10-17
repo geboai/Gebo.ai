@@ -32,6 +32,12 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGNetworkAgentService<InputType, OutputType> {
 
+	/** The performer answers with a RESPONSE, shared in the session context. */
+	@Override
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
+	}
+
 	protected final Class<InputType> inputType;
 	protected final Class<OutputType> outputType;
 	protected final String id;
@@ -113,11 +119,8 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			LOGGER.trace("</TASK_PERFORMER_OUTPUT>");
 		}
 		AgentsExchangeMessage<OutputType> out = new AgentsExchangeMessage<OutputType>(session.getId(),
-				MessageSemantic.RESPONSE,
-				contextAgentPersona.getAgentConfigCode() + (contextAgentPersona.getAgentContextualName() != null
-						? "-" + contextAgentPersona.getAgentContextualName()
-						: ""),
-				agentRole, msg.getFromAgent(), output, 1);
+				getProducedMessageSemantic(), contextAgentPersona.getNetworkAgentName(), agentRole,
+				msg.getFromAgent(), output, 1);
 		return List.of(out);
 	}
 

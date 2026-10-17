@@ -45,7 +45,7 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jir
 export * from "./lib/setup-wizard/llms-setup-wizard.component";
 export * from "./lib/setup-wizard/setup-wizards.component";
 export * from "./lib/setup-wizard/work-folder-wizard.component";
-export * from "./lib/setup-wizard/agent-setup-wizard.component";
+export * from "./lib/setup-wizard/agents-networks-setup-wizard.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-ranker-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-text-to-speech-model-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-transcript-model-admin.component";

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +47,8 @@ import lombok.Data;
 @RequestMapping(path = "api/admin/GeboAdminPromptsController")
 @AllArgsConstructor
 public class GeboAdminPromptsController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboAdminPromptsController.class);
+
 	/**
 	 * Persistence manager for database operations.
 	 */
@@ -98,7 +102,8 @@ public class GeboAdminPromptsController {
 			GPromptTemplateLightView view = GPromptTemplateLightView.of(config);
 			// Most static library templates carry no description of their own; fall back
 			// to the GPromptUseInfo catalog entry so the list stays informative.
-			if ((view.getDescription() == null || view.getDescription().trim().isEmpty()) && view.getPromptUse() != null) {
+			if ((view.getDescription() == null || view.getDescription().trim().isEmpty())
+					&& view.getPromptUse() != null) {
 				GPromptUseInfo useInfo = promptUseInfoDao.findByCode(view.getPromptUse());
 				if (useInfo != null && useInfo.getDescription() != null) {
 					view.setDescription(useInfo.getDescription());
@@ -117,7 +122,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@GetMapping(value = "findPromptConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code) throws GeboPersistenceException {
+	public GPromptTemplateConfig findPromptConfigByCode(@RequestParam("code") String code)
+			throws GeboPersistenceException {
 		return promptConfigDao.findByCode(code);
 	}
 
@@ -144,7 +150,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "insertPromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig insertPromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
+	public GPromptTemplateConfig insertPromptConfig(@RequestBody GPromptTemplateConfig Config)
+			throws GeboPersistenceException {
 		return promptConfigDao.insert(Config);
 	}
 
@@ -157,7 +164,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "updatePromptConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig updatePromptConfig(@RequestBody GPromptTemplateConfig Config) throws GeboPersistenceException {
+	public GPromptTemplateConfig updatePromptConfig(@RequestBody GPromptTemplateConfig Config)
+			throws GeboPersistenceException {
 		return promptConfigDao.update(Config);
 	}
 
@@ -200,7 +208,8 @@ public class GeboAdminPromptsController {
 	 *                                  operation
 	 */
 	@PostMapping(value = "getPromptConfigByFilter", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public GPromptTemplateConfig getPromptConfigByFilter(@RequestBody PromptFilter param) throws GeboPersistenceException {
+	public GPromptTemplateConfig getPromptConfigByFilter(@RequestBody PromptFilter param)
+			throws GeboPersistenceException {
 		return promptConfigDao.exactFindByPromptUse(param.modelUse, param.langCode, param.modelProvider,
 				param.modelCode);
 	}
@@ -222,5 +231,31 @@ public class GeboAdminPromptsController {
 			}
 		});
 		return new ArrayList<String>(cats.keySet());
+	}
+
+	/**
+	 * Retrieves the prompt templates declared as agent prompts of the given agent
+	 * service.
+	 *
+	 * @param agentId The agent service id (the {@code agentServiceId} of an agent
+	 *                configuration)
+	 * @return The agent prompt templates whose {@code agentId} matches
+	 */
+	@GetMapping(value = "findPromptConfigByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GPromptTemplateConfig> findPromptConfigByAgentId(@RequestParam("agentId") String agentId) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin findPromptConfigByAgentId(...) agentId:" + agentId);
+		}
+		List<GPromptTemplateConfig> prompts = promptConfigDao.findByAgentId(agentId);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End findPromptConfigByAgentId(...) agentId:" + agentId + " returned "
+					+ (prompts != null ? prompts.size() : 0) + " prompt template(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_PROMPT_TEMPLATES agentId=" + agentId + ">");
+			LOGGER.trace(String.valueOf(prompts));
+			LOGGER.trace("</AGENT_PROMPT_TEMPLATES>");
+		}
+		return prompts;
 	}
 }

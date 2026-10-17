@@ -180,6 +180,15 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		return outputType;
 	}
 
+	/**
+	 * A router works by delivering: each agent it can talk to gets a command typed on
+	 * that agent's input, and the router itself gets its next cycle.
+	 */
+	@Override
+	public final MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.EXECUTE_AND_SHARE_RESULT;
+	}
+
 	@Override
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
@@ -345,8 +354,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				if (!targetAgents.contains(d.getAgentId()))
 					targetAgents.add(d.getAgentId());
 				AgentsExchangeMessage<?> _msg = new AgentsExchangeMessage(session.getId(),
-						MessageSemantic.EXECUTE_AND_SHARE_RESULT, contextAgentPersona.getAgentContextualName(),
-						agentRole, d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
+						getProducedMessageSemantic(), contextAgentPersona.getNetworkAgentName(), agentRole,
+						d.getAgentId(), d.getCommandData(), d.getDeliveryOrder());
 				out.add(_msg);
 			}
 		}
@@ -393,7 +402,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 					+ output.size() + " contributionNr:" + actualContributionNr + " tokenBudget:" + tokenBudget
 					+ " splitByBudget:" + splitByBudget);
 		}
-		final int maxCycles = resolveMaxRoutingCycles(contextAgentPersona);
+		final int maxCycles = resolveMaxRoutingCycles(network, contextAgentPersona);
 		final int currentCycle = currentRoutingCycle(mySessionContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Exposing routing cycle signals to " + output.size() + " parameter window(s): cycle "
@@ -446,7 +455,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				dispatchedWorker = true;
 			}
 		}
-		final int maxCycles = resolveMaxRoutingCycles(contextAgentPersona);
+		final int maxCycles = resolveMaxRoutingCycles(network, contextAgentPersona);
 		final int currentCycle = currentRoutingCycle(mySessionContext);
 		final boolean budgetRemains = currentCycle < maxCycles;
 		final int nextOrder = maxOrder + 1;
@@ -473,8 +482,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 						+ " self:" + selfName + " at deliveryOrder:" + nextOrder + " to plan cycle " + (currentCycle + 1)
 						+ " of " + maxCycles);
 			}
-			out.add(new AgentsExchangeMessage(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT, selfName,
-					agentRole, selfName, msg.getPayload(), nextOrder));
+			out.add(new AgentsExchangeMessage(session.getId(), getProducedMessageSemantic(), selfName, agentRole,
+					selfName, msg.getPayload(), nextOrder));
 			// INFO, not DEBUG: a gather cycle is the longest silence in the whole exchange -
 			// the searchers run, the controller re-plans, and only then does the writer begin
 			// emitting text. Measured on a multi source analytic question, that is around
@@ -520,33 +529,26 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 	/**
 	 * The routing agent's cycle budget: the maximum number of gather/finalize cycles
-	 * it may run. Taken from the participant's declared invocation limit; when none
-	 * is declared it is a single cycle (legacy single-pass behavior).
+	 * it may run. It is the network's {@link GAgentsNetwork#getMaxLoopIteration()
+	 * max loop iteration} when this participant is the controller of the network,
+	 * the one the network counts its loop on. A router that is not the controller
+	 * (a network saved before the controller existed, or a second router) runs a
+	 * single cycle.
 	 */
-	protected int resolveMaxRoutingCycles(AgentNetworkParticipant persona) {
-		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Resolving the routing cycle budget for persona:"
-					+ (persona != null ? persona.getNetworkAgentName() : null) + " maxInvocations:"
-					+ (persona != null ? persona.getMaxInvocations() : null) + " maxConsecutiveInvocations:"
-					+ (persona != null ? persona.getMaxConsecutiveInvocations() : null));
-		}
-		if (persona != null && persona.getMaxInvocations() != null && persona.getMaxInvocations() > 0) {
+	protected int resolveMaxRoutingCycles(GAgentsNetwork network, AgentNetworkParticipant persona) {
+		final boolean controller = persona != null && persona.isController();
+		final int limit = network != null ? network.getMaxLoopIteration() : 0;
+		if (controller && limit > 0) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Routing cycle budget taken from maxInvocations:" + persona.getMaxInvocations());
+				LOGGER.debug("Routing cycle budget of the controller:" + persona.getNetworkAgentName()
+						+ " taken from the network limit:" + limit);
 			}
-			return persona.getMaxInvocations();
+			return limit;
 		}
-		if (persona != null && persona.getMaxConsecutiveInvocations() != null
-				&& persona.getMaxConsecutiveInvocations() > 0) {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Routing cycle budget taken from maxConsecutiveInvocations:"
-						+ persona.getMaxConsecutiveInvocations());
-			}
-			return persona.getMaxConsecutiveInvocations();
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Routing cycle budget falls back to the single pass default:" + DEFAULT_MAX_ROUTING_CYCLES);
-		}
+		LOGGER.warn("Routing agent:" + (persona != null ? persona.getNetworkAgentName() : null) + " of the network:"
+				+ (network != null ? network.getCode() : null)
+				+ " is not its controller: it runs the single pass default of " + DEFAULT_MAX_ROUTING_CYCLES
+				+ " cycle(s); flag it as the controller to give it the network's loop budget");
 		return DEFAULT_MAX_ROUTING_CYCLES;
 	}
 

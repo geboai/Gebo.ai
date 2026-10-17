@@ -220,6 +220,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		ToolReference reference = new ToolReference();
 		reference.setName(SEARCH_KNOWLEDGE_BASE_TOOL);
 		reference.setDescription(SEARCH_KNOWLEDGE_BASE_DESCRIPTION);
+		reference.setUserUIfunctionDescription(
+				"Search the knowledge bases the user can access for documents, by meaning and keywords");
 		return List.of(reference);
 	}
 

@@ -11,7 +11,7 @@
 -->
 
 @if (formGroup) {
-  <p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI [formGroup]="formGroup">
+  <p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI [formGroup]="formGroup" [showHeader]="false">
     <p-blockUI [target]="chatModelAdvancedUI" [blocked]="loading">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>
@@ -21,11 +21,7 @@
           id="enabledFunctions"
           formControlName="enabledFunctions"
           [knowledgeBaseContext]="false"
-          dataKey="code"
-          optionLabel="description"
-          optionValue="code"
-          display="chip"
-          class="col-12"
+          class="block w-full"
           gebo-ai-field-element
           />
         </gebo-ai-field>

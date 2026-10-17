@@ -8,40 +8,115 @@
 * Copyright (c) 2025+ Gebo.ai
 */
 -->
-
-<span [formGroup]="formGroup">
-  <p-treeSelect
-    id="TreeSelect" gebo-ai-label
-    class=" col-12"
-    containerStyleClass="w-full"
-    appendTo="body"
-    formControlName="selected"
-    [options]="root"
-    display="chip"  [loading]="loading"
-    [metaKeySelection]="false"
-    selectionMode="checkbox"
-    [propagateSelectionUp]="true"
-    [propagateSelectionDown]="true"
-    placeholder="Select functions"
-    [virtualScroll]="true"
-    [virtualScrollItemSize]="46"
-    [virtualScrollOptions]="{scrollHeight: '200px'}"
-    >
-    <ng-template pTemplate="value" let-value>
-      @if (hasLeaf(value)) {
-        @for (node of value; track node) {
-          @if (node.leaf) {
-            <div class="p-treeselect-token">
-              <span class="p-treeselect-token-label">{{ node.label }}</span>
-            </div>
-          }
+<div class="border-round border-1 surface-border bg-card w-full" style="min-width: 0; overflow: hidden;" [class.opacity-60]="disabled">
+  <!-- the mode, when the host has the switch -->
+  @if (everyToolsControl) {
+    <div class="flex flex-wrap align-items-center gap-2 p-2 surface-50 border-bottom-1 surface-border">
+      <div class="flex">
+        <button pButton type="button" id="EveryToolsBtn" gebo-ai-label label="Every tool" icon="pi pi-th-large" class="p-button-sm"
+          [outlined]="!everyTools" [disabled]="disabled" (click)="setMode(true)"></button>
+        <button pButton type="button" id="ChosenToolsBtn" gebo-ai-label label="Chosen tools" icon="pi pi-check-square" class="p-button-sm ml-1"
+          [outlined]="everyTools" [disabled]="disabled" (click)="setMode(false)"></button>
+      </div>
+      <span class="ml-auto text-xs text-muted-color">
+        @if (everyTools) {
+          <span id="EveryToolsHint" gebo-ai-text>every registered tool is mounted</span> ({{toolsCount}})
+        } @else {
+          {{chosenTools.length}} / {{toolsCount}} <span id="ChosenCountHint" gebo-ai-text>tools chosen</span>
         }
-      } @else {
-        <span class="p-placeholder">Select functions</span>
-      }
-    </ng-template>
-  </p-treeSelect>
-</span>
+      </span>
+    </div>
+  } @else {
+    <div class="flex align-items-center p-2 surface-50 border-bottom-1 surface-border text-xs text-muted-color">
+      {{chosenTools.length}} / {{toolsCount}} <span id="ChosenCountHint2" gebo-ai-text class="ml-1">tools chosen</span>
+    </div>
+  }
 
-<!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
-<!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->
+  <!-- the choice, at rest -->
+  <div class="flex flex-wrap gap-1 p-2 border-bottom-1 surface-border align-items-center" style="min-height: 2.75rem;" [class.opacity-50]="everyTools">
+    @for (tool of chosenTools; track tool.name) {
+      <span class="inline-flex align-items-center gap-1 px-2 py-1 border-round-2xl bg-primary-50 text-primary-700 text-xs" style="max-width: 100%;"
+        [pTooltip]="tool.modelDescription" tooltipPosition="top" appendTo="body">
+        <span class="font-monospace font-medium">{{tool.name}}</span>
+        <span class="text-color white-space-nowrap overflow-hidden text-overflow-ellipsis" style="max-width: 28ch;">{{tool.description}}</span>
+        @if (!disabled) {
+          <button type="button" class="border-none bg-transparent cursor-pointer text-primary-700 p-0 ml-1" [title]="'Remove ' + tool.name" (click)="remove(tool)">
+            <i class="pi pi-times" style="font-size: 0.7rem"></i>
+          </button>
+        }
+      </span>
+    }
+    @if (chosenTools.length === 0) {
+      @if (everyTools) {
+        <span id="EveryToolsChoiceHint" gebo-ai-text class="text-xs text-muted-color">The choice below is kept but not used while every tool is mounted.</span>
+      } @else {
+        <span id="NoToolChosenHint" gebo-ai-text class="text-xs text-muted-color">No tool chosen: pick them below, by category or one by one.</span>
+      }
+    }
+  </div>
+
+  @if (everyToolsControl) {
+    <div class="px-2 py-1 border-bottom-1 surface-border text-xs text-muted-color flex align-items-center gap-1">
+      <i class="pi pi-info-circle"></i>
+      <span id="BuiltInToolsHint" gebo-ai-text>Built in and never listed here: notifyUser, with which the agent tells the user what it is doing; the participant's "may notify the user" flag governs it.</span>
+    </div>
+  }
+
+  <!-- the catalogue: the categories on the left, the tools on the right -->
+  <div class="grid grid-nogutter">
+    <div class="col-12 md:col-3 lg:col-2 border-right-1 surface-border p-2 flex md:flex-column flex-wrap gap-1">
+      <button type="button" class="border-none text-left px-2 py-1 border-round cursor-pointer text-sm flex justify-content-between gap-2 align-items-center"
+        [class.bg-primary-50]="categoryFilter === null" [class.text-primary-700]="categoryFilter === null" [class.font-semibold]="categoryFilter === null"
+        [class.bg-transparent]="categoryFilter !== null" (click)="categoryFilter = null">
+        <span id="AllCategoriesBtn" gebo-ai-text>All</span>
+        <span class="text-xs text-muted-color">{{chosenTools.length}}/{{toolsCount}}</span>
+      </button>
+      @for (category of nonEmptyCategories; track category.code) {
+        <button type="button" class="border-none text-left px-2 py-1 border-round cursor-pointer text-sm flex justify-content-between gap-2 align-items-center"
+          [class.bg-primary-50]="categoryFilter === category.code" [class.text-primary-700]="categoryFilter === category.code" [class.font-semibold]="categoryFilter === category.code"
+          [class.bg-transparent]="categoryFilter !== category.code" (click)="categoryFilter = category.code">
+          <span class="overflow-hidden text-overflow-ellipsis white-space-nowrap" style="min-width: 0;">{{category.label}}</span>
+          <span class="text-xs text-muted-color flex-shrink-0">{{chosenInCategory(category)}}/{{category.tools.length}}</span>
+        </button>
+      }
+    </div>
+    <div class="col-12 md:col-9 lg:col-10 p-2 flex flex-column gap-2" style="min-width: 0;">
+      <div class="flex gap-2 align-items-center">
+        <input pInputText type="search" id="SearchToolInput" gebo-ai-label class="flex-grow-1 p-inputtext-sm" style="min-width: 0;"
+          placeholder="Find a tool by name or by what it does" [(ngModel)]="query" [disabled]="disabled" />
+        <button pButton type="button" id="ClearChoiceBtn" gebo-ai-label label="Clear choice" class="p-button-sm p-button-outlined p-button-secondary"
+          [disabled]="!pickable || chosenTools.length === 0" (click)="clear()"></button>
+      </div>
+      @if (loading) {
+        <span id="LoadingHint" gebo-ai-text class="text-xs text-muted-color">Loading the tools…</span>
+      }
+      <div class="flex flex-column gap-2" style="max-height: 22rem; overflow-y: auto;">
+        @for (category of visibleCategories; track category.code) {
+          <div class="border-round border-1 surface-border">
+            <div class="flex align-items-center gap-2 px-2 py-1 surface-50 text-xs font-semibold">
+              <span class="px-2 border-round" [class]="category.colorClass">{{category.label}}</span>
+              <span class="text-muted-color font-normal">{{chosenInCategory(category)}} / {{category.tools.length}}</span>
+              <button type="button" class="ml-auto border-none bg-transparent cursor-pointer text-primary text-xs" [disabled]="!pickable"
+                (click)="setCategory(category, !allChosen(category))">
+                @if (allChosen(category)) { <span id="NoneOfTheseBtn" gebo-ai-text>none of these</span> } @else { <span id="AllOfTheseBtn" gebo-ai-text>all of these</span> }
+              </button>
+            </div>
+            @for (tool of category.tools; track tool.name) {
+              <label class="flex align-items-center gap-2 px-2 py-1 border-top-1 surface-border cursor-pointer hover:surface-50" style="min-width: 0;"
+                [class.opacity-50]="!pickable" [pTooltip]="tool.modelDescription" tooltipPosition="top" appendTo="body">
+                <input type="checkbox" class="flex-shrink-0" [checked]="isChosen(tool)" [disabled]="!pickable" (change)="toggle(tool)" />
+                <span class="flex flex-column" style="min-width: 0;">
+                  <span class="font-monospace text-sm font-medium">{{tool.name}}</span>
+                  <span class="text-xs text-muted-color" style="overflow-wrap: anywhere;">{{tool.description}}</span>
+                </span>
+              </label>
+            }
+          </div>
+        }
+        @if (visibleCategories.length === 0 && !loading) {
+          <span id="NoMatchHint" gebo-ai-text class="text-xs text-muted-color p-2">No tool matches.</span>
+        }
+      </div>
+    </div>
+  </div>
+</div>

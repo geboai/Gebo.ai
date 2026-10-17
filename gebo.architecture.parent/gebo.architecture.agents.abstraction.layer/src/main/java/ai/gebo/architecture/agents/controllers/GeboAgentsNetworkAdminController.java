@@ -3,6 +3,8 @@ package ai.gebo.architecture.agents.controllers;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,15 +19,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.AgentServiceDescriptor;
+import ai.gebo.architecture.agents.model.AgentTypeCompatibility;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.NetworkServiceFactoryDescriptor;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
+import ai.gebo.architecture.agents.services.IGAgentsCopyService;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkCrudService;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkToNetworkAgentAdapterService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GBaseObject;
@@ -60,6 +69,7 @@ public class GeboAgentsNetworkAdminController {
 
 	private final IGAgentsNetworkCrudService networkCrudService;
 	private final IGRuntimeBinder runtimeBinder;
+	private final IGAgentsCopyService agentsCopyService;
 
 	private <T> T get(Class<T> t) {
 		T implementation = runtimeBinder.getImplementationOf(t);
@@ -178,18 +188,38 @@ public class GeboAgentsNetworkAdminController {
 		return status;
 	}
 
+	/**
+	 * Copies the network of agents with the given code, together with its agents,
+	 * into a new, editable network whose participants are copies of the original
+	 * agents, also when the original is a read-only network declared by a
+	 * configuration bean (see {@link IGAgentsCopyService#copyAgentsNetwork(String)}).
+	 */
+	@PostMapping(value = "copyAgentsNetwork", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAgentsNetwork> copyAgentsNetwork(@RequestParam("code") String code) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST copyAgentsNetwork code:" + code);
+		}
+		OperationStatus<GAgentsNetwork> status = agentsCopyService.copyAgentsNetwork(code);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST copyAgentsNetwork code:" + code + " produced a copy:"
+					+ (status != null && status.getResult() != null ? status.getResult().getCode() : null)
+					+ " message(s):" + (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
+	}
+
 	// ---------------------------------------------------------------------
 	// Visual composer: agent configs / services lookup
 	// ---------------------------------------------------------------------
 
 	/**
-	 * Lists every agent configuration, as lightweight code/description objects, so
-	 * the composer can bind a network participant to a concrete configuration.
+	 * Lists every agent configuration, whole, so the composer can bind a network
+	 * participant to a concrete configuration knowing the service it runs and its
+	 * role.
 	 */
 	@GetMapping(value = "getAgentConfigs", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<GBaseObject> getAgentConfigs() {
-		List<GBaseObject> configs = get(IAgentConfigDao.class).getConfigurations().stream()
-				.map(x -> new GBaseObject(x)).toList();
+	public List<GAgentConfig> getAgentConfigs() {
+		List<GAgentConfig> configs = new ArrayList<>(get(IAgentConfigDao.class).getConfigurations());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST getAgentConfigs returned " + configs.size() + " agent configuration(s)");
 		}
@@ -252,10 +282,17 @@ public class GeboAgentsNetworkAdminController {
 	 */
 	@GetMapping(value = "getAgentServices", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<AgentServiceDescriptor> getAgentServices() {
+		// the services answering the user directly are listed too, described with the
+		// types of the adapter that makes them a network agent: the composer needs to
+		// know they exist and that they take part only as the single output node
+		final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern adapterFactories = get(
+				IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern.class);
 		List<AgentServiceDescriptor> descriptors = get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
-				.filter(s -> s instanceof IGNetworkAgentService).map(AgentServiceDescriptor::of).toList();
+				.filter(s -> s instanceof IGNetworkAgentService || s instanceof IGReactiveAgentService)
+				.map(s -> AgentServiceDescriptor.of(s, adapterFactories)).toList();
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("REST getAgentServices returned " + descriptors.size() + " network agent service(s)");
+			LOGGER.debug("REST getAgentServices returned " + descriptors.size() + " agent service(s), reactive:"
+					+ descriptors.stream().filter(AgentServiceDescriptor::isReactive).count());
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<AGENT_SERVICE_DESCRIPTORS>");
@@ -279,6 +316,97 @@ public class GeboAgentsNetworkAdminController {
 			LOGGER.debug("REST getNetworkAdapterServices returned " + descriptors.size() + " adapter service(s)");
 		}
 		return descriptors;
+	}
+
+	/**
+	 * Lists the network service factories a network can declare to run on, with the
+	 * contract each one imposes: the input its input nodes must accept, the output
+	 * its output nodes must produce, whether it streams one reactive output node.
+	 */
+	@GetMapping(value = "getNetworkServiceFactories", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<NetworkServiceFactoryDescriptor> getNetworkServiceFactories() {
+		final IGAgentsNetworkServiceFactoryRepositoryPattern factories = get(
+				IGAgentsNetworkServiceFactoryRepositoryPattern.class);
+		List<NetworkServiceFactoryDescriptor> descriptors = factories != null
+				? factories.getImplementations().stream().map(f -> (IGAgentsNetworkServiceFactory<?, ?, ?>) f)
+						.map(NetworkServiceFactoryDescriptor::of).toList()
+				: List.of();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getNetworkServiceFactories returned " + descriptors.size() + " factory(ies)");
+		}
+		return descriptors;
+	}
+
+	/**
+	 * For every type the agent services and the network service factories exchange,
+	 * the types assignable to it: the answer of Java assignability the composer
+	 * needs to tell, while the admin draws an edge, whether what an agent produces
+	 * can be given to another, without guessing the type hierarchy on the client.
+	 */
+	@GetMapping(value = "getAgentTypesCompatibility", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AgentTypeCompatibility> getAgentTypesCompatibility() {
+		final Set<Class<?>> types = new LinkedHashSet<>();
+		get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
+				.filter(s -> s instanceof IGNetworkAgentService).map(s -> (IGNetworkAgentService<?, ?>) s)
+				.forEach(s -> {
+					if (s.getInputType() != null) {
+						types.add(s.getInputType());
+					}
+					if (s.getOutputType() != null) {
+						types.add(s.getOutputType());
+					}
+				});
+		final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern adapterFactories = get(
+				IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern.class);
+		get(IGAgentServiceRuntimeDao.class).getConfigurations().stream()
+				.filter(s -> s instanceof IGReactiveAgentService).map(s -> AgentServiceDescriptor.of(s, adapterFactories))
+				.forEach(d -> {
+					typeOf(d.getInputType()).ifPresent(types::add);
+					typeOf(d.getOutputType()).ifPresent(types::add);
+				});
+		final IGAgentsNetworkServiceFactoryRepositoryPattern factories = get(
+				IGAgentsNetworkServiceFactoryRepositoryPattern.class);
+		if (factories != null) {
+			factories.getImplementations().stream().map(f -> (IGAgentsNetworkServiceFactory<?, ?, ?>) f).forEach(f -> {
+				if (f.getInputType() != null) {
+					types.add(f.getInputType());
+				}
+				if (f.getOutputType() != null) {
+					types.add(f.getOutputType());
+				}
+			});
+		}
+		List<AgentTypeCompatibility> compatibilities = types.stream().map(target -> new AgentTypeCompatibility(
+				target.getName(),
+				types.stream().filter(source -> target.isAssignableFrom(source)).map(Class::getName).toList()))
+				.toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentTypesCompatibility returned " + compatibilities.size() + " type(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<AGENT_TYPES_COMPATIBILITY>");
+			LOGGER.trace(String.valueOf(compatibilities));
+			LOGGER.trace("</AGENT_TYPES_COMPATIBILITY>");
+		}
+		return compatibilities;
+	}
+
+	/**
+	 * The class of a type name the descriptors carry, when the class loader of the
+	 * controller knows it (the adapters' types are loaded with the agents).
+	 */
+	private Optional<Class<?>> typeOf(String typeName) {
+		if (typeName == null) {
+			return Optional.empty();
+		}
+		try {
+			return Optional.of(Class.forName(typeName, false, getClass().getClassLoader()));
+		} catch (ClassNotFoundException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The type " + typeName + " of a reactive agent adapter is not loadable: skipped", e);
+			}
+			return Optional.empty();
+		}
 	}
 
 	// ---------------------------------------------------------------------

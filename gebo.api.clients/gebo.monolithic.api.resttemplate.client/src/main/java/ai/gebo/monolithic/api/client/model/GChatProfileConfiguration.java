@@ -27,7 +27,7 @@ import java.util.List;
  * GChatProfileConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
 
 public class GChatProfileConfiguration {
   @JsonProperty("code")
@@ -53,9 +53,6 @@ public class GChatProfileConfiguration {
 
   @JsonProperty("chatModelReference")
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
-
-  @JsonProperty("enabledFunctions")
-  private List<String> enabledFunctions = null;
 
   @JsonProperty("accessibleGroups")
   private List<String> accessibleGroups = null;
@@ -241,32 +238,6 @@ public class GChatProfileConfiguration {
 
   public void setChatModelReference(GObjectRefGBaseChatModelConfig chatModelReference) {
     this.chatModelReference = chatModelReference;
-  }
-
-  public GChatProfileConfiguration enabledFunctions(List<String> enabledFunctions) {
-    this.enabledFunctions = enabledFunctions;
-    return this;
-  }
-
-  public GChatProfileConfiguration addEnabledFunctionsItem(String enabledFunctionsItem) {
-    if (this.enabledFunctions == null) {
-      this.enabledFunctions = new ArrayList<>();
-    }
-    this.enabledFunctions.add(enabledFunctionsItem);
-    return this;
-  }
-
-   /**
-   * Get enabledFunctions
-   * @return enabledFunctions
-  **/
-  @Schema(description = "")
-  public List<String> getEnabledFunctions() {
-    return enabledFunctions;
-  }
-
-  public void setEnabledFunctions(List<String> enabledFunctions) {
-    this.enabledFunctions = enabledFunctions;
   }
 
   public GChatProfileConfiguration accessibleGroups(List<String> accessibleGroups) {
@@ -571,7 +542,6 @@ public class GChatProfileConfiguration {
         Objects.equals(this.dateCreated, gchatProfileConfiguration.dateCreated) &&
         Objects.equals(this.embeddingModelReference, gchatProfileConfiguration.embeddingModelReference) &&
         Objects.equals(this.chatModelReference, gchatProfileConfiguration.chatModelReference) &&
-        Objects.equals(this.enabledFunctions, gchatProfileConfiguration.enabledFunctions) &&
         Objects.equals(this.accessibleGroups, gchatProfileConfiguration.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gchatProfileConfiguration.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gchatProfileConfiguration.accessibleToAll) &&
@@ -590,7 +560,7 @@ public class GChatProfileConfiguration {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, embeddingModelReference, chatModelReference, enabledFunctions, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch, defaultChatNetworkOfAgents);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, embeddingModelReference, chatModelReference, accessibleGroups, accessibleUsers, accessibleToAll, userChoosesKnowledgeBases, topK, similaritySearchThreshold, knowledgeBaseCodes, forcedRequestDocuments, forcedRequestDocumentsReadonly, disableMultiHopRag, otherSearchSimilarityThreshold, manualThreasholdsConfiguration, useAlsoKeywordSearch, defaultChatNetworkOfAgents);
   }
 
 
@@ -607,7 +577,6 @@ public class GChatProfileConfiguration {
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    embeddingModelReference: ").append(toIndentedString(embeddingModelReference)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
-    sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");

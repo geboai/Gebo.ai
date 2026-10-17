@@ -1,26 +1,37 @@
 package ai.gebo.architecture.agents.services.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.PartialOperationStatus;
+import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkServiceFactory;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
+import ai.gebo.architecture.agents.services.IGAgentConfigUsagesProvider;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkCrudService;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
+import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveAgentService;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern;
 import ai.gebo.architecture.agents.services.IGRoutingNetworkAgentService;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.model.GUserMessage;
@@ -43,11 +54,16 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAgentsNetworkCrudServiceImpl.class);
 
 	private final IGRuntimeBinder runtimeBinder;
+	/** The configurations using agents outside the networks (A2A, MCP exports...). */
+	private final List<IGAgentConfigUsagesProvider> agentUsagesProviders;
 
-	public GAgentsNetworkCrudServiceImpl(@Autowired IGRuntimeBinder runtimeBinder) {
+	public GAgentsNetworkCrudServiceImpl(@Autowired IGRuntimeBinder runtimeBinder,
+			@Autowired(required = false) List<IGAgentConfigUsagesProvider> agentUsagesProviders) {
 		this.runtimeBinder = runtimeBinder;
+		this.agentUsagesProviders = agentUsagesProviders != null ? agentUsagesProviders : List.of();
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Agents network CRUD service initialized, DAOs are resolved lazily through the runtime binder");
+			LOGGER.debug("Agents network CRUD service initialized, DAOs are resolved lazily through the runtime binder,"
+					+ " agent usages providers:" + this.agentUsagesProviders.size());
 		}
 	}
 
@@ -71,7 +87,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			LOGGER.debug("Begin validate(...) agents network code:" + (network != null ? network.getCode() : null));
 		}
 		List<GUserMessage> messages = new ArrayList<>();
-		validateStructure(network, messages);
+		validateStructure(network, messages, true);
 		traceMessages("validate", messages);
 		if (hasErrors(messages)) {
 			if (LOGGER.isDebugEnabled()) {
@@ -95,11 +111,31 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			LOGGER.debug("Begin insert(...) agents network code:" + (network != null ? network.getCode() : null));
 		}
 		List<GUserMessage> messages = new ArrayList<>();
-		validateStructure(network, messages);
+		// The code of a new network is generated from its description by the persistence
+		// layer, which refuses a network that already has one: it is not required here,
+		// and one given in advance cannot be kept.
+		validateStructure(network, messages, false);
 		final IAgentsNetworkDao dao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
-		if (network != null && !isBlank(network.getCode()) && dao.findByCode(network.getCode()) != null) {
-			messages.add(GUserMessage.errorMessage("Network already exists",
-					"A network with code '" + network.getCode() + "' already exists; use update instead"));
+		if (network != null) {
+			if (isBlank(network.getDescription())) {
+				messages.add(GUserMessage.errorMessage("Missing network description",
+						"The network must have a description: its code is generated from it"));
+			}
+			if (isBlank(network.getCode())) {
+				// An empty code is no code: the persistence layer generates one only for null.
+				network.setCode(null);
+			} else if (dao.findByCode(network.getCode()) != null) {
+				messages.add(GUserMessage.errorMessage("Network already exists",
+						"A network with code '" + network.getCode() + "' already exists; use update instead"));
+			} else {
+				messages.add(GUserMessage.errorMessage("Network code is generated",
+						"The code of a new network is generated from its description: leave the code '"
+								+ network.getCode() + "' empty"));
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("insert(...) network description:" + network.getDescription()
+						+ " code given in advance:" + network.getCode());
+			}
 		}
 		traceMessages("insert", messages);
 		if (hasErrors(messages)) {
@@ -128,7 +164,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			LOGGER.debug("Begin update(...) agents network code:" + (network != null ? network.getCode() : null));
 		}
 		List<GUserMessage> messages = new ArrayList<>();
-		validateStructure(network, messages);
+		validateStructure(network, messages, true);
 		final IAgentsNetworkDao dao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
 		if (network != null && !isBlank(network.getCode())) {
 			GAgentsNetwork existing = dao.findByCode(network.getCode());
@@ -202,6 +238,8 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			dao.delete(existing);
 			messages.add(GUserMessage.successMessage("Network deleted",
 					"Agents network '" + existing.getCode() + "' has been deleted"));
+			// An agent works within its network: the agents only this network used go with it.
+			deleteAgentsUsedOnlyBy(existing, dao, messages);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End delete(...) agents network code:" + existing.getCode() + " deleted");
 			}
@@ -214,14 +252,99 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 	}
 
 	/**
+	 * Deletes the agent configurations the deleted network used and nothing else
+	 * uses: no other network of agents (configuration beans included) and no other
+	 * configuration ({@link IGAgentConfigUsagesProvider}, e.g. an A2A or MCP export).
+	 * The read-only agents, declared by configuration beans, are never deleted. What
+	 * cannot be deleted is reported, the network deletion stands.
+	 */
+	private void deleteAgentsUsedOnlyBy(GAgentsNetwork deleted, IAgentsNetworkDao networkDao,
+			List<GUserMessage> messages) {
+		if (deleted.getAgents() == null || deleted.getAgents().isEmpty()) {
+			return;
+		}
+		final IAgentConfigDao configDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
+		final Set<String> agentCodes = new LinkedHashSet<>();
+		for (AgentNetworkParticipant participant : deleted.getAgents()) {
+			if (participant != null && !isBlank(participant.getAgentConfigCode())) {
+				agentCodes.add(participant.getAgentConfigCode());
+			}
+		}
+		// the networks still there use their agents
+		final Set<String> usedByOtherNetworks = new HashSet<>();
+		for (GAgentsNetwork other : networkDao.getConfigurations()) {
+			if (other == null || other.getAgents() == null
+					|| (other.getCode() != null && other.getCode().equals(deleted.getCode()))) {
+				continue;
+			}
+			for (AgentNetworkParticipant participant : other.getAgents()) {
+				if (participant != null && participant.getAgentConfigCode() != null) {
+					usedByOtherNetworks.add(participant.getAgentConfigCode());
+				}
+			}
+		}
+		final List<String> deletedAgents = new ArrayList<>();
+		final List<String> keptAgents = new ArrayList<>();
+		for (String agentCode : agentCodes) {
+			final GAgentConfig agent = configDao.findByCode(agentCode);
+			if (agent == null || Boolean.TRUE.equals(agent.getReadOnly())) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + agentCode + " of the deleted network:" + deleted.getCode() + " kept: "
+							+ (agent == null ? "it does not exist" : "it is read-only"));
+				}
+				continue;
+			}
+			final List<String> usages = new ArrayList<>();
+			if (usedByOtherNetworks.contains(agentCode)) {
+				usages.add("used by another network of agents");
+			}
+			for (IGAgentConfigUsagesProvider provider : agentUsagesProviders) {
+				usages.addAll(provider.findAgentConfigUsages(agentCode));
+			}
+			if (!usages.isEmpty()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + agentCode + " of the deleted network:" + deleted.getCode()
+							+ " kept, still " + usages);
+				}
+				keptAgents.add("'" + agentCode + "' (" + String.join(", ", usages) + ")");
+				continue;
+			}
+			try {
+				configDao.delete(agent);
+				deletedAgents.add("'" + agentCode + "'");
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Agent:" + agentCode + " used only by the deleted network:" + deleted.getCode()
+							+ " deleted");
+				}
+			} catch (Throwable e) {
+				LOGGER.error("Cannot delete the agent:" + agentCode + " used only by the deleted network:"
+						+ deleted.getCode(), e);
+				messages.add(GUserMessage.warnMessage("Agent not deleted",
+						"The agent '" + agentCode + "', used only by the deleted network, could not be deleted: "
+								+ e.getMessage()));
+			}
+		}
+		if (!deletedAgents.isEmpty()) {
+			messages.add(GUserMessage.successMessage("Agents deleted",
+					"The agents used only by the network have been deleted with it: "
+							+ String.join(", ", deletedAgents)));
+		}
+		if (!keptAgents.isEmpty()) {
+			messages.add(GUserMessage.infoMessage("Agents kept",
+					"These agents of the network are still used elsewhere: " + String.join(", ", keptAgents)));
+		}
+	}
+
+	/**
 	 * Runs the structural validation, accumulating {@link GUserMessage}s into the
 	 * given list. The presence of any {@code error} message means the network must
-	 * not be persisted.
+	 * not be persisted. {@code codeRequired} is false for a network to insert, whose
+	 * code is generated on insert.
 	 */
-	private void validateStructure(GAgentsNetwork network, List<GUserMessage> messages) {
+	private void validateStructure(GAgentsNetwork network, List<GUserMessage> messages, boolean codeRequired) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin validateStructure(...) network code:" + (network != null ? network.getCode() : null)
-					+ " participants:"
+					+ " codeRequired:" + codeRequired + " participants:"
 					+ (network != null && network.getAgents() != null ? network.getAgents().size() : 0));
 		}
 		if (LOGGER.isTraceEnabled()) {
@@ -233,7 +356,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			messages.add(GUserMessage.errorMessage("Network is null", "No agents network was provided"));
 			return;
 		}
-		if (isBlank(network.getCode())) {
+		if (codeRequired && isBlank(network.getCode())) {
 			messages.add(GUserMessage.errorMessage("Missing network code", "The network must have a non-empty code"));
 		}
 		if (isBlank(network.getScenarioDescription())) {
@@ -249,6 +372,9 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 
 		final IAgentConfigDao configDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		final IGAgentServiceRuntimeDao serviceDao = runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		// The factory the network declares to run on allocates its participants: what it
+		// accepts is what the network can be made of.
+		final IGAgentsNetworkServiceFactory<?, ?, ?> factory = resolveNetworkServiceFactory(network, messages);
 
 		// Index participants by their network agent name (agentConfigCode + optional
 		// contextual name) so communication edges can be resolved against the actual
@@ -287,6 +413,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 		// Resolve each participant to its concrete network agent service so input/output
 		// types are available for the communication-edge type checks below.
 		final Map<String, IGNetworkAgentService<?, ?>> servicesByName = new LinkedHashMap<>();
+		final List<String> reactiveParticipants = new ArrayList<>();
 		for (Map.Entry<String, AgentNetworkParticipant> entry : participantsByName.entrySet()) {
 			String name = entry.getKey();
 			AgentNetworkParticipant participant = entry.getValue();
@@ -309,7 +436,17 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 								+ "' which is not registered"));
 				continue;
 			}
-			if (!(service instanceof IGNetworkAgentService<?, ?> networkService)) {
+			final IGNetworkAgentService<?, ?> networkService;
+			if (service instanceof IGNetworkAgentService<?, ?> directNetworkService) {
+				networkService = directNetworkService;
+			} else if (service instanceof IGReactiveAgentService<?, ?> reactiveService) {
+				networkService = reactiveNetworkAdapter(name, participant, reactiveService, factory, messages);
+				if (networkService == null) {
+					// The reason has been reported.
+					continue;
+				}
+				reactiveParticipants.add(name);
+			} else {
 				messages.add(GUserMessage.errorMessage("Service is not a network agent",
 						"Agent service '" + service.getId() + "' used by participant '" + name
 								+ "' is not a network agent service and cannot take part in a network"));
@@ -325,20 +462,218 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End validateStructure(...) resolved " + servicesByName.size() + " of "
-					+ participantsByName.size() + " participant(s) to a concrete network agent service");
+					+ participantsByName.size() + " participant(s) to a concrete network agent service, reactive:"
+					+ reactiveParticipants);
 		}
+		if (factory != null) {
+			validateAgainstFactory(factory, participantsByName, servicesByName, reactiveParticipants, messages);
+		}
+		validateController(participantsByName, servicesByName, messages);
 		validateCommunicationEdges(participantsByName, servicesByName, messages);
 	}
 
 	/**
-	 * Enforces the core invariant: for every communication edge {@code A -> B} the
-	 * output type of {@code A} must be assignable to the input type of {@code B}.
-	 * <p>
-	 * Routing/coordinator agents ({@link IGRoutingNetworkAgentService}) do not pipe
-	 * their own output into a peer; they emit commands typed to each target's own
-	 * input. A type mismatch on an edge whose source is a routing agent is therefore
-	 * reported as a warning rather than a hard error, so coordinator-style networks
-	 * are not rejected.
+	 * The network agent a reactive agent service (one answering the user directly,
+	 * like the report writer) takes part in the network as, built like the reactive
+	 * output networks build it at runtime: only on an output node, through the
+	 * adapter its {@link IGReactiveToNetworkAgentAdapterFactory} creates. Only a
+	 * reactive output network factory ({@link GAbstractReactiveOutputAgentsNetworkServiceFactory})
+	 * adapts it: the others refuse any agent that is not a network agent.
+	 *
+	 * @param networkFactory the factory the network declares to run on, null when it
+	 *                       is unknown (already reported)
+	 * @return the adapter, or null with the reason added to {@code messages}
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private IGNetworkAgentService<?, ?> reactiveNetworkAdapter(String name, AgentNetworkParticipant participant,
+			IGReactiveAgentService reactiveService, IGAgentsNetworkServiceFactory<?, ?, ?> networkFactory,
+			List<GUserMessage> messages) {
+		if (networkFactory != null && !(networkFactory instanceof GAbstractReactiveOutputAgentsNetworkServiceFactory)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + name + " runs the reactive agent service:" + reactiveService.getId()
+						+ " but the network factory:" + networkFactory.getId() + " is not a reactive output one");
+			}
+			messages.add(GUserMessage.errorMessage("Reactive agent not run by the network factory",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' answers the user directly: the network service factory '" + networkFactory.getId()
+							+ "' runs only network agents"));
+			return null;
+		}
+		if (!participant.isOutputNode()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + name + " runs the reactive agent service:" + reactiveService.getId()
+						+ " without being an output node");
+			}
+			messages.add(GUserMessage.errorMessage("Reactive agent not on an output node",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' answers the user directly: it can take part in a network only as an output node"));
+			return null;
+		}
+		final IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern factories = runtimeBinder
+				.getImplementationOf(IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern.class);
+		final IGReactiveToNetworkAgentAdapterFactory adapterFactory = factories != null
+				? factories.getFactory(reactiveService)
+				: null;
+		if (adapterFactory == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No network adapter factory for the reactive agent service:" + reactiveService.getId()
+						+ " of participant:" + name);
+			}
+			messages.add(GUserMessage.errorMessage("Reactive agent cannot take part in a network",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' answers the user directly and no adapter makes it a network agent"));
+			return null;
+		}
+		try {
+			IGNetworkAgentService<?, ?> adapter = adapterFactory.create(reactiveService).getAdapter();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + name + " runs the reactive agent service:" + reactiveService.getId()
+						+ " through the network adapter factory:" + adapterFactory.getClass().getName());
+			}
+			return adapter;
+		} catch (Throwable e) {
+			LOGGER.error("Cannot adapt the reactive agent service:" + reactiveService.getId() + " of participant:"
+					+ name, e);
+			messages.add(GUserMessage.errorMessage("Reactive agent cannot take part in a network",
+					"Agent service '" + reactiveService.getId() + "' used by participant '" + name
+							+ "' cannot be adapted to a network agent: " + e.getMessage()));
+			return null;
+		}
+	}
+
+	/**
+	 * The factory the network declares to run on ({@code agentsNetworkServiceFactoryId}),
+	 * the one that allocates its participants when the network is run by its code (an
+	 * agents network exported as a tool, for instance).
+	 *
+	 * @return the factory, or null with the reason added to {@code messages}
+	 */
+	private IGAgentsNetworkServiceFactory<?, ?, ?> resolveNetworkServiceFactory(GAgentsNetwork network,
+			List<GUserMessage> messages) {
+		final String factoryId = network.getAgentsNetworkServiceFactoryId();
+		if (isBlank(factoryId)) {
+			messages.add(GUserMessage.errorMessage("Missing network service factory",
+					"The network must declare the network service factory that runs it"));
+			return null;
+		}
+		final IGAgentsNetworkServiceFactoryRepositoryPattern factories = runtimeBinder
+				.getImplementationOf(IGAgentsNetworkServiceFactoryRepositoryPattern.class);
+		final IGAgentsNetworkServiceFactory<?, ?, ?> factory = factories != null ? factories.findByCode(factoryId)
+				: null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network code:" + network.getCode() + " declares the network service factory:" + factoryId
+					+ " found:" + (factory != null) + " reactiveOutput:"
+					+ (factory instanceof GAbstractReactiveOutputAgentsNetworkServiceFactory));
+		}
+		if (factory == null) {
+			messages.add(GUserMessage.errorMessage("Unknown network service factory",
+					"The network service factory '" + factoryId + "' of the network is not registered"));
+		}
+		return factory;
+	}
+
+	/**
+	 * Enforces what the network factory checks when it allocates the network: an input
+	 * node accepting the network input, an output node producing the network output
+	 * and, for a reactive output factory, exactly one reactive output node.
+	 */
+	private void validateAgainstFactory(IGAgentsNetworkServiceFactory<?, ?, ?> factory,
+			Map<String, AgentNetworkParticipant> participantsByName,
+			Map<String, IGNetworkAgentService<?, ?>> servicesByName, List<String> reactiveParticipants,
+			List<GUserMessage> messages) {
+		final Class<?> networkInput = factory.getInputType();
+		final Class<?> networkOutput = factory.getOutputType();
+		final List<IGNetworkAgentService<?, ?>> inputNodes = new ArrayList<>();
+		final List<IGNetworkAgentService<?, ?>> outputNodes = new ArrayList<>();
+		for (Map.Entry<String, AgentNetworkParticipant> entry : participantsByName.entrySet()) {
+			final IGNetworkAgentService<?, ?> service = servicesByName.get(entry.getKey());
+			if (service == null) {
+				// Already reported.
+				continue;
+			}
+			if (entry.getValue().isInputNode()) {
+				inputNodes.add(service);
+			}
+			if (entry.getValue().isOutputNode()) {
+				outputNodes.add(service);
+			}
+		}
+		final boolean inputAccepted = inputNodes.stream().anyMatch(x -> x.getInputType() != null
+				&& networkInput != null && x.getInputType().isAssignableFrom(networkInput));
+		final boolean outputProduced = outputNodes.stream().anyMatch(x -> x.getOutputType() != null
+				&& networkOutput != null && networkOutput.isAssignableFrom(x.getOutputType()));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network factory:" + factory.getId() + " input:" + typeName(networkInput) + " accepted:"
+					+ inputAccepted + " output:" + typeName(networkOutput) + " produced:" + outputProduced
+					+ " reactive outputs:" + reactiveParticipants);
+		}
+		if (!inputNodes.isEmpty() && !inputAccepted) {
+			messages.add(GUserMessage.errorMessage("Input node not accepting the network input",
+					"No input node accepts the input '" + typeName(networkInput) + "' of the network service factory '"
+							+ factory.getId() + "'"));
+		}
+		if (!outputNodes.isEmpty() && !outputProduced) {
+			messages.add(GUserMessage.errorMessage("Output node not producing the network output",
+					"No output node produces the output '" + typeName(networkOutput)
+							+ "' of the network service factory '" + factory.getId() + "'"));
+		}
+		if (factory instanceof GAbstractReactiveOutputAgentsNetworkServiceFactory && reactiveParticipants.size() != 1) {
+			messages.add(GUserMessage.errorMessage("One reactive output node needed",
+					"The network service factory '" + factory.getId()
+							+ "' streams the answer of exactly one output node answering the user directly: the network has "
+							+ reactiveParticipants.size() + " " + reactiveParticipants));
+		}
+	}
+
+	/**
+	 * Enforces the controller of the network, the participant its loop is counted
+	 * on: exactly one, and one whose acting is what the limit means, a router (its
+	 * coordination cycles) or an output node (the cycles of an agent answering the
+	 * user, or the single pass of a plain output node).
+	 */
+	private void validateController(Map<String, AgentNetworkParticipant> participantsByName,
+			Map<String, IGNetworkAgentService<?, ?>> servicesByName, List<GUserMessage> messages) {
+		final List<String> controllers = participantsByName.entrySet().stream()
+				.filter(e -> e.getValue().isController()).map(Map.Entry::getKey).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Validating the controller of the network: " + controllers);
+		}
+		if (controllers.size() != 1) {
+			messages.add(GUserMessage.errorMessage("One controller needed",
+					"The network counts its loop on one controller, the router that coordinates the others or the output node: it has "
+							+ controllers.size() + (controllers.isEmpty() ? "" : " " + controllers)));
+			return;
+		}
+		final String name = controllers.get(0);
+		final AgentNetworkParticipant controller = participantsByName.get(name);
+		final IGNetworkAgentService<?, ?> service = servicesByName.get(name);
+		if (service == null) {
+			// the missing service has already been reported
+			return;
+		}
+		final boolean routing = service instanceof IGRoutingNetworkAgentService;
+		if (!routing && !controller.isOutputNode()) {
+			messages.add(GUserMessage.errorMessage("Controller must coordinate or answer",
+					"Participant '" + name
+							+ "' is the controller but neither coordinates the others (a router) nor is an output node: the loop of the network is counted on what the controller does"));
+		}
+	}
+
+	/**
+	 * Enforces how the agents talk to the agents in their communication lists, after
+	 * the semantic of the messages they produce
+	 * ({@link IGNetworkAgentService#getProducedMessageSemantic()}):
+	 * <ul>
+	 * <li>an agent delivering its messages ({@code EXECUTE_AND_SHARE_RESULT}) needs at
+	 * least one agent to talk to, the runtime refuses to run it otherwise;</li>
+	 * <li>a router ({@link IGRoutingNetworkAgentService}) sends each agent a command
+	 * typed on that agent's own input: no type to match;</li>
+	 * <li>a forwarder sends its own output, which must be consumable as the input of
+	 * each agent it talks to;</li>
+	 * <li>an agent answering with a {@code RESPONSE} only shares it in the session
+	 * context every agent reads: no type to match.</li>
+	 * </ul>
+	 * Every agent of a communication list must be a participant of the network.
 	 */
 	private void validateCommunicationEdges(Map<String, AgentNetworkParticipant> participantsByName,
 			Map<String, IGNetworkAgentService<?, ?>> servicesByName, List<GUserMessage> messages) {
@@ -346,14 +681,24 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 			String sourceName = entry.getKey();
 			AgentNetworkParticipant participant = entry.getValue();
 			List<String> targets = participant.getCommunicationList();
-			if (targets == null || targets.isEmpty()) {
-				continue;
-			}
 			IGNetworkAgentService<?, ?> sourceService = servicesByName.get(sourceName);
-			boolean routingSource = sourceService instanceof IGRoutingNetworkAgentService;
+			final boolean routingSource = sourceService instanceof IGRoutingNetworkAgentService;
+			// a source whose semantic is not declared is taken for one delivering, the strict case
+			final boolean delivering = sourceService != null
+					&& sourceService.getProducedMessageSemantic() != MessageSemantic.RESPONSE;
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Validating " + targets.size() + " communication edge(s) from participant:" + sourceName
-						+ " routingSource:" + routingSource);
+				LOGGER.debug("Validating " + (targets != null ? targets.size() : 0)
+						+ " communication edge(s) from participant:" + sourceName + " routingSource:" + routingSource
+						+ " delivering:" + delivering);
+			}
+			if (targets == null || targets.isEmpty()) {
+				if (delivering) {
+					messages.add(GUserMessage.errorMessage("No agent to talk to",
+							"Participant '" + sourceName + "' delivers its messages to the agents it can talk to ("
+									+ (routingSource ? "a router" : "a forwarder")
+									+ ") but its communication list is empty"));
+				}
+				continue;
 			}
 			for (String targetName : targets) {
 				if (!participantsByName.containsKey(targetName)) {
@@ -367,6 +712,15 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 					// The missing service has already been reported above.
 					continue;
 				}
+				if (!delivering || routingSource) {
+					// A RESPONSE is only shared in the session context; a router's commands are
+					// typed on each target's input.
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("Edge " + sourceName + " -> " + targetName + " has no input type to match ("
+								+ (routingSource ? "router" : "shared response") + ")");
+					}
+					continue;
+				}
 				Class<?> sourceOutput = sourceService.getOutputType();
 				Class<?> targetInput = targetService.getInputType();
 				boolean compatible = sourceOutput != null && targetInput != null
@@ -375,21 +729,12 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 					LOGGER.trace("Edge " + sourceName + " -> " + targetName + " outputType:" + typeName(sourceOutput)
 							+ " inputType:" + typeName(targetInput) + " compatible:" + compatible);
 				}
-				if (compatible) {
-					continue;
-				}
-				String detail = "Output type '" + typeName(sourceOutput) + "' of '" + sourceName
-						+ "' is not compatible with input type '" + typeName(targetInput) + "' of '" + targetName + "'";
-				if (routingSource) {
-					messages.add(GUserMessage.warnMessage(
-							"Coordinator output does not directly match target input",
-							"Coordinator '" + sourceName + "' messages '" + targetName + "': " + detail
-									+ ". This is allowed for routing agents (they emit commands typed to each target's"
-									+ " input), but check the routing prompt produces the target's input type"));
-				} else {
+				if (!compatible) {
 					messages.add(GUserMessage.errorMessage("Incompatible communication types",
-							detail + ". An agent can message another only when its output type can be consumed as the"
-									+ " other agent's input type"));
+							"Output type '" + typeName(sourceOutput) + "' of '" + sourceName
+									+ "' is not compatible with input type '" + typeName(targetInput) + "' of '"
+									+ targetName + "': '" + sourceName
+									+ "' delivers its output as the input of the agents it talks to"));
 				}
 			}
 		}

@@ -207,13 +207,11 @@ public class UsersFunctions implements IGToolCallbackSource {
 		ToolReference reference = new ToolReference();
 		reference.setName("searchCurrentUsersTeamsColleagues");
 		reference.setDescription("Get actual user's and colleagues list");
-		reference.setUserUIfunctionDescription(
-				"Retrieves minimal informations regarding list of collegues that are in your groups here on gebo.ai");
+		reference.setUserUIfunctionDescription("The user's colleagues, the members of the user's groups");
 		ToolReference reference1 = new ToolReference();
 		reference1.setName("getActualUser");
 		reference1.setDescription("Get actual user informations");
-		reference1.setUserUIfunctionDescription(
-				"Retrieves minimal informations about you for actions for example like send you an email if you ask it");
+		reference1.setUserUIfunctionDescription("The user's own profile (name, email)");
 		return List.of(reference, reference1);
 	}
 

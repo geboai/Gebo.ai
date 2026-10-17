@@ -46,10 +46,10 @@ public class AgenticLoopAgentsInitialization {
 	public static final String AGENTIC_LOOP_AGENT_CONFIG = "agenticLoopAgent";
 	public static final String AGENTIC_LOOP_PURE_CHAT_AGENT_CONFIG = "agenticLoopPureChatAgent";
 	private static final String REPORT_WRITER_AGENT_ROLE = "REPORT_WRITER_AGENT";
-	private static final String AGENT_DESCRIPTION = "Single agent operating every available tool, the internal knowledge base search included, in a loop until the answer is complete";
-	private static final String PURE_CHAT_AGENT_DESCRIPTION = "Single agent operating every available tool but the internal knowledge base search in a loop until the answer is complete";
-	private static final String NETWORK_DESCRIPTION = "Single agent tool calling loop: one agent searches the knowledge bases, the web and the external systems, calls the tools as many times as it needs and writes the answer itself";
-	private static final String PURE_CHAT_NETWORK_DESCRIPTION = "Single agent tool calling loop for free chats: one agent searches the web and the external systems, calls the tools as many times as it needs and writes the answer itself, without the internal knowledge bases";
+	private static final String AGENT_DESCRIPTION = "Single agent using every tool, the knowledge bases included, until the answer is complete";
+	private static final String PURE_CHAT_AGENT_DESCRIPTION = "Single agent using every tool but the knowledge bases, until the answer is complete";
+	private static final String NETWORK_DESCRIPTION = "Single agent with every tool, for chats with knowledge bases";
+	private static final String PURE_CHAT_NETWORK_DESCRIPTION = "Single agent with every tool but the knowledge bases, for free chats";
 	public static final String SUGGESTED_PURPOSE = "Fits most scenarios where a capable LLM, in the order of 100-1000B parameters, is used and paid per million tokens: fewer LLM calls, but the model must reason and call tools reliably.";
 	private static final String NETWORK_SCENARIO = "A single agent answers the user: it operates the available tools (internal knowledge base, web and external searches, connectors) as many times as needed and decides by itself when the answer is complete.";
 	private static final String PURE_CHAT_NETWORK_SCENARIO = "A single agent answers the user in a free chat: it operates the available tools (web and external searches, connectors) as many times as needed and decides by itself when the answer is complete.";
@@ -116,8 +116,9 @@ public class AgenticLoopAgentsInitialization {
 		network.setChoosableForPipelineTypes(List.of(pipelineType));
 		network.setAgentsNetworkServiceFactoryId(
 				GReactiveChatAgentsNetworkServiceFactoryImpl.REACTIVE_CHAT_AGENTS_NETWORK);
-		// The loop runs inside the agent: the network only delivers the request to it.
-		network.setMaxLoopIteration(4);
+		// The loop runs inside the agent, the controller of the network: the limit is
+		// its search-and-rewrite cycles.
+		network.setMaxLoopIteration(5);
 		network.setScenarioDescription(scenario);
 		network.setAccessibleToAll(true);
 		AgentNetworkParticipant input = new AgentNetworkParticipant();
@@ -128,8 +129,7 @@ public class AgenticLoopAgentsInitialization {
 		agent.setAgentConfigCode(agentConfigCode);
 		agent.setInputNode(false);
 		agent.setOutputNode(true);
-		agent.setMaxInvocations(1);
-		agent.setMaxConsecutiveInvocations(1);
+		agent.setController(true);
 		input.setCommunicationList(List.of(agent.getNetworkAgentName()));
 		agent.setCommunicationList(List.of());
 		network.setAgents(List.of(input, agent));

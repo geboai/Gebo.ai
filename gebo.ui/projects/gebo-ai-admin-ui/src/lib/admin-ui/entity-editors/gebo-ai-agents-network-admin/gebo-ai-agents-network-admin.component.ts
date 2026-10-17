@@ -1,12 +1,43 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
 import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GBaseObject, GAgentConfig, AgentMountedTools } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GAgentConfig, AgentMountedTools, AgentServiceDescriptor, NetworkServiceFactoryDescriptor, AgentTypeCompatibility, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
+import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboActionPerformedType, GeboAITranslationService, ExtendedConfirmation } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
-import { map, Observable, of } from "rxjs";
-import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
+import { forkJoin, map, Observable, of, take } from "rxjs";
+import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService, EdgeDrawEndedEvent, SelectionChangedEvent } from "ng-diagram";
 import { AgentNodeComponent } from "./agent-node.component";
 
+/** The verdict on an edge the admin wants to draw, with the reason the rules give. */
+export interface EdgeVerdict {
+    ok: boolean;
+    reason: string;
+}
+
+/** A group of the palette: the services of one kind. */
+interface PaletteGroup {
+    id: string;
+    kind: AgentServiceDescriptor.KindEnum;
+    label: string;
+    services: AgentServiceDescriptor[];
+}
+
+/**
+ * The composer of a network of agents: the factory the network runs on fixes its
+ * contract (the input its input nodes must accept, the output its output nodes
+ * must produce), a palette offers the agent services grouped by what they do in
+ * a network, the graph shows the participants with their typed ports and the
+ * edges of their communication lists, the inspector edits the selected
+ * participant and the checks rail shows what the backend validation answers on
+ * every change, so that a network is saved only when it would be accepted.
+ */
 @Component({
     selector: "gebo-ai-agents-network-admin-component",
     templateUrl: "gebo-ai-agents-network-admin.component.html",
@@ -33,6 +64,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         maxLoopIteration: new FormControl(),
         scenarioDescription: new FormControl(),
         suggestedPurpose: new FormControl(),
+        agentsNetworkServiceFactoryId: new FormControl(null, Validators.required),
         agents: new FormControl(),
         readOnly: new FormControl(),
         choosableForPipelineTypes: new FormControl(),
@@ -42,7 +74,14 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         aclAliases: new FormControl()
     });
 
-    protected availableAgents: GBaseObject[] = [];
+    /** Every agent configuration, whole: the participants bind to them. */
+    protected configs: GAgentConfig[] = [];
+    /** The agent services that can take part in a network, reactive ones included. */
+    protected services: AgentServiceDescriptor[] = [];
+    protected factories: NetworkServiceFactoryDescriptor[] = [];
+    /** For each message type, the types assignable to it, as the backend has them. */
+    private assignable = new Map<string, Set<string>>();
+    protected paletteGroups: PaletteGroup[] = [];
     protected agentsList: AgentNetworkParticipant[] = [];
     /** The tools each agent configuration mounts, by configuration code. */
     private mountedTools = new Map<string, AgentMountedTools>();
@@ -58,8 +97,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     private toolCategories: string[] = [];
 
     public readonly: boolean = false;
+    protected activeTab: number = 0;
     protected diagramModel: any;
     private lastLayoutNodes: { id: string; position: { x: number; y: number } }[] = [];
+    /** The positions the admin gave the nodes by dragging them, kept across redraws. */
+    private nodePositions = new Map<string, { x: number; y: number }>();
     @ViewChild("diagramHost", { read: ElementRef }) private diagramHostRef?: ElementRef<HTMLElement>;
     private observedDiagramHost?: HTMLElement;
     private diagramResizeObserver?: ResizeObserver;
@@ -76,24 +118,44 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         // after the tab becomes visible, as the compliance data-flow graph does.
         zoom: {
             max: 3
+        },
+        linking: {
+            // the ports are small: a link snaps to a port from further away than the
+            // library's default 10 units
+            portSnapDistance: 30,
+            // an edge is drawn from the output port of a participant to the input port
+            // of another, and only when the rules let the first talk to the second
+            validateConnection: (source: { id?: string } | null, sourcePort: { type?: string } | null, target: { id?: string } | null, targetPort: { type?: string } | null) => {
+                const verdict = this.linkVerdict(source?.id, sourcePort?.type, target?.id, targetPort?.type);
+                console.debug("[agents-network] link " + source?.id + " -> " + target?.id + ": " + (verdict.ok ? "allowed" : "refused") + ", " + verdict.reason);
+                return verdict.ok;
+            }
         }
     };
 
-    // Participant modal configuration
-    protected showParticipantDialog: boolean = false;
-    protected isNewParticipant: boolean = true;
-    protected dialogHeader: string = "";
-    protected editingParticipant: AgentNetworkParticipant | null = null;
-    protected parentParticipant: AgentNetworkParticipant | null = null;
+    // The inspector: the selected participant, edited in place
+    protected selected: AgentNetworkParticipant | null = null;
+    protected selectedEdge: { source: string; target: string } | null = null;
+    protected inspectorTab: "participant" | "configuration" = "participant";
+    private applyingSelection: boolean = false;
 
     protected policyOptions = [
-        { label: "Allow All", value: "ALLOW_ALL" },
-        { label: "Deny All", value: "DENY_ALL" },
-        { label: "Allow List", value: "ALLOW_LIST" },
-        { label: "Deny List", value: "DENY_LIST" }
+        { id: "PolicyAllowAll", label: "Allow all", value: "ALLOW_ALL" },
+        { id: "PolicyDenyAll", label: "Deny all", value: "DENY_ALL" },
+        { id: "PolicyAllowList", label: "Allow list", value: "ALLOW_LIST" },
+        { id: "PolicyDenyList", label: "Deny list", value: "DENY_LIST" }
     ];
 
-    /** The kinds of chat a network can be chosen for. */
+    /** The groups of the palette, by the kind of the services; the labels are translated on init. */
+    private static readonly PALETTE_GROUPS: { id: string, kind: AgentServiceDescriptor.KindEnum, label: string }[] = [
+        { id: "PaletteForwarders", kind: "FORWARDER", label: "Input adapters" },
+        { id: "PaletteRouters", kind: "ROUTER", label: "Routers" },
+        { id: "PaletteResponders", kind: "RESPONDER", label: "Workers" },
+        { id: "PaletteWriters", kind: "WRITER", label: "Writers, answer the user" },
+        { id: "PaletteNetworkAdapters", kind: "NETWORK_ADAPTER", label: "Networks as agents" }
+    ];
+    private paletteGroupLabels: { id: string, label: string }[] = GeboAIAgentsNetworkAdminComponent.PALETTE_GROUPS.map(g => ({ id: g.id, label: g.label }));
+
     /** Whether the agents are enabled: the chat choice fields exist only then. */
     protected agenticChatNetworksEnabled: boolean = false;
 
@@ -103,19 +165,25 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         { id: "PureChatPipelineOption", label: "Free chat", value: "PURE_CHAT_PIPELINE" }
     ];
 
+    /** The validation messages of the network as it is now, from the backend. */
+    protected checks: GUserMessage[] = [];
+    protected validationErrors: boolean = false;
+    private validateTimer?: ReturnType<typeof setTimeout>;
+    private validating: boolean = false;
+    private validateAgain: boolean = false;
+
     protected participantFormGroup = new FormGroup({
-        networkAgentName: new FormControl("", Validators.required),
-        agentConfigCode: new FormControl("", Validators.required),
-        agentContextualName: new FormControl(""),
-        inputNode: new FormControl(false),
-        outputNode: new FormControl(false),
-        communicationPolicy: new FormControl("ALLOW_ALL", Validators.required),
-        communicationList: new FormControl<string[]>([]),
-        maxInvocations: new FormControl<number | null>(null),
-        maxConsecutiveInvocations: new FormControl<number | null>(null),
-        canCallTools: new FormControl(true),
-        canCallOtherAgents: new FormControl(true)
+        agentConfigCode: new FormControl<string>("", Validators.required),
+        agentContextualName: new FormControl<string>(""),
+        inputNode: new FormControl<boolean>(false),
+        outputNode: new FormControl<boolean>(false),
+        allowedToNotifyUser: new FormControl<boolean>(true),
+        communicationPolicy: new FormControl<string>("ALLOW_LIST"),
+        controller: new FormControl<boolean>(false),
+        canCallTools: new FormControl<boolean>(true),
+        canCallOtherAgents: new FormControl<boolean>(false)
     });
+    protected addTargetControl = new FormControl<string | null>(null);
 
     constructor(
         injector: Injector,
@@ -135,23 +203,31 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         this.formGroup.valueChanges.subscribe((value) => {
             const isReadOnly = value?.readOnly === true;
             if (this.readonly !== isReadOnly) {
-                this.readonly = isReadOnly;
-                if (this.readonly) {
-                    this.participantFormGroup.disable();
-                    this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-                    this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
-                } else {
-                    this.participantFormGroup.enable();
-                    this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-                    this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
-                }
+                this.applyReadOnly(isReadOnly);
                 this.rebuildChart();
+            }
+        });
+        // the contract changes with the factory: every check runs again
+        this.formGroup.controls["agentsNetworkServiceFactoryId"].valueChanges.subscribe(() => {
+            this.buildPalette();
+            this.scheduleValidation();
+        });
+        this.participantFormGroup.valueChanges.subscribe(() => this.applyInspector());
+        this.addTargetControl.valueChanges.subscribe(target => {
+            if (target) {
+                this.addTarget(target);
+                // the select is a picker: it goes back to its placeholder once the
+                // choice is taken, after the select has settled its own model
+                setTimeout(() => this.addTargetControl.setValue(null, { emitEvent: false }));
             }
         });
         destroyRef.onDestroy(() => {
             this.diagramResizeObserver?.disconnect();
             if (this.resizeFitTimer) {
                 clearTimeout(this.resizeFitTimer);
+            }
+            if (this.validateTimer) {
+                clearTimeout(this.validateTimer);
             }
         });
     }
@@ -160,20 +236,44 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         super.ngOnInit();
         this.chatNetworksService.isAgenticChatNetworksEnabled()
             .subscribe(enabled => this.agenticChatNetworksEnabled = enabled === true);
-        this.myInjector.get(GeboAITranslationService).translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork",
-            this.pipelineTypeOptions).subscribe(items => this.pipelineTypeOptions = [...items] as { id: string, label: string, value: string }[]);
-        this.loadAvailableAgents();
+        const translations = this.myInjector.get(GeboAITranslationService);
+        translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.pipelineTypeOptions)
+            .subscribe(items => this.pipelineTypeOptions = [...items] as { id: string, label: string, value: string }[]);
+        translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.policyOptions)
+            .subscribe(items => this.policyOptions = [...items] as { id: string, label: string, value: string }[]);
+        translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.paletteGroupLabels)
+            .subscribe(items => {
+                this.paletteGroupLabels = [...items] as { id: string, label: string }[];
+                this.buildPalette();
+            });
+        this.loadComposerData();
     }
 
-    protected loadAvailableAgents(selectCode?: string): void {
+    /**
+     * Loads what the composer needs to apply the rules: the services with their
+     * types, the factories with their contracts, the assignability of the types and
+     * every agent configuration.
+     */
+    protected loadComposerData(selectCode?: string): void {
         this.loadingRelatedBackend = true;
-        this.agentsService.getAgents().subscribe({
-            next: (agents) => {
-                this.availableAgents = agents || [];
+        const observables: [Observable<AgentServiceDescriptor[]>, Observable<NetworkServiceFactoryDescriptor[]>, Observable<AgentTypeCompatibility[]>, Observable<GAgentConfig[]>] =
+            [this.service.getAgentServices(), this.service.getNetworkServiceFactories(), this.service.getAgentTypesCompatibility(), this.service.getAgentConfigs()];
+        forkJoin(observables).subscribe({
+            next: ([services, factories, compatibility, configs]) => {
+                this.services = services || [];
+                this.factories = factories || [];
+                this.assignable = new Map((compatibility || []).map(c => [c.type || "", new Set(c.assignableFrom || [])]));
+                this.configs = configs || [];
+                console.debug("[agents-network] composer data: " + this.services.length + " service(s), " + this.factories.length
+                    + " factory(ies), " + this.assignable.size + " type(s), " + this.configs.length + " configuration(s)");
+                this.buildPalette();
                 if (selectCode) {
                     this.participantFormGroup.controls.agentConfigCode.setValue(selectCode);
                 }
+                this.rebuildChart();
+                this.scheduleValidation();
             },
+            error: (error) => console.error("Cannot load the data of the composer", error),
             complete: () => {
                 this.loadingRelatedBackend = false;
             }
@@ -181,36 +281,502 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     }
 
     override onLoadedPersistentData(actualValue: GAgentsNetwork): void {
-        this.readonly = actualValue?.readOnly === true;
+        this.applyReadOnly(actualValue?.readOnly === true);
         this.agentsList = actualValue.agents ? [...actualValue.agents] : [];
-        if (this.readonly) {
-            this.participantFormGroup.disable();
-            this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-            this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
-        } else {
-            this.participantFormGroup.enable();
-            this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-            this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
-        }
+        this.nodePositions.clear();
+        this.select(null);
         this.rebuildChart();
         this.loadMountedTools();
+        this.scheduleValidation();
     }
 
     override onNewData(actualValue: GAgentsNetwork): void {
-        this.readonly = actualValue?.readOnly === true;
+        this.applyReadOnly(actualValue?.readOnly === true);
         this.agentsList = actualValue.agents ? [...actualValue.agents] : [];
-        if (this.readonly) {
-            this.participantFormGroup.disable();
-            this.formGroup.get("maxLoopIteration")?.disable({ emitEvent: false });
-            this.formGroup.get("choosableForPipelineTypes")?.disable({ emitEvent: false });
-        } else {
-            this.participantFormGroup.enable();
-            this.formGroup.get("maxLoopIteration")?.enable({ emitEvent: false });
-            this.formGroup.get("choosableForPipelineTypes")?.enable({ emitEvent: false });
+        this.nodePositions.clear();
+        this.select(null);
+        // a new network runs on the first factory unless told otherwise
+        if (!this.formGroup.controls["agentsNetworkServiceFactoryId"].value && this.factories.length > 0) {
+            this.formGroup.controls["agentsNetworkServiceFactoryId"].setValue(this.factories[0].factoryId);
         }
         this.rebuildChart();
         this.loadMountedTools();
+        this.scheduleValidation();
     }
+
+    private applyReadOnly(isReadOnly: boolean): void {
+        this.readonly = isReadOnly;
+        const controls = ["maxLoopIteration", "choosableForPipelineTypes", "agentsNetworkServiceFactoryId"];
+        if (this.readonly) {
+            this.participantFormGroup.disable({ emitEvent: false });
+            this.addTargetControl.disable({ emitEvent: false });
+            controls.forEach(c => this.formGroup.get(c)?.disable({ emitEvent: false }));
+        } else {
+            this.participantFormGroup.enable({ emitEvent: false });
+            this.addTargetControl.enable({ emitEvent: false });
+            controls.forEach(c => this.formGroup.get(c)?.enable({ emitEvent: false }));
+        }
+    }
+
+    // ---------------------------------------------------------------------
+    // The rules, as the backend validation applies them
+    // ---------------------------------------------------------------------
+
+    /** The network agent name of a participant, as the backend computes it. */
+    public participantName(participant: AgentNetworkParticipant | null | undefined): string {
+        if (!participant) {
+            return "";
+        }
+        return (participant.agentConfigCode || "") + (participant.agentContextualName ? "-" + participant.agentContextualName : "");
+    }
+
+    public configOf(participant: AgentNetworkParticipant | null | undefined): GAgentConfig | undefined {
+        return participant?.agentConfigCode ? this.configs.find(c => c.code === participant.agentConfigCode) : undefined;
+    }
+
+    public serviceOfConfig(config: GAgentConfig | undefined): AgentServiceDescriptor | undefined {
+        return config?.agentServiceId ? this.services.find(s => s.serviceId === config.agentServiceId) : undefined;
+    }
+
+    public serviceOf(participant: AgentNetworkParticipant | null | undefined): AgentServiceDescriptor | undefined {
+        return this.serviceOfConfig(this.configOf(participant));
+    }
+
+    protected factory(): NetworkServiceFactoryDescriptor | undefined {
+        const id = this.formGroup.controls["agentsNetworkServiceFactoryId"].value;
+        return id ? this.factories.find(f => f.factoryId === id) : undefined;
+    }
+
+    /** Whether a message of the source type can be given to an agent accepting the target type. */
+    public isAssignable(target: string | undefined, source: string | undefined): boolean {
+        if (!target || !source) {
+            return false;
+        }
+        const sources = this.assignable.get(target);
+        return sources ? sources.has(source) : target === source;
+    }
+
+    /** The simple name of a type, what the nodes and the chips show. */
+    public shortType(type: string | undefined): string {
+        if (!type) {
+            return "?";
+        }
+        const simple = type.substring(type.lastIndexOf(".") + 1);
+        return simple === "List" ? "List<Document>" : simple;
+    }
+
+    public isRouter(service: AgentServiceDescriptor | undefined): boolean {
+        return service?.kind === "ROUTER";
+    }
+
+    /** Whether the service delivers its output to the agents it talks to (a forwarder). */
+    public isForwarder(service: AgentServiceDescriptor | undefined): boolean {
+        return service?.kind === "FORWARDER";
+    }
+
+    /** Whether the service answers the agent that asked (its list is informational). */
+    public isResponder(service: AgentServiceDescriptor | undefined): boolean {
+        return !!service && service.messageSemantic === "RESPONSE";
+    }
+
+    /**
+     * Whether, by the rules, the source participant can be told to talk to the
+     * target one, with the reason.
+     */
+    public edgeVerdict(source: AgentNetworkParticipant, target: AgentNetworkParticipant): EdgeVerdict {
+        if (source === target) {
+            return { ok: false, reason: "an agent does not talk to itself" };
+        }
+        const sourceService = this.serviceOf(source), targetService = this.serviceOf(target);
+        if (!sourceService || !targetService) {
+            return { ok: false, reason: "unknown agent service" };
+        }
+        if ((source.communicationList || []).includes(this.participantName(target))) {
+            return { ok: false, reason: "already listed" };
+        }
+        if (this.isRouter(sourceService)) {
+            return { ok: true, reason: "a router sends commands typed on " + this.shortType(targetService.inputType) };
+        }
+        if (this.isResponder(sourceService)) {
+            return { ok: true, reason: "a responder's list tells the model whom it may address" };
+        }
+        return this.isAssignable(targetService.inputType, sourceService.outputType)
+            ? { ok: true, reason: this.shortType(sourceService.outputType) + " is accepted" }
+            : { ok: false, reason: "it delivers " + this.shortType(sourceService.outputType) + ", the target accepts " + this.shortType(targetService.inputType) };
+    }
+
+    /** The verdict on a link drawn on the graph, from a node and port to a node and port. */
+    private linkVerdict(sourceId: string | undefined, sourcePortType: string | undefined, targetId: string | undefined, targetPortType: string | undefined): EdgeVerdict {
+        if (this.readonly) {
+            return { ok: false, reason: "the network is read only" };
+        }
+        if (sourcePortType && sourcePortType !== "source") {
+            return { ok: false, reason: "a link starts from an output port" };
+        }
+        if (targetPortType && targetPortType !== "target") {
+            return { ok: false, reason: "a link ends on an input port" };
+        }
+        const source = this.agentsList.find(p => this.participantName(p) === sourceId);
+        const target = this.agentsList.find(p => this.participantName(p) === targetId);
+        if (!source || !target) {
+            return { ok: false, reason: "unknown participant" };
+        }
+        return this.edgeVerdict(source, target);
+    }
+
+    /** Whether the service can be added to the network under its contract, with the reason when not. */
+    public serviceBlockReason(service: AgentServiceDescriptor): string | null {
+        const factory = this.factory();
+        if (service.reactive && !service.adaptable) {
+            return "no adapter makes this agent a network agent";
+        }
+        if (service.reactive && factory && !factory.reactiveOutput) {
+            return "this factory runs network agents only";
+        }
+        if (service.reactive && this.agentsList.some(p => this.serviceOf(p)?.reactive)) {
+            return "this network already streams one writer";
+        }
+        return null;
+    }
+
+    /** Whether a participant of the service can be the input node of the network under its contract. */
+    public canBeInputNode(service: AgentServiceDescriptor | undefined): boolean {
+        const factory = this.factory();
+        return !!service && !!factory && this.isAssignable(service.inputType, factory.inputType);
+    }
+
+    /**
+     * Whether the participant can be the controller of the network, the one its loop
+     * is counted on: a router (its coordination cycles) or an output node (the cycles
+     * of a writer, the single pass of a plain output node).
+     */
+    public canBeController(service: AgentServiceDescriptor | undefined, participant?: AgentNetworkParticipant): boolean {
+        if (!service) {
+            return false;
+        }
+        return this.isRouter(service) || service.reactive === true || participant?.outputNode === true;
+    }
+
+    /** Whether a participant of the service produces the output of the network. */
+    public producesNetworkOutput(service: AgentServiceDescriptor | undefined): boolean {
+        const factory = this.factory();
+        return !!service && !!factory && this.isAssignable(factory.outputType, service.outputType);
+    }
+
+    /** The participants the selected one could be told to talk to, each with the verdict. */
+    protected targetCandidates(): { name: string, verdict: EdgeVerdict, disabled: boolean }[] {
+        if (!this.selected) {
+            return [];
+        }
+        const source = this.selected;
+        return this.agentsList.filter(p => p !== source)
+            .map(p => {
+                const verdict = this.edgeVerdict(source, p);
+                return { name: this.participantName(p), verdict, disabled: !verdict.ok };
+            });
+    }
+
+    /** How many checks of the severity the validation answered. */
+    protected checksCount(severity: string): number {
+        return this.checks.filter(m => m.severity === severity).length;
+    }
+
+    /** Whether the name of the participant is used by another participant too. */
+    public isDuplicateName(participant: AgentNetworkParticipant): boolean {
+        const name = this.participantName(participant);
+        return this.agentsList.filter(p => this.participantName(p) === name).length > 1;
+    }
+
+    /** The configurations of the service the selected participant runs. */
+    protected configsOfSelected(): GAgentConfig[] {
+        const config = this.configOf(this.selected);
+        return config ? this.configs.filter(c => c.agentServiceId === config.agentServiceId) : [];
+    }
+
+    // ---------------------------------------------------------------------
+    // The checks: the backend validation on every change
+    // ---------------------------------------------------------------------
+
+    /** Runs the backend validation once the admin pauses. */
+    protected scheduleValidation(): void {
+        if (this.validateTimer) {
+            clearTimeout(this.validateTimer);
+        }
+        this.validateTimer = setTimeout(() => this.runValidation(), 400);
+    }
+
+    protected runValidation(): void {
+        if (this.validating) {
+            this.validateAgain = true;
+            return;
+        }
+        const value: GAgentsNetwork = { ...(this.entity || {}), ...this.formGroup.getRawValue(), agents: this.agentsList } as GAgentsNetwork;
+        if (!value.code && !value.description) {
+            // nothing loaded yet
+            return;
+        }
+        this.validating = true;
+        this.service.validateAgentsNetwork(value).subscribe({
+            next: (status) => {
+                this.checks = (status?.messages || []).filter(m => m.severity !== "success");
+                this.validationErrors = this.checks.some(m => m.severity === "error");
+                console.debug("[agents-network] validation of " + (value.code || "the new network") + ": "
+                    + this.checks.filter(m => m.severity === "error").length + " error(s), "
+                    + this.checks.filter(m => m.severity === "warn").length + " warning(s)");
+                this.refreshNodeErrors();
+            },
+            error: (error) => {
+                console.error("Cannot validate the network of agents", error);
+                this.validating = false;
+            },
+            complete: () => {
+                this.validating = false;
+                if (this.validateAgain) {
+                    this.validateAgain = false;
+                    this.scheduleValidation();
+                }
+            }
+        });
+    }
+
+    /** The names of the participants the error messages point at. */
+    private nodeErrors = new Set<string>();
+
+    private refreshNodeErrors(): void {
+        // the validation names the participant it talks about in quotes
+        this.nodeErrors = new Set(this.agentsList.map(p => this.participantName(p))
+            .filter(name => this.checks.some(m => m.severity === "error" && (m.detail || "").includes("'" + name + "'"))));
+    }
+
+    public nodeHasError(name: string | undefined): boolean {
+        return !!name && this.nodeErrors.has(name);
+    }
+
+    /** The participant a check points at, if any: clicking the check selects it. */
+    protected selectFromCheck(message: GUserMessage): void {
+        const participant = this.agentsList.find(p => (message.detail || "").includes("'" + this.participantName(p) + "'"));
+        if (participant) {
+            this.select(participant);
+            this.activeTab = 1;
+        }
+    }
+
+    // ---------------------------------------------------------------------
+    // The palette
+    // ---------------------------------------------------------------------
+
+    private buildPalette(): void {
+        this.paletteGroups = GeboAIAgentsNetworkAdminComponent.PALETTE_GROUPS.map(group => ({
+            id: group.id,
+            kind: group.kind,
+            label: this.paletteGroupLabels.find(l => l.id === group.id)?.label || group.label,
+            services: this.services.filter(s => s.kind === group.kind)
+        })).filter(group => group.services.length > 0);
+    }
+
+    public configsCount(service: AgentServiceDescriptor): number {
+        return this.configs.filter(c => c.agentServiceId === service.serviceId).length;
+    }
+
+    /**
+     * Adds a participant running the service: with its first configuration, or with
+     * a new configuration when the service has none.
+     */
+    protected addService(service: AgentServiceDescriptor): void {
+        if (this.readonly || this.serviceBlockReason(service)) {
+            return;
+        }
+        const configs = this.configs.filter(c => c.agentServiceId === service.serviceId);
+        if (configs.length === 0) {
+            this.addAgentConfig(service.serviceId);
+            return;
+        }
+        this.addParticipant(configs[0]);
+    }
+
+    private addParticipant(config: GAgentConfig): void {
+        const service = this.serviceOfConfig(config);
+        const participant: AgentNetworkParticipant = {
+            agentConfigCode: config.code!,
+            agentContextualName: undefined,
+            inputNode: false,
+            outputNode: service?.reactive === true,
+            allowedToNotifyUser: true,
+            communicationPolicy: "ALLOW_LIST",
+            communicationList: [],
+            // the first participant that can be the controller takes the role
+            controller: this.canBeController(service) && !this.agentsList.some(p => p.controller),
+            canCallTools: true,
+            canCallOtherAgents: false
+        };
+        // the same configuration twice needs a contextual name to tell them apart
+        let suffix = 2;
+        while (this.agentsList.some(p => this.participantName(p) === this.participantName(participant))) {
+            participant.agentContextualName = String(suffix++);
+        }
+        participant.networkAgentName = this.participantName(participant);
+        this.agentsList.push(participant);
+        console.debug("[agents-network] added participant " + participant.networkAgentName + " running " + (service?.serviceId || "?"));
+        this.updateFormGroup();
+        this.select(participant);
+    }
+
+    // ---------------------------------------------------------------------
+    // The inspector
+    // ---------------------------------------------------------------------
+
+    public select(participant: AgentNetworkParticipant | null): void {
+        this.selected = participant;
+        this.selectedEdge = null;
+        this.inspectorTab = "participant";
+        this.applyingSelection = true;
+        try {
+            if (participant) {
+                this.participantFormGroup.patchValue({
+                    agentConfigCode: participant.agentConfigCode || "",
+                    agentContextualName: participant.agentContextualName || "",
+                    inputNode: participant.inputNode === true,
+                    outputNode: participant.outputNode === true,
+                    allowedToNotifyUser: participant.allowedToNotifyUser !== false,
+                    communicationPolicy: participant.communicationPolicy || "ALLOW_LIST",
+                    controller: participant.controller === true,
+                    canCallTools: participant.canCallTools !== false,
+                    canCallOtherAgents: participant.canCallOtherAgents === true
+                }, { emitEvent: false });
+                // the constraints of the contract are on the controls themselves: a
+                // participant whose input is not the contract input cannot be the input
+                // node, a writer is always the output node
+                if (!this.readonly) {
+                    const service = this.serviceOf(participant);
+                    this.setControlEnabled(this.participantFormGroup.controls.inputNode, this.canBeInputNode(service));
+                    this.setControlEnabled(this.participantFormGroup.controls.outputNode, service?.reactive !== true);
+                    this.setControlEnabled(this.participantFormGroup.controls.controller, this.canBeController(service, participant));
+                }
+            }
+        } finally {
+            this.applyingSelection = false;
+        }
+        this.refreshNodeSelection();
+    }
+
+    private setControlEnabled(control: FormControl<any>, enabled: boolean): void {
+        if (enabled && control.disabled) {
+            control.enable({ emitEvent: false });
+        } else if (!enabled && control.enabled) {
+            control.disable({ emitEvent: false });
+        }
+    }
+
+    public isSelected(participant: AgentNetworkParticipant): boolean {
+        return this.selected === participant;
+    }
+
+    /** Writes the inspector into the selected participant, renaming its edges when its name changes. */
+    private applyInspector(): void {
+        if (this.applyingSelection || !this.selected || this.readonly) {
+            return;
+        }
+        const participant = this.selected;
+        const value = this.participantFormGroup.getRawValue();
+        const oldName = this.participantName(participant);
+        participant.agentConfigCode = value.agentConfigCode || participant.agentConfigCode;
+        participant.agentContextualName = value.agentContextualName?.trim() ? value.agentContextualName.trim() : undefined;
+        participant.inputNode = value.inputNode === true;
+        participant.outputNode = value.outputNode === true;
+        participant.allowedToNotifyUser = value.allowedToNotifyUser !== false;
+        participant.communicationPolicy = (value.communicationPolicy || "ALLOW_LIST") as AgentNetworkParticipant.CommunicationPolicyEnum;
+        const controller = value.controller === true;
+        if (controller && !participant.controller) {
+            // one controller: the flag moves to this participant
+            this.agentsList.forEach(p => p.controller = p === participant);
+            console.debug("[agents-network] " + this.participantName(participant) + " is the controller of the network");
+        } else {
+            participant.controller = controller;
+        }
+        participant.canCallTools = value.canCallTools !== false;
+        participant.canCallOtherAgents = value.canCallOtherAgents === true;
+        const service = this.serviceOf(participant);
+        if (service?.reactive && !participant.outputNode) {
+            // a writer is always an output node
+            participant.outputNode = true;
+            this.participantFormGroup.controls.outputNode.setValue(true, { emitEvent: false });
+        }
+        this.setControlEnabled(this.participantFormGroup.controls.controller, this.canBeController(service, participant));
+        const newName = this.participantName(participant);
+        participant.networkAgentName = newName;
+        if (oldName !== newName) {
+            this.agentsList.forEach(p => {
+                if (p.communicationList) {
+                    p.communicationList = p.communicationList.map(n => n === oldName ? newName : n);
+                }
+            });
+            const position = this.nodePositions.get(oldName);
+            if (position) {
+                this.nodePositions.delete(oldName);
+                this.nodePositions.set(newName, position);
+            }
+            console.debug("[agents-network] participant " + oldName + " renamed " + newName + ", its edges renamed with it");
+        }
+        this.updateFormGroup();
+    }
+
+    protected addTarget(target: string): void {
+        if (!this.selected || this.readonly) {
+            return;
+        }
+        const targetParticipant = this.agentsList.find(p => this.participantName(p) === target);
+        if (!targetParticipant) {
+            return;
+        }
+        const verdict = this.edgeVerdict(this.selected, targetParticipant);
+        if (!verdict.ok) {
+            console.debug("[agents-network] " + this.participantName(this.selected) + " cannot talk to " + target + ": " + verdict.reason);
+            return;
+        }
+        this.selected.communicationList = [...(this.selected.communicationList || []), target];
+        console.debug("[agents-network] " + this.participantName(this.selected) + " talks to " + target + ": " + verdict.reason);
+        this.updateFormGroup();
+    }
+
+    protected removeTarget(target: string): void {
+        if (!this.selected || this.readonly) {
+            return;
+        }
+        this.selected.communicationList = (this.selected.communicationList || []).filter(n => n !== target);
+        console.debug("[agents-network] " + this.participantName(this.selected) + " no longer talks to " + target);
+        this.updateFormGroup();
+    }
+
+    protected removeSelectedEdge(): void {
+        if (!this.selectedEdge || this.readonly) {
+            return;
+        }
+        const edge = this.selectedEdge;
+        const source = this.agentsList.find(p => this.participantName(p) === edge.source);
+        if (source) {
+            source.communicationList = (source.communicationList || []).filter(n => n !== edge.target);
+            console.debug("[agents-network] edge " + edge.source + " -> " + edge.target + " removed");
+        }
+        this.selectedEdge = null;
+        this.updateFormGroup();
+    }
+
+    /** Opens the editor of the configuration the selected participant runs. */
+    protected editSelectedConfig(): void {
+        this.editAgentConfig(this.selected?.agentConfigCode);
+    }
+
+    /** Makes a new configuration of the service the selected participant runs, for the participant. */
+    protected newConfigForSelected(): void {
+        const service = this.serviceOf(this.selected);
+        if (service) {
+            this.addAgentConfig(service.serviceId, this.selected || undefined);
+        }
+    }
+
+    // ---------------------------------------------------------------------
+    // The graph
+    // ---------------------------------------------------------------------
 
     /**
      * The colour classes of a tool category: the categories of the graph take the
@@ -265,9 +831,9 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         });
     }
 
-    public getAgentDescription(code: string): string {
-        const found = this.availableAgents.find(a => a.code === code);
-        return found ? found.description || code : code;
+    public getAgentDescription(code: string | undefined): string {
+        const found = code ? this.configs.find(a => a.code === code) : undefined;
+        return found ? found.description || code || "" : code || "";
     }
 
     protected rebuildChart(): void {
@@ -278,23 +844,17 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             const list = this.agentsList || [];
             if (list.length === 0) {
                 this.diagramModel = initializeModel({ nodes: [], edges: [] });
+                this.lastLayoutNodes = [];
                 return;
             }
+            const nameOf = (p: AgentNetworkParticipant) => this.participantName(p);
 
             // Collect all target communication names to identify root nodes
             const targetNames = new Set<string>();
-            list.forEach(agent => {
-                if (agent.communicationList) {
-                    agent.communicationList.forEach(name => {
-                        if (name) {
-                            targetNames.add(name);
-                        }
-                    });
-                }
-            });
+            list.forEach(agent => (agent.communicationList || []).forEach(name => name && targetNames.add(name)));
 
-            // Roots are agents whose networkAgentName is not referenced in any communicationList
-            let roots = list.filter(agent => agent.networkAgentName && !targetNames.has(agent.networkAgentName));
+            // Roots are agents whose name is not referenced in any communicationList
+            let roots = list.filter(agent => !targetNames.has(nameOf(agent)));
 
             // If there is a cycle and no clear root, fallback to inputNode or first node
             if (roots.length === 0 && list.length > 0) {
@@ -305,37 +865,27 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             // BFS to assign hierarchy levels
             const levelsMap = new Map<string, number>();
             const visited = new Set<string>();
-            const queue: { agent: AgentNetworkParticipant; level: number }[] = [];
-
-            roots.forEach(r => {
-                if (r.networkAgentName) {
-                    queue.push({ agent: r, level: 0 });
-                }
-            });
-
+            const queue: { agent: AgentNetworkParticipant; level: number }[] = roots.map(r => ({ agent: r, level: 0 }));
             while (queue.length > 0) {
                 const { agent, level } = queue.shift()!;
-                const name = agent.networkAgentName || "";
+                const name = nameOf(agent);
                 if (visited.has(name)) {
                     continue;
                 }
                 visited.add(name);
                 levelsMap.set(name, level);
-
-                if (agent.communicationList) {
-                    agent.communicationList.forEach(childName => {
-                        const childAgent = list.find(a => a.networkAgentName === childName);
-                        if (childAgent && childName && !visited.has(childName)) {
-                            queue.push({ agent: childAgent, level: level + 1 });
-                        }
-                    });
-                }
+                (agent.communicationList || []).forEach(childName => {
+                    const childAgent = list.find(a => nameOf(a) === childName);
+                    if (childAgent && childName && !visited.has(childName)) {
+                        queue.push({ agent: childAgent, level: level + 1 });
+                    }
+                });
             }
 
             // Default all unreached/isolated agents to level 0
             list.forEach(a => {
-                if (a.networkAgentName && !levelsMap.has(a.networkAgentName)) {
-                    levelsMap.set(a.networkAgentName, 0);
+                if (!levelsMap.has(nameOf(a))) {
+                    levelsMap.set(nameOf(a), 0);
                 }
             });
 
@@ -350,38 +900,38 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
             const nodes: any[] = [];
             const edges: any[] = [];
-
             list.forEach(agent => {
-                const name = agent.networkAgentName || "";
+                const name = nameOf(agent);
                 const L = levelsMap.get(name) || 0;
                 const idxInLevel = levelGroups.get(L)?.indexOf(name) || 0;
                 const totalInLevel = levelGroups.get(L)?.length || 1;
 
-                // X centered around 350px, 340px apart: the nodes are at most 300px
-                // wide, so the ones of a level never overlap. Y spaced by 280px per
-                // level (the nodes grow with the row of their tools)
-                const x = (idxInLevel - (totalInLevel - 1) / 2) * 340 + 350;
-                const y = L * 280 + 50;
-
+                // The levels go left to right, 360px apart: the nodes are at most 300px
+                // wide. The nodes of a level are stacked 200px apart (they grow with the
+                // row of their tools). A node the admin dragged keeps its place.
+                const placed = this.nodePositions.get(name);
+                const x = placed ? placed.x : L * 360 + 40;
+                const y = placed ? placed.y : (idxInLevel - (totalInLevel - 1) / 2) * 200 + 300;
                 nodes.push({
                     id: name,
                     position: { x, y },
                     draggable: !this.readonly,
+                    selected: this.selected === agent,
                     type: "agent",
                     data: agent
                 });
-
-                if (agent.communicationList) {
-                    agent.communicationList.forEach(childName => {
-                        if (childName) {
-                            edges.push({
-                                id: `${name}-${childName}`,
-                                source: name,
-                                target: childName
-                            });
-                        }
-                    });
-                }
+                (agent.communicationList || []).forEach(childName => {
+                    if (childName) {
+                        edges.push({
+                            id: `${name}->${childName}`,
+                            source: name,
+                            sourcePort: "port-right",
+                            target: childName,
+                            targetPort: "port-left",
+                            data: { source: name, target: childName }
+                        });
+                    }
+                });
             });
 
             this.diagramModel = initializeModel({ nodes, edges });
@@ -400,8 +950,56 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         });
     }
 
+    /** The graph shows the selection without a rebuild: the nodes read it from the parent. */
+    private refreshNodeSelection(): void {
+        // nothing to do beyond change detection: the node template asks isSelected()
+    }
+
+    /** The admin drew an edge: the target joins the communication list of the source. */
+    protected onEdgeDrawEnded(event: EdgeDrawEndedEvent): void {
+        if (!event.success || !event.source || !event.target) {
+            console.debug("[agents-network] edge draw ended without a link: " + (event.reason || "cancelled"));
+            return;
+        }
+        const source = this.agentsList.find(p => this.participantName(p) === event.source.id);
+        const target = this.agentsList.find(p => this.participantName(p) === event.target!.id);
+        if (source && target) {
+            const verdict = this.edgeVerdict(source, target);
+            if (verdict.ok) {
+                source.communicationList = [...(source.communicationList || []), this.participantName(target)];
+                console.debug("[agents-network] edge drawn " + event.source.id + " -> " + event.target.id + ": " + verdict.reason);
+            } else {
+                console.debug("[agents-network] edge drawn " + event.source.id + " -> " + event.target.id + " refused: " + verdict.reason);
+            }
+        }
+        // the graph is rebuilt from the lists: the edge the library added is replaced by ours
+        this.updateFormGroup();
+    }
+
+    /** A click on an edge selects it: the inspector offers to remove it. */
+    protected onSelectionChanged(event: SelectionChangedEvent): void {
+        const edge = event.selectedEdges && event.selectedEdges.length > 0 ? event.selectedEdges[0] : null;
+        if (edge && edge.source && edge.target) {
+            this.selectedEdge = { source: edge.source, target: edge.target };
+            console.debug("[agents-network] edge selected " + edge.source + " -> " + edge.target);
+        } else if (this.selectedEdge) {
+            this.selectedEdge = null;
+        }
+    }
+
+    /** A dragged node keeps the place the admin gave it across redraws. */
+    protected onNodeDragEnded(event: any): void {
+        const nodes: any[] = event?.nodes || (event?.node ? [event.node] : []);
+        nodes.forEach(node => {
+            if (node?.id && node.position) {
+                this.nodePositions.set(node.id, { x: node.position.x, y: node.position.y });
+            }
+        });
+    }
+
     protected onTabChange(value: string | number | undefined): void {
-        if (Number(value) === 1 && this.diagramModel) {
+        this.activeTab = Number(value);
+        if (this.activeTab === 1 && this.diagramModel) {
             afterNextRender(() => {
                 this.fitDiagramToViewport();
             }, { injector: this.myInjector });
@@ -471,6 +1069,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         this.diagramResizeObserver.observe(hostEl);
     }
 
+    // ---------------------------------------------------------------------
+    // The agent configurations
+    // ---------------------------------------------------------------------
+
     public editAgentConfig(code: string | null | undefined): void {
         if (!code) return;
         this.actionsRouter.routeEvent({
@@ -480,225 +1082,188 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             targetType: "GAgentConfig",
             target: { code: code },
             onActionPerformed: (event) => {
-                this.loadAvailableAgents(code);
-                // the edited configuration may mount other tools now
-                this.loadMountedTools(code);
+                // an agent copied from the participant's context becomes the participant's agent
+                const copiedCode = event?.actionType === GeboActionPerformedType.INSERTED ? event.target?.code : undefined;
+                if (copiedCode && this.selected && this.selected.agentConfigCode === code) {
+                    this.participantFormGroup.controls.agentConfigCode.setValue(copiedCode, { emitEvent: false });
+                    this.applyInspectorConfig(copiedCode);
+                }
+                // the editor tells when it saved or inserted, then when it closes: the
+                // composer reloads on the change, not on the closing
+                if (copiedCode || event?.actionType === GeboActionPerformedType.SAVED) {
+                    this.loadComposerData();
+                    // the edited configuration may mount other tools now
+                    this.loadMountedTools(copiedCode ?? code);
+                }
             }
         });
     }
 
-    public addAgentConfig(): void {
+    /** The selected participant runs another configuration, by code. */
+    private applyInspectorConfig(code: string): void {
+        if (!this.selected) {
+            return;
+        }
+        const oldName = this.participantName(this.selected);
+        this.selected.agentConfigCode = code;
+        const newName = this.participantName(this.selected);
+        this.selected.networkAgentName = newName;
+        this.agentsList.forEach(p => {
+            if (p.communicationList) {
+                p.communicationList = p.communicationList.map(n => n === oldName ? newName : n);
+            }
+        });
+        this.updateFormGroup();
+    }
+
+    /**
+     * Opens the editor on a new configuration, of the given service when known: once
+     * saved, it joins the network as a participant (or replaces the configuration of
+     * the given participant).
+     */
+    public addAgentConfig(serviceId?: string, forParticipant?: AgentNetworkParticipant): void {
         this.actionsRouter.routeEvent({
             actionType: GeboActionType.NEW,
             context: {},
             contextType: "GeboAIAgentsNetworkAdminComponent",
             targetType: "GAgentConfig",
             target: {
+                agentServiceId: serviceId,
                 accessibleToAll: true,
                 enabledFunctions: [],
-                maxLoopIterations: 5,
                 subscribeAllTools: true,
                 useDefaultChatModel: true,
-                defaultConfiguration: true,
+                defaultConfiguration: false,
                 description: "New Agent Configuration"
             } as any,
             onActionPerformed: (event) => {
-                this.loadAvailableAgents(event.target?.code);
+                const created = event?.target as GAgentConfig | undefined;
+                if (event?.actionType === GeboActionPerformedType.INSERTED && created?.code) {
+                    this.loadingRelatedBackend = true;
+                    this.service.getAgentConfigs().subscribe({
+                        next: (configs) => {
+                            this.configs = configs || [];
+                            this.buildPalette();
+                            if (forParticipant) {
+                                this.select(forParticipant);
+                                this.applyInspectorConfig(created.code!);
+                            } else if (!this.readonly) {
+                                this.addParticipant(created);
+                            }
+                        },
+                        complete: () => this.loadingRelatedBackend = false
+                    });
+                } else if (event?.actionType === GeboActionPerformedType.SAVED) {
+                    this.loadComposerData();
+                }
             }
         });
     }
 
+    /**
+     * Copies the network together with its agents and goes on editing the copy in
+     * place of the original: this is also how a read-only system network becomes a
+     * network of agents that can be changed.
+     */
+    protected copyNetwork(): void {
+        const code = this.entity?.code;
+        if (!code) return;
+        if (!this.formGroup.dirty) {
+            this.doCopyNetwork(code);
+            return;
+        }
+        const confirmation: ExtendedConfirmation = {
+            id: "CopyConfirmation",
+            message: "The changes not saved are not copied and will be lost: copy the saved network of agents?",
+            header: "Copy the network of agents",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => this.doCopyNetwork(code)
+        };
+        this.myInjector.get(GeboAITranslationService).translateConfirmation("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", confirmation)
+            .pipe(take(1)).subscribe(translated => this.myConfirmationService.confirm(translated ?? confirmation));
+    }
+
+    private doCopyNetwork(code: string): void {
+        this.loadingRelatedBackend = true;
+        this.service.copyAgentsNetwork(code).subscribe({
+            next: (status) => {
+                this.assignBackendMessages(status?.messages);
+                const copy = status?.result;
+                if (copy?.code) {
+                    // the copy takes the place of the original in this editor, and whoever
+                    // opened the editor (the networks lists) learns a network was created
+                    this.entity = copy;
+                    this.formGroup.markAsPristine();
+                    this.doReloadByCode();
+                    this.loadComposerData();
+                    this.createdNew.emit(copy);
+                } else {
+                    this.loadingRelatedBackend = false;
+                }
+            },
+            error: (error) => {
+                this.loadingRelatedBackend = false;
+                this.userMessages = [{
+                    id: "COPY-ERROR",
+                    severity: "error",
+                    summary: "Copy failed",
+                    detail: "Server error copying the network of agents: " + (error?.message ?? error)
+                }];
+            }
+        });
+    }
+
+    /** The participants changed: the form, the graph, the tools and the checks follow. */
     protected updateFormGroup(): void {
+        this.agentsList.forEach(p => p.networkAgentName = this.participantName(p));
         this.formGroup.controls["agents"].setValue(this.agentsList);
         this.formGroup.controls["agents"].markAsDirty();
         this.rebuildChart();
         this.loadMountedTools();
-    }
-
-    protected openAddParticipant(): void {
-        this.isNewParticipant = true;
-        this.dialogHeader = "Add Agent Participant";
-        this.editingParticipant = null;
-        this.parentParticipant = null;
-        this.participantFormGroup.reset({
-            networkAgentName: "",
-            agentConfigCode: "",
-            agentContextualName: "",
-            inputNode: false,
-            outputNode: false,
-            communicationPolicy: "ALLOW_ALL",
-            communicationList: [],
-            maxInvocations: null,
-            maxConsecutiveInvocations: null,
-            canCallTools: true,
-            canCallOtherAgents: true
-        });
-        this.showParticipantDialog = true;
-    }
-
-    public openAddChild(parent: AgentNetworkParticipant): void {
-        this.isNewParticipant = true;
-        this.dialogHeader = `Add Child Agent to ${parent.networkAgentName}`;
-        this.editingParticipant = null;
-        this.parentParticipant = parent;
-        this.participantFormGroup.reset({
-            networkAgentName: "",
-            agentConfigCode: "",
-            agentContextualName: "",
-            inputNode: false,
-            outputNode: false,
-            communicationPolicy: "ALLOW_ALL",
-            communicationList: [],
-            maxInvocations: null,
-            maxConsecutiveInvocations: null,
-            canCallTools: true,
-            canCallOtherAgents: true
-        });
-        this.showParticipantDialog = true;
-    }
-
-    public openEditParticipant(participant: AgentNetworkParticipant): void {
-        this.isNewParticipant = false;
-        this.dialogHeader = `${this.readonly ? "View" : "Edit"} Agent Participant: ${participant.networkAgentName}`;
-        this.editingParticipant = participant;
-        this.parentParticipant = null;
-        this.participantFormGroup.patchValue({
-            networkAgentName: participant.networkAgentName || "",
-            agentConfigCode: participant.agentConfigCode || "",
-            agentContextualName: participant.agentContextualName || "",
-            inputNode: participant.inputNode || false,
-            outputNode: participant.outputNode || false,
-            communicationPolicy: participant.communicationPolicy || "ALLOW_ALL",
-            communicationList: participant.communicationList || [],
-            maxInvocations: participant.maxInvocations || null,
-            maxConsecutiveInvocations: participant.maxConsecutiveInvocations || null,
-            canCallTools: participant.canCallTools !== false,
-            canCallOtherAgents: participant.canCallOtherAgents !== false
-        });
-        this.showParticipantDialog = true;
-    }
-
-    protected saveParticipant(): void {
-        if (this.participantFormGroup.invalid) {
-            return;
-        }
-
-        const value = this.participantFormGroup.value;
-        const participant: AgentNetworkParticipant = {
-            networkAgentName: value.networkAgentName!,
-            agentConfigCode: value.agentConfigCode!,
-            agentContextualName: value.agentContextualName || undefined,
-            inputNode: value.inputNode || undefined,
-            outputNode: value.outputNode || undefined,
-            communicationPolicy: value.communicationPolicy as AgentNetworkParticipant.CommunicationPolicyEnum,
-            communicationList: (value.communicationList && value.communicationList.length > 0) ? value.communicationList : undefined,
-            maxInvocations: value.maxInvocations !== null && value.maxInvocations !== undefined ? Number(value.maxInvocations) : undefined,
-            maxConsecutiveInvocations: value.maxConsecutiveInvocations !== null && value.maxConsecutiveInvocations !== undefined ? Number(value.maxConsecutiveInvocations) : undefined,
-            canCallTools: value.canCallTools ?? true,
-            canCallOtherAgents: value.canCallOtherAgents ?? true
-        };
-
-        const existingWithSameName = this.agentsList.find(a => a.networkAgentName === participant.networkAgentName);
-
-        if (this.isNewParticipant) {
-            if (existingWithSameName) {
-                this.userMessages = [{
-                    severity: "error",
-                    summary: "Duplicate Name",
-                    detail: `An agent with the name "${participant.networkAgentName}" already exists in this network.`
-                }];
-                return;
-            }
-
-            this.agentsList.push(participant);
-
-            if (this.parentParticipant) {
-                const parentNode = this.agentsList.find(a => a.networkAgentName === this.parentParticipant!.networkAgentName);
-                if (parentNode) {
-                    if (!parentNode.communicationList) {
-                        parentNode.communicationList = [];
-                    }
-                    parentNode.communicationList.push(participant.networkAgentName!);
-                }
-            }
-        } else {
-            if (existingWithSameName && existingWithSameName !== this.editingParticipant) {
-                this.userMessages = [{
-                    severity: "error",
-                    summary: "Duplicate Name",
-                    detail: `An agent with the name "${participant.networkAgentName}" already exists in this network.`
-                }];
-                return;
-            }
-
-            const oldName = this.editingParticipant!.networkAgentName;
-            const newName = participant.networkAgentName;
-
-            const idx = this.agentsList.findIndex(a => a.networkAgentName === oldName);
-            if (idx !== -1) {
-                this.agentsList[idx] = participant;
-            }
-
-            if (oldName && newName && oldName !== newName) {
-                this.agentsList.forEach(a => {
-                    if (a.communicationList) {
-                        a.communicationList = a.communicationList.map(name => name === oldName ? newName : name);
-                    }
-                });
-            }
-        }
-
-        if (participant.inputNode) {
-            this.agentsList.forEach(a => {
-                if (a.networkAgentName !== participant.networkAgentName) {
-                    a.inputNode = false;
-                }
-            });
-        }
-
-        this.showParticipantDialog = false;
-        this.updateFormGroup();
+        this.scheduleValidation();
     }
 
     public deleteParticipant(participant: AgentNetworkParticipant): void {
-        this.myConfirmationService.confirm({
-            message: `Are you sure you want to remove "${participant.networkAgentName}" from the network? All communication links pointing to this agent will be removed.`,
-            header: "Confirm Participant Removal",
+        const name = this.participantName(participant);
+        const confirmation: ExtendedConfirmation = {
+            id: "RemoveParticipantConfirmation",
+            message: `Remove "${name}" from the network? The agents talking to it will stop.`,
+            header: "Remove the participant",
             icon: "pi pi-exclamation-triangle",
             accept: () => {
-                const name = participant.networkAgentName;
-                this.agentsList = this.agentsList.filter(a => a.networkAgentName !== name);
-
-                if (name) {
-                    this.agentsList.forEach(a => {
-                        if (a.communicationList) {
-                            a.communicationList = a.communicationList.filter(childName => childName !== name);
-                        }
-                    });
+                this.agentsList = this.agentsList.filter(a => a !== participant);
+                this.agentsList.forEach(a => {
+                    if (a.communicationList) {
+                        a.communicationList = a.communicationList.filter(childName => childName !== name);
+                    }
+                });
+                this.nodePositions.delete(name);
+                if (this.selected === participant) {
+                    this.select(null);
                 }
-
+                console.debug("[agents-network] participant " + name + " removed with the edges pointing to it");
                 this.updateFormGroup();
             }
-        });
+        };
+        this.myInjector.get(GeboAITranslationService).translateConfirmation("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", confirmation)
+            .pipe(take(1)).subscribe(translated => this.myConfirmationService.confirm(translated ?? confirmation));
     }
 
     protected clearNetwork(): void {
-        this.myConfirmationService.confirm({
-            message: "Are you sure you want to clear all agents from the network?",
-            header: "Confirm Clear Network",
+        const confirmation: ExtendedConfirmation = {
+            id: "ClearNetworkConfirmation",
+            message: "Remove every agent from the network?",
+            header: "Clear the network",
             icon: "pi pi-exclamation-triangle",
             accept: () => {
                 this.agentsList = [];
+                this.nodePositions.clear();
+                this.select(null);
                 this.updateFormGroup();
             }
-        });
-    }
-
-    // Returns potential communication targets (all other network agents except the current one)
-    protected getPotentialTargets(currentName?: string): string[] {
-        return this.agentsList
-            .map(a => a.networkAgentName || "")
-            .filter(name => name !== "" && name !== currentName);
+        };
+        this.myInjector.get(GeboAITranslationService).translateConfirmation("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", confirmation)
+            .pipe(take(1)).subscribe(translated => this.myConfirmationService.confirm(translated ?? confirmation));
     }
 
     override findByCode(code: string): Observable<GAgentsNetwork | null> {
@@ -727,6 +1292,10 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     }
 
     override canBeDeleted(value: GAgentsNetwork): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ "canBeDeleted": false, "message": "" });
+        // only the system networks, which are read-only, cannot be deleted
+        return of({
+            "canBeDeleted": value?.readOnly !== true,
+            "message": "This is a system network of agents: it cannot be changed nor deleted, copy it to have one of your own"
+        });
     }
 }

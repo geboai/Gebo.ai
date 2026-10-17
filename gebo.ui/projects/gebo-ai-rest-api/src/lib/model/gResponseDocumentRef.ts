@@ -29,9 +29,9 @@ export interface GResponseDocumentRef {
     nestedSearchResult?: SearchResult;
     loadPercentage?: number;
     references?: Array<DocInternalRef>;
-    ntokensRelevant?: number;
-    ntotalContentTokens?: number;
     shortCode?: string;
+    ntotalContentTokens?: number;
+    ntokensRelevant?: number;
     nbytesRelevant?: number;
 }
 export namespace GResponseDocumentRef {

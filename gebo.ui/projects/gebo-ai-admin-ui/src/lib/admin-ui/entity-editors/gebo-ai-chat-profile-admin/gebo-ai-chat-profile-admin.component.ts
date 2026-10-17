@@ -96,7 +96,6 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
         accessibleGroups: new FormControl(),
         accessibleUsers: new FormControl(),
         accessibleToAll: new FormControl(),
-        enabledFunctions: new FormControl(),
         useDefaultChatModel: new FormControl(),
         useDefaultEmbeddingModel: new FormControl(),
         userChoosesKnowledgeBases: new FormControl(),

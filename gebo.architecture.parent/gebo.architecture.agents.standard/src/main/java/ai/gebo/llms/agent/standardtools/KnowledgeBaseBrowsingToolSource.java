@@ -283,19 +283,27 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	@Override
 	public List<ToolReference> getFullToolReferences() {
 		final List<ToolReference> references = new ArrayList<>();
-		for (String[] tool : new String[][] { { COUNT_DOCUMENTS_TOOL, COUNT_DOCUMENTS_DESCRIPTION },
-				{ BROWSE_KNOWLEDGE_BASES_TOOL, BROWSE_KNOWLEDGE_BASES_DESCRIPTION },
-				{ BROWSE_PROJECTS_TOOL, BROWSE_PROJECTS_DESCRIPTION },
-				{ BROWSE_PROJECT_ENDPOINTS_TOOL, BROWSE_PROJECT_ENDPOINTS_DESCRIPTION },
-				{ BROWSE_FOLDERS_TOOL, BROWSE_FOLDERS_DESCRIPTION },
-				{ BROWSE_DOCUMENTS_TOOL, BROWSE_DOCUMENTS_DESCRIPTION },
-				{ DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION },
-				{ FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_TITLE_DESCRIPTION },
-				{ FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION },
-				{ FIND_DOCUMENTS_BY_AUTHOR_TOOL, FIND_DOCUMENTS_BY_AUTHOR_DESCRIPTION } }) {
+		// name, the description the model reads, the description the admin reads
+		for (String[] tool : new String[][] {
+				{ COUNT_DOCUMENTS_TOOL, COUNT_DOCUMENTS_DESCRIPTION, "Count the documents of the knowledge bases" },
+				{ BROWSE_KNOWLEDGE_BASES_TOOL, BROWSE_KNOWLEDGE_BASES_DESCRIPTION, "List the knowledge bases" },
+				{ BROWSE_PROJECTS_TOOL, BROWSE_PROJECTS_DESCRIPTION, "List the projects of the knowledge bases" },
+				{ BROWSE_PROJECT_ENDPOINTS_TOOL, BROWSE_PROJECT_ENDPOINTS_DESCRIPTION,
+						"List the content sources (folders, sites, repositories) of a project" },
+				{ BROWSE_FOLDERS_TOOL, BROWSE_FOLDERS_DESCRIPTION, "List the folders of the knowledge bases, with filters" },
+				{ BROWSE_DOCUMENTS_TOOL, BROWSE_DOCUMENTS_DESCRIPTION,
+						"List the documents of the knowledge bases, with filters" },
+				{ DOCUMENT_CONTENTS_TOOL, DOCUMENT_CONTENTS_DESCRIPTION, "Read the whole text of documents" },
+				{ FIND_DOCUMENTS_BY_TITLE_TOOL, FIND_DOCUMENTS_BY_TITLE_DESCRIPTION,
+						"Find documents by a title similar in meaning" },
+				{ FIND_DOCUMENTS_BY_FILE_NAME_TOOL, FIND_DOCUMENTS_BY_FILE_NAME_DESCRIPTION,
+						"Find documents by a similar file name" },
+				{ FIND_DOCUMENTS_BY_AUTHOR_TOOL, FIND_DOCUMENTS_BY_AUTHOR_DESCRIPTION,
+						"Find documents by a similar author name" } }) {
 			final ToolReference reference = new ToolReference();
 			reference.setName(tool[0]);
 			reference.setDescription(tool[1]);
+			reference.setUserUIfunctionDescription(tool[2]);
 			references.add(reference);
 		}
 		return references;

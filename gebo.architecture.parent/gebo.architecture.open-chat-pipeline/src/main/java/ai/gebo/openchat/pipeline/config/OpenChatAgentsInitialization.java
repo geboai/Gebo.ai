@@ -61,8 +61,10 @@ public class OpenChatAgentsInitialization {
 
 	private static final String SUPERVISOR_AGENT_ROLE = "SUPERVISOR_AGENT";
 	private static final String REPORT_WRITER_AGENT_ROLE = "REPORT_WRITER_AGENT";
-	private static final String OPEN_CHAT_CONTROLLER_DESCRIPTION = "Open-chat coordinator/controller";
-	private static final String OPEN_CHAT_ANSWER_WRITER_DESCRIPTION = "Open-chat free-response answer writer";
+	// what the administrator lists and what the coordinator reads of its peers
+	private static final String OPEN_CHAT_CONTROLLER_DESCRIPTION = "Coordinator for free chats: decides which agents act, without the knowledge bases";
+	private static final String OPEN_CHAT_ANSWER_WRITER_DESCRIPTION = "Writer/reporter agent for free chats: answers freely, using any evidence gathered";
+	private static final String OPEN_CHAT_NETWORK_DESCRIPTION = "Coordinator with web/external search, tool-calling and writer agents, for free chats";
 
 	@Bean
 	public IGDynamicAgentConfigDataSource openChatControllerAgentConfigDataSource() {
@@ -101,7 +103,7 @@ public class OpenChatAgentsInitialization {
 			@Override
 			public List<GAgentsNetwork> getConfigurations() {
 				GAgentsNetwork network = standardInit.createChatAgentsNetwork(OpenChatConstants.OPEN_CHAT_AGENTS_NETWORK,
-						"Full network of agents for free chats: a coordinator hands the question to specialized agents searching the web and the external systems or calling the tools, and a writer agent answers freely, without the internal knowledge bases",
+						OPEN_CHAT_NETWORK_DESCRIPTION,
 						ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER,
 						OpenChatConstants.OPEN_CHAT_CONTROLLER_AGENT_CONFIG,
 						OpenChatConstants.OPEN_CHAT_ANSWER_WRITER_AGENT_CONFIG,

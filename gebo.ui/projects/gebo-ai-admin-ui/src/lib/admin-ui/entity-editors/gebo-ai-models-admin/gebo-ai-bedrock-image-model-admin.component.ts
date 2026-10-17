@@ -15,6 +15,7 @@ import { ConfirmationService } from "primeng/api";
 import { map, Observable } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component for administering AWS Bedrock image generation model configurations
  * (Amazon Nova Canvas / Titan Image / Stability).
@@ -72,7 +73,7 @@ export class GeboAIBedrockImageModelAdminComponent extends BaseEntityEditingComp
         this.bedrockImageModelConfigService.getBedrockImageModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : [];
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;
@@ -82,7 +83,7 @@ export class GeboAIBedrockImageModelAdminComponent extends BaseEntityEditingComp
 
     protected override onLoadedPersistentData(actualValue: GBedrockImageModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("image-generation-aws-bedrock");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GBedrockImageModelConfig): void {

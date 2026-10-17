@@ -168,8 +168,12 @@ public class OpenAIChatModelConfigurationSupportService
 			// favour, and the reasoning models refuse it (the openai-java SDK documents it as
 			// "not compatible with o-series models"); max_completion_tokens bounds the
 			// reasoning tokens too, on every model.
-			if (config != null && config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder.maxCompletionTokens(config.getMaxGeneratedTokens());
+			// The generation cap: the configured one, else the default sized on the model's context
+			// window (see GAbstractConfigurableChatModel.maxGeneratedTokensOf), the same the budgets
+			// reserve; a model left without one generates up to its own maximum.
+			final Integer maxGeneratedTokens = GAbstractConfigurableChatModel.maxGeneratedTokensOf(config);
+			if (maxGeneratedTokens != null) {
+				builder.maxCompletionTokens(maxGeneratedTokens);
 			}
 			// The effort among the ones the model's parameter rules list: no thinking is
 			// sent as none where the model takes it, an effort the model refuses leaves its
@@ -182,7 +186,7 @@ public class OpenAIChatModelConfigurationSupportService
 				LOGGER.debug("Chat model {} ({}) configured with thinking {} as reasoning effort {}, temperature {},"
 						+ " max completion tokens {}", config.getCode(),
 						config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null,
-						config.getThinking(), effort, config.getTemperature(), config.getMaxGeneratedTokens());
+						config.getThinking(), effort, config.getTemperature(), maxGeneratedTokens);
 			}
 			if (user != null) {
 				builder = builder.user(user);

@@ -37,9 +37,12 @@
       </div>
     }
     <div class="col-12">
-      <gebo-ai-field id="functions" label="Chat model callable functions"
-        help="List of functions available to the chat model">
+      <gebo-ai-field id="functions" label="Tools of the chat model"
+        help="The tools the chat model calls in the chats that are not agentic: the ones chosen on the chat model's configuration">
         <div id="functions">
+          @if (!data?.availableFunctions || data!.availableFunctions!.length === 0) {
+            <i id="NoModelToolsHint" gebo-ai-text class="text-sm text-muted-color">The chat model calls no tool</i>
+          }
           @for (tree of data?.availableFunctions; track tree) {
             <p-fieldset [legend]="tree.category?.description">
               <div class="grid">
@@ -47,8 +50,8 @@
                 <div class="col-8"><b id="DescriptionCol" gebo-ai-text>Description</b></div>
                 @for (f of tree.toolsReference; track f) {
                   <div class="col-12 grid">
-                    <div class="col-4">{{f.name}}</div>
-                    <div class="col-8">{{f.description}}</div>
+                    <div class="col-4 font-monospace">{{f.name}}</div>
+                    <div class="col-8">{{f.userUIfunctionDescription || f.description}}</div>
                   </div>
                 }
               </div>
@@ -59,5 +62,37 @@
       </gebo-ai-field>
 
     </div>
+    @if (data?.agentsTools && data!.agentsTools!.length > 0) {
+      <div class="col-12">
+        <gebo-ai-field id="agentsTools" label="Agents of the network and their tools"
+          help="The agentic chats are handed to this network of agents: each agent calls only the tools listed under it">
+          <div id="agentsTools" class="flex flex-column gap-2">
+            @for (agent of data?.agentsTools; track agent.agentName) {
+              <p-fieldset [legend]="agent.agentName + (agent.agentDescription ? ' - ' + agent.agentDescription : '')">
+                <div class="text-xs text-muted-color mb-2">
+                  <span id="NetworkLabel" gebo-ai-text>Network</span>: {{agent.networkCode}}
+                  &middot; <span id="ServiceLabel" gebo-ai-text>Service</span>: {{agent.agentServiceId}}
+                  @if (agent.mountMode === 'AUTO') {
+                    &middot; <span id="EveryToolMountedHint" gebo-ai-text>every registered tool is mounted</span>
+                  }
+                </div>
+                @if (!agent.tools || agent.tools.length === 0) {
+                  <i id="NoAgentToolsHint" gebo-ai-text class="text-sm text-muted-color">This agent calls no tool</i>
+                }
+                @for (tree of agent.tools; track tree.category?.code) {
+                  <div class="font-semibold text-sm mt-2">{{tree.category?.description}}</div>
+                  <div class="grid">
+                    @for (f of tree.toolsReference; track f.name) {
+                      <div class="col-4 font-monospace text-sm">{{f.name}}</div>
+                      <div class="col-8 text-sm">{{f.userUIfunctionDescription || f.description}}</div>
+                    }
+                  </div>
+                }
+              </p-fieldset>
+            }
+          </div>
+        </gebo-ai-field>
+      </div>
+    }
   </div>
 </p-panel>

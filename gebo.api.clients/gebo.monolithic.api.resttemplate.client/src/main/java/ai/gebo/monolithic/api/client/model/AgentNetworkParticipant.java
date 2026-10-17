@@ -24,7 +24,7 @@ import java.util.List;
  * AgentNetworkParticipant
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
 
 public class AgentNetworkParticipant {
   @JsonProperty("agentConfigCode")
@@ -81,11 +81,8 @@ public class AgentNetworkParticipant {
   @JsonProperty("communicationList")
   private List<String> communicationList = null;
 
-  @JsonProperty("maxInvocations")
-  private Integer maxInvocations = null;
-
-  @JsonProperty("maxConsecutiveInvocations")
-  private Integer maxConsecutiveInvocations = null;
+  @JsonProperty("controller")
+  private Boolean controller = null;
 
   @JsonProperty("canCallTools")
   private Boolean canCallTools = null;
@@ -230,40 +227,22 @@ public class AgentNetworkParticipant {
     this.communicationList = communicationList;
   }
 
-  public AgentNetworkParticipant maxInvocations(Integer maxInvocations) {
-    this.maxInvocations = maxInvocations;
+  public AgentNetworkParticipant controller(Boolean controller) {
+    this.controller = controller;
     return this;
   }
 
    /**
-   * Get maxInvocations
-   * @return maxInvocations
+   * Get controller
+   * @return controller
   **/
   @Schema(description = "")
-  public Integer getMaxInvocations() {
-    return maxInvocations;
+  public Boolean isController() {
+    return controller;
   }
 
-  public void setMaxInvocations(Integer maxInvocations) {
-    this.maxInvocations = maxInvocations;
-  }
-
-  public AgentNetworkParticipant maxConsecutiveInvocations(Integer maxConsecutiveInvocations) {
-    this.maxConsecutiveInvocations = maxConsecutiveInvocations;
-    return this;
-  }
-
-   /**
-   * Get maxConsecutiveInvocations
-   * @return maxConsecutiveInvocations
-  **/
-  @Schema(description = "")
-  public Integer getMaxConsecutiveInvocations() {
-    return maxConsecutiveInvocations;
-  }
-
-  public void setMaxConsecutiveInvocations(Integer maxConsecutiveInvocations) {
-    this.maxConsecutiveInvocations = maxConsecutiveInvocations;
+  public void setController(Boolean controller) {
+    this.controller = controller;
   }
 
   public AgentNetworkParticipant canCallTools(Boolean canCallTools) {
@@ -337,8 +316,7 @@ public class AgentNetworkParticipant {
         Objects.equals(this.allowedToNotifyUser, agentNetworkParticipant.allowedToNotifyUser) &&
         Objects.equals(this.communicationPolicy, agentNetworkParticipant.communicationPolicy) &&
         Objects.equals(this.communicationList, agentNetworkParticipant.communicationList) &&
-        Objects.equals(this.maxInvocations, agentNetworkParticipant.maxInvocations) &&
-        Objects.equals(this.maxConsecutiveInvocations, agentNetworkParticipant.maxConsecutiveInvocations) &&
+        Objects.equals(this.controller, agentNetworkParticipant.controller) &&
         Objects.equals(this.canCallTools, agentNetworkParticipant.canCallTools) &&
         Objects.equals(this.canCallOtherAgents, agentNetworkParticipant.canCallOtherAgents) &&
         Objects.equals(this.networkAgentName, agentNetworkParticipant.networkAgentName);
@@ -346,7 +324,7 @@ public class AgentNetworkParticipant {
 
   @Override
   public int hashCode() {
-    return Objects.hash(agentConfigCode, agentContextualName, inputNode, outputNode, allowedToNotifyUser, communicationPolicy, communicationList, maxInvocations, maxConsecutiveInvocations, canCallTools, canCallOtherAgents, networkAgentName);
+    return Objects.hash(agentConfigCode, agentContextualName, inputNode, outputNode, allowedToNotifyUser, communicationPolicy, communicationList, controller, canCallTools, canCallOtherAgents, networkAgentName);
   }
 
 
@@ -362,8 +340,7 @@ public class AgentNetworkParticipant {
     sb.append("    allowedToNotifyUser: ").append(toIndentedString(allowedToNotifyUser)).append("\n");
     sb.append("    communicationPolicy: ").append(toIndentedString(communicationPolicy)).append("\n");
     sb.append("    communicationList: ").append(toIndentedString(communicationList)).append("\n");
-    sb.append("    maxInvocations: ").append(toIndentedString(maxInvocations)).append("\n");
-    sb.append("    maxConsecutiveInvocations: ").append(toIndentedString(maxConsecutiveInvocations)).append("\n");
+    sb.append("    controller: ").append(toIndentedString(controller)).append("\n");
     sb.append("    canCallTools: ").append(toIndentedString(canCallTools)).append("\n");
     sb.append("    canCallOtherAgents: ").append(toIndentedString(canCallOtherAgents)).append("\n");
     sb.append("    networkAgentName: ").append(toIndentedString(networkAgentName)).append("\n");

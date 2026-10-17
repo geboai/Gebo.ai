@@ -26,6 +26,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component responsible for managing Mistral AI chat model configurations.
  * Extends BaseEntityEditingComponent to provide CRUD operations for GMistralChatModelConfig entities.
@@ -135,7 +136,7 @@ export class GeboAIMistralAIChatModelAdminComponent extends BaseEntityEditingCom
         this.openaiChatModelConfigService.getMistralAIChatModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete:()=>{
                 this.loadingRelatedBackend=false;
@@ -151,7 +152,7 @@ export class GeboAIMistralAIChatModelAdminComponent extends BaseEntityEditingCom
      */
     protected override onLoadedPersistentData(actualValue: GMistralChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chatmodel-mistral");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

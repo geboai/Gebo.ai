@@ -77,19 +77,23 @@ import ai.gebo.security.services.IGSecurityService;
 public class StandardAgentsInitialization {
 	private static final String INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT = "*             Initializing standard agents network for reactive chat                 *";
 	private static final String START_ROW = "**************************************************************************************";
-	private static final String SEARCH_AGENT_INTERNALKB_SERVICE_DESCRIPTION = "Search agent service specialized in Internal Knowledge Base Searches";
+	// The agents' descriptions are what the administrator lists and what the coordinator
+	// reads of its peers: it tells the search, tool-calling and writer/reporter agents
+	// apart from them.
+	private static final String SEARCH_AGENT_INTERNALKB_SERVICE_DESCRIPTION = "Search agent for the internal knowledge bases";
+	private static final String EXTERNAL_SEARCH_AGENT_DESCRIPTION = "Search agent for ";
 	public static final String INTERNAL_KNOWLEDGEBASE_AGENT_CODE = "internalKnowledgeBaseSearchAgent";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER = "internalKnowledgeBaseSearch";
-	private static final String REPORTER_AGENT_DESCRIPTION = "Reporter agent that evaluates controller's initiatives, eventually present evidences/documents and user question to create the fittest answer";
-	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Agent's network controller and coordinator";
-	private static final String INPUT_ADAPTER_DESCRIPTION = "Input adapter extracting the user query from the chat runtime data";
+	private static final String REPORTER_AGENT_DESCRIPTION = "Writer/reporter agent: writes the answer from the evidence gathered by the other agents";
+	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Coordinator: decides which agents act, and when the evidence is enough to answer";
+	private static final String INPUT_ADAPTER_DESCRIPTION = "Input adapter: hands the user's request to the network, without calling an LLM";
 	private static final String EVIDENCES_SEARCHER_AGENT = "EVIDENCES_SEARCHER_AGENT";
 	private static final String REPORT_WRITER_AGENT = "REPORT_WRITER_AGENT";
 	private static final String SUPERVISOR_AGENT = "SUPERVISOR_AGENT";
 	private static final String TOOL_AGENT = "TOOL_AGENT";
-	private static final String TOOL_CALLING_AGENT_DESCRIPTION = "Tool-calling agent that operates the available tools (APIs, connectors, databases, services) to fulfill the coordinator's commands and returns the tool results as evidence";
+	private static final String TOOL_CALLING_AGENT_DESCRIPTION = "Tool-calling agent: runs the available tools (APIs, connectors, services) for the coordinator";
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
-	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Full network of agents: a coordinator hands the question to specialized agents searching the knowledge bases, the web and the external systems or calling the tools, checks the evidence they gather and has a writer agent compose the answer";
+	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Coordinator with search, tool-calling and writer agents, for chats with knowledge bases";
 	public static final String FULL_NETWORK_SUGGESTED_PURPOSE = "Fits most scenarios where cheap LLMs, in the order of 10-100B parameters, are used and the AI provider has flat conditions: every question takes many small, focused LLM calls.";
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
 	private final static Logger LOGGER = LoggerFactory.getLogger(StandardAgentsInitialization.class);
@@ -314,7 +318,8 @@ public class StandardAgentsInitialization {
 		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
 		// budget below is the real terminator); sized so a legitimate multi-cycle
 		// gather/finalize run with a wide searcher fan-out is never truncated.
-		network.setMaxLoopIteration(60);
+		// the cycles of the controller: it coordinates the searchers that many times at most
+		network.setMaxLoopIteration(5);
 		network.setScenarioDescription(DEFAULT_NETWORK_SCENARIO_DESCRIPTION);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
 		if (LOGGER.isDebugEnabled()) {
@@ -348,10 +353,9 @@ public class StandardAgentsInitialization {
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controllerConfigCode);
 		controllerParticipant.setInputNode(false);
-		// maxInvocations is the controller's cycle budget: the maximum number of
-		// gather/finalize cycles it may run before it must deliver the final answer.
-		controllerParticipant.setMaxInvocations(5);
-		controllerParticipant.setMaxConsecutiveInvocations(5);
+		// the controller: the network's max loop iteration is its cycle budget, the
+		// gather/finalize cycles it may run before it must deliver the final answer
+		controllerParticipant.setController(true);
 		controllerParticipant.setOutputNode(false);
 		// Searcher participants: the internal knowledge base searcher (when present)
 		// plus every external search-service searcher. Each is reachable from the
@@ -370,8 +374,6 @@ public class StandardAgentsInitialization {
 				LOGGER.trace("Adding searcher participant:" + searcher.getCode() + " - " + searcher.getDescription());
 			}
 			participant.setAgentConfigCode(searcher.getCode());
-			participant.setMaxConsecutiveInvocations(5);
-			participant.setMaxInvocations(10);
 			workerParticipants.add(participant);
 		}
 		// Tool-calling agent participant, present only when tools are available. Like the
@@ -380,8 +382,6 @@ public class StandardAgentsInitialization {
 		if (toolCallingAgentConfig != null) {
 			AgentNetworkParticipant toolAgentParticipant = new AgentNetworkParticipant();
 			toolAgentParticipant.setAgentConfigCode(toolCallingAgentConfig.getCode());
-			toolAgentParticipant.setMaxConsecutiveInvocations(5);
-			toolAgentParticipant.setMaxInvocations(10);
 			workerParticipants.add(toolAgentParticipant);
 		}
 		AgentNetworkParticipant outParticipant = new AgentNetworkParticipant();
@@ -419,8 +419,8 @@ public class StandardAgentsInitialization {
 		if (LOGGER.isTraceEnabled()) {
 			for (AgentNetworkParticipant participant : participants) {
 				LOGGER.trace("Participant:" + participant.getNetworkAgentName() + " inputNode:"
-						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " maxInvocations:"
-						+ participant.getMaxInvocations() + " communicationList:"
+						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " controller:"
+						+ participant.isController() + " communicationList:"
 						+ participant.getCommunicationList());
 			}
 		}
@@ -452,7 +452,7 @@ public class StandardAgentsInitialization {
 								: DocumentsSearchNetworkAgentServiceWrapper.SEARCH_AGENT);
 						GAgentConfig agentConfig = new GAgentConfig();
 						agentConfig.setCode(serviceId);
-						agentConfig.setDescription(search.getProductId() + " search agent ");
+						agentConfig.setDescription(EXTERNAL_SEARCH_AGENT_DESCRIPTION + search.getProductId());
 						// Native searchers generate with their native query template; the others use
 						// their query-generation prompt. The chosen template is runtime-patched with
 						// the agent network placeholders and stored as the agent's custom loop prompt.

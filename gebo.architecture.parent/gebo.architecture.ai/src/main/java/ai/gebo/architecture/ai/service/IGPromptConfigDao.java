@@ -9,6 +9,8 @@
 
 package ai.gebo.architecture.ai.service;
 
+import java.util.List;
+
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
 
@@ -21,6 +23,7 @@ import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
 public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptTemplateConfig> {
 	public static final String PROMPT_USE_STANDARD_CHAT_PROMPT = "standard-chat-prompt";
 	public static final String PROMPT_USE_STANDARD_RAG_PROMPT = "standard-rag-prompt";
+
 	/**
 	 * Provides a default prompt configuration based on the specified chat model
 	 * configuration and an optional flag to enable a retrieval-augmented generation
@@ -90,4 +93,6 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptTemp
 	public GPromptTemplateConfig update(GPromptTemplateConfig config);
 
 	public void delete(GPromptTemplateConfig config);
+
+	public List<GPromptTemplateConfig> findByAgentId(String agentId);
 }

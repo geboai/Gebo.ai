@@ -39,6 +39,12 @@ public class GeboChatUserInfo {
     private final GBaseChatModelChoice chatModelChoice;
 
     /**
+     * The agents of the network the agentic chats are handed to, each with its tools;
+     * null when the agents are not part of the build, empty when they are off.
+     */
+    private List<AgentToolsInfo> agentsTools = null;
+
+    /**
      * Constructs a new GeboChatUserInfo object.
      *
      * @param providerId          Unique identifier for the provider
@@ -113,5 +119,13 @@ public class GeboChatUserInfo {
      */
     public String getProviderId() {
         return providerId;
+    }
+
+    public List<AgentToolsInfo> getAgentsTools() {
+        return agentsTools;
+    }
+
+    public void setAgentsTools(List<AgentToolsInfo> agentsTools) {
+        this.agentsTools = agentsTools;
     }
 }

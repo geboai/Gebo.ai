@@ -34,6 +34,12 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		extends GAbstractGenericalNetworkAgentService<SearchAgentCommand, List<Document>>
 		implements IGDocumentsSearchNetworkAgentService {
 
+	/** The searcher returns the documents found with a RESPONSE, shared in the session context. */
+	@Override
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
+	}
+
 	public GAbstractDocumentsSearchNetworkAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGPromptConfigDao promptsDao,
 			IGSecurityService securityService, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
@@ -121,8 +127,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				index++;
 			}
 		}
-		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session, msg.getFromAgent(), documents,
-				MessageSemantic.RESPONSE);
+		AgentsExchangeMessage<List<Document>> outMsg = AgentsExchangeMessage.of(session,
+				contextAgentPersona.getNetworkAgentName(), msg.getFromAgent(), documents, getProducedMessageSemantic());
+		outMsg.setFromAgentRole(agentRole);
 		if (!statusNotices.isEmpty()) {
 			outMsg.setStatusNotices(statusNotices);
 			if (LOGGER.isDebugEnabled()) {

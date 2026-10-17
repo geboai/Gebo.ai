@@ -30,7 +30,6 @@ export interface GAgentConfig {
     useDefaultChatModel?: boolean;
     useChatModelWithUse?: GAgentConfig.UseChatModelWithUseEnum;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
-    maxLoopIterations: number;
     aclAliases?: Array<number>;
     defaultConfiguration?: boolean;
     topP?: number;

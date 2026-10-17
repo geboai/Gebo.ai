@@ -2,6 +2,10 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -17,7 +21,7 @@ import lombok.Data;
 
 @Data
 public class GAgentConfig extends GBaseObject
-		implements IGObjectWithSecurity, IAclGrantedResource, IJsonClonable<GAgentConfig> {
+		implements IGObjectWithSecurity, IAclGrantedResource, IJsonClonable<GAgentConfig>, IGCopiedEntity {
 	public static enum AgentType {
 		AGENT, AGENTS_NETWORK
 	}
@@ -38,8 +42,6 @@ public class GAgentConfig extends GBaseObject
 	private ChatModelsUses useChatModelWithUse = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
-	@NotNull
-	private Integer maxLoopIterations = null;
 	private List<Integer> aclAliases = null;
 	private Boolean defaultConfiguration = null;
 	/**
@@ -69,4 +71,12 @@ public class GAgentConfig extends GBaseObject
 	 * A list of functions that are enabled for direct chat interaction.
 	 */
 	protected List<String> enabledFunctions = null;
+
+	/**
+	 * The code of the agent configuration this one is a copy of, only while the copy
+	 * is being inserted: its code is made from it. Neither stored nor exchanged.
+	 */
+	@Transient
+	@JsonIgnore
+	private String copiedFromCode = null;
 }

@@ -26,6 +26,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component responsible for administrating Ollama embedding models.
  * It provides a UI to create, read, update and delete embedding model configurations
@@ -119,7 +120,7 @@ export class GeboAIOllamaEmbedModelAdminComponent extends BaseEntityEditingCompo
         this.embedModelConfigService.getOllamaEmbeddingModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete:()=>{
                 this.loadingRelatedBackend=false;
@@ -135,7 +136,7 @@ export class GeboAIOllamaEmbedModelAdminComponent extends BaseEntityEditingCompo
      */
     protected override onLoadedPersistentData(actualValue: GOllamaEmbeddingModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("embedding-ollama");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

@@ -145,8 +145,12 @@ public class GoogleVertexChatModelConfigurationSupportService
 			// The generation cap is maxOutputTokens here, not maxTokens as on the other
 			// providers, which is why this one was left unconfigured: a model asked to keep
 			// its answers short answered at whatever length vertex defaults to.
-			if (config.getMaxGeneratedTokens() != null && config.getMaxGeneratedTokens() > 0) {
-				builder = builder.maxOutputTokens(config.getMaxGeneratedTokens());
+			// The generation cap: the configured one, else the default sized on the model's context
+			// window (see GAbstractConfigurableChatModel.maxGeneratedTokensOf), the same the budgets
+			// reserve; a model left without one generates up to its own maximum.
+			final Integer maxGeneratedTokens = GAbstractConfigurableChatModel.maxGeneratedTokensOf(config);
+			if (maxGeneratedTokens != null) {
+				builder = builder.maxOutputTokens(maxGeneratedTokens);
 			}
 
 			// No thinking level is sent: which levels a Gemini model takes is the model's own

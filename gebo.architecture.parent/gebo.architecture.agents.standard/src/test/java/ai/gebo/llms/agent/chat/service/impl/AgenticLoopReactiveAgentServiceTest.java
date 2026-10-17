@@ -226,7 +226,9 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		String shown = run(agent, 5);
 
-		assertEquals("Searching first. \r\n\r\nThe final answer.", shown);
+		// the first cycle's answer, then the mark ending it: the second cycle writes the answer again
+		assertEquals("Searching first. " + AgenticLoopReactiveAgentServiceImpl.CYCLE_END_MARK + "The final answer.",
+				shown);
 		assertEquals(2, agent.receivedParams.size(), "the model ended the loop at the second iteration");
 		assertEquals(2, agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.CURRENT_ITERATION_PROMPT_PARAM));
 		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
@@ -263,7 +265,8 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		String story = agent.loopStory(history, 40_000, collector);
 
-		assertTrue(story.contains("RESPONSE: Shown to the user."), "a shown text is part of the answer: " + story);
+		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.LAST_ANSWER + "Shown to the user."),
+				"the last answer shown is the one the user sees, written again: " + story);
 		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_DRAFT
 				+ "The draft built on the deep searches."), "the last draft whole: " + story);
 		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.WHY_DISCARDED + "coverage thin: complete X"));
@@ -421,7 +424,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertTrue(shown.startsWith("From memory. ") && shown.endsWith("From the documents. "), shown);
 		assertEquals(2, agent.receivedParams.size());
 		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
-				.contains("RESPONSE: From memory."), "the previous answer is an input of the next call");
+				.contains(AgenticLoopReactiveAgentServiceImpl.LAST_ANSWER + "From memory."),
+				"the previous answer is an input of the next call");
 		assertFalse(collector.isAnsweredWithoutSearch(), "the sources were searched in the end");
 	}
 
@@ -438,7 +442,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		ToolsFoundDocuments stubbornCollector = new ToolsFoundDocuments();
 		ScriptedLoopAgent stubborn = toolUsingAgent(List.of(List.of("First. " + MORE),
 				List.of("Second, still without tools. " + STOP)), Set.of());
-		assertEquals("First. \r\n\r\nSecond, still without tools. ", runNeedingEvidence(stubborn, 3, stubbornCollector));
+		assertEquals("First. " + AgenticLoopReactiveAgentServiceImpl.CYCLE_END_MARK + "Second, still without tools. ",
+				runNeedingEvidence(stubborn, 3, stubbornCollector));
 		assertTrue(stubbornCollector.isAnsweredWithoutSearch());
 
 		ScriptedLoopAgent last = toolUsingAgent(List.of(List.of("Only answer. " + STOP)), Set.of());

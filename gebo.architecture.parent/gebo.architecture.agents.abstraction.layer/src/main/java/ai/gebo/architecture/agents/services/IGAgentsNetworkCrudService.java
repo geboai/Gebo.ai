@@ -15,10 +15,14 @@ import ai.gebo.model.OperationStatus;
  * operation is rejected (nothing is persisted) and the status carries a
  * {@code null} result together with the diagnostic messages.
  * <p>
- * The structural validation always enforces that the agents of a network can
- * actually communicate: for every communication edge {@code A -> B} the output
- * type of {@code A} must be assignable to the input type of {@code B} (see
- * {@link #validate(GAgentsNetwork)}).
+ * The structural validation enforces what the runtime needs to run the network:
+ * the network service factory it declares can allocate its participants (an input
+ * node accepting its input, an output node producing its output, the agents
+ * answering the user directly only where the factory streams them) and the agents
+ * can actually talk to the agents of their communication lists, after the semantic
+ * of the messages they produce ({@link IGNetworkAgentService#getProducedMessageSemantic()}):
+ * an agent delivering its own output needs it to be the input of the agents it talks
+ * to (see {@link #validate(GAgentsNetwork)}).
  */
 public interface IGAgentsNetworkCrudService {
 
