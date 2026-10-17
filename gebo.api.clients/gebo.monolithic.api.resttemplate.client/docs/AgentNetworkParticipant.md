@@ -10,8 +10,7 @@ Name | Type | Description | Notes
 **allowedToNotifyUser** | **Boolean** |  |  [optional]
 **communicationPolicy** | [**CommunicationPolicyEnum**](#CommunicationPolicyEnum) |  | 
 **communicationList** | **List&lt;String&gt;** |  |  [optional]
-**maxInvocations** | **Integer** |  |  [optional]
-**maxConsecutiveInvocations** | **Integer** |  |  [optional]
+**controller** | **Boolean** |  |  [optional]
 **canCallTools** | **Boolean** |  |  [optional]
 **canCallOtherAgents** | **Boolean** |  |  [optional]
 **networkAgentName** | **String** |  |  [optional]

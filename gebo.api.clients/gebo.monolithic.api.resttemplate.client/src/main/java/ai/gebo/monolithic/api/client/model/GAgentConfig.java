@@ -27,7 +27,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -142,9 +142,6 @@ public class GAgentConfig {
 
   @JsonProperty("chatModelReference")
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
-
-  @JsonProperty("maxLoopIterations")
-  private Integer maxLoopIterations = null;
 
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
@@ -516,24 +513,6 @@ public class GAgentConfig {
     this.chatModelReference = chatModelReference;
   }
 
-  public GAgentConfig maxLoopIterations(Integer maxLoopIterations) {
-    this.maxLoopIterations = maxLoopIterations;
-    return this;
-  }
-
-   /**
-   * Get maxLoopIterations
-   * @return maxLoopIterations
-  **/
-  @Schema(required = true, description = "")
-  public Integer getMaxLoopIterations() {
-    return maxLoopIterations;
-  }
-
-  public void setMaxLoopIterations(Integer maxLoopIterations) {
-    this.maxLoopIterations = maxLoopIterations;
-  }
-
   public GAgentConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
     return this;
@@ -773,7 +752,6 @@ public class GAgentConfig {
         Objects.equals(this.useDefaultChatModel, gagentConfig.useDefaultChatModel) &&
         Objects.equals(this.useChatModelWithUse, gagentConfig.useChatModelWithUse) &&
         Objects.equals(this.chatModelReference, gagentConfig.chatModelReference) &&
-        Objects.equals(this.maxLoopIterations, gagentConfig.maxLoopIterations) &&
         Objects.equals(this.aclAliases, gagentConfig.aclAliases) &&
         Objects.equals(this.defaultConfiguration, gagentConfig.defaultConfiguration) &&
         Objects.equals(this.topP, gagentConfig.topP) &&
@@ -788,7 +766,7 @@ public class GAgentConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, maxLoopIterations, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
   }
 
 
@@ -814,7 +792,6 @@ public class GAgentConfig {
     sb.append("    useDefaultChatModel: ").append(toIndentedString(useDefaultChatModel)).append("\n");
     sb.append("    useChatModelWithUse: ").append(toIndentedString(useChatModelWithUse)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
-    sb.append("    maxLoopIterations: ").append(toIndentedString(maxLoopIterations)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    defaultConfiguration: ").append(toIndentedString(defaultConfiguration)).append("\n");
     sb.append("    topP: ").append(toIndentedString(topP)).append("\n");

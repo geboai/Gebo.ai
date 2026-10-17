@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.DataEndpointAccess;
 import ai.gebo.monolithic.api.client.model.GeboComponentInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -25,7 +26,7 @@ import java.util.List;
  * DataEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
 
 public class DataEndpoint {
   @JsonProperty("id")
@@ -136,6 +137,12 @@ public class DataEndpoint {
 
   @JsonProperty("disposer")
   private GeboComponentInfo disposer = null;
+
+  @JsonProperty("access")
+  private List<DataEndpointAccess> access = null;
+
+  @JsonProperty("section")
+  private String section = null;
 
   public DataEndpoint id(String id) {
     this.id = id;
@@ -358,6 +365,50 @@ public class DataEndpoint {
     this.disposer = disposer;
   }
 
+  public DataEndpoint access(List<DataEndpointAccess> access) {
+    this.access = access;
+    return this;
+  }
+
+  public DataEndpoint addAccessItem(DataEndpointAccess accessItem) {
+    if (this.access == null) {
+      this.access = new ArrayList<>();
+    }
+    this.access.add(accessItem);
+    return this;
+  }
+
+   /**
+   * Get access
+   * @return access
+  **/
+  @Schema(description = "")
+  public List<DataEndpointAccess> getAccess() {
+    return access;
+  }
+
+  public void setAccess(List<DataEndpointAccess> access) {
+    this.access = access;
+  }
+
+  public DataEndpoint section(String section) {
+    this.section = section;
+    return this;
+  }
+
+   /**
+   * Get section
+   * @return section
+  **/
+  @Schema(description = "")
+  public String getSection() {
+    return section;
+  }
+
+  public void setSection(String section) {
+    this.section = section;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -379,12 +430,14 @@ public class DataEndpoint {
         Objects.equals(this.secretReference, dataEndpoint.secretReference) &&
         Objects.equals(this.personalData, dataEndpoint.personalData) &&
         Objects.equals(this.retention, dataEndpoint.retention) &&
-        Objects.equals(this.disposer, dataEndpoint.disposer);
+        Objects.equals(this.disposer, dataEndpoint.disposer) &&
+        Objects.equals(this.access, dataEndpoint.access) &&
+        Objects.equals(this.section, dataEndpoint.section);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, product, endpoint, input, output, types, locality, secretReference, personalData, retention, disposer);
+    return Objects.hash(id, description, product, endpoint, input, output, types, locality, secretReference, personalData, retention, disposer, access, section);
   }
 
 
@@ -405,6 +458,8 @@ public class DataEndpoint {
     sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    retention: ").append(toIndentedString(retention)).append("\n");
     sb.append("    disposer: ").append(toIndentedString(disposer)).append("\n");
+    sb.append("    access: ").append(toIndentedString(access)).append("\n");
+    sb.append("    section: ").append(toIndentedString(section)).append("\n");
     sb.append("}");
     return sb.toString();
   }

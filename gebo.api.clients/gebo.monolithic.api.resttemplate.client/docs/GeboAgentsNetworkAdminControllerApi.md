@@ -4,19 +4,65 @@ All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**copyAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#copyAgentsNetwork) | **POST** /api/admin/GeboAgentsNetworkAdminController/copyAgentsNetwork | 
 [**deleteAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#deleteAgentsNetwork) | **POST** /api/admin/GeboAgentsNetworkAdminController/deleteAgentsNetwork | 
 [**getAgentConfigs**](GeboAgentsNetworkAdminControllerApi.md#getAgentConfigs) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentConfigs | 
 [**getAgentConfigsByServiceId**](GeboAgentsNetworkAdminControllerApi.md#getAgentConfigsByServiceId) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId | 
 [**getAgentServices**](GeboAgentsNetworkAdminControllerApi.md#getAgentServices) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentServices | 
+[**getAgentTypesCompatibility**](GeboAgentsNetworkAdminControllerApi.md#getAgentTypesCompatibility) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentTypesCompatibility | 
 [**getAgentsMountedTools**](GeboAgentsNetworkAdminControllerApi.md#getAgentsMountedTools) | **POST** /api/admin/GeboAgentsNetworkAdminController/getAgentsMountedTools | 
 [**getAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#getAgentsNetwork) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork | 
 [**getAgentsNetworkByCode**](GeboAgentsNetworkAdminControllerApi.md#getAgentsNetworkByCode) | **GET** /api/admin/GeboAgentsNetworkAdminController/getAgentsNetworkByCode | 
 [**getCompatibleNextServices**](GeboAgentsNetworkAdminControllerApi.md#getCompatibleNextServices) | **GET** /api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices | 
 [**getCompatiblePreviousServices**](GeboAgentsNetworkAdminControllerApi.md#getCompatiblePreviousServices) | **GET** /api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices | 
 [**getNetworkAdapterServices**](GeboAgentsNetworkAdminControllerApi.md#getNetworkAdapterServices) | **GET** /api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices | 
+[**getNetworkServiceFactories**](GeboAgentsNetworkAdminControllerApi.md#getNetworkServiceFactories) | **GET** /api/admin/GeboAgentsNetworkAdminController/getNetworkServiceFactories | 
 [**insertAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#insertAgentsNetwork) | **POST** /api/admin/GeboAgentsNetworkAdminController/insertAgentsNetwork | 
 [**updateAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#updateAgentsNetwork) | **POST** /api/admin/GeboAgentsNetworkAdminController/updateAgentsNetwork | 
 [**validateAgentsNetwork**](GeboAgentsNetworkAdminControllerApi.md#validateAgentsNetwork) | **POST** /api/admin/GeboAgentsNetworkAdminController/validateAgentsNetwork | 
+
+<a name="copyAgentsNetwork"></a>
+# **copyAgentsNetwork**
+> OperationStatusGAgentsNetwork copyAgentsNetwork(code)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAgentsNetworkAdminControllerApi;
+
+
+GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
+String code = "code_example"; // String | 
+try {
+    OperationStatusGAgentsNetwork result = apiInstance.copyAgentsNetwork(code);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#copyAgentsNetwork");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **code** | **String**|  |
+
+### Return type
+
+[**OperationStatusGAgentsNetwork**](OperationStatusGAgentsNetwork.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="deleteAgentsNetwork"></a>
 # **deleteAgentsNetwork**
@@ -63,7 +109,7 @@ No authorization required
 
 <a name="getAgentConfigs"></a>
 # **getAgentConfigs**
-> List&lt;GBaseObject&gt; getAgentConfigs()
+> List&lt;GAgentConfig&gt; getAgentConfigs()
 
 
 
@@ -76,7 +122,7 @@ No authorization required
 
 GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
 try {
-    List<GBaseObject> result = apiInstance.getAgentConfigs();
+    List<GAgentConfig> result = apiInstance.getAgentConfigs();
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentConfigs");
@@ -89,7 +135,7 @@ This endpoint does not need any parameter.
 
 ### Return type
 
-[**List&lt;GBaseObject&gt;**](GBaseObject.md)
+[**List&lt;GAgentConfig&gt;**](GAgentConfig.md)
 
 ### Authorization
 
@@ -172,6 +218,45 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;AgentServiceDescriptor&gt;**](AgentServiceDescriptor.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAgentTypesCompatibility"></a>
+# **getAgentTypesCompatibility**
+> List&lt;AgentTypeCompatibility&gt; getAgentTypesCompatibility()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAgentsNetworkAdminControllerApi;
+
+
+GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
+try {
+    List<AgentTypeCompatibility> result = apiInstance.getAgentTypesCompatibility();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getAgentTypesCompatibility");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;AgentTypeCompatibility&gt;**](AgentTypeCompatibility.md)
 
 ### Authorization
 
@@ -422,6 +507,45 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;AgentServiceDescriptor&gt;**](AgentServiceDescriptor.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getNetworkServiceFactories"></a>
+# **getNetworkServiceFactories**
+> List&lt;NetworkServiceFactoryDescriptor&gt; getNetworkServiceFactories()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAgentsNetworkAdminControllerApi;
+
+
+GeboAgentsNetworkAdminControllerApi apiInstance = new GeboAgentsNetworkAdminControllerApi();
+try {
+    List<NetworkServiceFactoryDescriptor> result = apiInstance.getNetworkServiceFactories();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentsNetworkAdminControllerApi#getNetworkServiceFactories");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;NetworkServiceFactoryDescriptor&gt;**](NetworkServiceFactoryDescriptor.md)
 
 ### Authorization
 

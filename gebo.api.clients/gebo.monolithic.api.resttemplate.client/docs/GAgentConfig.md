@@ -20,7 +20,6 @@ Name | Type | Description | Notes
 **useDefaultChatModel** | **Boolean** |  |  [optional]
 **useChatModelWithUse** | [**UseChatModelWithUseEnum**](#UseChatModelWithUseEnum) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
-**maxLoopIterations** | **Integer** |  | 
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **defaultConfiguration** | **Boolean** |  |  [optional]
 **topP** | **Double** |  |  [optional]

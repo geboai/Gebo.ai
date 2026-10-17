@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AgentServiceDescriptor
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
 
 public class AgentServiceDescriptor {
   @JsonProperty("serviceId")
@@ -45,6 +45,83 @@ public class AgentServiceDescriptor {
 
   @JsonProperty("networkAdapter")
   private Boolean networkAdapter = null;
+
+  @JsonProperty("reactive")
+  private Boolean reactive = null;
+
+  @JsonProperty("adaptable")
+  private Boolean adaptable = null;
+
+  /**
+   * Gets or Sets messageSemantic
+   */
+  public enum MessageSemanticEnum {
+    EXECUTE_AND_SHARE_RESULT("EXECUTE_AND_SHARE_RESULT"),
+    RESPONSE("RESPONSE");
+
+    private String value;
+
+    MessageSemanticEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static MessageSemanticEnum fromValue(String input) {
+      for (MessageSemanticEnum b : MessageSemanticEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("messageSemantic")
+  private MessageSemanticEnum messageSemantic = null;
+
+  /**
+   * Gets or Sets kind
+   */
+  public enum KindEnum {
+    ROUTER("ROUTER"),
+    FORWARDER("FORWARDER"),
+    RESPONDER("RESPONDER"),
+    NETWORK_ADAPTER("NETWORK_ADAPTER"),
+    WRITER("WRITER");
+
+    private String value;
+
+    KindEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static KindEnum fromValue(String input) {
+      for (KindEnum b : KindEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("kind")
+  private KindEnum kind = null;
 
   public AgentServiceDescriptor serviceId(String serviceId) {
     this.serviceId = serviceId;
@@ -172,6 +249,78 @@ public class AgentServiceDescriptor {
     this.networkAdapter = networkAdapter;
   }
 
+  public AgentServiceDescriptor reactive(Boolean reactive) {
+    this.reactive = reactive;
+    return this;
+  }
+
+   /**
+   * Get reactive
+   * @return reactive
+  **/
+  @Schema(description = "")
+  public Boolean isReactive() {
+    return reactive;
+  }
+
+  public void setReactive(Boolean reactive) {
+    this.reactive = reactive;
+  }
+
+  public AgentServiceDescriptor adaptable(Boolean adaptable) {
+    this.adaptable = adaptable;
+    return this;
+  }
+
+   /**
+   * Get adaptable
+   * @return adaptable
+  **/
+  @Schema(description = "")
+  public Boolean isAdaptable() {
+    return adaptable;
+  }
+
+  public void setAdaptable(Boolean adaptable) {
+    this.adaptable = adaptable;
+  }
+
+  public AgentServiceDescriptor messageSemantic(MessageSemanticEnum messageSemantic) {
+    this.messageSemantic = messageSemantic;
+    return this;
+  }
+
+   /**
+   * Get messageSemantic
+   * @return messageSemantic
+  **/
+  @Schema(description = "")
+  public MessageSemanticEnum getMessageSemantic() {
+    return messageSemantic;
+  }
+
+  public void setMessageSemantic(MessageSemanticEnum messageSemantic) {
+    this.messageSemantic = messageSemantic;
+  }
+
+  public AgentServiceDescriptor kind(KindEnum kind) {
+    this.kind = kind;
+    return this;
+  }
+
+   /**
+   * Get kind
+   * @return kind
+  **/
+  @Schema(description = "")
+  public KindEnum getKind() {
+    return kind;
+  }
+
+  public void setKind(KindEnum kind) {
+    this.kind = kind;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -188,12 +337,16 @@ public class AgentServiceDescriptor {
         Objects.equals(this.outputType, agentServiceDescriptor.outputType) &&
         Objects.equals(this.networkAgent, agentServiceDescriptor.networkAgent) &&
         Objects.equals(this.routingAgent, agentServiceDescriptor.routingAgent) &&
-        Objects.equals(this.networkAdapter, agentServiceDescriptor.networkAdapter);
+        Objects.equals(this.networkAdapter, agentServiceDescriptor.networkAdapter) &&
+        Objects.equals(this.reactive, agentServiceDescriptor.reactive) &&
+        Objects.equals(this.adaptable, agentServiceDescriptor.adaptable) &&
+        Objects.equals(this.messageSemantic, agentServiceDescriptor.messageSemantic) &&
+        Objects.equals(this.kind, agentServiceDescriptor.kind);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter);
+    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind);
   }
 
 
@@ -209,6 +362,10 @@ public class AgentServiceDescriptor {
     sb.append("    networkAgent: ").append(toIndentedString(networkAgent)).append("\n");
     sb.append("    routingAgent: ").append(toIndentedString(routingAgent)).append("\n");
     sb.append("    networkAdapter: ").append(toIndentedString(networkAdapter)).append("\n");
+    sb.append("    reactive: ").append(toIndentedString(reactive)).append("\n");
+    sb.append("    adaptable: ").append(toIndentedString(adaptable)).append("\n");
+    sb.append("    messageSemantic: ").append(toIndentedString(messageSemantic)).append("\n");
+    sb.append("    kind: ").append(toIndentedString(kind)).append("\n");
     sb.append("}");
     return sb.toString();
   }

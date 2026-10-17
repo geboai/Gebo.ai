@@ -7,8 +7,8 @@ Name | Type | Description | Notes
 **property** | **String** |  |  [optional]
 **ignoreCase** | **Boolean** |  |  [optional]
 **nullHandling** | [**NullHandlingEnum**](#NullHandlingEnum) |  |  [optional]
-**ascending** | **Boolean** |  |  [optional]
 **descending** | **Boolean** |  |  [optional]
+**ascending** | **Boolean** |  |  [optional]
 
 <a name="DirectionEnum"></a>
 ## Enum: DirectionEnum
