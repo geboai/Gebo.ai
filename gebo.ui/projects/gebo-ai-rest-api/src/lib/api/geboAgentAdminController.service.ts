@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { GAgentConfig } from '../model/gAgentConfig';
+import { GAgentRole } from '../model/gAgentRole';
 import { GBaseObject } from '../model/gBaseObject';
 import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
 import { OperationStatusGAgentConfig } from '../model/operationStatusGAgentConfig';
@@ -190,6 +191,42 @@ export class GeboAgentAdminControllerService {
         return this.httpClient.request<GAgentConfig>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgentByCode`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAgentRoles(observe?: 'body', reportProgress?: boolean): Observable<Array<GAgentRole>>;
+    public getAgentRoles(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GAgentRole>>>;
+    public getAgentRoles(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GAgentRole>>>;
+    public getAgentRoles(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<GAgentRole>>('get',`${this.basePath}/api/admin/GeboAgentAdminController/getAgentRoles`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

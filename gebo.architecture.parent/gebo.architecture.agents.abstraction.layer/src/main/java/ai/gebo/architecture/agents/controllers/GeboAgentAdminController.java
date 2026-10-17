@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
+import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsCopyService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -73,6 +75,20 @@ public class GeboAgentAdminController {
 			object.setDescription(x.getDescription());
 			return object;
 		}).toList();
+	}
+
+	/**
+	 * The roles an agent configuration can take ({@code agentRoleCode} is mandatory):
+	 * the role library the prompts are built with.
+	 */
+	@GetMapping(value = "getAgentRoles", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GAgentRole> getAgentRoles() {
+		IAgentRoleDao dao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
+		List<GAgentRole> roles = dao != null && dao.getConfigurations() != null ? dao.getConfigurations() : List.of();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentRoles returned " + roles.size() + " role(s)");
+		}
+		return roles;
 	}
 
 	@GetMapping(value = "getAgentByCode", produces = MediaType.APPLICATION_JSON_VALUE)
