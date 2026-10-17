@@ -55,16 +55,23 @@
     }
   </div>
 
+  @if (everyToolsControl) {
+    <div class="px-2 py-1 border-bottom-1 surface-border text-xs text-muted-color flex align-items-center gap-1">
+      <i class="pi pi-info-circle"></i>
+      <span id="BuiltInToolsHint" gebo-ai-text>Built in and never listed here: notifyUser, with which the agent tells the user what it is doing; the participant's "may notify the user" flag governs it.</span>
+    </div>
+  }
+
   <!-- the catalogue: the categories on the left, the tools on the right -->
   <div class="grid grid-nogutter">
-    <div class="col-12 md:col-3 border-right-1 surface-border p-2 flex md:flex-column flex-wrap gap-1">
+    <div class="col-12 md:col-3 lg:col-2 border-right-1 surface-border p-2 flex md:flex-column flex-wrap gap-1">
       <button type="button" class="border-none text-left px-2 py-1 border-round cursor-pointer text-sm flex justify-content-between gap-2 align-items-center"
         [class.bg-primary-50]="categoryFilter === null" [class.text-primary-700]="categoryFilter === null" [class.font-semibold]="categoryFilter === null"
         [class.bg-transparent]="categoryFilter !== null" (click)="categoryFilter = null">
         <span id="AllCategoriesBtn" gebo-ai-text>All</span>
         <span class="text-xs text-muted-color">{{chosenTools.length}}/{{toolsCount}}</span>
       </button>
-      @for (category of categories; track category.code) {
+      @for (category of nonEmptyCategories; track category.code) {
         <button type="button" class="border-none text-left px-2 py-1 border-round cursor-pointer text-sm flex justify-content-between gap-2 align-items-center"
           [class.bg-primary-50]="categoryFilter === category.code" [class.text-primary-700]="categoryFilter === category.code" [class.font-semibold]="categoryFilter === category.code"
           [class.bg-transparent]="categoryFilter !== category.code" (click)="categoryFilter = category.code">
@@ -73,7 +80,7 @@
         </button>
       }
     </div>
-    <div class="col-12 md:col-9 p-2 flex flex-column gap-2" style="min-width: 0;">
+    <div class="col-12 md:col-9 lg:col-10 p-2 flex flex-column gap-2" style="min-width: 0;">
       <div class="flex gap-2 align-items-center">
         <input pInputText type="search" id="SearchToolInput" gebo-ai-label class="flex-grow-1 p-inputtext-sm" style="min-width: 0;"
           placeholder="Find a tool by name or by what it does" [(ngModel)]="query" [disabled]="disabled" />

@@ -8525,6 +8525,9 @@
       },
       "SearchToolInput": {
         "placeholder": "Find a tool by name or by what it does"
+      },
+      "BuiltInToolsHint": {
+        "label": "Built in and never listed here: notifyUser, with which the agent tells the user what it is doing; the participant's \"may notify the user\" flag governs it."
       }
     }
   },

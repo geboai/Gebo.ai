@@ -203,7 +203,7 @@
                           <button type="button" id="InspectorParticipantTab" gebo-ai-text class="p-button p-button-text p-button-sm" [class.font-bold]="inspectorTab === 'participant'" (click)="inspectorTab = 'participant'">Participant</button>
                           <button type="button" id="InspectorConfigurationTab" gebo-ai-text class="p-button p-button-text p-button-sm" [class.font-bold]="inspectorTab === 'configuration'" (click)="inspectorTab = 'configuration'">Agent configuration</button>
                         </div>
-                        <div class="p-2 flex flex-column gap-2 text-sm" style="max-height: clamp(260px, calc(100vh - 520px), 560px); overflow-y: auto; overflow-x: hidden; min-width: 0; overflow-wrap: anywhere;">
+                        <div class="p-2 flex flex-column gap-2 text-sm" style="max-height: clamp(260px, calc(100vh - 520px), 560px); overflow-y: auto; overflow-x: clip; min-width: 0; overflow-wrap: anywhere;">
                           @if (selectedEdge) {
                             <div class="flex align-items-center justify-content-between gap-2 border-round surface-100 p-2">
                               <span class="text-xs"><span id="EdgeLabel" gebo-ai-text>Link</span> <b>{{selectedEdge.source}}</b> → <b>{{selectedEdge.target}}</b></span>

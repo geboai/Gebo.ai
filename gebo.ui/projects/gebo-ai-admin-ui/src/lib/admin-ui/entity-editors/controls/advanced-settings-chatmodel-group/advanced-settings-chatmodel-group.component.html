@@ -11,7 +11,7 @@
 -->
 
 @if (formGroup) {
-  <p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI [formGroup]="formGroup">
+  <p-panel id="Panel" gebo-ai-label #chatModelAdvancedUI [formGroup]="formGroup" [showHeader]="false">
     <p-blockUI [target]="chatModelAdvancedUI" [blocked]="loading">
       <i class="pi pi-lock" style="font-size: 3rem"></i>
     </p-blockUI>

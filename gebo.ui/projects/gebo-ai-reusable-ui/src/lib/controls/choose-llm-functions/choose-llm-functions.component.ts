@@ -170,6 +170,11 @@ export class GeboAIChooseLLMFunctionscomponent implements ControlValueAccessor, 
         }
     }
 
+    /** The categories with at least one tool: the others have nothing to pick. */
+    get nonEmptyCategories(): PickerCategory[] {
+        return this.categories.filter(c => c.tools.length > 0);
+    }
+
     get toolsCount(): number {
         return this.toolsByName.size;
     }
