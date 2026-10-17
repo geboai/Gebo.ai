@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+
+import org.springframework.beans.factory.ObjectProvider;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -61,7 +63,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.model.AgentToolsInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -106,6 +111,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao;
 	final protected IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao;
 	final protected IGSecurityAuditLoggerService securityAuditLoggerService;
+	/** The agents layer's view of the agentic chats' tools: absent without the agents. */
+	final protected ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	// Metadata-only by design: model/provider/outcome/latency, never prompt or
@@ -147,7 +154,31 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		List<String> functions = config.getEnabledFunctions();
 		List<ToolCategoriesTree> trees = callbacksRepoPattern.getEnabledToolsTree(functions);
 		GeboChatUserInfo infos = new GeboChatUserInfo(config.getModelTypeCode(), choice, trees);
+		infos.setAgentsTools(agentsTools(null));
 		return infos;
+	}
+
+	/**
+	 * The agents, with their tools, of the network the chats are handed to: asked to
+	 * the agents layer when it is there, null otherwise.
+	 *
+	 * @param profile the chat profile, null for a free chat
+	 */
+	protected List<AgentToolsInfo> agentsTools(GChatProfileConfiguration profile) {
+		IGChatAgentsToolsDescriber describer = agentsToolsDescriber != null ? agentsToolsDescriber.getIfAvailable()
+				: null;
+		if (describer == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("agentsTools(...) no agents tools describer: the agents are not part of this build");
+			}
+			return null;
+		}
+		List<AgentToolsInfo> agents = describer.describeAgentsTools(profile);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("agentsTools(...) profile:" + (profile != null ? profile.getCode() : null) + " described "
+					+ (agents != null ? agents.size() : 0) + " agent(s)");
+		}
+		return agents;
 	}
 
 	/**

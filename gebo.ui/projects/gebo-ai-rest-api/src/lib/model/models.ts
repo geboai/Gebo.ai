@@ -8,6 +8,7 @@ export * from './additionalContent';
 export * from './agentMountedTools';
 export * from './agentNetworkParticipant';
 export * from './agentServiceDescriptor';
+export * from './agentToolsInfo';
 export * from './agentTypeCompatibility';
 export * from './agenticChatDefaultNetworkInfo';
 export * from './agenticChatDefaultNetworkRequest';

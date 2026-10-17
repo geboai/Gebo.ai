@@ -3444,8 +3444,8 @@
         "help": "LLms provider driver"
       },
       "functions": {
-        "label": "Chat model callable functions",
-        "help": "List of functions available to the chat model"
+        "label": "Tools of the chat model",
+        "help": "The tools the chat model calls in the chats that are not agentic: the ones chosen on the chat model's configuration"
       },
       "NameCol": {
         "label": "Name"
@@ -3459,6 +3459,25 @@
       },
       "CloseBtn": {
         "help": "Close"
+      },
+      "NoModelToolsHint": {
+        "label": "The chat model calls no tool"
+      },
+      "agentsTools": {
+        "label": "Agents of the network and their tools",
+        "help": "The agentic chats are handed to this network of agents: each agent calls only the tools listed under it"
+      },
+      "NetworkLabel": {
+        "label": "Network"
+      },
+      "ServiceLabel": {
+        "label": "Service"
+      },
+      "EveryToolMountedHint": {
+        "label": "every registered tool is mounted"
+      },
+      "NoAgentToolsHint": {
+        "label": "This agent calls no tool"
       }
     },
     "DocumentRefComponent": {
@@ -4490,7 +4509,7 @@
         "label": "RAG settings"
       },
       "LanguageModelTab": {
-        "label": "Large language model & usable tools settings"
+        "label": "Language models settings"
       },
       "UseEmbeddingModelLabel": {
         "label": "Use embedding model"
@@ -4532,10 +4551,6 @@
       "topK": {
         "label": "Considered document fragments (TopK)",
         "help": "In the retrieval-augmented generation, Top N found considered document fragments in semantic search"
-      },
-      "enabledFunctions": {
-        "label": "Enabled functions call for this RAG chat",
-        "help": "Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base"
       },
       "prompt": {
         "label": "Prompt",

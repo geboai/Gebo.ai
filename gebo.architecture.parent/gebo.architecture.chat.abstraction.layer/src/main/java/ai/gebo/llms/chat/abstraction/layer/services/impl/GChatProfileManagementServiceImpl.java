@@ -9,17 +9,13 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
-import ai.gebo.architecture.ai.model.ToolCategoriesTree;
-import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
-import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
@@ -43,7 +39,6 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 	protected final ChatProfilesRepository chatProfilesRepository;
 	protected final IGSecurityService securityService;
 	protected final IGPromptConfigDao promptConfigDao;
-	protected final IGToolCallbackSourceRepositoryPattern functionsCallbackWrapper;
 	protected final GeboRagSearchConfig ragConfig;
 
 
@@ -92,18 +87,6 @@ public class GChatProfileManagementServiceImpl implements IGChatProfileManagemen
 		configuration.setTopK(ragConfig.getDefaultTopK());
 		configuration.setSimilaritySearchThreshold(ragConfig.getDefaultSimilarityThreshold());
 		configuration.setOtherSearchSimilarityThreshold(ragConfig.getDefaultSimilarityThreshold());
-		// Add enabled functions to the configuration
-		List<ToolCategoriesTree> functionsTrees = functionsCallbackWrapper.getAllToolsTree(true);
-		List<String> functions = new ArrayList<String>();
-		for (ToolCategoriesTree functionCategoriesTree : functionsTrees) {
-			if (functionCategoriesTree.getToolsReference() != null) {
-				// Add each tool reference name to the list of functions
-				for (ToolReference fr : functionCategoriesTree.getToolsReference()) {
-					functions.add(fr.getName());
-				}
-			}
-		}
-		configuration.setEnabledFunctions(functions);
 		configuration.setCode(GChatProfileConfiguration.DEFAULT_CHAT_PROFILE_CODE);
 
 		// Save the new default chat profile to the repository

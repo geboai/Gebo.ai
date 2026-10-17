@@ -14,6 +14,8 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +42,7 @@ import ai.gebo.model.base.GObjectRef;
  */
 public class GRuntimeChatProfileChatModelDaoImpl extends GAbstractRuntimeConfigurationDao<IGChatProfileChatModel>
 		implements IGRuntimeChatProfileChatModelDao {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GRuntimeChatProfileChatModelDaoImpl.class);
     
     // Dependency injection of repository pattern for chat models
 	@Autowired
@@ -111,7 +114,15 @@ public class GRuntimeChatProfileChatModelDaoImpl extends GAbstractRuntimeConfigu
             // Attempt to find and configure a new chat model
 			GBaseChatModelConfig newConfig = persistentObjectManager.findByReference(modelConfiguration,
 					GBaseChatModelConfig.class);
-			newConfig.setEnabledFunctions(configuration.getEnabledFunctions());
+			// the tools are the model's own: the chat pipelines run the referenced model
+			// as it is configured, a profile chooses no tools of its own
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("createAndAdd(...) chat profile:" + configuration.getCode() + " runs chat model:"
+						+ newConfig.getCode() + " with its " + (newConfig.getEnabledFunctions() != null
+								? newConfig.getEnabledFunctions().size()
+								: 0)
+						+ " enabled function(s)");
+			}
 			IGChatModelConfigurationSupportService handler = chatModelsRepositoryPattern
 					.findByCode(newConfig.getModelTypeCode());
 			GChatProfileChatModel chatProfileChatModel = new GChatProfileChatModel(configuration,

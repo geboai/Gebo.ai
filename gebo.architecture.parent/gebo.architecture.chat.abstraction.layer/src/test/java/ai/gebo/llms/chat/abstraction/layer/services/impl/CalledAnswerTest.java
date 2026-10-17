@@ -69,7 +69,7 @@ class CalledAnswerTest {
 						mock(IGChatStorageAreaService.class), mock(LLMGeneratedResourceRepository.class),
 						mock(IGKnowledgebaseVisibilityService.class), mock(IGChatSessionLifeCycleService.class),
 						mock(IGTextToSpeechModelRuntimeConfigurationDao.class),
-						mock(IGTranscriptModelRuntimeConfigurationDao.class), audit)
+						mock(IGTranscriptModelRuntimeConfigurationDao.class), audit, null)
 						.defaultAnswer(Answers.CALLS_REAL_METHODS));
 	}
 

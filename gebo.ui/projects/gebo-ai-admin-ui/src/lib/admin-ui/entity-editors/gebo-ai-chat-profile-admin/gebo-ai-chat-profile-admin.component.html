@@ -42,7 +42,7 @@
           <p-tabs [value]="0" id="TabView">
             <p-tablist>
               <p-tab id="GeneralInfosTab" [value]="0" gebo-ai-text>General infos</p-tab>
-              <p-tab id="LanguageModelTab" [value]="1" gebo-ai-text>Large language model &amp; usable tools settings</p-tab>
+              <p-tab id="LanguageModelTab" [value]="1" gebo-ai-text>Language models settings</p-tab>
               @if (agenticChatNetworksEnabled) {
                 <p-tab [value]="4" id="NetworkOfAgentsTab" gebo-ai-text>Network of agents</p-tab>
               }
@@ -136,13 +136,6 @@
                       Use system default embedding model or specify one.
                     </small>
                   </div>
-                </div>
-                <div class="col-12">
-                  <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this RAG chat" help="Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base">
-                    <gebo-ai-choose-llm-functions-component id="enabledFunctions"
-                      formControlName="enabledFunctions" [knowledgeBaseContext]="true"
-                      class="block w-full" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
-                  </gebo-ai-field>
                 </div>
               </div>
             </p-tabpanel>

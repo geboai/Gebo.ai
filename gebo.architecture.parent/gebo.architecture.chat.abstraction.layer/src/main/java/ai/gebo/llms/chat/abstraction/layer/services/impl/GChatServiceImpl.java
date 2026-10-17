@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
@@ -41,6 +42,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGeneratio
 import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -68,11 +70,12 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGChatSessionLifeCycleService chatSessionLifecycleService,
 			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
 			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
-			IGSecurityAuditLoggerService securityAuditLoggerService) {
+			IGSecurityAuditLoggerService securityAuditLoggerService,
+			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
-				securityAuditLoggerService);
+				securityAuditLoggerService, agentsToolsDescriber);
 
 	}
 
