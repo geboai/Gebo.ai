@@ -140,10 +140,8 @@
                 <div class="col-12">
                   <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this RAG chat" help="Functionalities that could be used by the llm model during the chat with the user interacting also with the selected knowledge base">
                     <gebo-ai-choose-llm-functions-component id="enabledFunctions"
-                      formControlName="enabledFunctions"
-                      [knowledgeBaseContext]="true" dataKey="code" optionLabel="description"
-                      optionValue="code" display="chip"
-                    class="col-12" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+                      formControlName="enabledFunctions" [knowledgeBaseContext]="true"
+                      class="block w-full" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
                   </gebo-ai-field>
                 </div>
               </div>

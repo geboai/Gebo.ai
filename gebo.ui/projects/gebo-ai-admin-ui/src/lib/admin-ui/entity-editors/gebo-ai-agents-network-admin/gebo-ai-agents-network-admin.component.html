@@ -88,7 +88,7 @@
                     }
                     <div class="col-6">
                       <gebo-ai-field id="maxLoopIteration" label="Max Loop Iterations"
-                        help="Set the maximum loop iterations of the network.">
+                        help="How many times the controller of the network may act: the coordination cycles of a router, the search and rewrite cycles of a single agent answering the user.">
                         <p-inputNumber formControlName="maxLoopIteration" gebo-ai-field-element
                         [maxFractionDigits]="0" [min]="1" [max]="50"></p-inputNumber>
                       </gebo-ai-field>
@@ -255,6 +255,15 @@
                                 @else if (producesNetworkOutput(service)) { <span id="OutputNodeOkHint" gebo-ai-text>produces the output of the contract</span> }
                                 @else if (service && factory()) { <span id="OutputNodeNoHint" gebo-ai-text>does not produce the output of the contract: another output node must</span> }
                               </span>
+                              <div class="flex align-items-center gap-2" [class.opacity-50]="!canBeController(service, selected)">
+                                <p-checkbox formControlName="controller" [binary]="true" inputId="ControllerCheck"></p-checkbox>
+                                <label for="ControllerCheck" id="ControllerLabel" gebo-ai-text class="text-sm">Controller of the network</label>
+                              </div>
+                              <span class="text-xs text-muted-color">
+                                @if (selected.controller) { <span id="ControllerOnHint" gebo-ai-text>the network's max loop iterations are the times this participant may act</span> }
+                                @else if (canBeController(service, selected)) { <span id="ControllerCanHint" gebo-ai-text>a router or an output node can be the controller, the one the network counts its loop on</span> }
+                                @else { <span id="ControllerNoHint" gebo-ai-text>only a router or an output node can be the controller</span> }
+                              </span>
                             </div>
                             <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
                               <span id="TalksToLabel" gebo-ai-text class="text-xs uppercase font-semibold text-muted-color">Talks to</span>
@@ -292,16 +301,6 @@
                                 <label for="CanCallOtherAgentsCheck" id="CanCallOtherAgentsLabel" gebo-ai-text class="text-sm">May delegate to other agents</label>
                               </div>
                             </div>
-                            @if (isRouter(service)) {
-                              <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
-                                <span id="RoutingBudgetLabel" gebo-ai-text class="text-xs uppercase font-semibold text-muted-color">Routing budget</span>
-                                <label id="MaxInvocationsLabel" gebo-ai-text class="text-xs font-semibold text-muted-color" for="MaxInvocationsInput">Coordination cycles</label>
-                                <p-inputNumber id="MaxInvocationsInput" gebo-ai-label formControlName="maxInvocations" [min]="1" placeholder="One pass" styleClass="w-full" inputStyleClass="p-inputtext-sm w-full"></p-inputNumber>
-                                <label id="MaxConsecutiveLabel" gebo-ai-text class="text-xs font-semibold text-muted-color" for="MaxConsecutiveInput">Cycles when the first is empty</label>
-                                <p-inputNumber id="MaxConsecutiveInput" gebo-ai-label formControlName="maxConsecutiveInvocations" [min]="1" placeholder="One pass" styleClass="w-full" inputStyleClass="p-inputtext-sm w-full"></p-inputNumber>
-                                <span id="RoutingBudgetHint" gebo-ai-text class="text-xs text-muted-color">Cycles the router may run before it must deliver; empty means one pass. Only routers read these values.</span>
-                              </div>
-                            }
                             <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
                               <label id="PolicyLabel" gebo-ai-text class="text-xs font-semibold text-muted-color">Communication policy</label>
                               <p-select id="PolicySelect" gebo-ai-label formControlName="communicationPolicy" [options]="policyOptions" optionLabel="label" optionValue="value" dataKey="value" styleClass="w-full" appendTo="body"></p-select>
@@ -408,7 +407,10 @@
                             @if (agent.outputNode) {
                               <span class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold" title="Output Node">OUT</span>
                             }
-                            @if (!agent.inputNode && !agent.outputNode) {
+                            @if (agent.controller) {
+                              <span class="p-1 border-round bg-orange-100 text-orange-700 text-xs font-semibold" title="Controller">CTRL</span>
+                            }
+                            @if (!agent.inputNode && !agent.outputNode && !agent.controller) {
                               <span class="text-muted-color">-</span>
                             }
                           </div>

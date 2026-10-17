@@ -1,24 +1,14 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AgentServiceDescriptor, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map, Observable, of, take } from "rxjs";
+import { forkJoin, map, Observable, of, take, tap } from "rxjs";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
     templateUrl: "gebo-ai-agents-admin.component.html",
     standalone: false,
-    // the chosen tools are listed by their description, which is long: the chooser
-    // wraps them instead of growing wider than its column and pushing the fields
-    // beside it out of the panel
-    styles: [`
-        :host ::ng-deep gebo-ai-choose-llm-functions-component { display: block; min-width: 0; max-width: 100%; }
-        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect { width: 100%; max-width: 100%; }
-        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect-label { display: flex; flex-wrap: wrap; gap: 4px; white-space: normal; }
-        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect-chip-item,
-        :host ::ng-deep gebo-ai-choose-llm-functions-component .p-treeselect-chip-item .p-chip { max-width: 100%; white-space: normal; }
-    `],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAgentsAdminModule", multi: false },
     {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAgentsAdminComponent),
@@ -46,7 +36,6 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         subscribeAllTools: new FormControl(),
         chatModelReference: new FormControl(),
         useDefaultChatModel: new FormControl(),
-        maxLoopIterations: new FormControl(),
         topP: new FormControl(),
         accessibleGroups: new FormControl(),
         accessibleUsers: new FormControl(),
@@ -80,18 +69,14 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         private geboChatModelsService: ChatModelsControllerService,
         private networksService: GeboAgentsNetworkAdminControllerService) {
         super(injector, geboFormGroupsService, myConfirmationService, geboUIActionRoutingService, outputForwardingService);
-        this.formGroup.controls["subscribeAllTools"].valueChanges.subscribe({
-            next: (received) => {
-                if (received === true)
-                    this.formGroup.controls["enabledFunctions"].disable();
-                else
-                    this.formGroup.controls["enabledFunctions"].enable();
-            }
-        });
+        // every tool, or the tools chosen: the picker carries the switch and disables
+        // the choice while every tool is mounted
         this.formGroup.controls["agentServiceId"].valueChanges.subscribe(agentServiceId => {
             if (agentServiceId) {
-                // a prompt template is chosen by its use; the ones without a description are listed by it
-                this.promptLoadingObservable = this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(map(x => { return x?.map(y => { y.code = y.promptUse; y.description = y.description || y.promptUse; return y; }) }));
+                // the templates of the service, kept whole: customizing copies the chosen one
+                this.promptLoadingObservable = this.agentsAdminService.getPromptTemplatesByAgentId(agentServiceId).pipe(
+                    tap(templates => this.promptTemplates = templates || []),
+                    map(x => { return x?.map(y => { y.code = y.promptUse; y.description = y.description || y.promptUse; return y; }) }));
             }
             // a network adapter service runs a whole network as one agent: the
             // configuration says which network, and the agent type says so
@@ -125,6 +110,10 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 error: (error) => console.error("Cannot read the adapted network " + code, error)
             });
         });
+        // the custom prompt is edited only while the agent has one: otherwise the editor
+        // is disabled and the standard template is chosen
+        this.formGroup.controls["customLoopPrompt"].valueChanges.subscribe(() => this.syncPromptControls());
+        this.syncPromptControls();
         // Enable/disable chat model selection based on useDefaultChatModel value
         this.formGroup.controls["useDefaultChatModel"].valueChanges.subscribe(
             x => {
@@ -254,6 +243,68 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 }];
             }
         });
+    }
+
+    /** The templates of the chosen service, whole, as the listbox loaded them. */
+    private promptTemplates: GPromptTemplateConfig[] = [];
+
+    /**
+     * Whether the agent runs a prompt of its own instead of the standard template:
+     * a custom prompt is a copy of a template, so it carries the template's use code;
+     * the prompt editor emits an empty value while it initializes, which is no prompt.
+     */
+    protected get promptCustomized(): boolean {
+        const custom: GPromptTemplateConfig | null | undefined = this.formGroup.controls["customLoopPrompt"].value;
+        return !!custom && !!custom.promptUse;
+    }
+
+    private syncPromptControls(): void {
+        this.setEnabled(this.formGroup.controls["customLoopPrompt"], this.promptCustomized);
+    }
+
+    /**
+     * Copies the chosen standard template into the agent, to be edited for it only,
+     * once the admin confirms: it takes prompting skills.
+     */
+    protected customizePrompt(): void {
+        const use = this.formGroup.controls["mainLoopPromptUseCode"].value;
+        const template = this.promptTemplates.find(t => t.promptUse === use);
+        if (!template) {
+            console.debug("[agents-admin] no template loaded for the prompt use " + use + ": nothing to customize");
+            return;
+        }
+        const confirmation: ExtendedConfirmation = {
+            id: "CustomizePromptConfirmation",
+            message: "Customizing the prompt requires advanced LLM prompting skills: do you want to go further?",
+            header: "Customize the prompt",
+            icon: "pi pi-exclamation-triangle",
+            acceptLabel: "Yes",
+            rejectLabel: "No",
+            accept: () => {
+                const copy: GPromptTemplateConfig = JSON.parse(JSON.stringify(template));
+                console.debug("[agents-admin] the prompt " + use + " is copied into the agent to be customized");
+                this.formGroup.controls["customLoopPrompt"].enable({ emitEvent: false });
+                this.formGroup.controls["customLoopPrompt"].setValue(copy);
+                this.formGroup.controls["customLoopPrompt"].markAsDirty();
+            }
+        };
+        this.injector.get(GeboAITranslationService).translateConfirmation("GeboAIAgentsAdminModule", "GAgentConfig", confirmation)
+            .pipe(take(1)).subscribe(translated => this.myConfirmationService.confirm(translated ?? confirmation));
+    }
+
+    /** Drops the agent's own prompt: the standard template chosen is followed again. */
+    protected useStandardPrompt(): void {
+        console.debug("[agents-admin] the customized prompt is dropped, the standard template is followed");
+        this.formGroup.controls["customLoopPrompt"].setValue(null);
+        this.formGroup.controls["customLoopPrompt"].markAsDirty();
+    }
+
+    private setEnabled(control: AbstractControl, enabled: boolean): void {
+        if (enabled && control.disabled) {
+            control.enable({ emitEvent: false });
+        } else if (!enabled && control.enabled) {
+            control.disable({ emitEvent: false });
+        }
     }
 
     /** The descriptor of the service chosen in the form, with its types and kind. */

@@ -36,7 +36,8 @@
             <p-tablist>
               <p-tab id="GeneralInfosTab" [value]="0" gebo-ai-text>General infos</p-tab>
               <p-tab id="LanguageModelTab" [value]="1" gebo-ai-text>Large language model &amp; usable tools settings</p-tab>
-              <p-tab id="SecurityAccessSettingsTab" [value]="2" gebo-ai-text>Security access settings</p-tab>
+              <p-tab id="PromptTemplateTab" [value]="2" gebo-ai-text>Prompt template</p-tab>
+              <p-tab id="SecurityAccessSettingsTab" [value]="3" gebo-ai-text>Security access settings</p-tab>
             </p-tablist>
             <p-tabpanels>
             <p-tabpanel [value]="0">
@@ -100,26 +101,10 @@
                       </div>
                     }
                     <div class="col-6">
-                      <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
-                        help="Choose the Agent main loop prompt.">
-                        <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode"
-                          placeholder="Select the Prompt Template type" [required]="true"
-                          [optionsObservable]="promptLoadingObservable" gebo-ai-field-element>
-                        </geboai-editable-listbox-component>
-                      </gebo-ai-field>
-                    </div>
-                    <div class="col-6">
                       <gebo-ai-field id="defaultConfiguration" label="Default Agent configuration"
                         help="Set this as default configuration for this Agent service type">
                         <p-check-box formControlName="defaultConfiguration" [binary]="true" [trueValue]="true"
                           [falseValue]="false" gebo-ai-field-element />
-                        </gebo-ai-field>
-                      </div>
-                      <div class="col-6">
-                        <gebo-ai-field id="maxLoopIterations" label="Max number of Agent loops"
-                          help="Set the maximum number of Agent loops (this will result in a much refined result).">
-                          <p-inputNumber formControlName="maxLoopIterations" gebo-ai-field-element
-                          [maxFractionDigits]="0" [min]="1" [max]="20"></p-inputNumber>
                         </gebo-ai-field>
                       </div>
                     </div>
@@ -157,19 +142,12 @@
                       </small>
                     </div>
 
-                    <div class="col-4">
-                      <gebo-ai-field id="subscribeAllTools" label="Enable all available tools"
-                        help="When this flag is checked all the available tools will be assigned when this agents run">
-                        <p-check-box formControlName="subscribeAllTools" [binary]="true" [trueValue]="true"
-                        [falseValue]="false" gebo-ai-field-element></p-check-box>
-                      </gebo-ai-field>
-                    </div>
-                    <div class="col-8">
-                      <gebo-ai-field id="enabledFunctions" label="Enabled functions call for this Agent"
-                        help="Functionalities that could be used by the Agent while performing its work">
+                    <div class="col-12">
+                      <gebo-ai-field id="enabledFunctions" label="Tools of this agent"
+                        help="Mount every registered tool, or pick the ones this agent may call: by category, by name, or one by one.">
                         <gebo-ai-choose-llm-functions-component id="enabledFunctions"
-                          formControlName="enabledFunctions" [knowledgeBaseContext]="true" dataKey="code"
-                          optionLabel="description" optionValue="code" display="chip" class="col-12"
+                          formControlName="enabledFunctions" [knowledgeBaseContext]="true"
+                          [everyToolsControl]="formGroup.controls['subscribeAllTools']"
                         gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
                       </gebo-ai-field>
                     </div>
@@ -199,6 +177,35 @@
                       </p-tabpanel>
 
                       <p-tabpanel [value]="2">
+                        <div class="grid standardTabDialogueHeight">
+                          <div class="col-12 md:col-6">
+                            <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
+                              help="The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only.">
+                              <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode"
+                                placeholder="Select the Prompt Template type" [required]="true" [readonly]="promptCustomized"
+                                [optionsObservable]="promptLoadingObservable" gebo-ai-field-element>
+                              </geboai-editable-listbox-component>
+                            </gebo-ai-field>
+                          </div>
+                          <div class="col-12 md:col-6 flex align-items-start gap-2 pt-4">
+                            <p-button id="CustomizePromptBtn" gebo-ai-label label="Customize prompt" icon="pi pi-pencil" [outlined]="true"
+                              [disabled]="promptCustomized || !formGroup.controls['mainLoopPromptUseCode'].value || entity?.readOnly===true"
+                              (onClick)="customizePrompt()"></p-button>
+                            <p-button id="UseStandardPromptBtn" gebo-ai-label label="Use standard prompt" icon="pi pi-undo" [outlined]="true" severity="secondary"
+                              [disabled]="!promptCustomized || entity?.readOnly===true" (onClick)="useStandardPrompt()"></p-button>
+                          </div>
+                          <div class="col-12">
+                            @if (promptCustomized) {
+                              <small id="PromptCustomizedHint" gebo-ai-text class="text-muted-color block mb-2">This agent runs the prompt below, a copy of the template edited for it; the standard template is no longer followed.</small>
+                            } @else {
+                              <small id="PromptStandardHint" gebo-ai-text class="text-muted-color block mb-2">This agent runs the standard template chosen above. Customize it to edit a copy here.</small>
+                            }
+                            <gebo-ai-prompt-editing-component formControlName="customLoopPrompt"></gebo-ai-prompt-editing-component>
+                          </div>
+                        </div>
+                      </p-tabpanel>
+
+                      <p-tabpanel [value]="3">
                         <div class="standardTabDialogueHeight">
                           <gebo-ai-access-control [formGroup]="formGroup"></gebo-ai-access-control>
                         </div>

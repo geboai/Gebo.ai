@@ -61,6 +61,11 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
                   <i class="pi pi-sign-out"></i> OUT
                 </span>
               }
+              @if (participant.controller) {
+                <span class="p-1 border-round bg-orange-100 text-orange-700 text-xs font-semibold flex align-items-center gap-1" title="Controller: the network's loop is counted on it">
+                  <i class="pi pi-sync"></i> CTRL
+                </span>
+              }
             </div>
           </div>
 
@@ -98,7 +103,7 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
           <div class="text-xs text-muted-color">
             {{participant.allowedToNotifyUser === false ? 'silent' : 'notifies'}} · {{participant.canCallTools === false ? 'no tools' : 'tools'}}
             @if (participant.canCallOtherAgents) { · delegates }
-            @if (parent.isRouter(service)) { · {{participant.maxInvocations || participant.maxConsecutiveInvocations || 1}} cycle(s) }
+            @if (participant.controller) { · controller }
           </div>
 
           @if (parent.getMountedTools(participant.agentConfigCode); as mounted) {

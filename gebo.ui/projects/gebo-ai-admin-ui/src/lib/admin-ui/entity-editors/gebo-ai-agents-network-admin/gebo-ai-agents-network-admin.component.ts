@@ -179,8 +179,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         outputNode: new FormControl<boolean>(false),
         allowedToNotifyUser: new FormControl<boolean>(true),
         communicationPolicy: new FormControl<string>("ALLOW_LIST"),
-        maxInvocations: new FormControl<number | null>(null),
-        maxConsecutiveInvocations: new FormControl<number | null>(null),
+        controller: new FormControl<boolean>(false),
         canCallTools: new FormControl<boolean>(true),
         canCallOtherAgents: new FormControl<boolean>(false)
     });
@@ -446,6 +445,18 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         return !!service && !!factory && this.isAssignable(service.inputType, factory.inputType);
     }
 
+    /**
+     * Whether the participant can be the controller of the network, the one its loop
+     * is counted on: a router (its coordination cycles) or an output node (the cycles
+     * of a writer, the single pass of a plain output node).
+     */
+    public canBeController(service: AgentServiceDescriptor | undefined, participant?: AgentNetworkParticipant): boolean {
+        if (!service) {
+            return false;
+        }
+        return this.isRouter(service) || service.reactive === true || participant?.outputNode === true;
+    }
+
     /** Whether a participant of the service produces the output of the network. */
     public producesNetworkOutput(service: AgentServiceDescriptor | undefined): boolean {
         const factory = this.factory();
@@ -593,8 +604,8 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             allowedToNotifyUser: true,
             communicationPolicy: "ALLOW_LIST",
             communicationList: [],
-            maxInvocations: undefined,
-            maxConsecutiveInvocations: undefined,
+            // the first participant that can be the controller takes the role
+            controller: this.canBeController(service) && !this.agentsList.some(p => p.controller),
             canCallTools: true,
             canCallOtherAgents: false
         };
@@ -628,8 +639,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                     outputNode: participant.outputNode === true,
                     allowedToNotifyUser: participant.allowedToNotifyUser !== false,
                     communicationPolicy: participant.communicationPolicy || "ALLOW_LIST",
-                    maxInvocations: participant.maxInvocations ?? null,
-                    maxConsecutiveInvocations: participant.maxConsecutiveInvocations ?? null,
+                    controller: participant.controller === true,
                     canCallTools: participant.canCallTools !== false,
                     canCallOtherAgents: participant.canCallOtherAgents === true
                 }, { emitEvent: false });
@@ -640,6 +650,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                     const service = this.serviceOf(participant);
                     this.setControlEnabled(this.participantFormGroup.controls.inputNode, this.canBeInputNode(service));
                     this.setControlEnabled(this.participantFormGroup.controls.outputNode, service?.reactive !== true);
+                    this.setControlEnabled(this.participantFormGroup.controls.controller, this.canBeController(service, participant));
                 }
             }
         } finally {
@@ -674,8 +685,14 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         participant.outputNode = value.outputNode === true;
         participant.allowedToNotifyUser = value.allowedToNotifyUser !== false;
         participant.communicationPolicy = (value.communicationPolicy || "ALLOW_LIST") as AgentNetworkParticipant.CommunicationPolicyEnum;
-        participant.maxInvocations = value.maxInvocations !== null && value.maxInvocations !== undefined ? Number(value.maxInvocations) : undefined;
-        participant.maxConsecutiveInvocations = value.maxConsecutiveInvocations !== null && value.maxConsecutiveInvocations !== undefined ? Number(value.maxConsecutiveInvocations) : undefined;
+        const controller = value.controller === true;
+        if (controller && !participant.controller) {
+            // one controller: the flag moves to this participant
+            this.agentsList.forEach(p => p.controller = p === participant);
+            console.debug("[agents-network] " + this.participantName(participant) + " is the controller of the network");
+        } else {
+            participant.controller = controller;
+        }
         participant.canCallTools = value.canCallTools !== false;
         participant.canCallOtherAgents = value.canCallOtherAgents === true;
         const service = this.serviceOf(participant);
@@ -684,6 +701,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             participant.outputNode = true;
             this.participantFormGroup.controls.outputNode.setValue(true, { emitEvent: false });
         }
+        this.setControlEnabled(this.participantFormGroup.controls.controller, this.canBeController(service, participant));
         const newName = this.participantName(participant);
         participant.networkAgentName = newName;
         if (oldName !== newName) {
@@ -1113,7 +1131,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 agentServiceId: serviceId,
                 accessibleToAll: true,
                 enabledFunctions: [],
-                maxLoopIterations: 5,
                 subscribeAllTools: true,
                 useDefaultChatModel: true,
                 defaultConfiguration: false,

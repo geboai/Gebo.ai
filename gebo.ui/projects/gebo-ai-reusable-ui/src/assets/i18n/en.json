@@ -6293,19 +6293,11 @@
       },
       "mainLoopPromptUseCode": {
         "label": "Choose main loop prompt template",
-        "help": "Choose the Agent main loop prompt."
-      },
-      "maxLoopIterations": {
-        "label": "Max number of Agent loops",
-        "help": "Set the maximum number of Agent loops (this will result in a much refined result)."
-      },
-      "subscribeAllTools": {
-        "label": "Enable all available tools",
-        "help": "When this flag is checked all the available tools will be assigned when this agents run"
+        "help": "The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only."
       },
       "enabledFunctions": {
-        "label": "Enabled functions call for this Agent",
-        "help": "Functionalities that could be used by the Agent while performing its work"
+        "label": "Tools of this agent",
+        "help": "Mount every registered tool, or pick the ones this agent may call: by category, by name, or one by one."
       },
       "temperature": {
         "label": "Temperature",
@@ -6361,6 +6353,27 @@
       "agentNetworkServiceCode": {
         "label": "Network runs on",
         "help": "The network service factory of the adapted network, taken from the network."
+      },
+      "PromptTemplateTab": {
+        "label": "Prompt template"
+      },
+      "CustomizePromptBtn": {
+        "label": "Customize prompt"
+      },
+      "UseStandardPromptBtn": {
+        "label": "Use standard prompt"
+      },
+      "PromptCustomizedHint": {
+        "label": "This agent runs the prompt below, a copy of the template edited for it; the standard template is no longer followed."
+      },
+      "PromptStandardHint": {
+        "label": "This agent runs the standard template chosen above. Customize it to edit a copy here."
+      },
+      "CustomizePromptConfirmation": {
+        "message": "Customizing the prompt requires advanced LLM prompting skills: do you want to go further?",
+        "header": "Customize the prompt",
+        "acceptLabel": "Yes",
+        "rejectLabel": "No"
       }
     }
   },
@@ -7275,7 +7288,7 @@
       },
       "maxLoopIteration": {
         "label": "Max Loop Iterations",
-        "help": "Set the maximum loop iterations of the network."
+        "help": "How many times the controller of the network may act: the coordination cycles of a router, the search and rewrite cycles of a single agent answering the user."
       },
       "code": {
         "label": "Unique Code",
@@ -7439,18 +7452,6 @@
       "CanCallOtherAgentsLabel": {
         "label": "May delegate to other agents"
       },
-      "RoutingBudgetLabel": {
-        "label": "Routing budget"
-      },
-      "MaxInvocationsLabel": {
-        "label": "Coordination cycles"
-      },
-      "MaxConsecutiveLabel": {
-        "label": "Cycles when the first is empty"
-      },
-      "RoutingBudgetHint": {
-        "label": "Cycles the router may run before it must deliver; empty means one pass. Only routers read these values."
-      },
       "PolicyLabel": {
         "label": "Communication policy"
       },
@@ -7590,18 +7591,24 @@
       "AddTargetSelect": {
         "placeholder": "Add an agent to talk to"
       },
-      "MaxInvocationsInput": {
-        "placeholder": "One pass"
-      },
-      "MaxConsecutiveInput": {
-        "placeholder": "One pass"
-      },
       "RemoveParticipantConfirmation": {
         "header": "Remove the participant"
       },
       "ClearNetworkConfirmation": {
         "message": "Remove every agent from the network?",
         "header": "Clear the network"
+      },
+      "ControllerLabel": {
+        "label": "Controller of the network"
+      },
+      "ControllerOnHint": {
+        "label": "the network's max loop iterations are the times this participant may act"
+      },
+      "ControllerCanHint": {
+        "label": "a router or an output node can be the controller, the one the network counts its loop on"
+      },
+      "ControllerNoHint": {
+        "label": "only a router or an output node can be the controller"
       }
     }
   },
@@ -8477,8 +8484,47 @@
   },
   "GeboAIChooseLLMFunctionsModule": {
     "GeboAIChooseLLMFunctionscomponent": {
-      "TreeSelect": {
-        "placeholder": "Select functions"
+      "EveryToolsBtn": {
+        "label": "Every tool"
+      },
+      "ChosenToolsBtn": {
+        "label": "Chosen tools"
+      },
+      "ClearChoiceBtn": {
+        "label": "Clear choice"
+      },
+      "EveryToolsHint": {
+        "label": "every registered tool is mounted"
+      },
+      "ChosenCountHint": {
+        "label": "tools chosen"
+      },
+      "ChosenCountHint2": {
+        "label": "tools chosen"
+      },
+      "EveryToolsChoiceHint": {
+        "label": "The choice below is kept but not used while every tool is mounted."
+      },
+      "NoToolChosenHint": {
+        "label": "No tool chosen: pick them below, by category or one by one."
+      },
+      "AllCategoriesBtn": {
+        "label": "All"
+      },
+      "LoadingHint": {
+        "label": "Loading the tools…"
+      },
+      "NoneOfTheseBtn": {
+        "label": "none of these"
+      },
+      "AllOfTheseBtn": {
+        "label": "all of these"
+      },
+      "NoMatchHint": {
+        "label": "No tool matches."
+      },
+      "SearchToolInput": {
+        "placeholder": "Find a tool by name or by what it does"
       }
     }
   },
