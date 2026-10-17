@@ -4490,6 +4490,9 @@
       "GeneralInfosTab": {
         "label": "General infos"
       },
+      "LanguageModelsSettingsTab": {
+        "label": "Language models settings"
+      },
       "UseChatModelLabel": {
         "label": "Use chat model"
       },
@@ -4507,9 +4510,6 @@
       },
       "RagSettingsTab": {
         "label": "RAG settings"
-      },
-      "LanguageModelTab": {
-        "label": "Language models settings"
       },
       "UseEmbeddingModelLabel": {
         "label": "Use embedding model"
