@@ -468,6 +468,7 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 		if (factory != null) {
 			validateAgainstFactory(factory, participantsByName, servicesByName, reactiveParticipants, messages);
 		}
+		validateController(participantsByName, servicesByName, messages);
 		validateCommunicationEdges(participantsByName, servicesByName, messages);
 	}
 
@@ -621,6 +622,40 @@ public class GAgentsNetworkCrudServiceImpl implements IGAgentsNetworkCrudService
 					"The network service factory '" + factory.getId()
 							+ "' streams the answer of exactly one output node answering the user directly: the network has "
 							+ reactiveParticipants.size() + " " + reactiveParticipants));
+		}
+	}
+
+	/**
+	 * Enforces the controller of the network, the participant its loop is counted
+	 * on: exactly one, and one whose acting is what the limit means, a router (its
+	 * coordination cycles) or an output node (the cycles of an agent answering the
+	 * user, or the single pass of a plain output node).
+	 */
+	private void validateController(Map<String, AgentNetworkParticipant> participantsByName,
+			Map<String, IGNetworkAgentService<?, ?>> servicesByName, List<GUserMessage> messages) {
+		final List<String> controllers = participantsByName.entrySet().stream()
+				.filter(e -> e.getValue().isController()).map(Map.Entry::getKey).toList();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Validating the controller of the network: " + controllers);
+		}
+		if (controllers.size() != 1) {
+			messages.add(GUserMessage.errorMessage("One controller needed",
+					"The network counts its loop on one controller, the router that coordinates the others or the output node: it has "
+							+ controllers.size() + (controllers.isEmpty() ? "" : " " + controllers)));
+			return;
+		}
+		final String name = controllers.get(0);
+		final AgentNetworkParticipant controller = participantsByName.get(name);
+		final IGNetworkAgentService<?, ?> service = servicesByName.get(name);
+		if (service == null) {
+			// the missing service has already been reported
+			return;
+		}
+		final boolean routing = service instanceof IGRoutingNetworkAgentService;
+		if (!routing && !controller.isOutputNode()) {
+			messages.add(GUserMessage.errorMessage("Controller must coordinate or answer",
+					"Participant '" + name
+							+ "' is the controller but neither coordinates the others (a router) nor is an output node: the loop of the network is counted on what the controller does"));
 		}
 	}
 

@@ -196,9 +196,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					+ (inputMessage != null ? inputMessage.getMessageSemantic() : null));
 		}
 		final TreeMap<Integer, List<AgentsExchangeMessage<?>>> deliveryOrder = new TreeMap<>();
-		if (checkContinueLoop(network, agentsDao)) {
+		if (checkContinueLoop(network, agentsDao, inputRuntime)) {
 			final int contributionNr = session.getAndIncrementContributionNr();
 			inputRuntime.setTurnOfExecution(contributionNr);
+			final int invocation = inputRuntime.getInvocations().incrementAndGet();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent:" + inputRuntime.getNetworkParticipantConfig().getNetworkAgentName()
+						+ " dispatched for the " + invocation + ". time");
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Dispatching message to agent:" + inputRuntime.getService().getId() + " contributionNr:"
 						+ contributionNr);
@@ -404,8 +409,37 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		}
 	}
 
-	private boolean checkContinueLoop(GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao)
-			throws AgentException {
+	/**
+	 * Whether the network goes on dispatching to the given agent. When the network
+	 * flags a controller, its {@link GAgentsNetwork#getMaxLoopIteration() limit} is
+	 * the number of times the controller may act: the controller is dispatched that
+	 * many times, plus once more to receive what its last cycle produced (the
+	 * answer of the output node comes back to it); the other participants act only
+	 * on what the controller sends, so they need no count of their own. A network
+	 * without a controller (saved before the controller existed) keeps the former
+	 * counting: the limit bounds the dispatches of the whole exchange.
+	 */
+	private boolean checkContinueLoop(GAgentsNetwork network, IGAgentsNetworkRuntimeDao agentsDao,
+			RuntimeAgentInfos target) throws AgentException {
+		final boolean hasController = network.getAgents().stream().anyMatch(AgentNetworkParticipant::isController);
+		if (hasController) {
+			final AgentNetworkParticipant persona = target.getNetworkParticipantConfig();
+			if (!persona.isController()) {
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("checkContinueLoop(...) agent:" + persona.getNetworkAgentName()
+							+ " is not the controller: dispatched");
+				}
+				return true;
+			}
+			final int done = target.getInvocations().get();
+			final boolean continueLoop = done <= network.getMaxLoopIteration();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("checkContinueLoop(...) controller:" + persona.getNetworkAgentName() + " dispatched "
+						+ done + " time(s), maxLoopIteration:" + network.getMaxLoopIteration() + " continue:"
+						+ continueLoop);
+			}
+			return continueLoop;
+		}
 		int loopDone = Integer.MIN_VALUE;
 		for (AgentNetworkParticipant agent : network.getAgents()) {
 			RuntimeAgentInfos agentSituation = agentsDao.findAgentByCode(agent.getNetworkAgentName());

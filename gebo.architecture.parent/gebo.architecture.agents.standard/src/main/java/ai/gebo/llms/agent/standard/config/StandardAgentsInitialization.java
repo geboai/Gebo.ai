@@ -318,7 +318,8 @@ public class StandardAgentsInitialization {
 		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
 		// budget below is the real terminator); sized so a legitimate multi-cycle
 		// gather/finalize run with a wide searcher fan-out is never truncated.
-		network.setMaxLoopIteration(60);
+		// the cycles of the controller: it coordinates the searchers that many times at most
+		network.setMaxLoopIteration(5);
 		network.setScenarioDescription(DEFAULT_NETWORK_SCENARIO_DESCRIPTION);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
 		if (LOGGER.isDebugEnabled()) {
@@ -352,10 +353,9 @@ public class StandardAgentsInitialization {
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controllerConfigCode);
 		controllerParticipant.setInputNode(false);
-		// maxInvocations is the controller's cycle budget: the maximum number of
-		// gather/finalize cycles it may run before it must deliver the final answer.
-		controllerParticipant.setMaxInvocations(5);
-		controllerParticipant.setMaxConsecutiveInvocations(5);
+		// the controller: the network's max loop iteration is its cycle budget, the
+		// gather/finalize cycles it may run before it must deliver the final answer
+		controllerParticipant.setController(true);
 		controllerParticipant.setOutputNode(false);
 		// Searcher participants: the internal knowledge base searcher (when present)
 		// plus every external search-service searcher. Each is reachable from the
@@ -374,8 +374,6 @@ public class StandardAgentsInitialization {
 				LOGGER.trace("Adding searcher participant:" + searcher.getCode() + " - " + searcher.getDescription());
 			}
 			participant.setAgentConfigCode(searcher.getCode());
-			participant.setMaxConsecutiveInvocations(5);
-			participant.setMaxInvocations(10);
 			workerParticipants.add(participant);
 		}
 		// Tool-calling agent participant, present only when tools are available. Like the
@@ -384,8 +382,6 @@ public class StandardAgentsInitialization {
 		if (toolCallingAgentConfig != null) {
 			AgentNetworkParticipant toolAgentParticipant = new AgentNetworkParticipant();
 			toolAgentParticipant.setAgentConfigCode(toolCallingAgentConfig.getCode());
-			toolAgentParticipant.setMaxConsecutiveInvocations(5);
-			toolAgentParticipant.setMaxInvocations(10);
 			workerParticipants.add(toolAgentParticipant);
 		}
 		AgentNetworkParticipant outParticipant = new AgentNetworkParticipant();
@@ -423,8 +419,8 @@ public class StandardAgentsInitialization {
 		if (LOGGER.isTraceEnabled()) {
 			for (AgentNetworkParticipant participant : participants) {
 				LOGGER.trace("Participant:" + participant.getNetworkAgentName() + " inputNode:"
-						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " maxInvocations:"
-						+ participant.getMaxInvocations() + " communicationList:"
+						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " controller:"
+						+ participant.isController() + " communicationList:"
 						+ participant.getCommunicationList());
 			}
 		}

@@ -503,7 +503,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
-		final int maxIterations = maxIterations(contextAgentPersona);
+		final int maxIterations = maxIterations(network, contextAgentPersona);
 		final int budget = agentTokenBudget(agentModel, agentPrompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin createResponse(...) agentic loop agent id:" + getId() + " maxIterations:"
@@ -2257,9 +2257,22 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return list.toString();
 	}
 
-	/** The iterations (cycles) the loop may run at most: {@value #DEFAULT_MAX_ITERATIONS}. */
-	protected int maxIterations(AgentNetworkParticipant contextAgentPersona) {
-		return DEFAULT_MAX_ITERATIONS;
+	/**
+	 * The iterations (cycles) the loop may run at most: the network's
+	 * {@link GAgentsNetwork#getMaxLoopIteration() max loop iteration} when this
+	 * agent is the controller of the network (the loop is what the network counts),
+	 * else {@value #DEFAULT_MAX_ITERATIONS}.
+	 */
+	protected int maxIterations(GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona) {
+		final boolean controller = contextAgentPersona != null && contextAgentPersona.isController();
+		final int limit = network != null ? network.getMaxLoopIteration() : 0;
+		final int iterations = controller && limit > 0 ? limit : DEFAULT_MAX_ITERATIONS;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agentic loop agent id:" + getId() + " participant:"
+					+ (contextAgentPersona != null ? contextAgentPersona.getNetworkAgentName() : null) + " controller:"
+					+ controller + " network limit:" + limit + " -> " + iterations + " iteration(s)");
+		}
+		return iterations;
 	}
 
 	/**

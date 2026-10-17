@@ -13,6 +13,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,7 +175,38 @@ class GAgentsNetworkCrudServiceImplTest {
 		network.setScenarioDescription("Reads and writes");
 		network.setAgentsNetworkServiceFactoryId(factory);
 		network.setAgents(List.of(participants));
+		if (Arrays.stream(participants).noneMatch(AgentNetworkParticipant::isController)) {
+			// the controller the composer proposes: the router, else the first output node
+			Arrays.stream(participants).filter(p -> p.getAgentConfigCode().startsWith("router")).findFirst()
+					.or(() -> Arrays.stream(participants).filter(AgentNetworkParticipant::isOutputNode).findFirst())
+					.ifPresent(p -> p.setController(true));
+		}
 		return network;
+	}
+
+	private static AgentNetworkParticipant controller(AgentNetworkParticipant participant) {
+		participant.setController(true);
+		return participant;
+	}
+
+	@Test
+	void theNetworkCountsItsLoopOnExactlyOneController() {
+		OperationStatus<GAgentsNetwork> none = validate(FACTORY, participant("reader", true, false, "writer"),
+				participant("writer", false, true));
+		none.getResult().getAgents().forEach(p -> p.setController(false));
+		assertTrue(hasError(service.validate(none.getResult()), "One controller needed"));
+		assertTrue(hasError(validate(FACTORY, controller(participant("reader", true, false, "writer")),
+				controller(participant("writer", false, true))), "One controller needed"));
+	}
+
+	@Test
+	void theControllerCoordinatesOrAnswers() {
+		assertTrue(hasError(validate(FACTORY, participant("reader", true, false, "sharing"),
+				controller(participant("sharing", false, false, "writer")), participant("writer", false, true)),
+				"Controller must coordinate or answer"));
+		assertFalse(validate(FACTORY, participant("reader", true, false, "router"),
+				controller(participant("router", false, false, "writer")), participant("writer", false, true))
+				.isHasErrorMessages());
 	}
 
 	/** A valid network: an input node forwarding the request to an output node answering. */

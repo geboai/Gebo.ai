@@ -116,8 +116,9 @@ public class AgenticLoopAgentsInitialization {
 		network.setChoosableForPipelineTypes(List.of(pipelineType));
 		network.setAgentsNetworkServiceFactoryId(
 				GReactiveChatAgentsNetworkServiceFactoryImpl.REACTIVE_CHAT_AGENTS_NETWORK);
-		// The loop runs inside the agent: the network only delivers the request to it.
-		network.setMaxLoopIteration(4);
+		// The loop runs inside the agent, the controller of the network: the limit is
+		// its search-and-rewrite cycles.
+		network.setMaxLoopIteration(5);
 		network.setScenarioDescription(scenario);
 		network.setAccessibleToAll(true);
 		AgentNetworkParticipant input = new AgentNetworkParticipant();
@@ -128,8 +129,7 @@ public class AgenticLoopAgentsInitialization {
 		agent.setAgentConfigCode(agentConfigCode);
 		agent.setInputNode(false);
 		agent.setOutputNode(true);
-		agent.setMaxInvocations(1);
-		agent.setMaxConsecutiveInvocations(1);
+		agent.setController(true);
 		input.setCommunicationList(List.of(agent.getNetworkAgentName()));
 		agent.setCommunicationList(List.of());
 		network.setAgents(List.of(input, agent));

@@ -139,7 +139,7 @@ class GAgentsCopyServiceImplTest {
 	void theCopyOfABeanAgentIsEditableAndNeverTheDefaultConfiguration() {
 		GAgentConfig original = beanAgent("controllerAgent", "Network controller", "controllerAgent");
 		original.setDefaultConfiguration(true);
-		original.setMaxLoopIterations(7);
+		original.setTemperature(0.7);
 
 		OperationStatus<GAgentConfig> status = service.copyAgent("controllerAgent");
 
@@ -151,7 +151,7 @@ class GAgentsCopyServiceImplTest {
 		assertEquals(Boolean.FALSE, copy.getReadOnly());
 		assertNull(copy.getDefaultConfiguration());
 		assertEquals("controllerAgent", copy.getAgentServiceId());
-		assertEquals(7, copy.getMaxLoopIterations());
+		assertEquals(0.7, copy.getTemperature());
 		assertEquals(Boolean.TRUE, original.getReadOnly(), "the original is untouched");
 		assertEquals(Boolean.TRUE, original.getDefaultConfiguration());
 	}

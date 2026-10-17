@@ -71,7 +71,12 @@ public class WebSearchToolSource implements IGToolCallbackSource {
 	@Override
 	public List<ToolReference> getFullToolReferences() {
 		AbstractSearchServiceWrapperTool tool = webSearchTool();
-		return tool != null ? List.of(tool.toToolReference()) : List.of();
+		if (tool == null) {
+			return List.of();
+		}
+		final ToolReference reference = tool.toToolReference();
+		reference.setUserUIfunctionDescription("Search the public web and read the pages found");
+		return List.of(reference);
 	}
 
 	@Override

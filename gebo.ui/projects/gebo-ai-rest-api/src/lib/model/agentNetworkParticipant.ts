@@ -18,8 +18,7 @@ export interface AgentNetworkParticipant {
     allowedToNotifyUser?: boolean;
     communicationPolicy: AgentNetworkParticipant.CommunicationPolicyEnum;
     communicationList?: Array<string>;
-    maxInvocations?: number;
-    maxConsecutiveInvocations?: number;
+    controller?: boolean;
     canCallTools?: boolean;
     canCallOtherAgents?: boolean;
     networkAgentName?: string;

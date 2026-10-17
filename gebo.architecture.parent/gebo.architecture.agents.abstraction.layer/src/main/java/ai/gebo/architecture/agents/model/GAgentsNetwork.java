@@ -33,6 +33,11 @@ public class GAgentsNetwork extends GBaseObject
 		ON_RECEIVED_MESSAGE, EVERY_CYCLE
 	}
 
+	/**
+	 * How many times the controller participant may act: the coordination cycles
+	 * of a router, the search-and-rewrite cycles of a single agent answering the
+	 * user. The other participants act only on what the controller sends.
+	 */
 	int maxLoopIteration = 5;
 	Boolean accessibleToAll = null;
 	List<String> accessibleUsers = null;
@@ -52,9 +57,13 @@ public class GAgentsNetwork extends GBaseObject
 
 		private List<String> communicationList;
 
-		private Integer maxInvocations;
-
-		private Integer maxConsecutiveInvocations;
+		/**
+		 * The participant the network's loop is counted on: the one that coordinates
+		 * the others (a router) or, in a network of one agent answering the user, that
+		 * agent. {@link GAgentsNetwork#getMaxLoopIteration()} is the number of times it
+		 * may act. Exactly one participant is the controller.
+		 */
+		private boolean controller = false;
 
 		private boolean canCallTools = true;
 

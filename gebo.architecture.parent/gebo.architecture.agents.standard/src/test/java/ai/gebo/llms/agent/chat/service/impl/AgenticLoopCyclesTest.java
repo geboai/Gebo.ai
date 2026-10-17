@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -124,9 +125,15 @@ class AgenticLoopCyclesTest {
 		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("First try. " + MORE),
 				List.of("Second try. " + MORE), List.of("Third try. " + MORE), List.of("Fourth try. " + MORE),
 				List.of("Fifth try. " + MORE), List.of("never reached")));
-		assertEquals(5, agent.maxIterations(persona()));
+		assertEquals(5, agent.maxIterations(null, persona()));
+		final GAgentsNetwork network = new GAgentsNetwork();
+		network.setMaxLoopIteration(3);
+		assertEquals(5, agent.maxIterations(network, persona()));
+		final AgentNetworkParticipant controller = persona();
+		when(controller.isController()).thenReturn(true);
+		assertEquals(3, agent.maxIterations(network, controller));
 
-		String shown = String.join("", agent.iteration(1, agent.maxIterations(persona()), 10_000, new ArrayList<>(),
+		String shown = String.join("", agent.iteration(1, agent.maxIterations(null, persona()), 10_000, new ArrayList<>(),
 				null, new GPromptTemplateConfig(), null, persona(), mock(INotificationSink.class),
 				new ToolCallsListener()).collectList().block());
 

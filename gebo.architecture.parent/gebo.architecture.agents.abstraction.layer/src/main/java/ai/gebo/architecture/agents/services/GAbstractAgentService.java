@@ -50,9 +50,9 @@ public abstract class GAbstractAgentService<RequestType, ResponseType, Aggregate
 		}
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = agentToolCallsListener(chatRequestContext);
-		final int maxLoop = agentConfig.getMaxLoopIterations() != null && agentConfig.getMaxLoopIterations() > 0
-				? agentConfig.getMaxLoopIterations()
-				: 4;
+		// the network's limit is the cycles of its controller; any other agent gets the default
+		final int maxLoop = contextAgentPersona != null && contextAgentPersona.isController() && network != null
+				&& network.getMaxLoopIteration() > 0 ? network.getMaxLoopIteration() : 4;
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
