@@ -58,7 +58,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentConfigsTest() {
-        List<GBaseObject> response = api.getAgentConfigs();
+        List<GAgentConfig> response = api.getAgentConfigs();
 
         // TODO: test validations
     }
