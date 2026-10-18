@@ -51,6 +51,12 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 		return STANDARD_SEARCHES_TOOLS_SOURCE;
 	}
 
+	/** What this source is for the administrator. */
+	@Override
+	public String getDescription() {
+		return "Searches of the configured search services";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 

@@ -275,6 +275,12 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 		return KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE;
 	}
 
+	/** What this source is for the administrator: it shares its category with the knowledge base search. */
+	@Override
+	public String getDescription() {
+		return "Knowledge base browsing";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 		return ToolsCategory.KNOWLEDGE_BASE_VARIOUS_SEARCHES;

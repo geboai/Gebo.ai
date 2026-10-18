@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
 
+import ai.gebo.architecture.agents.config.AgentsToolsAutoMountingConfig;
 import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.ai.model.ToolsCategory;
@@ -54,6 +55,7 @@ class ToolCallingAgentExcludedSearchSourcesTest {
 	private static IGToolCallbackSource source(String id, ToolCallback... tools) {
 		IGToolCallbackSource source = mock(IGToolCallbackSource.class);
 		when(source.getId()).thenReturn(id);
+		when(source.getDescription()).thenReturn("source " + id);
 		ToolsCategory category = new ToolsCategory();
 		category.setCode(id);
 		category.setDescription(id);
@@ -121,6 +123,42 @@ class ToolCallingAgentExcludedSearchSourcesTest {
 				"the MCP and basic tools are mounted, the searches are the search agents' job");
 		assertEquals(Set.of("searchKnowledgeBase", "searchConfluence", "searchJira", "searchWeb", "deepSearchWeb",
 				"deepSearchKnowledgeBase"), names(mounted.getExcludedTools()), "the search tools are reported left out");
+		// each tool tells its source and why it is left out: the administrator reads it in the editor
+		for (AgentMountedTools.MountedTool tool : mounted.getExcludedTools()) {
+			assertEquals(AgentMountedTools.Exclusion.AGENT_CONFIGURATION, tool.getExclusion(), tool.getName());
+			assertTrue(tool.getSourceId() != null && tool.getSourceDescription() != null, tool.getName());
+		}
+		AgentMountedTools.MountedTool web = mounted.getExcludedTools().stream()
+				.filter(x -> "searchWeb".equals(x.getName())).findFirst().orElseThrow();
+		assertEquals(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE, web.getSourceId());
+		assertEquals("source " + WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE, web.getSourceDescription());
+		for (AgentMountedTools.MountedTool tool : mounted.getTools()) {
+			assertEquals(null, tool.getExclusion(), "a mounted tool has no exclusion");
+			assertTrue(tool.getSourceId() != null, tool.getName());
+		}
+	}
+
+	@Test
+	void theSystemSettingsExclusionsAreToldApartFromTheConfigurationOnes() {
+		IGToolCallbackSourceRepositoryPattern repository = toolsRepository();
+		IGRuntimeBinder binder = mock(IGRuntimeBinder.class);
+		AgentsToolsAutoMountingConfig settings = new AgentsToolsAutoMountingConfig();
+		settings.setExcludedToolSources(List.of("ActualDateFunctions"));
+		when(binder.getImplementationOf(AgentsToolsAutoMountingConfig.class)).thenReturn(settings);
+		StringToStringToolCallingNetworkAgent agent = new StringToStringToolCallingNetworkAgent(null, repository, null,
+				null, null, binder, null);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("webLessAgent");
+		config.setSubscribeAllTools(true);
+		config.setExcludedToolSources(List.of(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE));
+
+		AgentMountedTools mounted = agent.getMountedTools(config);
+
+		assertEquals(Set.of("getActualDate", "searchWeb"), names(mounted.getExcludedTools()));
+		assertEquals(AgentMountedTools.Exclusion.SYSTEM_SETTINGS, mounted.getExcludedTools().stream()
+				.filter(x -> "getActualDate".equals(x.getName())).findFirst().orElseThrow().getExclusion());
+		assertEquals(AgentMountedTools.Exclusion.AGENT_CONFIGURATION, mounted.getExcludedTools().stream()
+				.filter(x -> "searchWeb".equals(x.getName())).findFirst().orElseThrow().getExclusion());
 	}
 
 	@Test

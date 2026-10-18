@@ -223,6 +223,12 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 		return this.getClass().getName();
 	}
 
+	/** What this source is for the administrator: it shares its category with the web search. */
+	@Override
+	public String getDescription() {
+		return "Web pages crawling";
+	}
+
 	/**
 	 * Specifies the category of this tool.
 	 * 

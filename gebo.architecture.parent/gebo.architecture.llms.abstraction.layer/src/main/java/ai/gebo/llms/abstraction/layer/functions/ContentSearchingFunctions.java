@@ -51,6 +51,12 @@ public class ContentSearchingFunctions implements IGToolCallbackSource {
         return getClass().getName();
     }
 
+    /** What this source is for the administrator: it shares its category with the knowledge base search. */
+    @Override
+    public String getDescription() {
+        return "Knowledge base content searching functions";
+    }
+
     /**
      * Specifies the category of tools that this implementation belongs to.
      *

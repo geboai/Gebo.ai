@@ -390,7 +390,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 								new AgentMountedTools.MountedTool(callback.getToolDefinition().name(),
 										callback.getToolDefinition().description(),
 										category != null ? category.getCode() : null,
-										category != null ? category.getDescription() : null));
+										category != null ? category.getDescription() : null, source.getId(),
+										source.getDescription(), null));
 					}
 				}
 			}
@@ -405,9 +406,23 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			mounted.getTools().add(tool != null ? tool : new AgentMountedTools.MountedTool(name, null, null, null));
 		}
 		if (auto) {
+			// why each tool is left out: the agent configuration's own excluded sources, the
+			// system settings, else the agent service's own rule
+			final Set<String> configurationExcluded = toolNamesOfSources(agentConfig.getExcludedToolSources());
+			final Set<String> systemExcluded = autoMountExcludedToolNames();
 			for (AgentMountedTools.MountedTool tool : registered.values()) {
 				if (!mountedNames.contains(tool.getName())) {
+					tool.setExclusion(configurationExcluded.contains(tool.getName())
+							? AgentMountedTools.Exclusion.AGENT_CONFIGURATION
+							: systemExcluded.contains(tool.getName()) ? AgentMountedTools.Exclusion.SYSTEM_SETTINGS
+									: AgentMountedTools.Exclusion.AGENT_SERVICE);
 					mounted.getExcludedTools().add(tool);
+				}
+			}
+			if (LOGGER.isTraceEnabled()) {
+				for (AgentMountedTools.MountedTool tool : mounted.getExcludedTools()) {
+					LOGGER.trace("Excluded tool:" + tool.getName() + " source:" + tool.getSourceId() + " exclusion:"
+							+ tool.getExclusion());
 				}
 			}
 		}

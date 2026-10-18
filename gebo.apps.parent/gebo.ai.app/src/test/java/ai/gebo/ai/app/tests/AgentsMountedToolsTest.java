@@ -23,6 +23,7 @@ import ai.gebo.architecture.agents.repository.AgentConfigRepository;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.llms.abstraction.layer.functions.ActualDateFunctions;
+import ai.gebo.architecture.ai.model.ToolSourceInfo;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServiceImpl;
@@ -156,6 +157,17 @@ public class AgentsMountedToolsTest extends AbstractBaseTestLLmsIntegrationTests
 				"The search tools are the job of the search agents: " + names(mounted.getTools()));
 		assertTrue(names(mounted.getExcludedTools()).containsAll(searchTools),
 				"The search tools are reported as excluded: " + names(mounted.getExcludedTools()));
+		// the editor tells the administrator the source of each tool left out and why
+		mounted.getExcludedTools().stream().filter(tool -> searchTools.contains(tool.getName())).forEach(tool -> {
+			assertEquals(AgentMountedTools.Exclusion.AGENT_CONFIGURATION, tool.getExclusion(), tool.getName());
+			assertNotNull(tool.getSourceDescription(), "the source is described: " + tool.getName());
+			assertTrue(StandardAgentsInitialization.SEARCH_TOOL_SOURCES.contains(tool.getSourceId()), tool.getName());
+		});
+		// the tool sources the administrator can name are listed with those descriptions
+		List<ToolSourceInfo> sources = toolSources.getToolSourceInfos();
+		assertTrue(sources.stream().map(ToolSourceInfo::getId).toList()
+				.containsAll(StandardAgentsInitialization.SEARCH_TOOL_SOURCES), "the search sources are listed");
+		sources.forEach(source -> assertNotNull(source.getDescription(), "every source is described: " + source.getId()));
 
 		GAgentConfig adminConfig = saveConfig("mounted-tools-admin-tool-agent",
 				StringToStringToolCallingNetworkAgent.STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE, true, null);

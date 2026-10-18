@@ -77,6 +77,12 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 		return DEEP_SEARCH_TOOL_SOURCE;
 	}
 
+	/** What this source is for the administrator. */
+	@Override
+	public String getDescription() {
+		return "Deep searches of the knowledge bases, the search services and the web";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 		return category;
