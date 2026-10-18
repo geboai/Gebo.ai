@@ -73,6 +73,17 @@ public class GAgentConfig extends GBaseObject
 	protected List<String> enabledFunctions = null;
 
 	/**
+	 * The ids of the tool sources whose tools this agent leaves out when it mounts
+	 * every registered tool ({@link #subscribeAllTools}), on top of the system-wide
+	 * exclusions of the automatic mounting: how the tool-calling agent of a network
+	 * with search agents is kept off the search tools those agents already run, while
+	 * it still operates the other tools (MCP tools, the basic tools of the system).
+	 * Null or empty when the agent leaves out only the system-wide exclusions; the
+	 * tools selected by name ({@link #enabledFunctions}) are never affected.
+	 */
+	protected List<String> excludedToolSources = null;
+
+	/**
 	 * The code of the agent configuration this one is a copy of, only while the copy
 	 * is being inserted: its code is made from it. Neither stored nor exchanged.
 	 */

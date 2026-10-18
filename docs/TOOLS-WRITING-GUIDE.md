@@ -102,9 +102,13 @@ A tool is **never mounted by being a bean**: something has to enable it by name.
 2. **An agent's tools.** An agent declares its tools by name; an agent with
    `subscribeAllTools` mounts every registered tool, except the ones in
    `ai.gebo.agents.tools.auto-mounting.excluded-tools` /
-   `excluded-tool-sources` (`AgentsToolsAutoMountingConfig`). The default
-   network keeps the search tool sources out of automatic mounting on purpose
-   (`StandardAgentsInitialization.registerDefaultAutoMountExclusions`).
+   `excluded-tool-sources` (`AgentsToolsAutoMountingConfig`, system-wide) and
+   the tools of the sources its own configuration leaves out
+   (`GAgentConfig.excludedToolSources`). The tool-calling agent of the
+   networks with search agents leaves out the search tool sources this way
+   (`StandardAgentsInitialization.SEARCH_TOOL_SOURCES`): there each knowledge
+   base search and each search service is an agent of its own, and the
+   tool-calling agent operates the other tools (MCP tools, the basic tools).
 3. **Tools made for one use of a model.** `cloneWithOptions(...)` with
    `additionalTools` declares tools that are not in the repository (an agent's
    `notifyUser`), when the configuration enables their names.

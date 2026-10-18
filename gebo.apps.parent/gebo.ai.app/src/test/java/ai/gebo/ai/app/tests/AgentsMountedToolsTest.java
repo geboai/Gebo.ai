@@ -27,17 +27,15 @@ import ai.gebo.architecture.ai.service.IGToolCallbackSource;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
-import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
-import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
-import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
-import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
+import ai.gebo.llms.agent.standard.config.StandardAgentsInitialization;
 import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
 
 /**
  * The tools the network of agents editor shows on each agent are the ones the
- * agent mounts when it runs: auto mounted with the configured exclusions, or the
- * selected ones. The date tools are kept out of automatic mounting here; the
- * agentic loop, which operates every tool, mounts them anyway.
+ * agent mounts when it runs: auto mounted with the configured exclusions and the
+ * agent configuration's own excluded tool sources, or the selected ones. The date
+ * tools are kept out of automatic mounting here; the agentic loop, which operates
+ * every tool, mounts them anyway.
  */
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.tools.auto-mounting.excluded-tool-sources=ActualDateFunctions" })
@@ -53,12 +51,6 @@ public class AgentsMountedToolsTest extends AbstractBaseTestLLmsIntegrationTests
 	private ActualDateFunctions dateFunctions;
 	@Autowired
 	private IGToolCallbackSourceRepositoryPattern toolSources;
-
-	/** The tool sources the standard agents keep out of automatic mounting. */
-	private static final Set<String> DEFAULT_EXCLUDED_SOURCES = Set.of(
-			InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE,
-			StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE, WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE,
-			DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
 
 	/** The names of the tools the given sources export. */
 	private Set<String> toolNamesOfSources(Set<String> sourceIds) {
@@ -145,18 +137,33 @@ public class AgentsMountedToolsTest extends AbstractBaseTestLLmsIntegrationTests
 		assertEquals(names(mounted.getTools()), advertised);
 	}
 
+	/**
+	 * The tool-calling agent of the networks with search agents leaves the search
+	 * tool sources to them, through its own configuration: an admin's tool-calling
+	 * agent, for a network without search agents, mounts the search tools too.
+	 */
 	@Test
-	public void testTheStandardSearchSourcesAreKeptOutOfAutoMounting() {
-		Set<String> searchTools = toolNamesOfSources(DEFAULT_EXCLUDED_SOURCES);
+	public void testTheNetworkToolCallingAgentLeavesTheSearchSourcesToTheSearchAgents() {
+		Set<String> searchTools = toolNamesOfSources(Set.copyOf(StandardAgentsInitialization.SEARCH_TOOL_SOURCES));
 		assertFalse(searchTools.isEmpty(), "The standard agents register their search tools");
-		GAgentConfig config = saveConfig("mounted-tools-default-exclusions",
-				StringToStringToolCallingNetworkAgent.STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE, true, null);
-		AgentMountedTools mounted = mountedOf(config.getCode());
+		// the dynamic configuration of the tool-calling agent of the standard networks
+		AgentMountedTools mounted = mountedOf(
+				StringToStringToolCallingNetworkAgent.STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE);
 
+		assertEquals(MountMode.AUTO, mounted.getMountMode());
+		assertFalse(mounted.getTools().isEmpty(), "The other tools are mounted: " + names(mounted.getTools()));
 		assertTrue(names(mounted.getTools()).stream().noneMatch(searchTools::contains),
 				"The search tools are the job of the search agents: " + names(mounted.getTools()));
 		assertTrue(names(mounted.getExcludedTools()).containsAll(searchTools),
 				"The search tools are reported as excluded: " + names(mounted.getExcludedTools()));
+
+		GAgentConfig adminConfig = saveConfig("mounted-tools-admin-tool-agent",
+				StringToStringToolCallingNetworkAgent.STRING_TO_STRING_TOOL_CALLING_AGENT_SERVICE, true, null);
+		AgentMountedTools adminMounted = mountedOf(adminConfig.getCode());
+
+		assertTrue(names(adminMounted.getTools()).containsAll(searchTools),
+				"An admin's own tool-calling agent mounts the search tools: " + names(adminMounted.getTools()));
+		assertTrue(names(adminMounted.getExcludedTools()).stream().noneMatch(searchTools::contains));
 	}
 
 	@Test
