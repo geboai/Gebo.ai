@@ -13,6 +13,6 @@ Name | Type | Description | Notes
 **parentProjectCode** | **String** |  |  [optional]
 **rootKnowledgebaseCode** | **String** |  |  [optional]
 **modificationDate** | [**Date**](Date.md) |  |  [optional]
-**deleted** | **Boolean** |  |  [optional]
 **parentVirtualFolderCode** | **String** |  |  [optional]
 **relativePath** | **String** |  |  [optional]
+**deleted** | **Boolean** |  |  [optional]

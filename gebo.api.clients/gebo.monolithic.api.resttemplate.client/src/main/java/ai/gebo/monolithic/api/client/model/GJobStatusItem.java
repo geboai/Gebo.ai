@@ -24,7 +24,7 @@ import java.util.Date;
  * GJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class GJobStatusItem {
   @JsonProperty("error")
@@ -36,26 +36,14 @@ public class GJobStatusItem {
   @JsonProperty("endDateTime")
   private Date endDateTime = null;
 
-  @JsonProperty("processing")
-  private Boolean processing = null;
-
   @JsonProperty("finished")
   private Boolean finished = null;
 
-  @JsonProperty("projectEndpointReference")
-  private GObjectRefGProjectEndpoint projectEndpointReference = null;
+  @JsonProperty("processing")
+  private Boolean processing = null;
 
   @JsonProperty("code")
   private String code = null;
-
-  @JsonProperty("workflowType")
-  private String workflowType = null;
-
-  @JsonProperty("workflowId")
-  private String workflowId = null;
-
-  @JsonProperty("startDateTime")
-  private Date startDateTime = null;
 
   /**
    * Gets or Sets jobType
@@ -91,6 +79,18 @@ public class GJobStatusItem {
 
   }  @JsonProperty("jobType")
   private JobTypeEnum jobType = null;
+
+  @JsonProperty("projectEndpointReference")
+  private GObjectRefGProjectEndpoint projectEndpointReference = null;
+
+  @JsonProperty("workflowType")
+  private String workflowType = null;
+
+  @JsonProperty("workflowId")
+  private String workflowId = null;
+
+  @JsonProperty("startDateTime")
+  private Date startDateTime = null;
 
   public GJobStatusItem error(Boolean error) {
     this.error = error;
@@ -146,24 +146,6 @@ public class GJobStatusItem {
     this.endDateTime = endDateTime;
   }
 
-  public GJobStatusItem processing(Boolean processing) {
-    this.processing = processing;
-    return this;
-  }
-
-   /**
-   * Get processing
-   * @return processing
-  **/
-  @Schema(description = "")
-  public Boolean isProcessing() {
-    return processing;
-  }
-
-  public void setProcessing(Boolean processing) {
-    this.processing = processing;
-  }
-
   public GJobStatusItem finished(Boolean finished) {
     this.finished = finished;
     return this;
@@ -182,22 +164,22 @@ public class GJobStatusItem {
     this.finished = finished;
   }
 
-  public GJobStatusItem projectEndpointReference(GObjectRefGProjectEndpoint projectEndpointReference) {
-    this.projectEndpointReference = projectEndpointReference;
+  public GJobStatusItem processing(Boolean processing) {
+    this.processing = processing;
     return this;
   }
 
    /**
-   * Get projectEndpointReference
-   * @return projectEndpointReference
+   * Get processing
+   * @return processing
   **/
   @Schema(description = "")
-  public GObjectRefGProjectEndpoint getProjectEndpointReference() {
-    return projectEndpointReference;
+  public Boolean isProcessing() {
+    return processing;
   }
 
-  public void setProjectEndpointReference(GObjectRefGProjectEndpoint projectEndpointReference) {
-    this.projectEndpointReference = projectEndpointReference;
+  public void setProcessing(Boolean processing) {
+    this.processing = processing;
   }
 
   public GJobStatusItem code(String code) {
@@ -216,6 +198,42 @@ public class GJobStatusItem {
 
   public void setCode(String code) {
     this.code = code;
+  }
+
+  public GJobStatusItem jobType(JobTypeEnum jobType) {
+    this.jobType = jobType;
+    return this;
+  }
+
+   /**
+   * Get jobType
+   * @return jobType
+  **/
+  @Schema(description = "")
+  public JobTypeEnum getJobType() {
+    return jobType;
+  }
+
+  public void setJobType(JobTypeEnum jobType) {
+    this.jobType = jobType;
+  }
+
+  public GJobStatusItem projectEndpointReference(GObjectRefGProjectEndpoint projectEndpointReference) {
+    this.projectEndpointReference = projectEndpointReference;
+    return this;
+  }
+
+   /**
+   * Get projectEndpointReference
+   * @return projectEndpointReference
+  **/
+  @Schema(description = "")
+  public GObjectRefGProjectEndpoint getProjectEndpointReference() {
+    return projectEndpointReference;
+  }
+
+  public void setProjectEndpointReference(GObjectRefGProjectEndpoint projectEndpointReference) {
+    this.projectEndpointReference = projectEndpointReference;
   }
 
   public GJobStatusItem workflowType(String workflowType) {
@@ -272,24 +290,6 @@ public class GJobStatusItem {
     this.startDateTime = startDateTime;
   }
 
-  public GJobStatusItem jobType(JobTypeEnum jobType) {
-    this.jobType = jobType;
-    return this;
-  }
-
-   /**
-   * Get jobType
-   * @return jobType
-  **/
-  @Schema(description = "")
-  public JobTypeEnum getJobType() {
-    return jobType;
-  }
-
-  public void setJobType(JobTypeEnum jobType) {
-    this.jobType = jobType;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -303,19 +303,19 @@ public class GJobStatusItem {
     return Objects.equals(this.error, gjobStatusItem.error) &&
         Objects.equals(this.description, gjobStatusItem.description) &&
         Objects.equals(this.endDateTime, gjobStatusItem.endDateTime) &&
-        Objects.equals(this.processing, gjobStatusItem.processing) &&
         Objects.equals(this.finished, gjobStatusItem.finished) &&
-        Objects.equals(this.projectEndpointReference, gjobStatusItem.projectEndpointReference) &&
+        Objects.equals(this.processing, gjobStatusItem.processing) &&
         Objects.equals(this.code, gjobStatusItem.code) &&
+        Objects.equals(this.jobType, gjobStatusItem.jobType) &&
+        Objects.equals(this.projectEndpointReference, gjobStatusItem.projectEndpointReference) &&
         Objects.equals(this.workflowType, gjobStatusItem.workflowType) &&
         Objects.equals(this.workflowId, gjobStatusItem.workflowId) &&
-        Objects.equals(this.startDateTime, gjobStatusItem.startDateTime) &&
-        Objects.equals(this.jobType, gjobStatusItem.jobType);
+        Objects.equals(this.startDateTime, gjobStatusItem.startDateTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(error, description, endDateTime, processing, finished, projectEndpointReference, code, workflowType, workflowId, startDateTime, jobType);
+    return Objects.hash(error, description, endDateTime, finished, processing, code, jobType, projectEndpointReference, workflowType, workflowId, startDateTime);
   }
 
 
@@ -327,14 +327,14 @@ public class GJobStatusItem {
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    endDateTime: ").append(toIndentedString(endDateTime)).append("\n");
-    sb.append("    processing: ").append(toIndentedString(processing)).append("\n");
     sb.append("    finished: ").append(toIndentedString(finished)).append("\n");
-    sb.append("    projectEndpointReference: ").append(toIndentedString(projectEndpointReference)).append("\n");
+    sb.append("    processing: ").append(toIndentedString(processing)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");
+    sb.append("    projectEndpointReference: ").append(toIndentedString(projectEndpointReference)).append("\n");
     sb.append("    workflowType: ").append(toIndentedString(workflowType)).append("\n");
     sb.append("    workflowId: ").append(toIndentedString(workflowId)).append("\n");
     sb.append("    startDateTime: ").append(toIndentedString(startDateTime)).append("\n");
-    sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");
     sb.append("}");
     return sb.toString();
   }

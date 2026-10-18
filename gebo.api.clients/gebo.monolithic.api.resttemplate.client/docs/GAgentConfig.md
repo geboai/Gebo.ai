@@ -30,6 +30,7 @@ Name | Type | Description | Notes
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
+**excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>
 ## Enum: AgentTypeEnum

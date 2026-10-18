@@ -526,6 +526,7 @@ export * from './tavilySearchConfig';
 export * from './threasholdAutotuneProcessResult';
 export * from './toolCategoriesTree';
 export * from './toolReference';
+export * from './toolSourceInfo';
 export * from './toolsCategory';
 export * from './transcriptResponse';
 export * from './uIComponent';
