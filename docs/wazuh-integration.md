@@ -62,8 +62,9 @@ complete JSON object, no timestamp/level prefix:
 
 | Field | Meaning |
 |---|---|
-| `eventType`, `category` | Event family: `authentication`, `sessionManagement`, `llmConfiguration`, `llmInvocation`, `integrationConfiguration`, `integrationDataAccess`, `secretManagement`, `apiKeyManagement`, `userAdministration` |
-| `action` | The specific operation: `authLoginLocal`, `authLoginLocalFailure`, `authLoginOauth2`, `authUnauthorizedAccess`, `sessionTokenRenew`, `llmConfigInsert/Update/Delete`, `llmCredentialsCreate`, `llmInvokeChat/Tts/Transcript/Rank`, `secretCreate/Update/Delete/StorageMigrate`, `apiKeyGenerateSelf/GenerateAdmin/Delete`, `passwordChangeSelf/ChangeAdmin/ResetTicket`, `userInsert/Update/Delete`, `groupInsert/Update/Delete`, `integrationSystem*`, `integrationEndpoint*`, `integrationData*`, `oauth2ClientConfig*` |
+| `eventType`, `category` | Event family: `authentication`, `sessionManagement`, `llmConfiguration`, `llmInvocation`, `integrationConfiguration`, `integrationDataAccess`, `secretManagement`, `apiKeyManagement`, `userAdministration`, `agentsConfiguration`, `interoperabilityConfiguration`, `knowledgeConfiguration`, `searchConfiguration` |
+| `action` | The specific operation: `authLoginLocal`, `authLoginLocalFailure`, `authLoginOauth2`, `authUnauthorizedAccess`, `sessionTokenRenew`, `llmConfigInsert/Update/Delete`, `llmCredentialsCreate`, `llmInvokeChat/Tts/Transcript/Rank`, `secretCreate/Update/Delete/StorageMigrate`, `apiKeyGenerateSelf/GenerateAdmin/Delete`, `passwordChangeSelf/ChangeAdmin/ResetTicket`, `userInsert/Update/Delete`, `groupInsert/Update/Delete`, `integrationSystem*`, `integrationEndpoint*`, `integrationData*`, `oauth2ClientConfig*`, and the AI platform configuration changes: `agentsNetwork*`, `agent*`, `agenticChatDefaultNetwork*` (agentsConfiguration), `mcpServer*`, `mcpExposedServer*`, `a2aRemoteAgent*`, `a2aExport*` (interoperabilityConfiguration), `chatProfile*`, `knowledgeBase*`, `project*` (knowledgeConfiguration), `webSearchConfig*`, `deepSearchConfig*` (searchConfiguration) |
+| `resourceType`, `resourceId` | The changed object, for the configuration events: e.g. `agentsNetwork` / its code. Their `details` carry the object's access settings when it has any: `accessibleToAll`, `accessibleGroups` (group codes) and `accessibleUsersCount` — the number of users, never the users themselves |
 | `outcome` | `success`, `failure` or `denied` |
 | `architectureType` | `MONOLITHIC` or `MICROSERVICES` |
 | `application` | `spring.application.name` of the emitting service (`brain_gebo_ai`, `tyr_gebo_ai`, …; `unknown` when unset, which is the monolith's default) |
@@ -153,6 +154,10 @@ ships:
 | 100214 | 0 | 3rd-party data access (high volume: archived, not alerted) |
 | 100215 | 0 | LLM invocation (high volume: archived, not alerted) |
 | 100216 | 6 | A 3rd-party/LLM operation failed (spot revoked or expired credentials) |
+| 100217 | 5 | Networks of agents / agents configuration change (incl. copies and the default chat networks) |
+| 100218 | 7 | MCP / A2A interoperability change: external MCP servers and their tool permissions, exposed MCP servers, imported A2A agents, A2A exports |
+| 100219 | 5 | Knowledge base, project or chat profile change (incl. their access settings) |
+| 100220 | 5 | Web search provider or deep search configuration change (incl. who may use external sources) |
 
 Raise or lower the levels to fit your alerting policy; `level 0` means "store
 it, do not alert on it".
@@ -588,7 +593,12 @@ starts a real `wazuh/wazuh-manager` container, pipes the audit lines through
 `wazuh-logtest`, and asserts that Wazuh's built-in `json` decoder is selected and
 that every field (and the `timestamp`/`eventType`/`category`/`action`/`outcome`
 taxonomy) survives decoding unchanged. It also validates the file as JSON Lines,
-line by line.
+line by line. The manager starts with this repository's
+`deploy/wazuh/manager/local_rules.xml`, and the test asserts that every event ends
+on the rule of its `eventType`: an event type logged without a rule fails the build
+instead of reaching the SIEM unclassified. The configuration events are produced by
+`ConfigurationSecurityAuditIntegrationTest`, which drives the admin endpoints of
+networks of agents, MCP, A2A, chat profiles, knowledge bases and search.
 
 ```bash
 # whole suite (the Wazuh check runs last, after the tests that fill the trail)

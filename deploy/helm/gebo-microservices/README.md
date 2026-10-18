@@ -94,14 +94,17 @@ observability:
     service: { type: LoadBalancer }   # or port-forward to reach the UI
 ```
 
-When enabled, backends export traces to the in-cluster collector (overrides
-`common.otlpTracingEndpoint`), and Prometheus scrapes exactly the enabled backends'
-`/<svc>/actuator/prometheus`. To use your own collector instead, leave
+When enabled, the gateway and the backends export traces to the in-cluster collector
+(overrides `common.otlpTracingEndpoint`), and Prometheus scrapes the gateway and exactly
+the enabled backends at `/actuator/prometheus` on their management port
+(`common.managementPort`, default `13990`). To use your own collector instead, leave
 `observability.enabled: false` and set `common.otlpTracingEndpoint`.
 
-> Actuator endpoints sit behind auth in these images, so Prometheus scrapes may need
-> the management endpoints opened up (or a scrape credential) to return data — the
-> config mirrors the compose setup as-is.
+> On the management port `/actuator/health` and `/actuator/prometheus` answer without a
+> login, for Prometheus and probes; on the service ports every actuator call still needs
+> an authenticated user. The port is exposed by ClusterIP services only (the gateway gets
+> a separate `<release>-gateway-management` service), never by the public gateway service.
+> Set `common.managementPort: ""` to keep the actuator on the service ports, behind auth.
 
 ## Not yet included
 

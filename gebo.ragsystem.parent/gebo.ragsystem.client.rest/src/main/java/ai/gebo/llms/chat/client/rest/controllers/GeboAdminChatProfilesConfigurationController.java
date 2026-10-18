@@ -29,6 +29,10 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 
 /**
  * AI generated comments
@@ -44,6 +48,14 @@ public class GeboAdminChatProfilesConfigurationController {
 	/** Manages persistence operations for the chat profile configurations */
 	@Autowired
 	IGPersistentObjectManager persistenceManager;
+
+	/**
+	 * The insert/update/delete of a chat profile are security events: a profile
+	 * decides the knowledge bases, the models and the network of agents its users
+	 * chat with, and who those users are.
+	 */
+	@Autowired
+	IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**
 	 * Default constructor for the controller
@@ -62,7 +74,12 @@ public class GeboAdminChatProfilesConfigurationController {
 	@PostMapping(value = "insertChatProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GChatProfileConfiguration insertChatProfile(@RequestBody GChatProfileConfiguration configuration)
 			throws GeboPersistenceException {
-		return persistenceManager.insert(configuration);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.CHAT_PROFILE_INSERT,
+				SecurityAuditTaxonomy.ResourceType.CHAT_PROFILE, configuration != null ? configuration.getCode() : null,
+				configuration, () -> persistenceManager.insert(configuration));
 	}
 
 	/**
@@ -75,7 +92,11 @@ public class GeboAdminChatProfilesConfigurationController {
 	@PostMapping(value = "updateChatProfile", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public GChatProfileConfiguration updateChatProfile(@RequestBody GChatProfileConfiguration configuration)
 			throws GeboPersistenceException {
-		return persistenceManager.update(configuration);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.CHAT_PROFILE_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.CHAT_PROFILE, configuration != null ? configuration.getCode() : null,
+				configuration, () -> persistenceManager.update(configuration));
 	}
 
 	/**
@@ -87,7 +108,11 @@ public class GeboAdminChatProfilesConfigurationController {
 	@PostMapping(value = "deleteChatProfile", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteChatProfile(@RequestBody GChatProfileConfiguration configuration)
 			throws GeboPersistenceException {
-		persistenceManager.delete(configuration);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.CHAT_PROFILE_DELETE,
+				SecurityAuditTaxonomy.ResourceType.CHAT_PROFILE, configuration != null ? configuration.getCode() : null,
+				null, () -> persistenceManager.delete(configuration));
 	}
 
 	/**

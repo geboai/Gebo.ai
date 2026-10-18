@@ -42,6 +42,10 @@ spec:
           ports:
             - name: http
               containerPort: {{ $port }}
+            {{- with $root.Values.common.managementPort }}
+            - name: management
+              containerPort: {{ . }}
+            {{- end }}
           env:
             {{- include "gebo.backendEnv" $root | nindent 12 }}
           envFrom:
@@ -100,5 +104,10 @@ spec:
     - name: http
       port: {{ $port }}
       targetPort: {{ $port }}
+    {{- with $root.Values.common.managementPort }}
+    - name: management
+      port: {{ . }}
+      targetPort: {{ . }}
+    {{- end }}
 {{- end }}
 {{- end }}

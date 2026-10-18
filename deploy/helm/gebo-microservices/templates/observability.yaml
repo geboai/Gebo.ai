@@ -4,6 +4,9 @@
   Mirrors dockers/gebo.microservices/{otel-collector-config,tempo-config,prometheus}.yaml.
 */ -}}
 {{- if .Values.observability.enabled }}
+{{- if not .Values.common.managementPort }}
+{{- fail "observability.enabled needs common.managementPort: Prometheus scrapes the actuator there, the only port where it answers without a login" }}
+{{- end }}
 {{- $rel := .Release.Name -}}
 {{- $o := .Values.observability -}}
 # ---------------- otel-collector ----------------
@@ -152,21 +155,20 @@ data:
     global:
       scrape_interval: {{ $o.prometheus.scrapeInterval }}
     scrape_configs:
+      # Every service answers /actuator/prometheus without a login on its
+      # management port (common.managementPort), reached through ClusterIP services
+      # only; the management server ignores the services' context paths.
       - job_name: gateway
         metrics_path: /actuator/prometheus
         static_configs:
-          - targets: ["{{ $rel }}-gateway:{{ .Values.gateway.port }}"]
+          - targets: ["{{ $rel }}-gateway-management:{{ .Values.common.managementPort }}"]
       - job_name: gebo-microservices
-        relabel_configs:
-          - source_labels: [__meta_context_path]
-            target_label: __metrics_path__
-            regex: (.+)
-            replacement: ${1}/actuator/prometheus
+        metrics_path: /actuator/prometheus
         static_configs:
 {{- range $name, $svc := .Values.backends }}
 {{- if include "gebo.backendEnabled" $svc }}
-          - targets: ["{{ $rel }}-{{ $name }}:{{ $svc.port }}"]
-            labels: { service: {{ $name }}, __meta_context_path: /{{ $name }} }
+          - targets: ["{{ $rel }}-{{ $name }}:{{ $.Values.common.managementPort }}"]
+            labels: { service: {{ $name }} }
 {{- end }}
 {{- end }}
 ---

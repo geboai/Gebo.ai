@@ -116,6 +116,41 @@
     <description>Gebo.ai: user/group administration ($(action), $(outcome)) by user $(userId).</description>
   </rule>
 
+  <!-- ====================== AI platform configuration ======================
+       Changes to what the agents can do, which external tools, agents and search
+       services the platform reaches, and who can use which knowledge base, chat
+       profile or network of agents. resourceType/resourceId name the changed
+       object; details carry its access settings (accessibleToAll, the group codes,
+       the number of users - never the users themselves). -->
+
+  <rule id="100217" level="5">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^agentsConfiguration$</field>
+    <description>Gebo.ai: agents/networks of agents configuration change ($(action), $(outcome)) by user $(userId) on $(resourceId).</description>
+  </rule>
+
+  <!-- A new or changed external MCP server, MCP tool permission, exposed MCP
+       server, imported A2A agent or A2A export widens (or narrows) what reaches
+       outside the platform and what outside callers reach: as relevant as a
+       credential change. -->
+  <rule id="100218" level="7">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^interoperabilityConfiguration$</field>
+    <description>Gebo.ai: MCP/A2A interoperability configuration change ($(action), $(outcome)) by user $(userId) on $(resourceId).</description>
+  </rule>
+
+  <rule id="100219" level="5">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^knowledgeConfiguration$</field>
+    <description>Gebo.ai: knowledge base/project/chat profile configuration change ($(action), $(outcome)) by user $(userId) on $(resourceId).</description>
+  </rule>
+
+  <rule id="100220" level="5">
+    <if_sid>100200</if_sid>
+    <field name="eventType">^searchConfiguration$</field>
+    <description>Gebo.ai: web/deep search configuration change ($(action), $(outcome)) by user $(userId) on $(resourceId).</description>
+  </rule>
+
   <!-- ================= 3rd-party integrations and LLM traffic ================= -->
 
   <rule id="100213" level="3">

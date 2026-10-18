@@ -69,11 +69,12 @@
             <i class="pi pi-shield text-green-600"></i>
             <span id="SecurityAuditTitle" class="text-xl font-bold" gebo-ai-text>Security audit logging — Wazuh / SIEM compatible</span>
           </div>
-          <span id="SecurityAuditDescription" class="text-muted-color" gebo-ai-text>
-            An append-only audit trail (security-log.jsonl) records authentication, credential
-            changes, model configuration and user-administration events - one JSON object per line,
-            ingested natively by Wazuh's json decoder and any SIEM. Retained 365 days by default, and
-            its Wazuh compatibility is verified on every build.
+          <span id="SecurityAuditEventsDescription" class="text-muted-color" gebo-ai-text>
+            An append-only audit trail (security-log.jsonl) records authentication, credential changes,
+            user administration and the configuration changes of models, networks of agents, MCP servers and
+            A2A agents, knowledge bases, chat profiles and search - one JSON object per line, ingested natively
+            by Wazuh's json decoder and any SIEM. Retained 365 days by default, and its Wazuh compatibility and
+            rules are verified on every build.
           </span>
         </div>
 

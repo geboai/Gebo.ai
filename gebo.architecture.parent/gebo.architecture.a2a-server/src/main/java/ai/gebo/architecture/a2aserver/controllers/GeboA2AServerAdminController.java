@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.a2aserver.service.A2AServerConfigManagerService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -32,6 +36,12 @@ import lombok.AllArgsConstructor;
 public class GeboA2AServerAdminController {
 
 	private final A2AServerConfigManagerService managementService;
+	/**
+	 * The insert/update/delete of an A2A export are security events: each one
+	 * publishes, changes or removes an endpoint external clients can call to run a
+	 * Gebo agent or network of agents.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<A2AServerConfig> findAllA2AServer() {
@@ -45,16 +55,28 @@ public class GeboA2AServerAdminController {
 
 	@PostMapping(value = "insertA2AServer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<A2AServerConfig> insertA2AServer(@RequestBody @Valid @NotNull A2AServerConfig config) {
-		return managementService.insert(config);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION, SecurityAuditTaxonomy.Action.A2A_EXPORT_INSERT,
+				SecurityAuditTaxonomy.ResourceType.A2A_EXPORT, config != null ? config.getCode() : null, config,
+				() -> managementService.insert(config));
 	}
 
 	@PostMapping(value = "updateA2AServer", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<A2AServerConfig> updateA2AServer(@RequestBody @Valid @NotNull A2AServerConfig config) {
-		return managementService.update(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION, SecurityAuditTaxonomy.Action.A2A_EXPORT_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.A2A_EXPORT, config != null ? config.getCode() : null, config,
+				() -> managementService.update(config));
 	}
 
 	@DeleteMapping(value = "deleteA2AServer", produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<Boolean> deleteA2AServer(@RequestParam("code") String code) {
-		return managementService.delete(code);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION, SecurityAuditTaxonomy.Action.A2A_EXPORT_DELETE,
+				SecurityAuditTaxonomy.ResourceType.A2A_EXPORT, code, null, () -> managementService.delete(code));
 	}
 }

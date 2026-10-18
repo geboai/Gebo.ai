@@ -21,6 +21,15 @@
 # To stop collecting telemetry, bring the stack back up with docker-compose.yml
 # alone; the application keeps running untouched.
 #
+# The images are pinned to the versions these configuration files are verified
+# against (ObservabilityOverlayCompatibilityTest in gebo.ai.app): an unpinned
+# grafana/tempo stopped starting when Tempo 3 dropped the ingester/compactor
+# sections of tempo-config.yaml. Raise a version only together with that test.
+#
+# Prometheus scrapes gebo.ai on its separate management port (12998), where
+# /actuator/prometheus and /actuator/health answer without a login. The port is
+# deliberately NOT published: only the containers of this network reach it.
+#
 # See dockers/PERSISTENCE.md - the three volumes here hold telemetry history
 # only, and are safe to discard.
 # ---------------------------------------------------------------------------
@@ -31,10 +40,13 @@ services:
   gebo.ai:
     environment:
       MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
-      MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
+      # Spring Boot 4 name: the old MANAGEMENT_OTLP_TRACING_ENDPOINT is no longer read.
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://otel-collector:4318/v1/traces
+      # Actuator management port for the Prometheus scrape: internal only, not published.
+      MANAGEMENT_SERVER_PORT: "12998"
 
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.163.1
     restart: unless-stopped
     command: ["--config=/etc/otelcol-contrib/config.yaml"]
     volumes:
@@ -44,7 +56,7 @@ services:
     networks: [gebo-monolith-net]
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v3.15.0
     restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -54,7 +66,7 @@ services:
     networks: [gebo-monolith-net]
 
   tempo:
-    image: grafana/tempo
+    image: grafana/tempo:2.8.2
     restart: unless-stopped
     command: ["-config.file=/etc/tempo.yaml"]
     volumes:
@@ -63,7 +75,7 @@ services:
     networks: [gebo-monolith-net]
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:13.2.4
     restart: unless-stopped
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"

@@ -82,11 +82,33 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.gateway.port }}
+            {{- with .Values.common.managementPort }}
+            - name: management
+              containerPort: {{ . }}
+            {{- end }}
           env:
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
               value: "http://{{ .Release.Name }}-eureka:{{ .Values.eureka.port }}/eureka/"
             - name: EUREKA_INSTANCE_PREFERIPADDRESS
               value: "true"
+            - name: MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE
+              value: {{ .Values.common.managementExposure | quote }}
+            {{- $otlp := .Values.common.otlpTracingEndpoint -}}
+            {{- if .Values.observability.enabled -}}
+            {{- $otlp = printf "http://%s-otel-collector:4318/v1/traces" .Release.Name -}}
+            {{- end }}
+            {{- if $otlp }}
+            - name: MANAGEMENT_TRACING_SAMPLING_PROBABILITY
+              value: {{ .Values.common.tracingSamplingProbability | quote }}
+            - name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
+              value: {{ $otlp | quote }}
+            {{- end }}
+            {{- with .Values.common.managementPort }}
+            # The gateway has no login of its own: its actuator moves to the management
+            # port, reached only through the ClusterIP service below.
+            - name: MANAGEMENT_SERVER_PORT
+              value: {{ . | quote }}
+            {{- end }}
           resources:
             {{- toYaml .Values.gateway.resources | nindent 12 }}
 ---
@@ -106,6 +128,27 @@ spec:
     - name: http
       port: {{ .Values.gateway.port }}
       targetPort: {{ .Values.gateway.port }}
+{{- with .Values.common.managementPort }}
+---
+# The gateway's actuator, for Prometheus only: always ClusterIP, whatever type the
+# public gateway service has.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ $.Release.Name }}-gateway-management
+  labels:
+    {{- include "gebo.labels" $ | nindent 4 }}
+    app.kubernetes.io/name: gateway
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: gateway
+    app.kubernetes.io/instance: {{ $.Release.Name }}
+  ports:
+    - name: management
+      port: {{ . }}
+      targetPort: {{ . }}
+{{- end }}
 {{- if .Values.gateway.ingress.enabled }}
 ---
 apiVersion: networking.k8s.io/v1

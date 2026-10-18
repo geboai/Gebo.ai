@@ -29,9 +29,14 @@ management:
   tracing:
     sampling:
       probability: ${MANAGEMENT_TRACING_SAMPLING_PROBABILITY:1.0}
-  otlp:
-    tracing:
-      endpoint: ${MANAGEMENT_OTLP_TRACING_ENDPOINT:http://localhost:4318/v1/traces}
+  # Traces are exported over OTLP only when an endpoint is given, e.g. with
+  # MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT=http://otel-collector:4318/v1/traces
+  # (Spring Boot 4's management.opentelemetry.tracing.export.otlp.endpoint; the old
+  # management.otlp.tracing.endpoint is no longer read). Left unset here on purpose:
+  # an installation without a collector exports nothing instead of failing every batch.
+  # The metrics scraper reaches /actuator/prometheus anonymously only on the separate
+  # management port, set with MANAGEMENT_SERVER_PORT and never published (see
+  # dockers/docker-compose-deploy/docker-compose.observability.yml).
 spring.servlet.multipart:
   enabled: true
   maxFileSize: 100MB

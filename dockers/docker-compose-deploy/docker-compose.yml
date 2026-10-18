@@ -269,9 +269,9 @@ services:
       #   - ./config:/opt/gebo.ai/config:ro
 
     environment:
-      # No OpenTelemetry collector in this file: without this the app samples
-      # 100% of traces and retries them against localhost:4318 forever. The
-      # observability overlay turns sampling back on and points it at the
+      # No OpenTelemetry collector in this file: no trace endpoint is set, so no
+      # span is exported, and sampling 0 spares recording them at all. The
+      # observability overlay turns sampling back on and points the export at its
       # collector.
       MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "0"
       # JVM settings. -Xmx stays well under the 6G container limit above, and

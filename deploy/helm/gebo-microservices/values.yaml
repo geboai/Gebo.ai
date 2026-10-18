@@ -30,6 +30,12 @@ common:
   # OTLP traces endpoint; empty disables trace export.
   otlpTracingEndpoint: ""
   tracingSamplingProbability: "1.0"
+  # Actuator management port of the gateway and of every backend (MANAGEMENT_SERVER_PORT):
+  # there /actuator/health and /actuator/prometheus answer without a login, for
+  # Prometheus and probes, while on the service ports the actuator needs an
+  # authenticated user. Only ClusterIP services expose it, never the gateway's
+  # public service. Empty keeps the actuator on the service port, behind auth.
+  managementPort: "13990"
   # extra env applied to every backend: [{name: X, value: "y"}]
   extraEnv: []
 
@@ -181,18 +187,21 @@ secrets:
 observability:
   enabled: false
   otelCollector:
-    image: otel/opentelemetry-collector-contrib:latest
+    # Pinned to the versions the configs below are verified against
+    # (ObservabilityOverlayCompatibilityTest): an unpinned grafana/tempo stopped
+    # starting when Tempo 3 dropped the ingester/compactor config sections.
+    image: otel/opentelemetry-collector-contrib:0.163.1
   tempo:
-    image: grafana/tempo
+    image: grafana/tempo:2.8.2
     storage: 5Gi
     storageClassName: ""
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v3.15.0
     scrapeInterval: 15s
     storage: 5Gi
     storageClassName: ""
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:13.2.4
     service:
       type: ClusterIP        # LoadBalancer/NodePort to expose the UI
     anonymousViewer: true

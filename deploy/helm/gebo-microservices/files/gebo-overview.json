@@ -3,22 +3,38 @@
   "uid": "gebo-overview",
   "timezone": "browser",
   "schemaVersion": 39,
-  "version": 1,
+  "version": 2,
   "refresh": "30s",
-  "time": { "from": "now-1h", "to": "now" },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
   "panels": [
     {
       "id": 1,
       "title": "Services up",
       "type": "stat",
-      "gridPos": { "h": 6, "w": 24, "x": 0, "y": 0 },
-      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
           "expr": "up",
-          "legendFormat": "{{job}} - {{service}}",
-          "refId": "A"
+          "legendFormat": "{{job}} {{service}} {{instance}}",
+          "refId": "A",
+          "instant": true,
+          "range": false
         }
       ]
     },
@@ -26,11 +42,22 @@
       "id": 2,
       "title": "HTTP request rate",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 6 },
-      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
           "expr": "sum(rate(http_server_requests_seconds_count[1m])) by (service, uri)",
           "legendFormat": "{{service}} {{uri}}",
           "refId": "A"
@@ -41,12 +68,28 @@
       "id": 3,
       "title": "HTTP average request duration",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 6 },
-      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
-      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
           "expr": "sum(rate(http_server_requests_seconds_sum[1m])) by (service) / sum(rate(http_server_requests_seconds_count[1m])) by (service)",
           "legendFormat": "{{service}}",
           "refId": "A"
@@ -57,11 +100,22 @@
       "id": 4,
       "title": "Message broker routing rate (per hop)",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 14 },
-      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
           "expr": "sum(rate(gebo_messaging_broker_routing_seconds_count[1m])) by (sourceModule, targetModule)",
           "legendFormat": "{{sourceModule}} -> {{targetModule}}",
           "refId": "A"
@@ -72,17 +126,122 @@
       "id": 5,
       "title": "JVM memory used",
       "type": "timeseries",
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 14 },
-      "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
-      "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
       "targets": [
         {
-          "datasource": { "type": "prometheus", "uid": "gebo-prometheus" },
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
           "expr": "sum(jvm_memory_used_bytes) by (service, area)",
           "legendFormat": "{{service}} {{area}}",
           "refId": "A"
         }
       ]
+    },
+    {
+      "id": 6,
+      "title": "AI model calls per minute (Spring AI)",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 22
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
+          "expr": "sum(rate(gen_ai_client_operation_seconds_count[1m])) by (service, gen_ai_operation_name, gen_ai_request_model, error) * 60",
+          "legendFormat": "{{service}} {{gen_ai_operation_name}} {{gen_ai_request_model}} error={{error}}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "AI model call average duration",
+      "type": "timeseries",
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 22
+      },
+      "datasource": {
+        "type": "prometheus",
+        "uid": "gebo-prometheus"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "gebo-prometheus"
+          },
+          "expr": "sum(rate(gen_ai_client_operation_seconds_sum[1m])) by (service, gen_ai_operation_name, gen_ai_request_model) / sum(rate(gen_ai_client_operation_seconds_count[1m])) by (service, gen_ai_operation_name, gen_ai_request_model)",
+          "legendFormat": "{{service}} {{gen_ai_operation_name}} {{gen_ai_request_model}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "id": 8,
+      "title": "Recent AI model calls (spans in Tempo)",
+      "type": "table",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 30
+      },
+      "datasource": {
+        "type": "tempo",
+        "uid": "gebo-tempo"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "tempo",
+            "uid": "gebo-tempo"
+          },
+          "refId": "A",
+          "queryType": "traceql",
+          "limit": 20,
+          "tableType": "spans",
+          "query": "{ span.gen_ai.operation.name != \"\" } | select(span.gen_ai.request.model, span.gen_ai.usage.input_tokens, span.gen_ai.usage.output_tokens)"
+        }
+      ],
+      "options": {
+        "showHeader": true
+      }
     }
   ]
 }

@@ -31,6 +31,10 @@ import ai.gebo.searxngsearch.handler.model.SearxngSearchConfig;
 import ai.gebo.searxngsearch.handler.repository.GSearxngSearchApiCredentialsRepository;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -45,6 +49,11 @@ public class SearxngSearchConfigurationController {
 	private final GSearxngSearchApiCredentialsRepository repository;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboSecretsAccessService secretAccessService;
+	/**
+	 * The changes to the web search credentials are security events: they decide
+	 * which external search service the questions of the users are sent to.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@GetMapping(value = "searchGSearxngSearchApiCredentialsByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GSearxngSearchApiCredentials searchGSearxngSearchApiCredentialsByCode(@RequestParam("code") String code) {
@@ -55,18 +64,35 @@ public class SearxngSearchConfigurationController {
 	@PostMapping(value = "insertGSearxngSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GSearxngSearchApiCredentials insertGSearxngSearchApiCredentials(
 			@Valid @RequestBody GSearxngSearchApiCredentials value) {
-		return repository.insert(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "searxng");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.insert(value));
 	}
 
 	@PostMapping(value = "updateGSearxngSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GSearxngSearchApiCredentials updateGSearxngSearchApiCredentials(
 			@Valid @RequestBody GSearxngSearchApiCredentials value) {
-		return repository.save(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "searxng");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.save(value));
 	}
 
 	@PostMapping(value = "deleteGSearxngSearchApiCredentials", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGSearxngSearchApiCredentials(@Valid @RequestBody GSearxngSearchApiCredentials value) {
-		repository.delete(value);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "searxng");
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_DELETE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.delete(value));
 	}
 
 	@GetMapping(value = "getSearxngSearchStatus", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -96,6 +122,14 @@ public class SearxngSearchConfigurationController {
 					"searxng-search");
 			credentials.setSecretCode(secret);
 		}
-		return persistentObjectManager.insert(credentials);
+		// the API key was stored as a secret above, an event of the secret store; this one
+		// records the search configuration created, its code taken from what was saved
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "searxng");
+		event.getDetails().put("fastSetup", true);
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, null, null,
+				() -> persistentObjectManager.insert(credentials));
 	}
 }

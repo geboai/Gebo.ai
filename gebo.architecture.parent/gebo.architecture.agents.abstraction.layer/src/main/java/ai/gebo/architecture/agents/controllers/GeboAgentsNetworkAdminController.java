@@ -38,6 +38,10 @@ import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFacto
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -70,6 +74,11 @@ public class GeboAgentsNetworkAdminController {
 	private final IGAgentsNetworkCrudService networkCrudService;
 	private final IGRuntimeBinder runtimeBinder;
 	private final IGAgentsCopyService agentsCopyService;
+	/**
+	 * The insert/update/delete/copy of a network are security events: a network
+	 * decides which models, tools and knowledge its agents use and who may use it.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	private <T> T get(Class<T> t) {
 		T implementation = runtimeBinder.getImplementationOf(t);
@@ -141,7 +150,12 @@ public class GeboAgentsNetworkAdminController {
 			LOGGER.trace(String.valueOf(network));
 			LOGGER.trace("</AGENTS_NETWORK_UPDATE>");
 		}
-		OperationStatus<GAgentsNetwork> status = networkCrudService.update(network);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<GAgentsNetwork> status = ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENTS_NETWORK_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.AGENTS_NETWORK, network != null ? network.getCode() : null, network,
+				() -> networkCrudService.update(network));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST updateAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
 					+ (status != null && status.getResult() != null) + " message(s):"
@@ -160,7 +174,11 @@ public class GeboAgentsNetworkAdminController {
 			LOGGER.trace(String.valueOf(network));
 			LOGGER.trace("</AGENTS_NETWORK_INSERT>");
 		}
-		OperationStatus<GAgentsNetwork> status = networkCrudService.insert(network);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<GAgentsNetwork> status = ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENTS_NETWORK_INSERT,
+				SecurityAuditTaxonomy.ResourceType.AGENTS_NETWORK, network != null ? network.getCode() : null, network,
+				() -> networkCrudService.insert(network));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST insertAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
 					+ (status != null && status.getResult() != null) + " message(s):"
@@ -179,7 +197,11 @@ public class GeboAgentsNetworkAdminController {
 			LOGGER.trace(String.valueOf(network));
 			LOGGER.trace("</AGENTS_NETWORK_DELETE>");
 		}
-		OperationStatus<GAgentsNetwork> status = networkCrudService.delete(network);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		OperationStatus<GAgentsNetwork> status = ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENTS_NETWORK_DELETE,
+				SecurityAuditTaxonomy.ResourceType.AGENTS_NETWORK, network != null ? network.getCode() : null, null,
+				() -> networkCrudService.delete(network));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST deleteAgentsNetwork code:" + (network != null ? network.getCode() : null) + " produced a result:"
 					+ (status != null && status.getResult() != null) + " message(s):"
@@ -199,7 +221,16 @@ public class GeboAgentsNetworkAdminController {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST copyAgentsNetwork code:" + code);
 		}
-		OperationStatus<GAgentsNetwork> status = agentsCopyService.copyAgentsNetwork(code);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		// the network copied is the resource; the code of the new, editable copy is a detail
+		OperationStatus<GAgentsNetwork> status = ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENTS_NETWORK_COPY,
+				SecurityAuditTaxonomy.ResourceType.AGENTS_NETWORK, code, null,
+				() -> agentsCopyService.copyAgentsNetwork(code), (e, copied) -> {
+					if (copied != null && copied.getResult() != null) {
+						e.getDetails().put("copyCode", copied.getResult().getCode());
+					}
+				});
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST copyAgentsNetwork code:" + code + " produced a copy:"
 					+ (status != null && status.getResult() != null ? status.getResult().getCode() : null)

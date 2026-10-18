@@ -30,6 +30,10 @@ import ai.gebo.bravesearch.handler.repository.GBraveSearchApiCredentialsReposito
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,6 +48,11 @@ public class BraveSearchConfigurationController {
 	private final GBraveSearchApiCredentialsRepository repository;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboSecretsAccessService secretAccessService;
+	/**
+	 * The changes to the web search credentials are security events: they decide
+	 * which external search service the questions of the users are sent to.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@GetMapping(value = "searchGBraveSearchApiCredentialsByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GBraveSearchApiCredentials searchGBraveSearchApiCredentialsByCode(@RequestParam("code") String code) {
@@ -54,18 +63,35 @@ public class BraveSearchConfigurationController {
 	@PostMapping(value = "insertGBraveSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GBraveSearchApiCredentials insertGBraveSearchApiCredentials(
 			@Valid @RequestBody GBraveSearchApiCredentials value) {
-		return repository.insert(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "brave");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.insert(value));
 	}
 
 	@PostMapping(value = "updateGBraveSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GBraveSearchApiCredentials updateGBraveSearchApiCredentials(
 			@Valid @RequestBody GBraveSearchApiCredentials value) {
-		return repository.save(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "brave");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.save(value));
 	}
 
 	@PostMapping(value = "deleteGBraveSearchApiCredentials", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGBraveSearchApiCredentials(@Valid @RequestBody GBraveSearchApiCredentials value) {
-		repository.delete(value);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "brave");
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_DELETE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.delete(value));
 	}
 
 	@GetMapping(value = "getBraveSearchStatus", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,6 +117,14 @@ public class BraveSearchConfigurationController {
 		GBraveSearchApiCredentials credentials = new GBraveSearchApiCredentials();
 		credentials.setSecretCode(secret);
 		credentials.setDescription("Brave search credentials");
-		return persistentObjectManager.insert(credentials);
+		// the API key was stored as a secret above, an event of the secret store; this one
+		// records the search configuration created, its code taken from what was saved
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "brave");
+		event.getDetails().put("fastSetup", true);
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, null, null,
+				() -> persistentObjectManager.insert(credentials));
 	}
 }

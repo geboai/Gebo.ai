@@ -31,6 +31,10 @@ import ai.gebo.googlesearch.handler.model.GoogleSearchConfig;
 import ai.gebo.googlesearch.handler.repository.GGoogleSearchApiCredentialsRepository;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -55,6 +59,11 @@ public class GoogleSearchConfigurationController {
 	private final GGoogleSearchApiCredentialsRepository repository;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboSecretsAccessService secretAccessService;
+	/**
+	 * The changes to the web search credentials are security events: they decide
+	 * which external search service the questions of the users are sent to.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**
 	 * Retrieves Google Search API credentials by their unique code identifier
@@ -80,7 +89,13 @@ public class GoogleSearchConfigurationController {
 	@PostMapping(value = "insertGGoogleSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GGoogleSearchApiCredentials insertGGoogleSearchApiCredentials(
 			@Valid @RequestBody GGoogleSearchApiCredentials value) {
-		return repository.insert(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "google");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.insert(value));
 	}
 
 	/**
@@ -92,7 +107,13 @@ public class GoogleSearchConfigurationController {
 	@PostMapping(value = "updateGGoogleSearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GGoogleSearchApiCredentials updateGGoogleSearchApiCredentials(
 			@Valid @RequestBody GGoogleSearchApiCredentials value) {
-		return repository.save(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "google");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.save(value));
 	}
 
 	/**
@@ -102,7 +123,12 @@ public class GoogleSearchConfigurationController {
 	 */
 	@PostMapping(value = "deleteGGoogleSearchApiCredentials", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGGoogleSearchApiCredentials(@Valid @RequestBody GGoogleSearchApiCredentials value) {
-		repository.delete(value);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "google");
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_DELETE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.delete(value));
 	}
 
 	@GetMapping(value = "getGoogleSearchStatus", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -130,6 +156,14 @@ public class GoogleSearchConfigurationController {
 		credentials.setSecretCode(secret);
 		credentials.setCustomSearchEngineId(config.getCustomSearchEngineId());
 		credentials.setDescription("Google search credentials");
-		return persistentObjectManager.insert(credentials);
+		// the API key was stored as a secret above, an event of the secret store; this one
+		// records the search configuration created, its code taken from what was saved
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "google");
+		event.getDetails().put("fastSetup", true);
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, null, null,
+				() -> persistentObjectManager.insert(credentials));
 	}
 }

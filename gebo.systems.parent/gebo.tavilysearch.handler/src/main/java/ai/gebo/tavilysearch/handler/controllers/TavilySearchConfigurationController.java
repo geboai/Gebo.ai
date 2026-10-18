@@ -30,6 +30,10 @@ import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.tavilysearch.handler.model.GTavilySearchApiCredentials;
 import ai.gebo.tavilysearch.handler.model.TavilySearchConfig;
 import ai.gebo.tavilysearch.handler.repository.GTavilySearchApiCredentialsRepository;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -44,6 +48,11 @@ public class TavilySearchConfigurationController {
 	private final GTavilySearchApiCredentialsRepository repository;
 	private final IGPersistentObjectManager persistentObjectManager;
 	private final IGeboSecretsAccessService secretAccessService;
+	/**
+	 * The changes to the web search credentials are security events: they decide
+	 * which external search service the questions of the users are sent to.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@GetMapping(value = "searchGTavilySearchApiCredentialsByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GTavilySearchApiCredentials searchGTavilySearchApiCredentialsByCode(@RequestParam("code") String code) {
@@ -54,18 +63,35 @@ public class TavilySearchConfigurationController {
 	@PostMapping(value = "insertGTavilySearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GTavilySearchApiCredentials insertGTavilySearchApiCredentials(
 			@Valid @RequestBody GTavilySearchApiCredentials value) {
-		return repository.insert(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "tavily");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.insert(value));
 	}
 
 	@PostMapping(value = "updateGTavilySearchApiCredentials", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GTavilySearchApiCredentials updateGTavilySearchApiCredentials(
 			@Valid @RequestBody GTavilySearchApiCredentials value) {
-		return repository.save(value);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "tavily");
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.save(value));
 	}
 
 	@PostMapping(value = "deleteGTavilySearchApiCredentials", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGTavilySearchApiCredentials(@Valid @RequestBody GTavilySearchApiCredentials value) {
-		repository.delete(value);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "tavily");
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_DELETE,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, value != null ? value.getCode() : null, null,
+				() -> repository.delete(value));
 	}
 
 	@GetMapping(value = "getTavilySearchStatus", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -91,6 +117,14 @@ public class TavilySearchConfigurationController {
 		GTavilySearchApiCredentials credentials = new GTavilySearchApiCredentials();
 		credentials.setSecretCode(secret);
 		credentials.setDescription("Tavily search credentials");
-		return persistentObjectManager.insert(credentials);
+		// the API key was stored as a secret above, an event of the secret store; this one
+		// records the search configuration created, its code taken from what was saved
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("provider", "tavily");
+		event.getDetails().put("fastSetup", true);
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.SEARCH_CONFIGURATION, SecurityAuditTaxonomy.Action.WEB_SEARCH_CONFIG_INSERT,
+				SecurityAuditTaxonomy.ResourceType.WEB_SEARCH_CONFIG, null, null,
+				() -> persistentObjectManager.insert(credentials));
 	}
 }

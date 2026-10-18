@@ -81,8 +81,13 @@ true
 {{- if $otlp }}
 - name: MANAGEMENT_TRACING_SAMPLING_PROBABILITY
   value: {{ .Values.common.tracingSamplingProbability | quote }}
-- name: MANAGEMENT_OTLP_TRACING_ENDPOINT
+{{- /* Spring Boot 4 name: the old MANAGEMENT_OTLP_TRACING_ENDPOINT is no longer read. */}}
+- name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
   value: {{ $otlp | quote }}
+{{- end }}
+{{- with .Values.common.managementPort }}
+- name: MANAGEMENT_SERVER_PORT
+  value: {{ . | quote }}
 {{- end }}
 {{- with .Values.common.extraEnv }}
 {{ toYaml . }}

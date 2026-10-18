@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.architecture.a2aclients.model.A2ARemoteAgentConfig;
 import ai.gebo.architecture.a2aclients.service.A2AClientManagementService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -31,6 +35,11 @@ import lombok.AllArgsConstructor;
 public class A2AClientConfigController {
 
 	private final A2AClientManagementService managementService;
+	/**
+	 * The insert/update/delete of an imported A2A agent are security events: the
+	 * networks of agents hand work, and the data it carries, to that remote agent.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@PostMapping(value = "testAndDiscovery", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<A2ARemoteAgentConfig> testAndDiscoveryA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
@@ -39,17 +48,30 @@ public class A2AClientConfigController {
 
 	@PostMapping(value = "insertA2AAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<A2ARemoteAgentConfig> insertA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
-		return managementService.insert(config);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.A2A_REMOTE_AGENT_INSERT, SecurityAuditTaxonomy.ResourceType.A2A_REMOTE_AGENT,
+				config != null ? config.getCode() : null, config, () -> managementService.insert(config));
 	}
 
 	@PostMapping(value = "updateA2AAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<A2ARemoteAgentConfig> updateA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
-		return managementService.update(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.A2A_REMOTE_AGENT_UPDATE, SecurityAuditTaxonomy.ResourceType.A2A_REMOTE_AGENT,
+				config != null ? config.getCode() : null, config, () -> managementService.update(config));
 	}
 
 	@DeleteMapping(value = "deleteA2AAgent", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<Boolean> deleteA2AClientConfig(@RequestBody @Valid @NotNull A2ARemoteAgentConfig config) {
-		return managementService.delete(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.A2A_REMOTE_AGENT_DELETE, SecurityAuditTaxonomy.ResourceType.A2A_REMOTE_AGENT,
+				config != null ? config.getCode() : null, null, () -> managementService.delete(config));
 	}
 
 	@GetMapping(value = "findByCode", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -42,6 +42,10 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.knowledgebase.repositories.VirtualFolderRepository;
 import ai.gebo.model.base.GObjectRef;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.constraints.NotNull;
 
 /**
@@ -67,6 +71,13 @@ public class ProjectsController {
 
 	@Autowired
 	GCoreMessagesEmitterImpl coreEmitter;
+
+	/**
+	 * The insert/update/delete of a project are security events: a project brings a
+	 * set of document sources into a knowledge base, with its own access settings.
+	 */
+	@Autowired
+	IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**
 	 * Default constructor for ProjectsController.
@@ -237,11 +248,18 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "updateProject", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GProject updateProject(@RequestBody GProject entity) throws GeboPersistenceException {
-		refuseIfDeclaredInConfiguration(entity);
-		if (entity.getObjectSpaceType() == null) {
-			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
-		}
-		return persistenceManager.update(entity);
+		// created on entry, so the event's caller stack points at this endpoint; a write
+		// refused because the configuration owns the record is audited as a failure too
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.PROJECT_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.PROJECT, entity != null ? entity.getCode() : null, entity, () -> {
+					refuseIfDeclaredInConfiguration(entity);
+					if (entity.getObjectSpaceType() == null) {
+						entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
+					}
+					return persistenceManager.update(entity);
+				});
 	}
 
 	/**
@@ -253,11 +271,16 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "insertProject", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GProject insertProject(@RequestBody GProject entity) throws GeboPersistenceException {
-		refuseIfDeclaredInConfiguration(entity);
-		if (entity.getObjectSpaceType() == null) {
-			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
-		}
-		return persistenceManager.insert(entity);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.PROJECT_INSERT,
+				SecurityAuditTaxonomy.ResourceType.PROJECT, entity != null ? entity.getCode() : null, entity, () -> {
+					refuseIfDeclaredInConfiguration(entity);
+					if (entity.getObjectSpaceType() == null) {
+						entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
+					}
+					return persistenceManager.insert(entity);
+				});
 	}
 
 	/**
@@ -268,8 +291,13 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "deleteProject", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteProject(@RequestBody GProject entity) throws GeboPersistenceException {
-		refuseIfDeclaredInConfiguration(entity);
-		persistenceManager.delete(entity);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.PROJECT_DELETE,
+				SecurityAuditTaxonomy.ResourceType.PROJECT, entity != null ? entity.getCode() : null, null, () -> {
+					refuseIfDeclaredInConfiguration(entity);
+					persistenceManager.delete(entity);
+				});
 		GDeletedProjectPayload payload = new GDeletedProjectPayload();
 		// Set the project for the deletion payload
 		payload.setProject(entity);

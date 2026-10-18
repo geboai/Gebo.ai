@@ -27,8 +27,12 @@ import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
 import ai.gebo.architecture.mcpserver.service.IGMCPServerConfigManagerService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.utils.DataPage;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGSecurityService.AclOwnerInfo;
 import ai.gebo.security.services.IGSecurityService.AclOwnerInfo.OwnerType;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -47,9 +51,16 @@ import lombok.Data;
 public class GeboMCPServerAdminController {
 
 	private final IGMCPServerConfigManagerService managerService;
+	/**
+	 * The changes to an exposed MCP server are security events: each one publishes,
+	 * changes or removes an endpoint other systems call, and who may call it.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
-	public GeboMCPServerAdminController(IGMCPServerConfigManagerService managerService) {
+	public GeboMCPServerAdminController(IGMCPServerConfigManagerService managerService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		this.managerService = managerService;
+		this.securityAuditLoggerService = securityAuditLoggerService;
 	}
 
 	/**
@@ -61,7 +72,13 @@ public class GeboMCPServerAdminController {
 	@PostMapping(value = "insertMcpServer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboMCPServerConfig insertMcpServer(@Valid @RequestBody GeboMCPServerConfig config)
 			throws GeboPersistenceException {
-		return managerService.insert(config);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_EXPOSED_SERVER_INSERT,
+				SecurityAuditTaxonomy.ResourceType.MCP_EXPOSED_SERVER, config != null ? config.getCode() : null, config,
+				() -> managerService.insert(config));
 	}
 
 	/**
@@ -73,7 +90,12 @@ public class GeboMCPServerAdminController {
 	@PostMapping(value = "updateMcpServer", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboMCPServerConfig updateMcpServer(@Valid @RequestBody GeboMCPServerConfig config)
 			throws GeboPersistenceException {
-		return managerService.update(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_EXPOSED_SERVER_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.MCP_EXPOSED_SERVER, config != null ? config.getCode() : null, config,
+				() -> managerService.update(config));
 	}
 
 	/**
@@ -83,7 +105,11 @@ public class GeboMCPServerAdminController {
 	 */
 	@PostMapping(value = "deleteMcpServer", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteMcpServer(@RequestParam("code") String code) throws GeboPersistenceException {
-		managerService.delete(code);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_EXPOSED_SERVER_DELETE,
+				SecurityAuditTaxonomy.ResourceType.MCP_EXPOSED_SERVER, code, null, () -> managerService.delete(code));
 	}
 
 	/**
@@ -152,10 +178,22 @@ public class GeboMCPServerAdminController {
 	@PostMapping(value = "setMcpServerAccessAcls", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboMCPServerConfig setMcpServerAccessAcls(@Valid @RequestBody SetMcpServerAclsParam param)
 			throws GeboPersistenceException {
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		List<AclOwnerInfo> owners = new ArrayList<>();
+		long groupOwners = 0;
 		for (AclOwnerParam owner : param.owners) {
 			owners.add(new AclOwnerInfo(owner.ownerType, owner.ownerCode, owner.grants));
+			if (owner.ownerType == OwnerType.GROUP) {
+				groupOwners++;
+			}
 		}
-		return managerService.setAccessAcls(param.code, owners);
+		// how many grants, not to whom: user owners are e-mail addresses
+		event.getDetails().put("aclOwnersCount", owners.size());
+		event.getDetails().put("aclGroupOwnersCount", groupOwners);
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_EXPOSED_SERVER_ACCESS_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.MCP_EXPOSED_SERVER, param.code, null,
+				() -> managerService.setAccessAcls(param.code, owners));
 	}
 }

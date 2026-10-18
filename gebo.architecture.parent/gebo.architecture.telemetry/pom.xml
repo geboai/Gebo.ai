@@ -40,5 +40,21 @@
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-exporter-otlp</artifactId>
 		</dependency>
+		<!-- Spring Boot 4.x moved the tracing auto-configuration out of the actuator:
+			without these two modules no Tracer and no OTLP span exporter are created,
+			so no span ever leaves the application, whatever the endpoint. The
+			exporter is created only when
+			management.opentelemetry.tracing.export.otlp.endpoint is set. Not the
+			spring-boot-starter-opentelemetry starter: it also brings the OTLP
+			metrics registry, which would push metrics to a collector that a
+			plain installation does not run. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-micrometer-tracing-opentelemetry</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-opentelemetry</artifactId>
+		</dependency>
 	</dependencies>
 </project>
