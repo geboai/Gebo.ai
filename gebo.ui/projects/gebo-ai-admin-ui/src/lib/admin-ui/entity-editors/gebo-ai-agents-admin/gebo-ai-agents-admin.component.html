@@ -152,6 +152,17 @@
                       </gebo-ai-field>
                     </div>
 
+                    @if (formGroup.controls['subscribeAllTools'].value) {
+                      <div class="col-12">
+                        <gebo-ai-field id="excludedToolSources" label="Tool sources left out"
+                          help="With every registered tool mounted, the tools of these sources are never mounted on this agent: for instance the searches that other agents of the network already run. The system settings may keep other tools out as well; the network editor shows every tool left out and why.">
+                          <p-multiSelect id="excludedToolSources" formControlName="excludedToolSources"
+                            [options]="toolSources" optionLabel="description" optionValue="id" display="chip"
+                            [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
+                        </gebo-ai-field>
+                      </div>
+                    }
+
                     <div class="col-4">
                       <gebo-ai-field id="temperature" label="Temperature"
                         help="Temperature the model will respond, from 0 to 1 (if unsure leave empty)">

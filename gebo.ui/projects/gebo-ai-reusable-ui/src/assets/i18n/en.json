@@ -6314,6 +6314,10 @@
         "label": "Tools of this agent",
         "help": "Mount every registered tool, or pick the ones this agent may call: by category, by name, or one by one."
       },
+      "excludedToolSources": {
+        "label": "Tool sources left out",
+        "help": "With every registered tool mounted, the tools of these sources are never mounted on this agent: for instance the searches that other agents of the network already run. The system settings may keep other tools out as well; the network editor shows every tool left out and why."
+      },
       "temperature": {
         "label": "Temperature",
         "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"
@@ -7499,6 +7503,9 @@
       },
       "CfgAllTools": {
         "label": "every registered tool"
+      },
+      "CfgExcludedSourcesLabel": {
+        "label": "tool source(s) left out by this configuration"
       },
       "CfgAdaptedNetworkLabel": {
         "label": "Delegates to network"

@@ -330,7 +330,7 @@
                                   @if (config.useDefaultChatModel !== false) { <span id="CfgDefaultModel" gebo-ai-text>system default</span> } @else { {{config.chatModelReference?.description || config.chatModelReference?.code || '—'}} }
                                 </span>
                                 <span><span id="CfgToolsLabel" gebo-ai-text class="font-semibold text-muted-color">Tools</span>
-                                  @if (config.subscribeAllTools) { <span id="CfgAllTools" gebo-ai-text>every registered tool</span> } @else { {{(config.enabledFunctions || []).length}} }
+                                  @if (config.subscribeAllTools) { <span id="CfgAllTools" gebo-ai-text>every registered tool</span>@if (config.excludedToolSources?.length) { ({{config.excludedToolSources!.length}} <span id="CfgExcludedSourcesLabel" gebo-ai-text>tool source(s) left out by this configuration</span>) } } @else { {{(config.enabledFunctions || []).length}} }
                                 </span>
                                 @if (configService?.networkAdapter) {
                                   <span><span id="CfgAdaptedNetworkLabel" gebo-ai-text class="font-semibold text-muted-color">Delegates to network</span> {{config.adaptedAgentNetworkCode || '—'}}</span>
