@@ -158,7 +158,7 @@
                           help="With every registered tool mounted, the tools of these sources are never mounted on this agent: for instance the searches that other agents of the network already run. The system settings may keep other tools out as well; the network editor shows every tool left out and why.">
                           <p-multiSelect id="excludedToolSources" formControlName="excludedToolSources"
                             [options]="toolSources" optionLabel="description" optionValue="id" display="chip"
-                            [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
+                            [maxSelectedLabels]="100" [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
                         </gebo-ai-field>
                       </div>
                     }

@@ -326,10 +326,10 @@
                                   @if (!config.agentRoleCode) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
                                 </span>
                                 <span><span id="CfgPromptLabel" gebo-ai-text class="font-semibold text-muted-color">Main loop prompt</span> {{config.mainLoopPromptUseCode || '—'}}</span>
-                                <span><span id="CfgModelLabel" gebo-ai-text class="font-semibold text-muted-color">Chat model</span>
+                                <span><span id="CfgModelLabel" gebo-ai-text class="font-semibold text-muted-color">Chat model</span>&nbsp;
                                   @if (config.useDefaultChatModel !== false) { <span id="CfgDefaultModel" gebo-ai-text>system default</span> } @else { {{config.chatModelReference?.description || config.chatModelReference?.code || '—'}} }
                                 </span>
-                                <span><span id="CfgToolsLabel" gebo-ai-text class="font-semibold text-muted-color">Tools</span>
+                                <span><span id="CfgToolsLabel" gebo-ai-text class="font-semibold text-muted-color">Tools</span>&nbsp;
                                   @if (config.subscribeAllTools) { <span id="CfgAllTools" gebo-ai-text>every registered tool</span>@if (config.excludedToolSources?.length) { ({{config.excludedToolSources!.length}} <span id="CfgExcludedSourcesLabel" gebo-ai-text>tool source(s) left out by this configuration</span>) } } @else { {{(config.enabledFunctions || []).length}} }
                                 </span>
                                 @if (configService?.networkAdapter) {
