@@ -4,7 +4,6 @@ import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.ai.document.Document;
 
@@ -27,6 +26,7 @@ import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.agent.standardtools.DeepSearchReduction;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.security.services.IGSecurityService;
@@ -116,7 +116,7 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 		// The chunking itself (session lifecycle, per-document cap, error chunks) is shared
 		// with the search tools, see SearchResultsChunker.
 		final SearchResultsChunker.LoadedResults loaded = SearchResultsChunker.load(chunkingService, results, params,
-				maxChunksPerDocument, getId(), documentsParallelism, resultsLoading(), openNetworkLoading);
+				maxChunksPerDocument(command), getId(), documentsParallelism, resultsLoading(), openNetworkLoading);
 		final List<Document> documents = loaded.documents();
 		if (!loaded.notLoaded().isEmpty() && notificationSink != null) {
 			// the user is told what could not be read (each one with its reason in the log)
@@ -153,18 +153,20 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private Map<String, GResponseDocumentRef> chatWithDocumentRefs(AgentsCollaborationSessionContext session) {
-		final Map<String, Object> environment = session.getEnvironment();
-		synchronized (environment) {
-			Object existing = environment.get(StandardAgentsNetworkEnvironmentEntries.CHAT_WITH_DOC_REFS_BY_CODE);
-			if (existing instanceof Map<?, ?>) {
-				return (Map<String, GResponseDocumentRef>) existing;
+	/**
+	 * The chunks kept of each document found: the configured cap, or the deep search
+	 * tools' one when the command asks a deep search, which reads each document wider.
+	 */
+	protected int maxChunksPerDocument(SearchAgentCommand command) {
+		if (deepSearchRequested(command)) {
+			final int deep = DeepSearchReduction.externalFragmentsPerDocument();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("maxChunksPerDocument(...) agent id:" + getId() + " deep search: " + deep
+						+ " chunk(s) per document");
 			}
-			Map<String, GResponseDocumentRef> byCode = new ConcurrentHashMap<>();
-			environment.put(StandardAgentsNetworkEnvironmentEntries.CHAT_WITH_DOC_REFS_BY_CODE, byCode);
-			return byCode;
+			return deep;
 		}
+		return maxChunksPerDocument;
 	}
 
 	/**
@@ -179,6 +181,19 @@ public abstract class GAbstractExternalDocumentsSearchAgentService extends GAbst
 	 */
 	protected ChunkingParams buildSearchChunkingParams(IGConfigurableChatModel agentModel, SearchAgentCommand command,
 			List<String> keywords) {
+		if (deepSearchRequested(command)) {
+			// the fragments are analysed in batches, not fitted in one context: each document
+			// is read as the deep search tools read it
+			final int fragments = DeepSearchReduction.externalFragmentsPerDocument();
+			final ChunkingParams deepParams = SearchResultsChunker.buildChunkingParams(
+					fragments * SearchResultsChunker.LLM_CHUNK_TOKENS, fragments, keywords);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("buildSearchChunkingParams(...) agent id:" + getId() + " deep search: " + fragments
+						+ " chunk(s) of " + SearchResultsChunker.LLM_CHUNK_TOKENS + " (tok) per document, policy:"
+						+ deepParams.getChunkingPolicy());
+			}
+			return deepParams;
+		}
 		final int topK = command != null ? Math.max(1, command.getTopK()) : 1;
 		final int perDocumentBudget = (int) Math.max(SearchResultsChunker.LLM_CHUNK_TOKENS,
 				(agentModel.getContextLength() * DOC_BUDGET_FRACTION) / topK);

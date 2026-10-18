@@ -37,6 +37,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.agent.standardtools.DeepSearchReduction;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -185,12 +186,26 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 				fullTextFilter.setAclAliases(aclAliases);
 			}
 
-			final int topK = retrievalTopK(command);
+			final boolean deepSearch = deepSearchRequested(command);
 			// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
-			final int tokensBudget = (int) (agentModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+			final int contextShare = (int) (agentModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+			int topK = retrievalTopK(command);
+			int tokensBudget = contextShare;
+			if (deepSearch) {
+				// a deep search reads a few fragments of many documents, analysed in batches: sized
+				// as the knowledge base deep search tool, not to one context
+				final int fragmentsPerDocument = DeepSearchReduction.fragmentsPerDocument(deepSearchDepth(command));
+				fullTextFilter.setPerDocumentInnerHits(fragmentsPerDocument);
+				topK = topK * DeepSearchReduction.knowledgeBaseFragmentsPerDocument();
+				tokensBudget = Math.max(contextShare, DeepSearchReduction.knowledgeBaseRetrievedTokens());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Deep search asked: " + fragmentsPerDocument + " full-text fragment(s) per document, topK:"
+							+ topK + " tokensBudget:" + tokensBudget);
+				}
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Searching internal knowledge base over " + kbCodes.size() + " knowledge base(s) topK:"
-						+ topK + " tokensBudget:" + tokensBudget);
+						+ topK + " tokensBudget:" + tokensBudget + " deepSearch:" + deepSearch);
 			}
 			AIDocumentsSet set = documentsSearchService.search(command.getCommand(), semanticQueries, semanticFilter,
 					fullTextQueries, fullTextFilter, command.getCommand(), topK, tokensBudget);
