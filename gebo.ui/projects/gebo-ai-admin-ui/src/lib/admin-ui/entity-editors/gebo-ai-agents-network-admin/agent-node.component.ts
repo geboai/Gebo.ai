@@ -158,9 +158,14 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
                     </div>
                   }
                   @if (mounted.excludedTools?.length) {
-                    <span class="font-semibold border-top-1 surface-border pt-2">Excluded from auto mounting ({{mounted.excludedTools!.length}})</span>
-                    @for (tool of sortedTools(mounted.excludedTools); track tool.name) {
-                      <span class="text-xs text-muted-color line-through" [title]="tool.description || ''">{{tool.name}}</span>
+                    <span class="font-semibold border-top-1 surface-border pt-2">Left out of auto mounting ({{mounted.excludedTools!.length}})</span>
+                    @for (group of excludedGroups(mounted); track group.reason) {
+                      <span class="text-xs font-semibold text-muted-color">{{group.title}} ({{group.tools.length}})</span>
+                      @for (tool of group.tools; track tool.name) {
+                        <span class="text-xs text-muted-color" [title]="tool.description || ''">
+                          <span class="line-through">{{tool.name}}</span> · {{tool.sourceDescription || tool.categoryDescription || tool.categoryCode}}
+                        </span>
+                      }
                     }
                   }
                 </div>
@@ -225,6 +230,26 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
 
     protected categoryClass(tool: MountedTool): string {
         return this.parent.getToolCategoryClass(tool.categoryCode);
+    }
+
+    /** What the administrator is told for each reason a tool is left out. */
+    private static readonly EXCLUSION_TITLES: { reason: MountedTool.ExclusionEnum, title: string }[] = [
+        { reason: "AGENT_CONFIGURATION", title: "Left out by this agent's configuration (its tool sources left out)" },
+        { reason: "SYSTEM_SETTINGS", title: "Kept out by the system settings" },
+        { reason: "AGENT_SERVICE", title: "Left out by the agent service's own rule" }
+    ];
+
+    /** The tools left out, grouped by why, each with its source: the administrator knows where to act. */
+    protected excludedGroups(mounted: AgentMountedTools): { reason: string, title: string, tools: MountedTool[] }[] {
+        const excluded = this.sortedTools(mounted.excludedTools);
+        const groups = AgentNodeComponent.EXCLUSION_TITLES.map(x => ({
+            reason: x.reason as string, title: x.title, tools: excluded.filter(tool => tool.exclusion === x.reason)
+        }));
+        const untold = excluded.filter(tool => !tool.exclusion);
+        if (untold.length) {
+            groups.push({ reason: "UNKNOWN", title: "Left out", tools: untold });
+        }
+        return groups.filter(group => group.tools.length > 0);
     }
 
     protected toolTooltip(tool: MountedTool): string {

@@ -199,6 +199,12 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		return INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE;
 	}
 
+	/** What this source is for the administrator: it shares its category with the knowledge base browsing. */
+	@Override
+	public String getDescription() {
+		return "Knowledge base search";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 		return ToolsCategory.KNOWLEDGE_BASE_VARIOUS_SEARCHES;

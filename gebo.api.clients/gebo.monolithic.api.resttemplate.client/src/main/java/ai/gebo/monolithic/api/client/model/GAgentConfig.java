@@ -27,7 +27,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-17T15:45:36.515336700+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -206,6 +206,9 @@ public class GAgentConfig {
 
   @JsonProperty("enabledFunctions")
   private List<String> enabledFunctions = null;
+
+  @JsonProperty("excludedToolSources")
+  private List<String> excludedToolSources = null;
 
   public GAgentConfig code(String code) {
     this.code = code;
@@ -725,6 +728,32 @@ public class GAgentConfig {
     this.enabledFunctions = enabledFunctions;
   }
 
+  public GAgentConfig excludedToolSources(List<String> excludedToolSources) {
+    this.excludedToolSources = excludedToolSources;
+    return this;
+  }
+
+  public GAgentConfig addExcludedToolSourcesItem(String excludedToolSourcesItem) {
+    if (this.excludedToolSources == null) {
+      this.excludedToolSources = new ArrayList<>();
+    }
+    this.excludedToolSources.add(excludedToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get excludedToolSources
+   * @return excludedToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getExcludedToolSources() {
+    return excludedToolSources;
+  }
+
+  public void setExcludedToolSources(List<String> excludedToolSources) {
+    this.excludedToolSources = excludedToolSources;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -761,12 +790,13 @@ public class GAgentConfig {
         Objects.equals(this.accessibleGroups, gagentConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gagentConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gagentConfig.accessibleToAll) &&
-        Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions);
+        Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions) &&
+        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources);
   }
 
 
@@ -802,6 +832,7 @@ public class GAgentConfig {
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
+    sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
     sb.append("}");
     return sb.toString();
   }

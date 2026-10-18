@@ -41,14 +41,14 @@ import ai.gebo.security.services.IGSecurityService;
  * working in a loop, search widely and get an analysis of all the documents found.
  * <p>
  * Whether the current user may search a service is checked when a tool is called,
- * as the search tools do. Kept out of the default network's automatic tool
- * mounting: there the deep searches are the deep search pipelines' job.
+ * as the search tools do. Left out by the tool-calling agent of the networks with
+ * search agents: there the deep searches are the deep search pipelines' job.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.agents.standard.deep-search-tools", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
 public class DeepSearchToolSource implements IGToolCallbackSource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchToolSource.class);
-	/** The id of this tool source, kept out of the default network's automatic mounting. */
+	/** The id of this tool source, left out by the tool-calling agent of the networks with search agents. */
 	public static final String DEEP_SEARCH_TOOL_SOURCE = "standard-deep-search-tool-source";
 	public static final String DEEP_SEARCH_WEB_TOOL = "deepSearchWeb";
 	static final String DEEP_SEARCH_TOOL_PREFIX = "deepSearch";
@@ -75,6 +75,12 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 	@Override
 	public String getId() {
 		return DEEP_SEARCH_TOOL_SOURCE;
+	}
+
+	/** What this source is for the administrator. */
+	@Override
+	public String getDescription() {
+		return "Deep searches of the knowledge bases, the search services and the web";
 	}
 
 	@Override

@@ -112,6 +112,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		final List<String> statusNotices = new ArrayList<>();
 		List<Document> documents = retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
+		// what the agent hands over: the documents found, or what it made of them
+		documents = deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session,
+				contextAgentPersona, notificationSink, runAs, statusNotices);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
 				+ documents.size() + " evidences", NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
@@ -138,6 +141,31 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 			}
 		}
 		return List.of(outMsg);
+	}
+
+	/**
+	 * What the agent hands over for the documents it retrieved: the documents
+	 * themselves by default. A searcher able to do more with them (e.g. a deep
+	 * search analysing them into one text when the command asks it) overrides this,
+	 * adding to {@code statusNotices} what the agents reading the outcome must know.
+	 *
+	 * @param documents          the documents retrieved, never null
+	 * @param command            the command of the search
+	 * @param chatRequestContext the request context of this agent
+	 * @param agentModel         the model the agent runs with
+	 * @param session            the collaboration session of the network
+	 * @param runAs              the identity the agent runs as
+	 */
+	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
+			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
+			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices)
+			throws AgentException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("deliverDocuments(...) documents search agent id:" + getId() + " hands over "
+					+ (documents != null ? documents.size() : 0) + " document(s) as retrieved");
+		}
+		return documents;
 	}
 
 	/**

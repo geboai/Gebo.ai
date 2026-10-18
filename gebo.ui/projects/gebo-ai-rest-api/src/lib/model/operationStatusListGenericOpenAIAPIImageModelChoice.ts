@@ -15,6 +15,6 @@ import { GenericOpenAIAPIImageModelChoice } from './genericOpenAIAPIImageModelCh
 export interface OperationStatusListGenericOpenAIAPIImageModelChoice { 
     result?: Array<GenericOpenAIAPIImageModelChoice>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

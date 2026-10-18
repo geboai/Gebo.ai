@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.model.ToolSourceInfo;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
@@ -201,6 +202,41 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 			}
 		}
 		return List.copyOf(enabledtrees);
+	}
+
+	@Override
+	public List<ToolSourceInfo> getToolSourceInfos() {
+		final List<IGToolCallbackSource> implementations = getImplementations();
+		final List<ToolSourceInfo> infos = new ArrayList<ToolSourceInfo>();
+		if (implementations == null) {
+			return infos;
+		}
+		for (IGToolCallbackSource source : implementations) {
+			if (source == null || source.getId() == null) {
+				continue;
+			}
+			final ToolsCategory category = source.getToolCategory();
+			int toolsCount = 0;
+			try {
+				final List<ToolCallback> callbacks = source.getToolCallbacks();
+				toolsCount = callbacks != null ? callbacks.size() : 0;
+			} catch (Throwable th) {
+				LOGGER.warn("Cannot count the tools of source '" + source.getId() + "'", th);
+			}
+			infos.add(new ToolSourceInfo(source.getId(), source.getDescription(),
+					category != null ? category.getCode() : null, category != null ? category.getDescription() : null,
+					toolsCount));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getToolSourceInfos() " + infos.size() + " tool source(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			for (ToolSourceInfo info : infos) {
+				LOGGER.trace("Tool source id:" + info.getId() + " description:" + info.getDescription() + " category:"
+						+ info.getCategoryCode() + " tools:" + info.getToolsCount());
+			}
+		}
+		return infos;
 	}
 
 	/**
