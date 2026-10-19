@@ -14,6 +14,7 @@ import { TooltipModule } from "primeng/tooltip";
 import { SimpleNode, NgDiagramNodeTemplate, NgDiagramNodeSelectedDirective, NgDiagramPortComponent } from "ng-diagram";
 import { GeboAIAgentsNetworkAdminComponent } from "./gebo-ai-agents-network-admin.component";
 import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, MountedTool } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 
 /**
  * A participant of the network on the graph: its name, the service it runs with
@@ -25,7 +26,7 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
 @Component({
     selector: "gebo-ai-agent-node-component",
     standalone: true,
-    imports: [ButtonModule, PopoverModule, TooltipModule, NgDiagramNodeSelectedDirective, NgDiagramPortComponent],
+    imports: [ButtonModule, PopoverModule, TooltipModule, NgDiagramNodeSelectedDirective, NgDiagramPortComponent, GeboAIFieldTranslationContainerModule],
     hostDirectives: [{ directive: NgDiagramNodeSelectedDirective, inputs: ["node"] }],
     template: `
         @let participant = node().data;
@@ -52,18 +53,18 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
               style="min-width: 0;" [title]="name">{{name}}</span>
             <div class="flex gap-1 flex-shrink-0">
               @if (participant.inputNode) {
-                <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" title="Network input node">
-                  <i class="pi pi-sign-in"></i> IN
+                <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" id="NodeInputBadge" gebo-ai-label title="Network input node">
+                  <i class="pi pi-sign-in"></i> <span id="InputNodeBadge" gebo-ai-text>IN</span>
                 </span>
               }
               @if (participant.outputNode) {
-                <span class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold flex align-items-center gap-1" title="Network output node">
-                  <i class="pi pi-sign-out"></i> OUT
+                <span class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold flex align-items-center gap-1" id="NodeOutputBadge" gebo-ai-label title="Network output node">
+                  <i class="pi pi-sign-out"></i> <span id="OutputNodeBadge" gebo-ai-text>OUT</span>
                 </span>
               }
               @if (participant.controller) {
-                <span class="p-1 border-round bg-orange-100 text-orange-700 text-xs font-semibold flex align-items-center gap-1" title="Controller: the network's loop is counted on it">
-                  <i class="pi pi-sync"></i> CTRL
+                <span class="p-1 border-round bg-orange-100 text-orange-700 text-xs font-semibold flex align-items-center gap-1" id="NodeControllerBadge" gebo-ai-label title="Controller: the network's loop is counted on it">
+                  <i class="pi pi-sync"></i> <span id="ControllerBadge" gebo-ai-text>CTRL</span>
                 </span>
               }
             </div>
@@ -77,7 +78,7 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
             </div>
             <button pButton icon="pi pi-cog" class="p-button-rounded p-button-text p-button-sm p-0 w-2rem h-2rem"
               (click)="$event.stopPropagation(); parent.editAgentConfig(participant.agentConfigCode)"
-            title="Edit the agent configuration"></button>
+            id="NodeEditConfigBtn" gebo-ai-label title="Edit the agent configuration"></button>
           </div>
 
           <div class="text-xs flex align-items-center gap-1 flex-wrap" style="font-family: monospace;">
@@ -85,25 +86,25 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
               <span class="px-1 border-round bg-blue-50 text-blue-700" [pTooltip]="service.inputType" tooltipPosition="top" appendTo="body">{{parent.shortType(service.inputType)}}</span>
               <i class="pi pi-arrow-right text-muted-color" style="font-size: 0.6rem"></i>
               @if (parent.isRouter(service)) {
-                <span class="px-1 border-round bg-orange-50 text-orange-700" pTooltip="A router sends each agent it talks to a command typed on that agent's input" tooltipPosition="top" appendTo="body">commands</span>
+                <span id="CommandsLabel" gebo-ai-text class="px-1 border-round bg-orange-50 text-orange-700" pTooltip="A router sends each agent it talks to a command typed on that agent's input" tooltipPosition="top" appendTo="body">commands</span>
               } @else {
                 <span class="px-1 border-round bg-purple-50 text-purple-700" [pTooltip]="service.outputType" tooltipPosition="top" appendTo="body">{{parent.shortType(service.outputType)}}</span>
               }
               @if (parent.isResponder(service)) {
-                <span class="px-1 border-round bg-teal-50 text-teal-700" pTooltip="Replies to whoever asked; the reply is shared in the session" tooltipPosition="top" appendTo="body">replies</span>
+                <span id="RepliesLabel" gebo-ai-text class="px-1 border-round bg-teal-50 text-teal-700" pTooltip="Replies to whoever asked; the reply is shared in the session" tooltipPosition="top" appendTo="body">replies</span>
               }
               @if (service.reactive) {
-                <span class="px-1 border-round bg-purple-100 text-purple-800" pTooltip="Answers the user directly: the single output node the network streams" tooltipPosition="top" appendTo="body">streams</span>
+                <span id="StreamsLabel" gebo-ai-text class="px-1 border-round bg-purple-100 text-purple-800" pTooltip="Answers the user directly: the single output node the network streams" tooltipPosition="top" appendTo="body">streams</span>
               }
             } @else {
-              <span class="px-1 border-round bg-red-100 text-red-700">unknown service</span>
+              <span id="NodeUnknownService" gebo-ai-text class="px-1 border-round bg-red-100 text-red-700">unknown service</span>
             }
           </div>
 
           <div class="text-xs text-muted-color">
             {{participant.allowedToNotifyUser === false ? 'silent' : 'notifies'}} · {{participant.canCallTools === false ? 'no tools' : 'tools'}}
-            @if (participant.canCallOtherAgents) { · delegates }
-            @if (participant.controller) { · controller }
+            @if (participant.canCallOtherAgents) { · <span id="NodeDelegates" gebo-ai-text>delegates</span> }
+            @if (participant.controller) { · <span id="NodeControllerRole" gebo-ai-text>controller</span> }
           </div>
 
           @if (parent.getMountedTools(participant.agentConfigCode); as mounted) {
@@ -113,13 +114,13 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
               tooltipPosition="top" appendTo="body">
               <div class="flex align-items-center gap-1 text-xs">
                 <i class="pi pi-wrench text-muted-color"></i>
-                <span class="font-semibold text-muted-color">Tools ({{mounted.tools?.length || 0}})</span>
+                <span class="font-semibold text-muted-color"><span id="NodeToolsTitle" gebo-ai-text>Tools</span> ({{mounted.tools?.length || 0}})</span>
                 @if (mounted.mountMode === 'AUTO') {
-                  <span class="px-1 border-round bg-primary-50 text-primary-700 font-semibold"
+                  <span id="NodeAutoBadge" gebo-ai-text class="px-1 border-round bg-primary-50 text-primary-700 font-semibold"
                     [pTooltip]="'Auto mounting: every registered tool' + (mounted.excludedTools?.length ? ', but ' + mounted.excludedTools!.length + ' excluded' : '')"
                     tooltipPosition="top" appendTo="body">AUTO</span>
                 } @else {
-                  <span class="px-1 border-round surface-200 font-semibold"
+                  <span id="NodeSelectedBadge" gebo-ai-text class="px-1 border-round surface-200 font-semibold"
                     pTooltip="The tools selected in the agent configuration" tooltipPosition="top" appendTo="body">SELECTED</span>
                 }
               </div>
@@ -141,11 +142,11 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
                   }
                 </div>
               } @else {
-                <span class="text-xs text-muted-color">No tools mounted</span>
+                <span id="NodeNoToolsMounted" gebo-ai-text class="text-xs text-muted-color">No tools mounted</span>
               }
               <p-popover #toolsPopover appendTo="body">
                 <div class="flex flex-column gap-2 text-sm" style="max-width: 420px; max-height: 360px; overflow: auto;">
-                  <span class="font-semibold">Tools mounted by {{name}} ({{mounted.mountMode === 'AUTO' ? 'auto mounting' : 'selected'}})</span>
+                  <span class="font-semibold"><span id="NodeToolsMountedBy" gebo-ai-text>Tools mounted by</span> {{name}} ({{mounted.mountMode === 'AUTO' ? 'auto mounting' : 'selected'}})</span>
                   @for (tool of sortedTools(mounted.tools); track tool.name) {
                     <div class="flex flex-column">
                       <span class="flex align-items-center gap-1">
@@ -158,7 +159,7 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
                     </div>
                   }
                   @if (mounted.excludedTools?.length) {
-                    <span class="font-semibold border-top-1 surface-border pt-2">Left out of auto mounting ({{mounted.excludedTools!.length}})</span>
+                    <span class="font-semibold border-top-1 surface-border pt-2"><span id="NodeLeftOutTitle" gebo-ai-text>Left out of auto mounting</span> ({{mounted.excludedTools!.length}})</span>
                     @for (group of excludedGroups(mounted); track group.reason) {
                       <span class="text-xs font-semibold text-muted-color">{{group.title}} ({{group.tools.length}})</span>
                       @for (tool of group.tools; track tool.name) {
@@ -176,7 +177,7 @@ import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, Mou
           @if (!parent.readonly) {
             <div class="flex justify-content-end gap-1 mt-1 border-top-1 surface-border pt-1">
               <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm p-0 w-2rem h-2rem"
-              title="Remove from the network" (click)="$event.stopPropagation(); parent.deleteParticipant(participant)"></button>
+              id="NodeRemoveBtn" gebo-ai-label title="Remove from the network" (click)="$event.stopPropagation(); parent.deleteParticipant(participant)"></button>
             </div>
           }
         </div>

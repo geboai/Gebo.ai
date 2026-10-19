@@ -6393,6 +6393,9 @@
         "header": "Customize the prompt",
         "acceptLabel": "Yes",
         "rejectLabel": "No"
+      },
+      "DefaultModelSuffix": {
+        "label": "default"
       }
     }
   },
@@ -7634,6 +7637,78 @@
       },
       "ControllerNoHint": {
         "label": "only a router or an output node can be the controller"
+      },
+      "NodeInputBadge": {
+        "help": "Network input node"
+      },
+      "InputNodeBadge": {
+        "label": "IN",
+        "help": "Input Node"
+      },
+      "NodeOutputBadge": {
+        "help": "Network output node"
+      },
+      "OutputNodeBadge": {
+        "label": "OUT",
+        "help": "Output Node"
+      },
+      "NodeControllerBadge": {
+        "help": "Controller: the network's loop is counted on it"
+      },
+      "ControllerBadge": {
+        "label": "CTRL",
+        "help": "Controller"
+      },
+      "NodeEditConfigBtn": {
+        "help": "Edit the agent configuration"
+      },
+      "CommandsLabel": {
+        "label": "commands"
+      },
+      "RepliesLabel": {
+        "label": "replies"
+      },
+      "StreamsLabel": {
+        "label": "streams"
+      },
+      "NodeUnknownService": {
+        "label": "unknown service"
+      },
+      "NodeDelegates": {
+        "label": "delegates"
+      },
+      "NodeControllerRole": {
+        "label": "controller"
+      },
+      "NodeToolsTitle": {
+        "label": "Tools"
+      },
+      "NodeAutoBadge": {
+        "label": "AUTO"
+      },
+      "NodeSelectedBadge": {
+        "label": "SELECTED"
+      },
+      "NodeNoToolsMounted": {
+        "label": "No tools mounted"
+      },
+      "NodeToolsMountedBy": {
+        "label": "Tools mounted by"
+      },
+      "NodeLeftOutTitle": {
+        "label": "Left out of auto mounting"
+      },
+      "NodeRemoveBtn": {
+        "help": "Remove from the network"
+      },
+      "ContractInLabel": {
+        "label": "in"
+      },
+      "ContractOutLabel": {
+        "label": "out"
+      },
+      "RemoveParticipantRowBtn": {
+        "help": "Remove"
       }
     }
   },
