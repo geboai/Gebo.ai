@@ -32,6 +32,10 @@ import ai.gebo.core.messages.GDeletedKnowledgeBasePayload;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 
 /**
  * Controller to manage knowledge bases in the application.
@@ -54,6 +58,13 @@ public class KnowledgeBaseController {
 	// Repository for Knowledge Base operations
 	@Autowired 
 	private KnowledgeBaseRepository kbRepo;
+
+	/**
+	 * The insert/update/delete of a knowledge base are security events: a knowledge
+	 * base decides which documents the chats and agents search, and for whom.
+	 */
+	@Autowired
+	private IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**
 	 * Default constructor for KnowledgeBaseController.
@@ -118,12 +129,19 @@ public class KnowledgeBaseController {
 	 */
 	@PostMapping(value = "updateKnowledgeBase", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GKnowledgeBase updateKnowledgeBase(@RequestBody GKnowledgeBase entity) throws GeboPersistenceException {
-		refuseIfDeclaredInConfiguration(entity);
-		// Set default ObjectSpaceType if not set
-		if (entity.getObjectSpaceType() == null) {
-			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
-		}
-		return persistenceManager.update(entity);
+		// created on entry, so the event's caller stack points at this endpoint; a write
+		// refused because the configuration owns the record is audited as a failure too
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.KNOWLEDGE_BASE_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.KNOWLEDGE_BASE, entity != null ? entity.getCode() : null, entity, () -> {
+					refuseIfDeclaredInConfiguration(entity);
+					// Set default ObjectSpaceType if not set
+					if (entity.getObjectSpaceType() == null) {
+						entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
+					}
+					return persistenceManager.update(entity);
+				});
 	}
 
 	/**
@@ -135,12 +153,17 @@ public class KnowledgeBaseController {
 	 */
 	@PostMapping(value = "insertKnowledgeBase", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GKnowledgeBase insertKnowledgeBase(@RequestBody GKnowledgeBase entity) throws GeboPersistenceException {
-		refuseIfDeclaredInConfiguration(entity);
-		// Set default ObjectSpaceType if not set
-		if (entity.getObjectSpaceType() == null) {
-			entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
-		}
-		return persistenceManager.insert(entity);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.KNOWLEDGE_BASE_INSERT,
+				SecurityAuditTaxonomy.ResourceType.KNOWLEDGE_BASE, entity != null ? entity.getCode() : null, entity, () -> {
+					refuseIfDeclaredInConfiguration(entity);
+					// Set default ObjectSpaceType if not set
+					if (entity.getObjectSpaceType() == null) {
+						entity.setObjectSpaceType(ObjectSpaceType.COMPANY);
+					}
+					return persistenceManager.insert(entity);
+				});
 	}
 
 	/**
@@ -151,8 +174,13 @@ public class KnowledgeBaseController {
 	 */
 	@PostMapping(value = "deleteKnowledgeBase", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteKnowledgeBase(@RequestBody GKnowledgeBase entity) throws GeboPersistenceException {
-		refuseIfDeclaredInConfiguration(entity);
-		persistenceManager.delete(entity);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.KNOWLEDGE_BASE_DELETE,
+				SecurityAuditTaxonomy.ResourceType.KNOWLEDGE_BASE, entity != null ? entity.getCode() : null, null, () -> {
+					refuseIfDeclaredInConfiguration(entity);
+					persistenceManager.delete(entity);
+				});
 		
 		// Create payload for deleted knowledge base
 		GDeletedKnowledgeBasePayload payload = new GDeletedKnowledgeBasePayload();

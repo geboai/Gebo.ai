@@ -38,6 +38,7 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.images.builder.Transferable;
+import org.testcontainers.utility.MountableFile;
 
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
@@ -68,7 +69,11 @@ import tools.jackson.databind.ObjectMapper;
  * flattened by Wazuh as {@code parent.child});</li>
  * <li>the taxonomy fields Wazuh rules/dashboards would key on
  * ({@code timestamp}, {@code eventType}, {@code category}, {@code action},
- * {@code outcome}) are present on every single event.</li>
+ * {@code outcome}) are present on every single event;</li>
+ * <li>the rules this project ships ({@code deploy/wazuh/manager/local_rules.xml},
+ * loaded into the manager before it starts) classify every event with the rule
+ * of its eventType - so a new event type logged without a rule of its own fails
+ * here instead of reaching the SIEM unclassified.</li>
  * </ul>
  *
  * <p>
@@ -130,6 +135,30 @@ public class WazuhSecurityLogCompatibilityTest {
 	private static final List<String> MANDATORY_EVENT_FIELDS = List.of("timestamp", "eventType", "category", "action",
 			"outcome");
 
+	/**
+	 * The rules of deploy/wazuh/manager/local_rules.xml an event of each eventType
+	 * may end on. Several for the types whose rule depends on the outcome
+	 * (authentication: success, failure, the brute-force escalation of repeated
+	 * failures, denied) or that have a failure rule of their own. A type missing here
+	 * is a type the shipped rules do not classify: add a rule for it there and its id
+	 * here.
+	 */
+	private static final Map<String, Set<String>> RULES_PER_EVENT_TYPE = Map.ofEntries(
+			Map.entry("authentication", Set.of("100201", "100202", "100203", "100204")),
+			Map.entry("sessionManagement", Set.of("100205")),
+			Map.entry("secretManagement", Set.of("100210")), Map.entry("apiKeyManagement", Set.of("100210")),
+			Map.entry("llmConfiguration", Set.of("100211")), Map.entry("userAdministration", Set.of("100212")),
+			Map.entry("integrationConfiguration", Set.of("100213")),
+			Map.entry("integrationDataAccess", Set.of("100214", "100216")),
+			Map.entry("llmInvocation", Set.of("100215", "100216")),
+			Map.entry("agentsConfiguration", Set.of("100217")),
+			Map.entry("interoperabilityConfiguration", Set.of("100218")),
+			Map.entry("knowledgeConfiguration", Set.of("100219")),
+			Map.entry("searchConfiguration", Set.of("100220")));
+
+	/** Where the manager reads the local rules the tested file replaces. */
+	private static final String IN_CONTAINER_LOCAL_RULES = "/var/ossec/etc/rules/local_rules.xml";
+
 	private static GenericContainer<?> wazuhManager;
 
 	/** The audit lines actually fed to wazuh-logtest, in the order they were fed. */
@@ -138,12 +167,24 @@ public class WazuhSecurityLogCompatibilityTest {
 	/** wazuh-logtest's phase-2 decoding result per fed event, same order. */
 	private static List<DecodedEvent> decodedEvents;
 
+	/** The shipped rules file loaded into the manager, null when it cannot be found. */
+	private static File shippedRules;
+
 	/**
 	 * wazuh-logtest's per-event report: the decoder Wazuh selected plus the
 	 * fields it extracted (flattened, values stringified - that is how Wazuh
-	 * would hand them to the indexer/rules).
+	 * would hand them to the indexer/rules), and the id of the rule phase 3 ended
+	 * on (null when it reported none).
 	 */
-	private record DecodedEvent(String decoderName, Map<String, String> fields) {
+	private record DecodedEvent(String decoderName, Map<String, String> fields, String ruleId) {
+	}
+
+	private static File resolveShippedRulesFile() {
+		// user.dir is gebo.apps.parent/gebo.ai.app during `mvn test`: the rules live at
+		// the repository root, next to the deployment files that install them.
+		String override = System.getProperty("gebo.wazuh.rules.file");
+		return override != null ? new File(override)
+				: new File(System.getProperty("user.dir"), "../../deploy/wazuh/manager/local_rules.xml");
 	}
 
 	private static File resolveSecurityLogFile() {
@@ -178,6 +219,11 @@ public class WazuhSecurityLogCompatibilityTest {
 		LOGGER.info("Checking Wazuh compatibility of {} of the {} audit events in {} using {}", sentEvents.size(),
 				lines.size(), securityLog, WAZUH_IMAGE);
 
+		File rules = resolveShippedRulesFile();
+		shippedRules = rules.isFile() ? rules.getCanonicalFile() : null;
+		if (shippedRules == null) {
+			LOGGER.warn("Shipped Wazuh rules not found at {}: the rule classification is not checked", rules);
+		}
 		wazuhManager = new GenericContainer<>(WAZUH_IMAGE)
 				// The manager's own daemons are what we test against, so wait
 				// until analysisd really answers on the logtest socket AND
@@ -188,6 +234,12 @@ public class WazuhSecurityLogCompatibilityTest {
 						+ LOGTEST_BINARY + " 2>&1 | grep -q \"name: 'json'\"")
 						.withStartupTimeout(Duration.ofMinutes(5)))
 				.withLogConsumer(new Slf4jLogConsumer(LOGGER).withPrefix("wazuh-manager"));
+		if (shippedRules != null) {
+			// Copied before the start, so analysisd loads them at boot (a syntax error
+			// in them would keep it from answering, and the wait above times out).
+			wazuhManager.withCopyFileToContainer(MountableFile.forHostPath(shippedRules.toPath(), 0644),
+					IN_CONTAINER_LOCAL_RULES);
+		}
 		wazuhManager.start();
 
 		wazuhManager.copyFileToContainer(Transferable.of(String.join("\n", sentEvents) + "\n"), IN_CONTAINER_SAMPLE);
@@ -277,9 +329,8 @@ public class WazuhSecurityLogCompatibilityTest {
 	 * 	id: '1002'
 	 * </pre>
 	 *
-	 * Phase 3 is intentionally ignored: which (if any) of Wazuh's stock rules
-	 * fires on a Gebo audit event - and whether it is deduplicated away - is
-	 * not part of the log format's compatibility.
+	 * Phase 3 gives the rule the event ended on, checked against the shipped
+	 * rules by {@link #shippedRulesClassifyEveryAuditEventByItsEventType()}.
 	 *
 	 * <p>
 	 * Each field is reported as a tab-indented {@code key: 'value'} line, but a
@@ -293,6 +344,7 @@ public class WazuhSecurityLogCompatibilityTest {
 		String decoderName = null;
 		Map<String, String> fields = null;
 		boolean inDecodingPhase = false;
+		boolean inRulesPhase = false;
 		String pendingKey = null;
 		StringBuilder pendingValue = null;
 		for (String rawLine : output.split("\\R")) {
@@ -310,14 +362,26 @@ public class WazuhSecurityLogCompatibilityTest {
 				decoderName = null;
 				fields = new LinkedHashMap<>();
 				inDecodingPhase = true;
+				inRulesPhase = false;
 				continue;
 			}
 			if (rawLine.startsWith("**Phase")) {
 				// Phase 1 of the NEXT event (or this event's phase 3) closes
 				// the decoding section we were collecting.
 				if (inDecodingPhase) {
-					events.add(new DecodedEvent(decoderName, fields));
+					events.add(new DecodedEvent(decoderName, fields, null));
 					inDecodingPhase = false;
+				}
+				inRulesPhase = rawLine.startsWith("**Phase 3") && !events.isEmpty();
+				continue;
+			}
+			if (inRulesPhase && rawLine.startsWith("\t")) {
+				String ruleField = rawLine.strip();
+				if (ruleField.startsWith("id: '") && ruleField.endsWith("'")) {
+					DecodedEvent last = events.remove(events.size() - 1);
+					events.add(new DecodedEvent(last.decoderName(), last.fields(),
+							ruleField.substring("id: '".length(), ruleField.length() - 1)));
+					inRulesPhase = false;
 				}
 				continue;
 			}
@@ -345,7 +409,7 @@ public class WazuhSecurityLogCompatibilityTest {
 			}
 		}
 		if (inDecodingPhase) {
-			events.add(new DecodedEvent(decoderName, fields));
+			events.add(new DecodedEvent(decoderName, fields, null));
 		}
 		return events;
 	}
@@ -396,6 +460,34 @@ public class WazuhSecurityLogCompatibilityTest {
 								+ "' field, so no rule could classify or correlate it - fix the call site logging it "
 								+ "(see its stackPoint):\n" + event);
 			}
+		}
+	}
+
+	/**
+	 * The shipped rules classify every audit event with the rule of its eventType.
+	 * Events ending on a level-0 rule (data access, model invocations) may be
+	 * reported by wazuh-logtest without a phase 3; every other one must name its
+	 * rule.
+	 */
+	@Test
+	public void shippedRulesClassifyEveryAuditEventByItsEventType() {
+		assumeTrue(shippedRules != null, "The shipped Wazuh rules were not found: nothing to check");
+		for (int i = 0; i < decodedEvents.size(); i++) {
+			DecodedEvent decoded = decodedEvents.get(i);
+			String event = sentEvents.get(i);
+			String eventType = decoded.fields().get("eventType");
+			Set<String> expected = RULES_PER_EVENT_TYPE.get(eventType);
+			assertTrue(expected != null, () -> "No rule of " + shippedRules + " classifies the eventType '"
+					+ eventType + "': add one there and its id to RULES_PER_EVENT_TYPE. Event:\n" + event);
+			String ruleId = decoded.ruleId();
+			boolean levelZero = ("integrationDataAccess".equals(eventType) || "llmInvocation".equals(eventType))
+					&& !"failure".equals(decoded.fields().get("outcome"));
+			if (ruleId == null && levelZero) {
+				continue;
+			}
+			assertTrue(ruleId != null && expected.contains(ruleId),
+					() -> "This audit event ended on rule " + ruleId + " instead of one of " + expected + " of "
+							+ shippedRules + ":\n" + event);
 		}
 	}
 

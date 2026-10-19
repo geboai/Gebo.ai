@@ -19,7 +19,11 @@ import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.ILLMSUsageCrudService;
 import ai.gebo.llms.abstraction.layer.services.StackSamplingUtils;
 import ai.gebo.model.ModelType;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Writes the single usage record of one model call, whatever the model type. The
@@ -28,12 +32,28 @@ import lombok.AllArgsConstructor;
  * the same way for every type.
  */
 @Service
-@AllArgsConstructor
 public class LLMUsageRecorder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LLMUsageRecorder.class);
 	/** Number of distinct packages sampled from the caller's stack. */
 	public static final int CALLER_PACKAGES = 3;
 	private final ILLMSUsageCrudService usageCrudService;
+	/**
+	 * The security audit log every chat call is written to (llmInvokeChat): this is
+	 * the one point every chat call passes, the agentic chats included, which never
+	 * reach the chat services. Null records the usage only (unit tests).
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	public LLMUsageRecorder(ILLMSUsageCrudService usageCrudService) {
+		this(usageCrudService, null);
+	}
+
+	@Autowired
+	public LLMUsageRecorder(ILLMSUsageCrudService usageCrudService,
+			IGSecurityAuditLoggerService securityAuditLoggerService) {
+		this.usageCrudService = usageCrudService;
+		this.securityAuditLoggerService = securityAuditLoggerService;
+	}
 
 	/**
 	 * Package prefixes left out of the caller stack: the platform and the frameworks
@@ -182,6 +202,64 @@ public class LLMUsageRecorder {
 			LOGGER.trace("<USAGE_CALLER_STACK>" + callerStack + "</USAGE_CALLER_STACK>");
 		}
 		this.usageCrudService.enqueueUsage(detail);
+		if (detail.getModelType() == ModelType.CHAT) {
+			auditChatCall(config != null ? config.getCode() : null, detail, username, callerStack, responseTimeMs,
+					outcome);
+		}
+	}
+
+	/**
+	 * The llmInvokeChat security audit event of one chat call. Metadata only by design:
+	 * model, provider, outcome, latency and token counts, never the prompt or the
+	 * answer, which would make the audit log a leak surface. The user is read from the
+	 * request context when there is one; a call accounted on a Reactor thread, with no
+	 * request context, carries the user the caller sampled in its details. Best effort,
+	 * like the usage: a failure here never fails the call.
+	 */
+	private void auditChatCall(String configCode, LLMUsageDetailDto detail, String username, String callerStack,
+			long responseTimeMs, LLMCallOutcome outcome) {
+		if (securityAuditLoggerService == null) {
+			return;
+		}
+		try {
+			SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+			event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
+			event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
+			event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_CHAT);
+			// the model configuration, as the chat services named it; the type and the
+			// model it runs are details
+			event.setResourceId(configCode != null ? configCode : detail.getModelTypeCode());
+			event.setOutcome(outcome == LLMCallOutcome.SUCCESS ? SecurityAuditTaxonomy.Outcome.SUCCESS
+					: SecurityAuditTaxonomy.Outcome.FAILURE);
+			if (outcome == LLMCallOutcome.CANCELLED) {
+				event.getDetails().put("reason", "cancelled");
+			}
+			if (detail.getProviderId() != null) {
+				event.getDetails().put("provider", detail.getProviderId());
+			}
+			if (detail.getModelTypeCode() != null) {
+				event.getDetails().put("modelType", detail.getModelTypeCode());
+			}
+			if (detail.getModel() != null) {
+				event.getDetails().put("model", detail.getModel());
+			}
+			event.getDetails().put("latencyMs", responseTimeMs);
+			event.getDetails().put("inputTokens", detail.getInputToken());
+			event.getDetails().put("outputTokens", detail.getOutputToken());
+			if (event.getUserId() == null && username != null) {
+				event.getDetails().put("username", username);
+			}
+			if (callerStack != null) {
+				event.getDetails().put("caller", callerStack);
+			}
+			securityAuditLoggerService.log(event);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Audited chat call model=" + detail.getModelTypeCode() + " outcome=" + event.getOutcome());
+			}
+		} catch (Throwable e) {
+			LOGGER.error("Cannot audit the chat call of model=" + detail.getModelTypeCode()
+					+ ", the call is accounted without its audit event", e);
+		}
 	}
 
 	/**

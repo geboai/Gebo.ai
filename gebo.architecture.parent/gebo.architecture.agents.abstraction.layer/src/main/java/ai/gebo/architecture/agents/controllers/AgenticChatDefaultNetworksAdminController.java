@@ -27,6 +27,10 @@ import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService.AgenticChatDefaultNetworkInfo;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,6 +46,11 @@ import lombok.Data;
 public class AgenticChatDefaultNetworksAdminController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AgenticChatDefaultNetworksAdminController.class);
 	private final IGAgenticChatDefaultNetworkOfAgentsService defaultsService;
+	/**
+	 * Choosing the network every chat of a pipeline type is handed to is a security
+	 * event: it changes, for every user, which agents, models and tools answer.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@Data
 	public static class AgenticChatDefaultNetworkRequest {
@@ -78,12 +87,21 @@ public class AgenticChatDefaultNetworksAdminController {
 			LOGGER.debug("REST setAgenticChatDefaultNetwork(" + request.getPipelineType() + ", "
 					+ request.getDefaultChatNetworkOfAgents() + ")");
 		}
-		try {
-			return OperationStatus.of(defaultsService.setAgenticChatDefaultNetwork(request.getPipelineType(),
-					request.getDefaultChatNetworkOfAgents()));
-		} catch (IllegalArgumentException e) {
-			return OperationStatus.ofError("Chat network of agents", e.getMessage());
-		}
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		event.getDetails().put("network", request.getDefaultChatNetworkOfAgents());
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.AGENTIC_CHAT_DEFAULT_NETWORK_SET,
+				SecurityAuditTaxonomy.ResourceType.AGENTIC_CHAT_DEFAULT_NETWORK, pipelineTypeOf(request), null, () -> {
+					try {
+						return OperationStatus.of(defaultsService.setAgenticChatDefaultNetwork(request.getPipelineType(),
+								request.getDefaultChatNetworkOfAgents()));
+					} catch (IllegalArgumentException e) {
+						return OperationStatus.<AgenticChatDefaultNetworkInfo>ofError("Chat network of agents",
+								e.getMessage());
+					}
+				});
 	}
 
 	@PostMapping(value = "resetAgenticChatDefaultNetwork", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -92,10 +110,23 @@ public class AgenticChatDefaultNetworksAdminController {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST resetAgenticChatDefaultNetwork(" + request.getPipelineType() + ")");
 		}
-		try {
-			return OperationStatus.of(defaultsService.resetAgenticChatDefaultNetwork(request.getPipelineType()));
-		} catch (IllegalArgumentException e) {
-			return OperationStatus.ofError("Chat network of agents", e.getMessage());
-		}
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.AGENTIC_CHAT_DEFAULT_NETWORK_RESET,
+				SecurityAuditTaxonomy.ResourceType.AGENTIC_CHAT_DEFAULT_NETWORK, pipelineTypeOf(request), null, () -> {
+					try {
+						return OperationStatus
+								.of(defaultsService.resetAgenticChatDefaultNetwork(request.getPipelineType()));
+					} catch (IllegalArgumentException e) {
+						return OperationStatus.<AgenticChatDefaultNetworkInfo>ofError("Chat network of agents",
+								e.getMessage());
+					}
+				});
+	}
+
+	/** The pipeline type a default is set for, the resource of its security event. */
+	private static String pipelineTypeOf(AgenticChatDefaultNetworkRequest request) {
+		return request != null && request.getPipelineType() != null ? request.getPipelineType().name() : null;
 	}
 }

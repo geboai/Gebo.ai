@@ -44,7 +44,11 @@ x-microservice-env: &microservice-env
   JAVA_TOOL_OPTIONS: "-Xms256m -Xmx1g"
   MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus,metrics
   MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
-  MANAGEMENT_OTLP_TRACING_ENDPOINT: http://otel-collector:4318/v1/traces
+  # Spring Boot 4 name: the old MANAGEMENT_OTLP_TRACING_ENDPOINT is no longer read.
+  MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://otel-collector:4318/v1/traces
+  # Actuator management port, scraped by prometheus.yml and never published: there
+  # health and prometheus answer without a login, on the service ports they need one.
+  MANAGEMENT_SERVER_PORT: "13990"
 
 # The config mount is the only volume every service shares verbatim, so it is the
 # only one this anchor can carry: /opt/gebo.ai/{home,work,logs} has to be a NAMED
@@ -136,6 +140,12 @@ services:
     depends_on: [eureka]
     environment:
       EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: http://eureka:13017/eureka/
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: health,prometheus,metrics
+      MANAGEMENT_TRACING_SAMPLING_PROBABILITY: "1.0"
+      MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT: http://otel-collector:4318/v1/traces
+      # The gateway has no login of its own: its actuator moves to the unpublished
+      # management port, so the published 13000 no longer serves it.
+      MANAGEMENT_SERVER_PORT: "13990"
     ports:
       - "13000:13000"
     # Routes are resolved from Eureka at request time, so the edge holds no
@@ -147,7 +157,7 @@ services:
 
   # ---------------- Observability stack (metrics, traces, dashboards) --------
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:latest
+    image: otel/opentelemetry-collector-contrib:0.163.1
     restart: unless-stopped
     command: ["--config=/etc/otelcol-contrib/config.yaml"]
     volumes:
@@ -157,7 +167,7 @@ services:
     networks: [gebo-net]
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v3.15.0
     restart: unless-stopped
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
@@ -167,7 +177,7 @@ services:
     networks: [gebo-net]
 
   tempo:
-    image: grafana/tempo
+    image: grafana/tempo:2.8.2
     restart: unless-stopped
     command: ["-config.file=/etc/tempo.yaml"]
     volumes:
@@ -176,7 +186,7 @@ services:
     networks: [gebo-net]
 
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:13.2.4
     restart: unless-stopped
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"

@@ -6637,6 +6637,9 @@
       },
       "NoDataFlowsText": {
         "label": "No component of this installation reported a data-flow configuration. This is expected when no data source has been configured yet, and while components are still being migrated to publish their configuration."
+      },
+      "SecurityAuditEventsDescription": {
+        "label": "An append-only audit trail (security-log.jsonl) records authentication, credential changes, user administration and the configuration changes of models, networks of agents, MCP servers and A2A agents, knowledge bases, chat profiles and search - one JSON object per line, ingested natively by Wazuh's json decoder and any SIEM. Retained 365 days by default, and its Wazuh compatibility and rules are verified on every build."
       }
     }
   },

@@ -17,6 +17,15 @@ public class SecurityAuditTaxonomy {
 		public static final String SECRET_MANAGEMENT = "secretManagement";
 		public static final String API_KEY_MANAGEMENT = "apiKeyManagement";
 		public static final String USER_ADMINISTRATION = "userAdministration";
+		// Configuration changes that decide what the AI may do and for whom: the agents
+		// and networks of agents, the external tools and agents they reach (MCP, A2A),
+		// the chat profiles and knowledge bases users get, and the external search
+		// sources. Each one can widen access or open a new outbound data flow, so they
+		// are security events in their own right (see ConfigurationAuditSupport).
+		public static final String AGENTS_CONFIGURATION = "agentsConfiguration";
+		public static final String INTEROPERABILITY_CONFIGURATION = "interoperabilityConfiguration";
+		public static final String KNOWLEDGE_CONFIGURATION = "knowledgeConfiguration";
+		public static final String SEARCH_CONFIGURATION = "searchConfiguration";
 	}
 
 	public static class Category {
@@ -29,6 +38,10 @@ public class SecurityAuditTaxonomy {
 		public static final String SECRET_MANAGEMENT = EventType.SECRET_MANAGEMENT;
 		public static final String API_KEY_MANAGEMENT = EventType.API_KEY_MANAGEMENT;
 		public static final String USER_ADMINISTRATION = EventType.USER_ADMINISTRATION;
+		public static final String AGENTS_CONFIGURATION = EventType.AGENTS_CONFIGURATION;
+		public static final String INTEROPERABILITY_CONFIGURATION = EventType.INTEROPERABILITY_CONFIGURATION;
+		public static final String KNOWLEDGE_CONFIGURATION = EventType.KNOWLEDGE_CONFIGURATION;
+		public static final String SEARCH_CONFIGURATION = EventType.SEARCH_CONFIGURATION;
 	}
 
 	public static class Action {
@@ -148,6 +161,81 @@ public class SecurityAuditTaxonomy {
 		// authenticate exactly as it would have anyway.
 		public static final String OAUTH2_IDENTITY_PROVISION = "oauth2IdentityProvision";
 		public static final String OAUTH2_IDENTITY_SYNC = "oauth2IdentitySync";
+
+		// Agents configuration (EventType.AGENTS_CONFIGURATION): the networks of agents
+		// and the agents they are made of - their models, tools, prompts and who may use
+		// them - and the network every chat of a pipeline type is handed to. A copy is
+		// its own action: it creates a new, editable configuration out of another one.
+		public static final String AGENTS_NETWORK_INSERT = "agentsNetworkInsert";
+		public static final String AGENTS_NETWORK_UPDATE = "agentsNetworkUpdate";
+		public static final String AGENTS_NETWORK_DELETE = "agentsNetworkDelete";
+		public static final String AGENTS_NETWORK_COPY = "agentsNetworkCopy";
+		public static final String AGENT_INSERT = "agentInsert";
+		public static final String AGENT_UPDATE = "agentUpdate";
+		public static final String AGENT_DELETE = "agentDelete";
+		public static final String AGENT_COPY = "agentCopy";
+		public static final String AGENTIC_CHAT_DEFAULT_NETWORK_SET = "agenticChatDefaultNetworkSet";
+		public static final String AGENTIC_CHAT_DEFAULT_NETWORK_RESET = "agenticChatDefaultNetworkReset";
+
+		// Interoperability configuration (EventType.INTEROPERABILITY_CONFIGURATION): the
+		// external MCP servers whose tools the agents call, the MCP servers this
+		// installation exposes (and their ACLs), the external A2A agents imported and
+		// the agents/networks exported over A2A. Each one opens or closes a path to or
+		// from another system.
+		public static final String MCP_SERVER_INSERT = "mcpServerInsert";
+		public static final String MCP_SERVER_UPDATE = "mcpServerUpdate";
+		public static final String MCP_SERVER_DELETE = "mcpServerDelete";
+		public static final String MCP_EXPOSED_SERVER_INSERT = "mcpExposedServerInsert";
+		public static final String MCP_EXPOSED_SERVER_UPDATE = "mcpExposedServerUpdate";
+		public static final String MCP_EXPOSED_SERVER_DELETE = "mcpExposedServerDelete";
+		public static final String MCP_EXPOSED_SERVER_ACCESS_UPDATE = "mcpExposedServerAccessUpdate";
+		public static final String A2A_REMOTE_AGENT_INSERT = "a2aRemoteAgentInsert";
+		public static final String A2A_REMOTE_AGENT_UPDATE = "a2aRemoteAgentUpdate";
+		public static final String A2A_REMOTE_AGENT_DELETE = "a2aRemoteAgentDelete";
+		public static final String A2A_EXPORT_INSERT = "a2aExportInsert";
+		public static final String A2A_EXPORT_UPDATE = "a2aExportUpdate";
+		public static final String A2A_EXPORT_DELETE = "a2aExportDelete";
+
+		// Knowledge configuration (EventType.KNOWLEDGE_CONFIGURATION): the chat
+		// profiles users chat through and the knowledge bases and projects their
+		// documents live in, with who may use each one.
+		public static final String CHAT_PROFILE_INSERT = "chatProfileInsert";
+		public static final String CHAT_PROFILE_UPDATE = "chatProfileUpdate";
+		public static final String CHAT_PROFILE_DELETE = "chatProfileDelete";
+		public static final String KNOWLEDGE_BASE_INSERT = "knowledgeBaseInsert";
+		public static final String KNOWLEDGE_BASE_UPDATE = "knowledgeBaseUpdate";
+		public static final String KNOWLEDGE_BASE_DELETE = "knowledgeBaseDelete";
+		public static final String PROJECT_INSERT = "projectInsert";
+		public static final String PROJECT_UPDATE = "projectUpdate";
+		public static final String PROJECT_DELETE = "projectDelete";
+
+		// Search configuration (EventType.SEARCH_CONFIGURATION): the web search
+		// providers (Google, Tavily, Brave, SearXNG, SerpApi) and the deep search
+		// configuration, which also decides who may search the external sources.
+		public static final String WEB_SEARCH_CONFIG_INSERT = "webSearchConfigInsert";
+		public static final String WEB_SEARCH_CONFIG_UPDATE = "webSearchConfigUpdate";
+		public static final String WEB_SEARCH_CONFIG_DELETE = "webSearchConfigDelete";
+		public static final String DEEP_SEARCH_CONFIG_INSERT = "deepSearchConfigInsert";
+		public static final String DEEP_SEARCH_CONFIG_UPDATE = "deepSearchConfigUpdate";
+		public static final String DEEP_SEARCH_CONFIG_DELETE = "deepSearchConfigDelete";
+	}
+
+	/**
+	 * The resource types of the configuration events (SecurityEvent.resourceType).
+	 */
+	public static class ResourceType {
+		public static final String AGENTS_NETWORK = "agentsNetwork";
+		public static final String AGENT = "agent";
+		public static final String AGENTIC_CHAT_DEFAULT_NETWORK = "agenticChatDefaultNetwork";
+		public static final String MCP_SERVER = "mcpServer";
+		public static final String MCP_EXPOSED_SERVER = "mcpExposedServer";
+		public static final String A2A_REMOTE_AGENT = "a2aRemoteAgent";
+		public static final String A2A_EXPORT = "a2aExport";
+		public static final String CHAT_PROFILE = "chatProfile";
+		public static final String KNOWLEDGE_BASE = "knowledgeBase";
+		public static final String PROJECT = "project";
+		public static final String WEB_SEARCH_CONFIG = "webSearchConfig";
+		public static final String DEEP_SEARCH_CONFIG = "deepSearchConfig";
 	}
 
 	public static class Outcome {

@@ -25,8 +25,8 @@ config contains a key that no Java code binds to, it's called out explicitly in
 **Precedence** (highest wins): environment variable → external `application.yml`/`.properties`
 next to the jar or in the mounted `/opt/gebo.ai/config` → built-in defaults compiled into the jar.
 Any property can also be set as an environment variable using Spring Boot's relaxed-binding rules
-(uppercase, `.`/`-` → `_`) — e.g. `management.otlp.tracing.endpoint` becomes
-`MANAGEMENT_OTLP_TRACING_ENDPOINT`, exactly as `dockers/docker-compose-deploy/docker-compose.observability.yml` already does.
+(uppercase, `.`/`-` → `_`) — e.g. `management.opentelemetry.tracing.export.otlp.endpoint` becomes
+`MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT`, exactly as `dockers/docker-compose-deploy/docker-compose.observability.yml` already does.
 
 **A configuration change requires a restart** of the `gebo.ai` process/container — nothing in this
 document is hot-reloaded. Two standalone settings are supplied separately, not through
@@ -84,7 +84,8 @@ for how this plugs into the bundled Grafana/Prometheus/Tempo stack.)*
 | `management.endpoints.web.exposure.include` | csv | `health,prometheus,metrics` | Which Actuator endpoints are exposed over HTTP. |
 | `management.prometheus.metrics.export.enabled` | boolean | `true` | Enables the `/actuator/prometheus` scrape endpoint. |
 | `management.tracing.sampling.probability` | double 0–1 | `1.0` (env-overridable via `MANAGEMENT_TRACING_SAMPLING_PROBABILITY`) | Fraction of requests traced. Lower this in high-traffic production (e.g. `0.1`). |
-| `management.otlp.tracing.endpoint` | URL | `http://localhost:4318/v1/traces` (env-overridable via `MANAGEMENT_OTLP_TRACING_ENDPOINT`) | Where OTLP traces are exported — the bundled `otel-collector` in Docker Compose. |
+| `management.opentelemetry.tracing.export.otlp.endpoint` | URL | unset (env: `MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT`) | Where OTLP traces are exported, e.g. `http://otel-collector:4318/v1/traces` — the bundled `otel-collector` of the observability overlay. Unset, no span exporter is created, so an installation without a collector logs no export failures. Spring Boot 4 no longer reads the old `management.otlp.tracing.endpoint` / `MANAGEMENT_OTLP_TRACING_ENDPOINT`. |
+| `management.server.port` | port | unset (env: `MANAGEMENT_SERVER_PORT`) | Moves the actuator to a separate management port, where `/actuator/health` and `/actuator/prometheus` answer **anonymously**, for Prometheus and health probes. Never publish this port: the observability overlay sets `12998` and keeps it on the internal network. Unset (or equal to `server.port`), every actuator call needs an authenticated user, as before. Every other actuator endpoint (`metrics` included) always needs one. |
 
 ## 6. Security — authentication, tokens, CORS, SSO
 
