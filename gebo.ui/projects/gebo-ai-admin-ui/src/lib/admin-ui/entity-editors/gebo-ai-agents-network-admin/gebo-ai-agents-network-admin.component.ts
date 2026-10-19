@@ -102,6 +102,14 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     private lastLayoutNodes: { id: string; position: { x: number; y: number } }[] = [];
     /** The positions the admin gave the nodes by dragging them, kept across redraws. */
     private nodePositions = new Map<string, { x: number; y: number }>();
+    /** The rendered height of each node, measured after it is drawn: the nodes of a level are stacked on it. */
+    private measuredNodeHeights = new Map<string, number>();
+    /** The heights the last layout stacked the nodes with, to tell when a new measure asks for another one. */
+    private layoutNodeHeights = new Map<string, number>();
+    /** The layouts redone in a row for new measures, bounded so a node that keeps resizing cannot loop. */
+    private relayoutsInARow = 0;
+    private static readonly DEFAULT_NODE_HEIGHT = 160;
+    private static readonly NODE_VERTICAL_GAP = 40;
     @ViewChild("diagramHost", { read: ElementRef }) private diagramHostRef?: ElementRef<HTMLElement>;
     private observedDiagramHost?: HTMLElement;
     private diagramResizeObserver?: ResizeObserver;
@@ -898,20 +906,34 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                 levelGroups.get(level)!.push(name);
             });
 
+            // The nodes of a level are stacked on their rendered heights (they grow with
+            // the row of their tools), a gap apart and centred on the same line: before a
+            // node is measured it counts as DEFAULT_NODE_HEIGHT.
+            const heightOf = (name: string) => this.measuredNodeHeights.get(name) || GeboAIAgentsNetworkAdminComponent.DEFAULT_NODE_HEIGHT;
+            const gap = GeboAIAgentsNetworkAdminComponent.NODE_VERTICAL_GAP;
+            const stackedY = new Map<string, number>();
+            this.layoutNodeHeights = new Map<string, number>();
+            levelGroups.forEach(names => {
+                const total = names.reduce((sum, n) => sum + heightOf(n), 0) + gap * Math.max(names.length - 1, 0);
+                let top = 300 - total / 2;
+                names.forEach(n => {
+                    stackedY.set(n, top);
+                    this.layoutNodeHeights.set(n, heightOf(n));
+                    top += heightOf(n) + gap;
+                });
+            });
+
             const nodes: any[] = [];
             const edges: any[] = [];
             list.forEach(agent => {
                 const name = nameOf(agent);
                 const L = levelsMap.get(name) || 0;
-                const idxInLevel = levelGroups.get(L)?.indexOf(name) || 0;
-                const totalInLevel = levelGroups.get(L)?.length || 1;
 
                 // The levels go left to right, 360px apart: the nodes are at most 300px
-                // wide. The nodes of a level are stacked 200px apart (they grow with the
-                // row of their tools). A node the admin dragged keeps its place.
+                // wide. A node the admin dragged keeps its place.
                 const placed = this.nodePositions.get(name);
                 const x = placed ? placed.x : L * 360 + 40;
-                const y = placed ? placed.y : (idxInLevel - (totalInLevel - 1) / 2) * 200 + 300;
+                const y = placed ? placed.y : (stackedY.get(name) ?? 300);
                 nodes.push({
                     id: name,
                     position: { x, y },
@@ -1024,6 +1046,27 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         if (hostEl.clientWidth <= 0 || hostEl.clientHeight <= 0 || this.lastLayoutNodes.length === 0) {
             return;
         }
+        // the nodes drawn taller or shorter than the last layout stacked them are laid out
+        // again on their measured heights, so the nodes of a level never overlap
+        let heightsChanged = false;
+        for (const node of this.lastLayoutNodes) {
+            const nodeEl = hostEl.querySelector<HTMLElement>(`[data-node-id="${node.id}"]`);
+            const measured = nodeEl?.offsetHeight || 0;
+            if (measured > 0) {
+                this.measuredNodeHeights.set(node.id, measured);
+                const used = this.layoutNodeHeights.get(node.id);
+                if (!this.nodePositions.has(node.id) && (used === undefined || Math.abs(used - measured) > 8)) {
+                    heightsChanged = true;
+                }
+            }
+        }
+        if (heightsChanged && this.relayoutsInARow < 3) {
+            this.relayoutsInARow++;
+            console.debug("[agents-network] node heights changed: layout " + this.relayoutsInARow + " on the measured heights");
+            this.rebuildChart();
+            return;
+        }
+        this.relayoutsInARow = 0;
         let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
         for (const node of this.lastLayoutNodes) {
             const nodeEl = hostEl.querySelector<HTMLElement>(`[data-node-id="${node.id}"]`);

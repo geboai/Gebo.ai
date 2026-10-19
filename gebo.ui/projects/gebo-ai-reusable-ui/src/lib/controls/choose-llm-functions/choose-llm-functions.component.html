@@ -64,7 +64,7 @@
 
   <!-- the catalogue: the categories on the left, the tools on the right -->
   <div class="grid grid-nogutter">
-    <div class="col-12 md:col-3 lg:col-2 border-right-1 surface-border p-2 flex md:flex-column flex-wrap gap-1">
+    <div class="col-12 md:col-3 lg:col-2 border-right-1 surface-border p-2 flex md:flex-column flex-wrap md:flex-nowrap gap-1" style="min-width: 0;">
       <button type="button" class="border-none text-left px-2 py-1 border-round cursor-pointer text-sm flex justify-content-between gap-2 align-items-center"
         [class.bg-primary-50]="categoryFilter === null" [class.text-primary-700]="categoryFilter === null" [class.font-semibold]="categoryFilter === null"
         [class.bg-transparent]="categoryFilter !== null" (click)="categoryFilter = null">
@@ -75,7 +75,7 @@
         <button type="button" class="border-none text-left px-2 py-1 border-round cursor-pointer text-sm flex justify-content-between gap-2 align-items-center"
           [class.bg-primary-50]="categoryFilter === category.code" [class.text-primary-700]="categoryFilter === category.code" [class.font-semibold]="categoryFilter === category.code"
           [class.bg-transparent]="categoryFilter !== category.code" (click)="categoryFilter = category.code">
-          <span class="overflow-hidden text-overflow-ellipsis white-space-nowrap" style="min-width: 0;">{{category.label}}</span>
+          <span style="min-width: 0; overflow-wrap: anywhere;" [title]="category.label">{{category.label}}</span>
           <span class="text-xs text-muted-color flex-shrink-0">{{chosenInCategory(category)}}/{{category.tools.length}}</span>
         </button>
       }
