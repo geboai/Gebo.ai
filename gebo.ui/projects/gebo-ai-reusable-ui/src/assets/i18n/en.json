@@ -5386,7 +5386,7 @@
       "DuplicateNameWarning": {
         "label": "is used twice: give one a contextual name"
       },
-      "RoleInNetworkLabel": { "label": "ROLE IN THE NETWORK" },
+      "RoleInNetworkLabel": { "label": "Role in the network" },
       "InputNodeLabel": { "label": "Network input node" },
       "InputNodeOkHint": { "label": "accepts the input of the contract" },
       "InputNodeNoHint": {
@@ -5398,7 +5398,7 @@
       "OutputNodeNoHint": {
         "label": "does not produce the output of the contract: another output node must"
       },
-      "TalksToLabel": { "label": "TALKS TO" },
+      "TalksToLabel": { "label": "Talks to" },
       "TalksToNobody": { "label": "nobody" },
       "RouterTalksHint": {
         "label": "A router sends each target a command typed on that target's input; it needs at least one."
@@ -5409,7 +5409,7 @@
       "ResponderTalksHint": {
         "label": "Its reply goes to whoever asked and is shared in the session; this list tells the model whom it may address."
       },
-      "CapabilitiesLabel": { "label": "CAPABILITIES" },
+      "CapabilitiesLabel": { "label": "Capabilities" },
       "NotifyUserLabel": { "label": "May notify the user" },
       "CanCallToolsLabel": { "label": "May call its tools" },
       "CanCallOtherAgentsLabel": { "label": "May delegate to other agents" },
