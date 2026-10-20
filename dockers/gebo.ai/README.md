@@ -32,7 +32,7 @@ http://<your-server-ip>:12999/
 ### Administrative features
  The admin, chat,rag chat,graphrag chat user interfaces are **fully multilanguage** and the application is **fully multiuser**.
  All the following features are fully configurable using the administrative user interface.
- - Configure the large language models to use like:
+ - Configure large language models from providers like:
       - **OpenAI** chatgpt
       - **Anthropic** Claude
       - **AWS Bedrock** (Claude, Amazon Nova, Llama, Mistral & more)
