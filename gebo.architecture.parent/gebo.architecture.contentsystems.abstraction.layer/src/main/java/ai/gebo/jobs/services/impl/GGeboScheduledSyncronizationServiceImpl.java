@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -50,6 +51,10 @@ public class GGeboScheduledSyncronizationServiceImpl
 	// bean (rather than a dedicated emitter) is used as the reschedule request's
 	// "from" identity.
 	private final AbstractJobLaunchManager jobLaunchManager;
+	// This bean's own application context: the refreshed event of a descendant
+	// context (the actuator management port starts one, before this context is
+	// refreshed and its message broker assembled) must not trigger the scheduling.
+	private final ApplicationContext applicationContext;
 
 	
 	
@@ -85,12 +90,22 @@ public class GGeboScheduledSyncronizationServiceImpl
 	/**
 	 * Handles the Spring context refreshed event by scheduling updates. This
 	 * ensures that job scheduling begins when the application context is fully
-	 * initialized.
-	 * 
+	 * initialized. Only the event of this bean's own context counts: a descendant
+	 * context (the management port one) is refreshed earlier, when the message
+	 * broker has no emitter or receiver yet and the reschedule messages would be
+	 * refused as unroutable.
+	 *
 	 * @param event The context refreshed event
 	 */
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
+		if (event.getApplicationContext() != applicationContext) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Ignoring the refreshed event of the descendant context "
+						+ event.getApplicationContext().getId() + ": scheduling waits for this context's own");
+			}
+			return;
+		}
 		this.scheduleUpdates();
 	}
 
