@@ -197,8 +197,12 @@ injects it with `@Autowired(required = false)`, so the step bean always exists b
 inert when the network is off.
 
 Consequence: **setting `ai.gebo.agents.standard.enabled=false` is the supported way to
-run the default pipeline on the LLM router.** Any configuration that depends on the
-standard agents must back off with it. The worked example is `OfficeAgentsInitialization`,
+run the default pipeline on the LLM router**, unless a product publishes its own
+`@Qualifier(DEFAULT_PIPELINE_SERVICE)` bean with its own networks: the property switches
+off the bundled networks and their agents only. The agents as a whole, and so the
+administrator's choice of a network (`IGAgenticChatDefaultNetworkOfAgentsService`), are
+switched by `ai.gebo.agents.enabled`, which such a product leaves on. Any configuration
+that depends on the standard agents must back off with it. The worked example is `OfficeAgentsInitialization`,
 which lists both `ai.gebo.officeplugin.enabled` and `ai.gebo.agents.standard.enabled` in
 one `@ConditionalOnProperty` for exactly this reason; it now lives in the pro platform
 (`ai.gebo.pro.architecture.parent/gebo.architecture.office-plugin-pipeline`), so the rule

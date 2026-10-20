@@ -162,8 +162,20 @@ class GAgenticChatDefaultNetworkOfAgentsServiceImplTest {
 	}
 
 	@Test
-	void nothingCanBeChosenWhenTheAgentsAreDisabled() {
+	void theBundledNetworksSwitchDoesNotDisableTheAgents() {
+		// a product switches the bundled networks off and brings its own: the choice stays
 		environment.setProperty("ai.gebo.agents.standard.enabled", "false");
+
+		assertEquals(true, service.isAgenticChatNetworksEnabled());
+		assertEquals(java.util.Set.of("LOOP", "CONTROLLER"), service.getChoosableNetworksOfAgents(PipelineType.RAG_PIPELINE)
+				.stream().map(GAgentsNetwork::getCode).collect(java.util.stream.Collectors.toSet()));
+		assertEquals("CONTROLLER", service.setAgenticChatDefaultNetwork(PipelineType.RAG_PIPELINE, "CONTROLLER")
+				.getDefaultChatNetworkOfAgents());
+	}
+
+	@Test
+	void nothingCanBeChosenWhenTheAgentsAreDisabled() {
+		environment.setProperty("ai.gebo.agents.enabled", "false");
 
 		assertFalse(service.isAgenticChatNetworksEnabled());
 		assertEquals(List.of(), service.getChoosableNetworksOfAgents(PipelineType.RAG_PIPELINE));
