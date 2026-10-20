@@ -47,7 +47,6 @@
     
     {"langCode": "ms", "description": "Bahasa Melayu"},
     {"langCode": "sw", "description": "Kiswahili"},
-    {"langCode": "ta", "description": "தமிழ்"},
     {"langCode": "te", "description": "తెలుగు"},
     {"langCode": "mr", "description": "मराठी"},
     {"langCode": "gu", "description": "ગુજરાતી"},

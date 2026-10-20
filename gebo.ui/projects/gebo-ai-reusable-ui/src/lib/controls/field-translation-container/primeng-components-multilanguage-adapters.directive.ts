@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 // PrimeNG component classes (importa solo quelli che usi davvero nel progetto)
-import { Button } from 'primeng/button';
+import { Button, ButtonDirective } from 'primeng/button';
 import { Fieldset } from 'primeng/fieldset';
 import { Panel } from 'primeng/panel';
 import { Dialog } from 'primeng/dialog';
@@ -65,6 +65,20 @@ export class LabelTargetParent implements LabelTarget {
 })
 export class PButtonLabelTarget extends LabelTargetParent {
   constructor(@Optional() @Host() private btn: Button) {
+    super(btn);
+  }
+}
+
+// =========== Button directive: <button pButton label="..."> ===========
+// pButton reads label as an input, so the translated attribute alone leaves
+// the shown text in English: the translation is set on the directive itself.
+@Directive({
+  selector: '[pButton][gebo-ai-label]',
+  providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PButtonDirectiveLabelTarget }],
+  standalone: false
+})
+export class PButtonDirectiveLabelTarget extends LabelTargetParent {
+  constructor(@Optional() @Self() private btn: ButtonDirective) {
     super(btn);
   }
 }

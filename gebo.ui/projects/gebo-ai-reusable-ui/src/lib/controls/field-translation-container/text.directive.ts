@@ -31,7 +31,10 @@ export class GeboAITextDirective implements AfterContentInit, OnInit {
     }
     ngAfterContentInit(): void {
         this.componentId = this.el.nativeElement.getAttribute("id");
-        const text = this.el.nativeElement.innerText;
+        // textContent, not innerText: innerText is empty while the element is not
+        // rendered or visibility:hidden (ng-diagram keeps its nodes hidden until it
+        // has measured them), and the text would never be translated
+        const text = (this.el.nativeElement.textContent || "").replace(/\s+/g, " ").trim();
         if (this.componentId && text) {
             this.existingTexts = {
                 moduleId: this.moduleId,
