@@ -40,6 +40,11 @@ http://<your-server-ip>:12999/
       - **MistralAI**
       - **Regolo.ai** (Italian/European)
       - **OpenRouter.ai** (multi-model router)
+      - **Subconscious.dev**
+      - **Awan LLM**
+      - **llmax.ai**
+      - **CheapestInference**
+      - **Profundo AI**
       - Almost every local large language model using **Ollama** or **vLLM**       
       - Every provider/local server compatible with **OpenAi API**
  - Configure tools & functions that each llm configuration can use, including **web search** (**Google Programmable Search**, **Tavily**, **Brave Search**, **SerpApi** or a self-hosted **SearXNG**) — see [Web search & deep search](#web-search--deep-search) below
