@@ -55,7 +55,14 @@ public record ToolDataFlowTarget(Kind kind, String reference, String product, St
 		/** An external MCP server: {@code reference} is its client configuration code. */
 		MCP_SERVER,
 		/** Data of the platform itself (users, catalogues): {@code reference} names it. */
-		PLATFORM_DATA
+		PLATFORM_DATA,
+		/**
+		 * A database of the product outside the platform's own stores (a press review
+		 * archive, an ERP), queried by the tool: {@code reference} is its code,
+		 * {@code product} its name, {@code locator} where it is reached (a JDBC URL
+		 * without credentials), {@code secretReference} the secret it is reached with.
+		 */
+		EXTERNAL_DATABASE
 	}
 
 	public static ToolDataFlowTarget of(Kind kind, String description) {
@@ -68,5 +75,11 @@ public record ToolDataFlowTarget(Kind kind, String reference, String product, St
 
 	public static ToolDataFlowTarget platformData(String name, String description) {
 		return new ToolDataFlowTarget(Kind.PLATFORM_DATA, name, name, null, null, description);
+	}
+
+	/** A database of the product the tool queries (see {@link Kind#EXTERNAL_DATABASE}). */
+	public static ToolDataFlowTarget externalDatabase(String code, String product, String locator,
+			String secretReference, String description) {
+		return new ToolDataFlowTarget(Kind.EXTERNAL_DATABASE, code, product, locator, secretReference, description);
 	}
 }
