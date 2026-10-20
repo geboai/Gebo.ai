@@ -59,13 +59,6 @@ import { GeboAIExtensiblePipelineRouteDisplayComponent } from "./extensible-pipe
 import { GeboAIChatStreamEventsDisplayComponent } from "./chat-stream-events-display.component";
 import { ProgressBarModule } from "primeng/progressbar";
 import { ChipModule } from "primeng/chip";
-console.log(
-  '[GeboAIReusableChatModule] declarations =',
-  GeboAIReusableChatComponent,
-  ChangeDescriptionComponent,
-  DocumentRefComponent,  
-  GeboChatUserInfoComponent
-);
 @NgModule({
   imports: [CommonModule,
     ReactiveFormsModule,
