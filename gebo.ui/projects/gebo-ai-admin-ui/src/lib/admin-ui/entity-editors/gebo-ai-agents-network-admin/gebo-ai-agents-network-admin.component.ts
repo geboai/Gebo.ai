@@ -173,6 +173,54 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         { id: "PureChatPipelineOption", label: "Free chat", value: "PURE_CHAT_PIPELINE" }
     ];
 
+    /**
+     * The composer texts the template directives cannot reach: built in code, bound to a
+     * title or a tooltip, or shown on the graph nodes. Translated on init like the palette
+     * groups. They are whole phrases: a value (a type, a name) is appended by the caller
+     * as plain data, never interpolated into the translation.
+     */
+    private static readonly COMPOSER_TEXTS: { id: string, label: string }[] = [
+        { id: "LinkSelf", label: "an agent does not talk to itself" },
+        { id: "LinkUnknownService", label: "unknown agent service" },
+        { id: "LinkAlreadyListed", label: "already listed" },
+        { id: "LinkRouterCommands", label: "a router sends commands typed on the target's input" },
+        { id: "LinkResponderList", label: "a responder's list tells the model whom it may address" },
+        { id: "LinkTypeAccepted", label: "the delivered type is accepted" },
+        { id: "LinkTypeMismatch", label: "the delivered type is not the one the target accepts" },
+        { id: "LinkReadOnly", label: "the network is read only" },
+        { id: "LinkFromOutputPort", label: "a link starts from an output port" },
+        { id: "LinkToInputPort", label: "a link ends on an input port" },
+        { id: "LinkUnknownParticipant", label: "unknown participant" },
+        { id: "BlockNoAdapter", label: "no adapter makes this agent a network agent" },
+        { id: "BlockFactoryAgentsOnly", label: "this factory runs network agents only" },
+        { id: "BlockOneWriter", label: "this network already streams one writer" },
+        { id: "AddServiceTitle", label: "Add this service to the network" },
+        { id: "ViewParticipantTitle", label: "View" },
+        { id: "EditParticipantTitle", label: "Edit" },
+        { id: "NodeViewTitle", label: "Click to view this agent" },
+        { id: "NodeEditTitle", label: "Click to edit this agent" },
+        { id: "NodeCommandsTooltip", label: "A router sends each agent it talks to a command typed on that agent's input" },
+        { id: "NodeRepliesTooltip", label: "Replies to whoever asked; the reply is shared in the session" },
+        { id: "NodeStreamsTooltip", label: "Answers the user directly: the single output node the network streams" },
+        { id: "NodeToolsNotCalledTooltip", label: "These tools are mounted, but this participant is told not to call them" },
+        { id: "NodeAutoMountingTooltip", label: "Auto mounting: every registered tool" },
+        { id: "NodeAutoMountingExcludedTooltip", label: "Auto mounting: every registered tool but the excluded ones" },
+        { id: "NodeSelectedToolsTooltip", label: "The tools selected in the agent configuration" },
+        { id: "NodeShowAllToolsTitle", label: "Show all the tools of this agent" },
+        { id: "NodeToolFallback", label: "Tool" },
+        { id: "NodeExcludedByConfiguration", label: "Left out by this agent's configuration (its tool sources left out)" },
+        { id: "NodeExcludedBySystem", label: "Kept out by the system settings" },
+        { id: "NodeExcludedByService", label: "Left out by the agent service's own rule" },
+        { id: "NodeExcludedUnknown", label: "Left out" }
+    ];
+    private composerTexts: { id: string, label: string }[] = GeboAIAgentsNetworkAdminComponent.COMPOSER_TEXTS.map(x => ({ ...x }));
+    private composerTextsById: Map<string, string> = new Map<string, string>(this.composerTexts.map(x => [x.id, x.label]));
+
+    /** A composer text in the actual language. */
+    public text(id: string): string {
+        return this.composerTextsById.get(id) ?? id;
+    }
+
     /** The validation messages of the network as it is now, from the backend. */
     protected checks: GUserMessage[] = [];
     protected validationErrors: boolean = false;
@@ -253,6 +301,11 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             .subscribe(items => {
                 this.paletteGroupLabels = [...items] as { id: string, label: string }[];
                 this.buildPalette();
+            });
+        translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.composerTexts)
+            .subscribe(items => {
+                this.composerTextsById = new Map<string, string>(items.map(x => [x.id!, x.label!]));
+                console.debug("[agents-network] composer texts in the actual language: " + this.composerTextsById.size);
             });
         this.loadComposerData();
     }
@@ -393,41 +446,42 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
      */
     public edgeVerdict(source: AgentNetworkParticipant, target: AgentNetworkParticipant): EdgeVerdict {
         if (source === target) {
-            return { ok: false, reason: "an agent does not talk to itself" };
+            return { ok: false, reason: this.text("LinkSelf") };
         }
         const sourceService = this.serviceOf(source), targetService = this.serviceOf(target);
         if (!sourceService || !targetService) {
-            return { ok: false, reason: "unknown agent service" };
+            return { ok: false, reason: this.text("LinkUnknownService") };
         }
         if ((source.communicationList || []).includes(this.participantName(target))) {
-            return { ok: false, reason: "already listed" };
+            return { ok: false, reason: this.text("LinkAlreadyListed") };
         }
+        // the types follow the translated phrase as plain data
         if (this.isRouter(sourceService)) {
-            return { ok: true, reason: "a router sends commands typed on " + this.shortType(targetService.inputType) };
+            return { ok: true, reason: this.text("LinkRouterCommands") + ": " + this.shortType(targetService.inputType) };
         }
         if (this.isResponder(sourceService)) {
-            return { ok: true, reason: "a responder's list tells the model whom it may address" };
+            return { ok: true, reason: this.text("LinkResponderList") };
         }
         return this.isAssignable(targetService.inputType, sourceService.outputType)
-            ? { ok: true, reason: this.shortType(sourceService.outputType) + " is accepted" }
-            : { ok: false, reason: "it delivers " + this.shortType(sourceService.outputType) + ", the target accepts " + this.shortType(targetService.inputType) };
+            ? { ok: true, reason: this.text("LinkTypeAccepted") + ": " + this.shortType(sourceService.outputType) }
+            : { ok: false, reason: this.text("LinkTypeMismatch") + ": " + this.shortType(sourceService.outputType) + " → " + this.shortType(targetService.inputType) };
     }
 
     /** The verdict on a link drawn on the graph, from a node and port to a node and port. */
     private linkVerdict(sourceId: string | undefined, sourcePortType: string | undefined, targetId: string | undefined, targetPortType: string | undefined): EdgeVerdict {
         if (this.readonly) {
-            return { ok: false, reason: "the network is read only" };
+            return { ok: false, reason: this.text("LinkReadOnly") };
         }
         if (sourcePortType && sourcePortType !== "source") {
-            return { ok: false, reason: "a link starts from an output port" };
+            return { ok: false, reason: this.text("LinkFromOutputPort") };
         }
         if (targetPortType && targetPortType !== "target") {
-            return { ok: false, reason: "a link ends on an input port" };
+            return { ok: false, reason: this.text("LinkToInputPort") };
         }
         const source = this.agentsList.find(p => this.participantName(p) === sourceId);
         const target = this.agentsList.find(p => this.participantName(p) === targetId);
         if (!source || !target) {
-            return { ok: false, reason: "unknown participant" };
+            return { ok: false, reason: this.text("LinkUnknownParticipant") };
         }
         return this.edgeVerdict(source, target);
     }
@@ -436,13 +490,13 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     public serviceBlockReason(service: AgentServiceDescriptor): string | null {
         const factory = this.factory();
         if (service.reactive && !service.adaptable) {
-            return "no adapter makes this agent a network agent";
+            return this.text("BlockNoAdapter");
         }
         if (service.reactive && factory && !factory.reactiveOutput) {
-            return "this factory runs network agents only";
+            return this.text("BlockFactoryAgentsOnly");
         }
         if (service.reactive && this.agentsList.some(p => this.serviceOf(p)?.reactive)) {
-            return "this network already streams one writer";
+            return this.text("BlockOneWriter");
         }
         return null;
     }

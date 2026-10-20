@@ -5177,6 +5177,132 @@
   },
   "GeboAIAgentsNetworkAdminModule": {
     "GAgentsNetwork": {
+      "NodeSilent": {
+        "label": "silent"
+      },
+      "NodeNotifies": {
+        "label": "notifies"
+      },
+      "NodeNoTools": {
+        "label": "no tools"
+      },
+      "NodeTools": {
+        "label": "tools"
+      },
+      "NodeAutoMounting": {
+        "label": "auto mounting"
+      },
+      "NodeSelectedMounting": {
+        "label": "selected"
+      },
+      "ConfigurationCountLabel": {
+        "label": "configuration"
+      },
+      "ConfigurationsCountLabel": {
+        "label": "configurations"
+      },
+      "EditConfigBtn": {
+        "help": "Edit the configuration"
+      },
+      "NewConfigBtn": {
+        "help": "New configuration of this service"
+      },
+      "LinkSelf": {
+        "label": "an agent does not talk to itself"
+      },
+      "LinkUnknownService": {
+        "label": "unknown agent service"
+      },
+      "LinkAlreadyListed": {
+        "label": "already listed"
+      },
+      "LinkRouterCommands": {
+        "label": "a router sends commands typed on the target's input"
+      },
+      "LinkResponderList": {
+        "label": "a responder's list tells the model whom it may address"
+      },
+      "LinkTypeAccepted": {
+        "label": "the delivered type is accepted"
+      },
+      "LinkTypeMismatch": {
+        "label": "the delivered type is not the one the target accepts"
+      },
+      "LinkReadOnly": {
+        "label": "the network is read only"
+      },
+      "LinkFromOutputPort": {
+        "label": "a link starts from an output port"
+      },
+      "LinkToInputPort": {
+        "label": "a link ends on an input port"
+      },
+      "LinkUnknownParticipant": {
+        "label": "unknown participant"
+      },
+      "BlockNoAdapter": {
+        "label": "no adapter makes this agent a network agent"
+      },
+      "BlockFactoryAgentsOnly": {
+        "label": "this factory runs network agents only"
+      },
+      "BlockOneWriter": {
+        "label": "this network already streams one writer"
+      },
+      "AddServiceTitle": {
+        "label": "Add this service to the network"
+      },
+      "ViewParticipantTitle": {
+        "label": "View"
+      },
+      "EditParticipantTitle": {
+        "label": "Edit"
+      },
+      "NodeViewTitle": {
+        "label": "Click to view this agent"
+      },
+      "NodeEditTitle": {
+        "label": "Click to edit this agent"
+      },
+      "NodeCommandsTooltip": {
+        "label": "A router sends each agent it talks to a command typed on that agent's input"
+      },
+      "NodeRepliesTooltip": {
+        "label": "Replies to whoever asked; the reply is shared in the session"
+      },
+      "NodeStreamsTooltip": {
+        "label": "Answers the user directly: the single output node the network streams"
+      },
+      "NodeToolsNotCalledTooltip": {
+        "label": "These tools are mounted, but this participant is told not to call them"
+      },
+      "NodeAutoMountingTooltip": {
+        "label": "Auto mounting: every registered tool"
+      },
+      "NodeAutoMountingExcludedTooltip": {
+        "label": "Auto mounting: every registered tool but the excluded ones"
+      },
+      "NodeSelectedToolsTooltip": {
+        "label": "The tools selected in the agent configuration"
+      },
+      "NodeShowAllToolsTitle": {
+        "label": "Show all the tools of this agent"
+      },
+      "NodeToolFallback": {
+        "label": "Tool"
+      },
+      "NodeExcludedByConfiguration": {
+        "label": "Left out by this agent's configuration (its tool sources left out)"
+      },
+      "NodeExcludedBySystem": {
+        "label": "Kept out by the system settings"
+      },
+      "NodeExcludedByService": {
+        "label": "Left out by the agent service's own rule"
+      },
+      "NodeExcludedUnknown": {
+        "label": "Left out"
+      },
       "DeleteBtn": { "label": "Delete" },
       "SaveBtn": { "label": "Save" },
       "CancelBtn": { "label": "Cancel" },

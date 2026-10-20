@@ -145,7 +145,7 @@
                                   <span class="text-sm font-medium" style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{service.serviceId}}</span>
                                   <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-sm p-0 w-2rem h-2rem flex-shrink-0"
                                     [disabled]="readonly || serviceBlockReason(service) !== null" (click)="addService(service)"
-                                    [title]="'Add ' + service.serviceId"></button>
+                                    [title]="text('AddServiceTitle')"></button>
                                 </div>
                                 <div class="flex flex-wrap align-items-center gap-1 text-xs font-monospace">
                                   <span class="px-1 border-round bg-blue-50 text-blue-700">{{shortType(service.inputType)}}</span>
@@ -159,7 +159,7 @@
                                     <span id="RepliesLabel" gebo-ai-text class="px-1 border-round bg-teal-50 text-teal-700">replies</span>
                                   }
                                 </div>
-                                <span class="text-xs text-muted-color">{{serviceBlockReason(service) || (configsCount(service) + ' configuration' + (configsCount(service) === 1 ? '' : 's'))}}</span>
+                                <span class="text-xs text-muted-color">@if (serviceBlockReason(service); as reason) { {{reason}} } @else { {{configsCount(service)}} @if (configsCount(service) === 1) { <span id="ConfigurationCountLabel" gebo-ai-text>configuration</span> } @else { <span id="ConfigurationsCountLabel" gebo-ai-text>configurations</span> } }</span>
                               </div>
                             }
                           </div>
@@ -219,11 +219,11 @@
                               <div class="flex gap-1">
                                 <p-select id="ParticipantConfigSelect" gebo-ai-label formControlName="agentConfigCode" [options]="configsOfSelected()" optionLabel="description" optionValue="code" dataKey="code"
                                   placeholder="Choose the configuration" class="flex-grow-1" styleClass="w-full" appendTo="body"></p-select>
-                                <button pButton icon="pi pi-pencil" class="p-button-outlined p-button-sm w-2rem" [disabled]="!selected.agentConfigCode" (click)="editSelectedConfig()" [title]="'Edit the configuration'" id="EditConfigBtn"></button>
-                                <button pButton icon="pi pi-plus" class="p-button-outlined p-button-sm w-2rem" [disabled]="readonly" (click)="newConfigForSelected()" [title]="'New configuration of this service'" id="NewConfigBtn"></button>
+                                <button pButton icon="pi pi-pencil" class="p-button-outlined p-button-sm w-2rem" [disabled]="!selected.agentConfigCode" (click)="editSelectedConfig()" title="Edit the configuration" id="EditConfigBtn" gebo-ai-label></button>
+                                <button pButton icon="pi pi-plus" class="p-button-outlined p-button-sm w-2rem" [disabled]="readonly" (click)="newConfigForSelected()" title="New configuration of this service" id="NewConfigBtn" gebo-ai-label></button>
                               </div>
                               @if (service) {
-                                <span class="text-xs text-muted-color">{{service.serviceId}}: <span class="font-monospace">{{shortType(service.inputType)}} → {{isRouter(service) ? 'commands' : shortType(service.outputType)}}</span></span>
+                                <span class="text-xs text-muted-color">{{service.serviceId}}: <span class="font-monospace">{{shortType(service.inputType)}} → @if (isRouter(service)) { <span id="CommandsLabel" gebo-ai-text>commands</span> } @else { {{shortType(service.outputType)}} }</span></span>
                               } @else {
                                 <span id="UnknownServiceWarning" gebo-ai-text class="text-xs text-red-600">The configuration runs a service that is not registered.</span>
                               }
@@ -320,7 +320,7 @@
                               </div>
                               <div class="flex flex-column gap-1 text-xs">
                                 <span><span id="CfgServiceLabel" gebo-ai-text class="font-semibold text-muted-color">Service</span> {{config.agentServiceId}}
-                                  @if (configService) { <span class="font-monospace">{{shortType(configService.inputType)}} → {{isRouter(configService) ? 'commands' : shortType(configService.outputType)}}</span> }
+                                  @if (configService) { <span class="font-monospace">{{shortType(configService.inputType)}} → @if (isRouter(configService)) { <span id="CommandsLabel" gebo-ai-text>commands</span> } @else { {{shortType(configService.outputType)}} }</span> }
                                 </span>
                                 <span><span id="CfgRoleLabel" gebo-ai-text class="font-semibold text-muted-color">Role</span> {{config.agentRoleCode || '—'}}
                                   @if (!config.agentRoleCode) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
@@ -398,7 +398,7 @@
                         <td class="font-semibold text-primary">{{ participantName(agent) }}</td>
                         <td>{{ getAgentDescription(agent.agentConfigCode) }}</td>
                         <td>{{ serviceOf(agent)?.serviceId || '-' }}</td>
-                        <td class="font-monospace text-xs">{{ shortType(serviceOf(agent)?.inputType) }} → {{ isRouter(serviceOf(agent)) ? 'commands' : shortType(serviceOf(agent)?.outputType) }}</td>
+                        <td class="font-monospace text-xs">{{ shortType(serviceOf(agent)?.inputType) }} → @if (isRouter(serviceOf(agent))) { <span id="CommandsLabel" gebo-ai-text>commands</span> } @else { {{ shortType(serviceOf(agent)?.outputType) }} }</td>
                         <td>
                           <div class="flex gap-1">
                             @if (agent.inputNode) {
@@ -418,7 +418,7 @@
                         <td>{{ (agent.communicationList && agent.communicationList.length) ? agent.communicationList.join(', ') : '-' }}</td>
                         <td class="text-right" (click)="$event.stopPropagation()">
                           <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary p-button-sm p-0 w-2rem h-2rem"
-                            [title]="readonly ? 'View' : 'Edit'" (click)="select(agent); activeTab = 1"></button>
+                            [title]="text(readonly ? 'ViewParticipantTitle' : 'EditParticipantTitle')" (click)="select(agent); activeTab = 1"></button>
                           <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm p-0 w-2rem h-2rem"
                             [disabled]="readonly" id="RemoveParticipantRowBtn" gebo-ai-label title="Remove" (click)="deleteParticipant(agent)"></button>
                         </td>
