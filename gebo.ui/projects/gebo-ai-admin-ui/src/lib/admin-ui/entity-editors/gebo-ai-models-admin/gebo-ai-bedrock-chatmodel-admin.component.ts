@@ -15,6 +15,7 @@ import { ConfirmationService } from "primeng/api";
 import { map, Observable } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component for administering AWS Bedrock chat model configurations (Converse API).
  */
@@ -99,7 +100,7 @@ export class GeboAIBedrockChatModelAdminComponent extends BaseEntityEditingCompo
         this.bedrockChatModelConfigService.getBedrockChatModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : [];
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;
@@ -109,7 +110,7 @@ export class GeboAIBedrockChatModelAdminComponent extends BaseEntityEditingCompo
 
     protected override onLoadedPersistentData(actualValue: GBedrockChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chat-aws-bedrock");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GBedrockChatModelConfig): void {

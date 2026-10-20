@@ -22,7 +22,9 @@ import { GUploadsContentManagementSystem } from '../model/gUploadsContentManagem
 import { GUploadsProjectEndpoint } from '../model/gUploadsProjectEndpoint';
 import { OperationStatusGJobStatus } from '../model/operationStatusGJobStatus';
 import { OperationStatusGUploadsProjectEndpoint } from '../model/operationStatusGUploadsProjectEndpoint';
+import { OperationStatusUploadedFileNode } from '../model/operationStatusUploadedFileNode';
 import { UploadedFileInfo } from '../model/uploadedFileInfo';
+import { UploadedFileNode } from '../model/uploadedFileNode';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -59,6 +61,61 @@ export class FileUploadsControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param endpointCode 
+     * @param folderPath 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public createUploadsFolder(endpointCode: string, folderPath: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusUploadedFileNode>;
+    public createUploadsFolder(endpointCode: string, folderPath: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusUploadedFileNode>>;
+    public createUploadsFolder(endpointCode: string, folderPath: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusUploadedFileNode>>;
+    public createUploadsFolder(endpointCode: string, folderPath: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (endpointCode === null || endpointCode === undefined) {
+            throw new Error('Required parameter endpointCode was null or undefined when calling createUploadsFolder.');
+        }
+
+        if (folderPath === null || folderPath === undefined) {
+            throw new Error('Required parameter folderPath was null or undefined when calling createUploadsFolder.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (endpointCode !== undefined && endpointCode !== null) {
+            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
+        }
+        if (folderPath !== undefined && folderPath !== null) {
+            queryParameters = queryParameters.set('folderPath', <any>folderPath);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<OperationStatusUploadedFileNode>('post',`${this.basePath}/api/admin/FileUploadsController/createUploadsFolder`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -458,6 +515,53 @@ export class FileUploadsControllerService {
         ];
 
         return this.httpClient.request<Array<UploadedFileInfo>>('get',`${this.basePath}/api/admin/FileUploadsController/listUploadedFiles`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param endpointCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public listUploadedFilesTree(endpointCode: string, observe?: 'body', reportProgress?: boolean): Observable<UploadedFileNode>;
+    public listUploadedFilesTree(endpointCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<UploadedFileNode>>;
+    public listUploadedFilesTree(endpointCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<UploadedFileNode>>;
+    public listUploadedFilesTree(endpointCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (endpointCode === null || endpointCode === undefined) {
+            throw new Error('Required parameter endpointCode was null or undefined when calling listUploadedFilesTree.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (endpointCode !== undefined && endpointCode !== null) {
+            queryParameters = queryParameters.set('endpointCode', <any>endpointCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<UploadedFileNode>('get',`${this.basePath}/api/admin/FileUploadsController/listUploadedFilesTree`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

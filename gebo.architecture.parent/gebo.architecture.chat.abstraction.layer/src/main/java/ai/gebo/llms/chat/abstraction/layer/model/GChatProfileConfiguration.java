@@ -48,11 +48,6 @@ public class GChatProfileConfiguration extends GBaseObject implements IGObjectWi
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
 
 	/**
-	 * List of enabled functions for this chat profile.
-	 */
-	private List<String> enabledFunctions = null;
-
-	/**
 	 * List of groups that have access to this chat profile.
 	 */
 	private List<String> accessibleGroups = null;

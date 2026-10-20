@@ -26,6 +26,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 @Component({
     selector: "gebo-ai-open-ai-embed-model-admin-component",
     templateUrl: "gebo-ai-openai-embedmodel-admin.component.html",
@@ -112,7 +113,7 @@ export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingCompo
         this.openaiEmbedModelConfigService.getOpenAIEmbeddingModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete:()=>{
                 this.loadingRelatedBackend=false;
@@ -127,7 +128,7 @@ export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingCompo
      */
     protected override onLoadedPersistentData(actualValue: GOpenAIEmbeddingModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("embedding-OpenAI");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

@@ -108,7 +108,7 @@ public class DefaultControllerNetworkAgentService extends GBaseRoutingNetworkAge
 			LOGGER.trace(finalWriterFallbackInstruction(userRequest));
 			LOGGER.trace("</FORCED_WRITER_INSTRUCTION>");
 		}
-		return new AgentsExchangeMessage(session.getId(), MessageSemantic.EXECUTE_AND_SHARE_RESULT,
+		return new AgentsExchangeMessage(session.getId(), getProducedMessageSemantic(),
 				contextAgentPersona.getNetworkAgentName(), agentRole, outputNodeName,
 				finalWriterFallbackInstruction(userRequest), deliveryOrder);
 	}

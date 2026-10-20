@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.fulltextor.model.DataEndpoint;
+import gebo.microservices.api.client.fulltextor.model.DataFlowSection;
 import gebo.microservices.api.client.fulltextor.model.DataTransformationInfo;
 import gebo.microservices.api.client.fulltextor.model.DataTransformationMetaInfo;
 import gebo.microservices.api.client.fulltextor.model.GeboComponentInfo;
@@ -28,11 +29,17 @@ import java.util.List;
  * GDataFlowMetaInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:35.423274644+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:30.134467544+02:00[Europe/Rome]")
 
 public class GDataFlowMetaInfos {
   @JsonProperty("component")
   private GeboComponentInfo component = null;
+
+  @JsonProperty("description")
+  private String description = null;
+
+  @JsonProperty("sections")
+  private List<DataFlowSection> sections = null;
 
   @JsonProperty("dataEndpoints")
   private List<DataEndpoint> dataEndpoints = null;
@@ -59,6 +66,50 @@ public class GDataFlowMetaInfos {
 
   public void setComponent(GeboComponentInfo component) {
     this.component = component;
+  }
+
+  public GDataFlowMetaInfos description(String description) {
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * Get description
+   * @return description
+  **/
+  @Schema(description = "")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public GDataFlowMetaInfos sections(List<DataFlowSection> sections) {
+    this.sections = sections;
+    return this;
+  }
+
+  public GDataFlowMetaInfos addSectionsItem(DataFlowSection sectionsItem) {
+    if (this.sections == null) {
+      this.sections = new ArrayList<>();
+    }
+    this.sections.add(sectionsItem);
+    return this;
+  }
+
+   /**
+   * Get sections
+   * @return sections
+  **/
+  @Schema(description = "")
+  public List<DataFlowSection> getSections() {
+    return sections;
+  }
+
+  public void setSections(List<DataFlowSection> sections) {
+    this.sections = sections;
   }
 
   public GDataFlowMetaInfos dataEndpoints(List<DataEndpoint> dataEndpoints) {
@@ -150,6 +201,8 @@ public class GDataFlowMetaInfos {
     }
     GDataFlowMetaInfos gdataFlowMetaInfos = (GDataFlowMetaInfos) o;
     return Objects.equals(this.component, gdataFlowMetaInfos.component) &&
+        Objects.equals(this.description, gdataFlowMetaInfos.description) &&
+        Objects.equals(this.sections, gdataFlowMetaInfos.sections) &&
         Objects.equals(this.dataEndpoints, gdataFlowMetaInfos.dataEndpoints) &&
         Objects.equals(this.engines, gdataFlowMetaInfos.engines) &&
         Objects.equals(this.transformations, gdataFlowMetaInfos.transformations);
@@ -157,7 +210,7 @@ public class GDataFlowMetaInfos {
 
   @Override
   public int hashCode() {
-    return Objects.hash(component, dataEndpoints, engines, transformations);
+    return Objects.hash(component, description, sections, dataEndpoints, engines, transformations);
   }
 
 
@@ -167,6 +220,8 @@ public class GDataFlowMetaInfos {
     sb.append("class GDataFlowMetaInfos {\n");
     
     sb.append("    component: ").append(toIndentedString(component)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    sections: ").append(toIndentedString(sections)).append("\n");
     sb.append("    dataEndpoints: ").append(toIndentedString(dataEndpoints)).append("\n");
     sb.append("    engines: ").append(toIndentedString(engines)).append("\n");
     sb.append("    transformations: ").append(toIndentedString(transformations)).append("\n");

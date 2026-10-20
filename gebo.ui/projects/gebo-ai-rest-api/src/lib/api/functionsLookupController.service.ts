@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { GLookupEntry } from '../model/gLookupEntry';
 import { ToolCategoriesTree } from '../model/toolCategoriesTree';
+import { ToolSourceInfo } from '../model/toolSourceInfo';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -208,6 +209,42 @@ export class FunctionsLookupControllerService {
         return this.httpClient.request<Array<ToolCategoriesTree>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getAllLocalFunctionsTree`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getToolSourceInfos(observe?: 'body', reportProgress?: boolean): Observable<Array<ToolSourceInfo>>;
+    public getToolSourceInfos(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ToolSourceInfo>>>;
+    public getToolSourceInfos(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ToolSourceInfo>>>;
+    public getToolSourceInfos(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<ToolSourceInfo>>('get',`${this.basePath}/api/admin/FunctionsLookupController/getToolSourceInfos`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

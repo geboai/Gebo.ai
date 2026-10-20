@@ -19,9 +19,11 @@ import { Observable }                                        from 'rxjs';
 
 import { AgentMountedTools } from '../model/agentMountedTools';
 import { AgentServiceDescriptor } from '../model/agentServiceDescriptor';
+import { AgentTypeCompatibility } from '../model/agentTypeCompatibility';
 import { GAgentConfig } from '../model/gAgentConfig';
 import { GAgentsNetwork } from '../model/gAgentsNetwork';
 import { GBaseObject } from '../model/gBaseObject';
+import { NetworkServiceFactoryDescriptor } from '../model/networkServiceFactoryDescriptor';
 import { OperationStatusGAgentsNetwork } from '../model/operationStatusGAgentsNetwork';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -59,6 +61,53 @@ export class GeboAgentsNetworkAdminControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param code 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public copyAgentsNetwork(code: string, observe?: 'body', reportProgress?: boolean): Observable<OperationStatusGAgentsNetwork>;
+    public copyAgentsNetwork(code: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusGAgentsNetwork>>;
+    public copyAgentsNetwork(code: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusGAgentsNetwork>>;
+    public copyAgentsNetwork(code: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (code === null || code === undefined) {
+            throw new Error('Required parameter code was null or undefined when calling copyAgentsNetwork.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (code !== undefined && code !== null) {
+            queryParameters = queryParameters.set('code', <any>code);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<OperationStatusGAgentsNetwork>('post',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/copyAgentsNetwork`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 
@@ -113,9 +162,9 @@ export class GeboAgentsNetworkAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAgentConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GBaseObject>>;
-    public getAgentConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GBaseObject>>>;
-    public getAgentConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GBaseObject>>>;
+    public getAgentConfigs(observe?: 'body', reportProgress?: boolean): Observable<Array<GAgentConfig>>;
+    public getAgentConfigs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GAgentConfig>>>;
+    public getAgentConfigs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GAgentConfig>>>;
     public getAgentConfigs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -133,7 +182,7 @@ export class GeboAgentsNetworkAdminControllerService {
         const consumes: string[] = [
         ];
 
-        return this.httpClient.request<Array<GBaseObject>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs`,
+        return this.httpClient.request<Array<GAgentConfig>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -217,6 +266,42 @@ export class GeboAgentsNetworkAdminControllerService {
         ];
 
         return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentServices`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAgentTypesCompatibility(observe?: 'body', reportProgress?: boolean): Observable<Array<AgentTypeCompatibility>>;
+    public getAgentTypesCompatibility(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<AgentTypeCompatibility>>>;
+    public getAgentTypesCompatibility(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<AgentTypeCompatibility>>>;
+    public getAgentTypesCompatibility(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<AgentTypeCompatibility>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getAgentTypesCompatibility`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -477,6 +562,42 @@ export class GeboAgentsNetworkAdminControllerService {
         ];
 
         return this.httpClient.request<Array<AgentServiceDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getNetworkServiceFactories(observe?: 'body', reportProgress?: boolean): Observable<Array<NetworkServiceFactoryDescriptor>>;
+    public getNetworkServiceFactories(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<NetworkServiceFactoryDescriptor>>>;
+    public getNetworkServiceFactories(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<NetworkServiceFactoryDescriptor>>>;
+    public getNetworkServiceFactories(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<NetworkServiceFactoryDescriptor>>('get',`${this.basePath}/api/admin/GeboAgentsNetworkAdminController/getNetworkServiceFactories`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

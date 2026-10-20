@@ -28,6 +28,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 /**
  * Component for administering Ollama Chat Model configurations.
  * This component extends BaseEntityEditingComponent and provides
@@ -130,7 +131,7 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
         this.chatModelConfigService.getOllamaChatModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete:()=>{
                 this.loadingRelatedBackend=false;
@@ -145,7 +146,7 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
      */
     protected override onLoadedPersistentData(actualValue: GOllamaChatModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("chat-ollama");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
     
     /**

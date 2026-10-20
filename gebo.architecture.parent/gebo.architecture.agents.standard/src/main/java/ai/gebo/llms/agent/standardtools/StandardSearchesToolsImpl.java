@@ -51,6 +51,12 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 		return STANDARD_SEARCHES_TOOLS_SOURCE;
 	}
 
+	/** What this source is for the administrator. */
+	@Override
+	public String getDescription() {
+		return "Searches of the configured search services";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 
@@ -62,8 +68,12 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getFullToolReferences() for tool source:" + getId());
 		}
-		List<ToolReference> references = wrappers().stream().map(AbstractSearchServiceWrapperTool::toToolReference)
-				.toList();
+		List<ToolReference> references = new ArrayList<>();
+		for (AbstractSearchServiceWrapperTool wrapper : wrappers()) {
+			final ToolReference reference = wrapper.toToolReference();
+			reference.setUserUIfunctionDescription("Search " + searched(wrapper.getWrapped()) + " and read the contents found");
+			references.add(reference);
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getFullToolReferences() tool source:" + getId() + " exposes " + references.size()
 					+ " tool reference(s)");
@@ -105,6 +115,13 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 		return List.of();
 	}
 
+	/** The search service as the tool descriptions name it: its description, then its product. */
+	static String searched(ISearchService<?> searchService) {
+		return searchService.getDescription() != null
+				? searchService.getDescription() + " (" + searchService.getProductId() + ")"
+				: searchService.getProductId();
+	}
+
 	/**
 	 * One tool per enabled non-web search service: native services are searched with
 	 * their own query structure, the others with plain text.
@@ -125,10 +142,7 @@ public class StandardSearchesToolsImpl implements IGToolCallbackSource {
 						searchService.getId(), th);
 				continue;
 			}
-			final String searched = searchService.getDescription() != null
-					? searchService.getDescription() + " (" + searchService.getProductId() + ")"
-					: searchService.getProductId();
-			final String description = "Search " + searched
+			final String description = "Search " + searched(searchService)
 					+ " and return the contents found, ranked against your search objective.";
 			if (searchService instanceof INativeSearchService nativeSearchService) {
 				wrappers.add(new NativeSearchServiceWrapperTool(pipeline, nativeSearchService,

@@ -57,9 +57,11 @@ public class AgentsToolsAutoMountingConfig {
 	 * Ids of the {@code IGToolCallbackSource}s whose tools must never be
 	 * auto-mounted. Every tool contributed by a source listed here is excluded from
 	 * automatic mounting as a block, without having to enumerate each tool name.
-	 * This is how a whole family of tools (e.g. the standard search tools source) is
-	 * kept out of the default agents network's auto-mounting agents. Defaults to an
-	 * empty list.
+	 * This is the system-wide exclusion: it applies to every auto-mounting agent of
+	 * every network. An agent configuration keeps a whole family of tools out of its
+	 * own mounting with {@code GAgentConfig.excludedToolSources} (how the tool-calling
+	 * agent of the networks with search agents leaves the search tool sources to
+	 * them). Defaults to an empty list.
 	 */
 	private List<String> excludedToolSources = new ArrayList<>();
 

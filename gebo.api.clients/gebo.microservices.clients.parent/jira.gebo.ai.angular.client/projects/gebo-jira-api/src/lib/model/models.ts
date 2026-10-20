@@ -1,3 +1,4 @@
+export * from './aclEntry';
 export * from './aggregateRequestBodyJiraResultsExtractionData';
 export * from './browseParam';
 export * from './buildSystemRef';
@@ -5,6 +6,8 @@ export * from './catalogueSample';
 export * from './componentMetaInfo';
 export * from './customTemplateParamsRequestBody';
 export * from './dataEndpoint';
+export * from './dataEndpointAccess';
+export * from './dataFlowSection';
 export * from './dataTransformationInfo';
 export * from './dataTransformationMetaInfo';
 export * from './deletableStatus';

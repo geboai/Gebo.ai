@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **uses** | [**List&lt;UsesEnum&gt;**](#List&lt;UsesEnum&gt;) |  |  [optional]
 **maxGeneratedTokens** | **Integer** |  |  [optional]
 **thinking** | [**ThinkingEnum**](#ThinkingEnum) |  |  [optional]
+**temperature** | **Double** |  |  [optional]
 
 <a name="TypeEnum"></a>
 ## Enum: TypeEnum

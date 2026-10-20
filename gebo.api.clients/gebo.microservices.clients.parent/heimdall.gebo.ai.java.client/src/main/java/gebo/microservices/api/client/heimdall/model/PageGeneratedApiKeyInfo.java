@@ -27,7 +27,7 @@ import java.util.List;
  * PageGeneratedApiKeyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:44.621764227+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:52.907609785+02:00[Europe/Rome]")
 
 public class PageGeneratedApiKeyInfo {
   @JsonProperty("totalPages")
@@ -38,12 +38,6 @@ public class PageGeneratedApiKeyInfo {
 
   @JsonProperty("pageable")
   private PageableObject pageable = null;
-
-  @JsonProperty("first")
-  private Boolean first = null;
-
-  @JsonProperty("last")
-  private Boolean last = null;
 
   @JsonProperty("size")
   private Integer size = null;
@@ -56,6 +50,12 @@ public class PageGeneratedApiKeyInfo {
 
   @JsonProperty("sort")
   private SortObject sort = null;
+
+  @JsonProperty("first")
+  private Boolean first = null;
+
+  @JsonProperty("last")
+  private Boolean last = null;
 
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
@@ -115,42 +115,6 @@ public class PageGeneratedApiKeyInfo {
 
   public void setPageable(PageableObject pageable) {
     this.pageable = pageable;
-  }
-
-  public PageGeneratedApiKeyInfo first(Boolean first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
-  }
-
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageGeneratedApiKeyInfo last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
   }
 
   public PageGeneratedApiKeyInfo size(Integer size) {
@@ -233,6 +197,42 @@ public class PageGeneratedApiKeyInfo {
     this.sort = sort;
   }
 
+  public PageGeneratedApiKeyInfo first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageGeneratedApiKeyInfo last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
+  }
+
   public PageGeneratedApiKeyInfo numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -282,19 +282,19 @@ public class PageGeneratedApiKeyInfo {
     return Objects.equals(this.totalPages, pageGeneratedApiKeyInfo.totalPages) &&
         Objects.equals(this.totalElements, pageGeneratedApiKeyInfo.totalElements) &&
         Objects.equals(this.pageable, pageGeneratedApiKeyInfo.pageable) &&
-        Objects.equals(this.first, pageGeneratedApiKeyInfo.first) &&
-        Objects.equals(this.last, pageGeneratedApiKeyInfo.last) &&
         Objects.equals(this.size, pageGeneratedApiKeyInfo.size) &&
         Objects.equals(this.content, pageGeneratedApiKeyInfo.content) &&
         Objects.equals(this.number, pageGeneratedApiKeyInfo.number) &&
         Objects.equals(this.sort, pageGeneratedApiKeyInfo.sort) &&
+        Objects.equals(this.first, pageGeneratedApiKeyInfo.first) &&
+        Objects.equals(this.last, pageGeneratedApiKeyInfo.last) &&
         Objects.equals(this.numberOfElements, pageGeneratedApiKeyInfo.numberOfElements) &&
         Objects.equals(this.empty, pageGeneratedApiKeyInfo.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, size, content, number, sort, first, last, numberOfElements, empty);
   }
 
 
@@ -306,12 +306,12 @@ public class PageGeneratedApiKeyInfo {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");

@@ -12,7 +12,7 @@
 
 import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { DataPage, FunctionsLookupControllerService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PagedModelGChatProfileConfiguration, PromptTemplatesControllerService, ToolCategoriesTree, ToolReference } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PagedModelGChatProfileConfiguration, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { forkJoin, map, Observable } from "rxjs";
@@ -70,11 +70,6 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     public chatProfiles?: PagedModelGChatProfileConfiguration;
     
     /**
-     * Stores the available functions that can be enabled for chat profiles
-     */
-    private functions: string[] = [];
-    
-    /**
      * Stores the default prompt configuration to use for new chat profiles
      */
     private defaultPrompt?: GPromptTemplateConfig;
@@ -105,7 +100,6 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private chatProfilesService: GeboAdminChatProfilesConfigurationControllerService,
         private knowledgeBaseService: KnowledgeBaseControllerService,
-        private functionsLookupService: FunctionsLookupControllerService,
         private promptTemplatesControllerService: PromptTemplatesControllerService,
         private geboUIActionRoutingService: GeboUIActionRoutingService) {
         super(setupWizardComunicationService);
@@ -117,21 +111,13 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
      */
     override ngOnInit(): void {
         super.ngOnInit();
-        const observables: [Observable<Array<GKnowledgeBase>>, Observable<Array<ToolCategoriesTree>>, Observable<GPromptTemplateConfig>] = [this.knowledgeBaseService.getKnowledgeBases(), this.functionsLookupService.getAllFunctionsTree(true), this.promptTemplatesControllerService.getDefaultPrompt(true)];
+        // a profile chooses no tools: the chat model and the agents carry their own
+        const observables: [Observable<Array<GKnowledgeBase>>, Observable<GPromptTemplateConfig>] = [this.knowledgeBaseService.getKnowledgeBases(), this.promptTemplatesControllerService.getDefaultPrompt(true)];
 
         forkJoin(observables).subscribe({
             next: (data) => {
                 this.knowledgeBases = data[0];
-                const functions = this.serializeFunctions(data[1]);
-                this.defaultPrompt = data[2];
-                if (functions) {
-                    this.functions = [];
-                    functions.forEach(x => {
-                        if (x.name) {
-                            this.functions.push(x.name);
-                        }
-                    });
-                }
+                this.defaultPrompt = data[1];
             },
             complete: () => {
 
@@ -141,24 +127,6 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
         );
     }
     
-    /**
-     * Helper method to flatten the tree structure of functions into a simple array
-     * 
-     * @param data Array of ToolCategoriesTree objects representing the function hierarchy
-     * @returns Array of ToolReference objects representing all available functions
-     */
-    private serializeFunctions(data: ToolCategoriesTree[]): ToolReference[] {
-        const out: ToolReference[] = [];
-        data.forEach(x => {
-            if (x.toolsReference) {
-                x.toolsReference.forEach(y => {
-                    out.push(y);
-                });
-
-            }
-        });
-        return out;
-    }
     
     /**
      * Loads chat profile data from the backend service
@@ -219,8 +187,7 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
                 accessibleToAll: true,
                 userChoosesKnowledgeBases:false,
                 knowledgeBaseCodes:[data.knowledgeBaseCode],
-                description: "Chat with knowledge base: " + kbase.description,
-                enabledFunctions: this.functions
+                description: "Chat with knowledge base: " + kbase.description
             };
             const event: GeboUIActionRequest = {
                 actionType: GeboActionType.NEW,

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SimpleGObjectRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:22:02.816924017+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:40.134356333+02:00[Europe/Rome]")
 
 public class SimpleGObjectRef {
   @JsonProperty("simpleClassName")

@@ -694,13 +694,16 @@ export class SharePointSearchServiceControllerService {
      * @param body 
      * @param systemId 
      * @param nEntryLimit 
+     * @param connectTimeoutMillis 
+     * @param readTimeoutMillis 
+     * @param retries 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restNativeSearchSharePoint(body: SharePointSearchFilter, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling restNativeSearchSharePoint.');
@@ -714,12 +717,24 @@ export class SharePointSearchServiceControllerService {
             throw new Error('Required parameter nEntryLimit was null or undefined when calling restNativeSearchSharePoint.');
         }
 
+
+
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (systemId !== undefined && systemId !== null) {
             queryParameters = queryParameters.set('systemId', <any>systemId);
         }
         if (nEntryLimit !== undefined && nEntryLimit !== null) {
             queryParameters = queryParameters.set('nEntryLimit', <any>nEntryLimit);
+        }
+        if (connectTimeoutMillis !== undefined && connectTimeoutMillis !== null) {
+            queryParameters = queryParameters.set('connectTimeoutMillis', <any>connectTimeoutMillis);
+        }
+        if (readTimeoutMillis !== undefined && readTimeoutMillis !== null) {
+            queryParameters = queryParameters.set('readTimeoutMillis', <any>readTimeoutMillis);
+        }
+        if (retries !== undefined && retries !== null) {
+            queryParameters = queryParameters.set('retries', <any>retries);
         }
 
         let headers = this.defaultHeaders;
@@ -760,13 +775,16 @@ export class SharePointSearchServiceControllerService {
      * @param body 
      * @param systemId 
      * @param nEntryLimit 
+     * @param connectTimeoutMillis 
+     * @param readTimeoutMillis 
+     * @param retries 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
-    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
-    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
-    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe?: 'body', reportProgress?: boolean): Observable<Array<SearchResult>>;
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<SearchResult>>>;
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<SearchResult>>>;
+    public restSearchSharePoint(body: SearchQuery, systemId: string, nEntryLimit: number, connectTimeoutMillis?: number, readTimeoutMillis?: number, retries?: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling restSearchSharePoint.');
@@ -780,12 +798,24 @@ export class SharePointSearchServiceControllerService {
             throw new Error('Required parameter nEntryLimit was null or undefined when calling restSearchSharePoint.');
         }
 
+
+
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (systemId !== undefined && systemId !== null) {
             queryParameters = queryParameters.set('systemId', <any>systemId);
         }
         if (nEntryLimit !== undefined && nEntryLimit !== null) {
             queryParameters = queryParameters.set('nEntryLimit', <any>nEntryLimit);
+        }
+        if (connectTimeoutMillis !== undefined && connectTimeoutMillis !== null) {
+            queryParameters = queryParameters.set('connectTimeoutMillis', <any>connectTimeoutMillis);
+        }
+        if (readTimeoutMillis !== undefined && readTimeoutMillis !== null) {
+            queryParameters = queryParameters.set('readTimeoutMillis', <any>readTimeoutMillis);
+        }
+        if (retries !== undefined && retries !== null) {
+            queryParameters = queryParameters.set('retries', <any>retries);
         }
 
         let headers = this.defaultHeaders;

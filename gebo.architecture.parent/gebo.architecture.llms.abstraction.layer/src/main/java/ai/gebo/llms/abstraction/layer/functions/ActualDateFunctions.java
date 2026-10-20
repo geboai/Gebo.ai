@@ -84,6 +84,7 @@ public class ActualDateFunctions implements IGToolCallbackSource {
         ToolReference reference = new ToolReference();
         reference.setName(ACTUAL_DATE_TIME);
         reference.setDescription(GET_ACTUAL_DATE_AND_TIME_IN_ISO_FORMAT);
+        reference.setUserUIfunctionDescription("Current date and time");
         return List.of(reference);
     }
     

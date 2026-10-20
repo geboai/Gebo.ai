@@ -25,7 +25,7 @@ import java.util.Map;
  * GeboImageDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:47.306679445+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:59.303886578+02:00[Europe/Rome]")
 
 public class GeboImageDocumentFragment {
   @JsonProperty("customMetaData")

@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.AgentMountedTools;
 import gebo.microservices.api.client.brain.model.AgentServiceDescriptor;
 import gebo.microservices.api.client.brain.model.GAgentConfig;
 import gebo.microservices.api.client.brain.model.GAgentsNetwork;
@@ -88,6 +89,21 @@ public class GeboAgentsNetworkAdminControllerApiTest {
     @Test
     public void getAgentServicesTest() {
         List<AgentServiceDescriptor> response = api.getAgentServices();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAgentsMountedToolsTest() {
+        List<String> body = null;
+        List<AgentMountedTools> response = api.getAgentsMountedTools(body);
 
         // TODO: test validations
     }

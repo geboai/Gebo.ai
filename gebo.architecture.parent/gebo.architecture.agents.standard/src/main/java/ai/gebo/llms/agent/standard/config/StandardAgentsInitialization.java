@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ai.tool.ToolCallback;
 
-import ai.gebo.architecture.agents.config.AgentsToolsAutoMountingConfig;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -65,7 +64,6 @@ import ai.gebo.llms.agent.standardtools.DeepSearchToolSource;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
-import jakarta.annotation.PostConstruct;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
@@ -77,21 +75,37 @@ import ai.gebo.security.services.IGSecurityService;
 public class StandardAgentsInitialization {
 	private static final String INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT = "*             Initializing standard agents network for reactive chat                 *";
 	private static final String START_ROW = "**************************************************************************************";
-	private static final String SEARCH_AGENT_INTERNALKB_SERVICE_DESCRIPTION = "Search agent service specialized in Internal Knowledge Base Searches";
+	// The agents' descriptions are what the administrator lists and what the coordinator
+	// reads of its peers: it tells the search, tool-calling and writer/reporter agents
+	// apart from them.
+	private static final String SEARCH_AGENT_INTERNALKB_SERVICE_DESCRIPTION = "Search agent for the internal knowledge bases";
+	private static final String EXTERNAL_SEARCH_AGENT_DESCRIPTION = "Search agent for ";
 	public static final String INTERNAL_KNOWLEDGEBASE_AGENT_CODE = "internalKnowledgeBaseSearchAgent";
 	public static final String INTERNAL_KNOWLEDGE_BASE_SEARCH_QUALIFIER = "internalKnowledgeBaseSearch";
-	private static final String REPORTER_AGENT_DESCRIPTION = "Reporter agent that evaluates controller's initiatives, eventually present evidences/documents and user question to create the fittest answer";
-	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Agent's network controller and coordinator";
-	private static final String INPUT_ADAPTER_DESCRIPTION = "Input adapter extracting the user query from the chat runtime data";
+	private static final String REPORTER_AGENT_DESCRIPTION = "Writer/reporter agent: writes the answer from the evidence gathered by the other agents";
+	private static final String CONTROLLER_AND_COORDINATOR_DESCRIPTION = "Coordinator: decides which agents act, and when the evidence is enough to answer";
+	private static final String INPUT_ADAPTER_DESCRIPTION = "Input adapter: hands the user's request to the network, without calling an LLM";
 	private static final String EVIDENCES_SEARCHER_AGENT = "EVIDENCES_SEARCHER_AGENT";
 	private static final String REPORT_WRITER_AGENT = "REPORT_WRITER_AGENT";
 	private static final String SUPERVISOR_AGENT = "SUPERVISOR_AGENT";
 	private static final String TOOL_AGENT = "TOOL_AGENT";
-	private static final String TOOL_CALLING_AGENT_DESCRIPTION = "Tool-calling agent that operates the available tools (APIs, connectors, databases, services) to fulfill the coordinator's commands and returns the tool results as evidence";
+	private static final String TOOL_CALLING_AGENT_DESCRIPTION = "Tool-calling agent: runs the available tools (APIs, connectors, services) for the coordinator";
 	private static final String DEFAULT_NETWORK_SCENARIO_DESCRIPTION = "The network of agent is meant to try to delivery the best answer and interaction to user's questions with a leader controller node controlling if the quality of the network output is ok.\r\n The controller agent is comunicating with one or more searching agents to supply evidences on an evidence analyzer node that responds.\r\n";
-	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Full network of agents: a coordinator hands the question to specialized agents searching the knowledge bases, the web and the external systems or calling the tools, checks the evidence they gather and has a writer agent compose the answer";
+	private static final String DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES = "Coordinator with search, tool-calling and writer agents, for chats with knowledge bases";
 	public static final String FULL_NETWORK_SUGGESTED_PURPOSE = "Fits most scenarios where cheap LLMs, in the order of 10-100B parameters, are used and the AI provider has flat conditions: every question takes many small, focused LLM calls.";
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
+	/**
+	 * The tool sources searching the knowledge bases and the external sources (the
+	 * search services, native or not, the web, the deep searches). The networks
+	 * assembled by {@link #createChatAgentsNetwork} run those searches with one agent
+	 * per knowledge base search and per search service, so their tool-calling agent
+	 * leaves these sources out and operates the other tools of the system (MCP tools,
+	 * the basic tools) instead.
+	 */
+	public static final List<String> SEARCH_TOOL_SOURCES = List.of(
+			InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE,
+			StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE, WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE,
+			DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
 	private final static Logger LOGGER = LoggerFactory.getLogger(StandardAgentsInitialization.class);
 	private final ISearchServiceRepositoryPattern searchServicesRepositoryPattern;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
@@ -105,15 +119,13 @@ public class StandardAgentsInitialization {
 	private final IGDocumentContentRendererProvider rendererFactory;
 	private final IGExternalSearchSecurityService externalSearchSecurityService;
 	private final StandardAgentsConfig standardAgentsConfig;
-	private final AgentsToolsAutoMountingConfig autoMountingConfig;
 
 	public StandardAgentsInitialization(ISearchServiceRepositoryPattern searchServicesRepositoryPattern,
 			IGToolCallbackSourceRepositoryPattern toolsRepositoryPattern, IGSecurityService securityService,
 			IDocumentsChunkService chunkingService, IGRankerService rankerService, IGPromptConfigDao promptsDao,
 			IGChatModelRuntimeConfigurationDao chatModelsDao, IAgentRoleDao agentRoleDao, IGRuntimeBinder runtimeBinder,
 			IGDocumentContentRendererProvider rendererFactory,
-			IGExternalSearchSecurityService externalSearchSecurityService, StandardAgentsConfig standardAgentsConfig,
-			AgentsToolsAutoMountingConfig autoMountingConfig) {
+			IGExternalSearchSecurityService externalSearchSecurityService, StandardAgentsConfig standardAgentsConfig) {
 		this.searchServicesRepositoryPattern = searchServicesRepositoryPattern;
 		this.chatModelsDao = chatModelsDao;
 		this.toolsRepositoryPattern = toolsRepositoryPattern;
@@ -126,56 +138,9 @@ public class StandardAgentsInitialization {
 		this.rendererFactory = rendererFactory;
 		this.externalSearchSecurityService = externalSearchSecurityService;
 		this.standardAgentsConfig = standardAgentsConfig;
-		this.autoMountingConfig = autoMountingConfig;
 		LOGGER.info(START_ROW);
 		LOGGER.info(INITIALIZING_STANDARD_AGENTS_NETWORK_FOR_REACTIVE_CHAT);
 		LOGGER.info(START_ROW);
-	}
-
-	/**
-	 * Keeps the standard search tools out of the default agents network's automatic
-	 * tool mounting. Searching in the default network is the job of the dedicated
-	 * search agents, so the tools contributed by
-	 * {@link StandardSearchesToolsImpl#STANDARD_SEARCHES_TOOLS_SOURCE} must never be
-	 * auto-mounted onto an auto-mounting agent (e.g. the tool-calling agent). The
-	 * whole source is excluded as a block via {@link AgentsToolsAutoMountingConfig},
-	 * on top of any exclusions already configured in application.yml.
-	 */
-	@PostConstruct
-	public void registerDefaultAutoMountExclusions() {
-		List<String> excludedSources = new ArrayList<>(
-				autoMountingConfig.getExcludedToolSources() != null ? autoMountingConfig.getExcludedToolSources()
-						: List.of());
-		// The default network already has a knowledge base searcher agent: the knowledge
-		// base search tool is for the agents that operate their own tools.
-		if (!excludedSources.contains(InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE)) {
-			excludedSources.add(InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE);
-			autoMountingConfig.setExcludedToolSources(excludedSources);
-			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
-					InternalKnowledgeBaseSearchToolSource.INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE);
-		}
-		if (!excludedSources.contains(StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE)) {
-			excludedSources.add(StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
-			autoMountingConfig.setExcludedToolSources(excludedSources);
-			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
-					StandardSearchesToolsImpl.STANDARD_SEARCHES_TOOLS_SOURCE);
-		}
-		// The default network searches the web with its web search agents: the web
-		// search tool on the tool-calling agent would duplicate them.
-		if (!excludedSources.contains(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE)) {
-			excludedSources.add(WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
-			autoMountingConfig.setExcludedToolSources(excludedSources);
-			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
-					WebSearchToolSource.WEB_SEARCH_TOOL_SOURCE);
-		}
-		// The default network deep searches with the deep search pipelines: the deep
-		// search tools are for the agents that operate their own tools.
-		if (!excludedSources.contains(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE)) {
-			excludedSources.add(DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
-			autoMountingConfig.setExcludedToolSources(excludedSources);
-			LOGGER.info("Excluded tool source '{}' from agents automatic tool mounting in the default network",
-					DeepSearchToolSource.DEEP_SEARCH_TOOL_SOURCE);
-		}
 	}
 
 	@Bean
@@ -314,7 +279,8 @@ public class StandardAgentsInitialization {
 		// Global safety backstop on TOTAL agent invocations (the controller's own cycle
 		// budget below is the real terminator); sized so a legitimate multi-cycle
 		// gather/finalize run with a wide searcher fan-out is never truncated.
-		network.setMaxLoopIteration(60);
+		// the cycles of the controller: it coordinates the searchers that many times at most
+		network.setMaxLoopIteration(5);
 		network.setScenarioDescription(DEFAULT_NETWORK_SCENARIO_DESCRIPTION);
 		List<GAgentConfig> dataSources = externalSourcesAgentConfigDataSource().getConfigurations();
 		if (LOGGER.isDebugEnabled()) {
@@ -348,10 +314,9 @@ public class StandardAgentsInitialization {
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controllerConfigCode);
 		controllerParticipant.setInputNode(false);
-		// maxInvocations is the controller's cycle budget: the maximum number of
-		// gather/finalize cycles it may run before it must deliver the final answer.
-		controllerParticipant.setMaxInvocations(5);
-		controllerParticipant.setMaxConsecutiveInvocations(5);
+		// the controller: the network's max loop iteration is its cycle budget, the
+		// gather/finalize cycles it may run before it must deliver the final answer
+		controllerParticipant.setController(true);
 		controllerParticipant.setOutputNode(false);
 		// Searcher participants: the internal knowledge base searcher (when present)
 		// plus every external search-service searcher. Each is reachable from the
@@ -370,8 +335,6 @@ public class StandardAgentsInitialization {
 				LOGGER.trace("Adding searcher participant:" + searcher.getCode() + " - " + searcher.getDescription());
 			}
 			participant.setAgentConfigCode(searcher.getCode());
-			participant.setMaxConsecutiveInvocations(5);
-			participant.setMaxInvocations(10);
 			workerParticipants.add(participant);
 		}
 		// Tool-calling agent participant, present only when tools are available. Like the
@@ -380,8 +343,6 @@ public class StandardAgentsInitialization {
 		if (toolCallingAgentConfig != null) {
 			AgentNetworkParticipant toolAgentParticipant = new AgentNetworkParticipant();
 			toolAgentParticipant.setAgentConfigCode(toolCallingAgentConfig.getCode());
-			toolAgentParticipant.setMaxConsecutiveInvocations(5);
-			toolAgentParticipant.setMaxInvocations(10);
 			workerParticipants.add(toolAgentParticipant);
 		}
 		AgentNetworkParticipant outParticipant = new AgentNetworkParticipant();
@@ -419,8 +380,8 @@ public class StandardAgentsInitialization {
 		if (LOGGER.isTraceEnabled()) {
 			for (AgentNetworkParticipant participant : participants) {
 				LOGGER.trace("Participant:" + participant.getNetworkAgentName() + " inputNode:"
-						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " maxInvocations:"
-						+ participant.getMaxInvocations() + " communicationList:"
+						+ participant.isInputNode() + " outputNode:" + participant.isOutputNode() + " controller:"
+						+ participant.isController() + " communicationList:"
 						+ participant.getCommunicationList());
 			}
 		}
@@ -452,7 +413,7 @@ public class StandardAgentsInitialization {
 								: DocumentsSearchNetworkAgentServiceWrapper.SEARCH_AGENT);
 						GAgentConfig agentConfig = new GAgentConfig();
 						agentConfig.setCode(serviceId);
-						agentConfig.setDescription(search.getProductId() + " search agent ");
+						agentConfig.setDescription(EXTERNAL_SEARCH_AGENT_DESCRIPTION + search.getProductId());
 						// Native searchers generate with their native query template; the others use
 						// their query-generation prompt. The chosen template is runtime-patched with
 						// the agent network placeholders and stored as the agent's custom loop prompt.
@@ -489,12 +450,16 @@ public class StandardAgentsInitialization {
 	GAgentConfig toolCallingConfig = null;
 
 	/**
-	 * Config data source for the standard String-to-String tool-calling agent. The
-	 * agent subscribes to ALL registered tools ({@code subscribeAllTools=true}) so
-	 * it can operate whatever tools are dynamically available at runtime, and runs
-	 * the dedicated tool-calling loop prompt. It is only wired into the default
-	 * network when at least one tool is actually registered (see
-	 * {@link #hasToolsAvailable()}).
+	 * Config data source for the standard String-to-String tool-calling agent of the
+	 * networks assembled by {@link #createChatAgentsNetwork}. The agent subscribes
+	 * to ALL registered tools ({@code subscribeAllTools=true}) so it can operate
+	 * whatever tools are dynamically available at runtime (MCP tools, the basic
+	 * tools of the system), except the {@link #SEARCH_TOOL_SOURCES}: in those
+	 * networks every knowledge base search and every search service is run by its
+	 * own search agent, so the same searches are not mounted on the tool-calling
+	 * agent as tools too. It runs the dedicated tool-calling loop prompt and is
+	 * only wired into the network when at least one tool is actually registered
+	 * (see {@link #hasToolsAvailable()}).
 	 */
 	@Bean
 	public IGDynamicAgentConfigDataSource defaultToolCallingAgentConfigDataSource() {
@@ -510,9 +475,11 @@ public class StandardAgentsInitialization {
 			toolCallingConfig.setUseDefaultChatModel(true);
 			toolCallingConfig.setSubscribeAllTools(true);
 			toolCallingConfig.setEnabledFunctions(List.of());
+			// the searches are the search agents' job: the tool-calling agent runs the rest
+			toolCallingConfig.setExcludedToolSources(SEARCH_TOOL_SOURCES);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Built the default tool calling agent configuration code:" + toolCallingConfig.getCode()
-						+ " subscribing ALL registered tools");
+						+ " subscribing ALL registered tools but the search tool sources " + SEARCH_TOOL_SOURCES);
 			}
 		}
 		return IGDynamicAgentConfigDataSource.of(toolCallingConfig);

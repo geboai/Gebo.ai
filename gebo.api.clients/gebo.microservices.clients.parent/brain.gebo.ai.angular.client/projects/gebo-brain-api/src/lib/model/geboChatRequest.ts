@@ -30,6 +30,9 @@ export interface GeboChatRequest {
     userUploadedContents?: Array<UserUploadedContent>;
     deepSearchDataSources?: Array<string>;
     userIntent?: GeboChatRequest.UserIntentEnum;
+    searchRequested?: boolean;
+    searchForbidden?: boolean;
+    userLanguage?: string;
     additionalContents?: Array<AdditionalContent>;
     tokensSize?: number;
 }

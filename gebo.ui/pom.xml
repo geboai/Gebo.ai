@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo</groupId>
 		<artifactId>ai.gebo.parent</artifactId>
-		<version>1.0.4.0</version>
+		<version>1.0.5.0</version>
 	</parent>
 	<artifactId>gebo.ui</artifactId>
 	<properties>
@@ -81,6 +81,28 @@
 								</goals>
 								<configuration>
 									<arguments>run build-prod</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-clean-plugin</artifactId>
+						<version>3.4.1</version>
+						<executions>
+							<execution>
+								<id>drop the static files of the previous builds</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>clean</goal>
+								</goals>
+								<configuration>
+									<excludeDefaultDirectories>true</excludeDefaultDirectories>
+									<filesets>
+										<fileset>
+											<directory>${project.build.outputDirectory}/static</directory>
+										</fileset>
+									</filesets>
 								</configuration>
 							</execution>
 						</executions>

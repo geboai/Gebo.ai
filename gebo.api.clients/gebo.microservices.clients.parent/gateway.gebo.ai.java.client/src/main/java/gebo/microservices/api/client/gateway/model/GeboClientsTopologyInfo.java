@@ -25,7 +25,7 @@ import java.util.List;
  * GeboClientsTopologyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:37.059368197+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:34.056304754+02:00[Europe/Rome]")
 
 public class GeboClientsTopologyInfo {
   /**

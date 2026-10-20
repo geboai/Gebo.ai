@@ -56,6 +56,11 @@ interface GeboChatInteraction {
     // The reasoning the model writes before its answer, as it streams: accumulated and shown in
     // the answer's place until the answer starts, never part of the answer.
     streamingThinking?: string;
+    // How many answers the stream of this answer delivered so far, as GeboChatResponse messages:
+    // an agent working in cycles sends one per cycle, the final one included; the closing
+    // envelope of the pipeline (lastMessage) repeats the final one and is not counted.
+    // Undefined for an answer loaded from the history.
+    receivedResponses?: number;
 };
 
 /**
@@ -1383,6 +1388,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         lastMessage?: boolean
     ): void {
         const oldQueryResponse = interaction.response?.queryResponse;
+        if (lastMessage !== true) {
+            // the closing envelope of the pipeline carries the answer already counted: not an answer of its own
+            interaction.receivedResponses = (interaction.receivedResponses ?? 0) + 1;
+        }
         interaction.response = response;
         if (interaction.response && oldQueryResponse && !interaction.response.queryResponse) {
             interaction.response.queryResponse = oldQueryResponse;
@@ -1562,6 +1571,16 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                         case "GeboChatResponse": {
                             flushText();
                             this.handleGeboChatResponse(interaction, recvd.content, r, suggestChatDescription, doSpeach, recvd.lastMessage);
+                        } break;
+                        case "GAnswerCycleEvent": {
+                            // an agent working in cycles starts a new one: the answer of the previous
+                            // cycle (given whole just before, as a GeboChatResponse) is written again,
+                            // improved, in its place; the shown text makes room for the new one
+                            flushText();
+                            if (interaction.response) {
+                                interaction.response.queryResponse = "";
+                            }
+                            console.log("answer cycle " + recvd.content?.cycle + " of at most " + recvd.content?.maxCycles + " starts");
                         } break;
                         case "GThinkingEvent": {
                             if (recvd.content?.completed) {

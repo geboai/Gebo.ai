@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -362,8 +363,8 @@ public class GeboAISecurityConfig {
 	 * @throws Exception If an error occurs while configuring HTTP security.
 	 */
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestAuditFilter requestAuditFilter)
-			throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestAuditFilter requestAuditFilter,
+			Environment environment) throws Exception {
 		boolean oauth2LoginEnabled = securityConfig.getOauth2LoginEnabled() != null
 				&& securityConfig.getOauth2LoginEnabled();
 		boolean oauth2ResourceServerEnabled = securityConfig.getOauth2ResourceServerEnabled() != null
@@ -373,8 +374,20 @@ public class GeboAISecurityConfig {
 		} else {
 			LOGGER.info("No Swagger on the classpath: the API console and /v3/api-docs stay closed");
 		}
+		// The metrics scraper and the health probes reach the actuator anonymously on the
+		// separate management port only, which the observability deployments set and never
+		// publish (see ManagementPortScrapeRequestMatcher).
+		final ManagementPortScrapeRequestMatcher managementScrape = new ManagementPortScrapeRequestMatcher(environment);
+		String managementPort = environment.getProperty("management.server.port");
+		if (managementPort != null && !managementPort.isBlank()) {
+			LOGGER.info("Management port {} configured: actuator health and prometheus answer anonymously on it only",
+					managementPort);
+		} else {
+			LOGGER.info("No management port configured: the actuator stays behind authentication");
+		}
 		HttpSecurity configBuilder = http.cors(c -> c.disable()).csrf(csrf -> csrf.disable())
 				.addFilterAfter(corsFilter, CsrfFilter.class).authorizeHttpRequests(authorizeRequests -> {
+					authorizeRequests.requestMatchers(managementScrape).permitAll();
 					authorizeRequests.requestMatchers(allowedUrls).permitAll();
 					if (SWAGGER_PRESENT) {
 						authorizeRequests.requestMatchers(swaggerUrls).permitAll();

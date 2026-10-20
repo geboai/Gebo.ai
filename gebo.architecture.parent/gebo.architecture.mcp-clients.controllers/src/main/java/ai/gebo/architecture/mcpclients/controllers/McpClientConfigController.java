@@ -25,6 +25,10 @@ import ai.gebo.architecture.mcpclients.repository.McpClientConfigRepository;
 import ai.gebo.architecture.mcpclients.service.McpClientManagementService;
 import ai.gebo.architecture.utils.DataPage;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -43,6 +47,12 @@ public class McpClientConfigController {
 
 	private final McpClientManagementService managementService;
 	private final McpClientConfigRepository repository;
+	/**
+	 * The insert/update/delete of an external MCP server are security events: the
+	 * agents send tool arguments to it, and its tools and who may call each of them
+	 * are part of its configuration.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	/**
 	 * Tests connectivity to the configured MCP server and discovers its
@@ -58,7 +68,12 @@ public class McpClientConfigController {
 	 */
 	@PostMapping(value = "insertMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<MCPClientConfig> insertMCPClientConfig(@RequestBody @Valid @NotNull MCPClientConfig config) {
-		return managementService.insert(config);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_SERVER_INSERT, SecurityAuditTaxonomy.ResourceType.MCP_SERVER,
+				config != null ? config.getCode() : null, config, () -> managementService.insert(config));
 	}
 
 	/**
@@ -66,7 +81,11 @@ public class McpClientConfigController {
 	 */
 	@PostMapping(value = "updateMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<MCPClientConfig> updateMCPClientConfig(@RequestBody @Valid @NotNull MCPClientConfig config) {
-		return managementService.update(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_SERVER_UPDATE, SecurityAuditTaxonomy.ResourceType.MCP_SERVER,
+				config != null ? config.getCode() : null, config, () -> managementService.update(config));
 	}
 
 	/**
@@ -74,7 +93,11 @@ public class McpClientConfigController {
 	 */
 	@DeleteMapping(value = "deleteMCPClientConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<Boolean> deleteMCPClientConfig(@RequestBody @Valid @NotNull MCPClientConfig config) {
-		return managementService.delete(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.INTEROPERABILITY_CONFIGURATION,
+				SecurityAuditTaxonomy.Action.MCP_SERVER_DELETE, SecurityAuditTaxonomy.ResourceType.MCP_SERVER,
+				config != null ? config.getCode() : null, null, () -> managementService.delete(config));
 	}
 
 	/**

@@ -237,7 +237,10 @@ public class GoogleDriveSearchServiceControllerApiTest {
         SearchQuery body = null;
         String systemId = null;
         Integer nEntryLimit = null;
-        List<SearchResult> response = api.restSearchGoogleDrive(body, systemId, nEntryLimit);
+        Integer connectTimeoutMillis = null;
+        Integer readTimeoutMillis = null;
+        Integer retries = null;
+        List<SearchResult> response = api.restSearchGoogleDrive(body, systemId, nEntryLimit, connectTimeoutMillis, readTimeoutMillis, retries);
 
         // TODO: test validations
     }

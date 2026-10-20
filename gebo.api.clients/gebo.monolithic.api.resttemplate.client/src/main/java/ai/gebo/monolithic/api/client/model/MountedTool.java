@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * MountedTool
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class MountedTool {
   @JsonProperty("name")
@@ -36,6 +36,47 @@ public class MountedTool {
 
   @JsonProperty("categoryDescription")
   private String categoryDescription = null;
+
+  @JsonProperty("sourceId")
+  private String sourceId = null;
+
+  @JsonProperty("sourceDescription")
+  private String sourceDescription = null;
+
+  /**
+   * Gets or Sets exclusion
+   */
+  public enum ExclusionEnum {
+    AGENT_CONFIGURATION("AGENT_CONFIGURATION"),
+    SYSTEM_SETTINGS("SYSTEM_SETTINGS"),
+    AGENT_SERVICE("AGENT_SERVICE");
+
+    private String value;
+
+    ExclusionEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static ExclusionEnum fromValue(String input) {
+      for (ExclusionEnum b : ExclusionEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("exclusion")
+  private ExclusionEnum exclusion = null;
 
   public MountedTool name(String name) {
     this.name = name;
@@ -109,6 +150,60 @@ public class MountedTool {
     this.categoryDescription = categoryDescription;
   }
 
+  public MountedTool sourceId(String sourceId) {
+    this.sourceId = sourceId;
+    return this;
+  }
+
+   /**
+   * Get sourceId
+   * @return sourceId
+  **/
+  @Schema(description = "")
+  public String getSourceId() {
+    return sourceId;
+  }
+
+  public void setSourceId(String sourceId) {
+    this.sourceId = sourceId;
+  }
+
+  public MountedTool sourceDescription(String sourceDescription) {
+    this.sourceDescription = sourceDescription;
+    return this;
+  }
+
+   /**
+   * Get sourceDescription
+   * @return sourceDescription
+  **/
+  @Schema(description = "")
+  public String getSourceDescription() {
+    return sourceDescription;
+  }
+
+  public void setSourceDescription(String sourceDescription) {
+    this.sourceDescription = sourceDescription;
+  }
+
+  public MountedTool exclusion(ExclusionEnum exclusion) {
+    this.exclusion = exclusion;
+    return this;
+  }
+
+   /**
+   * Get exclusion
+   * @return exclusion
+  **/
+  @Schema(description = "")
+  public ExclusionEnum getExclusion() {
+    return exclusion;
+  }
+
+  public void setExclusion(ExclusionEnum exclusion) {
+    this.exclusion = exclusion;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -122,12 +217,15 @@ public class MountedTool {
     return Objects.equals(this.name, mountedTool.name) &&
         Objects.equals(this.description, mountedTool.description) &&
         Objects.equals(this.categoryCode, mountedTool.categoryCode) &&
-        Objects.equals(this.categoryDescription, mountedTool.categoryDescription);
+        Objects.equals(this.categoryDescription, mountedTool.categoryDescription) &&
+        Objects.equals(this.sourceId, mountedTool.sourceId) &&
+        Objects.equals(this.sourceDescription, mountedTool.sourceDescription) &&
+        Objects.equals(this.exclusion, mountedTool.exclusion);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, description, categoryCode, categoryDescription);
+    return Objects.hash(name, description, categoryCode, categoryDescription, sourceId, sourceDescription, exclusion);
   }
 
 
@@ -140,6 +238,9 @@ public class MountedTool {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    categoryCode: ").append(toIndentedString(categoryCode)).append("\n");
     sb.append("    categoryDescription: ").append(toIndentedString(categoryDescription)).append("\n");
+    sb.append("    sourceId: ").append(toIndentedString(sourceId)).append("\n");
+    sb.append("    sourceDescription: ").append(toIndentedString(sourceDescription)).append("\n");
+    sb.append("    exclusion: ").append(toIndentedString(exclusion)).append("\n");
     sb.append("}");
     return sb.toString();
   }

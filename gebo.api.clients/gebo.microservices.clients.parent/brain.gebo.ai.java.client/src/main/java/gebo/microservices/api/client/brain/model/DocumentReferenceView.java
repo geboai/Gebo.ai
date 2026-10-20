@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:20.194305186+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -35,17 +35,20 @@ public class DocumentReferenceView {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("messagingModuleId")
-  private String messagingModuleId = null;
-
   @JsonProperty("code")
   private String code = null;
+
+  @JsonProperty("messagingModuleId")
+  private String messagingModuleId = null;
 
   @JsonProperty("rootKnowledgebaseCode")
   private String rootKnowledgebaseCode = null;
 
   @JsonProperty("parentProjectCode")
   private String parentProjectCode = null;
+
+  @JsonProperty("parentVirtualFolderCode")
+  private String parentVirtualFolderCode = null;
 
   @JsonProperty("modificationDate")
   private Date modificationDate = null;
@@ -55,9 +58,6 @@ public class DocumentReferenceView {
 
   @JsonProperty("deleted")
   private Boolean deleted = null;
-
-  @JsonProperty("parentVirtualFolderCode")
-  private String parentVirtualFolderCode = null;
 
   @JsonProperty("creationDate")
   private Date creationDate = null;
@@ -119,24 +119,6 @@ public class DocumentReferenceView {
     this.description = description;
   }
 
-  public DocumentReferenceView messagingModuleId(String messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
-    return this;
-  }
-
-   /**
-   * Get messagingModuleId
-   * @return messagingModuleId
-  **/
-  @Schema(description = "")
-  public String getMessagingModuleId() {
-    return messagingModuleId;
-  }
-
-  public void setMessagingModuleId(String messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
-  }
-
   public DocumentReferenceView code(String code) {
     this.code = code;
     return this;
@@ -153,6 +135,24 @@ public class DocumentReferenceView {
 
   public void setCode(String code) {
     this.code = code;
+  }
+
+  public DocumentReferenceView messagingModuleId(String messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
+    return this;
+  }
+
+   /**
+   * Get messagingModuleId
+   * @return messagingModuleId
+  **/
+  @Schema(description = "")
+  public String getMessagingModuleId() {
+    return messagingModuleId;
+  }
+
+  public void setMessagingModuleId(String messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
   }
 
   public DocumentReferenceView rootKnowledgebaseCode(String rootKnowledgebaseCode) {
@@ -189,6 +189,24 @@ public class DocumentReferenceView {
 
   public void setParentProjectCode(String parentProjectCode) {
     this.parentProjectCode = parentProjectCode;
+  }
+
+  public DocumentReferenceView parentVirtualFolderCode(String parentVirtualFolderCode) {
+    this.parentVirtualFolderCode = parentVirtualFolderCode;
+    return this;
+  }
+
+   /**
+   * Get parentVirtualFolderCode
+   * @return parentVirtualFolderCode
+  **/
+  @Schema(description = "")
+  public String getParentVirtualFolderCode() {
+    return parentVirtualFolderCode;
+  }
+
+  public void setParentVirtualFolderCode(String parentVirtualFolderCode) {
+    this.parentVirtualFolderCode = parentVirtualFolderCode;
   }
 
   public DocumentReferenceView modificationDate(Date modificationDate) {
@@ -245,24 +263,6 @@ public class DocumentReferenceView {
     this.deleted = deleted;
   }
 
-  public DocumentReferenceView parentVirtualFolderCode(String parentVirtualFolderCode) {
-    this.parentVirtualFolderCode = parentVirtualFolderCode;
-    return this;
-  }
-
-   /**
-   * Get parentVirtualFolderCode
-   * @return parentVirtualFolderCode
-  **/
-  @Schema(description = "")
-  public String getParentVirtualFolderCode() {
-    return parentVirtualFolderCode;
-  }
-
-  public void setParentVirtualFolderCode(String parentVirtualFolderCode) {
-    this.parentVirtualFolderCode = parentVirtualFolderCode;
-  }
-
   public DocumentReferenceView creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
@@ -312,21 +312,21 @@ public class DocumentReferenceView {
     return Objects.equals(this.name, documentReferenceView.name) &&
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.description, documentReferenceView.description) &&
-        Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.code, documentReferenceView.code) &&
+        Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
+        Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
         Objects.equals(this.relativePath, documentReferenceView.relativePath) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
-        Objects.equals(this.parentVirtualFolderCode, documentReferenceView.parentVirtualFolderCode) &&
         Objects.equals(this.creationDate, documentReferenceView.creationDate) &&
         Objects.equals(this.contentType, documentReferenceView.contentType);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, description, messagingModuleId, code, rootKnowledgebaseCode, parentProjectCode, modificationDate, relativePath, deleted, parentVirtualFolderCode, creationDate, contentType);
+    return Objects.hash(name, extension, description, code, messagingModuleId, rootKnowledgebaseCode, parentProjectCode, parentVirtualFolderCode, modificationDate, relativePath, deleted, creationDate, contentType);
   }
 
 
@@ -338,14 +338,14 @@ public class DocumentReferenceView {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
+    sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");
     sb.append("    relativePath: ").append(toIndentedString(relativePath)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");
-    sb.append("    parentVirtualFolderCode: ").append(toIndentedString(parentVirtualFolderCode)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("}");

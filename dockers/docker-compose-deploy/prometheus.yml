@@ -1,7 +1,8 @@
 # Scrape config for the Gebo.ai monolith deployment.
-# The monolith serves at the root context path, so actuator is at the
-# default /actuator/prometheus (no per-service context-path prefix, unlike
-# the microservices stack's prometheus.yml).
+# The actuator answers on the separate management port 12998 that the
+# observability overlay sets (MANAGEMENT_SERVER_PORT) and keeps unpublished:
+# there /actuator/prometheus needs no login, while on the application port
+# 12999 every actuator call needs an authenticated user.
 global:
   scrape_interval: 15s
 
@@ -9,4 +10,4 @@ scrape_configs:
   - job_name: gebo-ai-monolith
     metrics_path: /actuator/prometheus
     static_configs:
-      - targets: ["gebo.ai:12999"]
+      - targets: ["gebo.ai:12998"]

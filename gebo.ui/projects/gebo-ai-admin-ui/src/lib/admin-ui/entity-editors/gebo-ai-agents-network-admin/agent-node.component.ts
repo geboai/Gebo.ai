@@ -1,3 +1,11 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
 import { Component, input, Inject, forwardRef } from "@angular/core";
 
 import { ButtonModule } from "primeng/button";
@@ -5,87 +13,116 @@ import { PopoverModule } from "primeng/popover";
 import { TooltipModule } from "primeng/tooltip";
 import { SimpleNode, NgDiagramNodeTemplate, NgDiagramNodeSelectedDirective, NgDiagramPortComponent } from "ng-diagram";
 import { GeboAIAgentsNetworkAdminComponent } from "./gebo-ai-agents-network-admin.component";
-import { AgentMountedTools, AgentNetworkParticipant, MountedTool } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, MountedTool } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
 
+/**
+ * A participant of the network on the graph: its name, the service it runs with
+ * the input it accepts and what it produces, its roles and flags, the tools its
+ * configuration mounts. The left port is its input, typed; the right port is its
+ * output: a router sends commands, a responder replies to whoever asked, a
+ * forwarder delivers its output. A node with an error of the checks is outlined.
+ */
 @Component({
     selector: "gebo-ai-agent-node-component",
     standalone: true,
-    imports: [ButtonModule, PopoverModule, TooltipModule, NgDiagramNodeSelectedDirective, NgDiagramPortComponent],
+    imports: [ButtonModule, PopoverModule, TooltipModule, NgDiagramNodeSelectedDirective, NgDiagramPortComponent, GeboAIFieldTranslationContainerModule],
     hostDirectives: [{ directive: NgDiagramNodeSelectedDirective, inputs: ["node"] }],
     template: `
+        @let participant = node().data;
+        @let service = parent.serviceOf(participant);
+        @let name = parent.participantName(participant);
         <div class="node-card p-3 border-round shadow-2 bg-paper flex flex-column gap-2 text-left relative cursor-pointer"
           style="min-width: 220px; max-width: 300px; border-top: 4px solid var(--primary-color); background-color: var(--surface-card, #ffffff);"
-          [title]="parent.readonly ? 'Click to view this agent' : 'Click to edit this agent'"
+          [style.outline]="parent.nodeHasError(name) ? '2px solid var(--red-500, #ef4444)' : (parent.isSelected(participant) ? '2px solid var(--primary-color)' : 'none')"
+          [style.border-top-color]="service?.reactive ? 'var(--purple-500, #a855f7)' : (parent.isRouter(service) ? 'var(--orange-500, #f97316)' : 'var(--primary-color)')"
+          [title]="parent.text(parent.readonly ? 'NodeViewTitle' : 'NodeEditTitle')"
           (pointerdown)="onPointerDown($event)"
           (pointerup)="onPointerUp($event)">
-        
-          <!-- Left Input Port -->
+
+          <!-- Left input port, typed -->
           <ng-diagram-port [side]="'left'" [type]="'target'" [id]="'port-left'"
           [style.pointer-events]="parent.readonly ? 'none' : 'auto'"></ng-diagram-port>
-        
-          <!-- Right Output Port -->
+
+          <!-- Right output port: a router sends commands, a responder replies -->
           <ng-diagram-port [side]="'right'" [type]="'source'" [id]="'port-right'"
           [style.pointer-events]="parent.readonly ? 'none' : 'auto'"></ng-diagram-port>
-        
+
           <div class="flex justify-content-between align-items-center gap-1">
             <span class="font-bold text-lg text-primary white-space-nowrap overflow-hidden text-overflow-ellipsis"
-              style="min-width: 0;" [title]="node().data.networkAgentName">{{node().data.networkAgentName}}</span>
+              style="min-width: 0;" [title]="name">{{name}}</span>
             <div class="flex gap-1 flex-shrink-0">
-              @if (node().data.inputNode) {
-                <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" title="Input Node">
-                  <i class="pi pi-sign-in"></i> IN
+              @if (participant.inputNode) {
+                <span class="p-1 border-round bg-green-100 text-green-700 text-xs font-semibold flex align-items-center gap-1" id="NodeInputBadge" gebo-ai-label title="Network input node">
+                  <i class="pi pi-sign-in"></i> <span id="InputNodeBadge" gebo-ai-text>IN</span>
                 </span>
               }
-              @if (node().data.outputNode) {
-                <span class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold flex align-items-center gap-1" title="Output Node">
-                  <i class="pi pi-sign-out"></i> OUT
+              @if (participant.outputNode) {
+                <span class="p-1 border-round bg-blue-100 text-blue-700 text-xs font-semibold flex align-items-center gap-1" id="NodeOutputBadge" gebo-ai-label title="Network output node">
+                  <i class="pi pi-sign-out"></i> <span id="OutputNodeBadge" gebo-ai-text>OUT</span>
+                </span>
+              }
+              @if (participant.controller) {
+                <span class="p-1 border-round bg-orange-100 text-orange-700 text-xs font-semibold flex align-items-center gap-1" id="NodeControllerBadge" gebo-ai-label title="Controller: the network's loop is counted on it">
+                  <i class="pi pi-sync"></i> <span id="ControllerBadge" gebo-ai-text>CTRL</span>
                 </span>
               }
             </div>
           </div>
-        
+
           <div class="text-sm flex align-items-center justify-content-between gap-1">
-            <div class="text-overflow-ellipsis overflow-hidden" style="max-width: 150px;">
-              <span class="text-muted-color font-semibold">Config: </span>
-              <span [title]="parent.getAgentDescription(node().data.agentConfigCode)">
-                {{parent.getAgentDescription(node().data.agentConfigCode)}}
+            <div class="text-overflow-ellipsis overflow-hidden" style="max-width: 190px;">
+              <span [title]="parent.getAgentDescription(participant.agentConfigCode)">
+                {{parent.getAgentDescription(participant.agentConfigCode)}}
               </span>
             </div>
             <button pButton icon="pi pi-cog" class="p-button-rounded p-button-text p-button-sm p-0 w-2rem h-2rem"
-              [disabled]="parent.readonly"
-              (click)="$event.stopPropagation(); parent.editAgentConfig(node().data.agentConfigCode)"
-            title="Edit Agent Configuration"></button>
+              (click)="$event.stopPropagation(); parent.editAgentConfig(participant.agentConfigCode)"
+            id="NodeEditConfigBtn" gebo-ai-label title="Edit the agent configuration"></button>
           </div>
-        
-          @if (node().data.agentContextualName) {
-            <div class="text-xs text-muted-color">
-              <span class="font-semibold">Context: </span>
-              <span>{{node().data.agentContextualName}}</span>
-            </div>
-          }
-        
-          @if (node().data.communicationPolicy) {
-            <div class="text-xs text-muted-color">
-              <span class="font-semibold">Policy: </span>
-              <span>{{node().data.communicationPolicy}}</span>
-            </div>
-          }
-        
-          @if (parent.getMountedTools(node().data.agentConfigCode); as mounted) {
+
+          <div class="text-xs flex align-items-center gap-1 flex-wrap" style="font-family: monospace;">
+            @if (service) {
+              <span class="px-1 border-round bg-blue-50 text-blue-700" [pTooltip]="service.inputType" tooltipPosition="top" appendTo="body">{{parent.shortType(service.inputType)}}</span>
+              <i class="pi pi-arrow-right text-muted-color" style="font-size: 0.6rem"></i>
+              @if (parent.isRouter(service)) {
+                <span id="CommandsLabel" gebo-ai-text class="px-1 border-round bg-orange-50 text-orange-700" [pTooltip]="parent.text('NodeCommandsTooltip')" tooltipPosition="top" appendTo="body">commands</span>
+              } @else {
+                <span class="px-1 border-round bg-purple-50 text-purple-700" [pTooltip]="service.outputType" tooltipPosition="top" appendTo="body">{{parent.shortType(service.outputType)}}</span>
+              }
+              @if (parent.isResponder(service)) {
+                <span id="RepliesLabel" gebo-ai-text class="px-1 border-round bg-teal-50 text-teal-700" [pTooltip]="parent.text('NodeRepliesTooltip')" tooltipPosition="top" appendTo="body">replies</span>
+              }
+              @if (service.reactive) {
+                <span id="StreamsLabel" gebo-ai-text class="px-1 border-round bg-purple-100 text-purple-800" [pTooltip]="parent.text('NodeStreamsTooltip')" tooltipPosition="top" appendTo="body">streams</span>
+              }
+            } @else {
+              <span id="NodeUnknownService" gebo-ai-text class="px-1 border-round bg-red-100 text-red-700">unknown service</span>
+            }
+          </div>
+
+          <div class="text-xs text-muted-color">
+            @if (participant.allowedToNotifyUser === false) { <span id="NodeSilent" gebo-ai-text>silent</span> } @else { <span id="NodeNotifies" gebo-ai-text>notifies</span> }
+            · @if (participant.canCallTools === false) { <span id="NodeNoTools" gebo-ai-text>no tools</span> } @else { <span id="NodeTools" gebo-ai-text>tools</span> }
+            @if (participant.canCallOtherAgents) { · <span id="NodeDelegates" gebo-ai-text>delegates</span> }
+            @if (participant.controller) { · <span id="NodeControllerRole" gebo-ai-text>controller</span> }
+          </div>
+
+          @if (parent.getMountedTools(participant.agentConfigCode); as mounted) {
             <div class="flex flex-column gap-1 border-top-1 surface-border pt-2" style="max-width: 280px;"
-              [class.opacity-50]="node().data.canCallTools === false"
-              [pTooltip]="node().data.canCallTools === false ? 'These tools are mounted, but this participant is told not to call them (Can Call Tools is off)' : undefined"
+              [class.opacity-50]="participant.canCallTools === false"
+              [pTooltip]="participant.canCallTools === false ? parent.text('NodeToolsNotCalledTooltip') : undefined"
               tooltipPosition="top" appendTo="body">
               <div class="flex align-items-center gap-1 text-xs">
                 <i class="pi pi-wrench text-muted-color"></i>
-                <span class="font-semibold text-muted-color">Tools ({{mounted.tools?.length || 0}})</span>
+                <span class="font-semibold text-muted-color"><span id="NodeToolsTitle" gebo-ai-text>Tools</span> ({{mounted.tools?.length || 0}})</span>
                 @if (mounted.mountMode === 'AUTO') {
-                  <span class="px-1 border-round bg-primary-50 text-primary-700 font-semibold"
-                    [pTooltip]="'Auto mounting: every registered tool' + (mounted.excludedTools?.length ? ', but ' + mounted.excludedTools!.length + ' excluded' : '')"
+                  <span id="NodeAutoBadge" gebo-ai-text class="px-1 border-round bg-primary-50 text-primary-700 font-semibold"
+                    [pTooltip]="mounted.excludedTools?.length ? parent.text('NodeAutoMountingExcludedTooltip') : parent.text('NodeAutoMountingTooltip')"
                     tooltipPosition="top" appendTo="body">AUTO</span>
                 } @else {
-                  <span class="px-1 border-round surface-200 font-semibold"
-                    pTooltip="The tools selected in the agent configuration" tooltipPosition="top" appendTo="body">SELECTED</span>
+                  <span id="NodeSelectedBadge" gebo-ai-text class="px-1 border-round surface-200 font-semibold"
+                    [pTooltip]="parent.text('NodeSelectedToolsTooltip')" tooltipPosition="top" appendTo="body">SELECTED</span>
                 }
               </div>
               @if (mounted.tools?.length) {
@@ -99,22 +136,22 @@ import { AgentMountedTools, AgentNetworkParticipant, MountedTool } from "@Gebo.a
                   }
                   @if (hiddenToolsCount(mounted) > 0 || mounted.excludedTools?.length) {
                     <button type="button" class="px-1 border-round text-xs border-1 surface-border surface-card cursor-pointer"
-                      [title]="'Show all the tools of ' + node().data.networkAgentName"
+                      [title]="parent.text('NodeShowAllToolsTitle')"
                       (click)="$event.stopPropagation(); toolsPopover.toggle($event)">
                       {{hiddenToolsCount(mounted) > 0 ? '+' + hiddenToolsCount(mounted) : '…'}}
                     </button>
                   }
                 </div>
               } @else {
-                <span class="text-xs text-muted-color">No tools mounted</span>
+                <span id="NodeNoToolsMounted" gebo-ai-text class="text-xs text-muted-color">No tools mounted</span>
               }
               <p-popover #toolsPopover appendTo="body">
                 <div class="flex flex-column gap-2 text-sm" style="max-width: 420px; max-height: 360px; overflow: auto;">
-                  <span class="font-semibold">Tools mounted by {{node().data.networkAgentName}} ({{mounted.mountMode === 'AUTO' ? 'auto mounting' : 'selected'}})</span>
+                  <span class="font-semibold"><span id="NodeToolsMountedBy" gebo-ai-text>Tools mounted by</span> {{name}} (@if (mounted.mountMode === 'AUTO') {<span id="NodeAutoMounting" gebo-ai-text>auto mounting</span>} @else {<span id="NodeSelectedMounting" gebo-ai-text>selected</span>})</span>
                   @for (tool of sortedTools(mounted.tools); track tool.name) {
                     <div class="flex flex-column">
                       <span class="flex align-items-center gap-1">
-                        <span class="px-1 border-round text-xs" [class]="categoryClass(tool)">{{tool.categoryDescription || tool.categoryCode || 'Tool'}}</span>
+                        <span class="px-1 border-round text-xs" [class]="categoryClass(tool)">{{tool.categoryDescription || tool.categoryCode || parent.text('NodeToolFallback')}}</span>
                         <span class="font-semibold">{{tool.name}}</span>
                       </span>
                       @if (tool.description) {
@@ -123,9 +160,14 @@ import { AgentMountedTools, AgentNetworkParticipant, MountedTool } from "@Gebo.a
                     </div>
                   }
                   @if (mounted.excludedTools?.length) {
-                    <span class="font-semibold border-top-1 surface-border pt-2">Excluded from auto mounting ({{mounted.excludedTools!.length}})</span>
-                    @for (tool of sortedTools(mounted.excludedTools); track tool.name) {
-                      <span class="text-xs text-muted-color line-through" [title]="tool.description || ''">{{tool.name}}</span>
+                    <span class="font-semibold border-top-1 surface-border pt-2"><span id="NodeLeftOutTitle" gebo-ai-text>Left out of auto mounting</span> ({{mounted.excludedTools!.length}})</span>
+                    @for (group of excludedGroups(mounted); track group.reason) {
+                      <span class="text-xs font-semibold text-muted-color">{{group.title}} ({{group.tools.length}})</span>
+                      @for (tool of group.tools; track tool.name) {
+                        <span class="text-xs text-muted-color" [title]="tool.description || ''">
+                          <span class="line-through">{{tool.name}}</span> · {{tool.sourceDescription || tool.categoryDescription || tool.categoryCode}}
+                        </span>
+                      }
                     }
                   }
                 </div>
@@ -134,13 +176,9 @@ import { AgentMountedTools, AgentNetworkParticipant, MountedTool } from "@Gebo.a
           }
 
           @if (!parent.readonly) {
-            <div class="flex justify-content-end gap-1 mt-2 border-top-1 surface-border pt-2">
-              <button pButton icon="pi pi-plus" class="p-button-rounded p-button-text p-button-success p-button-sm p-0 w-2rem h-2rem"
-              title="Add Child / Communicates With" (click)="$event.stopPropagation(); parent.openAddChild(node().data)"></button>
-              <button pButton icon="pi pi-pencil" class="p-button-rounded p-button-text p-button-secondary p-button-sm p-0 w-2rem h-2rem"
-              title="Edit Participant" (click)="$event.stopPropagation(); parent.openEditParticipant(node().data)"></button>
+            <div class="flex justify-content-end gap-1 mt-1 border-top-1 surface-border pt-1">
               <button pButton icon="pi pi-trash" class="p-button-rounded p-button-text p-button-danger p-button-sm p-0 w-2rem h-2rem"
-              title="Delete Participant" (click)="$event.stopPropagation(); parent.deleteParticipant(node().data)"></button>
+              id="NodeRemoveBtn" gebo-ai-label title="Remove from the network" (click)="$event.stopPropagation(); parent.deleteParticipant(participant)"></button>
             </div>
           }
         </div>
@@ -160,9 +198,9 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
         this.pointerDownPos = this.isInteractiveTarget(event.target) ? null : { x: event.clientX, y: event.clientY };
     }
 
-    // Open the participant editor only on a genuine click, not at the end of a
-    // drag that repositions the node (nodes are draggable while editable) and
-    // not when the interaction started on an inner button or connection port.
+    // Select the participant in the inspector only on a genuine click, not at the
+    // end of a drag that repositions the node (nodes are draggable while editable)
+    // and not when the interaction started on an inner button or connection port.
     protected onPointerUp(event: PointerEvent): void {
         const start = this.pointerDownPos;
         this.pointerDownPos = null;
@@ -171,8 +209,12 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
         }
         const moved = Math.abs(event.clientX - start.x) + Math.abs(event.clientY - start.y);
         if (moved <= 4) {
-            this.parent.openEditParticipant(this.node().data);
+            this.parent.select(this.node().data);
         }
+    }
+
+    protected serviceOf(participant: AgentNetworkParticipant): AgentServiceDescriptor | undefined {
+        return this.parent.serviceOf(participant);
     }
 
     protected sortedTools(tools: MountedTool[] | undefined): MountedTool[] {
@@ -190,6 +232,26 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
 
     protected categoryClass(tool: MountedTool): string {
         return this.parent.getToolCategoryClass(tool.categoryCode);
+    }
+
+    /** What the administrator is told for each reason a tool is left out, as composer texts of the parent. */
+    private static readonly EXCLUSION_TITLES: { reason: MountedTool.ExclusionEnum, textId: string }[] = [
+        { reason: "AGENT_CONFIGURATION", textId: "NodeExcludedByConfiguration" },
+        { reason: "SYSTEM_SETTINGS", textId: "NodeExcludedBySystem" },
+        { reason: "AGENT_SERVICE", textId: "NodeExcludedByService" }
+    ];
+
+    /** The tools left out, grouped by why, each with its source: the administrator knows where to act. */
+    protected excludedGroups(mounted: AgentMountedTools): { reason: string, title: string, tools: MountedTool[] }[] {
+        const excluded = this.sortedTools(mounted.excludedTools);
+        const groups = AgentNodeComponent.EXCLUSION_TITLES.map(x => ({
+            reason: x.reason as string, title: this.parent.text(x.textId), tools: excluded.filter(tool => tool.exclusion === x.reason)
+        }));
+        const untold = excluded.filter(tool => !tool.exclusion);
+        if (untold.length) {
+            groups.push({ reason: "UNKNOWN", title: this.parent.text("NodeExcludedUnknown"), tools: untold });
+        }
+        return groups.filter(group => group.tools.length > 0);
     }
 
     protected toolTooltip(tool: MountedTool): string {

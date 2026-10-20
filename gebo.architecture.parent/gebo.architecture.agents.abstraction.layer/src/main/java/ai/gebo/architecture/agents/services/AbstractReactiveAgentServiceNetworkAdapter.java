@@ -26,6 +26,12 @@ import reactor.core.publisher.Sinks;
 public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType>
 		implements IGNetworkAgentService<RequestType, ResponseType> {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractReactiveAgentServiceNetworkAdapter.class);
+
+	/** The adapted agent answers with a RESPONSE, shared in the session context. */
+	@Override
+	public MessageSemantic getProducedMessageSemantic() {
+		return MessageSemantic.RESPONSE;
+	}
 	private final IGReactiveAgentService<RequestType, ResponseType> service;
 	private final Class<RequestType> inputType;
 	private final Class<ResponseType> outputType;
@@ -104,8 +110,8 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.trace(String.valueOf(response));
 			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_OUTPUT>");
 		}
-		AgentsExchangeMessage<ResponseType> outMessage = AgentsExchangeMessage.of(session, msg.getFromAgent(), response,
-				MessageSemantic.RESPONSE);
+		AgentsExchangeMessage<ResponseType> outMessage = AgentsExchangeMessage.of(session,
+				contextAgentPersona.getNetworkAgentName(), msg.getFromAgent(), response, getProducedMessageSemantic());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End onMessage(...) reactive agent network adapter id:" + getId());
 		}

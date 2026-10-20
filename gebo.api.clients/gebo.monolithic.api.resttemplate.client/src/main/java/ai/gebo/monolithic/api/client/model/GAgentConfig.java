@@ -27,7 +27,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -143,9 +143,6 @@ public class GAgentConfig {
   @JsonProperty("chatModelReference")
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
 
-  @JsonProperty("maxLoopIterations")
-  private Integer maxLoopIterations = null;
-
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
 
@@ -209,6 +206,9 @@ public class GAgentConfig {
 
   @JsonProperty("enabledFunctions")
   private List<String> enabledFunctions = null;
+
+  @JsonProperty("excludedToolSources")
+  private List<String> excludedToolSources = null;
 
   public GAgentConfig code(String code) {
     this.code = code;
@@ -516,24 +516,6 @@ public class GAgentConfig {
     this.chatModelReference = chatModelReference;
   }
 
-  public GAgentConfig maxLoopIterations(Integer maxLoopIterations) {
-    this.maxLoopIterations = maxLoopIterations;
-    return this;
-  }
-
-   /**
-   * Get maxLoopIterations
-   * @return maxLoopIterations
-  **/
-  @Schema(required = true, description = "")
-  public Integer getMaxLoopIterations() {
-    return maxLoopIterations;
-  }
-
-  public void setMaxLoopIterations(Integer maxLoopIterations) {
-    this.maxLoopIterations = maxLoopIterations;
-  }
-
   public GAgentConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
     return this;
@@ -746,6 +728,32 @@ public class GAgentConfig {
     this.enabledFunctions = enabledFunctions;
   }
 
+  public GAgentConfig excludedToolSources(List<String> excludedToolSources) {
+    this.excludedToolSources = excludedToolSources;
+    return this;
+  }
+
+  public GAgentConfig addExcludedToolSourcesItem(String excludedToolSourcesItem) {
+    if (this.excludedToolSources == null) {
+      this.excludedToolSources = new ArrayList<>();
+    }
+    this.excludedToolSources.add(excludedToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get excludedToolSources
+   * @return excludedToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getExcludedToolSources() {
+    return excludedToolSources;
+  }
+
+  public void setExcludedToolSources(List<String> excludedToolSources) {
+    this.excludedToolSources = excludedToolSources;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -773,7 +781,6 @@ public class GAgentConfig {
         Objects.equals(this.useDefaultChatModel, gagentConfig.useDefaultChatModel) &&
         Objects.equals(this.useChatModelWithUse, gagentConfig.useChatModelWithUse) &&
         Objects.equals(this.chatModelReference, gagentConfig.chatModelReference) &&
-        Objects.equals(this.maxLoopIterations, gagentConfig.maxLoopIterations) &&
         Objects.equals(this.aclAliases, gagentConfig.aclAliases) &&
         Objects.equals(this.defaultConfiguration, gagentConfig.defaultConfiguration) &&
         Objects.equals(this.topP, gagentConfig.topP) &&
@@ -783,12 +790,13 @@ public class GAgentConfig {
         Objects.equals(this.accessibleGroups, gagentConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gagentConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gagentConfig.accessibleToAll) &&
-        Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions);
+        Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions) &&
+        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, maxLoopIterations, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources);
   }
 
 
@@ -814,7 +822,6 @@ public class GAgentConfig {
     sb.append("    useDefaultChatModel: ").append(toIndentedString(useDefaultChatModel)).append("\n");
     sb.append("    useChatModelWithUse: ").append(toIndentedString(useChatModelWithUse)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
-    sb.append("    maxLoopIterations: ").append(toIndentedString(maxLoopIterations)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    defaultConfiguration: ").append(toIndentedString(defaultConfiguration)).append("\n");
     sb.append("    topP: ").append(toIndentedString(topP)).append("\n");
@@ -825,6 +832,7 @@ public class GAgentConfig {
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
+    sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
     sb.append("}");
     return sb.toString();
   }

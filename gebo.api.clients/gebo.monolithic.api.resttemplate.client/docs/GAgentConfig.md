@@ -20,7 +20,6 @@ Name | Type | Description | Notes
 **useDefaultChatModel** | **Boolean** |  |  [optional]
 **useChatModelWithUse** | [**UseChatModelWithUseEnum**](#UseChatModelWithUseEnum) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
-**maxLoopIterations** | **Integer** |  | 
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **defaultConfiguration** | **Boolean** |  |  [optional]
 **topP** | **Double** |  |  [optional]
@@ -31,6 +30,7 @@ Name | Type | Description | Notes
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
+**excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>
 ## Enum: AgentTypeEnum

@@ -17,7 +17,7 @@ only holds the files that guide tells you to install.
 
 | File | Goes on | What it does |
 |---|---|---|
-| [`manager/local_rules.xml`](manager/local_rules.xml) | Wazuh **manager**, as `/var/ossec/etc/rules/local_rules.xml` | Classifies Gebo.ai audit events (logins, credential changes, LLM config, user admin, brute-force correlation). No custom decoder needed — Wazuh's built-in `json` decoder already parses the file. |
+| [`manager/local_rules.xml`](manager/local_rules.xml) | Wazuh **manager**, as `/var/ossec/etc/rules/local_rules.xml` | Classifies Gebo.ai audit events (logins, credential changes, LLM config, user admin, configuration changes of networks of agents, MCP/A2A, knowledge bases, chat profiles and search, brute-force correlation). No custom decoder needed — Wazuh's built-in `json` decoder already parses the file. |
 | [`manager/agent.conf`](manager/agent.conf) | Wazuh **manager**, as `/var/ossec/etc/shared/gebo-ai/agent.conf` | Centralized `<localfile>` config for the `gebo-ai` agent group: every install layout (deb/rpm, docker, msi, microservices) in one place, so agents need no local edits. |
 | [`agent/localfile-blocks.xml`](agent/localfile-blocks.xml) | Wazuh **agent**, pasted into its `ossec.conf` | The same `<localfile>` blocks for agents you configure individually instead of by group. |
 | [`agent/ossec.conf`](agent/ossec.conf) | the **containerized** agent | Minimal agent config (log shipping only, no FIM/SCA), mounted by the compose file below. |

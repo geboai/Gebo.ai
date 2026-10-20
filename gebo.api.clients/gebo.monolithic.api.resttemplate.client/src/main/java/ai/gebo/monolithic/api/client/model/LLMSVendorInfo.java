@@ -24,7 +24,7 @@ import java.util.List;
  * LLMSVendorInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T05:57:34.292407+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class LLMSVendorInfo {
   @JsonProperty("vendorId")

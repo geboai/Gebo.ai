@@ -75,6 +75,29 @@ p-block-ui {
   ;
 }
 
+// The Setup menu item shows the setup status (AppMenuProviderService sets the
+// class on the item): only an incomplete setup blinks red by CSS, so no script
+// re-renders the menubar every second. A complete setup carries no marker, like
+// a full one.
+@keyframes gebo-ai-setup-blink {
+  50% {
+    background-color: transparent;
+    color: #146084;
+  }
+}
+
+.gebo-ai-setup-incomplete .p-megamenu-item-content {
+  border-radius: 6px;
+  color: white;
+  background-color: red;
+  animation: gebo-ai-setup-blink 2s step-end infinite;
+
+  .p-megamenu-item-label,
+  .p-megamenu-item-icon {
+    color: inherit;
+  }
+}
+
 .p-fieldset .p-fieldset-legend {
   color: #146084;
   text-align: left;

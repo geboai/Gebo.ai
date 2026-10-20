@@ -10,6 +10,8 @@
 package ai.gebo.architecture.ai.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 import java.util.TreeMap;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.model.ToolSourceInfo;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
@@ -126,9 +129,26 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 			}
 			List<ToolCallback> wrappers = y.getToolCallbacks();
 			TreeMap<String, ToolReference> functions = new TreeMap<String, ToolReference>();
+			// The description a tool declares for the admin, beside the one the model
+			// reads: the source's full references carry it, by tool name
+			final Map<String, String> adminDescriptions = new HashMap<>();
+			final List<ToolReference> declared = y.getFullToolReferences();
+			if (declared != null) {
+				for (ToolReference reference : declared) {
+					if (reference.getName() != null && reference.getUserUIfunctionDescription() != null) {
+						adminDescriptions.put(reference.getName(), reference.getUserUIfunctionDescription());
+					}
+				}
+			}
 			// Map each ToolCallback to its ToolReference by its name
 			for (ToolCallback wraps : wrappers) {
-				functions.put(wraps.getToolDefinition().name(), new ToolReference(wraps));
+				final ToolReference reference = new ToolReference(wraps);
+				reference.setUserUIfunctionDescription(adminDescriptions.get(reference.getName()));
+				functions.put(reference.getName(), reference);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool source:" + y.getId() + " category:" + y.getToolCategory().getCode() + " exposes "
+						+ functions.size() + " tool(s), " + adminDescriptions.size() + " with an admin description");
 			}
 			// Add these references to the tree category
 			trees.get(y.getToolCategory().getCode()).getToolsReference().addAll(functions.values());
@@ -182,6 +202,41 @@ public class GToolCallbackRepositoryPatternImpl extends GAbstractImplementations
 			}
 		}
 		return List.copyOf(enabledtrees);
+	}
+
+	@Override
+	public List<ToolSourceInfo> getToolSourceInfos() {
+		final List<IGToolCallbackSource> implementations = getImplementations();
+		final List<ToolSourceInfo> infos = new ArrayList<ToolSourceInfo>();
+		if (implementations == null) {
+			return infos;
+		}
+		for (IGToolCallbackSource source : implementations) {
+			if (source == null || source.getId() == null) {
+				continue;
+			}
+			final ToolsCategory category = source.getToolCategory();
+			int toolsCount = 0;
+			try {
+				final List<ToolCallback> callbacks = source.getToolCallbacks();
+				toolsCount = callbacks != null ? callbacks.size() : 0;
+			} catch (Throwable th) {
+				LOGGER.warn("Cannot count the tools of source '" + source.getId() + "'", th);
+			}
+			infos.add(new ToolSourceInfo(source.getId(), source.getDescription(),
+					category != null ? category.getCode() : null, category != null ? category.getDescription() : null,
+					toolsCount));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getToolSourceInfos() " + infos.size() + " tool source(s)");
+		}
+		if (LOGGER.isTraceEnabled()) {
+			for (ToolSourceInfo info : infos) {
+				LOGGER.trace("Tool source id:" + info.getId() + " description:" + info.getDescription() + " category:"
+						+ info.getCategoryCode() + " tools:" + info.getToolsCount());
+			}
+		}
+		return infos;
 	}
 
 	/**

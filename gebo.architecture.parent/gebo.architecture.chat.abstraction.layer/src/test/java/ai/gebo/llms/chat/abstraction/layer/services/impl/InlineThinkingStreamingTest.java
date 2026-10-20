@@ -69,7 +69,8 @@ class InlineThinkingStreamingTest {
 						mock(IGChatStorageAreaService.class), mock(LLMGeneratedResourceRepository.class),
 						mock(IGKnowledgebaseVisibilityService.class), mock(IGChatSessionLifeCycleService.class),
 						mock(IGTextToSpeechModelRuntimeConfigurationDao.class),
-						mock(IGTranscriptModelRuntimeConfigurationDao.class), mock(IGSecurityAuditLoggerService.class))
+						mock(IGTranscriptModelRuntimeConfigurationDao.class), mock(IGSecurityAuditLoggerService.class),
+						null)
 						.defaultAnswer(Answers.CALLS_REAL_METHODS));
 	}
 

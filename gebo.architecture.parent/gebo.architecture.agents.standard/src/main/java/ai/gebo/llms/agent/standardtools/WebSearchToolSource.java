@@ -63,6 +63,12 @@ public class WebSearchToolSource implements IGToolCallbackSource {
 		return WEB_SEARCH_TOOL_SOURCE;
 	}
 
+	/** What this source is for the administrator: it shares its category with the web pages crawling. */
+	@Override
+	public String getDescription() {
+		return "Web search";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 		return ToolsCategory.INTERNET_BROWSING;
@@ -71,7 +77,12 @@ public class WebSearchToolSource implements IGToolCallbackSource {
 	@Override
 	public List<ToolReference> getFullToolReferences() {
 		AbstractSearchServiceWrapperTool tool = webSearchTool();
-		return tool != null ? List.of(tool.toToolReference()) : List.of();
+		if (tool == null) {
+			return List.of();
+		}
+		final ToolReference reference = tool.toToolReference();
+		reference.setUserUIfunctionDescription("Search the public web and read the pages found");
+		return List.of(reference);
 	}
 
 	@Override

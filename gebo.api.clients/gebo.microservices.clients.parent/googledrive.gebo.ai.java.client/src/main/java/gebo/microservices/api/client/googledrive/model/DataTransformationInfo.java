@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DataTransformationInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:40.609668083+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:42.899259775+02:00[Europe/Rome]")
 
 public class DataTransformationInfo {
   @JsonProperty("id")
@@ -40,6 +40,44 @@ public class DataTransformationInfo {
 
   @JsonProperty("dataDestinationId")
   private String dataDestinationId = null;
+
+  /**
+   * Gets or Sets carried
+   */
+  public enum CarriedEnum {
+    CONTENT("CONTENT"),
+    PROCESSED("PROCESSED"),
+    REQUEST("REQUEST");
+
+    private String value;
+
+    CarriedEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static CarriedEnum fromValue(String input) {
+      for (CarriedEnum b : CarriedEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("carried")
+  private CarriedEnum carried = null;
+
+  @JsonProperty("section")
+  private String section = null;
 
   public DataTransformationInfo id(String id) {
     this.id = id;
@@ -131,6 +169,42 @@ public class DataTransformationInfo {
     this.dataDestinationId = dataDestinationId;
   }
 
+  public DataTransformationInfo carried(CarriedEnum carried) {
+    this.carried = carried;
+    return this;
+  }
+
+   /**
+   * Get carried
+   * @return carried
+  **/
+  @Schema(description = "")
+  public CarriedEnum getCarried() {
+    return carried;
+  }
+
+  public void setCarried(CarriedEnum carried) {
+    this.carried = carried;
+  }
+
+  public DataTransformationInfo section(String section) {
+    this.section = section;
+    return this;
+  }
+
+   /**
+   * Get section
+   * @return section
+  **/
+  @Schema(description = "")
+  public String getSection() {
+    return section;
+  }
+
+  public void setSection(String section) {
+    this.section = section;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -145,12 +219,14 @@ public class DataTransformationInfo {
         Objects.equals(this.description, dataTransformationInfo.description) &&
         Objects.equals(this.transformationInfo, dataTransformationInfo.transformationInfo) &&
         Objects.equals(this.dataSourceId, dataTransformationInfo.dataSourceId) &&
-        Objects.equals(this.dataDestinationId, dataTransformationInfo.dataDestinationId);
+        Objects.equals(this.dataDestinationId, dataTransformationInfo.dataDestinationId) &&
+        Objects.equals(this.carried, dataTransformationInfo.carried) &&
+        Objects.equals(this.section, dataTransformationInfo.section);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, transformationInfo, dataSourceId, dataDestinationId);
+    return Objects.hash(id, description, transformationInfo, dataSourceId, dataDestinationId, carried, section);
   }
 
 
@@ -164,6 +240,8 @@ public class DataTransformationInfo {
     sb.append("    transformationInfo: ").append(toIndentedString(transformationInfo)).append("\n");
     sb.append("    dataSourceId: ").append(toIndentedString(dataSourceId)).append("\n");
     sb.append("    dataDestinationId: ").append(toIndentedString(dataDestinationId)).append("\n");
+    sb.append("    carried: ").append(toIndentedString(carried)).append("\n");
+    sb.append("    section: ").append(toIndentedString(section)).append("\n");
     sb.append("}");
     return sb.toString();
   }

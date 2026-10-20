@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -131,6 +131,51 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GPromptUseInfo> returnType = new ParameterizedTypeReference<GPromptUseInfo>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param agentId  (required)
+     * @return List&lt;GPromptTemplateConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GPromptTemplateConfig> findPromptConfigByAgentId(String agentId) throws RestClientException {
+        return findPromptConfigByAgentIdWithHttpInfo(agentId).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param agentId  (required)
+     * @return ResponseEntity&lt;List&lt;GPromptTemplateConfig&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GPromptTemplateConfig>> findPromptConfigByAgentIdWithHttpInfo(String agentId) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'agentId' is set
+        if (agentId == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'agentId' when calling findPromptConfigByAgentId");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/findPromptConfigByAgentId").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "agentId", agentId));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GPromptTemplateConfig>> returnType = new ParameterizedTypeReference<List<GPromptTemplateConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

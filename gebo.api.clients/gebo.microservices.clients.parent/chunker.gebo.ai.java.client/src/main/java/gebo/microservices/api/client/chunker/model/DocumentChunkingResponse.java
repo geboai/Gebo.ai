@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DocumentChunkingResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-02T12:21:26.515856083+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:10.884793465+02:00[Europe/Rome]")
 
 public class DocumentChunkingResponse {
   @JsonProperty("id")
@@ -56,6 +56,9 @@ public class DocumentChunkingResponse {
 
   @JsonProperty("errorMessage")
   private GUserMessage errorMessage = null;
+
+  @JsonProperty("contentHash")
+  private String contentHash = null;
 
   public DocumentChunkingResponse id(String id) {
     this.id = id;
@@ -237,6 +240,24 @@ public class DocumentChunkingResponse {
     this.errorMessage = errorMessage;
   }
 
+  public DocumentChunkingResponse contentHash(String contentHash) {
+    this.contentHash = contentHash;
+    return this;
+  }
+
+   /**
+   * Get contentHash
+   * @return contentHash
+  **/
+  @Schema(description = "")
+  public String getContentHash() {
+    return contentHash;
+  }
+
+  public void setContentHash(String contentHash) {
+    this.contentHash = contentHash;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -256,12 +277,13 @@ public class DocumentChunkingResponse {
         Objects.equals(this.chunkingSessionId, documentChunkingResponse.chunkingSessionId) &&
         Objects.equals(this.empty, documentChunkingResponse.empty) &&
         Objects.equals(this.error, documentChunkingResponse.error) &&
-        Objects.equals(this.errorMessage, documentChunkingResponse.errorMessage);
+        Objects.equals(this.errorMessage, documentChunkingResponse.errorMessage) &&
+        Objects.equals(this.contentHash, documentChunkingResponse.contentHash);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, totalBytesSize, totalTokensSize, totalChunksNumber, currentChunkSet, nextChunkSetId, chunkingSessionId, empty, error, errorMessage);
+    return Objects.hash(id, totalBytesSize, totalTokensSize, totalChunksNumber, currentChunkSet, nextChunkSetId, chunkingSessionId, empty, error, errorMessage, contentHash);
   }
 
 
@@ -280,6 +302,7 @@ public class DocumentChunkingResponse {
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    errorMessage: ").append(toIndentedString(errorMessage)).append("\n");
+    sb.append("    contentHash: ").append(toIndentedString(contentHash)).append("\n");
     sb.append("}");
     return sb.toString();
   }

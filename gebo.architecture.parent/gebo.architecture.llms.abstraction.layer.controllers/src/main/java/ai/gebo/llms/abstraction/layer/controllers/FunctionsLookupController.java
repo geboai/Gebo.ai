@@ -21,7 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.model.ToolSourceInfo;
 import ai.gebo.architecture.ai.service.IGExternalToolCallback;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.model.base.GLookupEntry;
@@ -36,6 +40,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("api/admin/FunctionsLookupController") // Defines the base URL path for the controller.
 @AllArgsConstructor
 public class FunctionsLookupController {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FunctionsLookupController.class);
 	private final IGToolCallbackSourceRepositoryPattern repoPattern; // Repository pattern to manage tool callback
 																		// sources.
 
@@ -64,6 +69,20 @@ public class FunctionsLookupController {
 			entry.setDescription(x.getToolDefinition().description()); // Set the description from tool definition.
 			return entry;
 		}).toList();
+	}
+
+	/**
+	 * The registered tool sources as the administrator sees them: what an agent
+	 * configuration names to leave a whole family of tools out of its automatic
+	 * mounting.
+	 */
+	@GetMapping(value = "getToolSourceInfos", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<ToolSourceInfo> getToolSourceInfos() {
+		final List<ToolSourceInfo> sources = repoPattern.getToolSourceInfos();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getToolSourceInfos() " + sources.size() + " tool source(s)");
+		}
+		return sources;
 	}
 
 	/***

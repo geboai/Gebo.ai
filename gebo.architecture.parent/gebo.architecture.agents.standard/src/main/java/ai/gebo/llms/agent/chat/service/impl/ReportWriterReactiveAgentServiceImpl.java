@@ -9,8 +9,10 @@ import org.springframework.util.FileCopyUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -50,6 +52,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener.ToolCallExecuted;
 import ai.gebo.llms.agent.chat.service.IReportWriterReactiveAgentService;
 import ai.gebo.llms.agent.standard.config.StandardAgentsPromptsLibraryConfig;
+import ai.gebo.llms.agent.standard.services.GAbstractStandardDocumentsSearchAgentService;
 import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
@@ -489,11 +492,25 @@ public class ReportWriterReactiveAgentServiceImpl
 					+ " document(s) out of the shared session contributions");
 		}
 		TreeMap<String, Document> forDocCode = new TreeMap<String, Document>();
+		// the documents a deep search analysis rests on: their refs were published by its searcher
+		final Set<String> deepSearchSources = new LinkedHashSet<>();
 		for (Document document : documentRef) {
 			if (document.getMetadata() != null && document.getMetadata().containsKey(DocumentMetaInfos.CONTENT_CODE)
 					&& document.getMetadata().get(DocumentMetaInfos.CONTENT_CODE) instanceof String code) {
 				forDocCode.put(code, document);
 			}
+			if (document.getMetadata() != null && document.getMetadata()
+					.get(GAbstractStandardDocumentsSearchAgentService.DEEP_SEARCH_SOURCE_CODES) instanceof Collection<?> codes) {
+				for (Object code : codes) {
+					if (code instanceof String text && !text.isBlank()) {
+						deepSearchSources.add(text);
+					}
+				}
+			}
+		}
+		if (LOGGER.isDebugEnabled() && !deepSearchSources.isEmpty()) {
+			LOGGER.debug("extractDocumentsList(...) " + deepSearchSources.size()
+					+ " document(s) a deep search analysis rests on");
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("extractDocumentsList(...) deduplicated to " + forDocCode.size() + " referenced document(s)");
@@ -506,10 +523,25 @@ public class ReportWriterReactiveAgentServiceImpl
 		// and carry nestedSearchResult, so the user can "chat with" them. Fall back to building
 		// from the Document for anything not published (internal knowledge-base documents).
 		final Map<String, GResponseDocumentRef> publishedRefs = chatWithDocumentRefs(session);
-		return forDocCode.entrySet().stream().map(entry -> {
+		final List<GResponseDocumentRef> refs = new ArrayList<>(forDocCode.entrySet().stream().map(entry -> {
 			GResponseDocumentRef published = publishedRefs.get(entry.getKey());
 			return published != null ? published : new GResponseDocumentRef(entry.getValue());
-		}).toList();
+		}).toList());
+		for (String code : deepSearchSources) {
+			if (forDocCode.containsKey(code)) {
+				continue;
+			}
+			final GResponseDocumentRef published = publishedRefs.get(code);
+			if (published != null) {
+				refs.add(published);
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("extractDocumentsList(...) no ref published for the deep search source:" + code);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("extractDocumentsList(...) " + refs.size() + " document ref(s) for the answer");
+		}
+		return refs;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -32,8 +32,11 @@ const menuItemsProtos: MegaMenuItem[] = [
 })
 export class AppMenuProviderService extends ApplicationMenuProviderService {
   private menuItemsSubject = new BehaviorSubject<MegaMenuItem[]>([]);
-  private blinkState: boolean = false;
-  private stopBlink: boolean = true;
+  // The one status poll chain: a second start never spawns another one (every
+  // 3-minute poll used to add a 1-second blink loop re-rendering the menubar,
+  // which saturated the main thread of a page left open).
+  private pollTimer?: ReturnType<typeof setTimeout>;
+  private static readonly POLL_PERIOD_MS = 3 * 60 * 1000;
   private setupStatus?: SetupStatus;
   private integrationsAllowed$: Observable<boolean> | null = null;
 
@@ -61,6 +64,7 @@ export class AppMenuProviderService extends ApplicationMenuProviderService {
   public getMenuItems(userInfo?: UserInfo): Observable<MegaMenuItem[]> {
     if (!userInfo) {
       this.integrationsAllowed$ = null;
+      this.stopSetupStatePolling();
       this.menuItemsSubject.next([]);
       return this.menuItemsSubject.asObservable();
     }
@@ -109,51 +113,67 @@ export class AppMenuProviderService extends ApplicationMenuProviderService {
   }
 
 
-  private startBlinkSetupState(): void {
+  /**
+   * Shows the setup state on the Setup menu item, once per status change: only an
+   * incomplete setup (a mandatory step missing) blinks red (a CSS animation, see
+   * styles.scss: nothing re-renders the menubar every second). A complete setup
+   * (all mandatory done, some optional missing) is shown like a full one: the item
+   * carries no marker.
+   */
+  private showSetupState(): void {
     const currentItems = this.menuItemsSubject.getValue();
     const setupItem = currentItems.find(x => x.id === setupItemId);
     if (!setupItem) return;
-
-    if (this.blinkState === false && this.stopBlink === false) {
-      if (this.setupStatus === 'incomplete') {
-        setupItem.style = { "text-color": "white", "background-color": "red" };
-      } else if (this.setupStatus === 'complete') {
-        setupItem.style = { "text-color": "white", "background-color": "orange" };
-      }
+    if (this.setupStatus === 'incomplete') {
+      setupItem.styleClass = "gebo-ai-setup-incomplete";
       setupItem.title = "Setup is incomplete, please consider press here and manage it";
       setupItem.state = { incomplete: true };
-      this.blinkState = true;
     } else {
-      setupItem.style = undefined;
-      setupItem.title = "Setup is incomplete, please consider press here and manage it";
-      setupItem.state = { incomplete: true };
-      this.blinkState = false;
+      setupItem.styleClass = undefined;
+      setupItem.title = undefined;
+      setupItem.state = undefined;
     }
-
+    console.debug("[app-menu] the Setup item shows the setup status " + this.setupStatus);
     this.menuItemsSubject.next([...currentItems]);
-
-    if (!this.stopBlink) {
-      setTimeout(() => {
-        this.startBlinkSetupState();
-      }, 1000);
-    }
   }
 
   private pollSetupState(): void {
+    // a login or a user info refresh polls now; the 3-minute chain stays single
+    if (this.pollTimer !== undefined) {
+      clearTimeout(this.pollTimer);
+      this.pollTimer = undefined;
+    }
     this.geboWizardSetupService.getGlobalSetupStatus().subscribe({
       next: (status) => {
-        this.setupStatus = status;
-        if (status !== 'full') {
-          this.stopBlink = false;
-          this.startBlinkSetupState();
-          //repeat setup state poll in 3 minutes
-          setTimeout(() => {
-            this.pollSetupState();
-          }, 1000 * 60 * 3);
-        } else {
-          this.stopBlink = true;
+        if (status !== this.setupStatus) {
+          console.info("[app-menu] setup status " + (this.setupStatus ?? "unknown") + " -> " + status);
         }
+        this.setupStatus = status;
+        this.showSetupState();
+        if (status !== 'full') {
+          this.pollTimer = setTimeout(() => {
+            this.pollTimer = undefined;
+            this.pollSetupState();
+          }, AppMenuProviderService.POLL_PERIOD_MS);
+        }
+      },
+      error: (error) => {
+        console.warn("[app-menu] the setup status could not be read, polling again later", error);
+        this.pollTimer = setTimeout(() => {
+          this.pollTimer = undefined;
+          this.pollSetupState();
+        }, AppMenuProviderService.POLL_PERIOD_MS);
       }
     });
+  }
+
+  /** On logout: no poll survives the user. */
+  private stopSetupStatePolling(): void {
+    if (this.pollTimer !== undefined) {
+      clearTimeout(this.pollTimer);
+      this.pollTimer = undefined;
+      console.debug("[app-menu] setup status polling stopped");
+    }
+    this.setupStatus = undefined;
   }
 }

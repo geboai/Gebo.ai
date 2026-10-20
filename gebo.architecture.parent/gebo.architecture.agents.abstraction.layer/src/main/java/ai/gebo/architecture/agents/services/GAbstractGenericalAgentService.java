@@ -289,12 +289,52 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
+	 * Removes from an auto-mounted tool-name list every tool of the sources the agent
+	 * configuration itself leaves out ({@link GAgentConfig#getExcludedToolSources()}).
+	 * Unlike the system-wide exclusions, these are the configuration's own choice, so
+	 * they apply to every agent service, the ones mounting the system-wide exclusions
+	 * anyway included.
+	 */
+	protected List<String> withoutConfiguredExcludedSources(GAgentConfig agentConfig, List<String> toolNames) {
+		if (toolNames == null || toolNames.isEmpty() || agentConfig == null
+				|| agentConfig.getExcludedToolSources() == null || agentConfig.getExcludedToolSources().isEmpty()) {
+			return toolNames;
+		}
+		Set<String> excluded = toolNamesOfSources(agentConfig.getExcludedToolSources());
+		if (excluded.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent config code:" + agentConfig.getCode() + " excludes the tool sources "
+						+ agentConfig.getExcludedToolSources() + " but none of them exports a tool");
+			}
+			return toolNames;
+		}
+		List<String> filtered = new ArrayList<String>(toolNames.size());
+		for (String name : toolNames) {
+			if (!excluded.contains(name)) {
+				filtered.add(name);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " leaves out " + (toolNames.size() - filtered.size())
+					+ " tool(s) of its excluded tool sources " + agentConfig.getExcludedToolSources()
+					+ " for agent service id:" + getId());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Tool names left out by the excluded tool sources of agent config code:"
+					+ agentConfig.getCode() + " : " + excluded);
+		}
+		return filtered;
+	}
+
+	/**
 	 * The names of the tools the configuration mounts on this agent's model, the one
 	 * rule every mounting path of the agent follows: with {@code subscribeAllTools}
 	 * every registered tool but the ones this agent keeps out of automatic mounting
-	 * (see {@link #filterAutoMountedTools(List)}), otherwise exactly the enabled
-	 * functions. With no registered tools to subscribe the enabled functions are
-	 * kept.
+	 * (see {@link #filterAutoMountedTools(List)}) and without the tools of the
+	 * sources the configuration leaves out (see
+	 * {@link #withoutConfiguredExcludedSources(GAgentConfig, List)}), otherwise
+	 * exactly the enabled functions. With no registered tools to subscribe the
+	 * enabled functions are kept.
 	 *
 	 * @param registeredTools the registered tools, read only when the configuration
 	 *                        subscribes all of them
@@ -310,6 +350,11 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent service id:" + getId() + " subscribes ALL tools, resolved " + names.size()
 						+ " functions after auto-mount exclusions");
+			}
+			names = new ArrayList<String>(withoutConfiguredExcludedSources(agentConfig, names));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent service id:" + getId() + " agent config code:" + agentConfig.getCode()
+						+ " mounts " + names.size() + " function(s) after its own excluded tool sources");
 			}
 		}
 		return names;
@@ -345,7 +390,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 								new AgentMountedTools.MountedTool(callback.getToolDefinition().name(),
 										callback.getToolDefinition().description(),
 										category != null ? category.getCode() : null,
-										category != null ? category.getDescription() : null));
+										category != null ? category.getDescription() : null, source.getId(),
+										source.getDescription(), null));
 					}
 				}
 			}
@@ -360,9 +406,23 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			mounted.getTools().add(tool != null ? tool : new AgentMountedTools.MountedTool(name, null, null, null));
 		}
 		if (auto) {
+			// why each tool is left out: the agent configuration's own excluded sources, the
+			// system settings, else the agent service's own rule
+			final Set<String> configurationExcluded = toolNamesOfSources(agentConfig.getExcludedToolSources());
+			final Set<String> systemExcluded = autoMountExcludedToolNames();
 			for (AgentMountedTools.MountedTool tool : registered.values()) {
 				if (!mountedNames.contains(tool.getName())) {
+					tool.setExclusion(configurationExcluded.contains(tool.getName())
+							? AgentMountedTools.Exclusion.AGENT_CONFIGURATION
+							: systemExcluded.contains(tool.getName()) ? AgentMountedTools.Exclusion.SYSTEM_SETTINGS
+									: AgentMountedTools.Exclusion.AGENT_SERVICE);
 					mounted.getExcludedTools().add(tool);
+				}
+			}
+			if (LOGGER.isTraceEnabled()) {
+				for (AgentMountedTools.MountedTool tool : mounted.getExcludedTools()) {
+					LOGGER.trace("Excluded tool:" + tool.getName() + " source:" + tool.getSourceId() + " exclusion:"
+							+ tool.getExclusion());
 				}
 			}
 		}
@@ -406,32 +466,48 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 		List<String> excludedSources = config.getExcludedToolSources();
 		if (excludedSources != null && !excludedSources.isEmpty()) {
-			List<IGToolCallbackSource> sources = toolsRepositoryPattern.getImplementations();
-			if (sources != null) {
-				for (IGToolCallbackSource source : sources) {
-					if (source == null || source.getId() == null || !excludedSources.contains(source.getId())) {
-						continue;
-					}
-					try {
-						List<ToolCallback> callbacks = source.getToolCallbacks();
-						if (callbacks != null) {
-							for (ToolCallback callback : callbacks) {
-								if (callback != null && callback.getToolDefinition() != null) {
-									excluded.add(callback.getToolDefinition().name());
-								}
-							}
-						}
-					} catch (Throwable th) {
-						LOGGER.warn("Cannot resolve tool callbacks for excluded tool source '" + source.getId()
-								+ "' while computing auto-mount exclusions", th);
-					}
-				}
-			}
+			excluded.addAll(toolNamesOfSources(excludedSources));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Auto mount excluded tool names: " + excluded);
 		}
 		return excluded;
+	}
+
+	/**
+	 * The names of every tool exported by the registered tool sources with the given
+	 * ids: a source that cannot be read contributes nothing and is logged.
+	 */
+	protected Set<String> toolNamesOfSources(List<String> sourceIds) {
+		Set<String> names = new HashSet<>();
+		if (sourceIds == null || sourceIds.isEmpty() || toolsRepositoryPattern == null) {
+			return names;
+		}
+		List<IGToolCallbackSource> sources = toolsRepositoryPattern.getImplementations();
+		if (sources != null) {
+			for (IGToolCallbackSource source : sources) {
+				if (source == null || source.getId() == null || !sourceIds.contains(source.getId())) {
+					continue;
+				}
+				try {
+					List<ToolCallback> callbacks = source.getToolCallbacks();
+					if (callbacks != null) {
+						for (ToolCallback callback : callbacks) {
+							if (callback != null && callback.getToolDefinition() != null) {
+								names.add(callback.getToolDefinition().name());
+							}
+						}
+					}
+				} catch (Throwable th) {
+					LOGGER.warn("Cannot resolve tool callbacks for excluded tool source '" + source.getId()
+							+ "' while computing auto-mount exclusions", th);
+				}
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("toolNamesOfSources(" + sourceIds + ") resolved " + names.size() + " tool name(s)");
+		}
+		return names;
 	}
 
 	/**
@@ -1272,12 +1348,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			if (participant == null || participant.getAgentConfigCode() == null) {
 				continue;
 			}
-			RuntimeAgentInfos agent = resolvePeer(participant.getAgentConfigCode(), agentsDao);
+			// The runtime agents, like the communication lists, are keyed by network agent
+			// name (the configuration code plus the contextual name): the name the agents
+			// are addressed with.
+			final String networkAgentName = participant.getNetworkAgentName();
+			RuntimeAgentInfos agent = resolvePeer(networkAgentName, agentsDao);
 			if (agent == null || agent.getService() == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("createNetworkAgentsCapabilitiesDescription(...) participant:" + networkAgentName
+							+ " has no runtime agent, left out of the roster");
+				}
 				continue;
 			}
 			buffer.append(AGENT_LIST_ITEM_PREFIX);
-			buffer.append(participant.getAgentConfigCode());
+			buffer.append(networkAgentName);
 			String description = resolvePeerDescription(agent);
 			if (description != null && !description.isBlank()) {
 				buffer.append(AGENT_DESCRIPTION_SEPARATOR);

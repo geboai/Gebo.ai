@@ -42,6 +42,20 @@ public interface IGToolCallbackSource {
     public ToolsCategory getToolCategory();
 
     /**
+     * What this source is, for the administrator: shown where a source is named as
+     * a whole, e.g. when an agent configuration leaves its tools out. By default the
+     * description of its category, else its id; a source sharing its category with
+     * others tells itself apart by overriding it.
+     */
+    public default String getDescription() {
+        final ToolsCategory category = getToolCategory();
+        if (category != null && category.getDescription() != null && !category.getDescription().isBlank()) {
+            return category.getDescription();
+        }
+        return getId();
+    }
+
+    /**
      * Retrieves the complete list of tool references.
      *
      * @return A list of ToolReference objects representing all tool references.

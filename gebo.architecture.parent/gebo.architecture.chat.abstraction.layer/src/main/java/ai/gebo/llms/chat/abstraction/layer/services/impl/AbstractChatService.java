@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
+
+import org.springframework.beans.factory.ObjectProvider;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -61,7 +63,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.model.AgentToolsInfo;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -106,26 +111,14 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao;
 	final protected IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao;
 	final protected IGSecurityAuditLoggerService securityAuditLoggerService;
+	/** The agents layer's view of the agentic chats' tools: absent without the agents. */
+	final protected ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
-	// Metadata-only by design: model/provider/outcome/latency, never prompt or
-	// response content - logging chat bodies would be a PII/secret-leak surface.
-	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
-	// itself) so newSecurityEvent()'s caller-stack capture points at the real
-	// invocation entry point, not at this shared helper.
-	private void logChatInvocationEvent(SecurityEvent event, IGConfigurableChatModel configurableChatModel,
-			long startMillis, String outcome) {
-		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
-		event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
-		event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_CHAT);
-		event.setResourceId(configurableChatModel != null ? configurableChatModel.getCode() : null);
-		event.setOutcome(outcome);
-		if (configurableChatModel != null && configurableChatModel.getType() != null) {
-			event.getDetails().put("provider", configurableChatModel.getType().getCode());
-		}
-		event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
-		securityAuditLoggerService.log(event);
-	}
+	// The llmInvokeChat audit event of every model call is written by the usage
+	// recorder (LLMUsageRecorder), on the Spring AI advisor and the recording model
+	// every chat model carries: the agentic chats never pass through this service,
+	// and logging here as well doubled the events of the classic chats.
 
 	/**
 	 * Retrieves chat model user information based on the provided model code.
@@ -147,7 +140,31 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		List<String> functions = config.getEnabledFunctions();
 		List<ToolCategoriesTree> trees = callbacksRepoPattern.getEnabledToolsTree(functions);
 		GeboChatUserInfo infos = new GeboChatUserInfo(config.getModelTypeCode(), choice, trees);
+		infos.setAgentsTools(agentsTools(null));
 		return infos;
+	}
+
+	/**
+	 * The agents, with their tools, of the network the chats are handed to: asked to
+	 * the agents layer when it is there, null otherwise.
+	 *
+	 * @param profile the chat profile, null for a free chat
+	 */
+	protected List<AgentToolsInfo> agentsTools(GChatProfileConfiguration profile) {
+		IGChatAgentsToolsDescriber describer = agentsToolsDescriber != null ? agentsToolsDescriber.getIfAvailable()
+				: null;
+		if (describer == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("agentsTools(...) no agents tools describer: the agents are not part of this build");
+			}
+			return null;
+		}
+		List<AgentToolsInfo> agents = describer.describeAgentsTools(profile);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("agentsTools(...) profile:" + (profile != null ? profile.getCode() : null) + " described "
+					+ (agents != null ? agents.size() : 0) + " agent(s)");
+		}
+		return agents;
 	}
 
 	/**
@@ -224,8 +241,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GPromptTemplateConfig prompt, final KBContext context, final GeboChatRequest request,
 			final GeboChatResponse response, IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		long startMillis = System.currentTimeMillis();
 		try {
 			final DeepSearchQuotations quotations = answerQuotations(prompt, Map.of(), chatRequestContext);
 			// the answer without its reasoning, every provider alike
@@ -242,10 +257,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			// recordToolCalls(...))
 
 			response.setDocumentsRef(showedDocuments != null ? GResponseDocumentRef.from(showedDocuments) : List.of());
-			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.SUCCESS);
 			return response;
 		} catch (RuntimeException | LLMConfigException e) {
-			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
+			LOGGER.error("Error while calling the chat client", e);
 			throw e;
 		}
 	}
@@ -272,8 +286,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GeboChatRequest request, final GeboChatResponse response, IChatRequestContext chatRequestContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		long startMillis = System.currentTimeMillis();
 		// the user of the request, as the model's stream samples it (see streamResponse)
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		try {
@@ -286,16 +298,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 					// stream's thread, where an answer turns out cut, carries no identity
 					thinking -> runAs.doRunAsWithReturnAndException(() -> withThinking(configurableChatModel,
 							thinking).streamAnswer(prompt, params, chatRequestContext)));
-			// Logged once at stream completion/error (not per chunk) to avoid flooding
-			// the audit log with one event per streamed token.
-			return composed
-					.doOnComplete(() -> logChatInvocationEvent(event, configurableChatModel, startMillis,
-							SecurityAuditTaxonomy.Outcome.SUCCESS))
-					.doOnError(err -> logChatInvocationEvent(event, configurableChatModel, startMillis,
-							SecurityAuditTaxonomy.Outcome.FAILURE));
+			return composed;
 		} catch (Throwable th) {
 			LOGGER.error("Error while streaming chat respose", th);
-			logChatInvocationEvent(event, configurableChatModel, startMillis, SecurityAuditTaxonomy.Outcome.FAILURE);
 			GUserMessage userMessage = GUserMessage.errorMessage("Error while streaming chat respose", th);
 			return Flux.just(new GeboChatMessageEnvelope(userMessage))
 					.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);

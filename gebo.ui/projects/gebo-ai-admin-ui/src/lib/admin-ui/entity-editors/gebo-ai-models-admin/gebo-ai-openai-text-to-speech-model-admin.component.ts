@@ -26,6 +26,7 @@ import { map, Observable } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 @Component({
     selector: "gebo-ai-open-ai-text-to-speech-model-admin-component",
     templateUrl: "gebo-ai-openai-text-to-speech-model-admin.component.html",
@@ -112,7 +113,7 @@ export class GeboAIOpenAITextToSpeechModelAdminComponent extends BaseEntityEditi
         this.openaiTextToSpeechModelConfigService.getOpenAITextToSpeechModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;
@@ -127,7 +128,7 @@ export class GeboAIOpenAITextToSpeechModelAdminComponent extends BaseEntityEditi
      */
     protected override onLoadedPersistentData(actualValue: GOpenAITextToSpeechModelConfig): void {
         this.formGroup.controls["modelTypeCode"].setValue("openai-tts");
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     /**

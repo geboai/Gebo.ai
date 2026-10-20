@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **modificationDate** | [**Date**](Date.md) |  |  [optional]
 **version** | **String** |  |  [optional]
 **parentVirtualFolderCode** | **String** |  |  [optional]
+**uniqueId** | **Long** |  |  [optional]
 **absolutePath** | **String** |  |  [optional]
 **parentProjectCode** | **String** |  |  [optional]
 **rootKnowledgebaseCode** | **String** |  |  [optional]

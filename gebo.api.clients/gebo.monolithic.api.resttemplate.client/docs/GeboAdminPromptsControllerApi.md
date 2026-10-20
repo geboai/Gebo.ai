@@ -1,11 +1,12 @@
 # GeboAdminPromptsControllerApi
 
-All URIs are relative to *http://localhost:12999*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deletePromptConfig**](GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
 [**findGPromptUseInfoByUseCode**](GeboAdminPromptsControllerApi.md#findGPromptUseInfoByUseCode) | **GET** /api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode | 
+[**findPromptConfigByAgentId**](GeboAdminPromptsControllerApi.md#findPromptConfigByAgentId) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByAgentId | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
 [**getAllPromptConfigsLightList**](GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
@@ -89,6 +90,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GPromptUseInfo**](GPromptUseInfo.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="findPromptConfigByAgentId"></a>
+# **findPromptConfigByAgentId**
+> List&lt;GPromptTemplateConfig&gt; findPromptConfigByAgentId(agentId)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+String agentId = "agentId_example"; // String | 
+try {
+    List<GPromptTemplateConfig> result = apiInstance.findPromptConfigByAgentId(agentId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#findPromptConfigByAgentId");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **agentId** | **String**|  |
+
+### Return type
+
+[**List&lt;GPromptTemplateConfig&gt;**](GPromptTemplateConfig.md)
 
 ### Authorization
 

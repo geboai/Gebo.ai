@@ -199,6 +199,12 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		return INTERNAL_KNOWLEDGE_BASE_SEARCH_TOOL_SOURCE;
 	}
 
+	/** What this source is for the administrator: it shares its category with the knowledge base browsing. */
+	@Override
+	public String getDescription() {
+		return "Knowledge base search";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 		return ToolsCategory.KNOWLEDGE_BASE_VARIOUS_SEARCHES;
@@ -220,6 +226,8 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 		ToolReference reference = new ToolReference();
 		reference.setName(SEARCH_KNOWLEDGE_BASE_TOOL);
 		reference.setDescription(SEARCH_KNOWLEDGE_BASE_DESCRIPTION);
+		reference.setUserUIfunctionDescription(
+				"Search the knowledge bases the user can access for documents, by meaning and keywords");
 		return List.of(reference);
 	}
 

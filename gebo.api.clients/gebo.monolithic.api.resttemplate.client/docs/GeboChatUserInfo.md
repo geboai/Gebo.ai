@@ -8,3 +8,4 @@ Name | Type | Description | Notes
 **providerId** | **String** |  |  [optional]
 **availableFunctions** | [**List&lt;ToolCategoriesTree&gt;**](ToolCategoriesTree.md) |  |  [optional]
 **chatModelChoice** | [**GBaseChatModelChoice**](GBaseChatModelChoice.md) |  |  [optional]
+**agentsTools** | [**List&lt;AgentToolsInfo&gt;**](AgentToolsInfo.md) |  |  [optional]

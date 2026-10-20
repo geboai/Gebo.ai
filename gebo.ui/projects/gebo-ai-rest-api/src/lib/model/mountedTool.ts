@@ -15,4 +15,15 @@ export interface MountedTool {
     description?: string;
     categoryCode?: string;
     categoryDescription?: string;
+    sourceId?: string;
+    sourceDescription?: string;
+    exclusion?: MountedTool.ExclusionEnum;
+}
+export namespace MountedTool {
+    export type ExclusionEnum = 'AGENT_CONFIGURATION' | 'SYSTEM_SETTINGS' | 'AGENT_SERVICE';
+    export const ExclusionEnum = {
+        AGENTCONFIGURATION: 'AGENT_CONFIGURATION' as ExclusionEnum,
+        SYSTEMSETTINGS: 'SYSTEM_SETTINGS' as ExclusionEnum,
+        AGENTSERVICE: 'AGENT_SERVICE' as ExclusionEnum
+    };
 }

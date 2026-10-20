@@ -23,6 +23,7 @@ import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
 
+import { alignChoosedModel } from "../utils/choosed-model-alignment";
 @Component({
     selector: "gebo-ai-generic-open-ai-api-image-model-admin-component",
     templateUrl: "gebo-ai-generic-openai-api-image-model-admin.component.html",
@@ -111,7 +112,7 @@ export class GeboAIGenericOpenAIAPIImageModelAdminComponent extends BaseEntityEd
         this.openaiImageModelConfigService.getGenericOpenAIAPIImageModels(newValue).subscribe({
             next: (r) => {
                 this.updateLastOperationStatus(r as any);
-                this.modelChoicesData = r.result ? r.result : []
+                this.modelChoicesData = alignChoosedModel(this.formGroup, r.result);
             },
             complete: () => {
                 this.loadingRelatedBackend = false;
@@ -121,7 +122,7 @@ export class GeboAIGenericOpenAIAPIImageModelAdminComponent extends BaseEntityEd
 
     protected override onLoadedPersistentData(actualValue: GenericOpenAIAPIImageModelConfig): void {
         this.refreshProviderModel(actualValue);
-        this.loadModels(actualValue);
+        // the model list loads once, through the value change the form patch emits (see the constructor)
     }
 
     protected override onNewData(actualValue: GenericOpenAIAPIImageModelConfig): void {

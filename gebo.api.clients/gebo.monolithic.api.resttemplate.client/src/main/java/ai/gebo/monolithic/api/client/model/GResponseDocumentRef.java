@@ -26,7 +26,7 @@ import java.util.List;
  * GResponseDocumentRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class GResponseDocumentRef {
   /**
@@ -108,17 +108,17 @@ public class GResponseDocumentRef {
   @JsonProperty("references")
   private List<DocInternalRef> references = null;
 
-  @JsonProperty("ntokensRelevant")
-  private Long ntokensRelevant = null;
-
   @JsonProperty("ntotalContentTokens")
   private Long ntotalContentTokens = null;
 
-  @JsonProperty("shortCode")
-  private String shortCode = null;
+  @JsonProperty("ntokensRelevant")
+  private Long ntokensRelevant = null;
 
   @JsonProperty("nbytesRelevant")
   private Long nbytesRelevant = null;
+
+  @JsonProperty("shortCode")
+  private String shortCode = null;
 
   public GResponseDocumentRef referenceType(ReferenceTypeEnum referenceType) {
     this.referenceType = referenceType;
@@ -416,24 +416,6 @@ public class GResponseDocumentRef {
     this.references = references;
   }
 
-  public GResponseDocumentRef ntokensRelevant(Long ntokensRelevant) {
-    this.ntokensRelevant = ntokensRelevant;
-    return this;
-  }
-
-   /**
-   * Get ntokensRelevant
-   * @return ntokensRelevant
-  **/
-  @Schema(description = "")
-  public Long getNtokensRelevant() {
-    return ntokensRelevant;
-  }
-
-  public void setNtokensRelevant(Long ntokensRelevant) {
-    this.ntokensRelevant = ntokensRelevant;
-  }
-
   public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
     this.ntotalContentTokens = ntotalContentTokens;
     return this;
@@ -452,22 +434,22 @@ public class GResponseDocumentRef {
     this.ntotalContentTokens = ntotalContentTokens;
   }
 
-  public GResponseDocumentRef shortCode(String shortCode) {
-    this.shortCode = shortCode;
+  public GResponseDocumentRef ntokensRelevant(Long ntokensRelevant) {
+    this.ntokensRelevant = ntokensRelevant;
     return this;
   }
 
    /**
-   * Get shortCode
-   * @return shortCode
+   * Get ntokensRelevant
+   * @return ntokensRelevant
   **/
   @Schema(description = "")
-  public String getShortCode() {
-    return shortCode;
+  public Long getNtokensRelevant() {
+    return ntokensRelevant;
   }
 
-  public void setShortCode(String shortCode) {
-    this.shortCode = shortCode;
+  public void setNtokensRelevant(Long ntokensRelevant) {
+    this.ntokensRelevant = ntokensRelevant;
   }
 
   public GResponseDocumentRef nbytesRelevant(Long nbytesRelevant) {
@@ -486,6 +468,24 @@ public class GResponseDocumentRef {
 
   public void setNbytesRelevant(Long nbytesRelevant) {
     this.nbytesRelevant = nbytesRelevant;
+  }
+
+  public GResponseDocumentRef shortCode(String shortCode) {
+    this.shortCode = shortCode;
+    return this;
+  }
+
+   /**
+   * Get shortCode
+   * @return shortCode
+  **/
+  @Schema(description = "")
+  public String getShortCode() {
+    return shortCode;
+  }
+
+  public void setShortCode(String shortCode) {
+    this.shortCode = shortCode;
   }
 
 
@@ -514,15 +514,15 @@ public class GResponseDocumentRef {
         Objects.equals(this.nestedSearchResult, gresponseDocumentRef.nestedSearchResult) &&
         Objects.equals(this.loadPercentage, gresponseDocumentRef.loadPercentage) &&
         Objects.equals(this.references, gresponseDocumentRef.references) &&
-        Objects.equals(this.ntokensRelevant, gresponseDocumentRef.ntokensRelevant) &&
         Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens) &&
-        Objects.equals(this.shortCode, gresponseDocumentRef.shortCode) &&
-        Objects.equals(this.nbytesRelevant, gresponseDocumentRef.nbytesRelevant);
+        Objects.equals(this.ntokensRelevant, gresponseDocumentRef.ntokensRelevant) &&
+        Objects.equals(this.nbytesRelevant, gresponseDocumentRef.nbytesRelevant) &&
+        Objects.equals(this.shortCode, gresponseDocumentRef.shortCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, knowledgeBaseDocument, nestedSearchResult, loadPercentage, references, ntokensRelevant, ntotalContentTokens, shortCode, nbytesRelevant);
+    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, knowledgeBaseDocument, nestedSearchResult, loadPercentage, references, ntotalContentTokens, ntokensRelevant, nbytesRelevant, shortCode);
   }
 
 
@@ -547,10 +547,10 @@ public class GResponseDocumentRef {
     sb.append("    nestedSearchResult: ").append(toIndentedString(nestedSearchResult)).append("\n");
     sb.append("    loadPercentage: ").append(toIndentedString(loadPercentage)).append("\n");
     sb.append("    references: ").append(toIndentedString(references)).append("\n");
-    sb.append("    ntokensRelevant: ").append(toIndentedString(ntokensRelevant)).append("\n");
     sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
-    sb.append("    shortCode: ").append(toIndentedString(shortCode)).append("\n");
+    sb.append("    ntokensRelevant: ").append(toIndentedString(ntokensRelevant)).append("\n");
     sb.append("    nbytesRelevant: ").append(toIndentedString(nbytesRelevant)).append("\n");
+    sb.append("    shortCode: ").append(toIndentedString(shortCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

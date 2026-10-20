@@ -83,7 +83,7 @@
             </div>
             <div class="col-6">
               <gebo-ai-field id="choosedModel" label="Ollama embedding model choice" help="Choose the Ollama embedding model to work with." [required]="true">
-                <p-select styleClass="w-full" id="choosedModel" formControlName="choosedModel" placeholder="Select a model"
+                <p-select styleClass="w-full" id="choosedModel" formControlName="choosedModel" dataKey="code" placeholder="Select a model"
                   [required]="true" [options]="modelChoicesData" optionLabel="description"
                 class="col-12" gebo-ai-field-element></p-select>
               </gebo-ai-field>

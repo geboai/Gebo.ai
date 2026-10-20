@@ -2,6 +2,10 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.IJsonClonable;
@@ -12,7 +16,7 @@ import lombok.Data;
 
 @Data
 public class GAgentsNetwork extends GBaseObject
-		implements IJsonClonable<GAgentsNetwork>, IGObjectWithSecurity, IAclGrantedResource {
+		implements IJsonClonable<GAgentsNetwork>, IGObjectWithSecurity, IAclGrantedResource, IGCopiedEntity {
 	/*
 	 * public String owner(); public Boolean getAccessibleToAll(); public
 	 * List<String> getAccessibleUsers(); public List<String> getAccessibleGroups();
@@ -29,6 +33,11 @@ public class GAgentsNetwork extends GBaseObject
 		ON_RECEIVED_MESSAGE, EVERY_CYCLE
 	}
 
+	/**
+	 * How many times the controller participant may act: the coordination cycles
+	 * of a router, the search-and-rewrite cycles of a single agent answering the
+	 * user. The other participants act only on what the controller sends.
+	 */
 	int maxLoopIteration = 5;
 	Boolean accessibleToAll = null;
 	List<String> accessibleUsers = null;
@@ -48,9 +57,13 @@ public class GAgentsNetwork extends GBaseObject
 
 		private List<String> communicationList;
 
-		private Integer maxInvocations;
-
-		private Integer maxConsecutiveInvocations;
+		/**
+		 * The participant the network's loop is counted on: the one that coordinates
+		 * the others (a router) or, in a network of one agent answering the user, that
+		 * agent. {@link GAgentsNetwork#getMaxLoopIteration()} is the number of times it
+		 * may act. Exactly one participant is the controller.
+		 */
+		private boolean controller = false;
 
 		private boolean canCallTools = true;
 
@@ -85,5 +98,13 @@ public class GAgentsNetwork extends GBaseObject
 	 * agents; not choosable when empty.
 	 */
 	private List<PipelineType> choosableForPipelineTypes = null;
+
+	/**
+	 * The code of the network this one is a copy of, only while the copy is being
+	 * inserted: its code is made from it. Neither stored nor exchanged.
+	 */
+	@Transient
+	@JsonIgnore
+	private String copiedFromCode = null;
 
 }

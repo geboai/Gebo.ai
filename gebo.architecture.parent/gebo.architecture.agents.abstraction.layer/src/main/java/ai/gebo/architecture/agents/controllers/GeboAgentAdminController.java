@@ -15,13 +15,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
+import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
+import ai.gebo.architecture.agents.services.IGAgentsCopyService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.model.base.GBaseObject;
+import ai.gebo.security.services.ConfigurationAuditSupport;
+import ai.gebo.security.services.IGSecurityAuditLoggerService;
+import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,6 +43,12 @@ public class GeboAgentAdminController {
 	private final IAgentConfigDao agentsConfigDao;
 	private final IGPromptConfigDao promptsDao;
 	private final IGRuntimeBinder runtimeBinder;
+	private final IGAgentsCopyService agentsCopyService;
+	/**
+	 * The insert/update/delete/copy of an agent are security events: an agent decides
+	 * which model, tools and prompt are used inside the networks it takes part in.
+	 */
+	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	@GetMapping(value = "getPromptTemplateByAgentId", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<GPromptTemplateConfig> getPromptTemplatesByAgentId(@RequestParam("agentId") String agentId) {
@@ -72,6 +86,20 @@ public class GeboAgentAdminController {
 		}).toList();
 	}
 
+	/**
+	 * The roles an agent configuration can take ({@code agentRoleCode} is mandatory):
+	 * the role library the prompts are built with.
+	 */
+	@GetMapping(value = "getAgentRoles", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<GAgentRole> getAgentRoles() {
+		IAgentRoleDao dao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
+		List<GAgentRole> roles = dao != null && dao.getConfigurations() != null ? dao.getConfigurations() : List.of();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST getAgentRoles returned " + roles.size() + " role(s)");
+		}
+		return roles;
+	}
+
 	@GetMapping(value = "getAgentByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GAgentConfig getAgentByCode(@RequestParam("code") String code) throws GeboPersistenceException {
 		if (LOGGER.isDebugEnabled()) {
@@ -96,7 +124,12 @@ public class GeboAgentAdminController {
 			LOGGER.trace(String.valueOf(config));
 			LOGGER.trace("</AGENT_CONFIG_UPDATE>");
 		}
-		return this.agentsConfigDao.update(config);
+		// created on entry, so the event's caller stack points at this endpoint
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENT_UPDATE,
+				SecurityAuditTaxonomy.ResourceType.AGENT, config != null ? config.getCode() : null, config,
+				() -> this.agentsConfigDao.update(config));
 	}
 
 	@PostMapping(value = "insertAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -109,15 +142,55 @@ public class GeboAgentAdminController {
 			LOGGER.trace(String.valueOf(config));
 			LOGGER.trace("</AGENT_CONFIG_INSERT>");
 		}
-		return this.agentsConfigDao.insert(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENT_INSERT,
+				SecurityAuditTaxonomy.ResourceType.AGENT, config != null ? config.getCode() : null, config,
+				() -> this.agentsConfigDao.insert(config));
 	}
 
+	/**
+	 * Copies the agent with the given code into a new, editable agent, also when the
+	 * original is a read-only agent declared by a configuration bean (see
+	 * {@link IGAgentsCopyService#copyAgent(String)}).
+	 */
+	@PostMapping(value = "copyAgent", produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<GAgentConfig> copyAgent(@RequestParam("code") String code) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST copyAgent code:" + code);
+		}
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		// the agent copied is the resource; the code of the new, editable copy is a detail
+		OperationStatus<GAgentConfig> status = ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENT_COPY,
+				SecurityAuditTaxonomy.ResourceType.AGENT, code, null, () -> agentsCopyService.copyAgent(code),
+				(e, copied) -> {
+					if (copied != null && copied.getResult() != null) {
+						e.getDetails().put("copyCode", copied.getResult().getCode());
+					}
+				});
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST copyAgent code:" + code + " produced a copy:"
+					+ (status != null && status.getResult() != null ? status.getResult().getCode() : null)
+					+ " message(s):" + (status != null && status.getMessages() != null ? status.getMessages().size() : 0));
+		}
+		return status;
+	}
+
+	/**
+	 * Deletes the agent configuration: not validated, an agent being deleted by its
+	 * code also when its configuration is no longer valid.
+	 */
 	@DeleteMapping(value = "deleteAgent", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteAgent(@Valid @NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
+	public void deleteAgent(@NotNull @RequestBody GAgentConfig config) throws GeboPersistenceException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("REST deleteAgent code:" + (config != null ? config.getCode() : null));
 		}
-		this.agentsConfigDao.delete(config);
+		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
+		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
+				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENT_DELETE,
+				SecurityAuditTaxonomy.ResourceType.AGENT, config != null ? config.getCode() : null, null,
+				() -> this.agentsConfigDao.delete(config));
 	}
 
 	@GetMapping(value = "getAgents", produces = MediaType.APPLICATION_JSON_VALUE)

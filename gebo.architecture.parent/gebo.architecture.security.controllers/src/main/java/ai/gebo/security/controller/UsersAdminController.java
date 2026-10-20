@@ -56,17 +56,10 @@ public class UsersAdminController {
 	private final IGSecurityService securityService;
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
-	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
-	// itself) so newSecurityEvent()'s caller-stack capture points at the real
-	// endpoint method, not at this shared helper.
-	private void logUserAdminEvent(SecurityEvent event, String action, String resourceId, String outcome) {
-		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
-		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
-		event.setAction(action);
-		event.setResourceId(resourceId);
-		event.setOutcome(outcome);
-		securityAuditLoggerService.log(event);
-	}
+	// The user and group insert/update/delete endpoints below write no security event
+	// of their own: IGUsersAdminService audits each of them (GUsersAdminServiceImpl,
+	// with the members and roles involved), and an event here too wrote every change
+	// twice into the security log.
 
 	/**
 	 * DTO for inserting a user with mandatory fields.
@@ -86,17 +79,7 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "insertUser", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public EditableUser insertUser(@Valid @RequestBody InsertUserParam p) {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		try {
-			EditableUser inserted = userAdminService.insertUser(p.user, p.password);
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_INSERT,
-					p.user != null ? p.user.getUsername() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
-			return inserted;
-		} catch (RuntimeException e) {
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_INSERT,
-					p.user != null ? p.user.getUsername() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		return userAdminService.insertUser(p.user, p.password);
 	}
 
 	/**
@@ -107,17 +90,7 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "updateUser", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public EditableUser updateUser(@Valid @RequestBody EditableUser user) {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		try {
-			EditableUser updated = userAdminService.updateUser(user);
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_UPDATE,
-					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
-			return updated;
-		} catch (RuntimeException e) {
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_UPDATE,
-					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		return userAdminService.updateUser(user);
 	}
 
 	/**
@@ -127,16 +100,7 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "deleteUser", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUser(@Valid @RequestBody EditableUser user) {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		try {
-			userAdminService.deleteUser(user);
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_DELETE,
-					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
-		} catch (RuntimeException e) {
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.USER_DELETE,
-					user != null ? user.getUsername() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		userAdminService.deleteUser(user);
 	}
 
 	/**
@@ -147,17 +111,7 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "insertGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public UsersGroup insertGroup(@Valid @RequestBody UsersGroup group) {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		try {
-			UsersGroup inserted = userAdminService.insertGroup(group);
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_INSERT,
-					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
-			return inserted;
-		} catch (RuntimeException e) {
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_INSERT,
-					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		return userAdminService.insertGroup(group);
 	}
 
 	/**
@@ -168,17 +122,7 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "updateGroup", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public UsersGroup updateGroup(@Valid @RequestBody UsersGroup group) {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		try {
-			UsersGroup updated = userAdminService.updateGroup(group);
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_UPDATE,
-					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
-			return updated;
-		} catch (RuntimeException e) {
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_UPDATE,
-					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		return userAdminService.updateGroup(group);
 	}
 
 	/**
@@ -188,16 +132,7 @@ public class UsersAdminController {
 	 */
 	@PostMapping(value = "deleteGroup", produces = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteGroup(@Valid @RequestBody UsersGroup group) {
-		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		try {
-			userAdminService.deleteGroup(group);
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_DELETE,
-					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.SUCCESS);
-		} catch (RuntimeException e) {
-			logUserAdminEvent(event, SecurityAuditTaxonomy.Action.GROUP_DELETE,
-					group != null ? group.getCode() : null, SecurityAuditTaxonomy.Outcome.FAILURE);
-			throw e;
-		}
+		userAdminService.deleteGroup(group);
 	}
 
 	/**

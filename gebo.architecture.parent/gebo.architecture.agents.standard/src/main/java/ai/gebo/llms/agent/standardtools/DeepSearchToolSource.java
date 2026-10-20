@@ -41,14 +41,14 @@ import ai.gebo.security.services.IGSecurityService;
  * working in a loop, search widely and get an analysis of all the documents found.
  * <p>
  * Whether the current user may search a service is checked when a tool is called,
- * as the search tools do. Kept out of the default network's automatic tool
- * mounting: there the deep searches are the deep search pipelines' job.
+ * as the search tools do. Left out by the tool-calling agent of the networks with
+ * search agents: there the deep searches are the deep search pipelines' job.
  */
 @ConditionalOnProperty(prefix = "ai.gebo.agents.standard.deep-search-tools", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Service
 public class DeepSearchToolSource implements IGToolCallbackSource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeepSearchToolSource.class);
-	/** The id of this tool source, kept out of the default network's automatic mounting. */
+	/** The id of this tool source, left out by the tool-calling agent of the networks with search agents. */
 	public static final String DEEP_SEARCH_TOOL_SOURCE = "standard-deep-search-tool-source";
 	public static final String DEEP_SEARCH_WEB_TOOL = "deepSearchWeb";
 	static final String DEEP_SEARCH_TOOL_PREFIX = "deepSearch";
@@ -77,6 +77,12 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 		return DEEP_SEARCH_TOOL_SOURCE;
 	}
 
+	/** What this source is for the administrator. */
+	@Override
+	public String getDescription() {
+		return "Deep searches of the knowledge bases, the search services and the web";
+	}
+
 	@Override
 	public ToolsCategory getToolCategory() {
 		return category;
@@ -84,7 +90,31 @@ public class DeepSearchToolSource implements IGToolCallbackSource {
 
 	@Override
 	public List<ToolReference> getFullToolReferences() {
-		return tools().stream().map(tool -> tool.toToolReference()).toList();
+		final List<ToolReference> references = new ArrayList<>();
+		for (AbstractDeepSearchTool<?> tool : tools()) {
+			final ToolReference reference = tool.toToolReference();
+			reference.setUserUIfunctionDescription(adminDescription(tool));
+			references.add(reference);
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getFullToolReferences() tool source:" + getId() + " exposes " + references.size()
+					+ " deep search tool reference(s) with their admin description");
+		}
+		return references;
+	}
+
+	/**
+	 * What the tool does, told for the admin choosing the tools: the source deep
+	 * searched, then what a deep search does with what it finds.
+	 */
+	static String adminDescription(AbstractDeepSearchTool<?> tool) {
+		final String source;
+		if (tool instanceof SearchServiceDeepSearchTool<?> serviceTool) {
+			source = DEEP_SEARCH_WEB_TOOL.equals(tool.getToolName()) ? "the public web" : describe(serviceTool.getService());
+		} else {
+			source = "the user accessible knowledge base(s)";
+		}
+		return "Deep search of " + source + ": many searches, the contents found analysed and summarised";
 	}
 
 	@Override

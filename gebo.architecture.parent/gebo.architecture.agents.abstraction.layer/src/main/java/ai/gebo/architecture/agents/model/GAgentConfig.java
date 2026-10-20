@@ -2,6 +2,10 @@ package ai.gebo.architecture.agents.model;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -17,7 +21,7 @@ import lombok.Data;
 
 @Data
 public class GAgentConfig extends GBaseObject
-		implements IGObjectWithSecurity, IAclGrantedResource, IJsonClonable<GAgentConfig> {
+		implements IGObjectWithSecurity, IAclGrantedResource, IJsonClonable<GAgentConfig>, IGCopiedEntity {
 	public static enum AgentType {
 		AGENT, AGENTS_NETWORK
 	}
@@ -38,8 +42,6 @@ public class GAgentConfig extends GBaseObject
 	private ChatModelsUses useChatModelWithUse = null;
 	@GObjectReference(referencedType = GBaseChatModelConfig.class, referencesExtensions = true)
 	private GObjectRef<GBaseChatModelConfig> chatModelReference = null;
-	@NotNull
-	private Integer maxLoopIterations = null;
 	private List<Integer> aclAliases = null;
 	private Boolean defaultConfiguration = null;
 	/**
@@ -69,4 +71,23 @@ public class GAgentConfig extends GBaseObject
 	 * A list of functions that are enabled for direct chat interaction.
 	 */
 	protected List<String> enabledFunctions = null;
+
+	/**
+	 * The ids of the tool sources whose tools this agent leaves out when it mounts
+	 * every registered tool ({@link #subscribeAllTools}), on top of the system-wide
+	 * exclusions of the automatic mounting: how the tool-calling agent of a network
+	 * with search agents is kept off the search tools those agents already run, while
+	 * it still operates the other tools (MCP tools, the basic tools of the system).
+	 * Null or empty when the agent leaves out only the system-wide exclusions; the
+	 * tools selected by name ({@link #enabledFunctions}) are never affected.
+	 */
+	protected List<String> excludedToolSources = null;
+
+	/**
+	 * The code of the agent configuration this one is a copy of, only while the copy
+	 * is being inserted: its code is made from it. Neither stored nor exchanged.
+	 */
+	@Transient
+	@JsonIgnore
+	private String copiedFromCode = null;
 }

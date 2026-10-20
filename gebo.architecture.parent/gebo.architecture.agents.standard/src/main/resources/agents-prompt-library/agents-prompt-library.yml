@@ -13,7 +13,7 @@ ai.gebo.agents.prompts.library:
     systemReference: /agents-prompt-library/en/report-answer-writer-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/report-answer-writer-agent-user-prompt.txt
     agentPrompt: true
-    agentId: ChatAgentService
+    agentId: ReportWriterNetworkAgentService
     chatHistory: REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: NOT_REQUIRED
@@ -22,7 +22,7 @@ ai.gebo.agents.prompts.library:
     systemReference: /agents-prompt-library/en/tool-calling-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/tool-calling-agent-user-prompt.txt
     agentPrompt: true
-    agentId: stringToStringToolCallingAgentService
+    agentId: toolCallingAgentService
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
     toolsCalling: REQUIRED
@@ -35,7 +35,7 @@ ai.gebo.agents.prompts.library:
     toolsCalling: NOT_REQUIRED
   - promptUse: default-chat-agent-prompt
     langCode: en
-    agentId: ChatAgentService
+    agentId: AgenticLoopNetworkAgentService
     agentPrompt: true
     systemReference: /agents-prompt-library/en/default-chat-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/default-chat-agent-user-prompt.txt
@@ -46,7 +46,7 @@ ai.gebo.agents.prompts.library:
     description: Default Chat Agent prompt
   - promptUse: pure-chat-agent-prompt
     langCode: en
-    agentId: ChatAgentService
+    agentId: AgenticLoopPureChatNetworkAgentService
     agentPrompt: true
     systemReference: /agents-prompt-library/en/pure-chat-agent-system-prompt.txt
     userReference: /agents-prompt-library/en/pure-chat-agent-user-prompt.txt
@@ -57,7 +57,7 @@ ai.gebo.agents.prompts.library:
     description: Chat Agent prompt for the chats without knowledge base
 ai.gebo.agents.prompts.uses:
   - code: default-chat-agent-prompt
-    description: Main loop prompt for the default single-agent chat agent (ChatAgentService), driving its iterate-until-done control loop.
+    description: Main loop prompt for the default single-agent chat agent (AgenticLoopNetworkAgentService), driving its iterate-until-done control loop.
     module: agents-standard
     placeholders:
       - placeholder: AGENT_CONTROL_CONTINUE_PROMPT_PARAM

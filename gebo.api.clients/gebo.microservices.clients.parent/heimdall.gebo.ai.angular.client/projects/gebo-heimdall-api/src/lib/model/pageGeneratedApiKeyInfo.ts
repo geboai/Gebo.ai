@@ -17,12 +17,12 @@ export interface PageGeneratedApiKeyInfo {
     totalPages?: number;
     totalElements?: number;
     pageable?: PageableObject;
-    first?: boolean;
-    last?: boolean;
     size?: number;
     content?: Array<GeneratedApiKeyInfo>;
     number?: number;
     sort?: SortObject;
+    first?: boolean;
+    last?: boolean;
     numberOfElements?: number;
     empty?: boolean;
 }

@@ -1,6 +1,6 @@
 # FunctionsLookupControllerApi
 
-All URIs are relative to *http://localhost:12999*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**getAllFunctionsTree**](FunctionsLookupControllerApi.md#getAllFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllFunctionsTree | 
 [**getAllLocalFunctions**](FunctionsLookupControllerApi.md#getAllLocalFunctions) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctions | 
 [**getAllLocalFunctionsTree**](FunctionsLookupControllerApi.md#getAllLocalFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctionsTree | 
+[**getToolSourceInfos**](FunctionsLookupControllerApi.md#getToolSourceInfos) | **GET** /api/admin/FunctionsLookupController/getToolSourceInfos | 
 
 <a name="getAllFunctions"></a>
 # **getAllFunctions**
@@ -163,6 +164,45 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;ToolCategoriesTree&gt;**](ToolCategoriesTree.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getToolSourceInfos"></a>
+# **getToolSourceInfos**
+> List&lt;ToolSourceInfo&gt; getToolSourceInfos()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FunctionsLookupControllerApi;
+
+
+FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
+try {
+    List<ToolSourceInfo> result = apiInstance.getToolSourceInfos();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FunctionsLookupControllerApi#getToolSourceInfos");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;ToolSourceInfo&gt;**](ToolSourceInfo.md)
 
 ### Authorization
 

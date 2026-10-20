@@ -3,8 +3,10 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.GAgentConfig;
+import ai.gebo.monolithic.api.client.model.GAgentRole;
 import ai.gebo.monolithic.api.client.model.GBaseObject;
 import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
+import ai.gebo.monolithic.api.client.model.OperationStatusGAgentConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-10T12:17:57.070821934+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
 
 public class GeboAgentAdminControllerApi {
     private ApiClient apiClient;
@@ -44,6 +46,51 @@ public class GeboAgentAdminControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return OperationStatusGAgentConfig
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGAgentConfig copyAgent(String code) throws RestClientException {
+        return copyAgentWithHttpInfo(code).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return ResponseEntity&lt;OperationStatusGAgentConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGAgentConfig> copyAgentWithHttpInfo(String code) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'code' is set
+        if (code == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling copyAgent");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/copyAgent").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "code", code));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGAgentConfig> returnType = new ParameterizedTypeReference<OperationStatusGAgentConfig>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -130,6 +177,44 @@ public class GeboAgentAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<GAgentConfig> returnType = new ParameterizedTypeReference<GAgentConfig>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;GAgentRole&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GAgentRole> getAgentRoles() throws RestClientException {
+        return getAgentRolesWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;GAgentRole&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GAgentRole>> getAgentRolesWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/getAgentRoles").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GAgentRole>> returnType = new ParameterizedTypeReference<List<GAgentRole>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

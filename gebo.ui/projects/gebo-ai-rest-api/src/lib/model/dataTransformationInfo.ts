@@ -17,5 +17,14 @@ export interface DataTransformationInfo {
     transformationInfo: DataTransformationMetaInfo;
     dataSourceId: string;
     dataDestinationId: string;
+    carried?: DataTransformationInfo.CarriedEnum;
     section?: string;
+}
+export namespace DataTransformationInfo {
+    export type CarriedEnum = 'CONTENT' | 'PROCESSED' | 'REQUEST';
+    export const CarriedEnum = {
+        CONTENT: 'CONTENT' as CarriedEnum,
+        PROCESSED: 'PROCESSED' as CarriedEnum,
+        REQUEST: 'REQUEST' as CarriedEnum
+    };
 }

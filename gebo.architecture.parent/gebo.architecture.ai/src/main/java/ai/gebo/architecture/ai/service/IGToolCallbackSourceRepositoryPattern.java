@@ -20,6 +20,7 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.model.ToolSourceInfo;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
 
@@ -62,6 +63,12 @@ public interface IGToolCallbackSourceRepositoryPattern
      * @return A list of ToolCategoriesTree instances containing only enabled tools.
      */
     public List<ToolCategoriesTree> getEnabledToolsTree(List<String> enabledFunctions);
+
+    /**
+     * The registered tool sources as the administrator sees them: id, description,
+     * category and how many tools each exports now, in the order registered.
+     */
+    public List<ToolSourceInfo> getToolSourceInfos();
 
     /**
      * Retrieves a tree structure of all tool categories without any filters.

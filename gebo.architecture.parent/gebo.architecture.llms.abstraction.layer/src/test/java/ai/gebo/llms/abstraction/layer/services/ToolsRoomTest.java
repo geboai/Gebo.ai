@@ -186,7 +186,11 @@ class ToolsRoomTest {
 
 		long used = ITokensCountable.stringsTokensSize(words(1000)) + ITokensCountable.stringsTokensSize(words(200));
 		long definitions = ITokensCountable.stringsTokensSize("searchWeb", "searchWeb tool", "{}");
-		assertEquals((int) ((20000 - used - definitions) * GAbstractConfigurableChatModel.TOOLS_ROOM_SHARE),
+		// the window less what the requests reserve for the generation: no cap configured, the
+		// default of a 20K window (4K)
+		final int usableWindow = GAbstractConfigurableChatModel.usableContextWindow(20000, model.config);
+		assertEquals(20000 - 4096, usableWindow);
+		assertEquals((int) ((usableWindow - used - definitions) * GAbstractConfigurableChatModel.TOOLS_ROOM_SHARE),
 				ToolsTokenBudget.from(toolsContext).left());
 		assertEquals("r1", toolsContext.get("requestId"), "the caller's values are kept");
 		assertNull(callerContext.get(ToolsTokenBudget.TOOLS_CONTEXT_KEY), "the caller's map is never changed");
