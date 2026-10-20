@@ -41,10 +41,14 @@ public class GAgenticChatDefaultNetworkOfAgentsServiceImpl implements IGAgenticC
 
 	@Override
 	public boolean isAgenticChatNetworksEnabled() {
-		// Same reading as the conditions switching the agents configurations on.
+		// The master switch, on when missing: not the one of the bundled networks
+		// (STANDARD_AGENTS_ENABLED_PROPERTY), which a product switches off to bring
+		// its own networks while the agents stay on.
 		boolean enabled = environment.getProperty(AGENTS_ENABLED_PROPERTY, Boolean.class, Boolean.TRUE);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("isAgenticChatNetworksEnabled() " + AGENTS_ENABLED_PROPERTY + ":" + enabled);
+			LOGGER.debug("isAgenticChatNetworksEnabled() " + AGENTS_ENABLED_PROPERTY + ":" + enabled + " ("
+					+ STANDARD_AGENTS_ENABLED_PROPERTY + ":"
+					+ environment.getProperty(STANDARD_AGENTS_ENABLED_PROPERTY, Boolean.class, Boolean.TRUE) + ")");
 		}
 		return enabled;
 	}
