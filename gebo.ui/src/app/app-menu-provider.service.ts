@@ -114,17 +114,18 @@ export class AppMenuProviderService extends ApplicationMenuProviderService {
 
 
   /**
-   * Shows the setup state on the Setup menu item, once per status change: an
-   * incomplete setup blinks red (a CSS animation, see styles.scss: nothing
-   * re-renders the menubar every second), a complete one (not yet full) is
-   * marked orange with no blink, a full one shows nothing.
+   * Shows the setup state on the Setup menu item, once per status change: only an
+   * incomplete setup (a mandatory step missing) blinks red (a CSS animation, see
+   * styles.scss: nothing re-renders the menubar every second). A complete setup
+   * (all mandatory done, some optional missing) is shown like a full one: the item
+   * carries no marker.
    */
   private showSetupState(): void {
     const currentItems = this.menuItemsSubject.getValue();
     const setupItem = currentItems.find(x => x.id === setupItemId);
     if (!setupItem) return;
-    if (this.setupStatus === 'incomplete' || this.setupStatus === 'complete') {
-      setupItem.styleClass = this.setupStatus === 'incomplete' ? "gebo-ai-setup-incomplete" : "gebo-ai-setup-complete";
+    if (this.setupStatus === 'incomplete') {
+      setupItem.styleClass = "gebo-ai-setup-incomplete";
       setupItem.title = "Setup is incomplete, please consider press here and manage it";
       setupItem.state = { incomplete: true };
     } else {
