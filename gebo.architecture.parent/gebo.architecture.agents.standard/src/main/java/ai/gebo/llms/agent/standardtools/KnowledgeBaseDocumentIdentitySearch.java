@@ -82,8 +82,7 @@ public class KnowledgeBaseDocumentIdentitySearch {
 		filter.setKnowledgeBasesCodes(knowledgeBaseCodes);
 		filter.setEmbedType(type);
 		final IGSecurityService security = securityService.getObject();
-		if (security.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !security.isCurrentUserAdmin()) {
+		if (security.isContentAclEnforced()) {
 			filter.setAclAliases(security.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases());
 		}
 		final SearchRequest request = SearchRequest.builder().query(text).topK(topK)

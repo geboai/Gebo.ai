@@ -84,8 +84,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		}
 		List<String> knowledgeBases = new ArrayList<String>();
 		List<Integer> aclAliases = null;
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
 		}
 		double threashold = chatConfigs.getDefaultSimilarityThreshold();
@@ -173,8 +172,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			LOGGER.debug("Begin search(String request,..)");
 		}
 		List<Integer> aclAliases = null;
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
 		}
 		// No chat profile/session: scope to all knowledge bases visible to the current user.
@@ -273,8 +271,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			// disabled does it fall back to its historical role of filling the gap left
 			// by an under delivering semantic leg.
 			if (lexicalLegAvailable && (hybrid || !endSearch)) {
-				boolean filterWithAcl = !securityService.isCurrentUserAdmin()
-						&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+				boolean filterWithAcl = securityService.isContentAclEnforced();
 				// the caller's filter (its knowledge bases, how many chunks of each document...),
 				// within the knowledge bases of this search and with the user's ACL
 				final FullTextSearchMetaDataFilter metaDataFilter = lexicalFilter(fullTextSearchMetaDataFilter,

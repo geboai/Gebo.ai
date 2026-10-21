@@ -33,7 +33,10 @@ import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.UsersGroup;
+import org.springframework.beans.factory.ObjectProvider;
+
 import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGContentAclBypass;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGeboSystemUserService;
@@ -62,6 +65,28 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	final IGeboCryptingService cryptService;
 	final IGPersistentObjectManager persistenceManager;
 	final IGeboSystemUserService systemUserService;
+	/** The products' bypass rules of the content ACL (see {@link IGContentAclBypass}); none by default. */
+	final ObjectProvider<IGContentAclBypass> contentAclBypasses;
+
+	@Override
+	public boolean isContentAclBypassed() {
+		final List<IGContentAclBypass> bypasses = contentAclBypasses != null ? contentAclBypasses.stream().toList()
+				: List.of();
+		if (bypasses.isEmpty()) {
+			return false;
+		}
+		final UserInfos user = getCurrentUser();
+		for (IGContentAclBypass bypass : bypasses) {
+			if (bypass.bypassesContentAcl(user)) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Content ACL bypassed for user:" + user.getUsername() + " by:"
+							+ bypass.getClass().getSimpleName());
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -269,7 +294,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return true;
 		}
 		case ACL_BASED: {
-			if (adminCanDoAll && isCurrentUserAdmin())
+			if (readsAsAdministrator(adminCanDoAll, grantType))
 				return true;
 			if (grantType == null || grantType.length == 0l)
 				return false;
@@ -296,7 +321,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDoAction(Collection<T> objects,
 			boolean adminCanDoAll, AclGrantType... grantType) {
-		if (adminCanDoAll && isCurrentUserAdmin())
+		if (readsAsAdministrator(adminCanDoAll, grantType))
 			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
@@ -344,7 +369,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public <T extends IAclGrantedResource> List<T> filterAclCanDoAction(Collection<T> objects, boolean adminCanDoAll,
 			AclGrantType... grantType) {
-		if (adminCanDoAll && isCurrentUserAdmin())
+		if (readsAsAdministrator(adminCanDoAll, grantType))
 			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {

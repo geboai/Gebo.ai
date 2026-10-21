@@ -151,8 +151,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 		// the full text search keeps the best chunks of each document (3 by default): a
 		// knowledge base of a few documents would give a deep search a handful of fragments
 		fullTextFilter.setPerDocumentInnerHits(fragmentsPerDocument);
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			final List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 					.getAllOwnedAclAliases();
 			semanticFilter.setAclAliases(aclAliases);

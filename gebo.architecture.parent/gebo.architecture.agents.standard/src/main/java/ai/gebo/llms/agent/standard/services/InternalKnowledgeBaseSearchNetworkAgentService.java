@@ -174,8 +174,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			semanticFilter.setKnowledgeBasesCodes(kbCodes);
 			FullTextSearchMetaDataFilter fullTextFilter = new FullTextSearchMetaDataFilter();
 			fullTextFilter.setKnowledgebaseCodes(kbCodes);
-			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-					&& !securityService.isCurrentUserAdmin()) {
+			if (securityService.isContentAclEnforced()) {
 				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 						.getAllOwnedAclAliases();
 				if (LOGGER.isDebugEnabled()) {

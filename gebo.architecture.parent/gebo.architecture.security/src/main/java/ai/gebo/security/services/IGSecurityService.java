@@ -63,6 +63,55 @@ public interface IGSecurityService {
 	public boolean isCurrentUserAdmin();
 
 	/**
+	 * Whether the contents the current user reads are filtered by the ACL aliases:
+	 * the platform's content access policy is ACL based and the user is neither an
+	 * administrator nor one a product lets bypass the ACL (see
+	 * {@link IGContentAclBypass}). The one rule of every content filter: the
+	 * searches, the deep searches, the browsing and the reading of the knowledge
+	 * bases' documents.
+	 */
+	public default boolean isContentAclEnforced() {
+		return getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED && !isCurrentUserAdmin()
+				&& !isContentAclBypassed();
+	}
+
+	/**
+	 * Whether a product lets the current user read every content regardless of the
+	 * ACL aliases (see {@link IGContentAclBypass}); false when none does.
+	 */
+	public default boolean isContentAclBypassed() {
+		return false;
+	}
+
+	/**
+	 * Whether the current user passes an ACL check as an administrator does: an
+	 * administrator when the check lets administrators do all, or a user a product
+	 * lets read every content (see {@link IGContentAclBypass}) when the grants asked
+	 * are reads only. The one gate of the ACL framework's checks
+	 * ({@link #isCanDoAction}, {@link #filterCanDoAction}, {@link #filterAclCanDoAction})
+	 * and of the content filters ({@link #isContentAclEnforced()}).
+	 */
+	public default boolean readsAsAdministrator(boolean adminCanDoAll, AclGrantType... grantType) {
+		if (adminCanDoAll && isCurrentUserAdmin()) {
+			return true;
+		}
+		return readOnly(grantType) && isContentAclBypassed();
+	}
+
+	/** Whether the grants asked are reads only; none asked is not a read. */
+	private static boolean readOnly(AclGrantType... grantType) {
+		if (grantType == null || grantType.length == 0) {
+			return false;
+		}
+		for (AclGrantType grant : grantType) {
+			if (grant != AclGrantType.READ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Determines if the current user has access to a specified object.
 	 *
 	 * @param object        An object with security parameters.

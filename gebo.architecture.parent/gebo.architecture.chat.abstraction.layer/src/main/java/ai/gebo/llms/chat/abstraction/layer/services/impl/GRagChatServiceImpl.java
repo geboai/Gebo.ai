@@ -165,8 +165,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
 			List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
-			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-					&& !securityService.isCurrentUserAdmin()) {
+			if (securityService.isContentAclEnforced()) {
 				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 						.getAllOwnedAclAliases();
 				fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
@@ -312,8 +311,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 		FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
 		List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 					.getAllOwnedAclAliases();
 			fullTextSearchMetaDataFilter.setAclAliases(aclAliases);

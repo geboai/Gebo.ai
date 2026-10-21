@@ -333,8 +333,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			semanticFilter.setKnowledgeBasesCodes(kbCodes);
 			FullTextSearchMetaDataFilter fullTextFilter = new FullTextSearchMetaDataFilter();
 			fullTextFilter.setKnowledgebaseCodes(kbCodes);
-			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-					&& !securityService.isCurrentUserAdmin()) {
+			if (securityService.isContentAclEnforced()) {
 				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 						.getAllOwnedAclAliases();
 				semanticFilter.setAclAliases(aclAliases);
