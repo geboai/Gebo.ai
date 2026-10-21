@@ -101,6 +101,7 @@
                 <th id="DescriptionHeader" gebo-ai-text>Description</th>
                 <th id="ModelProviderHeader" gebo-ai-text>Model provider</th>
                 <th id="ModelHeader" gebo-ai-text>Model </th>
+                <th id="RoleHeader" gebo-ai-text>Role</th>
                 <th></th>
                 <th></th>
               </tr>
@@ -111,6 +112,13 @@
                 <td>{{ model.configuration?.description }}</td>
                 <td>{{ model.configuration?.modelTypeCode }}</td>
                 <td>{{ model.configuration?.choosedModel?.code }}</td>
+                <td>
+                  @switch (chatModelRole(model.configuration)) {
+                    @case ('DEFAULT_CHAT') { <span id="RoleDefaultChat" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default chat model</span> }
+                    @case ('SERVICE') { <span id="RoleService" gebo-ai-text class="gebo-model-role gebo-model-role--service">Default service model</span> }
+                    @default { <span id="RoleChat" gebo-ai-text class="gebo-model-role">Chat model</span> }
+                  }
+                </td>
                 <td>
                   <gebo-ai-test-chat-component
                   [chatModelCode]="model.configuration.code"></gebo-ai-test-chat-component>
@@ -137,6 +145,7 @@
                   <th id="DescriptionHeader2" gebo-ai-text>Description</th>
                   <th id="ModelProviderHeader2" gebo-ai-text>Model provider</th>
                   <th id="ModelHeader2" gebo-ai-text>Model </th>
+                  <th id="RoleHeader2" gebo-ai-text>Role</th>
                   <th></th>
                   <th></th>
                 </tr>
@@ -147,6 +156,9 @@
                   <td>{{ model.configuration?.description }}</td>
                   <td>{{ model.configuration?.modelTypeCode }}</td>
                   <td>{{ model.configuration?.choosedModel?.code }}</td>
+                  <td>
+                    @if (model.configuration?.defaultModel === true) { <span id="RoleDefault" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default model</span> }
+                  </td>
                   <td>
                   </td>
                   <td><p-button id="ConfigureBtn2" gebo-ai-label (onClick)="editEmbeddingModel(model)"
@@ -169,6 +181,7 @@
                     <th id="DescriptionHeader3" gebo-ai-text>Description</th>
                     <th id="ModelProviderHeader3" gebo-ai-text>Model provider</th>
                     <th id="ModelHeader3" gebo-ai-text>Model </th>
+                    <th id="RoleHeader3" gebo-ai-text>Role</th>
                     <th></th>
                     <th></th>
                   </tr>
@@ -179,6 +192,9 @@
                     <td>{{ model.configuration?.description }}</td>
                     <td>{{ model.configuration?.modelTypeCode }}</td>
                     <td>{{ model.configuration?.choosedModel?.code }}</td>
+                    <td>
+                      @if (model.configuration?.defaultModel === true) { <span id="RoleDefault" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default model</span> }
+                    </td>
                     <td>
                     </td>
                     <td><p-button id="ConfigureBtn3" gebo-ai-label (onClick)="editRerankerModel(model)"
@@ -201,6 +217,7 @@
                       <th id="DescriptionHeader4" gebo-ai-text>Description</th>
                       <th id="ModelProviderHeader4" gebo-ai-text>Model provider</th>
                       <th id="ModelHeader4" gebo-ai-text>Model </th>
+                      <th id="RoleHeader4" gebo-ai-text>Role</th>
                       <th></th>
                       <th></th>
                     </tr>
@@ -211,6 +228,9 @@
                       <td>{{ model.configuration?.description }}</td>
                       <td>{{ model.configuration?.modelTypeCode }}</td>
                       <td>{{ model.configuration?.choosedModel?.code }}</td>
+                      <td>
+                        @if (model.configuration?.defaultModel === true) { <span id="RoleDefault" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default model</span> }
+                      </td>
                       <td></td>
                       <td><p-button id="ConfigureBtn4" gebo-ai-label (onClick)="editTextToSpeechModel(model)"
                       [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
@@ -232,6 +252,7 @@
                         <th id="DescriptionHeader5" gebo-ai-text>Description</th>
                         <th id="ModelProviderHeader5" gebo-ai-text>Model provider</th>
                         <th id="ModelHeader5" gebo-ai-text>Model </th>
+                        <th id="RoleHeader5" gebo-ai-text>Role</th>
                         <th></th>
                         <th></th>
                       </tr>
@@ -242,6 +263,9 @@
                         <td>{{ model.configuration?.description }}</td>
                         <td>{{ model.configuration?.modelTypeCode }}</td>
                         <td>{{ model.configuration?.choosedModel?.code }}</td>
+                        <td>
+                          @if (model.configuration?.defaultModel === true) { <span id="RoleDefault" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default model</span> }
+                        </td>
                         <td></td>
                         <td><p-button id="ConfigureBtn5" gebo-ai-label (onClick)="editTranscriptModel(model)"
                         [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
@@ -263,6 +287,7 @@
                           <th id="DescriptionHeader6" gebo-ai-text>Description</th>
                           <th id="ModelProviderHeader6" gebo-ai-text>Model provider</th>
                           <th id="ModelHeader6" gebo-ai-text>Model </th>
+                          <th id="RoleHeader6" gebo-ai-text>Role</th>
                           <th></th>
                           <th></th>
                         </tr>
@@ -273,6 +298,9 @@
                           <td>{{ model.configuration?.description }}</td>
                           <td>{{ model.configuration?.modelTypeCode }}</td>
                           <td>{{ model.configuration?.choosedModel?.code }}</td>
+                          <td>
+                            @if (model.configuration?.defaultModel === true) { <span id="RoleDefault" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default model</span> }
+                          </td>
                           <td></td>
                           <td><p-button id="ConfigureBtn6" gebo-ai-label (onClick)="editImageModel(model)"
                           [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>

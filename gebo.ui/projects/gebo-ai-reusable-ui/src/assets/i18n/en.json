@@ -1184,6 +1184,16 @@
   },
   "LlmsPanelModule": {
     "LlmsSystemsComponent": {
+      "RoleHeader": { "label": "Role" },
+      "RoleHeader2": { "label": "Role" },
+      "RoleHeader3": { "label": "Role" },
+      "RoleHeader4": { "label": "Role" },
+      "RoleHeader5": { "label": "Role" },
+      "RoleHeader6": { "label": "Role" },
+      "RoleDefaultChat": { "label": "Default chat model" },
+      "RoleService": { "label": "Default service model" },
+      "RoleChat": { "label": "Chat model" },
+      "RoleDefault": { "label": "Default model" },
       "NewEmbeddingModelConfigurationBtn": {
         "label": "New embedding model configuration"
       },

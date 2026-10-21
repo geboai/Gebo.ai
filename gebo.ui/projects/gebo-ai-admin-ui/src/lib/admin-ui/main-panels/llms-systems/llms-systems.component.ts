@@ -15,6 +15,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
+import { ChatModelRole, chatModelRoleOf } from "../../entity-editors/controls/chat-model-role/chat-model-role.component";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
 /**
@@ -32,6 +33,9 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
         .gebo-code-cell { display: inline-block; max-width: 11rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
         .gebo-code-cell--clickable { cursor: pointer; text-decoration: underline dotted; text-underline-offset: 2px; }
         .gebo-code-cell__full { font-family: monospace; word-break: break-all; max-width: 40rem; }
+        .gebo-model-role { display: inline-block; padding: 0.125rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; color: var(--gebo-text-muted); }
+        .gebo-model-role--default { color: var(--gebo-success); background: var(--gebo-success-bg); }
+        .gebo-model-role--service { color: var(--gebo-info); background: var(--gebo-info-bg); }
     `],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "LlmsPanelModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LlmsSystemsComponent")
@@ -377,6 +381,15 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      */
     ngOnInit(): void {
         this.loadData();
+    }
+
+    /**
+     * The role column of the chat models table: the system default chat model, the
+     * system default service model or a chat model, as the model editor's role panel
+     * names them. The other model kinds only show whether they are the default.
+     */
+    protected chatModelRole(config?: GBaseChatModelConfig): ChatModelRole {
+        return chatModelRoleOf(config?.forUses, config?.defaultModel);
     }
 
     protected showFullCode(event: Event, code: string | undefined, popover: { toggle: (e: Event) => void }): void {
