@@ -24,6 +24,7 @@ import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -294,7 +295,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return true;
 		}
 		case ACL_BASED: {
-			if (readsAsAdministrator(adminCanDoAll, grantType))
+			if (readsAsAdministrator(adminCanDoAll, resource, grantType))
 				return true;
 			if (grantType == null || grantType.length == 0l)
 				return false;
@@ -321,10 +322,13 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public <T extends IGObjectWithSecurity & IAclGrantedResource> List<T> filterCanDoAction(Collection<T> objects,
 			boolean adminCanDoAll, AclGrantType... grantType) {
-		if (readsAsAdministrator(adminCanDoAll, grantType))
+		if (adminCanDoAll && isCurrentUserAdmin())
 			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
+			// a content ACL bypass opens the contents of the knowledge bases to a read, never
+			// a configuration (see IGSecurityService.readsAsAdministrator)
+			final boolean contentBypass = IGSecurityService.readOnly(grantType) && isContentAclBypassed();
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
 			IAclGrantedAccessor firstGrantsAcc = null;
 			for (AclGrantType grant : grantType) {
@@ -348,6 +352,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				}
 			};
 			List<T> out = objects.stream().filter(object -> {
+				if (contentBypass && object instanceof IContentAclResource) {
+					return true;
+				}
 				for (AclGrantType grant : grantType) {
 					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
 						return true;
@@ -369,10 +376,13 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	@Override
 	public <T extends IAclGrantedResource> List<T> filterAclCanDoAction(Collection<T> objects, boolean adminCanDoAll,
 			AclGrantType... grantType) {
-		if (readsAsAdministrator(adminCanDoAll, grantType))
+		if (adminCanDoAll && isCurrentUserAdmin())
 			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
+			// a content ACL bypass opens the contents of the knowledge bases to a read, never
+			// a configuration (see IGSecurityService.readsAsAdministrator)
+			final boolean contentBypass = IGSecurityService.readOnly(grantType) && isContentAclBypassed();
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
 			IAclGrantedAccessor firstGrantsAcc = null;
 			for (AclGrantType grant : grantType) {
@@ -395,6 +405,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				}
 			};
 			List<T> out = objects.stream().filter(object -> {
+				if (contentBypass && object instanceof IContentAclResource) {
+					return true;
+				}
 				for (AclGrantType grant : grantType) {
 					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
 						return true;

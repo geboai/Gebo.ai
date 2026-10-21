@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.acl.ContentAccessPolicy;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
@@ -84,22 +85,26 @@ public interface IGSecurityService {
 	}
 
 	/**
-	 * Whether the current user passes an ACL check as an administrator does: an
-	 * administrator when the check lets administrators do all, or a user a product
-	 * lets read every content (see {@link IGContentAclBypass}) when the grants asked
-	 * are reads only. The one gate of the ACL framework's checks
-	 * ({@link #isCanDoAction}, {@link #filterCanDoAction}, {@link #filterAclCanDoAction})
-	 * and of the content filters ({@link #isContentAclEnforced()}).
+	 * Whether the current user passes the ACL check of a resource as an
+	 * administrator does: an administrator when the check lets administrators do
+	 * all, or a user a product lets read every content (see
+	 * {@link IGContentAclBypass}) when the resource is a content of the knowledge
+	 * bases ({@link IContentAclResource}) and the grants asked are reads only. A
+	 * configuration is never opened by a bypass. The one gate of the ACL framework's
+	 * checks ({@link #isCanDoAction}, {@link #filterCanDoAction},
+	 * {@link #filterAclCanDoAction}), beside the content filters' one
+	 * ({@link #isContentAclEnforced()}).
 	 */
-	public default boolean readsAsAdministrator(boolean adminCanDoAll, AclGrantType... grantType) {
+	public default boolean readsAsAdministrator(boolean adminCanDoAll, IAclGrantedResource resource,
+			AclGrantType... grantType) {
 		if (adminCanDoAll && isCurrentUserAdmin()) {
 			return true;
 		}
-		return readOnly(grantType) && isContentAclBypassed();
+		return resource instanceof IContentAclResource && readOnly(grantType) && isContentAclBypassed();
 	}
 
 	/** Whether the grants asked are reads only; none asked is not a read. */
-	private static boolean readOnly(AclGrantType... grantType) {
+	public static boolean readOnly(AclGrantType... grantType) {
 		if (grantType == null || grantType.length == 0) {
 			return false;
 		}

@@ -6,10 +6,14 @@ import static org.mockito.Mockito.CALLS_REAL_METHODS;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import ai.gebo.acl.AclGrantType;
 import ai.gebo.acl.ContentAccessPolicy;
+import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.security.services.IGSecurityService;
 
 /**
@@ -49,23 +53,71 @@ class ContentAclEnforcedTest {
 		assertFalse(security.isContentAclBypassed());
 	}
 
-	/** The ACL framework's own gate: a bypassed user passes the read checks as an administrator, the writes never. */
+	/** A content of the knowledge bases, as the framework gate sees it. */
+	private static IContentAclResource content() {
+		return new IContentAclResource() {
+			private List<Integer> aliases;
+
+			@Override
+			public List<Integer> getAclAliases() {
+				return aliases;
+			}
+
+			@Override
+			public void setAclAliases(List<Integer> acl) {
+				this.aliases = acl;
+			}
+		};
+	}
+
+	/** A configuration: ACL-granted, not a content. */
+	private static IAclGrantedResource configuration() {
+		return new IAclGrantedResource() {
+			private List<Integer> aliases;
+
+			@Override
+			public List<Integer> getAclAliases() {
+				return aliases;
+			}
+
+			@Override
+			public void setAclAliases(List<Integer> acl) {
+				this.aliases = acl;
+			}
+		};
+	}
+
+	/**
+	 * The ACL framework's own gate: a bypassed user reads the contents of the
+	 * knowledge bases as an administrator, never writes them, never reaches a
+	 * configuration.
+	 */
 	@Test
-	void theAclFrameworkLetsABypassedUserReadAsAnAdministratorButNotWrite() {
+	void theAclFrameworkLetsABypassedUserReadContentsAsAnAdministratorOnly() {
 		IGSecurityService impl = mock(IGSecurityService.class, CALLS_REAL_METHODS);
 		when(impl.isCurrentUserAdmin()).thenReturn(false);
 		when(impl.isContentAclBypassed()).thenReturn(true);
 
-		assertTrue(impl.readsAsAdministrator(true, AclGrantType.READ));
-		assertTrue(impl.readsAsAdministrator(false, AclGrantType.READ));
-		assertFalse(impl.readsAsAdministrator(true, AclGrantType.WRITE));
-		assertFalse(impl.readsAsAdministrator(true, AclGrantType.READ, AclGrantType.WRITE));
-		assertFalse(impl.readsAsAdministrator(true));
+		assertTrue(impl.readsAsAdministrator(true, content(), AclGrantType.READ));
+		assertTrue(impl.readsAsAdministrator(false, content(), AclGrantType.READ));
+		assertFalse(impl.readsAsAdministrator(true, content(), AclGrantType.WRITE));
+		assertFalse(impl.readsAsAdministrator(true, content(), AclGrantType.READ, AclGrantType.WRITE));
+		assertFalse(impl.readsAsAdministrator(true, content()));
+		assertFalse(impl.readsAsAdministrator(true, configuration(), AclGrantType.READ), "a configuration is never opened");
+		assertFalse(impl.readsAsAdministrator(true, null, AclGrantType.READ));
 
 		when(impl.isContentAclBypassed()).thenReturn(false);
-		assertFalse(impl.readsAsAdministrator(true, AclGrantType.READ));
+		assertFalse(impl.readsAsAdministrator(true, content(), AclGrantType.READ));
 		when(impl.isCurrentUserAdmin()).thenReturn(true);
-		assertTrue(impl.readsAsAdministrator(true, AclGrantType.WRITE));
-		assertFalse(impl.readsAsAdministrator(false, AclGrantType.WRITE));
+		assertTrue(impl.readsAsAdministrator(true, configuration(), AclGrantType.WRITE));
+		assertFalse(impl.readsAsAdministrator(false, configuration(), AclGrantType.WRITE));
+	}
+
+	@Test
+	void readOnlyMeansEveryGrantAskedIsARead() {
+		assertTrue(IGSecurityService.readOnly(AclGrantType.READ));
+		assertFalse(IGSecurityService.readOnly(AclGrantType.READ, AclGrantType.EXECUTE));
+		assertFalse(IGSecurityService.readOnly());
+		assertFalse(IGSecurityService.readOnly((AclGrantType[]) null));
 	}
 }
