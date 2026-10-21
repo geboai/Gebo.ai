@@ -192,12 +192,13 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			int topK = retrievalTopK(command);
 			int tokensBudget = contextShare;
 			if (deepSearch) {
-				// a deep search reads a few fragments of many documents, analysed in batches: sized
-				// as the knowledge base deep search tool, not to one context
+				// a deep search reads a few fragments of many documents, analysed in batches and
+				// reduced to one analysis: as the knowledge base deep search tool, the retrieval
+				// is bounded by the documents asked, not by a tokens budget
 				final int fragmentsPerDocument = DeepSearchReduction.fragmentsPerDocument(deepSearchDepth(command));
 				fullTextFilter.setPerDocumentInnerHits(fragmentsPerDocument);
 				topK = topK * DeepSearchReduction.knowledgeBaseFragmentsPerDocument();
-				tokensBudget = Math.max(contextShare, DeepSearchReduction.knowledgeBaseRetrievedTokens());
+				tokensBudget = DeepSearchReduction.knowledgeBaseRetrievedTokens();
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search asked: " + fragmentsPerDocument + " full-text fragment(s) per document, topK:"
 							+ topK + " tokensBudget:" + tokensBudget);

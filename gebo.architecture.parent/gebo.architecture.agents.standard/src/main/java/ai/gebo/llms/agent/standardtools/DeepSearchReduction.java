@@ -97,9 +97,13 @@ public final class DeepSearchReduction {
 		return KnowledgeBaseDeepSearchTool.FRAGMENTS_PER_DOCUMENT;
 	}
 
-	/** The tokens the knowledge base search may return to a deep search: read in batches, not in one context. */
+	/**
+	 * The tokens the knowledge base search may return to a deep search: not bounded,
+	 * as the fragments are read in batches, not in one context; only the reduced
+	 * analysis is sized to the room of the model call.
+	 */
 	public static int knowledgeBaseRetrievedTokens() {
-		return KnowledgeBaseDeepSearchTool.MAX_RETRIEVED_TOKENS;
+		return KnowledgeBaseDeepSearchTool.UNBOUNDED_RETRIEVED_TOKENS;
 	}
 
 	/** The fragments kept of each document found in an external source. */

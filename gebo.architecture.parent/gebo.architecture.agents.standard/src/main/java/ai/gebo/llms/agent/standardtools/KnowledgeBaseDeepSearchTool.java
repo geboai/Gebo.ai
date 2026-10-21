@@ -46,8 +46,13 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 			+ "report, an analysis, a comparison, a decision), not for a fact a plain search finds.";
 	/** Fragments retrieved, on average, for each document a deep search reads. */
 	static final int FRAGMENTS_PER_DOCUMENT = 3;
-	/** Most tokens of fragments a knowledge base deep search reads. */
-	static final int MAX_RETRIEVED_TOKENS = 120000;
+	/**
+	 * The tokens of fragments a knowledge base deep search retrieves: not bounded. The
+	 * fragments found are analysed in batches and reduced to one analysis, and only
+	 * that analysis is sized to the room the model call leaves to its tools; the
+	 * searches feeding the reduction are bounded by the documents asked only.
+	 */
+	static final int UNBOUNDED_RETRIEVED_TOKENS = Integer.MAX_VALUE;
 	private final IGDocumentsSearchService documentsSearchService;
 	private final IGSecurityService securityService;
 
@@ -160,7 +165,7 @@ public class KnowledgeBaseDeepSearchTool extends AbstractDeepSearchTool<String> 
 					+ " full-text queries:" + fullTextQueries);
 		}
 		final AIDocumentsSet found = documentsSearchService.search(question, queries, semanticFilter, fullTextQueries,
-				fullTextFilter, question, topK, MAX_RETRIEVED_TOKENS);
+				fullTextFilter, question, topK, UNBOUNDED_RETRIEVED_TOKENS);
 		final List<Document> fragments = found != null ? found.aiDocumentsList() : List.of();
 		for (Document fragment : fragments) {
 			final Map<String, Object> metaData = fragment.getMetadata();
