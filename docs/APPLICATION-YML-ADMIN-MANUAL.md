@@ -738,7 +738,7 @@ you don't spend time debugging "why doesn't this setting do anything."
 | Shipped key | Status | What to use instead |
 |---|---|---|
 | `ai.gebo.lucene.config.enabled` | No binding class anywhere in the codebase. Lucene is not an implemented vector-store backend despite being mentioned in code comments as aspirational. | N/A — ignore. |
-| `ai.gebo.chat.promptDefaults[].promptUse` / `.prompt` | `GeboChatConfigs` has no `promptDefaults` field; verified with a full-repo search — this key is not referenced anywhere else either. | `ai.gebo.prompts.library[]` (`GeboPromptsLibrary`), or manage prompts via the admin UI. |
+| `ai.gebo.chat.promptDefaults[].promptUse` / `.prompt` | Removed from the shipped files in 1.0.6.0. `GeboChatConfigs` has no `promptDefaults` field, so the key is inert in an older `application.yml` still carrying it. | `ai.gebo.prompts.library[]` (`GeboPromptsLibrary`), or manage prompts via the admin UI. |
 | `ai.gebo.security.oauth2.authorizedRedirectUris` | No `authorizedRedirectUris` field exists anywhere in the codebase. | Not needed — the SPA/redirect flow doesn't use a configured allow-list this way. |
 | `ai.gebo.security.oauth2configs[].configurationTypes` (plural) | The Java field is `configurationType` (**singular**) — relaxed binding does not match `configurationTypes`, so this key is silently dropped. | Use `configurationType:` (singular) in your YAML. |
 | `ai.gebo.vectorizator.config.disposerConfig.*` / `.vectorizatorReceiverConfig.*` | `GeboDocumentsCacheConfig` only has a `documentChunkerReceiverConfig` field; these two are not bound. | `ai.gebo.vectorizator.config.documentChunkerReceiverConfig.*` (see §17). |
