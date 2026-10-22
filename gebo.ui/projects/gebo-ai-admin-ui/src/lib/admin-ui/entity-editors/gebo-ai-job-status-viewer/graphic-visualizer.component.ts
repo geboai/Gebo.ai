@@ -138,12 +138,14 @@ export class GeboAIJobGraphicVisualizerComponent implements OnInit, OnChanges {
   applyResources(translations: UIExistingText[] | undefined, chart: NGPieChart) {
 
     if (translations && translations.length) {
+      // the translations of every chart of the step: only this chart's ones apply, or the
+      // documents chart takes the series names of the tokens chart (same field ids)
       const filtered = translations.filter(x => x.componentId === chart.id);
       if (chart.labels && chart.labels.length) {
         chart.labels.forEach((x, index) => {
           if (x) {
             const fieldId: string = "label-" + index;
-            const res = translations.find(x => x.fieldId === fieldId);
+            const res = filtered.find(x => x.fieldId === fieldId);
             if (res && res.translation) {
               chart.labels[index] = res.translation;
             }
@@ -153,7 +155,7 @@ export class GeboAIJobGraphicVisualizerComponent implements OnInit, OnChanges {
       if (chart.datasets && chart.datasets.length) {
         chart.datasets.forEach((ds, index) => {
           const fieldId: string = "dataset-" + index + "-label";
-          const res = translations.find(x => x.fieldId === fieldId);
+          const res = filtered.find(x => x.fieldId === fieldId);
           if (res && res.translation) {
             chart.datasets[index].label = res.translation;
           }

@@ -1,10 +1,11 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Optional } from "@angular/core";
 import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
 import { Observable, of, Subject, concat, map } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
-import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions } from "primeng/api";
-import { findMatchingTranlations } from "./text-language-resources";
+import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions, Translation } from "primeng/api";
+import { PrimeNG } from "primeng/config";
+import { findMatchingTranlations, findMatchingTranslation } from "./text-language-resources";
 
 import { HttpClient } from "@angular/common/http";
 import { GeboLanguage } from "./language-choice.component";
@@ -12,6 +13,18 @@ import { GeboLanguage } from "./language-choice.component";
 export interface ExtendedConfirmation extends Confirmation {
     id: string;
 }
+/**
+ * Texts PrimeNG components render on their own, taken from PrimeNG's translation (keyed by the
+ * componentId here): the password strength meter of the setup and user pages. They are set on
+ * PrimeNG at each language change, falling back to these English texts (PrimeNG's defaults) when
+ * the language has no resource for them.
+ */
+const primeNGTexts: UIExistingText[] = [
+    { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "weak", fieldId: "label", key: "label", text: "Weak" },
+    { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "medium", fieldId: "label", key: "label", text: "Medium" },
+    { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "strong", fieldId: "label", key: "label", text: "Strong" },
+    { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "passwordPrompt", fieldId: "label", key: "label", text: "Enter a password" }
+];
 /*******************************************************************************
  * The actual UI resources are all written in english, used as a default language
  * resources source, once the language is changed this service will publish all
@@ -28,7 +41,8 @@ export class GeboAITranslationService {
     private static languageChoices: GeboLanguage[] = [];
     constructor(private uiTextResourcesService: UiTextResourcesControllerService,
         private translateService: TranslateService,
-        private httpClient: HttpClient) {
+        private httpClient: HttpClient,
+        @Optional() private primeNG?: PrimeNG) {
         this.translateService.addLangs(["ar", "cs", "de", "en", "es", "fi", "fr", "he", "hi", "it", "js", "ko", "nl", "no", "pt", "ro", "ru", "sv", "th", "tr", "vi", "zh"]);
     }
     /**
@@ -288,11 +302,24 @@ export class GeboAITranslationService {
             next: (interpolationTranslateObject: InterpolatableTranslationObject) => {
 
                 GeboAITranslationService.currentTextResources = interpolationTranslateObject as (UILanguageResources | undefined);
+                this.applyPrimeNGTranslation(GeboAITranslationService.currentTextResources);
                 if (GeboAITranslationService.currentTextResources)
                     this.languageChanges.next(GeboAITranslationService.currentTextResources);
             }
         })
 
+    }
+    /**
+     * Sets PrimeNG's own texts (see primeNGTexts) from the resources of the actual language
+     */
+    private applyPrimeNGTranslation(resources: UILanguageResources | undefined): void {
+        if (!this.primeNG || !resources) return;
+        const translation: Translation = {};
+        primeNGTexts.forEach(text => {
+            const found = findMatchingTranslation(text, resources);
+            (translation as { [key: string]: string })[text.componentId as string] = found?.translation ? found.translation : text.text;
+        });
+        this.primeNG.setTranslation(translation);
     }
     public translateMegaMenuItems(moduleId: string, entityId: string, menuItems: MegaMenuItem[]): Observable<MegaMenuItem[]> {
         const resources: UIExistingText[] = [];

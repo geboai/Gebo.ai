@@ -1,6 +1,6 @@
 @if (viewed) {
   <div class="grid">
-    <div class="col-12"><label ><i [ngClass]="(viewed.completed===true?'pi pi-check':'pi pi-spin pi-cog')"></i>{{viewed.description}} ({{viewed.completed===true?"Completed":"Executing"}})</label></div>
+    <div class="col-12"><label ><i [ngClass]="(viewed.completed===true?'pi pi-check':'pi pi-spin pi-cog')"></i>{{viewed.description}} (@if (viewed.completed===true) {<span id="StepCompletedLabel" gebo-ai-text>Completed</span>} @else {<span id="StepExecutingLabel" gebo-ai-text>Executing</span>})</label></div>
     <div class="col-3">
       <div class="card">
         <p-chart id="Chart" type="pie" [data]="viewed.piechart" [options]="pieOptions" [height]="'170px'" />

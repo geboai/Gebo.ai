@@ -14,7 +14,7 @@
 
 <p-dialog [maximizable]="true" [visible]="visible" [modal]="true" styleClass="gebo-entity-dialog" [closable]="true"
   [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
-  [header]="'Showing content '+contentMetaInfo?.fileName">
+  [header]="showingContentTitle+' '+contentMetaInfo?.fileName">
   <p-blockUI [target]="contentUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>

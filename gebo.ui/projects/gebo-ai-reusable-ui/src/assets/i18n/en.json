@@ -1,6 +1,24 @@
 {
+  "GeboAIContentViewerModule": {
+    "GeboAIContentViewerComponent": {
+      "ShowingContentTitle": { "label": "Showing content" }
+    }
+  },
+  "ProjectAddContextMenuModule": {
+    "ProjectAddContextMenuComponent": {
+      "AddDataSourceLink": { "label": "+Add data source" }
+    }
+  },
   "FastSetupModule": {
     "FastSetupComponent": {
+      "WELCOME2SETUP": {
+        "summary": "Welcome to Gebo.ai setup",
+        "detail": "Create the administration credentials for this installation"
+      },
+      "ADMIN_USER_CREATED": {
+        "summary": "Admin user created !",
+        "detail": "The administrator account has been created successfully"
+      },
       "langCode": {
         "label": "Default system language",
         "help": "Default system language for this Gebo.ai installation"
@@ -79,6 +97,8 @@
       "ModifyBtn": { "label": "Modify" }
     },
     "SetupWizardPanelComponent": {
+      "SETUP-OK": { "summary": "Gebo.ai setup OK!" },
+      "SetupHomeBreadcrumb": { "label": "Setup home" },
       "WizardBackBtn": { "label": "Back to setup home page" },
       "WizardUi": { "label": "Choose a setup section" },
       "ungroupedSetupSectionsGroup": { "label": "Other setups" },
@@ -770,6 +790,40 @@
     }
   },
   "GeboAIUsersGroupModule": {
+    "GeboAIUserComponent": {
+      "MainPanel": { "label": "Editing user" },
+      "SaveBtn": { "label": "Save" },
+      "InsertBtn": { "label": "Insert" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "ChangePWDBtn": { "label": "Pwd change" },
+      "username": {
+        "label": "Username",
+        "help": "User username will be used also as user name"
+      },
+      "disabled": {
+        "label": "User disabled",
+        "help": "If checked this user is disabled"
+      },
+      "name": { "label": "First name", "help": "User first name" },
+      "sourname": { "label": "Surname", "help": "User surname" },
+      "roles": {
+        "label": "User roles",
+        "help": "Roles list (At least USER role is mandatory), ADMIN has administrative rights, USER can only chat and use LLMS chat services, APPLICATION is for external applications"
+      },
+      "authProvider": {
+        "label": "Authentication provider",
+        "help": "Authentication provider that grants user identity"
+      },
+      "password": { "label": "Password", "help": "Insert password" },
+      "USER_INSERTED_OK": { "summary": "User inserted successfully" },
+      "USER_ALREADY_EXISTS": {
+        "summary": "User already exists",
+        "detail": "search the user with the users page"
+      },
+      "USER_UPDATED_OK": { "summary": "User updated successfully" },
+      "USER_DELETED_OK": { "summary": "User deleted successfully" }
+    },
     "UsersGroup": {
       "DeleteBtn": { "label": "Delete" },
       "SaveBtn": { "label": "Save" },
@@ -2256,6 +2310,10 @@
   },
   "GeboAIChatControlModule": {
     "GeboAIReusableChatComponent": {
+      "NoInteractionsYet": {
+        "label": "No interactions yet. Start the conversation!"
+      },
+      "GeneratedResourcesCtl": { "label": "AI generated files" },
       "chatConfigInfosBtn": { "help": "Chat configuration infos" },
       "chaDeleteBtn": { "help": "Delete this chat session" },
       "chatNameChangeBtn": { "help": "Rename the chat session" },
@@ -2540,6 +2598,7 @@
       "imageGeneration": { "label": "Image generation" }
     },
     "GeboAIChatInputShellComponent": {
+      "QueryControl": { "placeholder": "Write a message for the chat bot" },
       "PendingSendHint": {
         "label": "The message will be sent as soon as the chat is ready…"
       },
@@ -2591,6 +2650,8 @@
       "NoLogEntries": { "label": "No log entry matches the current filters" }
     },
     "GJobStatus": {
+      "StepCompletedLabel": { "label": "Completed" },
+      "StepExecutingLabel": { "label": "Executing" },
       "ProcessesStatsTab": { "label": "Processes stats" },
       "DeleteBtn": { "label": "Delete" },
       "CloseBtn": { "label": "Close" },
@@ -2844,6 +2905,10 @@
   },
   "VFilesystemSelectorModule": {
     "VFilesystemSelectorComponent": {
+      "ViewElementBtn": { "help": "Open this element" },
+      "MarkForDeletionBtn": { "help": "Sign this element for deletion" },
+      "KeepElementBtn": { "help": "Keep this element" },
+      "ElementsTree": { "placeholder": "Filter the loaded elements" },
       "ChoosedElementsArea": { "label": "Selected elements" },
       "ChooseOk": { "label": "OK" },
       "ChooseCancel": { "label": "Cancel" },
@@ -3256,6 +3321,9 @@
   },
   "GeboAiChatModule": {
     "GeboAiChatSectionComponent": {
+      "LLMSNotConfiguredText": {
+        "label": "Chatting is not available yet: the system administrator must finish setting up the large language models before you can start a chat."
+      },
       "chatModelCode": {
         "label": "Chat without knowledge bases",
         "help": "Choose the LLMs for a chat session",
@@ -3907,6 +3975,7 @@
       "SupportedByLabel": { "label": "Supported by providers:" }
     },
     "LLMSEasyProviderStepComponent": {
+      "ProviderSelect": { "placeholder": "Select a provider" },
       "ProviderChoice": {
         "label": "Choose your large language model provider",
         "help": "Choose the provider whose models you want to configure in this run"
@@ -4364,6 +4433,8 @@
   },
   "GeboAIApiKeyModule": {
     "GeboAIApiKeyComponent": {
+      "ExistingCredentialsOption": { "label": "Existing credentials" },
+      "NewCredentialsOption": { "label": "New credentials" },
       "HeaderFieldSet": { "label": "Use or create api key credentials" },
       "ExistingApiKey": {
         "label": "Api key/credentials",
@@ -4594,6 +4665,15 @@
     }
   },
   "GeboAIMultilanguageModule": {
+    "PrimeNGTranslation": {
+      "weak": { "label": "Weak" },
+      "medium": { "label": "Medium" },
+      "strong": { "label": "Strong" },
+      "passwordPrompt": { "label": "Enter a password" }
+    },
+    "GeboAILanguageChoiceComponent": {
+      "LanguageSelect": { "placeholder": "Choose Language" }
+    },
     "GeboAIMainMicroLanguageComponent": {
       "MicroLanguageBtn": { "help": "Change language" }
     }

@@ -63,7 +63,7 @@
     <p-fieldset id="ChooseElementsArea" gebo-ai-label legend="Choose elements" styleClass="vfs-selector-tree-fieldset">
       <p-tree class="w-full" [value]="roots" (onNodeExpand)="nodeExpand($event)"
         (onNodeCollapse)="nodeCollapse($event)" [trackBy]="trackBy" loadingMode="icon"
-        containerStyleClass="w-full" [filter]="true" filterPlaceholder="Filter the loaded elements"
+        containerStyleClass="w-full" [filter]="true" [filterPlaceholder]="texts['ElementsTree']"
         scrollHeight="45vh">
         <ng-template let-node pTemplate="default">
           <div [formGroup]="formGroup" [style]="onlineStyle(node)" class="vfs-selector-node"
@@ -77,7 +77,7 @@
             <span class="vfs-selector-node-label" [pTooltip]="node.data.path?.absolutePath || node.data.root?.absolutePath">{{node.label}}</span>
             @if (showViewAction(node)) {
               <p-button [id]="'view_' + node.data.uniqueCode" [text]="true" [rounded]="true"
-                icon="pi pi-eye" severity="secondary" title="Open this element"
+                icon="pi pi-eye" severity="secondary" [title]="texts['ViewElementBtn']"
                 styleClass="vfs-selector-node-action"
                 (onClick)="$event.stopPropagation(); requestView(node)"></p-button>
             }
@@ -85,7 +85,7 @@
               <p-button [id]="'delete_' + node.data.uniqueCode" [text]="true" [rounded]="true"
                 [icon]="isMarkedForDeletion(node)?'pi pi-undo':'pi pi-trash'"
                 [severity]="isMarkedForDeletion(node)?'secondary':'danger'"
-                [title]="isMarkedForDeletion(node)?'Keep this element':'Sign this element for deletion'"
+                [title]="isMarkedForDeletion(node)?texts['KeepElementBtn']:texts['MarkForDeletionBtn']"
                 styleClass="vfs-selector-node-action"
                 (onClick)="$event.stopPropagation(); toggleDeletionMark(node)"></p-button>
             }
