@@ -300,7 +300,8 @@ export class GeboAIChatInputShellComponent implements OnInit, OnChanges {
         data?.forEach(x => {
           const toBeLabelled = this.allPipelineRoutingOptions.find(y => y.optionId === x.componentId && x.fieldId === 'label');
           if (toBeLabelled) {
-            toBeLabelled.description = x.text;
+            // the translation, not the English source text the lookup was made with
+            toBeLabelled.description = x.translation || x.text;
           }
         });
       }

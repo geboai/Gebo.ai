@@ -108,7 +108,10 @@ export class GeboAIDesktopComponent implements OnInit, OnDestroy {
             this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.menuItems).subscribe({
               next: (translated) => {
                 if (translated) {
-                  this.menuItems = translated;
+                  // new items: the translation changes the labels in place, and the menubar keeps
+                  // showing the English labels of the same objects (a user's menu is never
+                  // emitted again, unlike the admin's setup status refresh)
+                  this.menuItems = translated.map(item => ({ ...item }));
                 }
               }
             });

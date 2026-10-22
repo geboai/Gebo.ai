@@ -27,6 +27,25 @@ export class GeboAIJobGraphicVisualizerComponent implements OnInit, OnChanges {
       }
     }
   };
+  /**
+   * The pie chart's own options: sharing pieOptions with the bar charts gave the pie their
+   * x/y axes, whose labels left the pie no room (a dot with longer translations)
+   */
+  pieChartOptions = {
+    plugins: {
+      legend: {
+        labels: {
+          usePointStyle: true,
+          color: "black",
+          boxWidth: 8
+        }
+      }
+    },
+    scales: {
+      x: { display: false },
+      y: { display: false }
+    }
+  };
   basicOptions = {
     plugins: {
       legend: {
