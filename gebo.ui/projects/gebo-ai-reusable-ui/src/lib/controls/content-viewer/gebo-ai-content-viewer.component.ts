@@ -195,11 +195,12 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestro
           this.plainTextContent = fileType?.treatAs === 'plainText';
           this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
           this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
-          this.externalContentUrl = this.path + generatedContentControllerUrl + this.generatedContent?.userContextCode + "/" + this.generatedContent?.code;
-          this.contentServedByGebo = true;
         }
+        this.externalContentUrl = this.path + generatedContentControllerUrl + this.generatedContent?.userContextCode + "/" + this.generatedContent?.code;
+        this.contentServedByGebo = true;
         this.downloadableContent = fileType?.uiViewable === false;
-        this.visible = fileType?.uiViewable === true && this.activate===true;
+        // a content the viewer cannot show still opens, with its download link
+        this.visible = (fileType?.uiViewable === true || this.downloadableContent) && this.activate===true;
         console.log("Content: " + this.externalContentUrl);
         console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
         console.log("content viewer url:" + this.externalContentUrl);
@@ -214,11 +215,11 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestro
           this.plainTextContent = fileType?.treatAs === 'plainText';
           this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
           this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
-          this.externalContentUrl = this.path + uploadedContentControllerUrl + this.userUploadedContent?.userContextCode + "/" + this.userUploadedContent?.code;
-          this.contentServedByGebo = true;
         }
+        this.externalContentUrl = this.path + uploadedContentControllerUrl + this.userUploadedContent?.userContextCode + "/" + this.userUploadedContent?.code;
+        this.contentServedByGebo = true;
         this.downloadableContent = fileType?.uiViewable === false;
-        this.visible = fileType?.uiViewable === true;
+        this.visible = fileType?.uiViewable === true || this.downloadableContent;
         console.log("Content: " + this.externalContentUrl);
         console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
         console.log("content viewer url:" + this.externalContentUrl);
@@ -247,7 +248,8 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestro
               }
             }
             this.downloadableContent = fileType?.uiViewable === false;
-            this.visible = fileType?.uiViewable === true;
+            // a document the viewer cannot show (a Word file...) still opens, with its download link
+            this.visible = fileType?.uiViewable === true || this.downloadableContent;
             console.log("Content: " + this.externalContentUrl);
 
             console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
@@ -339,7 +341,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestro
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["activate"]) {
-       this.visible = this.ingestionFileType?.uiViewable === true && this.activate===true;
+       this.visible = (this.ingestionFileType?.uiViewable === true || this.downloadableContent) && this.activate===true;
     }
     if (this.code && this.code.length && changes["code"]) {
       this.loading = true;

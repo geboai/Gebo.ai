@@ -128,6 +128,9 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
    * Periodically reloads job status data until the job is completed.
    * Fetches job status, messages, and summary information.
    */
+  /** Reloads done after the workflow finished, waiting for the job's end date/time */
+  private endDateTimeReloads: number = 0;
+
   private reloadPeriodically(): void {
     if (this.entity?.code) {
 
@@ -149,7 +152,11 @@ export class GeboAIJobStatusViewerComponent extends BaseEntityEditingComponent<G
           //if (this.actualPageData && this.actualPageData.totalElements !== undefined && this.actualPageData.totalElements < 3) {
           //  delayInMilliseconds = 10000;
           //}
-          if (this.jobSummary?.workflowStatus?.finished !== true) {
+          // the job's end time is written just after its workflow finishes: reload a few more times
+          // until it is there, or the finished job shows no end date/time
+          const waitingEndDateTime = this.jobSummary?.workflowStatus?.finished === true && !this.entity?.endDateTime
+            && this.endDateTimeReloads++ < 6;
+          if (this.jobSummary?.workflowStatus?.finished !== true || waitingEndDateTime) {
             setTimeout(() => {
               this.reloadPeriodically();
             }, delayInMilliseconds);

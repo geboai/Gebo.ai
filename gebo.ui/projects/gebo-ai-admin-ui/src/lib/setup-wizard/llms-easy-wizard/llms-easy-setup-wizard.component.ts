@@ -304,6 +304,13 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
     private applyLookedUpModels(type: LLMCreateModelData.TypeEnum, models: GBaseModelChoice[]): void {
         this.decisions.filter(d => d.descriptor.type === type).forEach(decision => {
             decision.choices = this.describeModels(models, decision);
+            if (!models.length && !decision.descriptor.required && !decision.alreadyConfigured) {
+                // The provider answered and offers nothing of this kind to this key: a suggested
+                // class stays off instead of pre-ticked over an empty choice (it was skipped on apply)
+                decision.enabled = false;
+                decision.chosenCode = undefined;
+                return;
+            }
             if (decision.chosenCode && !models.some(m => m.code?.toLowerCase() === decision.chosenCode?.toLowerCase())) {
                 // The preselected model is gone from the provider: clear it and, when the class was
                 // meant to be applied, force it open so the user picks a replacement.
