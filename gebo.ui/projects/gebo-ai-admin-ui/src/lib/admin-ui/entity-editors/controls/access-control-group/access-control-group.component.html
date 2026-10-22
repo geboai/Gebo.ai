@@ -19,12 +19,12 @@
     </div>
     <div class="col-5">
       <gebo-ai-field id="accessibleGroups" label="Groups list" help="Select allowed groups">
-        <p-multiSelect id="accessibleGroups" formControlName="accessibleGroups" dataKey="code" optionLabel="description" optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
+        <p-multiSelect id="accessibleGroups" gebo-ai-label formControlName="accessibleGroups" dataKey="code" optionLabel="description" optionValue="code" [options]="groups" [disabled]="accessibleToAll" placeholder="Select groups" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
       </gebo-ai-field>
     </div>
     <div class="col-5">
       <gebo-ai-field id="accessibleUsers" label="Users list" help="Select allowed users">
-        <p-multiSelect id="accessibleUsers" formControlName="accessibleUsers" dataKey="username" optionLabel="username" optionValue="username" [options]="users" [disabled]="accessibleToAll" placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
+        <p-multiSelect id="accessibleUsers" gebo-ai-label formControlName="accessibleUsers" dataKey="username" optionLabel="username" optionValue="username" [options]="users" [disabled]="accessibleToAll" placeholder="Select users" display="chip" [showClear]="true" gebo-ai-field-element></p-multiSelect>
       </gebo-ai-field>
     </div>
   </div>

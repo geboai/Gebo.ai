@@ -76,7 +76,7 @@
               </div>
               <div class="col-6">
                 <gebo-ai-field id="embeddingModelReferences" label="Used embedding models (leave empty to use system default)" help="Embedding models for the knowledge base, leave empty will use the default one.">
-                  <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource" formControlName="embeddingModelReferences" id="embeddingModelReferences" placeholder="Select embedding models" optionLabel="description" display="chip" [showClear]="true" gebo-ai-field-element />
+                  <p-multiSelect styleClass="w-full" [options]="modelsChoicesSource" formControlName="embeddingModelReferences" id="embeddingModelReferences" gebo-ai-label placeholder="Select embedding models" optionLabel="description" display="chip" [showClear]="true" gebo-ai-field-element />
                 </gebo-ai-field>
               </div>
               @if (graphRagContext) {

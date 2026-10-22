@@ -11,6 +11,7 @@
   },
   "FastSetupModule": {
     "FastSetupComponent": {
+      "AcceptMarkLabel": { "label": "I accept the terms" },
       "WELCOME2SETUP": {
         "summary": "Welcome to Gebo.ai setup",
         "detail": "Create the administration credentials for this installation"
@@ -1141,7 +1142,8 @@
       },
       "embeddingModelReferences": {
         "label": "Used embedding models (leave empty to use system default)",
-        "help": "Embedding models for the knowledge base, leave empty will use the default one."
+        "help": "Embedding models for the knowledge base, leave empty will use the default one.",
+        "placeholder": "Select embedding models"
       },
       "SaveBtn": { "label": "Save" },
       "CancelBtn": { "label": "Cancel" },
@@ -1183,11 +1185,13 @@
       },
       "accessibleGroups": {
         "label": "Groups list",
-        "help": "Select allowed groups"
+        "help": "Select allowed groups",
+        "placeholder": "Select groups"
       },
       "accessibleUsers": {
         "label": "Users list",
-        "help": "Select allowed users"
+        "help": "Select allowed users",
+        "placeholder": "Select users"
       }
     }
   },
@@ -4669,7 +4673,20 @@
       "weak": { "label": "Weak" },
       "medium": { "label": "Medium" },
       "strong": { "label": "Strong" },
-      "passwordPrompt": { "label": "Enter a password" }
+      "passwordPrompt": { "label": "Enter a password" },
+      "emptyMessage": { "label": "No results found" },
+      "emptyFilterMessage": { "label": "No results found" },
+      "emptySearchMessage": { "label": "No results found" },
+      "emptySelectionMessage": { "label": "No selected item" },
+      "selectionMessage": { "label": "{0} items selected" },
+      "searchMessage": { "label": "{0} results are available" },
+      "accept": { "label": "Yes" },
+      "reject": { "label": "No" },
+      "choose": { "label": "Choose" },
+      "upload": { "label": "Upload" },
+      "cancel": { "label": "Cancel" },
+      "clear": { "label": "Clear" },
+      "apply": { "label": "Apply" }
     },
     "GeboAILanguageChoiceComponent": {
       "LanguageSelect": { "placeholder": "Choose Language" }

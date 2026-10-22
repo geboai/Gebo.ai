@@ -15,7 +15,8 @@ export interface ExtendedConfirmation extends Confirmation {
 }
 /**
  * Texts PrimeNG components render on their own, taken from PrimeNG's translation (keyed by the
- * componentId here): the password strength meter of the setup and user pages. They are set on
+ * componentId here): the password strength meter of the setup and user pages, the empty messages
+ * of lists and tables, the confirmation and file upload buttons. They are set on
  * PrimeNG at each language change, falling back to these English texts (PrimeNG's defaults) when
  * the language has no resource for them.
  */
@@ -23,7 +24,13 @@ const primeNGTexts: UIExistingText[] = [
     { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "weak", fieldId: "label", key: "label", text: "Weak" },
     { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "medium", fieldId: "label", key: "label", text: "Medium" },
     { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "strong", fieldId: "label", key: "label", text: "Strong" },
-    { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "passwordPrompt", fieldId: "label", key: "label", text: "Enter a password" }
+    { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "passwordPrompt", fieldId: "label", key: "label", text: "Enter a password" },
+    // empty lists and tables, selections, confirmation buttons and file upload buttons
+    ...([
+        ["emptyMessage", "No results found"], ["emptyFilterMessage", "No results found"], ["emptySearchMessage", "No results found"],
+        ["emptySelectionMessage", "No selected item"], ["selectionMessage", "{0} items selected"], ["searchMessage", "{0} results are available"],
+        ["accept", "Yes"], ["reject", "No"], ["choose", "Choose"], ["upload", "Upload"], ["cancel", "Cancel"], ["clear", "Clear"], ["apply", "Apply"]
+    ].map(([componentId, text]) => ({ moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId, fieldId: "label", key: "label", text })))
 ];
 /*******************************************************************************
  * The actual UI resources are all written in english, used as a default language
