@@ -65,6 +65,8 @@ import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotNull;
+import ai.gebo.llms.chat.abstraction.layer.services.ChatRequestEnding;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
 /**
@@ -335,8 +337,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
 		// Returns the chat stream for the request, profile and context
 		recordToolCalls(fullRequest, response);
-		return this.streamChatClient(handler, prompt, Map.of(), kbcontext, request,
-				response, fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
+		// a direct stream, outside the chat pipelines: ended here as the executor ends its
+		return ChatRequestEnding.ending(
+				this.streamChatClient(handler, prompt, Map.of(), kbcontext, request, response,
+						fullRequest.createChatRequestContext(), false, 0, extractedDocuments),
+				this.chatSessionLifecycleService, request, response, handler, ReactiveIdentityUtil.create());
 
 	}
 

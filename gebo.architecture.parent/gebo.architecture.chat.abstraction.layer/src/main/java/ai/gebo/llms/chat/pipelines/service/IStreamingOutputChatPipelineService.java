@@ -22,6 +22,14 @@ public interface IStreamingOutputChatPipelineService extends IChatPipelineStepSe
 
 	public List<StepEnvironmentParameter> getRequiredParameters();
 
+	/**
+	 * The step's answer stream. The step fills the runtime data's chat response and
+	 * emits it as the content of an envelope flagged as the last message; it never
+	 * ends the request itself: the pipelines executor ends every streamed request the
+	 * same way (see {@link ai.gebo.llms.chat.abstraction.layer.services.ChatRequestEnding}),
+	 * saving the interaction as that last message passes, before the client gets it,
+	 * or however the stream ends otherwise.
+	 */
 	public Flux<GeboChatMessageEnvelope> execute(ChatPipelineExecutionRuntimeData runtimeData,
 			ISinkUIEmitter sinkUIEmitter, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel)
 			throws ChatPipelineException, GeboChatSessionLifecycleException, LLMConfigException, GeboChatException, IOException;

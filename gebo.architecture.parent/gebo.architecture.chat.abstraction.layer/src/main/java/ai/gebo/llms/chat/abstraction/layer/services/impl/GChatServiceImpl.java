@@ -51,6 +51,8 @@ import ai.gebo.model.GUserMessage;
 import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.llms.chat.abstraction.layer.services.ChatRequestEnding;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
 /**
@@ -243,8 +245,11 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 
 				recordToolCalls(fullRequest, gresponse);
 				IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
-				return streamChatClient(handler, gprompt, Map.of(), kbcontext, request, gresponse, chatRequestContext,
-						fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null);
+				// a direct stream, outside the chat pipelines: ended here as the executor ends its
+				return ChatRequestEnding.ending(
+						streamChatClient(handler, gprompt, Map.of(), kbcontext, request, gresponse, chatRequestContext,
+								fullRequest.getTokensSize() > contextWindowSize / 3, contextWindowSize / 3, null),
+						chatSessionLifecycleService, request, gresponse, handler, ReactiveIdentityUtil.create());
 			}
 		} catch (Throwable e) {
 			// Handle exceptions and prepare error response as a Flux
