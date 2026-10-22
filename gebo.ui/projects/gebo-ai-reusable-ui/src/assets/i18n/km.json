@@ -6091,7 +6091,7 @@
   "GeboAIUserIntegrationsModule": {
     "GeboAIUserIntegrationsComponent": {
       "McpServersDescription": {
-        "label": " ទាំងនេះគឺជាម៉ាស៊ីនបម្រើ Model Context Protocol (MCP) ដែលបានកំណត់ក្នុងប្រព័ន្ធដែលអ្នកអាចចូលប្រើបាន។ អ្នកអាចភ្ជាប់អតិថិជន MCP ខាងក្រៅ (ដូចជា Claude Desktop, Cursor, ឬផ្នែកបន្ថែម IDE) ទៅម៉ាស៊ីនបម្រើទាំងនេះដោយប្រើចំណុចចូល SSE របស់ពួកវា។ "
+        "label": " ទាំងនេះគឺជាម៉ាស៊ីនបម្រើ Model Context Protocol (MCP) ដែលបានកំណត់ក្នុងប្រព័ន្ធដែលអ្នកអាចចូលប្រើបាន។ អ្នកអាចភ្ជាប់អតិថិជន MCP ខាងក្រៅ (ដូចជា Claude Desktop, Cursor, ឬផ្នែកបន្ថែម IDE) ទៅម៉ាស៊ីនបម្រើទាំងនេះដោយប្រើចំណុចចូល Streamable HTTP របស់ពួកវា។ "
       },
       "ExposedMcpServersHeader": {
         "label": "ម៉ាស៊ីនបម្រើ MCP ដែលបង្ហាញ"
@@ -6121,7 +6121,7 @@
         "label": "ស្ថានភាព"
       },
       "ThServerSSE": {
-        "label": "ចំណុចភ្ជាប់ SSE"
+        "label": "ចំណុចភ្ជាប់ Streamable HTTP"
       },
       "ThKeyDescription": {
         "label": "សេចក្ដីពិពណ៌នា"

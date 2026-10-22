@@ -91,6 +91,102 @@
                             class="block w-full" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
                         </gebo-ai-field>
                       </div>
+
+                      <!-- Agents exported as tools -->
+                      <div class="col-12">
+                        <h4 id="AgentToolsHeader" class="mb-1" gebo-ai-text>Agents exported as tools</h4>
+                        <p id="AgentToolsDescription" class="text-secondary mt-0" gebo-ai-text>Each agent becomes a tool that takes a request in natural language and answers with the agent's text, run as the caller over the knowledge bases the caller can see.</p>
+                        <p-table [value]="agentTools" [tableStyle]="{ 'min-width': '40rem' }">
+                          <ng-template pTemplate="header">
+                            <tr>
+                              <th id="AgentToolAgentHeader" gebo-ai-text>Agent code</th>
+                              <th id="AgentToolNameHeader" gebo-ai-text>Tool name</th>
+                              <th></th>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-item let-i="rowIndex">
+                            <tr>
+                              <td>{{ item.agentConfigCode }}</td>
+                              <td>{{ item.toolName }}</td>
+                              <td>
+                                <p-button id="RemoveAgentToolBtn_{{i}}" icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="removeAgentTool(i)"></p-button>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage">
+                            <tr>
+                              <td id="NoAgentToolsText" colspan="3" gebo-ai-text>No agent exported as a tool.</td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                        <div class="grid mt-2">
+                          <div class="col-5">
+                            <gebo-ai-field id="newAgentToolCode" label="Agent code" help="The code of the agent configuration to export.">
+                              <input pInputText id="newAgentToolCode" [(ngModel)]="newAgentTool.agentConfigCode"
+                                [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                          </div>
+                          <div class="col-5">
+                            <gebo-ai-field id="newAgentToolName" label="Tool name" help="The name MCP clients see (defaults to the agent code).">
+                              <input pInputText id="newAgentToolName" [(ngModel)]="newAgentTool.toolName"
+                                [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                          </div>
+                          <div class="col-2" style="display: flex; align-items: flex-end;">
+                            <p-button id="AddAgentToolBtn" gebo-ai-label icon="pi pi-plus" [outlined]="true" label="Add"
+                              (onClick)="addAgentTool()"></p-button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Networks of agents exported as tools -->
+                      <div class="col-12">
+                        <h4 id="NetworkToolsHeader" class="mb-1" gebo-ai-text>Networks of agents exported as tools</h4>
+                        <p id="NetworkToolsDescription" class="text-secondary mt-0" gebo-ai-text>Each network becomes a tool that takes a request in natural language and answers with the text the network produced, run as the caller.</p>
+                        <p-table [value]="networkTools" [tableStyle]="{ 'min-width': '40rem' }">
+                          <ng-template pTemplate="header">
+                            <tr>
+                              <th id="NetworkToolNetworkHeader" gebo-ai-text>Network code</th>
+                              <th id="NetworkToolNameHeader" gebo-ai-text>Tool name</th>
+                              <th></th>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="body" let-item let-i="rowIndex">
+                            <tr>
+                              <td>{{ item.agentsNetworkCode }}</td>
+                              <td>{{ item.toolName }}</td>
+                              <td>
+                                <p-button id="RemoveNetworkToolBtn_{{i}}" icon="pi pi-trash" severity="danger" [text]="true"
+                                  (onClick)="removeNetworkTool(i)"></p-button>
+                              </td>
+                            </tr>
+                          </ng-template>
+                          <ng-template pTemplate="emptymessage">
+                            <tr>
+                              <td id="NoNetworkToolsText" colspan="3" gebo-ai-text>No network of agents exported as a tool.</td>
+                            </tr>
+                          </ng-template>
+                        </p-table>
+                        <div class="grid mt-2">
+                          <div class="col-5">
+                            <gebo-ai-field id="newNetworkToolCode" label="Network code" help="The code of the network of agents to export.">
+                              <input pInputText id="newNetworkToolCode" [(ngModel)]="newNetworkTool.agentsNetworkCode"
+                                [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                          </div>
+                          <div class="col-5">
+                            <gebo-ai-field id="newNetworkToolName" label="Tool name" help="The name MCP clients see (defaults to the network code).">
+                              <input pInputText id="newNetworkToolName" [(ngModel)]="newNetworkTool.toolName"
+                                [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                          </div>
+                          <div class="col-2" style="display: flex; align-items: flex-end;">
+                            <p-button id="AddNetworkToolBtn" gebo-ai-label icon="pi pi-plus" [outlined]="true" label="Add"
+                              (onClick)="addNetworkTool()"></p-button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </ng-container>
                 </p-tabpanel>

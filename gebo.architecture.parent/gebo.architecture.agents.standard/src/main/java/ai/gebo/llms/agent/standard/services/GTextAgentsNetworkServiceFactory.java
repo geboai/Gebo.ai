@@ -1,4 +1,13 @@
-package ai.gebo.architecture.a2aserver.runtime;
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+package ai.gebo.llms.agent.standard.services;
 
 import java.util.Map;
 
@@ -18,38 +27,33 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
 /**
- * Factory that allocates and runs an {@link A2AStringNetworkService}. Registered
- * as a bean so it is discoverable through
- * {@code IGAgentsNetworkServiceFactoryRepositoryPattern}; the base class performs
- * the participant &rarr; runtime-agent allocation, and this subclass only supplies
- * the concrete text-typed service (mirrors
- * {@code GReactiveChatAgentsNetworkServiceFactoryImpl}).
+ * Builds {@link GTextAgentsNetworkService}s: any network of agents run as
+ * text-to-text, the way {@link GTextAgentsNetworkRunner} serves networks and
+ * agents outside a chat.
  */
 @Service
-public class A2AStringNetworkServiceFactory extends
-		GAbstractReactiveOutputAgentsNetworkServiceFactory<String, String, A2AStringNetworkService> {
-
-	public static final String FACTORY_ID = "A2A_STRING_NETWORK";
-	private static final String FACTORY_DESCRIPTION = "String-to-string network of agents factory for A2A export";
-
+public class GTextAgentsNetworkServiceFactory
+		extends GAbstractReactiveOutputAgentsNetworkServiceFactory<String, String, GTextAgentsNetworkService> {
+	public static final String FACTORY_ID = "TEXT_NETWORK";
+	private static final String FACTORY_DESCRIPTION = "Text-to-text network of agents factory (A2A skills, MCP tools)";
 	private final IGeboThreadManager threadManager;
 
-	public A2AStringNetworkServiceFactory(
+	public GTextAgentsNetworkServiceFactory(
 			IGReactiveToNetworkAgentAdapterFactoryRepositoryPattern reactiveAgentAdapterFactoryRepo,
 			IGeboThreadManager threadManager, IGRuntimeBinder runtimeBinder) {
-		super(FACTORY_ID, FACTORY_DESCRIPTION, A2AStringNetworkService.class, reactiveAgentAdapterFactoryRepo,
+		super(FACTORY_ID, FACTORY_DESCRIPTION, GTextAgentsNetworkService.class, reactiveAgentAdapterFactoryRepo,
 				runtimeBinder);
 		this.threadManager = threadManager;
 	}
 
 	@Override
-	protected A2AStringNetworkService createAgentsNetworkService(GAgentsNetwork network,
+	protected GTextAgentsNetworkService createAgentsNetworkService(GAgentsNetwork network,
 			INotificationSink notificationSink, Class<String> inputType, Class<String> outputType,
 			ReactiveIdentityUtil runAs, Map<String, RuntimeAgentInfos> agentsCache, AdapterWithFlux adapter) {
 		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
 				.getImplementationOf(IGAgentServiceRuntimeDao.class);
 		IAgentRoleDao agentRoleDao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
-		return new A2AStringNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
+		return new GTextAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
 				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
 	}
 

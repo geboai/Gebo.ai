@@ -1,33 +1,34 @@
-package ai.gebo.architecture.a2aserver.runtime;
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+package ai.gebo.llms.agent.standard.services;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
-import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.agents.services.INotificationSink;
+import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
 /**
- * A {@code String -> String} network-of-agents service used to run an exported
- * network (or a synthesized single-node agent network) behind an A2A endpoint.
- * <p>
- * It is the text-I/O counterpart of {@code GReactiveChatAgentsNetworkService}: the
- * only registered network service before this was chat-typed
- * ({@code ChatPipelineExecutionRuntimeData -> GeboChatMessageEnvelope}), which is
- * why exporting a network with plain text A2A messages needed an A2A-friendly
- * service/factory. Streaming partials are emitted to the reactive flux; the
- * returned value is the final text, so the latest non-null output wins.
+ * A network of agents run outside a chat: a text request in, the text of the
+ * network's final answer out. It is how a network, or a single agent, is served
+ * to the outside as an A2A skill or as an MCP tool.
  */
-public class A2AStringNetworkService
-		extends GAbstractReactiveOutputAgentsNetworkService<String, String> {
+public class GTextAgentsNetworkService extends GAbstractReactiveOutputAgentsNetworkService<String, String> {
+	static final String SERVICE_ID = "TEXT_NETWORK_SERVICE";
+	private static final String SERVICE_DESCRIPTION = "Text-to-text network of agents, served outside a chat (A2A skills, MCP tools)";
 
-	static final String SERVICE_ID = "A2A_STRING_NETWORK_SERVICE";
-	private static final String SERVICE_DESCRIPTION = "String-to-string network of agents served over A2A";
-
-	public A2AStringNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
+	public GTextAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
 			Class<String> inputType, Class<String> outputType, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao, AdapterWithFlux<?, String> adapterWithFlux) {

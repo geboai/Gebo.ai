@@ -144,15 +144,23 @@ export class GeboAIUserIntegrationsComponent implements OnInit {
         });
     }
 
+    /**
+     * The URL an MCP client connects to: the endpoint path the server reports
+     * (the exported servers live under /mcp/) on this installation's origin.
+     */
     getMcpEndpointUrl(mcpServer: UserAccessibleMcpServerView): string {
-        let relativeUrl = mcpServer.exportedUniqueRelativeUrl || "";
-        if (!relativeUrl) {
-            return "";
+        let path = mcpServer.endpointPath || "";
+        if (!path) {
+            const relativeUrl = mcpServer.exportedUniqueRelativeUrl || "";
+            if (!relativeUrl) {
+                return "";
+            }
+            path = "/mcp/" + relativeUrl.replace(/^\/+/, "");
         }
-        if (!relativeUrl.startsWith("/")) {
-            relativeUrl = "/" + relativeUrl;
+        if (!path.startsWith("/")) {
+            path = "/" + path;
         }
-        return this.basePath + relativeUrl;
+        return this.basePath + path;
     }
 
     openCreateDialog(): void {

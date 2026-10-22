@@ -69,7 +69,7 @@
 
                         <div class="col-4">
                             <gebo-ai-field id="transportType" label="Transport Type"
-                                help="A2A transport. JSON-RPC is the default." [required]="true">
+                                help="A2A transport: JSON-RPC, the only one this client supports for now." [required]="true">
                                 <p-select id="transportType" formControlName="transportType" [options]="transportTypes"
                                     optionLabel="label" optionValue="value" gebo-ai-field-element
                                     [disabled]="readonly"></p-select>

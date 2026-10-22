@@ -10,6 +10,7 @@
 package ai.gebo.architecture.mcpclients.service.impl;
 
 import java.time.Duration;
+import java.util.Date;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,12 @@ import ai.gebo.secrets.model.GeboOauth2TokenSecretContent;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGOauth2AccessTokenService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
+import ai.gebo.security.config.GeboSecurityConfig;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
+import ai.gebo.security.services.IGSecurityService;
+import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
 import io.modelcontextprotocol.client.transport.HttpClientSseClientTransport;
@@ -36,6 +41,9 @@ import io.modelcontextprotocol.client.transport.customizer.McpSyncHttpClientRequ
 import io.modelcontextprotocol.json.McpJsonDefaults;
 import io.modelcontextprotocol.spec.McpClientTransport;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.AbstractOAuth2TokenAuthenticationToken;
 
 /**
  * Builds and connects a {@link McpSyncClient} from a {@link MCPClientConfig}.
@@ -58,10 +66,15 @@ public class McpClientConnector {
 	private static final Duration DEFAULT_REQUEST_TIMEOUT = Duration.ofSeconds(30);
 	private static final Duration DEFAULT_INITIALIZATION_TIMEOUT = Duration.ofSeconds(30);
 	private static final String DEFAULT_MCP_ENDPOINT = "/mcp";
+	/** How long a token minted to relay the caller's identity to a Gebo peer lives. */
+	private static final Duration USER_TOKEN_EXCHANGE_TTL = Duration.ofMinutes(5);
 
 	private final IGeboSecretsAccessService secretsAccessService;
 	private final IGOauth2AccessTokenService oauth2AccessTokenService;
 	private final IGOauth2RuntimeConfigurationDao oauth2ConfigDao;
+	private final IGSecurityService securityService;
+	private final LocalJwtTokenProvider jwtTokenProvider;
+	private final GeboSecurityConfig securityConfig;
 
 	/**
 	 * Builds a fully initialized synchronous MCP client for the given configuration.
@@ -192,18 +205,65 @@ public class McpClientConnector {
 			return "Bearer " + resolveClientCredentialsToken(config);
 		case OAUTH2_AUTHORIZATION_CODE_PER_USER:
 		case USER_TOKEN_RELAY:
-			// The user has already authorized the downstream provider; the resulting
-			// authorized-client token is stored as an OAuth2 token secret and relayed.
+			// Per-user delegation: the user has already authorized the downstream
+			// provider and the authorized-client token, stored as an OAuth2 token
+			// secret, is relayed; without a secret the caller's own live identity is
+			// relayed instead, as a token exchange does.
+			if (isBlank(config.getSecretCode())) {
+				return "Bearer " + exchangeCurrentUserToken();
+			}
 			return "Bearer " + resolveStoredOauthAccessToken(config, authMode);
 		case TOKEN_EXCHANGE:
-			// RFC 8693 token exchange has no platform endpoint wired yet; fail with a
-			// precise, actionable message rather than silently sending no credentials.
-			throw new UnsupportedOperationException(
-					"authMode TOKEN_EXCHANGE is not yet supported for MCP clients (no token-exchange endpoint is "
-							+ "configured on the platform)");
+			// Always relay the caller's live identity.
+			return "Bearer " + exchangeCurrentUserToken();
 		default:
 			throw new UnsupportedOperationException("Unsupported MCP auth mode: " + authMode);
 		}
+	}
+
+	/**
+	 * Relays the caller's identity to the remote MCP server, as the A2A client does:
+	 * <ul>
+	 * <li>in OAuth2 resource-server mode the inbound bearer token of the current
+	 * request is relayed as it is, so a remote server trusting the same identity
+	 * provider sees the same user;</li>
+	 * <li>otherwise a short-lived local JWT is minted for the current user through
+	 * {@link LocalJwtTokenProvider}: a Gebo MCP server validates it through the same
+	 * chain and runs its tools impersonating that same user.</li>
+	 * </ul>
+	 */
+	private String exchangeCurrentUserToken() {
+		if (isOauth2ResourceServerMode()) {
+			String relayed = currentResourceServerToken();
+			if (isBlank(relayed)) {
+				throw new IllegalStateException(
+						"OAuth2 resource-server mode: no bearer token in the current context to relay to the remote MCP server");
+			}
+			return relayed;
+		}
+		UserInfos user = securityService.getCurrentUser();
+		if (user == null || isBlank(user.getUsername())) {
+			throw new IllegalStateException(
+					"Cannot relay user authentication: no authenticated user in the current context");
+		}
+		Date expiration = new Date(System.currentTimeMillis() + USER_TOKEN_EXCHANGE_TTL.toMillis());
+		return jwtTokenProvider.createToken(user.getUsername(), expiration);
+	}
+
+	private boolean isOauth2ResourceServerMode() {
+		return securityConfig != null && Boolean.TRUE.equals(securityConfig.getOauth2ResourceServerEnabled());
+	}
+
+	/**
+	 * The raw inbound OAuth2 token of the current authentication, JWT or opaque
+	 * (both extend {@code AbstractOAuth2TokenAuthenticationToken}).
+	 */
+	private String currentResourceServerToken() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		if (auth instanceof AbstractOAuth2TokenAuthenticationToken<?> tokenAuth && tokenAuth.getToken() != null) {
+			return tokenAuth.getToken().getTokenValue();
+		}
+		return null;
 	}
 
 	private String resolveStaticSecretToken(MCPClientConfig config, McpAuthMode authMode) throws Exception {

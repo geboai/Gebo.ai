@@ -56,7 +56,8 @@
               <h4 id="ExposedMcpServersHeader" class="mt-0" gebo-ai-text>Exposed MCP Servers</h4>
               <p id="McpServersDescription" class="text-secondary" gebo-ai-text>
                 These are the Model Context Protocol (MCP) servers configured in the system that you have access to.
-                You can connect external MCP clients (like Claude Desktop, Cursor, or IDE extensions) to these servers using their SSE endpoints.
+                You can connect external MCP clients (like Claude Desktop, Cursor, or IDE extensions) to these servers using their Streamable HTTP endpoints,
+                sending one of your API keys as a bearer token (Authorization: Bearer &lt;key&gt;).
               </p>
             </div>
             <p-table [value]="mcpServers" responsiveLayout="scroll" styleClass="p-datatable-striped">
@@ -66,7 +67,7 @@
                   <th id="ThServerDescription" gebo-ai-text style="width: 30%">Description</th>
                   <th id="ThServerCapabilities" gebo-ai-text style="width: 15%">Capabilities</th>
                   <th id="ThServerStatus" gebo-ai-text style="width: 10%">Status</th>
-                  <th id="ThServerSSE" gebo-ai-text style="width: 20%">SSE Connection Endpoint</th>
+                  <th id="ThServerSSE" gebo-ai-text style="width: 20%">Streamable HTTP endpoint</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-server>
@@ -100,7 +101,7 @@
                         <div class="p-inputgroup flex-1">
                           <input pInputText type="text" [value]="getMcpEndpointUrl(server)" readonly class="p-inputtext-sm text-xs" />
                           <button pButton icon="pi pi-copy" class="p-button-secondary p-button-sm"
-                          (click)="copyToClipboard(getMcpEndpointUrl(server), 'SSE Endpoint URL')"></button>
+                          (click)="copyToClipboard(getMcpEndpointUrl(server), 'MCP endpoint URL')"></button>
                         </div>
                       </div>
                     }

@@ -5732,7 +5732,7 @@
   "GeboAIUserIntegrationsModule": {
     "GeboAIUserIntegrationsComponent": {
       "McpServersDescription": {
-        "label": " These are the Model Context Protocol (MCP) servers configured in the system that you have access to. You can connect external MCP clients (like Claude Desktop, Cursor, or IDE extensions) to these servers using their SSE endpoints. "
+        "label": " These are the Model Context Protocol (MCP) servers configured in the system that you have access to. You can connect external MCP clients (like Claude Desktop, Cursor, or IDE extensions) to these servers using their Streamable HTTP endpoints, sending one of your API keys as a bearer token (Authorization: Bearer <key>). "
       },
       "ExposedMcpServersHeader": { "label": "Exposed MCP Servers" },
       "UserApiKeysDescription": {
@@ -5745,7 +5745,7 @@
       "ThServerNameCode": { "label": "Server Name & Code" },
       "ThServerDescription": { "label": "Description" },
       "ThServerStatus": { "label": "Status" },
-      "ThServerSSE": { "label": "SSE Connection Endpoint" },
+      "ThServerSSE": { "label": "Streamable HTTP endpoint" },
       "ThKeyDescription": { "label": "Description" },
       "NoMcpServersText": { "label": "No accessible MCP servers found." },
       "ThKeyCreatedAt": { "label": "Created At" },
