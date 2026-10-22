@@ -667,20 +667,29 @@ textarea.p-inputtextarea:read-only {
    buttons overlapping. A fixed rem width fixes English but not translation:
    "konfigurieren" is 151px against "configure"'s 122px and spills again.
 
-   So these tables use auto layout and let the two action columns shrink to fit
-   their button (width:1% + nowrap is the usual idiom for that), which is
-   correct at any width in any language. The other four keep their share, and
-   the description column absorbs the slack. */
+   So these tables use auto layout, where a cell width is a minimum: a column
+   whose content needs more (a longer translation) widens instead of spilling.
+
+   The page stacks one table per model kind, and their columns must line up, so
+   no column is sized by its content. Shrinking the action columns to fit their
+   buttons (width:1%) did not: only the chat table has the test chat button, and
+   the description column of every table absorbed a different slack. The code
+   cell is at most 11rem, so its column takes 12rem; the role column (the role
+   badge) 11rem; each action column 9.5rem, the empty test chat column of the
+   other model kinds included. Every table holds the same configure button, so
+   a translation widening it widens it everywhere. The description column
+   absorbs the slack, which is now the same in every table. */
 .gebo-llms-admin__section .p-datatable-table {
   table-layout: auto;
 }
 
-.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(1) { width: 15%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(1) { width: 12rem; }
 .gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(2) { width: auto; }
 .gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(3) { width: 15%; }
 .gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(4) { width: 12%; }
-.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(5),
-.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(6) { width: 1%; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(5) { width: 11rem; }
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(6),
+.gebo-llms-admin__section .p-datatable-table :is(th, td):nth-child(7) { width: 9.5rem; }
 
 .gebo-llms-admin__section .p-datatable-tbody > tr > td {
   overflow-wrap: anywhere;
