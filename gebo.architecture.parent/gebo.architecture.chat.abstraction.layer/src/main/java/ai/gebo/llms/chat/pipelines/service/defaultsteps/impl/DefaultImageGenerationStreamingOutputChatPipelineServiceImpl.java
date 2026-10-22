@@ -8,6 +8,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -129,6 +130,7 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 			IOException {
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final GeboChatResponse response = runtimeData.getChatResponse();
+		final AtomicBoolean ended = new AtomicBoolean(false);
 		sinkUIEmitter.notifyUser("generatingImage", "Generating the requested image", "pi pi-image", 3000l,
 				NotificationType.INFO);
 
@@ -152,6 +154,12 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 				envelopes.add(new GeboChatMessageEnvelope(response.getQueryResponse()));
 				GeboChatMessageEnvelope lastEnvelope = new GeboChatMessageEnvelope(response);
 				lastEnvelope.setLastMessage(true);
+				// saved before the last message leaves: the client asks for the chat title
+				// as soon as it receives it, and a title written from a session saved
+				// without the answer overwrote it
+				if (ended.compareAndSet(false, true)) {
+					endRequest(runtimeData, response);
+				}
 				envelopes.add(lastEnvelope);
 				envelopes.add(GeboChatMessageEnvelope.FINAL_MESSAGE);
 				return Flux.fromIterable(envelopes);
@@ -164,11 +172,8 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 					GUserMessage.errorMessage("Error while streaming image generation response", exc)));
 		}).doOnComplete(() -> {
 			runAs.doAs(() -> {
-				try {
-					this.chatSessionLifecycleService.endRequest(runtimeData.getRequestResources().getCurrentRequest(),
-							response);
-				} catch (Throwable th) {
-					LOGGER.error("Error saving user context", th);
+				if (ended.compareAndSet(false, true)) {
+					endRequest(runtimeData, response);
 				}
 				try {
 					this.chatSessionLifecycleService
@@ -178,6 +183,15 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 				}
 			});
 		});
+	}
+
+	private void endRequest(ChatPipelineExecutionRuntimeData runtimeData, GeboChatResponse response) {
+		try {
+			this.chatSessionLifecycleService.endRequest(runtimeData.getRequestResources().getCurrentRequest(),
+					response);
+		} catch (Throwable th) {
+			LOGGER.error("Error saving user context", th);
+		}
 	}
 
 	private void generateAndAttachImage(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter sinkUIEmitter,

@@ -18,7 +18,12 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.IGMessageBroker;
@@ -115,6 +120,12 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final GeboChatUIServerConfig uiServerConfig;
 	private final ChatAnswerFeedbackRepository answerFeedbackRepository;
 	private final IGChatRulesService rulesService;
+	/**
+	 * Writes the chat title alone (see {@link #suggestChatDescription(String)}):
+	 * a whole-session save there overwrote the first answer when a handler saved
+	 * it meanwhile.
+	 */
+	private final ObjectProvider<MongoTemplate> mongoTemplateProvider;
 	private static final int MAX_RULES_PER_REQUEST = 20;
 	private static final int MAX_RULES_LENGTH = 6000;
 
@@ -139,10 +150,10 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	/**
 	 * Notified each time a request ends with its interaction saved (see
 	 * {@link #endRequest(GeboChatRequest, GeboChatResponse)}): a chat title asked for
-	 * before the interaction is saved waits on it.
+	 * before the answered interaction is saved waits on it.
 	 */
 	private static final Object INTERACTION_SAVED = new Object();
-	/** Longest wait of a chat title for the chat's first interaction to be saved. */
+	/** Longest wait of a chat title for the chat's first answered interaction to be saved. */
 	static final long TITLE_INTERACTION_WAIT_MILLIS = 20000L;
 	/**
 	 * Interval of the re-reads of the session while waiting: the request may be served
@@ -1272,41 +1283,68 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
 		IGConfigurableChatModel handler = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		try {
-			if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
+			if (handler != null && hasAnsweredInteraction(context)) {
 				IChatRequestContext ccontext = context.createChatRequestContext();
 				String content = handler.textResponse(prompt, cache, ccontext);
 				String pureText = ClientChatCallUtil.removeThinking(content);
 				data.setDescription(pureText);
-				context.setDescription(pureText);
-				this.sessionRepository.save(context);
+				saveDescription(context, pureText);
 				return data;
 			}
 		} catch (Throwable th) {
 			LOGGER.error("Exception in suggestChatDescription", th);
 			return data;
 		}
-		if (context.getInteractions() == null || context.getInteractions().isEmpty()) {
-			LOGGER.warn("No chat title suggested for chat:" + id + ": it has no saved interaction");
+		if (!hasAnsweredInteraction(context)) {
+			LOGGER.warn("No chat title suggested for chat:" + id + ": it has no saved answered interaction");
 		}
 		return data;
 	}
 
 	/**
-	 * The chat session once it has a saved interaction to name the chat after. The
-	 * user interface asks for the title as soon as the first answer is streamed, which
-	 * can be before the handler that streamed it ends the request and saves the
-	 * interaction: the session is re-read, when a request ends here or every
-	 * {@value #TITLE_INTERACTION_POLL_MILLIS} ms, for at most
-	 * {@value #TITLE_INTERACTION_WAIT_MILLIS} ms.
+	 * Writes the chat's title and nothing else: the session read for the title is
+	 * stale as soon as the request that answered it is ended by its handler, and
+	 * saving it whole wrote the first interaction back without its answer. Without a
+	 * MongoDB the session is re-read and saved with the title set.
+	 */
+	private void saveDescription(GUserChatSession context, String description)
+			throws GeboChatSessionLifecycleException {
+		MongoTemplate mongoTemplate = mongoTemplateProvider != null ? mongoTemplateProvider.getIfAvailable() : null;
+		if (mongoTemplate != null) {
+			mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(context.getCode())),
+					new Update().set("description", description), GUserChatSession.class);
+		} else {
+			GUserChatSession fresh = get(context.getCode());
+			fresh.setDescription(description);
+			this.sessionRepository.save(fresh);
+		}
+		context.setDescription(description);
+	}
+
+	/** Whether the session has a saved interaction that has its answer. */
+	private static boolean hasAnsweredInteraction(GUserChatSession context) {
+		return context.getInteractions() != null
+				&& context.getInteractions().stream().anyMatch(x -> x != null && x.getResponse() != null);
+	}
+
+	/**
+	 * The chat session once it has a saved answered interaction to name the chat
+	 * after. The user interface asks for the title as soon as the first answer is
+	 * streamed, which can be before the handler that streamed it ends the request and
+	 * saves the interaction with its answer; the session may already hold the
+	 * interaction without its answer, saved while the request was still running (e.g.
+	 * with the chat's language), which is not enough: the session is re-read, when a
+	 * request ends here or every {@value #TITLE_INTERACTION_POLL_MILLIS} ms, for at
+	 * most {@value #TITLE_INTERACTION_WAIT_MILLIS} ms.
 	 */
 	private GUserChatSession waitForFirstInteraction(String id) throws GeboChatSessionLifecycleException {
 		GUserChatSession context = get(id);
 		final long deadline = System.currentTimeMillis() + TITLE_INTERACTION_WAIT_MILLIS;
 		long remaining = TITLE_INTERACTION_WAIT_MILLIS;
-		if (LOGGER.isDebugEnabled() && (context.getInteractions() == null || context.getInteractions().isEmpty())) {
-			LOGGER.debug("Chat title of chat:" + id + " waits for its first interaction to be saved");
+		if (LOGGER.isDebugEnabled() && !hasAnsweredInteraction(context)) {
+			LOGGER.debug("Chat title of chat:" + id + " waits for its first answered interaction to be saved");
 		}
-		while ((context.getInteractions() == null || context.getInteractions().isEmpty()) && remaining > 0) {
+		while (!hasAnsweredInteraction(context) && remaining > 0) {
 			try {
 				synchronized (INTERACTION_SAVED) {
 					INTERACTION_SAVED.wait(Math.min(remaining, TITLE_INTERACTION_POLL_MILLIS));

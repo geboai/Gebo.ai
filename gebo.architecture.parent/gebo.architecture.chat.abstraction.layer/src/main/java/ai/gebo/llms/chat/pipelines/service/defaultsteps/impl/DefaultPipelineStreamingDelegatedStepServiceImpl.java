@@ -2,7 +2,7 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Vector;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +14,6 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -66,17 +65,23 @@ public class DefaultPipelineStreamingDelegatedStepServiceImpl implements IStream
 			IOException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
-		final GeboChatResponse response = runtimeData.getChatResponse();
 		Flux<GeboChatMessageEnvelope> outFlux = delegatedService.execute(runtimeData, sinkUIEmitter, chatModel,
 				serviceModel);
 
-		Vector<GeboChatResponse> finalResponse = new Vector<>();
-		return outFlux.publishOn(runAs.wrap(Schedulers.boundedElastic())).doOnComplete(() -> {
+		// The interaction is saved before the last message leaves, as every other
+		// streaming handler does: the client asks for the chat title as soon as it
+		// receives that message, and a title written from a session saved without the
+		// answer overwrote it. A stream ending without a last message is saved on
+		// completion.
+		final AtomicBoolean ended = new AtomicBoolean(false);
+		return outFlux.publishOn(runAs.wrap(Schedulers.boundedElastic())).doOnNext(envelope -> {
+			if (envelope != null && envelope.isLastMessage() && ended.compareAndSet(false, true)) {
+				runAs.doAs(() -> endRequest(request, runtimeData));
+			}
+		}).doOnComplete(() -> {
 			runAs.doAs(() -> {
-				try {
-					sessionLifecycleService.endRequest(request, runtimeData.getChatResponse());
-				} catch (Throwable e) {
-					LOGGER.error("Error ending request", e);
+				if (ended.compareAndSet(false, true)) {
+					endRequest(request, runtimeData);
 				}
 				try {
 					sessionLifecycleService.chatRequestCompleted(request, chatModel);
@@ -88,6 +93,14 @@ public class DefaultPipelineStreamingDelegatedStepServiceImpl implements IStream
 
 		});
 
+	}
+
+	private void endRequest(GeboChatRequest request, ChatPipelineExecutionRuntimeData runtimeData) {
+		try {
+			sessionLifecycleService.endRequest(request, runtimeData.getChatResponse());
+		} catch (Throwable e) {
+			LOGGER.error("Error ending request", e);
+		}
 	}
 
 	public boolean isDefaultPipelineStreamingDefined() {
