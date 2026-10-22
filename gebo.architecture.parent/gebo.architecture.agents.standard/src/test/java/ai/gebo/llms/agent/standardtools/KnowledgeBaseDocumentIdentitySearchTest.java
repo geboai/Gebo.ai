@@ -85,6 +85,7 @@ class KnowledgeBaseDocumentIdentitySearchTest {
 		IGConfigurableEmbeddingModel defaultModel = model("default", defaultStore);
 		when(models.defaultHandler()).thenReturn(defaultModel);
 		when(security.getPlatformContentAccessPolicy()).thenReturn(ContentAccessPolicy.ACL_BASED);
+		when(security.isContentAclEnforced()).thenReturn(true);
 		when(security.isCurrentUserAdmin()).thenReturn(false);
 		IAclGrantedAccessor accessor = mock(IAclGrantedAccessor.class);
 		when(accessor.getAllOwnedAclAliases()).thenReturn(List.of(3, 4));

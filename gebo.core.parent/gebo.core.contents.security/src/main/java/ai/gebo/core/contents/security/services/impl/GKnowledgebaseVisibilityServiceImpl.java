@@ -164,7 +164,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GVirtualFolder> getVisibleProjectEndpointRootsByParentEndpoint(String code, String className) {
 		boolean isAdmin = securityService.isCurrentUserAdmin();
-		boolean useAcl = !isAdmin && securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			return virtualFoldersRepository
@@ -183,7 +183,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GVirtualFolder> getVisibleChildVirtualFolders(String parentVirtualFolderCode) {
 		boolean isAdmin = securityService.isCurrentUserAdmin();
-		boolean useAcl = !isAdmin && securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			return virtualFoldersRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
@@ -197,7 +197,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 	@Override
 	public List<GDocumentReference> getVisibleChildDocuments(String parentVirtualFolderCode) {
 		boolean isAdmin = securityService.isCurrentUserAdmin();
-		boolean useAcl = !isAdmin && securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			return documentsRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
@@ -272,8 +272,7 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 		if (query.getUniqueIds() != null && !query.getUniqueIds().isEmpty()) {
 			criteria.and("uniqueId").in(query.getUniqueIds());
 		}
-		final boolean useAcl = !securityService.isCurrentUserAdmin()
-				&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+		final boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			final IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
 			criteria.and("aclAliases").in(aclInfos.getAllOwnedAclAliases());
