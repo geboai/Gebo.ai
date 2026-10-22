@@ -59,9 +59,9 @@
                     </div>
                     <div class="col-12">
                       <gebo-ai-field id="agentsNetworkServiceFactoryId" label="Runs on"
-                        help="The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce." [required]="true">
-                        <p-select id="FactorySelect" gebo-ai-label formControlName="agentsNetworkServiceFactoryId" [options]="factories"
-                          optionLabel="description" optionValue="factoryId" dataKey="factoryId" placeholder="Choose the factory the network runs on"
+                        help="The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce." [required]="true" placeholder="Choose the factory the network runs on">
+                        <p-select id="FactorySelect" formControlName="agentsNetworkServiceFactoryId" [options]="factories"
+                          optionLabel="description" optionValue="factoryId" dataKey="factoryId"
                           styleClass="w-full" appendTo="body" gebo-ai-field-element>
                           <ng-template #item let-factory>
                             <span>{{factory.description}}</span>
@@ -96,9 +96,9 @@
                     @if (agenticChatNetworksEnabled) {
                       <div class="col-6">
                         <gebo-ai-field id="choosableForPipelineTypes" label="Choosable for chats"
-                          help="The kinds of chat this network can be chosen for, as their network of agents.">
-                          <p-multiselect id="ChoosableForPipelineTypesSelect" gebo-ai-label formControlName="choosableForPipelineTypes" [options]="pipelineTypeOptions"
-                            optionLabel="label" optionValue="value" placeholder="Not choosable" styleClass="w-full"
+                          help="The kinds of chat this network can be chosen for, as their network of agents." placeholder="Not choosable">
+                          <p-multiselect id="ChoosableForPipelineTypesSelect" formControlName="choosableForPipelineTypes" [options]="pipelineTypeOptions"
+                            optionLabel="label" optionValue="value" styleClass="w-full"
                             appendTo="body" gebo-ai-field-element></p-multiselect>
                         </gebo-ai-field>
                       </div>

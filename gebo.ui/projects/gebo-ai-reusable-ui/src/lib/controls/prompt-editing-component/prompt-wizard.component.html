@@ -44,8 +44,8 @@
         <div class="grid">
             <div class="col-12">
                 <gebo-ai-field id="modelCode" label="Chat model to use" [required]="true"
-                    help="Choose the chat model you want to ask the prompt template generation">
-                    <geboai-editable-listbox-component formControlName="modelCode" placeholder="Select a chat model"
+                    help="Choose the chat model you want to ask the prompt template generation" placeholder="Select a chat model">
+                    <geboai-editable-listbox-component formControlName="modelCode"
                         [data]="chatModels" gebo-ai-field-element [required]="true">
                     </geboai-editable-listbox-component>
                 </gebo-ai-field>

@@ -74,10 +74,9 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                      <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+                      <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
                         <geboai-editable-listbox-component
                           formControlName="parentProjectCode"
-                          placeholder="Select a project"
                           [required]="true"
                           [optionsObservable]="projectsObservable"
                           [readonly]="cantModifyProject"
@@ -86,11 +85,10 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                      <gebo-ai-field id="sharePointSystemCode" label="sharepoint system" help="Already configured SharePoint/OneDrive system reference." [required]="true">
+                      <gebo-ai-field id="sharePointSystemCode" label="sharepoint system" help="Already configured SharePoint/OneDrive system reference." [required]="true" placeholder="Select a sharepoint server">
                         <geboai-editable-listbox-component
                           formControlName="sharePointSystemCode"
                           [required]="true"
-                          placeholder="Select a sharepoint server"
                           [data]="sharepointServersData"
                           [readonly]="mode==='EDIT'"
                           [createNewRecordRequest]="newsharepointServerRequest"

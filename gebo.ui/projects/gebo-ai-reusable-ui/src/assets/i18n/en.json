@@ -531,7 +531,8 @@
       "ExpirationHeader": { "label": "Expiration Date" },
       "impersonatedUserField": {
         "label": "Impersonate User",
-        "help": "Select the user whose permissions this API key will run under."
+        "help": "Select the user whose permissions this API key will run under.",
+        "placeholder": "Select User"
       },
       "expirationField": {
         "label": "Expiration Date",
@@ -597,11 +598,13 @@
       },
       "configurationType": {
         "label": "Configuration purpose",
-        "help": "Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system."
+        "help": "Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.",
+        "placeholder": "Select configuration purpose"
       },
       "authProvider": {
         "label": "Provider",
-        "help": "Enter the provider of OAUTH2 Authentication"
+        "help": "Enter the provider of OAUTH2 Authentication",
+        "placeholder": "Select a OAUTH2 provider"
       },
       "issuerUri": {
         "label": "Issuer Uri",
@@ -676,7 +679,8 @@
       },
       "confluenceVersion": {
         "label": "Confluence version",
-        "help": "Confluence version"
+        "help": "Confluence version",
+        "placeholder": "Select a confluence version"
       },
       "baseUri": {
         "label": "Base internet address",
@@ -712,11 +716,13 @@
       },
       "confluenceSystemCode": {
         "label": "Confluence system",
-        "help": "Already configured confluence system reference."
+        "help": "Already configured confluence system reference.",
+        "placeholder": "Select a confluence server"
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "openZips": {
         "label": "Open zip files",
@@ -759,11 +765,13 @@
       },
       "confluenceVersion": {
         "label": "Confluence version",
-        "help": "Confluence version"
+        "help": "Confluence version",
+        "placeholder": "Select a confluence version"
       },
       "secretCode": {
         "label": "Identity used",
-        "help": "Select or create the identity to access the confluence system"
+        "help": "Select or create the identity to access the confluence system",
+        "placeholder": "Select an identity"
       }
     }
   },
@@ -841,7 +849,8 @@
       },
       "userIds": {
         "label": "Users list",
-        "help": "Select users partecipating the group"
+        "help": "Select users partecipating the group",
+        "placeholder": "Select users"
       }
     },
     "GeboAIChangeUserPasswordComponent": {
@@ -902,11 +911,13 @@
       },
       "jiraSystemCode": {
         "label": "jira system",
-        "help": "Already configured jira system reference."
+        "help": "Already configured jira system reference.",
+        "placeholder": "Select a jira server"
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "description": {
         "label": "Description",
@@ -952,7 +963,8 @@
       },
       "secretCode": {
         "label": "Identity used",
-        "help": "Select or create the identity to access the jira system"
+        "help": "Select or create the identity to access the jira system",
+        "placeholder": "Select an identity"
       }
     }
   },
@@ -964,7 +976,8 @@
       },
       "sharepointVersion": {
         "label": "Sharepoint version",
-        "help": "sharepoint version"
+        "help": "sharepoint version",
+        "placeholder": "Select a sharepoint version"
       },
       "secret": {
         "label": "Secret key",
@@ -1008,7 +1021,8 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "description": {
         "label": "Description",
@@ -1016,7 +1030,8 @@
       },
       "sharePointSystemCode": {
         "label": "sharepoint system",
-        "help": "Already configured SharePoint/OneDrive system reference."
+        "help": "Already configured SharePoint/OneDrive system reference.",
+        "placeholder": "Select a sharepoint server"
       },
       "openZips": {
         "label": "Open zip files",
@@ -1047,7 +1062,8 @@
       "SaveBtn": { "label": "Save" },
       "secretCode": {
         "label": "Identity used",
-        "help": "Select or create the identity to access the sharepoint system"
+        "help": "Select or create the identity to access the sharepoint system",
+        "placeholder": "Select an identity"
       },
       "code": {
         "label": "Unique Code",
@@ -1059,7 +1075,8 @@
       },
       "sharepointVersion": {
         "label": "Sharepoint version",
-        "help": "sharepoint version"
+        "help": "sharepoint version",
+        "placeholder": "Select a sharepoint version"
       },
       "baseUri": {
         "label": "Base internet address",
@@ -1112,7 +1129,7 @@
       "extractionFormat": {
         "label": "Extraction format",
         "help": "Use CSV format for llms under 30b params,JSON form huge frontier models",
-        "placeholder": "Use CSV format for llms under 30b params,JSON form huge frontier models"
+        "placeholder": "Select format"
       }
     }
   },
@@ -1273,17 +1290,17 @@
       "chat": {
         "label": "New chat model",
         "help": "Select the supplier to add a new chat model capable of chatting with user or executing automations",
-        "placeholder": "Select the supplier to add a new chat model capable of chatting with user or executing automations"
+        "placeholder": "Select the chat model provider"
       },
       "embed": {
         "label": "New embedding model",
         "help": "Select the supplier to add a new embedding model capable of doing semantical indexing of contents",
-        "placeholder": "Select the supplier to add a new embedding model capable of doing semantical indexing of contents"
+        "placeholder": "Select the embedding model provider"
       },
       "ranker": {
         "label": "New rerank model",
         "help": "Select the supplier to add a new reranker model",
-        "placeholder": "Select the supplier to add a new reranker model"
+        "placeholder": "Select the reranker model provider"
       },
       "NewRerankerModelConfigurationBtn": {
         "label": "New reranker model configuration"
@@ -1318,17 +1335,17 @@
       "tts": {
         "label": "New text to speech model",
         "help": "Select the supplier to add a new text to speech model",
-        "placeholder": "Select the supplier to add a new text to speech model"
+        "placeholder": "Select the text to speech model provider"
       },
       "transcript": {
         "label": "New transcript model",
         "help": "Select the supplier to add a new transcript model",
-        "placeholder": "Select the supplier to add a new transcript model"
+        "placeholder": "Select the transcript model provider"
       },
       "image": {
         "label": "New image model",
         "help": "Select the supplier to add a new image model",
-        "placeholder": "Select the supplier to add a new image model"
+        "placeholder": "Select the image model provider"
       },
       "ModelProviderHeader4": { "label": "Model provider" },
       "DescriptionHeader4": { "label": "Description" },
@@ -1357,7 +1374,8 @@
       },
       "apiSecretCode": {
         "label": "OpenAI token",
-        "help": "Choose the OpenAI token to be used for this model"
+        "help": "Choose the OpenAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default chat model",
@@ -1365,7 +1383,8 @@
       },
       "choosedModel": {
         "label": "OpenAI chat model choice",
-        "help": "Choose the OpenAI chat model to work with."
+        "help": "Choose the OpenAI chat model to work with.",
+        "placeholder": "Select a model"
       },
       "GeneralInfosTab": { "label": "General infos" },
       "AdvancedSettingsTab": { "label": "Advanced settings" },
@@ -1392,7 +1411,8 @@
       "MainPanel": { "label": "Editing OpenAI embedding model configuration" },
       "apiSecretCode": {
         "label": "OpenAI token",
-        "help": "Choose the OpenAI token to be used for this model"
+        "help": "Choose the OpenAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "code": {
         "label": "Unique Code",
@@ -1404,7 +1424,8 @@
       },
       "choosedModel": {
         "label": "OpenAI embedding model choice",
-        "help": "Choose the OpenAI embedding model to work with."
+        "help": "Choose the OpenAI embedding model to work with.",
+        "placeholder": "Select a model"
       },
       "defaultModel": {
         "label": "set this as default embedding model",
@@ -1441,7 +1462,8 @@
       },
       "apiSecretCode": {
         "label": "Ollama token",
-        "help": "Choose the Ollama token to be used for this model (optional)"
+        "help": "Choose the Ollama token to be used for this model (optional)",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default chat model",
@@ -1474,7 +1496,8 @@
       },
       "apiSecretCode": {
         "label": "Anthropic token",
-        "help": "Choose the Anthropic token to be used for this model"
+        "help": "Choose the Anthropic token to be used for this model",
+        "placeholder": "Select a token"
       },
       "choosedModel": {
         "label": "Anthropic chat model choice",
@@ -1509,7 +1532,8 @@
       "CancelBtn": { "label": "Cancel" },
       "apiSecretCode": {
         "label": "MistralAI token",
-        "help": "Choose the MistralAI token to be used for this model"
+        "help": "Choose the MistralAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default chat model",
@@ -1517,7 +1541,8 @@
       },
       "choosedModel": {
         "label": "MistralAI chat model choice",
-        "help": "Choose the MistralAI chat model to work with."
+        "help": "Choose the MistralAI chat model to work with.",
+        "placeholder": "Select a model"
       },
       "GeneralInfosTab": { "label": "General infos" },
       "AdvancedSettingsTab": { "label": "Advanced settings" },
@@ -1537,11 +1562,13 @@
       },
       "choosedModel": {
         "label": "Google Vertex AI chat model choice",
-        "help": "Choose the Google Vertex AI chat model to work with."
+        "help": "Choose the Google Vertex AI chat model to work with.",
+        "placeholder": "Select a model"
       },
       "apiSecretCode": {
         "label": "Google Vertex AI token",
-        "help": "Choose the Google Vertex AI token to be used for this model"
+        "help": "Choose the Google Vertex AI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "description": {
         "label": "Description",
@@ -1571,7 +1598,8 @@
       "SaveBtn": { "label": "Save" },
       "apiSecretCode": {
         "label": "Deepseek token",
-        "help": "Choose the Deepseek token to be used for this model"
+        "help": "Choose the Deepseek token to be used for this model",
+        "placeholder": "Select a token"
       },
       "description": {
         "label": "Description",
@@ -1618,7 +1646,8 @@
       },
       "apiSecretCode": {
         "label": "Chat model  API token",
-        "help": "Choose the Chat model  API token to be used for this model (optional)"
+        "help": "Choose the Chat model  API token to be used for this model (optional)",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default chat model",
@@ -1626,7 +1655,8 @@
       },
       "choosedModel": {
         "label": "Chat model  chat model choice",
-        "help": "Choose the Chat model  chat model to work with."
+        "help": "Choose the Chat model  chat model to work with.",
+        "placeholder": "Select a model"
       },
       "GeneralInfosTab": { "label": "General infos" },
       "TitleFragment": { "label": "Editing chat model provider:" },
@@ -1699,11 +1729,13 @@
       },
       "apiSecretCode": {
         "label": "Ollama token",
-        "help": "Choose the Ollama token to be used for this model"
+        "help": "Choose the Ollama token to be used for this model",
+        "placeholder": "Select a token"
       },
       "choosedModel": {
         "label": "Ollama embedding model choice",
-        "help": "Choose the Ollama embedding model to work with."
+        "help": "Choose the Ollama embedding model to work with.",
+        "placeholder": "Select a model"
       },
       "code": {
         "label": "Unique Code",
@@ -1738,7 +1770,8 @@
       },
       "choosedModel": {
         "label": "MistralAI embedding model choice",
-        "help": "Choose the MistralAI embedding model to work with."
+        "help": "Choose the MistralAI embedding model to work with.",
+        "placeholder": "Select a model"
       },
       "defaultModel": {
         "label": "set this as default embedding model",
@@ -1746,7 +1779,8 @@
       },
       "apiSecretCode": {
         "label": "MistralAI token",
-        "help": "Choose the MistralAI token to be used for this model"
+        "help": "Choose the MistralAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "EmbeddingModelChangeWarning": {
         "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
@@ -1765,7 +1799,8 @@
       "SaveBtn": { "label": "Save" },
       "choosedModel": {
         "label": "Google Vertex AI embedding model choice",
-        "help": "Choose the Google Vertex AI embedding model to work with."
+        "help": "Choose the Google Vertex AI embedding model to work with.",
+        "placeholder": "Select a model"
       },
       "defaultModel": {
         "label": "set this as default embedding model",
@@ -1777,7 +1812,8 @@
       },
       "apiSecretCode": {
         "label": "Google Vertex AI token",
-        "help": "Choose the Google Vertex AI token to be used for this model"
+        "help": "Choose the Google Vertex AI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "EmbeddingModelChangeWarning": {
         "label": "Changing the embedding model of an existing configuration invalidates the vectors already stored: the knowledge bases must be ingested again, otherwise retrieval keeps searching vectors that this model did not produce."
@@ -1798,7 +1834,8 @@
       },
       "choosedModel": {
         "label": "Embedding model  embedding model choice",
-        "help": "Choose the Embedding model  embedding model to work with."
+        "help": "Choose the Embedding model  embedding model to work with.",
+        "placeholder": "Select a model"
       },
       "baseUrl": {
         "label": "Embedding model  API server address",
@@ -1810,7 +1847,8 @@
       },
       "apiSecretCode": {
         "label": "Embedding model  API token",
-        "help": "Choose the Embedding model  API token to be used for this model"
+        "help": "Choose the Embedding model  API token to be used for this model",
+        "placeholder": "Select a token"
       },
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
         "summary": "OK!",
@@ -1873,11 +1911,13 @@
       },
       "choosedModel": {
         "label": "OpenAI image model choice",
-        "help": "Choose the OpenAI image model to work with."
+        "help": "Choose the OpenAI image model to work with.",
+        "placeholder": "Select a model"
       },
       "apiSecretCode": {
         "label": "OpenAI token",
-        "help": "Choose the OpenAI token to be used for this model"
+        "help": "Choose the OpenAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default image model",
@@ -1901,7 +1941,8 @@
       },
       "apiSecretCode": {
         "label": "OpenAI token",
-        "help": "Choose the OpenAI token to be used for this model"
+        "help": "Choose the OpenAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "code": {
         "label": "Unique Code",
@@ -1909,7 +1950,8 @@
       },
       "choosedModel": {
         "label": "OpenAI text to speech model choice",
-        "help": "Choose the OpenAI text to speech model to work with."
+        "help": "Choose the OpenAI text to speech model to work with.",
+        "placeholder": "Select a model"
       },
       "defaultModel": {
         "label": "set this as default text to speech model",
@@ -1935,11 +1977,13 @@
       },
       "choosedModel": {
         "label": "OpenAI transcript model choice",
-        "help": "Choose the OpenAI transcript model to work with."
+        "help": "Choose the OpenAI transcript model to work with.",
+        "placeholder": "Select a model"
       },
       "apiSecretCode": {
         "label": "OpenAI token",
-        "help": "Choose the OpenAI token to be used for this model"
+        "help": "Choose the OpenAI token to be used for this model",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default transcript model",
@@ -1965,7 +2009,8 @@
       },
       "apiSecretCode": {
         "label": "Image model API token",
-        "help": "Choose the image model API token to be used for this model (optional)"
+        "help": "Choose the image model API token to be used for this model (optional)",
+        "placeholder": "Select a token"
       },
       "baseUrl": {
         "label": "Image model API base server address",
@@ -1973,7 +2018,8 @@
       },
       "choosedModel": {
         "label": "Image model choice",
-        "help": "Choose the image model to work with."
+        "help": "Choose the image model to work with.",
+        "placeholder": "Select a model"
       },
       "defaultModel": {
         "label": "set this as default image model",
@@ -1991,7 +2037,8 @@
       },
       "choosedModel": {
         "label": "ranking model  ranking model choice",
-        "help": "Choose the ranking model  ranking model to work with."
+        "help": "Choose the ranking model  ranking model to work with.",
+        "placeholder": "Select a model"
       },
       "code": {
         "label": "Unique Code",
@@ -2003,7 +2050,8 @@
       },
       "apiSecretCode": {
         "label": "ranking model  API token",
-        "help": "Choose the ranking model  API token to be used for this model (optional)"
+        "help": "Choose the ranking model  API token to be used for this model (optional)",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default ranking model",
@@ -2041,7 +2089,8 @@
       },
       "choosedModel": {
         "label": "Text to speech model choice",
-        "help": "Choose the text to speech model to work with."
+        "help": "Choose the text to speech model to work with.",
+        "placeholder": "Select a model"
       },
       "description": {
         "label": "Description",
@@ -2049,7 +2098,8 @@
       },
       "apiSecretCode": {
         "label": "Text to speech model API token",
-        "help": "Choose the text to speech model API token to be used for this model (optional)"
+        "help": "Choose the text to speech model API token to be used for this model (optional)",
+        "placeholder": "Select a token"
       },
       "defaultModel": {
         "label": "set this as default text to speech model",
@@ -2063,7 +2113,8 @@
       "CancelBtn": { "label": "Cancel" },
       "apiSecretCode": {
         "label": "Transcript model API token",
-        "help": "Choose the transcript model API token to be used for this model (optional)"
+        "help": "Choose the transcript model API token to be used for this model (optional)",
+        "placeholder": "Select a token"
       },
       "description": {
         "label": "Description",
@@ -2075,7 +2126,8 @@
       },
       "choosedModel": {
         "label": "Transcript model choice",
-        "help": "Choose the transcript model to work with."
+        "help": "Choose the transcript model to work with.",
+        "placeholder": "Select a model"
       },
       "code": {
         "label": "Unique Code",
@@ -2102,11 +2154,13 @@
       },
       "apiSecretCode": {
         "label": "AWS credentials",
-        "help": "Choose the AWS credentials (access key id / secret access key) to be used for this model. Leave empty to use the instance IAM role."
+        "help": "Choose the AWS credentials (access key id / secret access key) to be used for this model. Leave empty to use the instance IAM role.",
+        "placeholder": "Select AWS credentials"
       },
       "choosedModel": {
         "label": "AWS Bedrock chat model choice",
-        "help": "Choose the AWS Bedrock chat model to work with."
+        "help": "Choose the AWS Bedrock chat model to work with.",
+        "placeholder": "Select a model"
       },
       "forUses": {
         "label": "Model usage(s)",
@@ -2138,11 +2192,13 @@
       },
       "apiSecretCode": {
         "label": "AWS credentials",
-        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role."
+        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role.",
+        "placeholder": "Select AWS credentials"
       },
       "choosedModel": {
         "label": "AWS Bedrock embedding model choice",
-        "help": "Choose the AWS Bedrock embedding model to work with."
+        "help": "Choose the AWS Bedrock embedding model to work with.",
+        "placeholder": "Select a model"
       },
       "defaultModel": {
         "label": "set this as default embedding model",
@@ -2171,11 +2227,13 @@
       },
       "apiSecretCode": {
         "label": "AWS credentials",
-        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role."
+        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role.",
+        "placeholder": "Select AWS credentials"
       },
       "choosedModel": {
         "label": "AWS Bedrock image model choice",
-        "help": "Choose the AWS Bedrock image generation model to work with."
+        "help": "Choose the AWS Bedrock image generation model to work with.",
+        "placeholder": "Select a model"
       },
       "cfgScale": {
         "label": "CFG scale",
@@ -2211,7 +2269,8 @@
       },
       "apiSecretCode": {
         "label": "AWS credentials",
-        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role."
+        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role.",
+        "placeholder": "Select AWS credentials"
       },
       "defaultModel": {
         "label": "set this as default reranking model",
@@ -2219,7 +2278,8 @@
       },
       "choosedModel": {
         "label": "AWS Bedrock reranking model choice",
-        "help": "Choose the AWS Bedrock reranking model to work with."
+        "help": "Choose the AWS Bedrock reranking model to work with.",
+        "placeholder": "Select a model"
       },
       "maxDocumentsPerRequest": {
         "label": "Max documents / request",
@@ -2255,13 +2315,15 @@
       },
       "choosedModel": {
         "label": "Voice",
-        "help": "Choose the Amazon Polly voice to use."
+        "help": "Choose the Amazon Polly voice to use.",
+        "placeholder": "Select a voice"
       },
       "apiSecretCode": {
         "label": "AWS credentials",
-        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role."
+        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role.",
+        "placeholder": "Select AWS credentials"
       },
-      "engine": { "label": "Engine", "help": "Amazon Polly synthesis engine" },
+      "engine": { "label": "Engine", "help": "Amazon Polly synthesis engine", "placeholder": "Select an engine" },
       "defaultModel": {
         "label": "set this as default text to speech model",
         "help": "If true this will be used as default text to speech model where none is indicated"
@@ -2276,7 +2338,8 @@
       },
       "apiSecretCode": {
         "label": "AWS credentials",
-        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role."
+        "help": "Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role.",
+        "placeholder": "Select AWS credentials"
       },
       "description": {
         "label": "Description",
@@ -2288,15 +2351,18 @@
       },
       "languageCode": {
         "label": "Language code",
-        "help": "BCP-47 language code of the audio (e.g. en-US)"
+        "help": "BCP-47 language code of the audio (e.g. en-US)",
+        "placeholder": "en-US"
       },
       "choosedModel": {
         "label": "Transcribe model",
-        "help": "Amazon Transcribe streaming mode."
+        "help": "Amazon Transcribe streaming mode.",
+        "placeholder": "Select a model"
       },
       "mediaEncoding": {
         "label": "Media encoding",
-        "help": "Encoding of the audio stream"
+        "help": "Encoding of the audio stream",
+        "placeholder": "Select an encoding"
       },
       "defaultModel": {
         "label": "set this as default transcript model",
@@ -2705,7 +2771,8 @@
       },
       "modelCode": {
         "label": "Chat model to use",
-        "help": "Choose the chat model you want to ask the prompt template generation"
+        "help": "Choose the chat model you want to ask the prompt template generation",
+        "placeholder": "Select a chat model"
       },
       "query": {
         "label": "Prompt template request",
@@ -2764,7 +2831,8 @@
       },
       "secretType": {
         "label": "Identity type",
-        "help": "Select the identity type to create for the remote system"
+        "help": "Select the identity type to create for the remote system",
+        "placeholder": "Select the identity type"
       },
       "InsertBtn": { "label": "Insert" },
       "token": { "label": "Token", "help": "Enter the token." },
@@ -2800,7 +2868,7 @@
       "delegatedUser": {
         "label": "Google user to impersonate",
         "help": "The user that will be impersonated by the provided credentials",
-        "placeholder": "The user that will be impersonated by the provided credentials"
+        "placeholder": "Write here google user to impersonate"
       },
       "OK": {
         "summary": "Saved with success",
@@ -2843,7 +2911,8 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "upload": {
         "label": "Upload contents",
@@ -3021,7 +3090,8 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
@@ -3090,19 +3160,23 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "contentManagementSystem": {
         "label": "Git system",
-        "help": "Already configured git system reference."
+        "help": "Already configured git system reference.",
+        "placeholder": "Select a git server setting"
       },
       "branch": {
         "label": "Branch",
-        "help": "Branch name to checkout (normally master, main or develop)"
+        "help": "Branch name to checkout (normally master, main or develop)",
+        "placeholder": "Select a branch"
       },
       "identityCode": {
         "label": "Identity used",
-        "help": "Select the identity to do clone/checkout on the system"
+        "help": "Select the identity to do clone/checkout on the system",
+        "placeholder": "Select an identity"
       },
       "repositoryUri": {
         "label": "Repository url/address",
@@ -3138,7 +3212,8 @@
       "SaveBtn": { "label": "Save" },
       "contentManagementSystemType": {
         "label": "Git driver",
-        "help": "Git driver for cloning/pull of repos"
+        "help": "Git driver for cloning/pull of repos",
+        "placeholder": "Select a Git driver"
       },
       "description": {
         "label": "Description",
@@ -3160,7 +3235,8 @@
       "SecurityTab": { "label": "Security settings" },
       "defaultIdentityCode": {
         "label": "Default identity used",
-        "help": "Select the default identity to do clone/checkout on the system"
+        "help": "Select the default identity to do clone/checkout on the system",
+        "placeholder": "Select an identity"
       }
     }
   },
@@ -3308,7 +3384,8 @@
       "MainPanel": { "label": "Editing google custom search api credentials" },
       "secretCode": {
         "label": "Google search api token",
-        "help": "Choose or insert the google search api token"
+        "help": "Choose or insert the google search api token",
+        "placeholder": "Select a token"
       },
       "customSearchEngineId": {
         "label": "Google search engine id",
@@ -3339,7 +3416,7 @@
       "chatProfileCode": {
         "label": "Chat with knowledge bases",
         "help": "Choose the company chat profile to interact with company (and your) documents and LLMs",
-        "placeholder": "Choose the company chat profile to interact with company (and your) documents and LLMs"
+        "placeholder": "Select a chat profile"
       },
       "NewChatBtn": { "label": "New chat" },
       "ChatSessionsPanel": { "label": "Chat sessions" },
@@ -4247,12 +4324,12 @@
       "delegatedUser": {
         "label": "Google user to impersonate",
         "help": "The user that will be impersonated by the provided credentials",
-        "placeholder": "The user that will be impersonated by the provided credentials"
+        "placeholder": "Write here google user to impersonate"
       },
       "jsonContent": {
         "label": "Google credentials json content",
         "help": "Create Google Credentials with your workspace/team drives access in the Google Console Cloud and paste here the downloaded json file content (https://console.cloud.google.com/).",
-        "placeholder": "Create Google Credentials with your workspace/team drives access in the Google Console Cloud and paste here the downloaded json file content (https://console.cloud.google.com/)."
+        "placeholder": "Write here obtained google json credentials"
       }
     },
     "GGoogleDriveProjectEndpoint": {
@@ -4280,7 +4357,8 @@
       },
       "driveSystemCode": {
         "label": "Google drive configuration",
-        "help": "Already configured google drive system reference."
+        "help": "Already configured google drive system reference.",
+        "placeholder": "Select a google drive configuration"
       },
       "openZips": {
         "label": "Open zip files",
@@ -4288,7 +4366,8 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "programmedTables": {
         "label": "Contents updates checks schedule",
@@ -4319,7 +4398,8 @@
       },
       "driveAccessSecret": {
         "label": "Identity used",
-        "help": "Select or create the identity to access the google drive system"
+        "help": "Select or create the identity to access the google drive system",
+        "placeholder": "Select an identity"
       }
     },
     "GeboAIGoogleWorkspaceAccessComponent": {
@@ -4479,7 +4559,8 @@
       },
       "NewAwsRegion": {
         "label": "AWS region",
-        "help": "Select the AWS region hosting the resources this connection is used for."
+        "help": "Select the AWS region hosting the resources this connection is used for.",
+        "placeholder": "Select an AWS region"
       },
       "NewGoogleDelegatedUser": {
         "label": "Google user to impersonate",
@@ -4524,7 +4605,8 @@
       },
       "agentServiceId": {
         "label": "Agent service type",
-        "help": "Choose the Agent service type will be run."
+        "help": "Choose the Agent service type will be run.",
+        "placeholder": "Select the Agent type"
       },
       "defaultConfiguration": {
         "label": "Default Agent configuration",
@@ -4532,7 +4614,8 @@
       },
       "mainLoopPromptUseCode": {
         "label": "Choose main loop prompt template",
-        "help": "The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only."
+        "help": "The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only.",
+        "placeholder": "Select the Prompt Template type"
       },
       "enabledFunctions": {
         "label": "Tools of this agent",
@@ -4573,12 +4656,14 @@
       },
       "agentRoleCode": {
         "label": "Agent role",
-        "help": "The role the agent plays, from the role library the prompts are built with. Mandatory."
+        "help": "The role the agent plays, from the role library the prompts are built with. Mandatory.",
+        "placeholder": "Choose the role"
       },
       "AgentRoleSelect": { "placeholder": "Choose the role" },
       "adaptedAgentNetworkCode": {
         "label": "Delegates to network",
-        "help": "The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service."
+        "help": "The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service.",
+        "placeholder": "Choose the network"
       },
       "AdaptedNetworkSelect": { "placeholder": "Choose the network" },
       "agentNetworkServiceCode": {
@@ -4699,7 +4784,8 @@
     "GeboAiLogsViewComponent": {
       "datasourceTypes": {
         "label": "Data source types",
-        "help": "Data source types whose ingestion logs are listed. Leave empty to list them all."
+        "help": "Data source types whose ingestion logs are listed. Leave empty to list them all.",
+        "placeholder": "All data source types"
       },
       "datasourceTypesSelector": { "placeholder": "All data source types" }
     }
@@ -4819,7 +4905,8 @@
       },
       "s3SecretCode": {
         "label": "Identity used",
-        "help": "Select or create the AWS connection identity (access key, secret key and region) to access the AWS S3 system"
+        "help": "Select or create the AWS connection identity (access key, secret key and region) to access the AWS S3 system",
+        "placeholder": "Select an identity"
       },
       "description": {
         "label": "Description",
@@ -4838,7 +4925,8 @@
       "MainPanel": { "label": "Sharing AWS S3 contents" },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "code": {
         "label": "Unique Code",
@@ -4850,7 +4938,8 @@
       },
       "s3SystemCode": {
         "label": "AWS S3 system",
-        "help": "Already configured AWS S3 system reference."
+        "help": "Already configured AWS S3 system reference.",
+        "placeholder": "Select an AWS S3 system"
       },
       "description": {
         "label": "Description",
@@ -4925,12 +5014,14 @@
       },
       "webdavAuthType": {
         "label": "Authentication method",
-        "help": "Authentication method for the WebDAV server"
+        "help": "Authentication method for the WebDAV server",
+        "placeholder": "Select authentication method"
       },
       "GeneralSettingsTab": { "label": "General settings" },
       "secretCode": {
         "label": "Identity used",
-        "help": "Select or create the identity to access the WebDAV system"
+        "help": "Select or create the identity to access the WebDAV system",
+        "placeholder": "Select an identity"
       }
     },
     "GWebdavProjectEndpoint": {
@@ -4948,7 +5039,8 @@
       },
       "webdavSystemCode": {
         "label": "WebDAV system",
-        "help": "Already configured WebDAV system reference."
+        "help": "Already configured WebDAV system reference.",
+        "placeholder": "Select a WebDAV server"
       },
       "code": {
         "label": "Unique Code",
@@ -4956,7 +5048,8 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "tree": {
         "label": "Selected WebDAV folders/files",
@@ -4998,7 +5091,8 @@
       },
       "authType": {
         "label": "Authentication method",
-        "help": "Select the authentication method used by the WebDAV server. See known compatible systems below."
+        "help": "Select the authentication method used by the WebDAV server. See known compatible systems below.",
+        "placeholder": "Select authentication method"
       },
       "password": {
         "label": "Password",
@@ -5082,7 +5176,8 @@
       },
       "secretCode": {
         "label": "Identity credential (secret)",
-        "help": "Select or create the secret credentials."
+        "help": "Select or create the secret credentials.",
+        "placeholder": "Select an identity"
       },
       "oauth2AuthenticatorCode": {
         "label": "OAuth2 Authenticator code",
@@ -5102,7 +5197,8 @@
       "MainPanel": { "label": "Editing MCP server data source" },
       "mcpClientConfigCode": {
         "label": "MCP server",
-        "help": "Choose the configured MCP client (transport, endpoint and credentials) whose resources this virtual drive integrates."
+        "help": "Choose the configured MCP client (transport, endpoint and credentials) whose resources this virtual drive integrates.",
+        "placeholder": "Select an MCP server"
       },
       "code": {
         "label": "Unique Code",
@@ -5110,7 +5206,8 @@
       },
       "parentProjectCode": {
         "label": "Project",
-        "help": "Parent project reference."
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
       },
       "description": {
         "label": "Description",
@@ -5436,7 +5533,8 @@
       },
       "choosableForPipelineTypes": {
         "label": "Choosable for chats",
-        "help": "The kinds of chat this network can be chosen for, as their network of agents."
+        "help": "The kinds of chat this network can be chosen for, as their network of agents.",
+        "placeholder": "Not choosable"
       },
       "ChoosableForPipelineTypesSelect": { "placeholder": "Not choosable" },
       "RagPipelineOption": { "label": "Agentic chat with knowledge bases" },
@@ -5574,7 +5672,8 @@
       "NewConfigFromInspectorBtn": { "label": "New" },
       "agentsNetworkServiceFactoryId": {
         "label": "Runs on",
-        "help": "The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce."
+        "help": "The network service factory that runs the network: it fixes the input its input nodes must accept and the output its output nodes must produce.",
+        "placeholder": "Choose the factory the network runs on"
       },
       "FactorySelect": {
         "placeholder": "Choose the factory the network runs on"
@@ -5723,17 +5822,17 @@
       },
       "chatHistory": {
         "label": "Chat history",
-        "placeholder": "Whether the chat history is required by this prompt",
+        "placeholder": "Select an option",
         "help": "Whether the chat history is required by this prompt"
       },
       "contextDocuments": {
         "label": "Context documents",
-        "placeholder": "Whether context documents are required by this prompt",
+        "placeholder": "Select an option",
         "help": "Whether context documents are required by this prompt"
       },
       "toolsCalling": {
         "label": "Tools calling",
-        "placeholder": "Whether tools calling is required by this prompt",
+        "placeholder": "Select an option",
         "help": "Whether tools calling is required by this prompt"
       },
       "langCode": {
@@ -5766,7 +5865,8 @@
     "GeboAIPromptWizardComponent": {
       "modelCode": {
         "help": "Choose the chat model you want to ask the prompt template generation",
-        "label": "Chat model to use"
+        "label": "Chat model to use",
+        "placeholder": "Select a chat model"
       },
       "query": {
         "help": "Specify in 2nd person which is the objective that the AI will support the user",

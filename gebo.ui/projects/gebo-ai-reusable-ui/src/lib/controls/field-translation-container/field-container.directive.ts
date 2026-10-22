@@ -4,6 +4,17 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '
 import { merge, startWith, Subscription } from 'rxjs';
 import { safeSet } from './primeng-components-multilanguage-adapters.directive';
 
+/**
+ * True when the instance's component or directive declares a placeholder input. Read from the
+ * Angular definition, as an uninitialized input field is not an own property here
+ * (useDefineForClassFields is false).
+ */
+function declaresPlaceholderInput(instance: unknown): boolean {
+    const type = (instance as { constructor?: any })?.constructor;
+    const inputs = type?.ɵcmp?.inputs ?? type?.ɵdir?.inputs;
+    return !!(inputs && Object.prototype.hasOwnProperty.call(inputs, "placeholder")) || "placeholder" in (instance as object);
+}
+
 @Directive({
     selector: '[gebo-ai-field-element]',
     standalone: false
@@ -20,12 +31,16 @@ export class GeboAIFieldContainerDirective implements AfterContentInit, OnDestro
     ) { }
 
     /**
-     * The field's placeholder goes on the element: a PrimeNG input (p-select, p-multiSelect,
-     * p-datepicker...) reads it as an input, and registers itself as the element's value
-     * accessor, so it is set on the component; a native input or textarea takes the attribute.
+     * The field's placeholder goes on the element: an input component (p-select, p-multiSelect,
+     * p-datepicker, geboai-editable-listbox-component...) declares placeholder as an input and is
+     * the element's value accessor, so it is set on the component; a native input or textarea
+     * takes the attribute.
      */
     private applyPlaceholder(text: string): void {
-        const component = this.valueAccessors?.find(accessor => accessor && 'placeholder' in (accessor as object));
+        // the accessor of the control (components that assign themselves as ngControl.valueAccessor),
+        // else the ones the element provides as NG_VALUE_ACCESSOR
+        const candidates: unknown[] = [this.ngControl?.valueAccessor, ...(this.valueAccessors || [])];
+        const component = candidates.find(accessor => accessor && declaresPlaceholderInput(accessor));
         if (component) {
             safeSet(component, "placeholder", text);
         } else {

@@ -49,14 +49,14 @@
               </gebo-ai-field>
             </div>
             <div class="col-6">
-              <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
-                <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
+              <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
+                <geboai-editable-listbox-component formControlName="parentProjectCode" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
                 </geboai-editable-listbox-component>
               </gebo-ai-field>
             </div>
             <div class="col-6">
-              <gebo-ai-field id="webdavSystemCode" label="WebDAV system" help="Already configured WebDAV system reference." [required]="true">
-                <geboai-editable-listbox-component formControlName="webdavSystemCode" [required]="true" placeholder="Select a WebDAV server" [data]="webdavServersData" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newWebdavServerRequest" gebo-ai-field-element>
+              <gebo-ai-field id="webdavSystemCode" label="WebDAV system" help="Already configured WebDAV system reference." [required]="true" placeholder="Select a WebDAV server">
+                <geboai-editable-listbox-component formControlName="webdavSystemCode" [required]="true" [data]="webdavServersData" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newWebdavServerRequest" gebo-ai-field-element>
                 </geboai-editable-listbox-component>
               </gebo-ai-field>
             </div>

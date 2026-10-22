@@ -135,9 +135,8 @@
                         <ng-container *ngIf="formGroup.get('authMode')?.value !== 'NONE'">
                             <div class="col-6">
                                 <gebo-ai-field id="secretCode" label="Identity credential (secret)"
-                                    help="Select or create the secret credentials.">
-                                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
-                                        placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                                    help="Select or create the secret credentials." placeholder="Select an identity">
+                                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode" [optionsObservable]="identitiesObservable"
                                         [createNewRecordRequest]="newSecretAction" gebo-ai-field-element
                                         [disabled]="readonly"></geboai-editable-listbox-component>
                                 </gebo-ai-field>

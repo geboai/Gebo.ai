@@ -65,16 +65,16 @@
                     </gebo-ai-field>
                   </div>
                   <div class="col-6">
-                    <gebo-ai-field id="parentProjectCode" label="Project" [required]="true" help="Parent project reference.">
-                      <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project"
+                    <gebo-ai-field id="parentProjectCode" label="Project" [required]="true" help="Parent project reference." placeholder="Select a project">
+                      <geboai-editable-listbox-component formControlName="parentProjectCode"
                         [optionsObservable]="projectsObservable" gebo-ai-field-element>
                       </geboai-editable-listbox-component>
                     </gebo-ai-field>
                   </div>
                   <div class="col-6">
                     <gebo-ai-field id="mcpClientConfigCode" label="MCP server" [required]="true"
-                      help="Choose the configured MCP client (transport, endpoint and credentials) whose resources this virtual drive integrates.">
-                      <geboai-editable-listbox-component formControlName="mcpClientConfigCode" placeholder="Select an MCP server"
+                      help="Choose the configured MCP client (transport, endpoint and credentials) whose resources this virtual drive integrates." placeholder="Select an MCP server">
+                      <geboai-editable-listbox-component formControlName="mcpClientConfigCode"
                         [optionsObservable]="mcpConfigsObservable" gebo-ai-field-element>
                       </geboai-editable-listbox-component>
                     </gebo-ai-field>

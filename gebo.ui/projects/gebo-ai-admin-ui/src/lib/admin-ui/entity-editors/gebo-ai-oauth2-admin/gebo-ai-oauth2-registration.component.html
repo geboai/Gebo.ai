@@ -82,10 +82,9 @@
           </gebo-ai-field>
         </div>
         <div class="col-6">
-          <gebo-ai-field id="authProvider" label="Provider" help="Enter the provider of OAUTH2 Authentication">
+          <gebo-ai-field id="authProvider" label="Provider" help="Enter the provider of OAUTH2 Authentication" placeholder="Select a OAUTH2 provider">
             <geboai-editable-listbox-component
               formControlName="authProvider"
-              placeholder="Select a OAUTH2 provider"
               [readonly]="readonly || mode!=='NEW'"
               [data]="providers"
               gebo-ai-field-element
@@ -95,11 +94,10 @@
         </div>
 
         <div class="col-6">
-          <gebo-ai-field id="configurationType" label="Configuration purpose" help="Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.">
+          <gebo-ai-field id="configurationType" label="Configuration purpose" help="Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system." placeholder="Select configuration purpose">
             <geboai-editable-listbox-component
               id="configurationType"
               formControlName="configurationType"
-              placeholder="Select configuration purpose"
               [readonly]="readonly"
               [data]="configurationTypesData"
               gebo-ai-field-element
