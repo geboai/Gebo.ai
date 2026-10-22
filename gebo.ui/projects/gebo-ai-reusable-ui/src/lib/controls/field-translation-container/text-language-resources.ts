@@ -18,7 +18,9 @@ export function extractUIExistingText(item: UIExistingText, data: UILanguageReso
     if (item.moduleId && item.entityId && item.componentId && item.fieldId) {
         const module = getAttribute(item.moduleId, data);
         const entity = getAttribute(item.entityId, module);
-        const component = getAttribute(item.componentId, entity);
+        // ids taken from Java class names (the data source menu items) are stored with their
+        // dots turned into underscores, as the recorder writes them
+        const component = getAttribute(item.componentId, entity) ?? getAttribute(item.componentId.replace(/\./g, "_"), entity);
         const attribute = getAttribute(item.fieldId, component);
         if (module && entity && component && attribute) {
             if (typeof attribute === "string") {

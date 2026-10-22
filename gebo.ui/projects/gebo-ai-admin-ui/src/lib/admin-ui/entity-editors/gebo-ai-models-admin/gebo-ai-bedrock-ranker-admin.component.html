@@ -43,16 +43,16 @@
           </gebo-ai-field>
         </div>
         <div class="col-6">
-          <gebo-ai-field id="apiSecretCode" label="AWS credentials" help="Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role.">
-            <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select AWS credentials"
+          <gebo-ai-field id="apiSecretCode" label="AWS credentials" help="Choose the AWS credentials (access key id / secret access key). Leave empty to use the instance IAM role." placeholder="Select AWS credentials">
+            <geboai-editable-listbox-component formControlName="apiSecretCode"
               [optionsObservable]="identitiesObservable"
               [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
             </geboai-editable-listbox-component>
           </gebo-ai-field>
         </div>
         <div class="col-6">
-          <gebo-ai-field id="choosedModel" label="AWS Bedrock reranking model choice" help="Choose the AWS Bedrock reranking model to work with." [required]="true">
-            <p-select styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel" placeholder="Select a model"
+          <gebo-ai-field id="choosedModel" label="AWS Bedrock reranking model choice" help="Choose the AWS Bedrock reranking model to work with." [required]="true" placeholder="Select a model">
+            <p-select styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel"
               [required]="true" [options]="modelChoicesData" optionLabel="description" gebo-ai-field-element>
             </p-select>
           </gebo-ai-field>

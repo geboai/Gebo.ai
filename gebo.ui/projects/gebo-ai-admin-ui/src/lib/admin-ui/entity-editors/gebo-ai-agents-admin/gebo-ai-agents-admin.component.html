@@ -58,9 +58,8 @@
                     </div>
                     <div class="col-6">
                       <gebo-ai-field id="agentServiceId" label="Agent service type"
-                        help="Choose the Agent service type will be run.">
-                        <geboai-editable-listbox-component formControlName="agentServiceId"
-                          placeholder="Select the Agent type" [required]="true" [data]="agentTypes"
+                        help="Choose the Agent service type will be run." placeholder="Select the Agent type">
+                        <geboai-editable-listbox-component formControlName="agentServiceId" [required]="true" [data]="agentTypes"
                           gebo-ai-field-element>
                         </geboai-editable-listbox-component>
                       </gebo-ai-field>
@@ -75,9 +74,9 @@
                     </div>
                     <div class="col-6">
                       <gebo-ai-field id="agentRoleCode" label="Agent role"
-                        help="The role the agent plays, from the role library the prompts are built with. Mandatory." [required]="true">
-                        <p-select id="AgentRoleSelect" gebo-ai-label formControlName="agentRoleCode" [options]="roles" optionLabel="description" optionValue="code" dataKey="code"
-                          [required]="true" placeholder="Choose the role" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
+                        help="The role the agent plays, from the role library the prompts are built with. Mandatory." [required]="true" placeholder="Choose the role">
+                        <p-select id="AgentRoleSelect" formControlName="agentRoleCode" [options]="roles" optionLabel="description" optionValue="code" dataKey="code"
+                          [required]="true" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
                           <ng-template #item let-role>
                             <span>{{role.description}}</span>
                             <span class="ml-2 text-xs text-muted-color font-monospace">{{role.code}}</span>
@@ -88,9 +87,9 @@
                     @if (isNetworkAdapterService(formGroup.controls['agentServiceId'].value)) {
                       <div class="col-6">
                         <gebo-ai-field id="adaptedAgentNetworkCode" label="Delegates to network"
-                          help="The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service." [required]="true">
-                          <p-select id="AdaptedNetworkSelect" gebo-ai-label formControlName="adaptedAgentNetworkCode" [options]="networks" optionLabel="description" optionValue="code" dataKey="code"
-                            [required]="true" placeholder="Choose the network" styleClass="w-full" appendTo="body" gebo-ai-field-element></p-select>
+                          help="The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service." [required]="true" placeholder="Choose the network">
+                          <p-select id="AdaptedNetworkSelect" formControlName="adaptedAgentNetworkCode" [options]="networks" optionLabel="description" optionValue="code" dataKey="code"
+                            [required]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element></p-select>
                         </gebo-ai-field>
                       </div>
                       <div class="col-6">
@@ -191,9 +190,8 @@
                         <div class="grid standardTabDialogueHeight">
                           <div class="col-12 md:col-6">
                             <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
-                              help="The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only.">
-                              <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode"
-                                placeholder="Select the Prompt Template type" [required]="true" [readonly]="promptCustomized"
+                              help="The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only." placeholder="Select the Prompt Template type">
+                              <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode" [required]="true" [readonly]="promptCustomized"
                                 [optionsObservable]="promptLoadingObservable" gebo-ai-field-element>
                               </geboai-editable-listbox-component>
                             </gebo-ai-field>

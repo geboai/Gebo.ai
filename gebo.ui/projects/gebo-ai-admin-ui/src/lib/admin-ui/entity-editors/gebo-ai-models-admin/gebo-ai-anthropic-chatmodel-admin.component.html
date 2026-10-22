@@ -58,17 +58,16 @@
                 </gebo-ai-field>
               </div>
               <div class="col-6">
-                <gebo-ai-field id="apiSecretCode" label="Anthropic token" help="Choose the Anthropic token to be used for this model" [required]="true">
-                  <geboai-editable-listbox-component formControlName="apiSecretCode"
-                    placeholder="Select a token" [required]="true"
+                <gebo-ai-field id="apiSecretCode" label="Anthropic token" help="Choose the Anthropic token to be used for this model" [required]="true" placeholder="Select a token">
+                  <geboai-editable-listbox-component formControlName="apiSecretCode" [required]="true"
                     [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
                     gebo-ai-field-element>
                   </geboai-editable-listbox-component>
                 </gebo-ai-field>
               </div>
               <div class="col-6">
-                <gebo-ai-field id="choosedModel" label="Anthropic chat model choice" help="Choose the Anthropic chat model to work with." [required]="true">
-                  <p-select id="ChoosedModelSelect" gebo-ai-label styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel" placeholder="Select a model"
+                <gebo-ai-field id="choosedModel" label="Anthropic chat model choice" help="Choose the Anthropic chat model to work with." [required]="true" placeholder="Select a model">
+                  <p-select id="ChoosedModelSelect" styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel"
                     [required]="true" [options]="modelChoicesData" optionLabel="description"
                   gebo-ai-field-element></p-select>
                 </gebo-ai-field>

@@ -17,10 +17,28 @@
  * including source code, plain text, PDF, and browsable web content.
  */
 import { HttpClient } from "@angular/common/http";
-import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
 import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
+import { Subscription } from "rxjs";
 import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
+import { findMatchingTranslation, UIExistingText } from "../field-translation-container/text-language-resources";
+
+/**
+ * Fixed prefix of the dialog title, the file name that follows it is data. The viewer is opened
+ * from the chat, the knowledge base tree and the document opener buttons and has no
+ * GEBO_AI_MODULE/GEBO_AI_FIELD_HOST of its own (its web viewer resolves its texts on the host's),
+ * so the prefix is looked up with an explicit module/entity, the same in every host.
+ */
+const showingContentTitleText: UIExistingText = {
+  moduleId: "GeboAIContentViewerModule",
+  entityId: "GeboAIContentViewerComponent",
+  componentId: "ShowingContentTitle",
+  fieldId: "label",
+  key: "label",
+  text: "Showing content"
+};
 
 /**
  * A file Gebo.ai serves by url and that has no ingested document behind it.
@@ -56,7 +74,7 @@ const generatedContentControllerUrl: string = "/api/users/GeboLLMGeneratedResour
   templateUrl: "gebo-ai-content-viewer.component.html",
   standalone: false
 })
-export class GeboAIContentViewerComponent implements OnInit, OnChanges {
+export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestroy {
 
   /** Unique identifier for the content to be displayed */
   @Input() code: string = "";
@@ -115,6 +133,10 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
   /** Event emitter that fires when the content viewer is closed */
   @Output() close: EventEmitter<boolean> = new EventEmitter();
 
+  /** Dialog title prefix in the actual language */
+  protected showingContentTitle: string = showingContentTitleText.text;
+  private titleTranslationSubscription?: Subscription;
+
   /**
    * Constructor for the GeboAIContentViewerComponent
    * 
@@ -127,7 +149,8 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
     private contentMetaControllerService: ContentMetaInfosControllerService,
     private ingestionMetaInfoService: IngestionFileTypesLibraryControllerService,
     private httpClient: HttpClient,
-    @Inject(BASE_PATH) private path: string) {
+    @Inject(BASE_PATH) private path: string,
+    private translationService: GeboAITranslationService) {
 
   }
 
@@ -135,7 +158,16 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * Angular lifecycle hook that initializes the component
    */
   ngOnInit(): void {
+    this.titleTranslationSubscription = this.translationService.translateOnActualLanguage([showingContentTitleText]).subscribe({
+      next: (resources) => {
+        const found = resources ? findMatchingTranslation(showingContentTitleText, resources) : undefined;
+        this.showingContentTitle = found?.translation ? found.translation : showingContentTitleText.text;
+      }
+    });
+  }
 
+  ngOnDestroy(): void {
+    this.titleTranslationSubscription?.unsubscribe();
   }
 
   /**

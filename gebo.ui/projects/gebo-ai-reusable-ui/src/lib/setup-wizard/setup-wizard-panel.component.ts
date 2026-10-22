@@ -37,6 +37,8 @@ function filterNotContained<T>(v1: T[], v2: T[]): T[] {
 }
 const moduleId: string = "SetupWizardPanelModule";
 const fieldHostId: string = "SetupWizardPanelComponent";
+/** Label of the breadcrumb home item: a menu item, so it is translated programmatically */
+const setupHomeText: UIExistingText = { moduleId: moduleId, componentId: "SetupHomeBreadcrumb", entityId: fieldHostId, fieldId: "label", key: "label", text: "Setup home" };
 interface MandatoryUIEntry { config: SetupWizardItem, wizardComponent: Type<BaseWizardSectionComponent> };
 /**
  * Builds the translatable texts (label and description) of wizard items or groups,
@@ -118,7 +120,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     public bcItems: MenuItem[] = [];
     /** Home breadcrumb item with navigation back to main wizard */
     public home: MenuItem = {
-        label: "Setup home",
+        label: setupHomeText.text,
         command: (item) => {
             this.closeWizard();
         }
@@ -256,7 +258,19 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         this.setupWizardComunicationService.setWizardPanel(this);
         this.reloadStatus();
+        this.geboLanguageService.translateOnActualLanguage([setupHomeText]).subscribe({
+            next: (resources) => {
+                // a title bound by the host replaces the home label, it is not translated here
+                if (this.homeLabelFromTitle) return;
+                const found = resources ? findMatchingTranlations([setupHomeText], resources) : undefined;
+                const label = found?.length && found[0].translation ? found[0].translation : setupHomeText.text;
+                // a new object, so that the breadcrumb renders the new label
+                this.home = { ...this.home, label: label };
+            }
+        });
     }
+    /** True once the host bound a title, which is then the home label */
+    private homeLabelFromTitle: boolean = false;
 
     /**
      * Angular lifecycle hook that responds to changes in @Input properties
@@ -268,6 +282,7 @@ export class SetupWizardPanelComponent implements OnInit, OnChanges {
         }
         if (this.title && changes["title"]) {
             this.home.label = this.title;
+            this.homeLabelFromTitle = true;
         }
     }
 

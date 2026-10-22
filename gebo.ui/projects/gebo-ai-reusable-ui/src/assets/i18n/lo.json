@@ -839,9 +839,6 @@
       "SaveBtn": {
         "label": "ບັນທຶກ"
       },
-      "UserIds": {
-        "placeholder": "ເລືອກຜູ້ໃຊ້"
-      },
       "CancelBtn": {
         "label": "ຍົກເລີກ"
       },
@@ -858,7 +855,8 @@
       },
       "userIds": {
         "label": "ລາຍຊື່ຜູ້ໃຊ້",
-        "help": "ເລືອກຜູ້ໃຊ້ທີ່ເຂົ້າຮ່ວມກຸ່ມ"
+        "help": "ເລືອກຜູ້ໃຊ້ທີ່ເຂົ້າຮ່ວມກຸ່ມ",
+        "placeholder": "ເລືອກຜູ້ໃຊ້"
       }
     },
     "GeboAIChangeUserPasswordComponent": {
@@ -1183,8 +1181,7 @@
       },
       "extractionFormat": {
         "label": "ຮູບແບບການດຶງຂໍ້ມູນ",
-        "help": "ໃຊ້ຮູບແບບ CSV ສໍາລັບ llms ທີ່ມີພາຣາມິເຕີລຸ້ນຕໍາກ່ວາ 30b, ຮູບແບບ JSON ສໍາລັບຮຸ່ນທີ່ໃຫຍ່",
-        "placeholder": "ໃຊ້ຮູບແບບ CSV ສໍາລັບ llms ທີ່ມີພາຣາມິເຕີລຸ້ນຕໍາກ່ວາ 30b, ຮູບແບບ JSON ສໍາລັບຮຸ່ນທີ່ໃຫຍ່"
+        "help": "ໃຊ້ຮູບແບບ CSV ສໍາລັບ llms ທີ່ມີພາຣາມິເຕີລຸ້ນຕໍາກ່ວາ 30b, ຮູບແບບ JSON ສໍາລັບຮຸ່ນທີ່ໃຫຍ່"
       }
     }
   },
@@ -1419,18 +1416,15 @@
       },
       "chat": {
         "label": "ແບບຈຳລອງສົນທະນາໃໝ່",
-        "help": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງສົນທະນາໃໝ່ທີ່ສາມາດສົນທະນາກັບຜູ້ໃຊ້ ຫຼື ປະຕິບັດການອັດຕະໂນມັດໄດ້",
-        "placeholder": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງສົນທະນາໃໝ່ທີ່ສາມາດສົນທະນາກັບຜູ້ໃຊ້ ຫຼື ປະຕິບັດການອັດຕະໂນມັດໄດ້"
+        "help": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງສົນທະນາໃໝ່ທີ່ສາມາດສົນທະນາກັບຜູ້ໃຊ້ ຫຼື ປະຕິບັດການອັດຕະໂນມັດໄດ້"
       },
       "embed": {
         "label": "ແບບຈຳລອງ embedding ໃໝ່",
-        "help": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງ embedding ໃໝ່ທີ່ສາມາດດຳເນີນການຈັດດັບຄວາມໝາຍຂອງເນື້ອຫາໄດ້",
-        "placeholder": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງ embedding ໃໝ່ທີ່ສາມາດດຳເນີນການຈັດດັບຄວາມໝາຍຂອງເນື້ອຫາໄດ້"
+        "help": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມແບບຈຳລອງ embedding ໃໝ່ທີ່ສາມາດດຳເນີນການຈັດດັບຄວາມໝາຍຂອງເນື້ອຫາໄດ້"
       },
       "ranker": {
         "label": "ໂມເດວ rerank ໃໝ່",
-        "help": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມ reranker ໃໝ່",
-        "placeholder": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມ reranker ໃໝ່"
+        "help": "ເລືອກຜູ້ສະໜອງເພື່ອເພີ່ມ reranker ໃໝ່"
       },
       "NewRerankerModelConfigurationBtn": {
         "label": "ຕັ້ງຄ່າໂມເດວ reranker ໃໝ່"
@@ -2667,8 +2661,7 @@
       },
       "delegatedUser": {
         "label": "ຜູ້ໃຊ້ Google ທີ່ຈະຈໍາລອງ",
-        "help": "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້",
-        "placeholder": "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
+        "help": "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
       },
       "OK": {
         "summary": "ບັນທຶກແລ້ວສຳເລັດ",
@@ -3151,8 +3144,7 @@
       },
       "chatProfileCode": {
         "label": "ສົນທະນາກັບຖານຂໍ້ມູນຄວາມຮູ້",
-        "help": "ເລືອກໂປຣໄຟລ໌ສົນທະນາບໍລິສັດເພື່ອໂຕ້ຕອບກັບເອກະສານບໍລິສັດ (ແລະຂອງທ່ານ) ແລະ LLM",
-        "placeholder": "ເລືອກໂປຣໄຟລ໌ສົນທະນາບໍລິສັດເພື່ອໂຕ້ຕອບກັບເອກະສານບໍລິສັດ (ແລະຂອງທ່ານ) ແລະ LLM"
+        "help": "ເລືອກໂປຣໄຟລ໌ສົນທະນາບໍລິສັດເພື່ອໂຕ້ຕອບກັບເອກະສານບໍລິສັດ (ແລະຂອງທ່ານ) ແລະ LLM"
       },
       "NewChatBtn": {
         "label": "ສົນທະນາໃໝ່"
@@ -3838,13 +3830,11 @@
       },
       "delegatedUser": {
         "label": "ຜູ້ໃຊ້ Google ທີ່ຈະຈໍາລອງ",
-        "help": "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້",
-        "placeholder": "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
+        "help": "ຜູ້ໃຊ້ທີ່ຈະຖືກຈໍາລອງໂດຍ credentials ທີ່ໃຫ້ໄວ້"
       },
       "jsonContent": {
         "label": "ເນື້ອໃນ json credentials ຂອງ Google",
-        "help": "ສ້າງ Google Credentials ດ້ວຍການເຂົ້າຮ່ວມ workspace/team drives ໃນ Google Console Cloud ແລະ ກົງສໍາເນົາເນື້ອໃນໄຟລ json ມາວາງທີ່ນີ້ (https://console.cloud.google.com/).",
-        "placeholder": "ສ້າງ Google Credentials ດ້ວຍການເຂົ້າຮ່ວມ workspace/team drives ໃນ Google Console Cloud ແລະ ກົງສໍາເນົາເນື້ອໃນໄຟລ json ມາວາງທີ່ນີ້ (https://console.cloud.google.com/)."
+        "help": "ສ້າງ Google Credentials ດ້ວຍການເຂົ້າຮ່ວມ workspace/team drives ໃນ Google Console Cloud ແລະ ກົງສໍາເນົາເນື້ອໃນໄຟລ json ມາວາງທີ່ນີ້ (https://console.cloud.google.com/)."
       }
     },
     "GGoogleDriveProjectEndpoint": {

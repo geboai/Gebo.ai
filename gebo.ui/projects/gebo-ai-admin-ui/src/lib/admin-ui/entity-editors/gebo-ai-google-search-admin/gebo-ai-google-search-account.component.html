@@ -50,8 +50,8 @@
           </gebo-ai-field>
         </div>
         <div class="col-6">
-          <gebo-ai-field id="secretCode" label="Google search api token" help="Choose or insert the google search api token" [required]="true">
-            <geboai-editable-listbox-component formControlName="secretCode" placeholder="Select a token"
+          <gebo-ai-field id="secretCode" label="Google search api token" help="Choose or insert the google search api token" [required]="true" placeholder="Select a token">
+            <geboai-editable-listbox-component formControlName="secretCode"
               [required]="true" [optionsObservable]="identitiesObservable"
               [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
             </geboai-editable-listbox-component>

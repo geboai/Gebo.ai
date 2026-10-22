@@ -54,7 +54,7 @@
     <!-- CHAT BODY -->
     <div #chatBody class="gebo-ai-reusable-chat__interaction">
       @if(!interactions.length) {
-        <div class="gebo-ai-reusable-chat__interaction-empty">
+        <div id="NoInteractionsYet" class="gebo-ai-reusable-chat__interaction-empty" gebo-ai-text>
           No interactions yet. Start the conversation!
         </div>
       }
@@ -72,9 +72,9 @@
         @if (interaction.request.userUploadedContents?.length) {
           <div class="gebo-ai-reusable-chat__interaction-item">
             <span class="gebo-ai-reusable-chat__interaction-item-icon">
-              <i class="pi pi-paperclip" id="UploadedDocs"></i>
+              <i class="pi pi-paperclip"></i>
             </span>
-            <span class="gebo-ai-reusable-chat__interaction-item-title">Uploaded docs</span>
+            <span id="UploadedDocs" class="gebo-ai-reusable-chat__interaction-item-title" gebo-ai-text>Uploaded docs</span>
 
             @for (uploadedContent of interaction.request.userUploadedContents; track uploadedContent.code) {
               @if(uploadedContent) {
@@ -193,7 +193,7 @@
             <span class="gebo-ai-reusable-chat__interaction-item-icon">
               <i class="pi pi-paperclip" id="FoundDocs"></i>
             </span>
-            <span class="gebo-ai-reusable-chat__interaction-item-title">Found docs</span>
+            <span id="FoundRelatedDocs" class="gebo-ai-reusable-chat__interaction-item-title" gebo-ai-text>Found docs</span>
 
             @for (document of getDocs(interaction); track document.uuid; let i = $index) {
               @if(document && (isInteractionDocsExpanded(interaction.request.id) || i < maxDisplayedDocs)) {
@@ -216,7 +216,7 @@
             <span class="gebo-ai-reusable-chat__interaction-item-icon">
               <i class="pi pi-microchip" id="GeneratedResources"></i>
             </span>
-            <span class="gebo-ai-reusable-chat__interaction-item-title">AI generated files</span>
+            <span id="GeneratedResourcesCtl" class="gebo-ai-reusable-chat__interaction-item-title" gebo-ai-text>AI generated files</span>
 
             @for (generatedFiles of interaction.response?.generatedResources; track generatedFiles.code) {
               <llm-generated-document-ref [ref]="generatedFiles"></llm-generated-document-ref>

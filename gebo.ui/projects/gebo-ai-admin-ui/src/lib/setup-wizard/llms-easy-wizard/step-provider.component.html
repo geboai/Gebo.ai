@@ -11,10 +11,10 @@
 <div class="grid" [formGroup]="formGroup">
   <div class="col-12 md:col-6">
     <gebo-ai-field id="ProviderChoice" label="Choose your large language model provider" [required]="true"
-      help="Choose the provider whose models you want to configure in this run">
+      help="Choose the provider whose models you want to configure in this run" placeholder="Select a provider">
       <p-select [options]="vendors" formControlName="vendorId" optionLabel="parentModel.name"
         optionValue="parentModel.vendorId" [filter]="true" filterBy="parentModel.name"
-        placeholder="Select a provider" gebo-ai-field-element styleClass="w-full"></p-select>
+        gebo-ai-field-element styleClass="w-full"></p-select>
     </gebo-ai-field>
   </div>
 

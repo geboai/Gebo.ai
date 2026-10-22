@@ -76,10 +76,9 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                      <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+                      <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
                         <geboai-editable-listbox-component
                           formControlName="parentProjectCode"
-                          placeholder="Select a project"
                           [required]="true"
                           [optionsObservable]="projectsObservable"
                           [readonly]="cantModifyProject"

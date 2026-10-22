@@ -58,10 +58,10 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="contentManagementSystemType" label="Git driver" help="Git driver for cloning/pull of repos" [required]="true">
+                  <gebo-ai-field id="contentManagementSystemType" label="Git driver" help="Git driver for cloning/pull of repos" [required]="true" placeholder="Select a Git driver">
                     <geboai-editable-listbox-component id="contentManagementSystemType"
                       formControlName="contentManagementSystemType"
-                      [readonly]="cantModifyGitSystemReference" placeholder="Select a Git driver"
+                      [readonly]="cantModifyGitSystemReference"
                       class="col-12 required"
                       [optionsObservable]="contentManagementSystemTypeObservable"
                       gebo-ai-field-element>
@@ -87,9 +87,9 @@
                     </div>
                     @if (publicAccess===false && mode==='EDIT') {
                       <div class="col-6">
-                        <gebo-ai-field id="defaultIdentityCode" label="Default identity used" help="Select the default identity to do clone/checkout on the system" [required]="publicAccess===false  && mode==='EDIT'">
+                        <gebo-ai-field id="defaultIdentityCode" label="Default identity used" help="Select the default identity to do clone/checkout on the system" [required]="publicAccess===false  && mode==='EDIT'" placeholder="Select an identity">
                           <geboai-editable-listbox-component formControlName="defaultIdentityCode"
-                            id="defaultIdentityCode" placeholder="Select an identity"
+                            id="defaultIdentityCode"
                             [optionsObservable]="identitiesObservable"
                             gebo-ai-field-element>
                           </geboai-editable-listbox-component>

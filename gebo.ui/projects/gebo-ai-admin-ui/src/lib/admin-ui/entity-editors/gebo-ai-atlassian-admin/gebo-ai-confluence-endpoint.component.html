@@ -77,11 +77,10 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                      <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
+                      <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
                         <geboai-editable-listbox-component
                           id="parentProjectCode"
                           formControlName="parentProjectCode"
-                          placeholder="Select a project"
                           [required]="true"
                           [optionsObservable]="projectsObservable"
                           [readonly]="cantModifyProject"
@@ -91,12 +90,11 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                      <gebo-ai-field id="confluenceSystemCode" label="Confluence system" help="Already configured confluence system reference." [required]="true">
+                      <gebo-ai-field id="confluenceSystemCode" label="Confluence system" help="Already configured confluence system reference." [required]="true" placeholder="Select a confluence server">
                         <geboai-editable-listbox-component
                           id="confluenceSystemCode"
                           formControlName="confluenceSystemCode"
                           [required]="true"
-                          placeholder="Select a confluence server"
                           [optionsObservable]="confluenceServersObservable"
                           [readonly]="mode==='EDIT'"
                           [createNewRecordRequest]="newConfluenceServerRequest"
@@ -139,7 +137,6 @@
                           <textarea
                             id="catalogingCriteria"
                             formControlName="catalogingCriteria"
-                            cols="200"
                             rows="2"
                             gebo-ai-field-element
                             >

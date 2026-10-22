@@ -19,11 +19,10 @@
         <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
         <div class="grid">
             <div class="col-12">
-                <gebo-ai-field id="modelCode" label="Chat model to use" [required]="true" help="Choose the chat model you want to ask the prompt template generation">
+                <gebo-ai-field id="modelCode" label="Chat model to use" [required]="true" help="Choose the chat model you want to ask the prompt template generation" placeholder="Select a chat model">
                     <geboai-editable-listbox-component
                         id="modelCode"
                         formControlName="modelCode"
-                        placeholder="Select a chat model"
                         [data]="chatModels"
                         [required]="true"
                         gebo-ai-field-element

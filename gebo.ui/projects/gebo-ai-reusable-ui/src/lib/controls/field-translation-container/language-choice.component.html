@@ -1,5 +1,5 @@
 <span [formGroup]="formGroup">
-  <p-select [options]="choosableLanguages" formControlName="langCode" placeholder="Choose Language" optionLabel="description" optionValue="langCode"
+  <p-select [options]="choosableLanguages" formControlName="langCode" [placeholder]="placeholder" optionLabel="description" optionValue="langCode"
     class="w-full md:w-56">
     <ng-template #selectedItem let-selectedOption>
       @if (selectedOption) {
