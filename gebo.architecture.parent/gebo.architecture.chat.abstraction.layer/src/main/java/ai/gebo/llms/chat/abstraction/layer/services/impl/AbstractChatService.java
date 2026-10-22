@@ -9,7 +9,6 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -69,7 +68,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
-import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -526,14 +524,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			GeboChatMessageEnvelope<GeboChatResponse> finalEnvelope = new GeboChatMessageEnvelope<GeboChatResponse>();
 			finalEnvelope.setContent(response); // Use the accumulated text
 			finalEnvelope.setLastMessage(true);
-			try {
-
-				this.chatSessionLifecycleService.endRequest(request, response);
-			} catch (Throwable th) {
-				LOGGER.error("Error saving user context", th);
-			} finally {
-				LLMtInteractionContextThreadLocal.Context.remove();
-			}
+			// the request is not ended here: whoever streams it (the pipelines executor, or
+			// the direct streamChat(request) entry points) ends it as this message passes
+			LLMtInteractionContextThreadLocal.Context.remove();
 			return finalEnvelope;
 		});
 		Flux<GeboChatMessageEnvelope> responseFlux = startFlux.concatWith(bodyFlux).concatWith(cutFlux)
@@ -541,13 +534,6 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				.concatWith(heldFlux)
 				.concatWith(trailingFlux)
 				.concatWithValues(GeboChatMessageEnvelope.FINAL_MESSAGE);
-		responseFlux = responseFlux.doOnComplete(() -> {
-			try {
-				this.chatSessionLifecycleService.chatRequestCompleted(request, configurableChatModel);
-			} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
-				LOGGER.error("Error closing response flux with chatSessionLifecycle code", e);
-			}
-		}).doFinally(signal -> this.chatSessionLifecycleService.releaseRequest(request));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End composeFlux(....)");
 		}

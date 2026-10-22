@@ -8,7 +8,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -39,7 +38,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
@@ -80,7 +78,6 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 	private final IGPromptConfigDao promptsDao;
 	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	private final IGChatStorageAreaService chatStorageAreaService;
-	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 
 	@Override
 	public StepExecutorType getExecutorType() {
@@ -130,7 +127,6 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 			IOException {
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		final GeboChatResponse response = runtimeData.getChatResponse();
-		final AtomicBoolean ended = new AtomicBoolean(false);
 		sinkUIEmitter.notifyUser("generatingImage", "Generating the requested image", "pi pi-image", 3000l,
 				NotificationType.INFO);
 
@@ -152,14 +148,9 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 				resourcesEnvelope.setLastMessage(false);
 				envelopes.add(resourcesEnvelope);
 				envelopes.add(new GeboChatMessageEnvelope(response.getQueryResponse()));
+				// the pipelines executor saves the interaction as this last message passes
 				GeboChatMessageEnvelope lastEnvelope = new GeboChatMessageEnvelope(response);
 				lastEnvelope.setLastMessage(true);
-				// saved before the last message leaves: the client asks for the chat title
-				// as soon as it receives it, and a title written from a session saved
-				// without the answer overwrote it
-				if (ended.compareAndSet(false, true)) {
-					endRequest(runtimeData, response);
-				}
 				envelopes.add(lastEnvelope);
 				envelopes.add(GeboChatMessageEnvelope.FINAL_MESSAGE);
 				return Flux.fromIterable(envelopes);
@@ -170,28 +161,7 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 			LOGGER.error("Error while streaming image generation response", exc);
 			return Flux.just(new GeboChatMessageEnvelope(
 					GUserMessage.errorMessage("Error while streaming image generation response", exc)));
-		}).doOnComplete(() -> {
-			runAs.doAs(() -> {
-				if (ended.compareAndSet(false, true)) {
-					endRequest(runtimeData, response);
-				}
-				try {
-					this.chatSessionLifecycleService
-							.chatRequestCompleted(runtimeData.getRequestResources().getCurrentRequest(), chatModel);
-				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
-					LOGGER.error("Error closing image generation response flux with chatSessionLifecycle code", e);
-				}
-			});
 		});
-	}
-
-	private void endRequest(ChatPipelineExecutionRuntimeData runtimeData, GeboChatResponse response) {
-		try {
-			this.chatSessionLifecycleService.endRequest(runtimeData.getRequestResources().getCurrentRequest(),
-					response);
-		} catch (Throwable th) {
-			LOGGER.error("Error saving user context", th);
-		}
 	}
 
 	private void generateAndAttachImage(ChatPipelineExecutionRuntimeData runtimeData, ISinkUIEmitter sinkUIEmitter,

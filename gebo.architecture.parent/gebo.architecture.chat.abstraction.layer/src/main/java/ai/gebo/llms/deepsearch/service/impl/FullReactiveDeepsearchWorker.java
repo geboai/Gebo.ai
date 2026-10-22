@@ -3,7 +3,6 @@ package ai.gebo.llms.deepsearch.service.impl;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -43,7 +42,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.FoldOutcome;
@@ -94,7 +92,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 	private final IGPromptConfigDao promptsDao;
 	private final IGeboThreadManager threadManager;
 	private final IGInternalKnlowledgeBaseRagDeepSearchService internalKnowledgeBaseDeepSearchService;
-	private final IGChatSessionLifeCycleService sessionLifecycleService;
 	private final IGDeepSearchConfigProvider deepSearchConfigProvider;
 	protected final IDocumentsChunkService chunkingService;
 	// the one deep search map/reduce, the deep search tools' too
@@ -108,7 +105,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			IGReactiveDeepSearchDataSourceServiceRepositoryPattern deepSearchDataSourcesRepositoryPattern,
 			IGReactiveDynamicDataSourceServicesProvider dataSourcesProvider,
 			IGReactiveEnabledDeepSearchDataSourceLookupService enabledDataSourcesLookupService,
-			IGChatSessionLifeCycleService sessionLifecycleService, IDocumentsChunkService chunkingService,
+			IDocumentsChunkService chunkingService,
 			IGDeepSearchConfigProvider deepSearchConfigProvider, DeepSearchAnalysis analysis) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
 		this.analysis = analysis;
@@ -118,7 +115,6 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		this.threadManager = threadManager;
 		this.internalKnowledgeBaseDeepSearchService = internalKnowledgeBaseDeepSearchService;
 		this.deepSearchConfigProvider = deepSearchConfigProvider;
-		this.sessionLifecycleService = sessionLifecycleService;
 		this.chunkingService = chunkingService;
 
 	}
@@ -523,26 +519,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 					docsMap.put(code, new GResponseDocumentRef(x));
 				});
 				response.setDocumentsRef(new ArrayList<>(docsMap.values()));
-				try {
-					sessionLifecycleService.endRequest(request, response);
-				} catch (Throwable e) {
-					LOGGER.error("Error ending request", e);
-				}
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 				envelope.setLastMessage(true);
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
 			});
 		});
+		// the request is ended by the pipelines executor as the last message passes
 		Flux<GeboChatMessageEnvelope> finalFlux = Flux.concat(intermediateStreamingFlux, finalMessages)
-				.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
-					runAs.doAs(() -> {
-						try {
-							sessionLifecycleService.chatRequestCompleted(request, chatModel);
-						} catch (Throwable e) {
-							LOGGER.error("Error completing request", e);
-						}
-					});
-				})
+				.publishOn(threadManager.getScheduler())
 				// the chunking session ends however the search ends: completed, failed or cancelled
 				.doFinally(signal -> runAs.doAs(() -> disposeChunkingSession(chunkSessionId)));
 
@@ -631,26 +615,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				response.setQueryResponse(cumulative.toString());
 				ArrayList docs = new ArrayList<>(docrefs.values());
 				response.setDocumentsRef(docs);
-				try {
-					sessionLifecycleService.endRequest(request, response);
-				} catch (Throwable e) {
-					LOGGER.error("Error ending request", e);
-				}
 				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(response);
 				envelope.setLastMessage(true);
 				return Flux.fromIterable(List.of(envelope, GeboChatMessageEnvelope.FINAL_MESSAGE));
 			});
 		});
+		// the request is ended by the pipelines executor as the last message passes
 		Flux<GeboChatMessageEnvelope> finalFlux = Flux.concat(intermediateStreamingFlux, finalMessages)
-				.publishOn(threadManager.getScheduler()).doOnComplete(() -> {
-					runAs.doAs(() -> {
-						try {
-							sessionLifecycleService.chatRequestCompleted(request, chatModel);
-						} catch (Throwable e) {
-							LOGGER.error("Error completing request", e);
-						}
-					});
-				})
+				.publishOn(threadManager.getScheduler())
 				// the chunking session ends however the answer ends: completed, failed or cancelled
 				.doFinally(signal -> runAs.doAs(() -> disposeChunkingSession(chunkSessionId)));
 		return finalFlux.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));

@@ -23,6 +23,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
+import ai.gebo.llms.chat.abstraction.layer.services.ChatRequestEnding;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
@@ -255,8 +256,13 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 								.just(buildRoutingInfos(lastStepData.getRuntimeData(), streamingOutputService, response,
 										chatModel, serviceModel));
 
-						Flux<GeboChatMessageEnvelope> outputFlux = streamingOutputService
-								.execute(lastStepData.getRuntimeData(), emitter, chatModel, serviceModel);
+						// the request ends here, the same way for every route: its interaction
+						// saved as the step's last message passes, before the client gets it, or
+						// however the step's stream ends (see ChatRequestEnding)
+						Flux<GeboChatMessageEnvelope> outputFlux = ChatRequestEnding.ending(
+								streamingOutputService.execute(lastStepData.getRuntimeData(), emitter, chatModel,
+										serviceModel),
+								chatSessionLifecycleService, request, response, chatModel, runAs);
 
 						return Flux.concat(routingInfoFlux, outputFlux);
 					});
@@ -273,6 +279,9 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			}
 		}).doFinally(signalType -> {
 			emitter.complete();
+			// a request that never reached its output step (its routing failed) is released
+			// here; one that did was ended and released with its stream, and a second
+			// release is a no-op
 			this.chatSessionLifecycleService.releaseRequest(request);
 		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
 
