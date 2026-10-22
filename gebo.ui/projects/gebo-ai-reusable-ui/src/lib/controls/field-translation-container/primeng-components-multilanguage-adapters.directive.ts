@@ -309,8 +309,7 @@ export class PDropdownLabelTarget extends LabelTargetParent {
 }
 
 @Directive({
-  // element selectors are case sensitive: the templates mostly write p-multiSelect
-  selector: 'p-multiselect[gebo-ai-label], p-multiSelect[gebo-ai-label]',
+  selector: 'p-multiselect[gebo-ai-label]',
   providers: [{ provide: GEBO_MULILANGUAGE_TARGET, useExisting: PMultiSelectLabelTarget }],
   standalone: false
 })

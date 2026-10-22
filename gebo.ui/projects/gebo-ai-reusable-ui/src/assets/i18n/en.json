@@ -3979,10 +3979,10 @@
       "SupportedByLabel": { "label": "Supported by providers:" }
     },
     "LLMSEasyProviderStepComponent": {
-      "ProviderSelect": { "placeholder": "Select a provider" },
       "ProviderChoice": {
         "label": "Choose your large language model provider",
-        "help": "Choose the provider whose models you want to configure in this run"
+        "help": "Choose the provider whose models you want to configure in this run",
+        "placeholder": "Select a provider"
       },
       "ProviderWebSite": {
         "label": "Provider web site",

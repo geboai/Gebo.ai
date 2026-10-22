@@ -1,20 +1,41 @@
-import { AfterContentInit, Directive, ElementRef, Inject, Optional, Renderer2 } from '@angular/core';
+import { AfterContentInit, Directive, ElementRef, Inject, OnDestroy, Optional, Renderer2, Self } from '@angular/core';
 import { GeboAIFieldContainerComponent } from './field-container.component';
-import { NgControl, Validators } from '@angular/forms';
-import { merge, startWith } from 'rxjs';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl, Validators } from '@angular/forms';
+import { merge, startWith, Subscription } from 'rxjs';
+import { safeSet } from './primeng-components-multilanguage-adapters.directive';
 
 @Directive({
     selector: '[gebo-ai-field-element]',
     standalone: false
 })
-export class GeboAIFieldContainerDirective implements AfterContentInit {
+export class GeboAIFieldContainerDirective implements AfterContentInit, OnDestroy {
+    private localizationSubscription?: Subscription;
     constructor(
         private el: ElementRef<HTMLElement>,
 
         private renderer: Renderer2,
         @Optional() @Inject(GeboAIFieldContainerComponent) private wrapper: GeboAIFieldContainerComponent | null,
-        @Optional() private ngControl?: NgControl
+        @Optional() private ngControl?: NgControl,
+        @Optional() @Self() @Inject(NG_VALUE_ACCESSOR) private valueAccessors?: ControlValueAccessor[]
     ) { }
+
+    /**
+     * The field's placeholder goes on the element: a PrimeNG input (p-select, p-multiSelect,
+     * p-datepicker...) reads it as an input, and registers itself as the element's value
+     * accessor, so it is set on the component; a native input or textarea takes the attribute.
+     */
+    private applyPlaceholder(text: string): void {
+        const component = this.valueAccessors?.find(accessor => accessor && 'placeholder' in (accessor as object));
+        if (component) {
+            safeSet(component, "placeholder", text);
+        } else {
+            this.renderer.setAttribute(this.el.nativeElement, "placeholder", text);
+        }
+    }
+
+    ngOnDestroy(): void {
+        this.localizationSubscription?.unsubscribe();
+    }
 
     ngAfterContentInit(): void {
         if (!this.wrapper) return;
@@ -32,8 +53,14 @@ export class GeboAIFieldContainerDirective implements AfterContentInit {
 
 
         if (this.wrapper.placeholder) {
-            this.renderer.setAttribute(this.el.nativeElement, "placeholder", this.wrapper.placeholder);
+            this.applyPlaceholder(this.wrapper.internalPlaceholder || this.wrapper.placeholder);
         }
+        // the field publishes its texts in the actual language, the placeholder among them
+        this.localizationSubscription = this.wrapper.localizationSubject.subscribe(texts => {
+            if (texts?.placeholder) {
+                this.applyPlaceholder(texts.placeholder);
+            }
+        });
         if (this.ngControl) {
             const ctrl = this.ngControl.control;
             if (ctrl) {
