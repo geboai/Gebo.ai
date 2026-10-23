@@ -39,7 +39,17 @@ public enum AuthProvider {
 	// github(AuthProviderType.OAUTH2, "GitHub auth provider",
 	// false,Oauth2LoginModel.SPA),
 
-	// Authentication using Microsoft account "common" endpoints
+	// Authentication using Microsoft account "common" endpoints.
+	//
+	// NOT OFFERED when configuring a new provider, see getOauth2Providers(): the
+	// "common" endpoints do not issue tokens under a "common" issuer. Microsoft's own
+	// discovery document for them advertises
+	// issuer: https://login.microsoftonline.com/{tenantid}/v2.0, a literal template,
+	// because a real id token is signed under the issuer of the tenant the person
+	// actually belongs to. The login compares the id token's issuer with the
+	// configured one exactly, so a token from here never matches and the login always
+	// fails. microsoft_multitenant, with the organization's tenant id, is the one that
+	// works. The constant stays so that configurations saved against it still load.
 	microsoft(AuthProviderType.OAUTH2, "Microsoft Entra Id auth provider (for public cloud)", false, List.of()),
 	// Authentication using Microsoft account "multitenant" endpoints
 	microsoft_multitenant(AuthProviderType.OAUTH2,
@@ -144,7 +154,10 @@ public enum AuthProvider {
 		for (AuthProvider authProvider : values) {
 			switch (authProvider) {
 			case local:
-			case ldap: {
+			case ldap:
+			// offering this one only produced configurations that can never log anybody
+			// in, see the constant: its endpoints do not issue tokens under its issuer
+			case microsoft: {
 				continue;
 			}
 			default: {
