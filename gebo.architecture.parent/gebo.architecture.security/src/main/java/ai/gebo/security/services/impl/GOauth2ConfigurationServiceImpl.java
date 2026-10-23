@@ -115,6 +115,10 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		configuration.setConfigurationType(configurationType);
 		configuration.setProvider(authProvider);
 		configuration.setRegistrationId(uniqueId);
+		// Without this the description typed when the configuration is created is lost:
+		// it is what names the configuration in the setup list and what labels the
+		// provider's button on the login page, which would otherwise be blank.
+		configuration.setDescription(description);
 		configuration.setProviderConfig(providerConfiguration);
 		try {
 			// Store the secret content using a unique identifier
@@ -159,6 +163,8 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		configuration.setConfigurationType(configurationType);
 		configuration.setProvider(authProvider);
 		configuration.setRegistrationId(uniqueId);
+		// See the generic insert above: the description has to be kept here too.
+		configuration.setDescription(description);
 		try {
 			// Store the secret content using a unique identifier
 			String secretId = secretService.storeSecret(oauth2ClientContent,

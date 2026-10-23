@@ -39,7 +39,17 @@ public enum AuthProvider {
 	// github(AuthProviderType.OAUTH2, "GitHub auth provider",
 	// false,Oauth2LoginModel.SPA),
 
-	// Authentication using Microsoft account "common" endpoints
+	// Authentication using Microsoft account "common" endpoints.
+	//
+	// NOT OFFERED when configuring a new provider, see getOauth2Providers(): the
+	// "common" endpoints do not issue tokens under a "common" issuer. Microsoft's own
+	// discovery document for them advertises
+	// issuer: https://login.microsoftonline.com/{tenantid}/v2.0, a literal template,
+	// because a real id token is signed under the issuer of the tenant the person
+	// actually belongs to. The login compares the id token's issuer with the
+	// configured one exactly, so a token from here never matches and the login always
+	// fails. microsoft_multitenant, with the organization's tenant id, is the one that
+	// works. The constant stays so that configurations saved against it still load.
 	microsoft(AuthProviderType.OAUTH2, "Microsoft Entra Id auth provider (for public cloud)", false, List.of()),
 	// Authentication using Microsoft account "multitenant" endpoints
 	microsoft_multitenant(AuthProviderType.OAUTH2,
@@ -58,14 +68,14 @@ public enum AuthProvider {
 	aws_identity_center(AuthProviderType.OAUTH2, "AWS IAM Identity Center (SSO) OIDC provider", true,
 			List.of(Oauth2CustomAttribute.of("instanceId", "IAM Identity Center instance id (ssoins-xxxx)"),
 					Oauth2CustomAttribute.of("region", "AWS region of the Identity Center instance"))),
-	// Authentication using a Keycloak realm (OIDC). The realm is carried in the
-	// issuer/authorization/token URIs; expose it as a custom attribute so those
-	// URIs can be templated with {realm}. serverUrl is the Keycloak base/auth-server
-	// URL, used by integrations that call the Admin REST API (it is otherwise
-	// derivable from the issuer, so it is an optional override).
+	// Authentication using a Keycloak realm (OIDC). Every endpoint of the realm hangs
+	// off the server URL, so both attributes template the URIs of the provider library
+	// entry ({serverUrl} and {realm}) and both are needed: without them the entry
+	// cannot be resolved into a client registration.
 	keycloak(AuthProviderType.OAUTH2, "Keycloak OIDC auth provider", false,
-			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm"),
-					Oauth2CustomAttribute.of("serverUrl", "Keycloak base/auth-server URL (for the Admin API)"))),
+			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm name, as in the realm's own URL"),
+					Oauth2CustomAttribute.of("serverUrl",
+							"Keycloak base URL, without a trailing slash, for example https://sso.example.com"))),
 	// Authentication using Linkedin account
 	// linkedin(AuthProviderType.OAUTH2, "Linkedin auth provider",
 	// false,Oauth2LoginModel.SPA),
@@ -144,7 +154,10 @@ public enum AuthProvider {
 		for (AuthProvider authProvider : values) {
 			switch (authProvider) {
 			case local:
-			case ldap: {
+			case ldap:
+			// offering this one only produced configurations that can never log anybody
+			// in, see the constant: its endpoints do not issue tokens under its issuer
+			case microsoft: {
 				continue;
 			}
 			default: {
