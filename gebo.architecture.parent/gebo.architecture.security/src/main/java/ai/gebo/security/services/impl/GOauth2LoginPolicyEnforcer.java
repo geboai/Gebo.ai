@@ -60,6 +60,18 @@ public class GOauth2LoginPolicyEnforcer {
 
 	private static final String RESOURCE_TYPE_USER = "user";
 
+	/**
+	 * Fills in and emits a provisioning event.
+	 *
+	 * <p>
+	 * It takes an event that is already made and never calls
+	 * {@code newSecurityEvent()} itself, because that call captures the stack it is
+	 * made from: made here, every event would name this one shared helper. Made where
+	 * the decision starts, in {@link #enforce}, the captured stack names the enforcer
+	 * and, right behind it, whichever user service was called, so an OpenID Connect
+	 * login and a plain oauth2 one can still be told apart in the audit.
+	 * </p>
+	 */
 	private void logProvisioningEvent(SecurityEvent event, String action, String username, String outcome) {
 		event.setEventType(SecurityAuditTaxonomy.EventType.USER_ADMINISTRATION);
 		event.setCategory(SecurityAuditTaxonomy.Category.USER_ADMINISTRATION);
