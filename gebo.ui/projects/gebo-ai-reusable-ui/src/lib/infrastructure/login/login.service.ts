@@ -164,7 +164,9 @@ export class LoginService {
       resetAuth();
       this.logged.next(undefined);
       this.authDataSubject.next(undefined);
-      this.router.navigate(["/", "ui", "chat"], { relativeTo: this.activatedRouter });
+      // straight to the login page: landing on the chat first made it bounce there with a
+      // "session expired" notice, misleading after a deliberate logout
+      this.router.navigate(["/", "ui", "login"], { relativeTo: this.activatedRouter });
     };
     if (getAuth()) {
       this.sessionController.logout().subscribe({ next: () => finish(), error: () => finish() });
