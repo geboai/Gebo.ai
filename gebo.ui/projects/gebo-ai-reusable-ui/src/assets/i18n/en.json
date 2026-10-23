@@ -620,7 +620,7 @@
       },
       "resourceServerAudiences": {
         "label": "Accepted audiences",
-        "help": "Which audiences a token sent to the API must carry to be accepted for this provider, separated by commas. Use the audience the provider writes into its access tokens, which is not always the Client ID: Keycloak, for one, names this application only once its client has an audience mapper. Leave it empty to accept any token this provider signed, including one issued to another of its applications.",
+        "help": "Which application a token sent to the API must be meant for to be accepted for this provider, separated by commas if more than one. The Client ID above is accepted whether the provider names it as the token's audience or as the application that requested it. For a stricter check, give the tokens an audience of their own at the provider (in Keycloak, an audience mapper on the client) and enter that instead. Leave it empty to accept any token this provider signed, including one issued to another of its applications.",
         "placeholder": "Empty: accept any token of this provider"
       },
       "authorizationUri": {

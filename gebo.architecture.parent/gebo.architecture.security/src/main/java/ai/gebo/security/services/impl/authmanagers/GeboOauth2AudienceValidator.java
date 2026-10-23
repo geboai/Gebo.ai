@@ -36,22 +36,38 @@ import org.springframework.security.oauth2.jwt.Jwt;
  * </p>
  *
  * <p>
- * Two claims are consulted, because OIDC providers disagree on where the
- * recipient lands:
+ * Three claims are consulted, because providers disagree on where they say which
+ * application a token is for:
  * <ul>
- * <li>{@code aud} - the standard audience, a list; carried by OIDC id tokens and
- * by Keycloak/Entra access tokens.</li>
- * <li>{@code client_id} - where AWS Cognito puts the recipient on its
- * <b>access</b> tokens (their {@code aud} is absent). Consulted so a Cognito
- * access token can be pinned to its app client id.</li>
+ * <li>{@code aud} - the standard audience, a list; carried by OIDC id tokens, by
+ * Entra access tokens, and by Keycloak access tokens once the client has an
+ * audience mapper.</li>
+ * <li>{@code client_id} - the application the token was issued to, where AWS
+ * Cognito puts it on its <b>access</b> tokens (their {@code aud} is absent).
+ * Consulted so a Cognito access token can be pinned to its app client id.</li>
+ * <li>{@code azp} - the same thing under Keycloak's name. A default Keycloak realm
+ * addresses a user's access token to its own account service ({@code aud:
+ * account}) and names the client only here, so without it the obvious setting,
+ * the client id, refused every token of the realm it was meant to accept.</li>
  * </ul>
- * The token passes when any of its {@code aud} values, or its {@code client_id},
- * is one of the accepted values.
+ * The token passes when any of its {@code aud} values, its {@code client_id} or
+ * its {@code azp} is one of the accepted values.
+ * </p>
+ *
+ * <p>
+ * Accepting the requesting application is what the {@code client_id} rule already
+ * did for Cognito, and it still refuses what this check exists for: a token issued
+ * to another application of the same issuer names that application. What it lets
+ * through, and a strict reading of {@code aud} would not, is a token this
+ * deployment's own client obtained for some other API. A deployment that wants the
+ * strict reading gives its tokens an audience of their own, distinct from the
+ * client id, and accepts that alone.
  * </p>
  */
 public final class GeboOauth2AudienceValidator implements OAuth2TokenValidator<Jwt> {
 
 	private static final String CLIENT_ID_CLAIM = "client_id";
+	private static final String AUTHORIZED_PARTY_CLAIM = "azp";
 
 	private final Set<String> acceptedAudiences;
 	private final OAuth2Error error;
@@ -83,6 +99,10 @@ public final class GeboOauth2AudienceValidator implements OAuth2TokenValidator<J
 		}
 		String clientId = token.getClaimAsString(CLIENT_ID_CLAIM);
 		if (clientId != null && acceptedAudiences.contains(clientId)) {
+			return OAuth2TokenValidatorResult.success();
+		}
+		String authorizedParty = token.getClaimAsString(AUTHORIZED_PARTY_CLAIM);
+		if (authorizedParty != null && acceptedAudiences.contains(authorizedParty)) {
 			return OAuth2TokenValidatorResult.success();
 		}
 		return OAuth2TokenValidatorResult.failure(error);
