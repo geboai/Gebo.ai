@@ -58,14 +58,14 @@ public enum AuthProvider {
 	aws_identity_center(AuthProviderType.OAUTH2, "AWS IAM Identity Center (SSO) OIDC provider", true,
 			List.of(Oauth2CustomAttribute.of("instanceId", "IAM Identity Center instance id (ssoins-xxxx)"),
 					Oauth2CustomAttribute.of("region", "AWS region of the Identity Center instance"))),
-	// Authentication using a Keycloak realm (OIDC). The realm is carried in the
-	// issuer/authorization/token URIs; expose it as a custom attribute so those
-	// URIs can be templated with {realm}. serverUrl is the Keycloak base/auth-server
-	// URL, used by integrations that call the Admin REST API (it is otherwise
-	// derivable from the issuer, so it is an optional override).
+	// Authentication using a Keycloak realm (OIDC). Every endpoint of the realm hangs
+	// off the server URL, so both attributes template the URIs of the provider library
+	// entry ({serverUrl} and {realm}) and both are needed: without them the entry
+	// cannot be resolved into a client registration.
 	keycloak(AuthProviderType.OAUTH2, "Keycloak OIDC auth provider", false,
-			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm"),
-					Oauth2CustomAttribute.of("serverUrl", "Keycloak base/auth-server URL (for the Admin API)"))),
+			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm name, as in the realm's own URL"),
+					Oauth2CustomAttribute.of("serverUrl",
+							"Keycloak base URL, without a trailing slash, for example https://sso.example.com"))),
 	// Authentication using Linkedin account
 	// linkedin(AuthProviderType.OAUTH2, "Linkedin auth provider",
 	// false,Oauth2LoginModel.SPA),

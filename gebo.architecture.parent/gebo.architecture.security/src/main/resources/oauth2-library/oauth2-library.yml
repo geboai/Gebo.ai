@@ -34,6 +34,20 @@ ai.gebo.oauth2.library:
       issuerUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}"
       jwkSetUri: "https://identitycenter.amazonaws.com/ssoins-{instanceId}/.well-known/jwks.json"
       userNameAttribute: email
+    # Keycloak: every endpoint lives under a realm of a server of yours, so both the
+    # server URL and the realm name are provider custom attributes. The issuer the realm
+    # puts in its tokens is exactly <serverUrl>/realms/<realm>, which is what the login
+    # compares the id token against: a serverUrl that differs from the address Keycloak
+    # is configured to publish (KC_HOSTNAME) makes the comparison fail.
+    - provider: keycloak
+      authorizationUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/auth"
+      tokenUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/token"
+      userInfoUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/userinfo"
+      issuerUri: "{serverUrl}/realms/{realm}"
+      introspectionUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/token/introspect"
+      jwkSetUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/certs"
+      userNameAttribute: email
+
     - provider: microsoft
       authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
       tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
