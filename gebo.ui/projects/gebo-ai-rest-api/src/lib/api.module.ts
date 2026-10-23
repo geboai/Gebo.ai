@@ -127,6 +127,8 @@ import { SearxngSearchConfigurationControllerService } from './api/searxngSearch
 import { SecretsControllerService } from './api/secretsController.service';
 import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
 import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
+import { SessionControllerService } from './api/sessionController.service';
+import { SessionsAdminControllerService } from './api/sessionsAdminController.service';
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
@@ -277,6 +279,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     SecretsControllerService,
     SecurityHeaderDataCompletionControllerService,
     SerpapiSearchConfigurationControllerService,
+    SessionControllerService,
+    SessionsAdminControllerService,
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,

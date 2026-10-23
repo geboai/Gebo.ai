@@ -133,5 +133,92 @@
           (changedData)="editedUserChange($event)"></gebo-ai-user-component>
         }
       </p-panel>
+      <p-panel id="SessionsListPanel" gebo-ai-label #sessionsPanel header="Active sessions">
+        <div class="grid">
+          <div class="col-12">
+            <p id="SessionsHelp" class="text-secondary mt-0" gebo-ai-text>Tokens currently in use, by user. Revoking a session refuses its tokens from the next request; revoking all the sessions of a user includes your own if you are that user.</p>
+          </div>
+          <div class="col-3">
+            <gebo-ai-field id="sessionsUsername" label="User" help="Part of the user name">
+              <input pInputText [(ngModel)]="sessionsQuery.username" [ngModelOptions]="{standalone: true}" class="w-full" gebo-ai-field-element (keyup.enter)="searchSessions()" />
+            </gebo-ai-field>
+          </div>
+          <div class="col-3">
+            <gebo-ai-field id="sessionsKind" label="Kind" help="Login sessions, API keys or external OAuth2 tokens">
+              <p-select [options]="sessionKinds" optionLabel="label" optionValue="value" [(ngModel)]="sessionsQuery.kind" [ngModelOptions]="{standalone: true}" class="w-full" gebo-ai-field-element></p-select>
+            </gebo-ai-field>
+          </div>
+          <div class="col-2">
+            <gebo-ai-field id="sessionsActiveWithin" label="Seen in the last minutes" help="Empty for any time">
+              <input pInputText type="number" min="0" [(ngModel)]="sessionsQuery.activeWithinMinutes" [ngModelOptions]="{standalone: true}" class="w-full" gebo-ai-field-element />
+            </gebo-ai-field>
+          </div>
+          <div class="col-2 flex flex-column gap-2 justify-content-end">
+            <div class="flex align-items-center gap-2"><p-checkbox [(ngModel)]="sessionsQuery.includeRevoked" [binary]="true" [ngModelOptions]="{standalone: true}"></p-checkbox><span id="SessionsIncludeRevoked" gebo-ai-text>Revoked too</span></div>
+            <div class="flex align-items-center gap-2"><p-checkbox [(ngModel)]="sessionsQuery.includeExpired" [binary]="true" [ngModelOptions]="{standalone: true}"></p-checkbox><span id="SessionsIncludeExpired" gebo-ai-text>Expired too</span></div>
+          </div>
+          <div class="col-2 flex align-items-end">
+            <p-button id="SearchSessionsBtn" gebo-ai-label [outlined]="true" label="Refresh" icon="pi pi-refresh" (onClick)="searchSessions()"></p-button>
+          </div>
+          @if (sessionsMessage) {
+            <div class="col-12"><p-message severity="info" [text]="sessionsMessage" [closable]="true" (onClose)="sessionsMessage = undefined"></p-message></div>
+          }
+          <div class="col-12">
+            <p-table [value]="sessionsPaged.content ? sessionsPaged.content : []" [tableStyle]="{ 'min-width': '60rem' }">
+              <ng-template pTemplate="header">
+                <tr>
+                  <th id="ThSessionUser" gebo-ai-text>User</th>
+                  <th id="ThSessionKind" gebo-ai-text>Kind</th>
+                  <th id="ThSessionSince" gebo-ai-text>Since</th>
+                  <th id="ThSessionLastSeen" gebo-ai-text>Last seen</th>
+                  <th id="ThSessionClient" gebo-ai-text>Address and client</th>
+                  <th id="ThSessionExpires" gebo-ai-text>Expires</th>
+                  <th id="ThSessionState" gebo-ai-text>State</th>
+                  <th></th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-session>
+                <tr>
+                  <td>{{ session.username }}</td>
+                  <td>{{ session.kind }}<br /><small class="text-secondary">{{ session.authProvider }}</small></td>
+                  <td>{{ session.firstSeen | date:'short' }}</td>
+                  <td>{{ session.lastSeen | date:'medium' }}</td>
+                  <td>{{ session.lastClientIp }}<br /><small class="text-secondary">{{ clientOf(session) }}</small></td>
+                  <td>{{ session.expiresAt | date:'short' }}</td>
+                  <td>
+                    @if (session.revoked) {
+                      <span class="text-red-500">revoked</span><br /><small class="text-secondary">{{ session.revokedBy }} {{ session.revokedAt | date:'short' }}</small>
+                    } @else {
+                      <span class="text-green-600">live</span>
+                    }
+                  </td>
+                  <td class="text-right white-space-nowrap">
+                    @if (!session.revoked) {
+                      @if (confirmingSessionCode === session.code) {
+                        <p-button id="ConfirmRevokeSessionBtn_{{session.code}}" gebo-ai-label label="Confirm" severity="danger" size="small" (onClick)="revokeSession(session)"></p-button>
+                        <p-button id="CancelRevokeSessionBtn_{{session.code}}" gebo-ai-label label="Cancel" severity="secondary" [text]="true" size="small" (onClick)="cancelRevoke()"></p-button>
+                      } @else if (confirmingUsername === session.username) {
+                        <p-button id="ConfirmRevokeUserBtn_{{session.code}}" gebo-ai-label label="Confirm all" severity="danger" size="small" (onClick)="revokeUserSessions(session.username)"></p-button>
+                        <p-button id="CancelRevokeUserBtn_{{session.code}}" gebo-ai-label label="Cancel" severity="secondary" [text]="true" size="small" (onClick)="cancelRevoke()"></p-button>
+                      } @else {
+                        <p-button id="RevokeSessionBtn_{{session.code}}" gebo-ai-label label="Revoke" severity="danger" [outlined]="true" size="small" icon="pi pi-ban" (onClick)="revokeSession(session)"></p-button>
+                        <p-button id="RevokeUserBtn_{{session.code}}" gebo-ai-label label="All of this user" severity="danger" [text]="true" size="small" (onClick)="revokeUserSessions(session.username)"></p-button>
+                      }
+                    }
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr><td id="NoSessionsText" colspan="8" class="text-center p-3" gebo-ai-text>No session matches the filters.</td></tr>
+              </ng-template>
+            </p-table>
+            @if (sessionsPaged?.content?.length) {
+              <p-paginator id="PaginatorSessions" gebo-ai-label (onPageChange)="onSessionsPageChange($event)"
+                [first]="(sessionsPage.page ?? 0) * (sessionsPage.pageSize ?? 20)" [rows]="sessionsPage.pageSize"
+                [totalRecords]="sessionsPaged?.page?.totalElements" [rowsPerPageOptions]="[10, 20, 50]" />
+            }
+          </div>
+        </div>
+      </p-panel>
       <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->
       <!-- Treated By refactory robot ROBOT-REFACTORY-PRIMENG-COMPONENTS-HTML-NODES-GEBOAI -->

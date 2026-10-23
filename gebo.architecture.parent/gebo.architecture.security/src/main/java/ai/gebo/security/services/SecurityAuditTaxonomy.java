@@ -48,6 +48,9 @@ public class SecurityAuditTaxonomy {
 		// Session / token
 		public static final String SESSION_TOKEN_RENEW = "sessionTokenRenew";
 		public static final String SESSION_HEADER_DATA_COMPLETE = "sessionHeaderDataComplete";
+		public static final String SESSION_LOGOUT = "sessionLogout";
+		public static final String SESSION_REVOKE = "sessionRevoke";
+		public static final String SESSION_REVOKE_ALL_OF_USER = "sessionRevokeAllOfUser";
 
 		// Authentication
 		public static final String AUTH_LOGIN_LOCAL = "authLoginLocal";

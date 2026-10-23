@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.6.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.architecture.security.sessions</artifactId>
+	<!--
+		The sessions store: which tokens are in use, by whom, since when and from where,
+		and their revocation. A vertical slice like gebo.architecture.security.apikey, and
+		owner-only like it: it ships to the monolith and to heimdall, the two places a
+		request enters through.
+		The security module knows nothing of it: it tells the registered
+		IGAuthenticatedTokenObserver of every token that authenticates and asks the
+		registered IGIssuedTokenRevocationChecker about every token with an id; this
+		module implements both over one Mongo collection.
+	-->
+	<dependencies>
+		<!-- LocalJwtTokenProvider (the claims of a token), the observer and checker
+		     interfaces, IGSecurityService (who revokes), the audit logger. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- DataPage, used by the admin listing. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.utils</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- IGBaseMongoDBRepository, GBaseObject. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.persistence</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+	</dependencies>
+</project>

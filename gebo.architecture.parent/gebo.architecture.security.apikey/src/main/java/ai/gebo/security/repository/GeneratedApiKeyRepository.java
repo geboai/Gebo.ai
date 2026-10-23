@@ -19,4 +19,7 @@ public interface GeneratedApiKeyRepository extends IGBaseMongoDBRepository<Gener
 
 	Page<GeneratedApiKeyInfo> findProjectedByUserCreated(String username, Pageable pageable);
 
+	/** Whether a key whose token carries this {@code jti} still exists: deleted keys are revoked. */
+	boolean existsByTokenId(String tokenId);
+
 }

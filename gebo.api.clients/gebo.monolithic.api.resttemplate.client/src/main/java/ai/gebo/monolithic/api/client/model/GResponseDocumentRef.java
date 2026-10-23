@@ -26,7 +26,7 @@ import java.util.List;
  * GResponseDocumentRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
 
 public class GResponseDocumentRef {
   /**
@@ -108,11 +108,11 @@ public class GResponseDocumentRef {
   @JsonProperty("references")
   private List<DocInternalRef> references = null;
 
-  @JsonProperty("ntotalContentTokens")
-  private Long ntotalContentTokens = null;
-
   @JsonProperty("ntokensRelevant")
   private Long ntokensRelevant = null;
+
+  @JsonProperty("ntotalContentTokens")
+  private Long ntotalContentTokens = null;
 
   @JsonProperty("nbytesRelevant")
   private Long nbytesRelevant = null;
@@ -416,24 +416,6 @@ public class GResponseDocumentRef {
     this.references = references;
   }
 
-  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
-    this.ntotalContentTokens = ntotalContentTokens;
-    return this;
-  }
-
-   /**
-   * Get ntotalContentTokens
-   * @return ntotalContentTokens
-  **/
-  @Schema(description = "")
-  public Long getNtotalContentTokens() {
-    return ntotalContentTokens;
-  }
-
-  public void setNtotalContentTokens(Long ntotalContentTokens) {
-    this.ntotalContentTokens = ntotalContentTokens;
-  }
-
   public GResponseDocumentRef ntokensRelevant(Long ntokensRelevant) {
     this.ntokensRelevant = ntokensRelevant;
     return this;
@@ -450,6 +432,24 @@ public class GResponseDocumentRef {
 
   public void setNtokensRelevant(Long ntokensRelevant) {
     this.ntokensRelevant = ntokensRelevant;
+  }
+
+  public GResponseDocumentRef ntotalContentTokens(Long ntotalContentTokens) {
+    this.ntotalContentTokens = ntotalContentTokens;
+    return this;
+  }
+
+   /**
+   * Get ntotalContentTokens
+   * @return ntotalContentTokens
+  **/
+  @Schema(description = "")
+  public Long getNtotalContentTokens() {
+    return ntotalContentTokens;
+  }
+
+  public void setNtotalContentTokens(Long ntotalContentTokens) {
+    this.ntotalContentTokens = ntotalContentTokens;
   }
 
   public GResponseDocumentRef nbytesRelevant(Long nbytesRelevant) {
@@ -514,15 +514,15 @@ public class GResponseDocumentRef {
         Objects.equals(this.nestedSearchResult, gresponseDocumentRef.nestedSearchResult) &&
         Objects.equals(this.loadPercentage, gresponseDocumentRef.loadPercentage) &&
         Objects.equals(this.references, gresponseDocumentRef.references) &&
-        Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens) &&
         Objects.equals(this.ntokensRelevant, gresponseDocumentRef.ntokensRelevant) &&
+        Objects.equals(this.ntotalContentTokens, gresponseDocumentRef.ntotalContentTokens) &&
         Objects.equals(this.nbytesRelevant, gresponseDocumentRef.nbytesRelevant) &&
         Objects.equals(this.shortCode, gresponseDocumentRef.shortCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, knowledgeBaseDocument, nestedSearchResult, loadPercentage, references, ntotalContentTokens, ntokensRelevant, nbytesRelevant, shortCode);
+    return Objects.hash(referenceType, uuid, documentCode, description, contentType, extension, knowledgeBaseCode, projectCode, geboTreatAs, geboFileTypeDescription, geboFileTypeId, name, knowledgeBaseDocument, nestedSearchResult, loadPercentage, references, ntokensRelevant, ntotalContentTokens, nbytesRelevant, shortCode);
   }
 
 
@@ -547,8 +547,8 @@ public class GResponseDocumentRef {
     sb.append("    nestedSearchResult: ").append(toIndentedString(nestedSearchResult)).append("\n");
     sb.append("    loadPercentage: ").append(toIndentedString(loadPercentage)).append("\n");
     sb.append("    references: ").append(toIndentedString(references)).append("\n");
-    sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
     sb.append("    ntokensRelevant: ").append(toIndentedString(ntokensRelevant)).append("\n");
+    sb.append("    ntotalContentTokens: ").append(toIndentedString(ntotalContentTokens)).append("\n");
     sb.append("    nbytesRelevant: ").append(toIndentedString(nbytesRelevant)).append("\n");
     sb.append("    shortCode: ").append(toIndentedString(shortCode)).append("\n");
     sb.append("}");

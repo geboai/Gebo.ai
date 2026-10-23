@@ -9,6 +9,16 @@
 
 package ai.gebo.microservices.security.client.config;
 
+import ai.gebo.security.services.IGInstallationIdProvider;
+
+import ai.gebo.security.config.GeboSecurityConfig;
+
+import ai.gebo.microservices.security.client.RestInstallationIdProvider;
+
+import org.springframework.context.annotation.Primary;
+
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -99,6 +109,22 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 	 * gebo.security.directory.mongo} instead gets its local, Mongo-backed one and this
 	 * bean backs off.
 	 */
+	/**
+	 * A microservice that does not own the installation record asks heimdall's
+	 * installation controller for it: this provider takes precedence over the
+	 * database-backed one the security module carries. Heimdall, which owns the
+	 * record, does not include this module.
+	 */
+	@Bean
+	@Primary
+	public IGInstallationIdProvider restInstallationIdProvider(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient, GeboMicroserviceUrlResolver urlResolver,
+			GeboSecurityConfig securityConfig, GeboSecurityClientProperties properties,
+			@Value("${spring.application.name:gebo-microservice}") String applicationName) {
+		return new RestInstallationIdProvider(geboSecurityClientWebClient, urlResolver, securityConfig,
+				properties.getMicroserviceId(), properties.getInstallationBasePath(), applicationName);
+	}
+
 	@Bean
 	@ConditionalOnMissingBean(IGUsersAdminService.class)
 	public IGUsersAdminService restUsersAdminService(@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient,

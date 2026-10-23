@@ -55,10 +55,9 @@ export class GeboAIA2AClientAdminComponent extends BaseEntityEditingComponent<A2
         skills: new FormControl([])
     });
 
+    /** The client speaks JSON-RPC only: REST and gRPC are refused by the backend until wired. */
     public transportTypes = [
-        { label: 'JSON-RPC', value: 'JSONRPC' },
-        { label: 'REST', value: 'REST' },
-        { label: 'gRPC', value: 'GRPC' }
+        { label: 'JSON-RPC', value: 'JSONRPC' }
     ];
 
     public authModes = [

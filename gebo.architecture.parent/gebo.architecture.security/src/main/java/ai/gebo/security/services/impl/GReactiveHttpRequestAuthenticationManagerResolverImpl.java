@@ -9,6 +9,18 @@
 
 package ai.gebo.security.services.impl;
 
+import ai.gebo.security.services.impl.authmanagers.SessionAwareReactiveAuthenticationManager;
+
+import io.jsonwebtoken.Claims;
+
+import ai.gebo.security.services.IGAuthenticatedTokenObserver;
+
+import org.springframework.beans.factory.ObjectProvider;
+
+import java.util.Map;
+
+import java.util.Collections;
+
 import java.util.Base64;
 import java.util.List;
 
@@ -80,9 +92,14 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 	private final GOauth2ResourceServerUserProvisioner provisioner;
 	private final ReactiveJwtDecoderCache reactiveJwtDecoderCache = new ReactiveJwtDecoderCache();
 
+	// The sessions store, when present: told of every local token that authenticates
+	private final List<IGAuthenticatedTokenObserver> tokenObservers;
+
 	public GReactiveHttpRequestAuthenticationManagerResolverImpl(UserDetailsService customUserDetailsService,
 			IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao, LocalJwtTokenProvider tokenProvider,
-			GOauth2ResourceServerUserProvisioner provisioner) {
+			GOauth2ResourceServerUserProvisioner provisioner,
+			ObjectProvider<IGAuthenticatedTokenObserver> tokenObservers) {
+		this.tokenObservers = tokenObservers != null ? tokenObservers.orderedStream().toList() : List.of();
 		this.customUserDetailsService = customUserDetailsService;
 		this.oauth2RuntimeConfigurationDao = oauth2RuntimeConfigurationDao;
 		this.tokenProvider = tokenProvider;
@@ -96,11 +113,14 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 			return Mono.empty();
 		switch (header.getAuthType()) {
 		case LOCAL_JWT:
-			return Mono.just(localJwtManager());
+			return Mono.just(localJwtManager(exchange));
 		case OAUTH2:
 			// Building an OAuth2 manager reads provider config (blocking DAO) and, for JWT,
 			// performs OIDC discovery; keep that off the event loop.
-			return Mono.fromCallable(() -> oauth2Manager(header)).subscribeOn(Schedulers.boundedElastic());
+			// a token of an external identity provider: listed and revocable by its hash
+			return Mono.fromCallable(() -> (ReactiveAuthenticationManager) new SessionAwareReactiveAuthenticationManager(
+					oauth2Manager(header), header.getToken(), tokenProvider, tokenObservers, clientIp(exchange),
+					userAgent(exchange), header.getAuthProviderId())).subscribeOn(Schedulers.boundedElastic());
 		default:
 			return Mono.empty();
 		}
@@ -162,19 +182,61 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 						Mono.error(new BadCredentialsException("Opaque Token not recognized by any configured provider")));
 	}
 
-	private ReactiveAuthenticationManager localJwtManager() {
+	private ReactiveAuthenticationManager localJwtManager(ServerWebExchange exchange) {
 		return authentication -> Mono.fromCallable(() -> {
 			if (authentication instanceof BearerTokenAuthenticationToken auth) {
 				String token = auth.getToken();
 				if (!tokenProvider.validateToken(token))
 					throw new BadCredentialsException("invalid local jwt value");
 				String userId = tokenProvider.getUserIdFromToken(token);
+				notifyObservers(token, exchange);
 				UserDetails userDetails = customUserDetailsService.loadUserByUsername(userId);
 				return (Authentication) new UsernamePasswordAuthenticationToken(userDetails, null,
 						userDetails.getAuthorities());
 			}
 			return authentication;
 		}).subscribeOn(Schedulers.boundedElastic());
+	}
+
+	/** The caller's address, behind a reverse proxy the first forwarded one. */
+	private static String clientIp(ServerWebExchange exchange) {
+		if (exchange == null || exchange.getRequest() == null) {
+			return null;
+		}
+		String forwarded = exchange.getRequest().getHeaders().getFirst("X-Forwarded-For");
+		if (forwarded != null && !forwarded.isBlank()) {
+			return forwarded.split(",")[0].trim();
+		}
+		return exchange.getRequest().getRemoteAddress() != null
+				? exchange.getRequest().getRemoteAddress().getAddress().getHostAddress()
+				: null;
+	}
+
+	private static String userAgent(ServerWebExchange exchange) {
+		return exchange != null && exchange.getRequest() != null
+				? exchange.getRequest().getHeaders().getFirst("User-Agent")
+				: null;
+	}
+
+	/** The sessions store learns of the token and where the request came from. */
+	private void notifyObservers(String token, ServerWebExchange exchange) {
+		if (tokenObservers.isEmpty()) {
+			return;
+		}
+		Claims claims = tokenProvider.parseClaims(token);
+		if (claims == null || claims.getId() == null) {
+			return;
+		}
+		String ip = clientIp(exchange);
+		String userAgent = userAgent(exchange);
+		Map<String, Object> readOnly = Collections.unmodifiableMap(claims);
+		for (IGAuthenticatedTokenObserver observer : tokenObservers) {
+			try {
+				observer.onAuthenticated(claims.getId(), readOnly, ip, userAgent);
+			} catch (RuntimeException e) {
+				LOGGER.warn("Token observer failed (ignored): {}", e.getMessage());
+			}
+		}
 	}
 
 	/***

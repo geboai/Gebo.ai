@@ -113,6 +113,12 @@
 			<artifactId>gebo.architecture.security.apikey</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The sessions store: live tokens and their revocation; owner-only like the keys. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security.sessions</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.fastsetup.system</artifactId>
