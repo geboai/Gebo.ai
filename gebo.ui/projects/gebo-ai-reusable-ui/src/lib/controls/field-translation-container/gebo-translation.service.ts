@@ -1,6 +1,6 @@
 import { Injectable, Optional } from "@angular/core";
-import { DEFAULT_LANGUAGE, UIExistingText, UILanguageResources } from "./text-language-resources";
-import { Observable, of, Subject, concat, map } from "rxjs";
+import { DEFAULT_LANGUAGE, GEBO_AI_LOCAL_STORAGE_LANG, UIExistingText, UILanguageResources } from "./text-language-resources";
+import { Observable, of, Subject, concat, filter, map, timeout } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
 import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions, Translation } from "primeng/api";
@@ -285,24 +285,52 @@ export class GeboAITranslationService {
         }
         if (textResource && textResource.length) {
             const observable = this.translateOnActualLanguage(textResource);
-            return observable.pipe(map(data => {
-                if (data) {
-                    const matchings = findMatchingTranlations(textResource, data);
-                    if (matchings && matchings.length) {
-                        const outOption: ToastMessageOptions = {
-                            ...option
-                        };
-                        matchings.filter(d => d.translation).forEach(t => {
-                            (outOption as any)[t.key] = t.translation;
-                        });
-                        return outOption;
+            return observable.pipe(
+                // A message raised while the page is still loading arrives before the
+                // language file does. Translated against nothing, it came out as written,
+                // in English, and the notifications keep the first answer they get, so it
+                // stayed that way even once the page was in Italian. So it waits for the
+                // file, but only in a language other than the one the texts are written
+                // in: the default language has nothing to wait for, and its resources are
+                // not always loaded through this service at all.
+                filter(data => data !== undefined || !GeboAITranslationService.awaitsTranslation()),
+                map(data => {
+                    if (data) {
+                        const matchings = findMatchingTranlations(textResource, data);
+                        if (matchings && matchings.length) {
+                            const outOption: ToastMessageOptions = {
+                                ...option
+                            };
+                            matchings.filter(d => d.translation).forEach(t => {
+                                (outOption as any)[t.key] = t.translation;
+                            });
+                            return outOption;
+                        }
                     }
-                }
-                return option;
-
-            }));
+                    return option;
+                }),
+                // and a file that never arrives must not swallow the message
+                timeout({ first: 3000, with: () => of(option) }));
         } else return of(undefined);
     }
+    /**
+     * Whether the page is in a language other than the one the texts are written in,
+     * and so has a translation to wait for. Both places the answer can come from are
+     * asked, because either may be set first while a page loads: the language this
+     * service was switched to, and the one the person chose on a previous visit.
+     */
+    private static awaitsTranslation(): boolean {
+        if (GeboAITranslationService.actualLanguage && GeboAITranslationService.actualLanguage !== DEFAULT_LANGUAGE) {
+            return true;
+        }
+        try {
+            const stored = JSON.parse(localStorage.getItem(GEBO_AI_LOCAL_STORAGE_LANG) ?? "null");
+            return !!stored?.langCode && stored.langCode !== DEFAULT_LANGUAGE;
+        } catch (e) {
+            return false;
+        }
+    }
+
     public changeActualLanguage(language: string): void {
         GeboAITranslationService.actualLanguage = language;
         this.translateService.use(language).subscribe({

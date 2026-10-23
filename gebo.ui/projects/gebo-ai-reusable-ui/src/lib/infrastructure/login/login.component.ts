@@ -29,11 +29,14 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
 import { Subscription } from "rxjs";
 import { GeboAITranslationService } from "../../controls/field-translation-container/gebo-translation.service";
 const welcomeMessage: ToastMessageOptions = { summary: "Welcome to gebo.ai", detail: "Enter your username and password to login", severity: "success" };
-const sessionExpiredMessage: ToastMessageOptions = { summary: "Session expired", detail: "Your session has expired, please log in again", severity: "warn" };
+// The ids are what the notifications translate a message by, under this component's
+// entry of the language files: without one a message stays in English whatever the
+// language of the page, and two messages without one count as the same message.
+const sessionExpiredMessage: ToastMessageOptions = { id: "SessionExpiredMessage", summary: "Session expired", detail: "Your session has expired, please log in again", severity: "warn" };
 // The provider authenticated the person; this installation did not accept them. Said
 // plainly, because the two halves are administered by different people: the account
 // exists at the provider and still has to exist here, with the same e-mail address.
-const ssoRefusedMessage: ToastMessageOptions = { summary: "Access refused", detail: "Your identity provider recognised you, but this Gebo.ai installation did not accept the login. Ask an administrator to add your account, with the e-mail address the provider knows you by.", severity: "error" };
+const ssoRefusedMessage: ToastMessageOptions = { id: "SsoRefusedMessage", summary: "Access refused", detail: "Your identity provider recognised you, but this Gebo.ai installation did not accept the login. Ask an administrator to add your account, with the e-mail address the provider knows you by.", severity: "error" };
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
   standalone: false,

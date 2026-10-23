@@ -42,11 +42,21 @@ export class AuthInterceptor implements HttpInterceptor {
       catchError((error: any, caught: Observable<HttpSentEvent | HttpHeaderResponse | HttpProgressEvent | HttpResponse<any> | HttpUserEvent<any>>) => {
         if (error instanceof HttpErrorResponse) {
           if (error.status === 401) {
+            // Only a request that carried credentials can tell a session ended. One that
+            // carried none was simply made before anybody logged in, and calling that an
+            // expired session greeted every anonymous visitor of the login page with it,
+            // and replaced whatever the login page had come to say, such as why a single
+            // sign-on was refused.
+            const hadCredentials = request.headers.has("Authorization");
             resetAuth();
             const currentUrl = this.router.url;
             const path = window.location.pathname;
             if (!currentUrl.includes('/ui/user-workflows/') && !path.includes('/ui/user-workflows/')) {
-              this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute, queryParams: { sessionExpired: true } });
+              if (hadCredentials) {
+                this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute, queryParams: { sessionExpired: true } });
+              } else if (!path.startsWith("/ui/login")) {
+                this.router.navigate(["/", "ui", "login"], { relativeTo: this.actualRoute });
+              }
             }
 
           } else if (error.status === 500) {
