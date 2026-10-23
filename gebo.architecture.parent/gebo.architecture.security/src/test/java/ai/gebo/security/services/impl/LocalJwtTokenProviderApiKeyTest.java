@@ -28,6 +28,7 @@ import ai.gebo.security.model.SecurityHeaderUtil.XAuthType;
 import ai.gebo.security.services.IGIssuedTokenRevocationChecker;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 /**
  * An API key is a local JWT marked as such, carrying the id of its record; it
@@ -81,13 +82,14 @@ class LocalJwtTokenProviderApiKeyTest {
 	}
 
 	@Test
-	void aSessionTokenIsNotAnApiKeyAndHasNoId() {
+	void aSystemTokenHasAnIdButNoSessionAndIsNotAnApiKey() {
 		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig);
 
-		String session = provider.createToken(USER, inOneHour());
+		String system = provider.createToken(USER, inOneHour());
 
-		Claims claims = claimsOf(session);
-		assertThat(claims.getId()).isNull();
+		Claims claims = claimsOf(system);
+		assertThat(claims.getId()).as("every token has an id now").isNotBlank();
+		assertThat(claims.get(LocalJwtTokenProvider.SESSION_ID_CLAIM)).isNull();
 		assertThat(LocalJwtTokenProvider.isApiKey(claims)).isFalse();
 	}
 
@@ -104,16 +106,17 @@ class LocalJwtTokenProviderApiKeyTest {
 	}
 
 	@Test
-	void aCheckerIsNotAskedAboutSessionTokens() {
+	void theCheckersAreAskedAboutEveryToken() {
 		Set<String> asked = new CopyOnWriteArraySet<>();
 		IGIssuedTokenRevocationChecker spy = (tokenId, claims) -> {
 			asked.add(tokenId);
-			return true;
+			return false;
 		};
 		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig, List.of(spy));
+		String token = provider.createToken(USER, inOneHour());
 
-		assertThat(provider.validateToken(provider.createToken(USER, inOneHour()))).isTrue();
-		assertThat(asked).isEmpty();
+		assertThat(provider.validateToken(token)).isTrue();
+		assertThat(asked).containsExactly(claimsOf(token).getId());
 	}
 
 	@Test
@@ -234,5 +237,47 @@ class LocalJwtTokenProviderApiKeyTest {
 
 		assertThat(provider.isRevoked("hash-1", claims)).isTrue();
 		assertThat(asked).containsExactly("hash-1");
+	}
+
+	@Test
+	void everyMintedTokenCarriesAnIdAndTheInstallationId() {
+		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig, List.of(), "install-A@host-a");
+
+		for (String token : List.of(provider.createToken(USER, inOneHour()),
+				provider.createApiKeyToken(USER, inOneHour(), TOKEN_ID, LocalJwtTokenProvider.API_KEY_KIND_USER),
+				provider.createToken(USER, AuthProviderType.LOCAL_JWT, AuthProvider.local, null,
+						System.currentTimeMillis() + 3_600_000L))) {
+			Claims claims = claimsOf(token);
+			assertThat(claims.getId()).isNotBlank();
+			assertThat(claims.get(LocalJwtTokenProvider.INSTALLATION_ID_CLAIM, String.class)).isEqualTo("install-A@host-a");
+			assertThat(provider.validateToken(token)).isTrue();
+		}
+	}
+
+	@Test
+	void aTokenOfTheOldShapeIsRefused() {
+		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig, List.of(), "install-A@host-a");
+		// signed with the same secret, the claims a token carried before: no id, no installation
+		String old = Jwts.builder().claim(LocalJwtTokenProvider.AUTH_TYPE_CLAIM, "LOCAL_JWT")
+				.claim(LocalJwtTokenProvider.AUTH_PROVIDER_CLAIM, "local").setSubject(USER).setIssuedAt(new Date())
+				.setExpiration(inOneHour()).signWith(SignatureAlgorithm.HS512, SECRET).compact();
+		assertThat(provider.validateToken(old)).isFalse();
+
+		String idButNoInstallation = Jwts.builder().setId("some-id").setSubject(USER).setIssuedAt(new Date())
+				.setExpiration(inOneHour()).signWith(SignatureAlgorithm.HS512, SECRET).compact();
+		assertThat(provider.validateToken(idButNoInstallation)).isFalse();
+	}
+
+	@Test
+	void aTokenOfAnotherInstallationWithTheSameSecretIsRefused() {
+		LocalJwtTokenProvider here = new LocalJwtTokenProvider(securityConfig, List.of(), "install-A@host-a");
+		LocalJwtTokenProvider elsewhere = new LocalJwtTokenProvider(securityConfig, List.of(), "install-B@host-b");
+
+		String foreign = elsewhere.createToken(USER, inOneHour());
+
+		assertThat(elsewhere.validateToken(foreign)).isTrue();
+		assertThat(here.validateToken(foreign)).as("same secret, other installation").isFalse();
+		assertThat(here.validateToken(elsewhere.createApiKeyToken(USER, inOneHour(), TOKEN_ID,
+				LocalJwtTokenProvider.API_KEY_KIND_ADMIN))).as("an API key of another installation").isFalse();
 	}
 }

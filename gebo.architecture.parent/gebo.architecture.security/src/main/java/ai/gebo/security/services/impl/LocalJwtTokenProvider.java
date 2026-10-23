@@ -36,6 +36,7 @@ import ai.gebo.security.model.AuthProviderType;
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.SecurityHeaderUtil.XAuthType;
 import ai.gebo.security.model.UserPrincipal;
+import ai.gebo.security.services.IGInstallationIdProvider;
 import ai.gebo.security.services.IGIssuedTokenRevocationChecker;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -85,6 +86,16 @@ public class LocalJwtTokenProvider {
 	 * value, which stands for its id.
 	 */
 	public static final String OAUTH2_TOKEN_CLAIM = "OAUTH2_TOKEN";
+	/**
+	 * The installation that minted the token: a local token is accepted only by
+	 * the installation whose id it carries (see {@link IGInstallationIdProvider}).
+	 */
+	public static final String INSTALLATION_ID_CLAIM = "geboInstallationId";
+	/**
+	 * The installation id of a provider built by hand, without the container (the
+	 * unit tests): what it mints, it accepts.
+	 */
+	public static final String STANDALONE_INSTALLATION_ID = "standalone-installation";
 	// Logger instance for logging events
 	private static final Logger logger = LoggerFactory.getLogger(LocalJwtTokenProvider.class);
 	public static final String TEMPORARY_OAUTH2_COOKIENAME = "GeboTemporaryAcquired";
@@ -95,6 +106,9 @@ public class LocalJwtTokenProvider {
 	// parses tokens with it), which an eager resolution would turn into a cycle.
 	private final ObjectProvider<IGIssuedTokenRevocationChecker> revocationCheckersProvider;
 	private volatile List<IGIssuedTokenRevocationChecker> revocationCheckers;
+	// The installation id, resolved lazily too (it is read from the database)
+	private final ObjectProvider<IGInstallationIdProvider> installationIdProvider;
+	private final String fixedInstallationId;
 
 	/**
 	 * Constructs a TokenProvider with specified application security properties.
@@ -111,17 +125,41 @@ public class LocalJwtTokenProvider {
 	 */
 	@Autowired
 	public LocalJwtTokenProvider(GeboSecurityConfig appProperties,
-			ObjectProvider<IGIssuedTokenRevocationChecker> revocationCheckers) {
+			ObjectProvider<IGIssuedTokenRevocationChecker> revocationCheckers,
+			ObjectProvider<IGInstallationIdProvider> installationIdProvider) {
 		this.appProperties = appProperties;
 		this.revocationCheckersProvider = revocationCheckers;
 		this.revocationCheckers = null;
+		this.installationIdProvider = installationIdProvider;
+		this.fixedInstallationId = null;
 	}
 
 	public LocalJwtTokenProvider(GeboSecurityConfig appProperties,
 			List<IGIssuedTokenRevocationChecker> revocationCheckers) {
+		this(appProperties, revocationCheckers, STANDALONE_INSTALLATION_ID);
+	}
+
+	/** A provider built by hand, minting and accepting tokens of the given installation. */
+	public LocalJwtTokenProvider(GeboSecurityConfig appProperties,
+			List<IGIssuedTokenRevocationChecker> revocationCheckers, String installationId) {
 		this.appProperties = appProperties;
 		this.revocationCheckersProvider = null;
 		this.revocationCheckers = revocationCheckers != null ? List.copyOf(revocationCheckers) : List.of();
+		this.installationIdProvider = null;
+		this.fixedInstallationId = Objects.requireNonNull(installationId, "installationId");
+	}
+
+	/** This installation's id: the fixed one of a hand-built provider, else the database's. */
+	public String installationId() {
+		if (fixedInstallationId != null) {
+			return fixedInstallationId;
+		}
+		IGInstallationIdProvider provider = installationIdProvider != null ? installationIdProvider.getIfAvailable()
+				: null;
+		if (provider == null) {
+			throw new IllegalStateException("No installation id provider: tokens can be neither minted nor accepted");
+		}
+		return provider.getInstallationId();
 	}
 
 	/** The registered checkers, resolved on first use. */
@@ -153,6 +191,7 @@ public class LocalJwtTokenProvider {
 		claims.put(AUTH_PROVIDER_CLAIM, AuthProvider.local.name());
 		// a login opens a session: its tokens are listed and revoked by it
 		claims.put(SESSION_ID_CLAIM, newSessionId());
+		claims.put(INSTALLATION_ID_CLAIM, installationId());
 		builder.addClaims(claims);
 		// Build and sign the JWT
 		return builder.setId(newTokenId()).setSubject(userPrincipal.getUsername()).setIssuedAt(new Date())
@@ -237,9 +276,10 @@ public class LocalJwtTokenProvider {
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put(AUTH_TYPE_CLAIM, AuthProviderType.LOCAL_JWT.name());
 		claims.put(AUTH_PROVIDER_CLAIM, AuthProvider.local.name());
+		claims.put(INSTALLATION_ID_CLAIM, installationId());
 		builder.addClaims(claims);
 		// Build and sign the JWT
-		return builder.setSubject(username).setIssuedAt(new Date()).setExpiration(expiration)
+		return builder.setId(newTokenId()).setSubject(username).setIssuedAt(new Date()).setExpiration(expiration)
 				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
 	}
 
@@ -263,6 +303,7 @@ public class LocalJwtTokenProvider {
 		claims.put(AUTH_PROVIDER_CLAIM, AuthProvider.local.name());
 		claims.put(API_KEY_CLAIM, Boolean.TRUE);
 		claims.put(API_KEY_KIND_CLAIM, kind);
+		claims.put(INSTALLATION_ID_CLAIM, installationId());
 		builder.addClaims(claims);
 		return builder.setId(tokenId).setSubject(username).setIssuedAt(new Date()).setExpiration(expiration)
 				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
@@ -300,6 +341,7 @@ public class LocalJwtTokenProvider {
 			claims.put(AUTH_PROVIDER_REGISTRATION_ID, registrationId);
 		if (sessionId != null)
 			claims.put(SESSION_ID_CLAIM, sessionId);
+		claims.put(INSTALLATION_ID_CLAIM, installationId());
 		builder.addClaims(claims);
 		// Build and sign the JWT
 		return builder.setId(newTokenId()).setSubject(subject).setIssuedAt(new Date()).setExpiration(expiryDate)
@@ -321,6 +363,7 @@ public class LocalJwtTokenProvider {
 		if (registrationId != null)
 			claims.put(AUTH_PROVIDER_REGISTRATION_ID, registrationId);
 		claims.put(SESSION_ID_CLAIM, newSessionId());
+		claims.put(INSTALLATION_ID_CLAIM, installationId());
 		builder.addClaims(claims);
 		// Build and sign the JWT
 		return builder.setId(newTokenId()).setSubject(principal.getEmail()).setIssuedAt(new Date())
@@ -354,15 +397,27 @@ public class LocalJwtTokenProvider {
 			// Parse JWT to validate it
 			Claims claims = Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret())
 					.parseClaimsJws(authToken).getBody();
-			// A token with an id (an API key) is accepted while nobody revoked it
+			// Only tokens of the current shape: an id of their own and this installation's id.
+			// Older tokens and tokens minted by another installation with the same secret
+			// (the shipped default one, for example) are refused.
 			String tokenId = claims.getId();
-			if (tokenId != null) {
-				Map<String, Object> readOnlyClaims = Collections.unmodifiableMap(claims);
-				for (IGIssuedTokenRevocationChecker checker : checkers()) {
-					if (checker.isRevoked(tokenId, readOnlyClaims)) {
-						logger.info("Revoked token presented (jti={}, subject={})", tokenId, claims.getSubject());
-						return false;
-					}
+			if (tokenId == null || tokenId.isBlank()) {
+				logger.info("Token without id refused (subject={}): minted before the current token shape",
+						claims.getSubject());
+				return false;
+			}
+			Object installation = claims.get(INSTALLATION_ID_CLAIM);
+			if (installation == null || !installationId().equals(installation.toString())) {
+				logger.warn("Token of another installation refused (subject={}, installation={})", claims.getSubject(),
+						installation);
+				return false;
+			}
+			// accepted while nobody revoked it
+			Map<String, Object> readOnlyClaims = Collections.unmodifiableMap(claims);
+			for (IGIssuedTokenRevocationChecker checker : checkers()) {
+				if (checker.isRevoked(tokenId, readOnlyClaims)) {
+					logger.info("Revoked token presented (jti={}, subject={})", tokenId, claims.getSubject());
+					return false;
 				}
 			}
 			return true;
@@ -376,6 +431,8 @@ public class LocalJwtTokenProvider {
 			logger.error("Unsupported JWT token", ex);
 		} catch (IllegalArgumentException ex) {
 			logger.error("JWT claims string is empty.", ex);
+		} catch (IllegalStateException ex) {
+			logger.error("Token refused: the installation id is not available ({})", ex.getMessage());
 		}
 		return false;
 	}
