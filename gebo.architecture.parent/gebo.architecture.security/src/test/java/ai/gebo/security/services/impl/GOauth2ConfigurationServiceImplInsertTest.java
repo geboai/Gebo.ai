@@ -68,19 +68,23 @@ class GOauth2ConfigurationServiceImplInsertTest {
         providerConfig.setIssuerUri("https://sso.example.com/realms/company");
 
         service.insertOauth2Configuration(providerConfig, client(), null, null, Oauth2ConfigurationType.AUTHENTICATION,
-                "Company single sign-on");
+                "Company single sign-on", java.util.List.of("gebo-ai"));
 
         org.mockito.Mockito.verify(service.repository).insert(inserted.capture());
         assertThat(inserted.getValue().getDescription()).isEqualTo("Company single sign-on");
+        // the audiences typed in the form reach the store too
+        assertThat(inserted.getValue().getResourceServerAudiences()).containsExactly("gebo-ai");
     }
 
     @Test
     void theDescriptionSurvivesTheLibraryProviderInsert() throws Exception {
         service.insertOauth2Configuration(AuthProvider.keycloak, client(), null, null,
-                Oauth2ConfigurationType.AUTHENTICATION, "Keycloak company realm");
+                Oauth2ConfigurationType.AUTHENTICATION, "Keycloak company realm", null);
 
         org.mockito.Mockito.verify(service.repository).insert(inserted.capture());
         assertThat(inserted.getValue().getDescription()).isEqualTo("Keycloak company realm");
         assertThat(inserted.getValue().getProvider()).isEqualTo(AuthProvider.keycloak);
+        // none given is none stored: any token of the provider stays accepted, as before
+        assertThat(inserted.getValue().getResourceServerAudiences()).isNull();
     }
 }

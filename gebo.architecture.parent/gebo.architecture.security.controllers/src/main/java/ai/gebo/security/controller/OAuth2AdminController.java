@@ -50,11 +50,11 @@ public class OAuth2AdminController {
 			}
 			registrationId = oauth2ConfiguratoinService.insertOauth2Configuration(data.getProviderConfiguration(),
 					data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
-					data.getConfigurationType(), data.getDescription());
+					data.getConfigurationType(), data.getDescription(), data.getResourceServerAudiences());
 		} else {
 			registrationId = oauth2ConfiguratoinService.insertOauth2Configuration(data.getAuthProvider(),
 					data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
-					data.getConfigurationType(), data.getDescription());
+					data.getConfigurationType(), data.getDescription(), data.getResourceServerAudiences());
 		}
 		Oauth2ClientRegistration registration = oauth2ConfiguratoinService
 				.findOauth2ClientRegistrationByRegistrationId(registrationId);
@@ -74,7 +74,7 @@ public class OAuth2AdminController {
 			@NotNull @Valid @RequestBody Oauth2ProviderModifiableData data) throws GeboOauth2Exception {
 		oauth2ConfiguratoinService.updateOauth2Configuration(data.getCode(), data.getProviderConfiguration(),
 				data.getOauth2ClientContent(), data.getAuthClientMethod(), data.getAuthGrantType(),
-				data.getConfigurationType(), data.getDescription());
+				data.getConfigurationType(), data.getDescription(), data.getResourceServerAudiences());
 		Oauth2ClientRegistration registration = oauth2ConfiguratoinService
 				.findOauth2ClientRegistrationByRegistrationId(data.getCode());
 		return toModifiableData(registration);
@@ -98,6 +98,7 @@ public class OAuth2AdminController {
 		data.setDescription(registration.getRuntimeConfiguration().getDescription());
 		data.setAuthProvider(registration.getRuntimeConfiguration().getProvider());
 		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());
+		data.setResourceServerAudiences(registration.getRuntimeConfiguration().getResourceServerAudiences());
 		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
 		if (data.getAuthProvider() != null && data.getAuthProvider() == AuthProvider.oauth2_generic) {
 			data.setProviderConfiguration(registration.getRuntimeConfiguration().getProviderConfig());

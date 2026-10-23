@@ -105,6 +105,17 @@
             </geboai-editable-listbox-component>
           </gebo-ai-field>
         </div>
+        @if (readonly!==true && currentConfigurationType==='AUTHENTICATION') {
+          <div class="col-12">
+            <gebo-ai-field id="resourceServerAudiences" label="Accepted audiences"
+              help="Which audiences a token sent to the API may carry to be accepted for this provider, separated by commas: usually the Client ID above, or the identifier the provider gives this application. Leave it empty to accept any token this provider signed, including one issued to another of its applications."
+              placeholder="Empty: accept any token of this provider">
+              <input pInputText id="resourceServerAudiences" class="w-full" gebo-ai-field-element
+                [ngModel]="audiencesText" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="audiencesChanged($event)" />
+            </gebo-ai-field>
+          </div>
+        }
         @if (readonly!==true) {
           <div class="col-12" formGroupName="providerConfiguration" [hidden]="currentProvider!=='oauth2_generic'">
             <p-fieldset id="Oauth2ProviderUrls" gebo-ai-label legend="OAUTH2 provider URLS">

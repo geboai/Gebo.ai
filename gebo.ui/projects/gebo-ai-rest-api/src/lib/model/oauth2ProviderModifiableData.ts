@@ -21,6 +21,7 @@ export interface Oauth2ProviderModifiableData {
     authGrantType?: Oauth2ProviderModifiableData.AuthGrantTypeEnum;
     configurationType: Oauth2ProviderModifiableData.ConfigurationTypeEnum;
     description: string;
+    resourceServerAudiences?: Array<string>;
     readOnly: boolean;
 }
 export namespace Oauth2ProviderModifiableData {
