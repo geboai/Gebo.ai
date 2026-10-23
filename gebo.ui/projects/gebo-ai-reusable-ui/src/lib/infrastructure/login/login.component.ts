@@ -30,6 +30,10 @@ import { Subscription } from "rxjs";
 import { GeboAITranslationService } from "../../controls/field-translation-container/gebo-translation.service";
 const welcomeMessage: ToastMessageOptions = { summary: "Welcome to gebo.ai", detail: "Enter your username and password to login", severity: "success" };
 const sessionExpiredMessage: ToastMessageOptions = { summary: "Session expired", detail: "Your session has expired, please log in again", severity: "warn" };
+// The provider authenticated the person; this installation did not accept them. Said
+// plainly, because the two halves are administered by different people: the account
+// exists at the provider and still has to exist here, with the same e-mail address.
+const ssoRefusedMessage: ToastMessageOptions = { summary: "Access refused", detail: "Your identity provider recognised you, but this Gebo.ai installation did not accept the login. Ask an administrator to add your account, with the e-mail address the provider knows you by.", severity: "error" };
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
   standalone: false,
@@ -126,6 +130,9 @@ export class LoginComponent implements OnInit {
     //this.userMessages = [welcomeMessage];
     if (this.activatedRoute.snapshot.queryParamMap.get("sessionExpired") === "true") {
       this.userMessages = [sessionExpiredMessage];
+    }
+    if (this.activatedRoute.snapshot.queryParamMap.get("ssoRefused") === "true") {
+      this.userMessages = [ssoRefusedMessage];
     }
     this.loginService.loginActivated.next(true);
 

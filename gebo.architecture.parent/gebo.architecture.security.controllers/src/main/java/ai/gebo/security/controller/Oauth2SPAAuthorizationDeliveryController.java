@@ -15,6 +15,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
 import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
+import ai.gebo.security.services.impl.SafeRedirectUri;
 import ai.gebo.security.util.CookieUtils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,13 +43,20 @@ public class Oauth2SPAAuthorizationDeliveryController {
 			OperationStatus<SecurityHeaderData> responseStatus = backendOauth2LoginService
 					.getAuthorizationData(cryptedId, remoteAddress);
 			response.setContentType("text/html");
+			// This page carries the session token, so nothing reaches it unescaped and it
+			// only ever sends the browser back into this installation. The address is a
+			// parameter of the request, so it used to be possible to have a login end on
+			// another site, or to close the script tag from inside the address and have
+			// the page run something of one's own choosing next to the token.
+			String safeNextUri = SafeRedirectUri.resolve(nextUri, request, "/ui/chat");
 			PrintWriter writer = response.getWriter();
 			writer.println("<html>");
 			writer.println("<script language=\"JavaScript\">");
 			writer.println("function goToSpa() {");
-			writer.println("const data=" + objectMapper.writeValueAsString(responseStatus) + ";");
+			writer.println("const data=" + SafeRedirectUri.forScriptJson(objectMapper.writeValueAsString(responseStatus))
+					+ ";");
 			writer.println("sessionStorage.setItem(\"RESPONSE_STATUS\",JSON.stringify(data));");
-			writer.println("document.location=\"" + nextUri + "\";");
+			writer.println("document.location=\"" + SafeRedirectUri.forScriptString(safeNextUri) + "\";");
 			writer.println("}");
 			writer.println("</script>");
 			writer.println("<body onload=\"goToSpa();\" ></body>");

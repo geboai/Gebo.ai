@@ -52,7 +52,9 @@ public class GOAuth2AuthenticationSuccessHandler implements IGOAuth2Authenticati
 				try {
 					String nextUri = backendOauth2LoginSpaSupportService.oauth2LoginSuccess(loginAttemptCryptedId,
 							remoteAddress, principal);
-					response.sendRedirect(nextUri);
+					// the address was a parameter of whatever started this login, so it is
+					// only followed when it leads back here
+					response.sendRedirect(SafeRedirectUri.resolve(nextUri, request, "/ui/chat"));
 				} catch (BackendOauth2LoginSPASupportException | GeboCryptSecretException e) {
 					throw new RuntimeException("Exception in IGBackendOauth2LoginSPASupportService", e);
 				}
