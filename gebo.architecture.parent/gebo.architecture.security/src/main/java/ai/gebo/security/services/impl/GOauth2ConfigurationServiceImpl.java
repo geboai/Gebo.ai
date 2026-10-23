@@ -88,11 +88,11 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType, @NotNull Oauth2ConfigurationType configurationType,
-			String description) throws GeboOauth2Exception {
+			String description, List<String> resourceServerAudiences) throws GeboOauth2Exception {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
 			String id = insertOauth2ConfigurationInternal(providerConfiguration, oauth2ClientContent, authClientMethod,
-					authGrantType, configurationType, description);
+					authGrantType, configurationType, description, resourceServerAudiences);
 			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_INSERT, id,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
 			return id;
@@ -106,7 +106,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	private String insertOauth2ConfigurationInternal(Oauth2ProviderConfig providerConfiguration,
 			GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType,
-			String description) throws GeboOauth2Exception {
+			String description, List<String> resourceServerAudiences) throws GeboOauth2Exception {
 		AuthProvider authProvider = AuthProvider.oauth2_generic;
 		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
 		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
@@ -115,6 +115,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		configuration.setConfigurationType(configurationType);
 		configuration.setProvider(authProvider);
 		configuration.setRegistrationId(uniqueId);
+		configuration.setResourceServerAudiences(resourceServerAudiences);
 		configuration.setProviderConfig(providerConfiguration);
 		try {
 			// Store the secret content using a unique identifier
@@ -132,11 +133,12 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	@Override
 	public String insertOauth2Configuration(AuthProvider authProvider, GeboOauth2SecretContent oauth2ClientContent,
 			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
-			Oauth2ConfigurationType configurationType, String description) throws GeboOauth2Exception {
+			Oauth2ConfigurationType configurationType, String description, List<String> resourceServerAudiences)
+			throws GeboOauth2Exception {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
 			String id = insertOauth2ConfigurationInternal(authProvider, oauth2ClientContent, authClientMethod,
-					authGrantType, configurationType, description);
+					authGrantType, configurationType, description, resourceServerAudiences);
 			logOauth2ConfigEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_CLIENT_CONFIG_INSERT, id,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
 			return id;
@@ -149,8 +151,8 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 
 	private String insertOauth2ConfigurationInternal(AuthProvider authProvider,
 			GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
-			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description)
-			throws GeboOauth2Exception {
+			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description,
+			List<String> resourceServerAudiences) throws GeboOauth2Exception {
 
 		String uniqueId = authProvider.name() + "-" + UUID.randomUUID().toString();
 		Oauth2RuntimeConfiguration configuration = new Oauth2RuntimeConfiguration();
@@ -159,6 +161,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 		configuration.setConfigurationType(configurationType);
 		configuration.setProvider(authProvider);
 		configuration.setRegistrationId(uniqueId);
+		configuration.setResourceServerAudiences(resourceServerAudiences);
 		try {
 			// Store the secret content using a unique identifier
 			String secretId = secretService.storeSecret(oauth2ClientContent,
@@ -330,8 +333,8 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 	@Override
 	public void updateOauth2Configuration(String registrationId, Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
-			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description)
-			throws GeboOauth2Exception {
+			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description,
+			List<String> resourceServerAudiences) throws GeboOauth2Exception {
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		try {
 			Oauth2RuntimeConfiguration data = repository.findByCode(registrationId);
@@ -346,6 +349,7 @@ public class GOauth2ConfigurationServiceImpl implements IGOauth2ConfigurationSer
 			data.setConfigurationType(configurationType);
 			data.setClientAuthMethod(authClientMethod);
 			data.setAuthGrantType(authGrantType);
+			data.setResourceServerAudiences(resourceServerAudiences);
 			repository.save(data);
 			try {
 				SecretInfo info = secretService.getSecretInfoById(data.getClientSecretId());

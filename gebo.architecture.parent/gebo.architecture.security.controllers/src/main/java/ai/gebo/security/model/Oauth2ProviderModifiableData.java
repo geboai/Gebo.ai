@@ -24,6 +24,14 @@ public class Oauth2ProviderModifiableData {
 	private @NotNull Oauth2ConfigurationType configurationType;
 	private @NotNull String description;
 
+	/**
+	 * Which audiences a token presented to the api may carry to be accepted for this
+	 * configuration, usually the client id of this registration. Empty accepts any
+	 * token the provider signed, including one issued to a different client of the
+	 * same provider, which is the behaviour of an installation that never set this.
+	 */
+	private List<String> resourceServerAudiences = null;
+
 	@NotNull
 	private Boolean readOnly = false;
 }

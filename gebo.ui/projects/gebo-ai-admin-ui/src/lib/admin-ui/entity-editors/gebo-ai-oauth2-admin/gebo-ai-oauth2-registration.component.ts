@@ -37,12 +37,16 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
         authClientMethod: new FormControl(),
         authGrantType: new FormControl(),
         configurationType: new FormControl(),
+        resourceServerAudiences: new FormControl(),
         description: new FormControl(),
         readOnly: new FormControl()
     });
     protected redirectUrls: string[] = [];
     protected refererUrls: string[] = [];
     protected currentProvider?: AuthProviderDto.ProviderEnum;
+    protected currentConfigurationType?: Oauth2ProviderModifiableData.ConfigurationTypeEnum;
+    /** The accepted audiences as typed, one line of comma separated values. */
+    protected audiencesText: string = "";
     @Input() oauth2ChoosableScopes: { code: string, description: string }[] = [];
     @Input() oauth2MandatoryScopes: { code: string, description: string }[] = [];
     protected providers: {
@@ -72,6 +76,9 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
 
 
             }
+            // audiences are checked only when a token is presented to the API, which is
+            // what an authentication configuration is for
+            this.currentConfigurationType = value.configurationType;
         });
     }
     protected override onNewData(actualValue: Oauth2ProviderModifiableData): void {
@@ -80,13 +87,22 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
             detail: "Oauth2 client registration data will be crypted inside the database, pay attention on handling it, a misconfiguration can leave your system on being unusable from some users",
             severity: "warning"
         }];
+        this.audiencesText = "";
         actualValue.readOnly = false;
         this.formGroup.controls["readOnly"].setValue(false);
     }
+    /** Keeps the control and the line the administrator types in step. */
+    protected audiencesChanged(text: string): void {
+        this.audiencesText = text;
+        const audiences = (text ?? "").split(",").map(x => x.trim()).filter(x => x.length > 0);
+        this.formGroup.controls["resourceServerAudiences"].setValue(audiences.length ? audiences : null);
+    }
+
     protected cat(base: string, relative: string, id?: string): string {
         return base + (id ? relative.replaceAll("{registrationId}", id) : relative);
     }
     protected override onLoadedPersistentData(actualValue: Oauth2ProviderModifiableData): void {
+        this.audiencesText = (actualValue.resourceServerAudiences ?? []).join(", ");
         const registrationId = actualValue.code;
         const baseUIPath = window.document.location.origin;
         this.redirectUrls = [...frontendRedirectRelativeUris.map(x => this.cat(baseUIPath, x, registrationId)), ...backendRedirectRelativeUris.map(x => this.cat(this.basePath, x, registrationId))];

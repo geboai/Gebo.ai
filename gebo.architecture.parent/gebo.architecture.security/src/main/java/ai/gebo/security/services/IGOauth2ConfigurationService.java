@@ -43,7 +43,8 @@ public interface IGOauth2ConfigurationService {
 	 */
 	public String insertOauth2Configuration(AuthProvider authProvider, GeboOauth2SecretContent oauth2ClientContent,
 			Oauth2ClientAuthMethod authClientMethod, Oauth2AuthorizationGrantType authGrantType,
-			Oauth2ConfigurationType configurationType, String description) throws GeboOauth2Exception;
+			Oauth2ConfigurationType configurationType, String description, List<String> resourceServerAudiences)
+			throws GeboOauth2Exception;
 
 	/**
 	 * Store OAuth2 configuration with specified parameters, using a specific
@@ -61,7 +62,7 @@ public interface IGOauth2ConfigurationService {
 	public String insertOauth2Configuration(@NotNull @Valid Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
 			Oauth2AuthorizationGrantType authGrantType, @NotNull @NotEmpty Oauth2ConfigurationType configurationType,
-			String description) throws GeboOauth2Exception;
+			String description, List<String> resourceServerAudiences) throws GeboOauth2Exception;
 
 	/**
 	 * Delete the OAuth2 configuration by its ID.
@@ -114,7 +115,7 @@ public interface IGOauth2ConfigurationService {
 
 	public void updateOauth2Configuration(String registrationId, Oauth2ProviderConfig providerConfiguration,
 			@NotNull @Valid GeboOauth2SecretContent oauth2ClientContent, Oauth2ClientAuthMethod authClientMethod,
-			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description)
-			throws GeboOauth2Exception;
+			Oauth2AuthorizationGrantType authGrantType, Oauth2ConfigurationType configurationType, String description,
+			List<String> resourceServerAudiences) throws GeboOauth2Exception;
 
 }
