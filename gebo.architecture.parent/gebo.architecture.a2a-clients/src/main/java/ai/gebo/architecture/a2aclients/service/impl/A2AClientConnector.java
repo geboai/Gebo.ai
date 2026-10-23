@@ -409,12 +409,11 @@ public class A2AClientConnector {
 	 * chain and runs the exported network impersonating that same user.
 	 */
 	private String exchangeCurrentUserToken() {
-		if (isOauth2ResourceServerMode()) {
-			String relayed = currentResourceServerToken();
-			if (isBlank(relayed)) {
-				throw new IllegalStateException(
-						"OAuth2 resource-server mode: no bearer token in the current context to relay to the remote A2A agent");
-			}
+		// a caller that came with a token of an external identity provider: that token
+		// is relayed; a caller that logged in here (a local JWT, an API key) gets a
+		// short-lived local token minted, whatever the resource-server setting says
+		String relayed = currentResourceServerToken();
+		if (!isBlank(relayed)) {
 			return relayed;
 		}
 		UserInfos user = securityService.getCurrentUser();
@@ -426,9 +425,6 @@ public class A2AClientConnector {
 		return jwtTokenProvider.createToken(user.getUsername(), expiration);
 	}
 
-	private boolean isOauth2ResourceServerMode() {
-		return securityConfig != null && Boolean.TRUE.equals(securityConfig.getOauth2ResourceServerEnabled());
-	}
 
 	/**
 	 * Extracts the raw inbound OAuth2 token value from the current authentication.
