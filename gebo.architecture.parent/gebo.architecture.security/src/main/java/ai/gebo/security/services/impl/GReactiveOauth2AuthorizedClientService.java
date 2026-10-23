@@ -8,6 +8,8 @@
  */
 package ai.gebo.security.services.impl;
 
+import java.util.List;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientService;
@@ -16,6 +18,7 @@ import org.springframework.security.oauth2.client.registration.ReactiveClientReg
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboOauth2TokenSecretContent;
+import ai.gebo.secrets.model.SecretInfo;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import reactor.core.publisher.Mono;
 
@@ -74,7 +77,10 @@ public class GReactiveOauth2AuthorizedClientService implements ReactiveOAuth2Aut
 
             String secretId = buildSecretId(principal.getName(), client.getClientRegistration().getRegistrationId());
             try {
-                secrets.storeSecret(content, "OAuth2 token", secretId);
+                // See the servlet counterpart: one record per user and registration, filed
+                // under the id the load and the removal both look for.
+                deleteStoredTokens(secretId);
+                secrets.storeSecret(content, "OAuth2 token", secretId, secretId);
             } catch (GeboCryptSecretException e) {
                 throw new RuntimeException("Cannot store secret token", e);
             }
@@ -93,7 +99,11 @@ public class GReactiveOauth2AuthorizedClientService implements ReactiveOAuth2Aut
         String secretId = buildSecretId(principalName, registrationId);
         return Mono.fromCallable(() -> {
             try {
-                AbstractGeboSecretContent content = secrets.getSecretContentById(secretId);
+                List<SecretInfo> stored = secrets.getSecretInfoByContextCode(secretId);
+                if (stored == null || stored.isEmpty()) {
+                    return null;
+                }
+                AbstractGeboSecretContent content = secrets.getSecretContentById(stored.get(0).getCode());
                 if (content instanceof GeboOauth2TokenSecretContent tokenContent) {
                     return new OAuth2AuthorizedClient(
                             clientRegistrationRepository.findByRegistrationId(registrationId).block(), principalName,
@@ -117,11 +127,25 @@ public class GReactiveOauth2AuthorizedClientService implements ReactiveOAuth2Aut
     public Mono<Void> removeAuthorizedClient(String registrationId, String principalName) {
         return Mono.fromRunnable(() -> {
             try {
-                String secretId = buildSecretId(principalName, registrationId);
-                secrets.deleteSecret(secretId);
+                deleteStoredTokens(buildSecretId(principalName, registrationId));
             } catch (GeboCryptSecretException e) {
                 throw new RuntimeException("Token deletion failure from secrets layer", e);
             }
         });
+    }
+
+    /**
+     * Removes every record filed under this context code. The deletion used to be
+     * asked for by context code where an id was expected, so it removed nothing and
+     * the tokens stayed in the secret store.
+     */
+    private void deleteStoredTokens(String secretId) throws GeboCryptSecretException {
+        List<SecretInfo> stored = secrets.getSecretInfoByContextCode(secretId);
+        if (stored == null) {
+            return;
+        }
+        for (SecretInfo info : stored) {
+            secrets.deleteSecret(info.getCode());
+        }
     }
 }
