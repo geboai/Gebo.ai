@@ -13,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -20,6 +21,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ai.gebo.security.config.GeboSecurityConfig;
+import ai.gebo.security.model.AuthProvider;
+import ai.gebo.security.model.AuthProviderType;
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.SecurityHeaderUtil.XAuthType;
 import ai.gebo.security.services.IGIssuedTokenRevocationChecker;
@@ -151,7 +154,8 @@ class LocalJwtTokenProviderApiKeyTest {
 
 		assertThat(renewed.getToken()).isNotEqualTo(session);
 		assertThat(provider.getUserIdFromToken(renewed.getToken())).isEqualTo(USER);
-		assertThat(claimsOf(renewed.getToken()).getId()).isNull();
+		assertThat(claimsOf(renewed.getToken()).getId()).as("a token of its own").isNotBlank();
+		assertThat(LocalJwtTokenProvider.isApiKey(claimsOf(renewed.getToken()))).isFalse();
 	}
 
 	@Test
@@ -162,5 +166,73 @@ class LocalJwtTokenProviderApiKeyTest {
 		String key = provider.createApiKeyToken(USER, inOneHour(), TOKEN_ID, LocalJwtTokenProvider.API_KEY_KIND_USER);
 
 		assertThat(provider.validateToken(key)).as("a checker added later is not consulted").isTrue();
+	}
+
+	@Test
+	void aSessionTokenCarriesItsSessionAndItsOwnId() {
+		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig);
+		String first = provider.createToken(USER, AuthProviderType.LOCAL_JWT, AuthProvider.local, null,
+				System.currentTimeMillis() + 3_600_000L);
+
+		Claims claims = claimsOf(first);
+		assertThat(claims.getId()).isNotBlank();
+		assertThat(claims.get(LocalJwtTokenProvider.SESSION_ID_CLAIM, String.class)).isNotBlank();
+		assertThat(LocalJwtTokenProvider.isApiKey(claims)).isFalse();
+	}
+
+	@Test
+	void aRenewedTokenStaysInTheSessionOfTheTokenItRenews() {
+		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig);
+		String first = provider.createToken(USER, AuthProviderType.LOCAL_JWT, AuthProvider.local, null,
+				System.currentTimeMillis() + 3_600_000L);
+		String sessionId = claimsOf(first).get(LocalJwtTokenProvider.SESSION_ID_CLAIM, String.class);
+
+		SecurityHeaderData renewed = provider
+				.renew(new SecurityHeaderData(first, XAuthType.LOCAL_JWT, "local", null, false));
+
+		Claims claims = claimsOf(renewed.getToken());
+		assertThat(claims.get(LocalJwtTokenProvider.SESSION_ID_CLAIM, String.class)).isEqualTo(sessionId);
+		assertThat(claims.getId()).isNotEqualTo(claimsOf(first).getId());
+	}
+
+	@Test
+	void aRevokedSessionRefusesEveryTokenOfTheChain() {
+		Set<String> revokedSessions = new CopyOnWriteArraySet<>();
+		IGIssuedTokenRevocationChecker sessionsChecker = (tokenId, claims) -> revokedSessions
+				.contains(claims.get(LocalJwtTokenProvider.SESSION_ID_CLAIM));
+		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig, List.of(sessionsChecker));
+		String first = provider.createToken(USER, AuthProviderType.LOCAL_JWT, AuthProvider.local, null,
+				System.currentTimeMillis() + 3_600_000L);
+		String renewed = provider.renew(new SecurityHeaderData(first, XAuthType.LOCAL_JWT, "local", null, false))
+				.getToken();
+		assertThat(provider.validateToken(first)).isTrue();
+		assertThat(provider.validateToken(renewed)).isTrue();
+
+		revokedSessions.add(claimsOf(first).get(LocalJwtTokenProvider.SESSION_ID_CLAIM, String.class));
+
+		assertThat(provider.validateToken(first)).as("the login token").isFalse();
+		assertThat(provider.validateToken(renewed)).as("the token renewed from it").isFalse();
+	}
+
+	@Test
+	void anExternalTokenIsKnownByItsHash() {
+		String token = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJzb21lb25lIn0.signature";
+		assertThat(LocalJwtTokenProvider.tokenHash(token)).hasSize(64).isEqualTo(LocalJwtTokenProvider.tokenHash(token));
+		assertThat(LocalJwtTokenProvider.tokenHash(token + "x")).isNotEqualTo(LocalJwtTokenProvider.tokenHash(token));
+	}
+
+	@Test
+	void theCheckersAreAskedAboutExternalTokensToo() {
+		Set<String> asked = new CopyOnWriteArraySet<>();
+		IGIssuedTokenRevocationChecker spy = (tokenId, claims) -> {
+			asked.add(tokenId);
+			return Boolean.TRUE.equals(claims.get(LocalJwtTokenProvider.OAUTH2_TOKEN_CLAIM));
+		};
+		LocalJwtTokenProvider provider = new LocalJwtTokenProvider(securityConfig, List.of(spy));
+		Map<String, Object> claims = new java.util.HashMap<>();
+		claims.put(LocalJwtTokenProvider.OAUTH2_TOKEN_CLAIM, Boolean.TRUE);
+
+		assertThat(provider.isRevoked("hash-1", claims)).isTrue();
+		assertThat(asked).containsExactly("hash-1");
 	}
 }

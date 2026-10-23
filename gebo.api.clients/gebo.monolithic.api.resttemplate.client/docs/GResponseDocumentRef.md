@@ -19,8 +19,8 @@ Name | Type | Description | Notes
 **nestedSearchResult** | [**SearchResult**](SearchResult.md) |  |  [optional]
 **loadPercentage** | **Double** |  |  [optional]
 **references** | [**List&lt;DocInternalRef&gt;**](DocInternalRef.md) |  |  [optional]
-**ntotalContentTokens** | **Long** |  |  [optional]
 **ntokensRelevant** | **Long** |  |  [optional]
+**ntotalContentTokens** | **Long** |  |  [optional]
 **nbytesRelevant** | **Long** |  |  [optional]
 **shortCode** | **String** |  |  [optional]
 

@@ -9,6 +9,10 @@
 
 package ai.gebo.security.config;
 
+import ai.gebo.security.services.IGAuthenticatedTokenObserver;
+
+import org.springframework.beans.factory.ObjectProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -214,6 +218,8 @@ public class GeboAISecurityConfig {
 	// built lazily in @Bean methods below - the resource-server provisioner and the
 	// authentication-manager resolver - audit the OAuth2 provisioning decision too.
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+	// The sessions store, when present: the resolvers tell it of every token that authenticates
+	private final ObjectProvider<IGAuthenticatedTokenObserver> tokenObservers;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -233,7 +239,9 @@ public class GeboAISecurityConfig {
 			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
 			IGSecurityDirectory securityDirectory,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
-			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider) {
+			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider,
+			ObjectProvider<IGAuthenticatedTokenObserver> tokenObservers) {
+		this.tokenObservers = tokenObservers;
 		this.oauth2UserSyncProvider = oauth2UserSyncProvider;
 		this.securityAuditLoggerService = securityAuditLoggerService;
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
@@ -442,7 +450,7 @@ public class GeboAISecurityConfig {
 			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
 				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService, securityConfig,
-				securityDirectory, resourceServerUserProvisioner, securityAuditLoggerService);
+				securityDirectory, resourceServerUserProvisioner, securityAuditLoggerService, tokenObservers);
 	}
 
 	/**
@@ -455,7 +463,7 @@ public class GeboAISecurityConfig {
 	public GReactiveHttpRequestAuthenticationManagerResolverImpl reactiveAuthenticationManagerResolver(
 			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GReactiveHttpRequestAuthenticationManagerResolverImpl(directoryBackedUserDetailsService,
-				oauth2RuntimeConfigurationDao, tokenProvider, resourceServerUserProvisioner);
+				oauth2RuntimeConfigurationDao, tokenProvider, resourceServerUserProvisioner, tokenObservers);
 	}
 
 }

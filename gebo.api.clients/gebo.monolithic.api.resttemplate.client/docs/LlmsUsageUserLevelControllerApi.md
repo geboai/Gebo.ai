@@ -1,6 +1,6 @@
 # LlmsUsageUserLevelControllerApi
 
-All URIs are relative to *http://localhost:13999*
+All URIs are relative to *http://localhost:12998*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

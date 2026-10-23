@@ -17,7 +17,7 @@
  */
 
 import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { DataPage, EditableUser, PagedModelUserInfos, PagedModelUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { DataPage, EditableUser, GUserSession, PagedModelGUserSession, PagedModelUserInfos, PagedModelUsersGroup, SessionsAdminControllerService, SessionsQuery, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -41,7 +41,24 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     public override reloadViewedData(): void {
         this.loadUsers();
         this.loadGroups();
+        this.loadSessions();
     }
+
+    // The live sessions: tokens in use, by whom and from where, and their revocation
+    loadingSessions: boolean = false;
+    sessionsPage: DataPage = { page: 0, pageSize: 20 };
+    sessionsPaged: PagedModelGUserSession = { content: [] };
+    sessionsQuery: SessionsQuery = { username: '', activeWithinMinutes: 15, includeRevoked: false, includeExpired: false };
+    sessionKinds = [
+        { label: 'Any kind', value: undefined },
+        { label: 'Login session', value: 'SESSION' },
+        { label: 'API key', value: 'API_KEY' },
+        { label: 'External OAuth2 token', value: 'OAUTH2' }
+    ];
+    /** The session whose revocation waits for a second click, or the user whose sessions do. */
+    confirmingSessionCode?: string;
+    confirmingUsername?: string;
+    sessionsMessage?: string;
 
     // Flag indicating if users are currently being loaded
     loadingUsers: boolean = false;
@@ -81,6 +98,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
      */
     constructor(
         private geboAiUserAdminControllerService: UsersAdminControllerService,
+        private sessionsAdminService: SessionsAdminControllerService,
         private actionServices: GeboUIActionRoutingService) {
         super();
     }
@@ -91,6 +109,107 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     ngOnInit(): void {
         this.loadUsers();
         this.loadGroups();
+        this.loadSessions();
+    }
+
+    /** Reloads the sessions from the first page with the current filters. */
+    public searchSessions(): void {
+        this.sessionsPage.page = 0;
+        this.loadSessions();
+    }
+
+    public loadSessions(): void {
+        this.loadingSessions = true;
+        this.confirmingSessionCode = undefined;
+        this.confirmingUsername = undefined;
+        const query: SessionsQuery = { ...this.sessionsQuery };
+        if (!query.username) {
+            delete query.username;
+        }
+        if (!query.activeWithinMinutes) {
+            delete query.activeWithinMinutes;
+        }
+        this.sessionsAdminService.getSessionsPagedList({ page: this.sessionsPage, query }).subscribe({
+            next: (value) => {
+                this.sessionsPaged = value;
+            },
+            error: () => {
+                this.sessionsMessage = 'The sessions could not be loaded.';
+            },
+            complete: () => {
+                this.loadingSessions = false;
+            }
+        });
+    }
+
+    public onSessionsPageChange(event: PaginatorState): void {
+        this.sessionsPage.page = event.page ?? 0;
+        this.sessionsPage.pageSize = event.rows ?? 20;
+        this.loadSessions();
+    }
+
+    /** The first click asks for a confirmation, the second revokes. */
+    public revokeSession(session: GUserSession): void {
+        if (!session.code) {
+            return;
+        }
+        if (this.confirmingSessionCode !== session.code) {
+            this.confirmingSessionCode = session.code;
+            this.confirmingUsername = undefined;
+            return;
+        }
+        this.loadingSessions = true;
+        this.sessionsAdminService.revokeSession(session.code).subscribe({
+            next: () => {
+                this.sessionsMessage = `Session of ${session.username} revoked: its tokens are refused from now on.`;
+                this.loadSessions();
+            },
+            error: () => {
+                this.sessionsMessage = 'The session could not be revoked.';
+                this.loadingSessions = false;
+            }
+        });
+    }
+
+    /** The first click asks for a confirmation, the second revokes every session of the user, the administrator's own included. */
+    public revokeUserSessions(username?: string): void {
+        if (!username) {
+            return;
+        }
+        if (this.confirmingUsername !== username) {
+            this.confirmingUsername = username;
+            this.confirmingSessionCode = undefined;
+            return;
+        }
+        this.loadingSessions = true;
+        this.sessionsAdminService.revokeUserSessions(username).subscribe({
+            next: (count) => {
+                this.sessionsMessage = `${count} session(s) of ${username} revoked.`;
+                this.loadSessions();
+            },
+            error: () => {
+                this.sessionsMessage = 'The sessions could not be revoked.';
+                this.loadingSessions = false;
+            }
+        });
+    }
+
+    public cancelRevoke(): void {
+        this.confirmingSessionCode = undefined;
+        this.confirmingUsername = undefined;
+    }
+
+    /** A short form of the user agent: the browser or the client, not the whole string. */
+    public clientOf(session: GUserSession): string {
+        const ua = session.lastUserAgent || '';
+        const known = ['Edg/', 'OPR/', 'Firefox/', 'Chrome/', 'Safari/', 'curl/', 'python-requests/', 'okhttp/', 'node'];
+        for (const marker of known) {
+            const i = ua.indexOf(marker);
+            if (i >= 0) {
+                return ua.substring(i).split(' ')[0];
+            }
+        }
+        return ua.length > 40 ? ua.substring(0, 40) + '…' : ua;
     }
 
     /**

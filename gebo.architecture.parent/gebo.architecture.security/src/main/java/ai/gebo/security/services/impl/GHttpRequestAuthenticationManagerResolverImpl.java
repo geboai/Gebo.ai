@@ -1,5 +1,9 @@
 package ai.gebo.security.services.impl;
 
+import ai.gebo.security.services.IGAuthenticatedTokenObserver;
+
+import org.springframework.beans.factory.ObjectProvider;
+
 import java.util.Base64;
 import java.util.List;
 
@@ -30,6 +34,7 @@ import ai.gebo.security.services.impl.authmanagers.GOauth2ResourceServerUserProv
 import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
 import ai.gebo.security.services.impl.authmanagers.JwtDecoderCache;
 import ai.gebo.security.services.impl.authmanagers.LocalJwtAuthenticationManager;
+import ai.gebo.security.services.impl.authmanagers.SessionAwareAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.MultiOauth2ConfigJwtAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.MultiOauth2ConfigOpaqueTokenAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.SingleOauth2ConfigJwtAuthenticationManager;
@@ -56,6 +61,8 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 	// the sole provisioning path for opaque tokens (GOpaqueTokenAuthenticationConverter
 	// has none of its own).
 	private final GOauth2ResourceServerUserProvisioner provisioner;
+	// The sessions store, when present: told of every local token that authenticates
+	private final List<IGAuthenticatedTokenObserver> tokenObservers;
 	// Shared per-issuer JwtDecoder cache. The resolver is a singleton, so this cache
 	// lives for the application lifetime and is reused across all per-request managers.
 	private final JwtDecoderCache jwtDecoderCache = new JwtDecoderCache();
@@ -71,8 +78,9 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 			LocalJwtTokenProvider tokenProvider, UserDetailsService customUserDetailsService,
 			GeboSecurityConfig securityConfig, IGSecurityDirectory securityDirectory,
 			GOauth2ResourceServerUserProvisioner provisioner,
-			IGSecurityAuditLoggerService securityAuditLoggerService) {
-
+			IGSecurityAuditLoggerService securityAuditLoggerService,
+			ObjectProvider<IGAuthenticatedTokenObserver> tokenObservers) {
+		this.tokenObservers = tokenObservers != null ? tokenObservers.orderedStream().toList() : List.of();
 		this.userDetailsService = userDetailsService;
 		this.passwordEncoder = passwordEncoder;
 		this.oauth2RuntimeConfigurationDao = oauth2RuntimeConfigurationDao;
@@ -106,7 +114,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		AuthenticationManager manager = null;
 		switch (header.getAuthType()) {
 		case LOCAL_JWT: {
-			manager = new LocalJwtAuthenticationManager(request, tokenProvider, customUserDetailsService);
+			manager = new LocalJwtAuthenticationManager(request, tokenProvider, customUserDetailsService, tokenObservers);
 		}
 			break;
 		case OAUTH2: {
@@ -146,6 +154,12 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 			LOGGER.debug("End resolve(...) returning manager of class "
 					+ (manager != null ? manager.getClass().getName() : "NULL"));
 		}
+		if (manager != null && !(manager instanceof LocalJwtAuthenticationManager)) {
+			// a token of an external identity provider: listed and revocable by its hash
+			manager = new SessionAwareAuthenticationManager(manager, header.getToken(), tokenProvider,
+					tokenObservers, LocalJwtAuthenticationManager.clientIp(request), request.getHeader("User-Agent"),
+					header.getAuthProviderId());
+		}
 		return manager;
 	}
 
@@ -182,7 +196,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		// SecurityHeaderUtil.createSelfsignedJwtSecurityHeader and LocalJwtTokenProvider) -
 		// an external IdP's JWT will not carry them.
 		if (payload.has("AUTH_TYPE") || payload.has("AUTH_PROVIDER")) {
-			return new LocalJwtAuthenticationManager(request, tokenProvider, customUserDetailsService);
+			return new LocalJwtAuthenticationManager(request, tokenProvider, customUserDetailsService, tokenObservers);
 		}
 		String issuer = payload.has("iss") ? payload.get("iss").asText() : null;
 		if (issuer != null) {
@@ -211,7 +225,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		// JWT-shaped but neither self-identifies as LOCAL_JWT nor carries a recognized
 		// issuer: fall back to LOCAL_JWT, today's default - tokenProvider.validateToken()
 		// will correctly reject it (fails closed) if it isn't really one.
-		return new LocalJwtAuthenticationManager(request, tokenProvider, customUserDetailsService);
+		return new LocalJwtAuthenticationManager(request, tokenProvider, customUserDetailsService, tokenObservers);
 	}
 
 	private static ObjectMapper objectMapper = new ObjectMapper();

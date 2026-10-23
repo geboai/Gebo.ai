@@ -18,7 +18,7 @@
 
 import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo, TokenRenewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo, TokenRenewControllerService, SessionControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "primeng/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth, saveAuth } from "../gebo-credentials";
@@ -67,7 +67,8 @@ export class LoginService {
     private authControllerService: AuthControllerService,
     private oauth2ProvidersService: AuthProvidersControllerService,
     private tokenRenewService: TokenRenewControllerService,
-    private userController: UserControllerService) {
+    private userController: UserControllerService,
+    private sessionController: SessionControllerService) {
     this.oauth2Service.authDataSubject.subscribe({
       next: (data) => {
         this.authDataSubject.next(data);
@@ -157,10 +158,19 @@ export class LoginService {
    * notifying subscribers that user is logged out, and redirecting to the chat page
    */
   public logout(): void {
-    resetAuth();
-    this.logged.next(undefined);
-    this.authDataSubject.next(undefined);
-    this.router.navigate(["/", "ui", "chat"], { relativeTo: this.activatedRouter });
+    // the backend revokes the session first (the request still carries the token),
+    // then the browser forgets it; a failure to revoke does not keep the user in
+    const finish = () => {
+      resetAuth();
+      this.logged.next(undefined);
+      this.authDataSubject.next(undefined);
+      this.router.navigate(["/", "ui", "chat"], { relativeTo: this.activatedRouter });
+    };
+    if (getAuth()) {
+      this.sessionController.logout().subscribe({ next: () => finish(), error: () => finish() });
+    } else {
+      finish();
+    }
   }
   /**********************
    * Load list of oauth2 providers enabled for the user login (UI data without technical oauth2 critical infos)

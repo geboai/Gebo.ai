@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboKnowledgeBaseSetupStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
 
 public class GeboKnowledgeBaseSetupStatus {
   @JsonProperty("isSetup")
