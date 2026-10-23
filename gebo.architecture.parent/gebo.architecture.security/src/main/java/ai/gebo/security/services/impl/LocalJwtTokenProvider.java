@@ -359,7 +359,11 @@ public class LocalJwtTokenProvider {
 		JwtBuilder builder = Jwts.builder();
 		Map<String, Object> claims = new HashMap<String, Object>();
 		claims.put(AUTH_TYPE_CLAIM, AuthProviderType.OAUTH2.name());
-		claims.put(AUTH_PROVIDER_CLAIM, authProvider != null ? authProvider.name() : "UNKNOWN");
+		// Only ever a name this installation knows: a placeholder here is read back on
+		// every renewal and is not a provider, so it used to end the session instead.
+		if (authProvider != null) {
+			claims.put(AUTH_PROVIDER_CLAIM, authProvider.name());
+		}
 		if (registrationId != null)
 			claims.put(AUTH_PROVIDER_REGISTRATION_ID, registrationId);
 		claims.put(SESSION_ID_CLAIM, newSessionId());
@@ -454,9 +458,8 @@ public class LocalJwtTokenProvider {
 			String authProviderType = jwtData.getBody().get(AUTH_TYPE_CLAIM, String.class);
 			String authProvider = jwtData.getBody().get(AUTH_PROVIDER_CLAIM, String.class);
 			String registrationId = jwtData.getBody().get(AUTH_PROVIDER_REGISTRATION_ID, String.class);
-			AuthProviderType providerType = authProviderType != null ? AuthProviderType.valueOf(authProviderType)
-					: null;
-			AuthProvider provider = authProvider != null ? AuthProvider.valueOf(authProvider) : null;
+			AuthProviderType providerType = providerTypeOf(authProviderType);
+			AuthProvider provider = providerOf(authProvider);
 			Date now = new Date();
 			// the renewed token stays in the session of the token it renews
 			String sessionId = jwtData.getBody().get(SESSION_ID_CLAIM, String.class);
@@ -467,6 +470,48 @@ public class LocalJwtTokenProvider {
 					false);
 		} else
 			return data;
+	}
+
+	/**
+	 * The provider a token says it came from, or null when it names one this
+	 * installation does not know.
+	 *
+	 * <p>
+	 * These two claims only describe where the identity came from; nothing is
+	 * authorized on them, and the renewed token carries the same subject and session
+	 * either way. Reading them with a bare {@code valueOf} made a renewal fail
+	 * outright on a name that is not a constant: tokens minted for a single sign-on
+	 * login carried {@code UNKNOWN}, so no such session could ever be extended and it
+	 * ended when the provider's id token did, however short that was. A token from an
+	 * older release, or from a release that knew a provider since removed, would fail
+	 * the same way.
+	 * </p>
+	 */
+	private static AuthProvider providerOf(String claim) {
+		if (claim == null) {
+			return null;
+		}
+		try {
+			return AuthProvider.valueOf(claim);
+		} catch (IllegalArgumentException unknown) {
+			logger.debug("Token renewal: unknown authentication provider '{}' in the token, renewed without it",
+					claim);
+			return null;
+		}
+	}
+
+	/** The same tolerance for the provider type. See {@link #providerOf(String)}. */
+	private static AuthProviderType providerTypeOf(String claim) {
+		if (claim == null) {
+			return null;
+		}
+		try {
+			return AuthProviderType.valueOf(claim);
+		} catch (IllegalArgumentException unknown) {
+			logger.debug("Token renewal: unknown authentication provider type '{}' in the token, renewed without it",
+					claim);
+			return null;
+		}
 	}
 
 }

@@ -29,7 +29,14 @@ import lombok.AllArgsConstructor;
 public class GOAuth2AuthenticationFailureHandler implements AuthenticationFailureHandler {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GOAuth2AuthenticationFailureHandler.class);
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
-	private final AuthenticationFailureHandler delegate = new SimpleUrlAuthenticationFailureHandler();
+	/**
+	 * A refused single sign-on ends on the login page, saying that it was refused.
+	 * With no address to go to, the refusal came out as a bare 401 from the callback,
+	 * which tells the person nothing and leaves an administrator guessing whether the
+	 * provider, the configuration or the account was the problem.
+	 */
+	private final AuthenticationFailureHandler delegate = new SimpleUrlAuthenticationFailureHandler(
+			"/ui/login?ssoRefused=true");
 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
