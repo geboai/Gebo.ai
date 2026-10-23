@@ -34,24 +34,27 @@ import jakarta.servlet.http.HttpServletRequest;
  * can mint any platform token. Heimdall owns the installation record; this
  * module is only ever a dependency of heimdall.
  * <p>
- * Authenticated by its own channel: a plain JWT signed with the shared token
+ * It lives under {@code /public/}, which the platform's security chain already
+ * lets through, so the chain needs no rule of its own; the restriction is done
+ * here, in the application:
+ * <ul>
+ * <li>only registered cluster participants, like every cluster surface
+ * ({@link ClusterParticipantsGuard}): a request forwarded by the gateway comes
+ * from the gateway's address, which is not a participant, and is refused;</li>
+ * <li>authenticated by its own channel: a plain JWT signed with the shared token
  * secret, valid five minutes, in the
  * {@value GeboInstallationBootstrapToken#HEADER} header (see
- * {@link GeboInstallationBootstrapToken}). The platform's security chain lets
- * this path through without its bearer processing
- * ({@link InstallationClusterSecurityConfig}); this controller checks the token.
- * Like every cluster surface it also admits only registered cluster participants
- * and is never routed by the gateway.
+ * {@link GeboInstallationBootstrapToken}).</li>
+ * </ul>
  */
 @RestController
 @ConditionalOnProperty(prefix = "ai.gebo.security.cluster", name = "enabled", havingValue = "true",
 		matchIfMissing = true)
-@RequestMapping("${" + InstallationClusterController.BASE_PATH_PROPERTY + ":"
-		+ InstallationClusterController.DEFAULT_BASE_PATH + "}")
+@RequestMapping(InstallationClusterController.BASE_PATH)
 public class InstallationClusterController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(InstallationClusterController.class);
-	static final String BASE_PATH_PROPERTY = "ai.gebo.security.cluster.installation-base-path";
-	static final String DEFAULT_BASE_PATH = "api/cluster/InstallationController";
+	/** Under /public/: the platform chain permits it, this controller restricts it. */
+	static final String BASE_PATH = "public/InstallationController";
 
 	private final IGInstallationIdProvider installationIdProvider;
 	private final GeboClusterParticipants participants;

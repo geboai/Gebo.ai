@@ -68,8 +68,8 @@ public class GeboSecurityClientProperties {
 
 	/** Arbitrary extra headers added to every request (tenant, correlation, ...). */
 	private Map<String, String> headers = new LinkedHashMap<>();
-	/** Heimdall's installation controller (its installation-base-path). */
-	private String installationBasePath = "api/cluster/InstallationController";
+	/** Heimdall's installation controller, under its /public/ path. */
+	private String installationBasePath = "public/InstallationController";
 
 	public String getInstallationBasePath() {
 		return installationBasePath;

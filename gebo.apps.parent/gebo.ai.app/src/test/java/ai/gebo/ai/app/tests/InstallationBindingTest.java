@@ -94,6 +94,14 @@ public class InstallationBindingTest extends AbstractBaseTestLLmsIntegrationTest
 				.setIssuedAt(new Date()).setExpiration(inTenMinutes)
 				.signWith(SignatureAlgorithm.HS512, securityConfig.getAuth().getTokenSecret()).compact();
 		assertEquals(401, status(mvc, old), "A token of the old shape is refused");
+
+		// heimdall's installation path lives under /public/: the standard chain lets it
+		// through unchanged (here, in the monolith, no controller answers it: 404), while
+		// the cluster surfaces still need a platform token
+		assertEquals(404, mvc.perform(get("/public/InstallationController/getInstallationId")).andReturn()
+				.getResponse().getStatus(), "The standard chain lets /public/ through, without a token");
+		assertEquals(401, mvc.perform(get("/api/cluster/SecurityController/findAllGroups")).andReturn()
+				.getResponse().getStatus(), "The cluster surfaces still need a platform token");
 	}
 
 	private int status(MockMvc mvc, String token) throws Exception {
