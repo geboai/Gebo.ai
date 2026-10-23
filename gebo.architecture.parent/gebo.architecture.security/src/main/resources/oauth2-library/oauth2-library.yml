@@ -57,13 +57,16 @@ ai.gebo.oauth2.library:
       jwkSetUri: https://login.microsoftonline.com/common/discovery/v2.0/keys
       userNameAttribute: id
 
+    # The user name attribute must be a claim of the id token or of /oidc/userinfo:
+    # neither carries "id" (that is a property of Graph's /v1.0/me), and a login whose
+    # attribute is missing fails before Gebo.ai sees the user. "sub" is always there.
     - provider: microsoft_multitenant
       authorizationUri: "https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize"
       tokenUri: "https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token"
       userInfoUri: "https://graph.microsoft.com/oidc/userinfo"
       issuerUri: "https://login.microsoftonline.com/{tenantId}/v2.0"
       jwkSetUri: "https://login.microsoftonline.com/{tenantId}/discovery/v2.0/keys"
-      userNameAttribute: id
+      userNameAttribute: sub
 
   #- provider: facebook
   #  authorization-uri: https://www.facebook.com/v10.0/dialog/oauth

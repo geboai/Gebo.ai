@@ -11,12 +11,17 @@ package ai.gebo.security.model.oauth2;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.InputStream;
+import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.yaml.snakeyaml.Yaml;
 
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
@@ -135,5 +140,53 @@ class Oauth2ProviderLibraryTest {
         // an authentication configuration with no scopes of its own logs in with the
         // standard OIDC set, which is what makes the id token carry the e-mail
         assertThat(registration.getScopes()).contains("openid", "email");
+    }
+
+    /**
+     * The OIDC login builds its user with the registration's user name attribute and
+     * fails when the claims lack it, before Gebo.ai sees the user. Only two claims can
+     * be counted on: {@code sub}, which every id token carries, and {@code email},
+     * without which the login policy refuses the user anyway.
+     */
+    @Test
+    void everyLibraryUserNameAttributeIsAClaimTheLoginAlwaysHas() {
+        for (AuthProvider.AuthProviderDto dto : AuthProvider.getOauth2Providers()) {
+            Map<String, Object> entry = entryOf(dto.getProvider());
+            if (entry == null || entry.get("userNameAttribute") == null) {
+                continue;
+            }
+            assertThat(entry.get("userNameAttribute")).as("%s.userNameAttribute", dto.getProvider())
+                    .isIn("sub", "email");
+        }
+    }
+
+    /**
+     * Microsoft Entra ID with the claims Microsoft documents for a v2.0 id token and
+     * for https://graph.microsoft.com/oidc/userinfo, given to the same
+     * {@link DefaultOidcUser} constructor Spring's OIDC login calls with the
+     * registration's user name attribute: the user must come out, named by its
+     * subject.
+     */
+    @Test
+    void entraLoginBuildsItsUserFromMicrosoftClaims() {
+        Map<String, Object> entry = entryOf(AuthProvider.microsoft_multitenant);
+        assertThat(entry).as("the microsoft_multitenant entry of the provider library").isNotNull();
+        String tenant = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+        String subject = "OLu859SGc2Sr9ZsqbkG-QbeLgJlb41KcdiPoLYNpSFA";
+        Instant now = Instant.now();
+        OidcIdToken idToken = OidcIdToken.withTokenValue("id-token").issuer("https://login.microsoftonline.com/" + tenant + "/v2.0")
+                .subject(subject).audience(List.of("11111111-2222-3333-4444-555555555555")).issuedAt(now)
+                .expiresAt(now.plusSeconds(3600)).claim("oid", "00000000-0000-0000-66f3-3332eca7ea81")
+                .claim("tid", tenant).claim("preferred_username", "anna.bianchi@demo-company.example")
+                .claim("name", "Anna Bianchi").claim("ver", "2.0").build();
+        OidcUserInfo userInfo = OidcUserInfo.builder().subject(subject).name("Anna Bianchi").givenName("Anna")
+                .familyName("Bianchi").email("anna.bianchi@demo-company.example").build();
+
+        DefaultOidcUser user = new DefaultOidcUser(Set.of(), idToken, userInfo,
+                (String) entry.get("userNameAttribute"));
+
+        assertThat(user.getName()).isEqualTo(subject);
+        // the claim the login policy looks the Gebo.ai user up by
+        assertThat((String) user.getAttribute("email")).isEqualTo("anna.bianchi@demo-company.example");
     }
 }
