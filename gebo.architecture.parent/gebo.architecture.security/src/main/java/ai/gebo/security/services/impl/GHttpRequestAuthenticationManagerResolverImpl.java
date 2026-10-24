@@ -71,7 +71,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 	// to resolve the AuthProvider for auto-provisioning - one cache, one cost per
 	// issuer, instead of scanning every configured provider on every request either
 	// way needs it.
-	private final IssuerConfigCache issuerConfigCache = new IssuerConfigCache();
+	private final IssuerConfigCache issuerConfigCache;
 
 	public GHttpRequestAuthenticationManagerResolverImpl(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder, IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao,
@@ -84,6 +84,9 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		this.userDetailsService = userDetailsService;
 		this.passwordEncoder = passwordEncoder;
 		this.oauth2RuntimeConfigurationDao = oauth2RuntimeConfigurationDao;
+		// before the converter below, which shares it: every lookup reads the configuration
+		// again by id, so a deleted or edited provider is seen from the next request
+		this.issuerConfigCache = new IssuerConfigCache(oauth2RuntimeConfigurationDao::findByCode);
 		this.tokenProvider = tokenProvider;
 		this.customUserDetailsService = customUserDetailsService;
 		this.provisioner = provisioner;
