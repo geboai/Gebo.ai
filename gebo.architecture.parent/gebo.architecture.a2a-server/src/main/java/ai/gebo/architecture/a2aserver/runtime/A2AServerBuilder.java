@@ -97,30 +97,35 @@ public class A2AServerBuilder {
 		Object id = parsed.getId();
 		MessageSendParams params = parsed.getParams();
 		Message inbound = params != null ? params.message() : null;
-		String text = renderParts(inbound != null ? inbound.parts() : null);
+		A2AInboundResources received = A2AInboundResources.of(inbound != null ? inbound.parts() : null);
+		String text = received.getText();
+		if (!received.getNotTaken().isEmpty()) {
+			LOGGER.warn("The caller sent things this export cannot take in: " + received.getNotTaken());
+		}
 		String contextId = inbound != null ? inbound.contextId() : null;
 		String skillId = extractSkillId(inbound);
 
 		if ("message/stream".equals(method)) {
-			return handleStream(config, id, skillId, text, contextId);
+			return handleStream(config, id, skillId, received, contextId);
 		}
 		if ("message/send".equals(method)) {
-			return handleSend(config, id, skillId, text, contextId);
+			return handleSend(config, id, skillId, received, contextId);
 		}
 		A2AError error = new A2AError(JSONRPC_METHOD_NOT_FOUND, "Method not supported: " + method, null);
 		return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
 				.body(JsonUtil.toJson(new SendMessageResponse(id, error)));
 	}
 
-	private ServerResponse handleSend(A2AServerConfig config, Object id, String skillId, String text, String contextId)
-			throws Exception {
+	private ServerResponse handleSend(A2AServerConfig config, Object id, String skillId,
+			A2AInboundResources received, String contextId) throws Exception {
+		final String text = received.getText();
 		try {
 			A2ANotificationCollector sink = new A2ANotificationCollector();
 			// A network exported with a chat profile runs in that profile's environment,
 			// and the caller waiting for one answer simply reads the frame marked as the
 			// last one: the same run, read the other way.
-			A2AChatEnvironmentRunner.ChatEnvironmentRun run = taskBridge.runInChatEnvironment(config, skillId, text,
-					contextId, sink);
+			A2AChatEnvironmentRunner.ChatEnvironmentRun run = taskBridge.runInChatEnvironment(config, skillId,
+					received, contextId, sink);
 			if (run != null) {
 				try {
 					GeboChatResponse response = lastResponseOf(run);
@@ -175,13 +180,14 @@ public class A2AServerBuilder {
 	 * planned follow-up (the transport contract — SSE frames of
 	 * SendStreamingMessageResponse — is already honoured here).
 	 */
-	private ServerResponse handleStream(A2AServerConfig config, Object id, String skillId, String text,
-			String contextId) {
+	private ServerResponse handleStream(A2AServerConfig config, Object id, String skillId,
+			A2AInboundResources received, String contextId) {
+		final String text = received.getText();
 		final A2ANotificationCollector sink = new A2ANotificationCollector();
 		A2AChatEnvironmentRunner.ChatEnvironmentRun streamed = null;
 		A2AError prepareError = null;
 		try {
-			streamed = taskBridge.runInChatEnvironment(config, skillId, text, contextId, sink);
+			streamed = taskBridge.runInChatEnvironment(config, skillId, received, contextId, sink);
 		} catch (Throwable t) {
 			LOGGER.error("A2A message/stream failed", t);
 			prepareError = new A2AError(JSONRPC_INTERNAL_ERROR, t.getMessage(), null);

@@ -9,10 +9,12 @@
 
 package ai.gebo.architecture.a2aserver.runtime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -21,6 +23,7 @@ import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.agents.services.NetworkOfAgentsException;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -35,8 +38,10 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
+import ai.gebo.model.OperationStatus;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
@@ -73,6 +78,8 @@ public class A2AChatEnvironmentRunner {
 	private final IGRuntimeBinder runtimeBinder;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
+	/** Stores what a caller attaches, when this installation takes uploads at all. */
+	private final ObjectProvider<IGUserUploadContentHandler> uploadContentHandler;
 
 	/** What a run produced: the frames, and the response of the last one. */
 	public static class ChatEnvironmentRun {
@@ -138,8 +145,8 @@ public class A2AChatEnvironmentRunner {
 	 * @throws AgentException when the network does not exist or the run cannot be
 	 *                        prepared
 	 */
-	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, INotificationSink sink)
-			throws AgentException {
+	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, A2AInboundResources inbound,
+			INotificationSink sink) throws AgentException {
 		final GAgentsNetwork network = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)
 				.findByCode(networkCode);
 		if (network == null) {
@@ -157,6 +164,9 @@ public class A2AChatEnvironmentRunner {
 			// The session has to exist before its request can be started, and a caller
 			// naming a conversation we have never seen is naming a new one.
 			chatSessionLifecycleService.ensureChatSessionExists(request);
+			// What the caller sent with its message is attached before the resources of
+			// the request are built, so the run is prepared knowing about it.
+			attachInbound(request, inbound, chatModel);
 			final GeboChatResponse response = chatSessionLifecycleService.createEmptyResponse(request);
 			final LLMChatRequestResources resources = chatSessionLifecycleService.startRequest(request, chatModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
@@ -197,6 +207,64 @@ public class A2AChatEnvironmentRunner {
 			LOGGER.error("The run of the exported network '" + networkCode + "' failed", e);
 			throw new AgentException(
 					"The run of the exported network '" + networkCode + "' failed: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Attaches what the caller sent with its message: the knowledge bases and the
+	 * documents it stated, and the files it sent, stored in this conversation's own
+	 * area and handed to the request as a chat hands over an upload.
+	 */
+	private void attachInbound(GeboChatRequest request, A2AInboundResources inbound,
+			IGConfigurableChatModel chatModel) {
+		if (inbound == null || !inbound.hasResources()) {
+			return;
+		}
+		if (!inbound.getKnowledgeBases().isEmpty()) {
+			request.setChoosedKnowledgeBases(List.copyOf(inbound.getKnowledgeBases()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The caller asked the run to work on " + inbound.getKnowledgeBases().size()
+						+ " stated knowledge base(s)");
+			}
+		}
+		if (!inbound.getDocuments().isEmpty()) {
+			final List<String> forced = new ArrayList<>(
+					request.getForcedRequestDocuments() != null ? request.getForcedRequestDocuments() : List.of());
+			forced.addAll(inbound.getDocuments());
+			request.setForcedRequestDocuments(forced);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The caller named " + inbound.getDocuments().size() + " document(s) for the run");
+			}
+		}
+		if (inbound.getFiles().isEmpty()) {
+			return;
+		}
+		final IGUserUploadContentHandler uploads = uploadContentHandler.getIfAvailable();
+		if (uploads == null) {
+			LOGGER.warn("The caller sent " + inbound.getFiles().size()
+					+ " file(s) but this installation cannot take uploads: they are left out of the run");
+			return;
+		}
+		final OperationStatus<List<UserUploadedContent>> stored = uploads
+				.chatSessionUpload(request.getUserChatContextCode(), inbound.getFiles());
+		final List<UserUploadedContent> contents = stored != null ? stored.getResult() : null;
+		if (contents == null || contents.isEmpty()) {
+			LOGGER.warn("The file(s) the caller sent could not be stored: they are left out of the run");
+			return;
+		}
+		for (UserUploadedContent content : contents) {
+			try {
+				chatSessionLifecycleService.addUploadedDocument(request, content, chatModel,
+						LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("The file " + content.getFileName() + " the caller sent is part of the run");
+				}
+			} catch (GeboChatSessionLifecycleException | java.io.IOException | RuntimeException notAttached) {
+				// One attachment that cannot be taken in must not lose the question it came
+				// with: the run goes on without it, and the log says which.
+				LOGGER.error("The file " + content.getFileName()
+						+ " the caller sent could not be added to the run; it goes on without it", notAttached);
+			}
 		}
 	}
 

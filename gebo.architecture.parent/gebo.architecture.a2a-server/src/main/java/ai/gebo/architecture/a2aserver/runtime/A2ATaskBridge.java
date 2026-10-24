@@ -65,7 +65,8 @@ public class A2ATaskBridge {
 	 * @return the run, or null when this export is not a network
 	 */
 	public A2AChatEnvironmentRunner.ChatEnvironmentRun runInChatEnvironment(A2AServerConfig serverConfig,
-			String skillId, String inputText, String chatContextCode, INotificationSink sink) throws AgentException {
+			String skillId, A2AInboundResources inbound, String chatContextCode, INotificationSink sink)
+			throws AgentException {
 		final A2AExportedAgent exported = resolveExport(serverConfig, skillId);
 		if (exported == null) {
 			throw new AgentException("No exported skill '" + skillId + "' on A2A server '"
@@ -80,7 +81,8 @@ public class A2ATaskBridge {
 					+ chatContextCode);
 		}
 		return chatEnvironmentRunner.run(exported.getNetworkCode(),
-				chatEnvironmentRunner.requestOf(inputText, exported.getChatProfileCode(), chatContextCode), sink);
+				chatEnvironmentRunner.requestOf(inbound.getText(), exported.getChatProfileCode(), chatContextCode),
+				inbound, sink);
 	}
 
 	private A2AExportedAgent resolveExport(A2AServerConfig serverConfig, String skillId) {
