@@ -7,12 +7,13 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import {
     GCurrency, GModelPricingConditions, GProviderApiKey, GProviderCurrency, GProviderDeal, GProviderModelPriceInfo,
     GUserMessage, ProviderDealsControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
+import { Popover } from "primeng/popover";
 import { forkJoin, Observable, of } from "rxjs";
 
 /** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */
@@ -69,9 +70,11 @@ interface ProviderGroup {
     templateUrl: "provider-deals-wizard.component.html",
     standalone: false,
     styles: [`
-        .gebo-provider-deals__price { width: 7rem; }
+        /* on the input inside p-inputNumber, which the component's own styles do not reach */
+        :host ::ng-deep .gebo-provider-deals__price { width: 7rem; }
         .gebo-provider-deals__currency { width: 8rem; }
-        .gebo-provider-deals__code { font-family: monospace; word-break: break-all; }
+        .gebo-provider-deals__code { font-family: monospace; white-space: nowrap; }
+        .gebo-provider-deals__source { max-width: 22rem; }
     `],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "ProviderDealsWizardModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProviderDealsWizardComponent")
@@ -90,6 +93,39 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     /** The API key chosen to add to each deal. */
     protected keyToAdd: { [dealId: string]: string | undefined } = {};
 
+    private moduleId = inject(GEBO_AI_MODULE, { optional: true });
+    private fieldHost = inject(GEBO_AI_FIELD_HOST, { optional: true });
+    /** Texts built here rather than in the template, translated as the template's are; {name} is filled in. */
+    protected texts: { [id: string]: string } = {
+        UnusedKey: "unused",
+        NoApiKeyRunning: "No API key (configurations running without one)",
+        NoApiKey: "No API key",
+        NowInDeal: "now in {deal}",
+        PriceIn: "in {price}",
+        PriceOut: "out {price}",
+        PerMtok: "per Mtok",
+        PerRequest: "{price} per request",
+        PerMonth: "{price} monthly",
+        LimitDaily: "{limit} daily",
+        LimitWeekly: "{limit} weekly",
+        LimitMonthly: "{limit} monthly",
+        LimitTotal: "{limit} total",
+        Unlimited: "unlimited",
+        PriceFromProviderApi: "Deal price, imported from the provider's API",
+        PriceSetByAdmin: "Deal price, set by the admin",
+        ProviderApiPriceApplies: "No deal price: the provider API's price applies",
+        NoPrice: "No price: the calls of this model are not priced",
+        NoPriceDetail: "The usage statistics show no cost for its calls. Enter its prices in this row and save them: they count from then on, not for the calls already made.",
+        LimitsImported: "imported from the provider",
+        LimitsSetByAdmin: "set by an admin",
+        BackToProviderCurrencyTitle: "Go back to the provider default currency: {currency}",
+        SaveDealPriceTitle: "Save the deal price",
+        SetDealPriceTitle: "Set this price in the deal"
+    };
+
+    /** The price row whose source the shared popover shows. */
+    protected sourceRow?: GProviderModelPriceInfo;
+
     // The new deal form.
     protected newDealProvider?: string;
     protected newDealDescription: string = "";
@@ -99,6 +135,33 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private dealsService: ProviderDealsControllerService, private translationService: GeboAITranslationService) {
         super(setupWizardComunicationService);
+    }
+
+    override ngOnInit(): void {
+        this.translateTexts();
+        super.ngOnInit();
+    }
+
+    /** Translates the texts built here; the template reads them on every check. */
+    private translateTexts(): void {
+        const host = Array.isArray(this.fieldHost) ? this.fieldHost[0] : this.fieldHost;
+        const moduleId = Array.isArray(this.moduleId) ? this.moduleId[0] : this.moduleId;
+        const entityId = host?.getEntityName();
+        if (!moduleId || !entityId) return;
+        const items = Object.entries(this.texts).map(([id, label]) => ({ id, label }));
+        this.translationService.translateMenuItems(moduleId, entityId, items).subscribe(translated => {
+            const texts = { ...this.texts };
+            translated.forEach(x => {
+                if (x.id && x.label) texts[x.id] = x.label;
+            });
+            this.texts = texts;
+        });
+    }
+
+    /** A text of {@link texts}, its {name} placeholders filled in. */
+    protected text(id: string, values: { [name: string]: any } = {}): string {
+        return Object.entries(values).reduce((text, [name, value]) => text.split('{' + name + '}').join(String(value)),
+            this.texts[id]);
     }
 
     /** Loads every deal grouped by provider, with each provider's keys, prices and currency. */
@@ -224,7 +287,7 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     /** The provider's API keys a deal can take: those it does not cover yet. */
     protected keyOptions(group: ProviderGroup, deal: GProviderDeal): { label: string, value: string }[] {
         return group.apiKeys.filter(x => x.dealId !== deal.id).map(x => ({
-            label: this.keyDescription(x, group.usedKeys) + (x.dealId ? " - now in " + this.dealDescription(group, x.dealId) : ""),
+            label: this.keyDescription(x, group.usedKeys) + (x.dealId ? " - " + this.text("NowInDeal", { deal: this.dealDescription(group, x.dealId) }) : ""),
             value: x.secretCode ?? ""
         }));
     }
@@ -232,16 +295,16 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
     /** How an API key is shown: "(unused)" when no running model configuration uses it. */
     protected keyDescription(key?: GProviderApiKey, usedKeys?: Set<string>): string {
         if (!key) return "";
-        const unused = usedKeys && !usedKeys.has(key.secretCode ?? "") ? " (unused)" : "";
-        if (key.secretCode === NO_API_KEY) return "No API key (configurations running without one)" + unused;
+        const unused = usedKeys && !usedKeys.has(key.secretCode ?? "") ? " (" + this.text("UnusedKey") + ")" : "";
+        if (key.secretCode === NO_API_KEY) return this.text("NoApiKeyRunning") + unused;
         return (key.description ? key.description + " (" + key.secretCode + ")" : key.secretCode ?? "") + unused;
     }
 
     /** How an API key code of a deal is shown. */
     protected keyLabel(group: ProviderGroup, secretCode?: string): string {
         const key = group.apiKeys.find(x => x.secretCode === secretCode);
-        const unused = !group.usedKeys.has(secretCode ?? "") ? " (unused)" : "";
-        return key ? this.keyDescription(key, group.usedKeys) : (secretCode === NO_API_KEY ? "No API key" : (secretCode ?? "")) + unused;
+        const unused = !group.usedKeys.has(secretCode ?? "") ? " (" + this.text("UnusedKey") + ")" : "";
+        return key ? this.keyDescription(key, group.usedKeys) : (secretCode === NO_API_KEY ? this.text("NoApiKey") : (secretCode ?? "")) + unused;
     }
 
     private dealDescription(group: ProviderGroup, dealId?: string): string {
@@ -253,11 +316,11 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
             return "-";
         }
         const parts: string[] = [];
-        if (pricing.inputMtokenPrice != null) parts.push("in " + pricing.inputMtokenPrice);
-        if (pricing.outputMtokenPrice != null) parts.push("out " + pricing.outputMtokenPrice);
-        let text = parts.length ? parts.join(" / ") + " per Mtok" : "";
-        if (pricing.requestPrice != null) text += (text ? ", " : "") + pricing.requestPrice + " per request";
-        if (pricing.monthlyFlatCost != null) text += (text ? ", " : "") + pricing.monthlyFlatCost + " monthly";
+        if (pricing.inputMtokenPrice != null) parts.push(this.text("PriceIn", { price: pricing.inputMtokenPrice }));
+        if (pricing.outputMtokenPrice != null) parts.push(this.text("PriceOut", { price: pricing.outputMtokenPrice }));
+        let text = parts.length ? parts.join(" / ") + " " + this.text("PerMtok") : "";
+        if (pricing.requestPrice != null) text += (text ? ", " : "") + this.text("PerRequest", { price: pricing.requestPrice });
+        if (pricing.monthlyFlatCost != null) text += (text ? ", " : "") + this.text("PerMonth", { price: pricing.monthlyFlatCost });
         return (pricing.currencyCode ?? "") + " " + (text || "-");
     }
 
@@ -267,20 +330,30 @@ export class ProviderDealsWizardComponent extends BaseWizardSectionComponent {
             return "-";
         }
         const parts: string[] = [];
-        if (limits.dailySpendingLimit != null) parts.push(limits.dailySpendingLimit + " daily");
-        if (limits.weeklySpendingLimit != null) parts.push(limits.weeklySpendingLimit + " weekly");
-        if (limits.monthlySpendingLimit != null) parts.push(limits.monthlySpendingLimit + " monthly");
-        if (limits.totalSpendingLimit != null) parts.push(limits.totalSpendingLimit + " total");
-        return parts.length ? (limits.currencyCode ?? "") + " " + parts.join(", ") : "unlimited";
+        if (limits.dailySpendingLimit != null) parts.push(this.text("LimitDaily", { limit: limits.dailySpendingLimit }));
+        if (limits.weeklySpendingLimit != null) parts.push(this.text("LimitWeekly", { limit: limits.weeklySpendingLimit }));
+        if (limits.monthlySpendingLimit != null) parts.push(this.text("LimitMonthly", { limit: limits.monthlySpendingLimit }));
+        if (limits.totalSpendingLimit != null) parts.push(this.text("LimitTotal", { limit: limits.totalSpendingLimit }));
+        return parts.length ? (limits.currencyCode ?? "") + " " + parts.join(", ") : this.text("Unlimited");
+    }
+
+    /** No price at all: the calls of the row's model are recorded without a cost. */
+    protected priceless(row: GProviderModelPriceInfo): boolean {
+        return !row.dealPricing && !row.providerApiPricing;
+    }
+
+    /** Opens the shared popover on where the price of a row comes from. */
+    protected showPriceSource(event: Event, row: GProviderModelPriceInfo, popover: Popover): void {
+        this.sourceRow = row;
+        popover.toggle(event);
     }
 
     /** Where the price the configurations pay comes from. */
     protected priceSource(row: GProviderModelPriceInfo): string {
         if (row.dealPricing) {
-            return row.dealPricingAutoImported ? "imported from the provider's API" : "set by the admin";
+            return this.text(row.dealPricingAutoImported ? "PriceFromProviderApi" : "PriceSetByAdmin");
         }
-        return row.providerApiPricing ? "no deal price: the provider API's price applies"
-            : "no price: the calls of this model are not priced";
+        return this.text(row.providerApiPricing ? "ProviderApiPriceApplies" : "NoPrice");
     }
 
     /** Runs a maintenance operation, then reloads; a refused one shows its messages. */

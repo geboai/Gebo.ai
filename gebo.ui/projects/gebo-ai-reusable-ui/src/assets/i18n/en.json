@@ -6043,6 +6043,42 @@
   },
   "ProviderDealsWizardModule": {
     "ProviderDealsWizardComponent": {
+      "UnusedKey": { "label": "unused" },
+      "NoApiKeyRunning": {
+        "label": "No API key (configurations running without one)"
+      },
+      "NoApiKey": { "label": "No API key" },
+      "NowInDeal": { "label": "now in {deal}" },
+      "PriceIn": { "label": "in {price}" },
+      "PriceOut": { "label": "out {price}" },
+      "PerMtok": { "label": "per Mtok" },
+      "PerRequest": { "label": "{price} per request" },
+      "PerMonth": { "label": "{price} monthly" },
+      "LimitDaily": { "label": "{limit} daily" },
+      "LimitWeekly": { "label": "{limit} weekly" },
+      "LimitMonthly": { "label": "{limit} monthly" },
+      "LimitTotal": { "label": "{limit} total" },
+      "Unlimited": { "label": "unlimited" },
+      "PriceFromProviderApi": {
+        "label": "Deal price, imported from the provider's API"
+      },
+      "PriceSetByAdmin": { "label": "Deal price, set by the admin" },
+      "ProviderApiPriceApplies": {
+        "label": "No deal price: the provider API's price applies"
+      },
+      "NoPrice": {
+        "label": "No price: the calls of this model are not priced"
+      },
+      "NoPriceDetail": {
+        "label": "The usage statistics show no cost for its calls. Enter its prices in this row and save them: they count from then on, not for the calls already made."
+      },
+      "LimitsImported": { "label": "imported from the provider" },
+      "LimitsSetByAdmin": { "label": "set by an admin" },
+      "BackToProviderCurrencyTitle": {
+        "label": "Go back to the provider default currency: {currency}"
+      },
+      "SaveDealPriceTitle": { "label": "Save the deal price" },
+      "SetDealPriceTitle": { "label": "Set this price in the deal" },
       "ProviderDealsHint": {
         "label": "Each provider deal groups the API keys sharing the same economic conditions. The model configurations running with a deal's API keys pay the deal's price of their model, else the price the provider's API gives, if any; the usage costs computed from them remain an evaluation that may differ from the actual costs billed by the suppliers."
       },
