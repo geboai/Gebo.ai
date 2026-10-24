@@ -29,4 +29,15 @@ public interface IInternalKnowledgeLLMAssistedRetrieveService {
 	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
 			boolean removeIrrelevant) throws GeboChatSessionLifecycleException, LLMConfigException;
+
+	/**
+	 * The same, the contents found capped to {@code tokensBudget} tokens: the share the
+	 * model reading them may take (see {@code KnowledgeBaseSearchBudget}), when it is
+	 * not the target model. An implementation sizing its search otherwise ignores it.
+	 */
+	public default Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, int tokensBudget) throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant);
+	}
 }

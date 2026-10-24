@@ -10,6 +10,7 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
@@ -60,12 +61,19 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 		try {
 			GeboRagSearchConfig ragConfig = runtimeBinder.getImplementationOf(GeboRagSearchConfig.class);
 			final int topK = ragConfig.getDefaultTopK();
+			final GPromptTemplateConfig prompt = promptsDao
+					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
+			// the knowledge base contents' share of what the request and the output prompt
+			// leave of the context of the chat model reading them, as the knowledge base
+			// search tools' (KnowledgeBaseSearchBudget)
+			final long used = (runtimeData.getRequestResources() != null
+					? runtimeData.getRequestResources().getTokensSize()
+					: 0) + (prompt != null ? prompt.getTokensSize() : 0);
+			final int tokensBudget = KnowledgeBaseSearchBudget.forContext(chatModel.getContextLength(), used);
 			Flux<AIDocumentsSet> documentSet = internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(
 					runtimeData.getMinimalChatContext(), serviceModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK);
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK, true, tokensBudget);
 			Flux<GeboChatMessageEnvelope> flux = documentSet.concatMap(ed -> {
-				GPromptTemplateConfig prompt = promptsDao
-						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 				try {
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(
 							runtimeData.getRequestResources().getCurrentRequest(), ed, chatModel,

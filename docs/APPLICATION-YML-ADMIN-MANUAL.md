@@ -241,6 +241,13 @@ registered generically as OpenAI-API-compatible endpoints (`GenericOpenAICompati
 sourced from a bundled provider catalog), and any further OpenAI-compatible server is added the same
 way through the admin UI, not `application.yml`.
 
+How much knowledge base content a model call may take (`KnowledgeBaseSearchBudgetConfig`):
+
+| Property | Type | Shipped default | Description |
+|---|---|---|---|
+| `ai.gebo.llms.knowledge-base-search-room-divisor` | double > 0 | `3` | The knowledge base contents of a model call take the room its messages leave of its context (two thirds of it) divided by this: the chats with knowledge bases, the pipelines, the knowledge base agents of the networks and the search tools alike. |
+| `ai.gebo.agents.standard.knowledge-base-search-room-divisor` | double > 0 | *(not set)* | When set, overrides the divisor above for the search tools only. |
+
 ## 9. Vector store
 
 Bound by `GeboAIVectorStoreConfig` (`ai.gebo.vectorstore`).

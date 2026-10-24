@@ -40,6 +40,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -176,8 +177,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
 			semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 
+			// the knowledge base contents' share of what the request and its prompt leave of
+			// the context, as the knowledge base search tools' (KnowledgeBaseSearchBudget)
 			AIDocumentsSet retrieved = this.ragSearchService.search(request, semanticSearchMetaDataFilter,
-					fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
+					fullTextSearchMetaDataFilter, KnowledgeBaseSearchBudget.forContext(handler.getContextLength(),
+							(long) fullRequest.getTokensSize() + gprompt.getTokensSize()));
 			fullRequest = chatSessionLifecycleService.addRetrievedDocuments(request, retrieved, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
@@ -325,16 +329,19 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		AIDocumentsSet extractedDocuments = ragSearchService.search(request, semanticSearchMetaDataFilter,
-				fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
-		List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
-		response.setDocumentsRef(docrefs);
-		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		String modelCode = handler != null && handler.getConfig() != null
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
 		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
+		// the knowledge base contents' share of what the request and its prompt leave of
+		// the context, as the knowledge base search tools' (KnowledgeBaseSearchBudget)
+		AIDocumentsSet extractedDocuments = ragSearchService.search(request, semanticSearchMetaDataFilter,
+				fullTextSearchMetaDataFilter, KnowledgeBaseSearchBudget.forContext(handler.getContextLength(),
+						(long) fullRequest.getTokensSize() + (prompt != null ? prompt.getTokensSize() : 0)));
+		List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
+		response.setDocumentsRef(docrefs);
+		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		// Returns the chat stream for the request, profile and context
 		recordToolCalls(fullRequest, response);
 		// a direct stream, outside the chat pipelines: ended here as the executor ends its

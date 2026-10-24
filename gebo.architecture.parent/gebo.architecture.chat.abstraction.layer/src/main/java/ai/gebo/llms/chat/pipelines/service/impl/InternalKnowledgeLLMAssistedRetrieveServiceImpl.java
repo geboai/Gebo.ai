@@ -71,6 +71,24 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
 			boolean removeIrrelevant) throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant, null);
+	}
+
+	@Override
+	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, int tokensBudget) throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant,
+				Integer.valueOf(tokensBudget));
+	}
+
+	/**
+	 * The documents retrieved, capped to {@code tokensBudget} tokens when given, to the
+	 * tokens budget's share of the target model's context otherwise.
+	 */
+	private Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, Integer tokensBudget) throws GeboChatSessionLifecycleException, LLMConfigException {
 		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService
 				.getSessionAvailableKnowledgeBases(minimalChatContext.getCurrentRequest());
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
@@ -82,7 +100,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 				try {
 					SearchesSuggestions searchSuggestions = askSearchesSuggestion(minimalChatContext, targetChatModel);
 					de = this.integrateWithAISuggestedSearch(minimalChatContext, targetChatModel, searchSuggestions,
-							knowledgeBases, policy, topK, removeIrrelevant);
+							knowledgeBases, policy, topK, removeIrrelevant, tokensBudget);
 
 				} catch (Throwable e) {
 					String msg = "Error accessing search/llm assisted";
@@ -99,8 +117,8 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 
 	private AIDocumentsSet integrateWithAISuggestedSearch(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel, SearchesSuggestions searchSuggestions,
-			List<GKnowledgeBase> knowledgeBases, LLMRequestGenerationPolicy policy, int topK, boolean removeIrrelevant)
-			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+			List<GKnowledgeBase> knowledgeBases, LLMRequestGenerationPolicy policy, int topK, boolean removeIrrelevant,
+			Integer tokensBudget) throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
 
 		AIDocumentsSet out = new AIDocumentsSet();
 		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
@@ -116,9 +134,13 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 		semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 		final boolean userRanker = rankerService.isRankerConfigured();
 		final int calculatedTopK = userRanker ? topK * 2 : topK;
-		AIDocumentsSet searchResult = this.search(minimalChatContext, searchSuggestions, targetChatModel,
-				targetChatModel.getContextLength(), semanticSearchMetaDataFilter, fullTextSearchMetaDataFilter,
-				calculatedTopK);
+		// the tokens budget's share of the target model's context window
+		// (ai.gebo.llms.tokens-budget.factor) unless the caller sized it
+		final int budget = tokensBudget != null ? tokensBudget
+				: (int) (((double) targetChatModel.getContextLength())
+						* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+		AIDocumentsSet searchResult = this.search(minimalChatContext, searchSuggestions, budget,
+				semanticSearchMetaDataFilter, fullTextSearchMetaDataFilter, calculatedTopK);
 		out = AIDocumentsSet.join(out, searchResult);
 
 		return userRanker ? rankFound(out, GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()), topK,
@@ -140,13 +162,12 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	}
 
 	private AIDocumentsSet search(MinimalChatContext minimalChatContext, SearchesSuggestions searchRewritings,
-			IGConfigurableChatModel targetChatModel, int contextWindowLength,
-			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter,
+			int tokensBudget, SemanticSearchMetaDataFilter semanticSearchMetaDataFilter,
 			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter, int topK)
 			throws FullTextException, LLMConfigException, GeboChatSessionLifecycleException {
-
-		// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
-		int tokensBudget = (int) (((double) contextWindowLength) * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("search(...) topK:" + topK + " tokensBudget:" + tokensBudget + " (tok)");
+		}
 		AIDocumentsSet documentSet = searchesService.search(minimalChatContext.getCurrentRequest(),
 				searchRewritings.getRewrittenSemanticSearchSentences(), semanticSearchMetaDataFilter,
 				searchRewritings.getRewrittenFullTextSearchSentences(), fullTextSearchMetaDataFilter,
