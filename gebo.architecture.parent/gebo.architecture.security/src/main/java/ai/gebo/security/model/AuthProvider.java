@@ -39,18 +39,18 @@ public enum AuthProvider {
 	// github(AuthProviderType.OAUTH2, "GitHub auth provider",
 	// false,Oauth2LoginModel.SPA),
 
-	// Authentication using Microsoft account "common" endpoints.
+	// Authentication using a personal Microsoft account, for an installation whose
+	// users have no organization of their own.
 	//
-	// NOT OFFERED when configuring a new provider, see getOauth2Providers(): the
-	// "common" endpoints do not issue tokens under a "common" issuer. Microsoft's own
-	// discovery document for them advertises
-	// issuer: https://login.microsoftonline.com/{tenantid}/v2.0, a literal template,
-	// because a real id token is signed under the issuer of the tenant the person
-	// actually belongs to. The login compares the id token's issuer with the
-	// configured one exactly, so a token from here never matches and the login always
-	// fails. microsoft_multitenant, with the organization's tenant id, is the one that
-	// works. The constant stays so that configurations saved against it still load.
-	microsoft(AuthProviderType.OAUTH2, "Microsoft Entra Id auth provider (for public cloud)", false, List.of()),
+	// The library entry uses Microsoft's "consumers" endpoints, not the "common" ones
+	// this constant was first written against: "common" signs every id token under the
+	// issuer of the person's own tenant and publishes no issuer of its own, and the
+	// login compares the id token's issuer with the configured one exactly, so no
+	// login through it could succeed. Personal accounts all belong to one Microsoft
+	// tenant, whose issuer is fixed. The name stays, so that configurations saved
+	// against it still load, and they pick up the corrected endpoints.
+	microsoft(AuthProviderType.OAUTH2, "Microsoft personal account auth provider (outlook.com, hotmail.com, live.com)",
+			false, List.of()),
 	// Authentication using Microsoft account "multitenant" endpoints
 	microsoft_multitenant(AuthProviderType.OAUTH2,
 			"Microsoft  Entra Id multitenant auth provider (for private organizations)", true,
@@ -154,10 +154,7 @@ public enum AuthProvider {
 		for (AuthProvider authProvider : values) {
 			switch (authProvider) {
 			case local:
-			case ldap:
-			// offering this one only produced configurations that can never log anybody
-			// in, see the constant: its endpoints do not issue tokens under its issuer
-			case microsoft: {
+			case ldap: {
 				continue;
 			}
 			default: {

@@ -18,10 +18,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.security.oauth2.client.oidc.authentication.OidcIdTokenValidator;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.yaml.snakeyaml.Yaml;
 
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
@@ -43,6 +45,9 @@ import ai.gebo.security.model.AuthProvider;
 class Oauth2ProviderLibraryTest {
 
     private static final String LIBRARY = "/oauth2-library/oauth2-library.yml";
+
+    /** The tenant every personal Microsoft account belongs to. */
+    private static final String MICROSOFT_PERSONAL_ACCOUNTS_TENANT = "9188040d-6c67-4c5b-b112-36a304b66dad";
 
     @SuppressWarnings("unchecked")
     private static Map<String, Object> entryOf(AuthProvider provider) {
@@ -188,5 +193,83 @@ class Oauth2ProviderLibraryTest {
         assertThat(user.getName()).isEqualTo(subject);
         // the claim the login policy looks the Gebo.ai user up by
         assertThat((String) user.getAttribute("email")).isEqualTo("anna.bianchi@demo-company.example");
+    }
+
+    /**
+     * The personal Microsoft account entry against what Microsoft publishes at
+     * https://login.microsoftonline.com/consumers/v2.0/.well-known/openid-configuration.
+     * The user info has to be the OIDC one: Spring's OIDC login refuses a user info
+     * response without the id token's {@code sub}, and Graph's /v1.0/me has none.
+     */
+    @Test
+    void microsoftPersonalAccountsUseTheConsumersEndpoints() {
+        Map<String, Object> entry = entryOf(AuthProvider.microsoft);
+        assertThat(entry).as("the microsoft entry of the provider library").isNotNull();
+
+        assertThat(entry.get("issuerUri"))
+                .isEqualTo("https://login.microsoftonline.com/" + MICROSOFT_PERSONAL_ACCOUNTS_TENANT + "/v2.0");
+        assertThat(entry.get("authorizationUri"))
+                .isEqualTo("https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize");
+        assertThat(entry.get("tokenUri")).isEqualTo("https://login.microsoftonline.com/consumers/oauth2/v2.0/token");
+        assertThat(entry.get("jwkSetUri"))
+                .isEqualTo("https://login.microsoftonline.com/consumers/discovery/v2.0/keys");
+        assertThat(entry.get("userInfoUri")).isEqualTo("https://graph.microsoft.com/oidc/userinfo");
+    }
+
+    /**
+     * The check Spring's OIDC login runs on every id token, on a registration built
+     * from the personal Microsoft account entry: a token Microsoft issues for a
+     * personal account passes it, while one issued for an organization's tenant does
+     * not, because that tenant is its issuer. The shared "common" endpoints the entry
+     * used to name publish no issuer of their own, so no token ever passed.
+     */
+    @Test
+    void microsoftPersonalAccountTokensPassTheLoginIssuerCheck() {
+        Map<String, Object> entry = entryOf(AuthProvider.microsoft);
+        assertThat(entry).as("the microsoft entry of the provider library").isNotNull();
+
+        Oauth2ProviderConfig providerConfig = new Oauth2ProviderConfig();
+        providerConfig.setProvider(AuthProvider.microsoft);
+        providerConfig.setAuthorizationUri((String) entry.get("authorizationUri"));
+        providerConfig.setTokenUri((String) entry.get("tokenUri"));
+        providerConfig.setUserInfoUri((String) entry.get("userInfoUri"));
+        providerConfig.setIssuerUri((String) entry.get("issuerUri"));
+        providerConfig.setJwkSetUri((String) entry.get("jwkSetUri"));
+        providerConfig.setUserNameAttribute((String) entry.get("userNameAttribute"));
+
+        Oauth2RuntimeConfiguration runtime = new Oauth2RuntimeConfiguration();
+        runtime.setRegistrationId("microsoft-test");
+        runtime.setProvider(AuthProvider.microsoft);
+        runtime.setConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
+        runtime.setProviderConfig(providerConfig);
+
+        String clientId = "11111111-2222-3333-4444-555555555555";
+        GeboOauth2SecretContent secret = new GeboOauth2SecretContent();
+        secret.setClientId(clientId);
+        secret.setSecret("a-client-secret");
+        secret.setCustomAttributes(new LinkedHashMap<>());
+
+        ClientRegistration registration = Oauth2ClientRegistration
+                .toClientRegistration(new Oauth2ClientRegistration(secret, runtime));
+        OidcIdTokenValidator validator = new OidcIdTokenValidator(registration);
+
+        assertThat(validator.validate(microsoftIdToken(MICROSOFT_PERSONAL_ACCOUNTS_TENANT, clientId)).getErrors())
+                .as("a personal account's id token").isEmpty();
+        assertThat(validator.validate(microsoftIdToken("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", clientId)).hasErrors())
+                .as("an organization account's id token").isTrue();
+    }
+
+    /**
+     * An id token as Microsoft's v2.0 endpoints issue it to the given client for a
+     * person of the given tenant.
+     */
+    private static Jwt microsoftIdToken(String tenant, String clientId) {
+        Instant now = Instant.now();
+        return Jwt.withTokenValue("id-token").header("alg", "RS256")
+                .issuer("https://login.microsoftonline.com/" + tenant + "/v2.0")
+                .subject("AAAAAAAAAAAAAAAAAAAAAIkzqFVrSaSaFHy782bbtaQ").audience(List.of(clientId)).issuedAt(now)
+                .expiresAt(now.plusSeconds(3600)).claim("tid", tenant)
+                .claim("preferred_username", "anna.bianchi@outlook.com").claim("email", "anna.bianchi@outlook.com")
+                .claim("name", "Anna Bianchi").claim("ver", "2.0").build();
     }
 }

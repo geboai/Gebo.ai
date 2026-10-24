@@ -30,20 +30,18 @@ class AuthProviderTest {
     }
 
     /**
-     * Microsoft's shared endpoints sign each id token under the issuer of the tenant
-     * the person belongs to, never under a shared one, and the login compares that
-     * issuer exactly. A configuration made against them could therefore never log
-     * anybody in, so it is not offered; the organization entry, which takes the
-     * tenant id, is the one that works.
+     * Both kinds of Microsoft account can be configured: personal accounts, for an
+     * installation whose users have no organization, and the accounts of one
+     * organization, by its tenant id.
      */
     @Test
-    void theSharedMicrosoftEndpointsAreNotOffered() {
-        assertThat(offered()).doesNotContain(AuthProvider.microsoft);
-        assertThat(offered()).contains(AuthProvider.microsoft_multitenant);
+    void bothKindsOfMicrosoftAccountAreOffered() {
+        assertThat(offered()).contains(AuthProvider.microsoft, AuthProvider.microsoft_multitenant);
     }
 
     /**
-     * The constant itself has to stay: installations that saved a configuration
+     * The constant for personal accounts was first written against Microsoft's shared
+     * endpoints and is kept under that name: installations that saved a configuration
      * against it still read it back, and an enum that no longer has the name simply
      * fails to load them.
      */
