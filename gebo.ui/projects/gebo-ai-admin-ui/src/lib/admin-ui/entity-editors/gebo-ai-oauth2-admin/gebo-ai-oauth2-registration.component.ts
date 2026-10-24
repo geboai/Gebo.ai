@@ -1,7 +1,7 @@
-import { Component, forwardRef, Inject, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Inject, inject, Injector, Input } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthProviderDto, BASE_PATH, OAuth2AdminControllerService, Oauth2ProviderModifiableData } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
 const frontendRedirectRelativeUris: string[] = ["/ui/oauth2-land", "/ui/chat", "/"];
@@ -55,7 +55,14 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
     }[] = [];
     protected authClientMethodData: { code: Oauth2ProviderModifiableData.AuthClientMethodEnum, description: string }[] = [];
     protected authGrantTypeData: { code: Oauth2ProviderModifiableData.AuthGrantTypeEnum, description: string }[] = [];
-    protected configurationTypesData: { code: Oauth2ProviderModifiableData.ConfigurationTypeEnum, description: string }[] = [{ code: "AUTHENTICATION", description: "Authentication" }, { code: "INTEGRATION", description: "Integration client" }];
+    private translationService = inject(GeboAITranslationService);
+    private moduleId = inject(GEBO_AI_MODULE, { optional: true });
+    /** The configuration purposes, built here rather than in the template, translated as the template's texts are. */
+    private purposeTexts: { [id: string]: string } = {
+        AuthenticationPurposeOption: "Authentication",
+        IntegrationPurposeOption: "Integration client"
+    };
+    protected configurationTypesData: { code: Oauth2ProviderModifiableData.ConfigurationTypeEnum, description: string }[] = this.buildConfigurationTypesData();
     protected readonly: boolean = false;
     // 'facebook' | 'google' | 'github' | 'microsoft' | 'linkedin' | 'amazon' | 'twitter' | 'slack' | 'x' | 'apple' | 'oauth2_generic' 
 
@@ -148,8 +155,29 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
             });
         }
     }
+    private buildConfigurationTypesData(): { code: Oauth2ProviderModifiableData.ConfigurationTypeEnum, description: string }[] {
+        return [{ code: "AUTHENTICATION", description: this.purposeTexts["AuthenticationPurposeOption"] },
+        { code: "INTEGRATION", description: this.purposeTexts["IntegrationPurposeOption"] }];
+    }
+
+    /** Translates the configuration purposes, then the options showing them. */
+    private translatePurposeTexts(): void {
+        const moduleId = Array.isArray(this.moduleId) ? this.moduleId[0] : this.moduleId;
+        if (!moduleId) return;
+        const items = Object.entries(this.purposeTexts).map(([id, label]) => ({ id, label }));
+        this.translationService.translateMenuItems(moduleId, this.entityName, items).subscribe(translated => {
+            const texts = { ...this.purposeTexts };
+            translated.forEach(x => {
+                if (x.id && x.label) texts[x.id] = x.label;
+            });
+            this.purposeTexts = texts;
+            this.configurationTypesData = this.buildConfigurationTypesData();
+        });
+    }
+
     override ngOnInit(): void {
         super.ngOnInit();
+        this.translatePurposeTexts();
         this.loadingRelatedBackend = true;
         this.oauth2ControllerService.getProviders().subscribe({
             next: (providers) => {
