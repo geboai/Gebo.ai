@@ -17,6 +17,7 @@ import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
+import ai.gebo.architecture.agents.model.AgentsSessionCreationContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
@@ -28,9 +29,8 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
-		implements IGAgentsNetworkService<InputType, OutputType> {
+		implements IGAgentsNetworkService<InputType, OutputType>, IGSessionContextFactoryAware {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractAgentsNetworkService.class);
 	private static final String EXCEPTION_IN_AGENTS_NETWORK_EXECUTION = "Exception in agents network execution";
 	private static final String NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE = "Network input node does not support a matching type ";
@@ -46,6 +46,125 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private final Class<OutputType> outputType;
 	private final ReactiveIdentityUtil runAs;
 	private final IGAgentsNetworkRuntimeDao agentsDao;
+	/**
+	 * Who builds the session of a run, when someone outside owns it; null means
+	 * this service builds its own, which is what a plain run does.
+	 */
+	private volatile IAgentsCollaborationSessionContextFactory sessionContextFactory;
+
+	/**
+	 * A network service that owns the sessions of its runs: every run collaborates
+	 * in a session of its own, with a fresh identity and no past.
+	 */
+	public GAbstractAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
+			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
+			Class<InputType> inputType, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao) {
+		this(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType, runAs,
+				agentsDao, null);
+	}
+
+	/**
+	 * A network service whose sessions are built by the given factory (see
+	 * {@link IAgentsCollaborationSessionContextFactory}); a null factory is the
+	 * same as not having one.
+	 */
+	public GAbstractAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
+			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
+			Class<InputType> inputType, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao,
+			IAgentsCollaborationSessionContextFactory sessionContextFactory) {
+		this.agentsServicesRepository = agentsServicesRepository;
+		this.rolesDao = rolesDao;
+		this.threadManager = threadManager;
+		this.network = network;
+		this.notificationSink = notificationSink;
+		this.inputType = inputType;
+		this.outputType = outputType;
+		this.runAs = runAs;
+		this.agentsDao = agentsDao;
+		this.sessionContextFactory = sessionContextFactory;
+	}
+
+	@Override
+	public void setSessionContextFactory(IAgentsCollaborationSessionContextFactory sessionContextFactory) {
+		this.sessionContextFactory = sessionContextFactory;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("setSessionContextFactory(...) network code:" + (network != null ? network.getCode() : null)
+					+ " sessions built from outside:" + (sessionContextFactory != null));
+		}
+	}
+
+	/**
+	 * What the run is about, for whoever builds its session.
+	 */
+	protected AgentsSessionCreationContext sessionCreationContext(IChatRequestContext chatRequestContext,
+			Map<String, Object> environment) {
+		return AgentsSessionCreationContext.builder().network(network).chatRequestContext(chatRequestContext)
+				.environment(environment).inputType(inputType).outputType(outputType).runAs(runAs)
+				.networkServiceId(getId()).build();
+	}
+
+	/**
+	 * The session this run collaborates in: the one the factory builds when there is
+	 * one that builds a usable session, else a session of this run's own.
+	 */
+	protected AgentsCollaborationSessionContext createSessionContext(AgentsSessionCreationContext creation) {
+		final IAgentsCollaborationSessionContextFactory factory = sessionContextFactory;
+		if (factory == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No session factory supplied: the run opens a session of its own");
+			}
+			return new AgentsCollaborationSessionContext();
+		}
+		AgentsCollaborationSessionContext created = null;
+		try {
+			created = factory.createSessionContext(creation);
+		} catch (Throwable factoryFailure) {
+			// A session builder that cannot build one must not take the run down with it:
+			// the run goes on in a session of its own, and the failure is reported.
+			LOGGER.error("The session factory failed to build a session for network:"
+					+ (network != null ? network.getCode() : null) + "; the run opens one of its own",
+					factoryFailure);
+		}
+		if (created == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The session factory built no session: the run opens one of its own");
+			}
+			return new AgentsCollaborationSessionContext();
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The run collaborates in session:" + created.getId() + " built from outside, already holding "
+					+ created.getSampledContributions().size() + " contribution(s), next contributionNr:"
+					+ created.getContributionCounter());
+		}
+		return created;
+	}
+
+	/**
+	 * Tells whoever built the session that the run is over. Only the factory that
+	 * built a session is told of it, and what it throws never changes the outcome of
+	 * the run.
+	 */
+	private void sessionCompleted(AgentsCollaborationSessionContext session, AgentsSessionCreationContext creation,
+			OutputType output, Throwable failure) {
+		final IAgentsCollaborationSessionContextFactory factory = sessionContextFactory;
+		if (factory == null || session == null) {
+			return;
+		}
+		try {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Closing session:" + session.getId() + " of network:"
+						+ (network != null ? network.getCode() : null) + " produced output:" + (output != null)
+						+ " failed:" + (failure != null) + " contributions:"
+						+ session.getSampledContributions().size());
+			}
+			factory.sessionCompleted(session, creation, output, failure);
+		} catch (Throwable completionFailure) {
+			LOGGER.error("The session factory failed while closing session:" + session.getId()
+					+ "; the outcome of the run is unchanged", completionFailure);
+		}
+	}
 
 	@Override
 	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
@@ -67,7 +186,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			LOGGER.debug("Resolved input node:" + inputNodeName + " among " + network.getAgents().size()
 					+ " network participant(s)");
 		}
-		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext();
+		final AgentsSessionCreationContext sessionCreation = sessionCreationContext(chatRequestContext, environment);
+		final AgentsCollaborationSessionContext session = createSessionContext(sessionCreation);
 		if (environment != null)
 			session.getEnvironment().putAll(environment);
 		if (LOGGER.isTraceEnabled()) {
@@ -78,6 +198,27 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			LOGGER.trace(String.valueOf(input));
 			LOGGER.trace("</NETWORK_INPUT>");
 		}
+		OutputType producedOutput = null;
+		Throwable failure = null;
+		try {
+			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName);
+			return producedOutput;
+		} catch (AgentException | LLMConfigException | RuntimeException | Error runFailure) {
+			failure = runFailure;
+			throw runFailure;
+		} finally {
+			// Whoever built this session is told the run is over in every case: with what
+			// it produced, or with what made it fail.
+			sessionCompleted(session, sessionCreation, producedOutput, failure);
+		}
+	}
+
+	/**
+	 * The run itself, in the session it collaborates in.
+	 */
+	private OutputType executeNetworkInSession(IChatRequestContext chatRequestContext, InputType input,
+			AgentsCollaborationSessionContext session, String inputNodeName)
+			throws AgentException, LLMConfigException {
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final RuntimeAgentInfos inputRuntime = agentsDao.findAgentByCode(inputNodeName);
