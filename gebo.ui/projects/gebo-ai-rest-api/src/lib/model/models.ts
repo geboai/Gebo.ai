@@ -1,3 +1,4 @@
+export * from './a2AExportKinds';
 export * from './a2AExportedAgent';
 export * from './a2ARemoteAgentConfig';
 export * from './a2ARemoteSkill';

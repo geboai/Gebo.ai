@@ -11,13 +11,13 @@
  */
 
 export interface GUserChatInfo { 
-    username?: string;
     description?: string;
-    code?: string;
-    contextCode?: string;
     chatProfileCode?: string;
     chatModelCode?: string;
     pipelineCode?: string;
-    ragChat?: boolean;
     chatCreationDateTime?: Date;
+    code?: string;
+    contextCode?: string;
+    ragChat?: boolean;
+    username?: string;
 }

@@ -39,7 +39,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class ProviderDealsControllerService {
 
-    protected basePath = 'http://localhost:12998';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
