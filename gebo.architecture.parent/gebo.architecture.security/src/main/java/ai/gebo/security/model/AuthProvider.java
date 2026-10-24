@@ -45,7 +45,8 @@ public enum AuthProvider {
 	//
 	// Those endpoints sign every id token under the issuer of the person's own tenant,
 	// so the login checks the tenant instead of one issuer
-	// (GMicrosoftAccountsIdTokenValidator). allowedTenants lists the tenants admitted:
+	// (GMicrosoftAccountsIdTokenValidator), and so does the API with a bearer token
+	// (GeboMicrosoftAccountsTenantValidator). allowedTenants lists the tenants admitted:
 	// "consumers" for personal accounts, and the tenant id of each organization. A
 	// configuration saved before it existed admits personal accounts only.
 	microsoft(AuthProviderType.OAUTH2,

@@ -8,6 +8,9 @@
  */
 package ai.gebo.security.services.impl.authmanagers;
 
+import static ai.gebo.security.services.impl.authmanagers.MicrosoftTokenSigner.CONTOSO;
+import static ai.gebo.security.services.impl.authmanagers.MicrosoftTokenSigner.FABRIKAM;
+import static ai.gebo.security.services.impl.authmanagers.MicrosoftTokenSigner.PERSONAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
@@ -18,6 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 
@@ -56,9 +60,16 @@ class IssuerConfigCacheTest {
     private Oauth2RuntimeConfiguration lookup(String issuer) {
         return cache.forIssuer(issuer, () -> {
             scans.incrementAndGet();
-            return store.values().stream().filter(c -> issuer.equals(c.getProviderConfig().getIssuerUri()))
-                    .findFirst().orElse(null);
+            return IssuerConfigCache.answeringFor(List.copyOf(store.values()), issuer);
         }).orElse(null);
+    }
+
+    private static String tenantIssuer(String tenant) {
+        return "https://login.microsoftonline.com/" + tenant + "/v2.0";
+    }
+
+    private static Oauth2RuntimeConfiguration microsoftAccounts(String id, String allowedTenants) {
+        return MicrosoftTokenSigner.otherProvider(id, AuthProvider.microsoft, tenantIssuer(PERSONAL), allowedTenants);
     }
 
     @Test
@@ -110,6 +121,69 @@ class IssuerConfigCacheTest {
         store.put("keycloak-1", configuration("keycloak-1", ISSUER, null));
 
         assertThat(lookup(ISSUER)).isNotNull();
+    }
+
+    /**
+     * The people of the Microsoft accounts configuration belong to several tenants,
+     * each signing under an issuer of its own, and it answers for those it admits.
+     */
+    @Test
+    void theMicrosoftAccountsConfigurationAnswersForTheTenantsItAdmits() {
+        Oauth2RuntimeConfiguration configuration = microsoftAccounts("microsoft-1", "consumers, " + CONTOSO);
+
+        assertThat(IssuerConfigCache.answersFor(configuration, tenantIssuer(PERSONAL))).isTrue();
+        assertThat(IssuerConfigCache.answersFor(configuration, tenantIssuer(CONTOSO))).isTrue();
+        assertThat(IssuerConfigCache.answersFor(configuration, tenantIssuer(CONTOSO.toUpperCase()))).isTrue();
+        assertThat(IssuerConfigCache.answersFor(configuration, tenantIssuer(FABRIKAM))).isFalse();
+        assertThat(IssuerConfigCache.answersFor(configuration, tenantIssuer("common"))).isFalse();
+        assertThat(IssuerConfigCache.answersFor(configuration, tenantIssuer(CONTOSO + "/more"))).isFalse();
+        assertThat(IssuerConfigCache.answersFor(configuration, "https://login.microsoftonline.com/v2.0")).isFalse();
+        assertThat(IssuerConfigCache.answersFor(configuration, "https://sts.windows.net/" + CONTOSO + "/"))
+                .isFalse();
+        assertThat(IssuerConfigCache.answersFor(configuration, null)).isFalse();
+    }
+
+    /** No other provider reads the list, whatever it was saved with. */
+    @Test
+    void anotherProviderAnswersForItsOwnIssuerOnly() {
+        Oauth2RuntimeConfiguration organization = MicrosoftTokenSigner.otherProvider("entra-1",
+                AuthProvider.microsoft_multitenant, tenantIssuer(CONTOSO), FABRIKAM);
+
+        assertThat(IssuerConfigCache.answersFor(organization, tenantIssuer(CONTOSO))).isTrue();
+        assertThat(IssuerConfigCache.answersFor(organization, tenantIssuer(FABRIKAM))).isFalse();
+    }
+
+    /**
+     * An organization configured on its own is meant more precisely than the
+     * Microsoft accounts configuration that also admits it, whichever comes first.
+     */
+    @Test
+    void anOrganizationConfiguredOnItsOwnIsPreferred() {
+        Oauth2RuntimeConfiguration accounts = microsoftAccounts("microsoft-1", "consumers, " + CONTOSO);
+        Oauth2RuntimeConfiguration organization = MicrosoftTokenSigner.otherProvider("entra-1",
+                AuthProvider.microsoft_multitenant, tenantIssuer(CONTOSO), null);
+
+        assertThat(IssuerConfigCache.answeringFor(List.of(accounts, organization), tenantIssuer(CONTOSO)))
+                .isSameAs(organization);
+        assertThat(IssuerConfigCache.answeringFor(List.of(organization, accounts), tenantIssuer(CONTOSO)))
+                .isSameAs(organization);
+        assertThat(IssuerConfigCache.answeringFor(List.of(organization, accounts), tenantIssuer(PERSONAL)))
+                .isSameAs(accounts);
+        assertThat(IssuerConfigCache.answeringFor(List.of(organization, accounts), tenantIssuer(FABRIKAM)))
+                .isNull();
+    }
+
+    @Test
+    void aTenantTakenOffTheListIsUnknownFromTheNextRequest() {
+        store.put("microsoft-1", microsoftAccounts("microsoft-1", "consumers, " + CONTOSO));
+        assertThat(lookup(tenantIssuer(CONTOSO))).isNotNull();
+        assertThat(lookup(tenantIssuer(CONTOSO))).isNotNull();
+        assertThat(scans.get()).isEqualTo(1);
+
+        store.put("microsoft-1", microsoftAccounts("microsoft-1", "consumers"));
+
+        assertThat(lookup(tenantIssuer(CONTOSO))).isNull();
+        assertThat(lookup(tenantIssuer(PERSONAL))).isNotNull();
     }
 
     @Test

@@ -203,15 +203,14 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 		}
 		String issuer = payload.has("iss") ? payload.get("iss").asText() : null;
 		if (issuer != null) {
-			Oauth2RuntimeConfiguration matched = issuerConfigCache.forIssuer(issuer, () -> oauth2RuntimeConfigurationDao
-					.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION).stream()
-					.filter(config -> config.getProviderConfig() != null
-							&& issuer.equals(config.getProviderConfig().getIssuerUri()))
-					.findFirst().orElse(null))
+			Oauth2RuntimeConfiguration matched = issuerConfigCache.forIssuer(issuer,
+					() -> IssuerConfigCache.answeringFor(oauth2RuntimeConfigurationDao
+							.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION), issuer))
 					.orElse(null);
 			if (matched != null) {
-				// Unambiguous: this issuer matches exactly one configured provider, so there is
-				// no need for X-Authprovider-id at all to disambiguate.
+				// Unambiguous: this issuer belongs to one configured provider (its own issuer,
+				// or a tenant the Microsoft accounts configuration admits), so there is no
+				// need for X-Authprovider-id at all to disambiguate.
 				return new SingleOauth2ConfigJwtAuthenticationManager(header, matched, jwtAuthenticationConverter,
 						jwtDecoderCache, provisioner);
 			}

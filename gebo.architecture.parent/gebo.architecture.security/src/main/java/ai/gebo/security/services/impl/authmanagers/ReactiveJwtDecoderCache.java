@@ -10,6 +10,7 @@
 package ai.gebo.security.services.impl.authmanagers;
 
 import java.util.Collection;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +21,11 @@ import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoders;
+
+import ai.gebo.security.model.AuthProvider;
+import ai.gebo.security.model.oauth2.Oauth2ProviderConfig;
+import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
+import ai.gebo.security.services.impl.GMicrosoftAccountsIdTokenValidator;
 
 /**
  * Reactive counterpart of {@link JwtDecoderCache}: a thread-safe cache of
@@ -55,6 +61,31 @@ public final class ReactiveJwtDecoderCache {
 		}
 		return decodersByKey.computeIfAbsent(cacheKey(issuerUri, acceptedAudiences),
 				k -> build(issuerUri, acceptedAudiences));
+	}
+
+	/**
+	 * Returns a cached decoder for the tokens of a configuration, checked as its
+	 * provider signs them: see {@link JwtDecoderCache#forConfiguration}, which this
+	 * mirrors, Microsoft accounts configuration included.
+	 *
+	 * @param configuration a configuration as the store hands it out, its endpoints
+	 *                      resolved and its client included
+	 */
+	public ReactiveJwtDecoder forConfiguration(Oauth2RuntimeConfiguration configuration) {
+		Oauth2ProviderConfig provider = configuration.getProviderConfig();
+		if (configuration.getProvider() == AuthProvider.microsoft && provider.getJwkSetUri() != null) {
+			Set<String> tenants = GMicrosoftAccountsIdTokenValidator.admittedTenants(configuration);
+			Collection<String> audiences = configuration.getResourceServerAudiences();
+			return decodersByKey.computeIfAbsent(JwtDecoderCache.microsoftAccountsCacheKey(provider.getJwkSetUri(),
+					configuration.getRegistrationId(), tenants, audiences), k -> {
+						NimbusReactiveJwtDecoder decoder = NimbusReactiveJwtDecoder
+								.withJwkSetUri(provider.getJwkSetUri()).build();
+						decoder.setJwtValidator(JwtDecoderCache.microsoftAccountsValidator(tenants,
+								configuration.getRegistrationId(), audiences));
+						return decoder;
+					});
+		}
+		return forIssuerLocation(provider.getIssuerUri(), configuration.getResourceServerAudiences());
 	}
 
 	private static ReactiveJwtDecoder build(String issuerUri, Collection<String> acceptedAudiences) {
