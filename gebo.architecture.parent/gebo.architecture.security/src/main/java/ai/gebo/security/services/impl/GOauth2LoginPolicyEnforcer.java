@@ -48,6 +48,16 @@ import lombok.AllArgsConstructor;
  * refused. The events raised here name the identity, the provider, the policy in
  * force, and what made a refusal a refusal.
  * </p>
+ *
+ * <h2>Disabled accounts</h2>
+ * <p>
+ * An account an administrator disabled is refused here whatever the policy, with
+ * the reason {@code userDisabled}. The password login and every token already
+ * refuse it, through the user details service; this login did not, so a disabled
+ * person signing in with their provider was handed a session token, and only the
+ * requests that followed refused it, with an error rather than the login page's
+ * refusal.
+ * </p>
  */
 @AllArgsConstructor
 public class GOauth2LoginPolicyEnforcer {
@@ -91,6 +101,19 @@ public class GOauth2LoginPolicyEnforcer {
 	 * @throws OAuth2AuthenticationException when the identity may not log in here
 	 */
 	public void enforce(String registrationId, OAuth2User oauth2User) {
+		enforce(registrationId, oauth2User, "oauth2Login");
+	}
+
+	/**
+	 * As {@link #enforce(String, OAuth2User)}, recording the login as the flow
+	 * given, so the reactive login can still be told apart in the audit.
+	 *
+	 * @param registrationId the configuration the login came through
+	 * @param oauth2User     the identity the provider described
+	 * @param flow           the {@code flow} detail of the events raised
+	 * @throws OAuth2AuthenticationException when the identity may not log in here
+	 */
+	public void enforce(String registrationId, OAuth2User oauth2User, String flow) {
 		Oauth2ClientRegistration config = null;
 		AuthProvider authProvider = null;
 		try {
@@ -110,7 +133,7 @@ public class GOauth2LoginPolicyEnforcer {
 		IGOauth2UserSyncService service = oauth2SyncService.handlerOf(data);
 
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
-		event.getDetails().put("flow", "oauth2Login");
+		event.getDetails().put("flow", flow);
 		event.getDetails().put("registrationId", registrationId);
 		event.getDetails().put("loginPolicy", String.valueOf(securityProperties.getLoginPolicy()));
 		event.getDetails().put("authProvider", String.valueOf(authProvider));
@@ -125,6 +148,7 @@ public class GOauth2LoginPolicyEnforcer {
 				: SecurityAuditTaxonomy.Action.OAUTH2_IDENTITY_SYNC;
 		switch (securityProperties.getLoginPolicy()) {
 		case TRUST_EVERY_OAUTH_IDENTITY: {
+			refuseIfDisabled(event, user, email);
 			try {
 				service.createOrSyncUser(data);
 			} catch (RuntimeException e) {
@@ -151,6 +175,9 @@ public class GOauth2LoginPolicyEnforcer {
 						SecurityAuditTaxonomy.Outcome.DENIED);
 				throw new OAuth2AuthenticationException("User not authorized");
 			}
+			// after the provider check: an account claimed through another provider is the
+			// more telling reason to record, disabled or not
+			refuseIfDisabled(event, user, email);
 			try {
 				service.syncUser(data);
 			} catch (RuntimeException e) {
@@ -162,6 +189,19 @@ public class GOauth2LoginPolicyEnforcer {
 			logProvisioningEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_IDENTITY_SYNC, email,
 					SecurityAuditTaxonomy.Outcome.SUCCESS);
 		}
+		}
+	}
+
+	/**
+	 * Refuses an existing account an administrator disabled, before it is refreshed
+	 * from the provider.
+	 */
+	private void refuseIfDisabled(SecurityEvent event, EditableUser user, String email) {
+		if (user != null && Boolean.TRUE.equals(user.getDisabled())) {
+			event.getDetails().put("reason", "userDisabled");
+			logProvisioningEvent(event, SecurityAuditTaxonomy.Action.OAUTH2_IDENTITY_SYNC, email,
+					SecurityAuditTaxonomy.Outcome.DENIED);
+			throw new OAuth2AuthenticationException("User disabled");
 		}
 	}
 }

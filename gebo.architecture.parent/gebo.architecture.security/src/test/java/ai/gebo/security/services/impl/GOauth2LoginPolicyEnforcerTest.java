@@ -8,6 +8,7 @@
  */
 package ai.gebo.security.services.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,7 @@ import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementatio
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.IGUsersAdminService;
+import ai.gebo.security.services.SecurityAuditTaxonomy;
 
 /**
  * The decision {@code ai.gebo.security.loginPolicy} governs, which until now never
@@ -56,6 +59,8 @@ class GOauth2LoginPolicyEnforcerTest {
     private IGOauth2UserSyncService sync;
     private GOauth2LoginPolicyEnforcer enforcer;
     private OAuth2User identity;
+    private SecurityEvent event;
+    private Map<String, Object> details;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -65,8 +70,9 @@ class GOauth2LoginPolicyEnforcerTest {
         syncProvider = mock(IGOauth2UserSyncServiceConditionedImplementationProvider.class);
         sync = mock(IGOauth2UserSyncService.class);
         IGSecurityAuditLoggerService audit = mock(IGSecurityAuditLoggerService.class);
-        SecurityEvent event = mock(SecurityEvent.class);
-        when(event.getDetails()).thenReturn(new HashMap<>());
+        event = mock(SecurityEvent.class);
+        details = new HashMap<>();
+        when(event.getDetails()).thenReturn(details);
         when(audit.newSecurityEvent()).thenReturn(event);
         when(syncProvider.handlerOf(any(Oauth2SyncUsersData.class))).thenReturn(sync);
 
@@ -87,6 +93,12 @@ class GOauth2LoginPolicyEnforcerTest {
         EditableUser user = new EditableUser();
         user.setUsername(EMAIL);
         user.setAuthProvider(provider);
+        return user;
+    }
+
+    private static EditableUser disabledUserOf(AuthProvider provider) {
+        EditableUser user = userOf(provider);
+        user.setDisabled(true);
         return user;
     }
 
@@ -125,6 +137,61 @@ class GOauth2LoginPolicyEnforcerTest {
 
         assertThatCode(() -> enforcer.enforce(REGISTRATION, identity)).doesNotThrowAnyException();
         verify(sync).createOrSyncUser(any(Oauth2SyncUsersData.class));
+    }
+
+    /**
+     * The password login and every token refuse a disabled account; the provider's
+     * login has to as well, whatever the policy, and before the account is refreshed.
+     */
+    @Test
+    void aDisabledAccountIsRefusedWhateverThePolicy() {
+        for (GeboLoginPolicy policy : GeboLoginPolicy.values()) {
+            securityConfig.setLoginPolicy(policy);
+            when(users.findUserByUsername(EMAIL)).thenReturn(disabledUserOf(AuthProvider.keycloak));
+            details.clear();
+
+            assertThatThrownBy(() -> enforcer.enforce(REGISTRATION, identity)).as("%s", policy)
+                    .isInstanceOf(OAuth2AuthenticationException.class);
+            assertThat(details.get("reason")).as("%s", policy).isEqualTo("userDisabled");
+        }
+        verify(sync, never()).syncUser(any());
+        verify(sync, never()).createOrSyncUser(any());
+    }
+
+    @Test
+    void theRefusalOfADisabledAccountIsAudited() {
+        securityConfig.setLoginPolicy(GeboLoginPolicy.REQUIRE_INVITATION);
+        when(users.findUserByUsername(EMAIL)).thenReturn(disabledUserOf(AuthProvider.keycloak));
+
+        assertThatThrownBy(() -> enforcer.enforce(REGISTRATION, identity))
+                .isInstanceOf(OAuth2AuthenticationException.class);
+        verify(event).setOutcome(SecurityAuditTaxonomy.Outcome.DENIED);
+        verify(event).setResourceId(EMAIL);
+    }
+
+    /**
+     * An account of that name registered against another provider is the more
+     * telling reason, and the one recorded, disabled or not.
+     */
+    @Test
+    void aDisabledAccountOfAnotherProviderIsRecordedAsAMismatch() {
+        securityConfig.setLoginPolicy(GeboLoginPolicy.REQUIRE_INVITATION);
+        when(users.findUserByUsername(EMAIL)).thenReturn(disabledUserOf(AuthProvider.google));
+
+        assertThatThrownBy(() -> enforcer.enforce(REGISTRATION, identity))
+                .isInstanceOf(OAuth2AuthenticationException.class);
+        assertThat(details.get("reason")).isEqualTo("authProviderMismatch");
+    }
+
+    @Test
+    void anAccountExplicitlyEnabledIsLetIn() {
+        securityConfig.setLoginPolicy(GeboLoginPolicy.REQUIRE_INVITATION);
+        EditableUser enabled = userOf(AuthProvider.keycloak);
+        enabled.setDisabled(false);
+        when(users.findUserByUsername(EMAIL)).thenReturn(enabled);
+
+        assertThatCode(() -> enforcer.enforce(REGISTRATION, identity)).doesNotThrowAnyException();
+        verify(sync).syncUser(any(Oauth2SyncUsersData.class));
     }
 
     @Test
