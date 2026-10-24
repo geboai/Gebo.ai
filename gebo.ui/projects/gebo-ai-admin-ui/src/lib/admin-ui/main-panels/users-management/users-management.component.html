@@ -111,7 +111,7 @@
                   <tr>
                     <td>{{ grp.code }}</td>
                     <td>{{ grp.description }}</td>
-                    <td>{{ grp.users }}</td>
+                    <td>{{ grp.userIds?.length ?? 0 }}</td>
                     <td>
                       <p-button id="EditGroupBtn" gebo-ai-label [outlined]="true" label="Edit"
                       (onClick)="editGroup(grp)" icon="pi pi-users"></p-button>

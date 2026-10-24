@@ -134,6 +134,10 @@ export class GeboAIOauth2RegistrationComponent extends BaseEntityEditingComponen
                 this.formGroup.controls["providerConfiguration"].enable();
                 this.switchMandatory(this.formGroup.controls["providerConfiguration"], true);
                 const providerConfiguration = this.formGroup.controls["providerConfiguration"] as FormGroup;
+                // not in the form, so never filled: an OpenID Connect login names the user by
+                // "sub" when it is empty
+                providerConfiguration.controls["userNameAttribute"].clearValidators();
+                providerConfiguration.controls["userNameAttribute"].updateValueAndValidity();
                 providerConfiguration.controls["provider"].setValue(value.authProvider);
             } else {
                 this.formGroup.controls["providerConfiguration"].disable();

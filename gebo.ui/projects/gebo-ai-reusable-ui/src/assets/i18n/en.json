@@ -642,6 +642,12 @@
     "Oauth2ProviderRegistration": {
       "AuthenticationPurposeOption": { "label": "Authentication" },
       "IntegrationPurposeOption": { "label": "Integration client" },
+      "NewRegistrationTitle": {
+        "label": "Insert new OAUTH2 Authentication/Integration infos"
+      },
+      "EditRegistrationTitle": {
+        "label": "Editing OAUTH2 Authentication/Integration infos"
+      },
       "code": {
         "label": "Code",
         "help": "Enter the description of OAUTH2 Authentication/Integration code (registrationId)."
@@ -911,6 +917,8 @@
   },
   "GeboAIUsersGroupModule": {
     "GeboAIUserComponent": {
+      "NewUserTitle": { "label": "New user" },
+      "EditUserTitle": { "label": "Editing user" },
       "MainPanel": { "label": "Editing user" },
       "SaveBtn": { "label": "Save" },
       "InsertBtn": { "label": "Insert" },
@@ -945,6 +953,8 @@
       "USER_DELETED_OK": { "summary": "User deleted successfully" }
     },
     "UsersGroup": {
+      "NewGroupTitle": { "label": "New user group" },
+      "EditGroupTitle": { "label": "Editing user group" },
       "DeleteBtn": { "label": "Delete" },
       "SaveBtn": { "label": "Save" },
       "UserIds": { "placeholder": "Select users" },
