@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
@@ -33,8 +32,13 @@ import tools.jackson.databind.json.JsonMapper;
  */
 class PageJsonShapeTest {
 
-	/** The page serialization the monolith's {@link Main} asks for. */
-	@Configuration
+	/**
+	 * The page serialization the monolith's {@link Main} asks for. Not a
+	 * {@code @Configuration}: Main scans ai.gebo, test classes included, and a second
+	 * {@code @EnableSpringDataWebSupport} there registers SpringDataWebSettings twice,
+	 * which stops every integration test's context. Registered directly, the annotation
+	 * still applies.
+	 */
 	@EnableSpringDataWebSupport(pageSerializationMode = PageSerializationMode.VIA_DTO)
 	static class AsTheMonolith {
 	}
