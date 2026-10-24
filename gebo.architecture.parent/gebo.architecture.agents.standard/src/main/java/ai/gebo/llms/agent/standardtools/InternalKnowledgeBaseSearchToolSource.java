@@ -45,6 +45,7 @@ import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
@@ -87,7 +88,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			+ "visible to the user. Give a precise question or topic, and optionally a few alternative phrasings; returns "
 			+ "the most relevant document fragments with their titles and sources.";
 	/** The share of the room left to the tools an answer may take: a third by default. */
-	public static final double DEFAULT_ROOM_DIVISOR = 3.0d;
+	public static final double DEFAULT_ROOM_DIVISOR = KnowledgeBaseSearchBudget.DEFAULT_ROOM_DIVISOR;
 	/** The fittings of the fragments tried to bring the whole answer in its room. */
 	static final int MAX_FIT_ATTEMPTS = 4;
 	static final int DEFAULT_TOP_K = 10;
@@ -117,21 +118,13 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 	}
 
 	/**
-	 * The configured divisor of the room left to the tools, the default one when not
-	 * configured or not a positive number.
+	 * The divisor of the room left to the tools: the knowledge base tools' own when
+	 * configured, the shared one of the knowledge base searches otherwise (see
+	 * {@link StandardAgentsConfig#knowledgeBaseSearchRoomDivisor(StandardAgentsConfig)}).
 	 */
 	double roomDivisor() {
-		final StandardAgentsConfig config = agentsConfig != null ? agentsConfig.getIfAvailable() : null;
-		if (config == null) {
-			return DEFAULT_ROOM_DIVISOR;
-		}
-		final double divisor = config.getKnowledgeBaseSearchRoomDivisor();
-		if (!(divisor > 0) || Double.isInfinite(divisor)) {
-			LOGGER.warn("ai.gebo.agents.standard.knowledge-base-search-room-divisor " + divisor
-					+ " is not a positive number, " + DEFAULT_ROOM_DIVISOR + " is used");
-			return DEFAULT_ROOM_DIVISOR;
-		}
-		return divisor;
+		return StandardAgentsConfig
+				.knowledgeBaseSearchRoomDivisor(agentsConfig != null ? agentsConfig.getIfAvailable() : null);
 	}
 
 	/**
@@ -144,7 +137,7 @@ public class InternalKnowledgeBaseSearchToolSource implements IGToolCallbackSour
 			return Integer.MAX_VALUE;
 		}
 		final double divisor = roomDivisor();
-		final int maxTokens = callBudget.grant((int) Math.min(Integer.MAX_VALUE, Math.floor(callBudget.left() / divisor)));
+		final int maxTokens = KnowledgeBaseSearchBudget.shareOfRoom(callBudget.left(), divisor);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("maxResultTokens(...) room left:" + callBudget.left() + " (tok) divisor:" + divisor
 					+ " answer at most:" + maxTokens + " (tok)");

@@ -80,4 +80,22 @@ class InternalKnowledgeLLMAssistedRetrieveRankingTest {
 
 		assertEquals(List.of(true), asked);
 	}
+
+	@Test
+	void anImplementationSizingItsSearchItselfIgnoresTheGivenBudget() throws Exception {
+		List<Boolean> asked = new ArrayList<>();
+		IInternalKnowledgeLLMAssistedRetrieveService service = new IInternalKnowledgeLLMAssistedRetrieveService() {
+			@Override
+			public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+					IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+					boolean removeIrrelevant) {
+				asked.add(removeIrrelevant);
+				return Flux.empty();
+			}
+		};
+
+		service.doDocumentsRetrieve(null, null, null, 8, true, 28000);
+
+		assertEquals(List.of(true), asked, "the implementation without a budget still answers");
+	}
 }

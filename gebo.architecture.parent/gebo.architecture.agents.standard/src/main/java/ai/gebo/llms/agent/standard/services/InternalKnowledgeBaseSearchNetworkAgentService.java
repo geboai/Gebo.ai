@@ -1,6 +1,5 @@
 package ai.gebo.llms.agent.standard.services;
 
-import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.agent.standardtools.DeepSearchReduction;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -186,8 +186,12 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			}
 
 			final boolean deepSearch = deepSearchRequested(command);
-			// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
-			final int contextShare = (int) (agentModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+			// the knowledge base contents' share of what the agent's prompt, history and
+			// documents leave of its model's context, as the knowledge base search tools'
+			// (KnowledgeBaseSearchBudget)
+			final int contextShare = KnowledgeBaseSearchBudget.forContext(agentModel.getContextLength(),
+					(long) (prompt != null ? prompt.getTokensSize() : 0) + chatHistoryTokens(prompt, chatRequestContext)
+							+ contextDocumentsTokens(prompt, chatRequestContext));
 			int topK = retrievalTopK(command);
 			int tokensBudget = contextShare;
 			if (deepSearch) {

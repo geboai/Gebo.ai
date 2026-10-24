@@ -305,10 +305,14 @@ what lets the model cite and decide.
 `grantFor` gives a tool everything that is left. When the model is likely to
 call several tools in the same round (several searches), take a **share**
 instead, so the later calls are not left with nothing: the knowledge base search
-takes the room divided by `ai.gebo.agents.standard.knowledge-base-search-room-divisor`
+takes the room divided by `ai.gebo.llms.knowledge-base-search-room-divisor`
 (3 by default, `InternalKnowledgeBaseSearchToolSource.maxResultTokens`), and so do
 the search tools of the web and the other systems
-(`SearchToolContentPipeline.resultTokens`).
+(`SearchToolContentPipeline.resultTokens`). The divisor and the formula are
+`KnowledgeBaseSearchBudget`'s, the same that caps the knowledge base contents of the
+chats with knowledge bases, of the pipelines and of the knowledge base agents of the
+networks (`forContext`); `ai.gebo.agents.standard.knowledge-base-search-room-divisor`,
+when set, overrides the divisor for the tools only.
 
 ### Results you cannot size
 
