@@ -1,4 +1,48 @@
 {
+  "GeboAIWorkflowStatsDashboardModule": {
+    "GeboAIWorkflowStatsAdminDashboardComponent": {
+      "noWorkflowStatsLabel": { "label": "no workflow activity recorded yet" },
+      "wdlabel": { "label": "Monthly workflow volumes" },
+      "wmlabel": { "label": "This month workflow volumes" },
+      "FilterDrillDownLabel": { "label": "Filter Drill Down" },
+      "KnowledgeBaseFilterLabel": { "label": "Knowledge Base" },
+      "ProjectFilterLabel": { "label": "Project" },
+      "ProjectEndpointFilterLabel": { "label": "Project Endpoint" },
+      "WorkflowTypeFilterLabel": { "label": "Workflow Type" },
+      "WorkflowIdFilterLabel": { "label": "Workflow Id" },
+      "WorkflowStepFilterLabel": { "label": "Workflow Step" },
+      "YearFilterLabel": { "label": "Year" },
+      "MonthFilterLabel": { "label": "Month" },
+      "KnowledgeBaseFilterSelect": { "placeholder": "All" },
+      "ProjectFilterSelect": { "placeholder": "All" },
+      "ProjectEndpointFilterSelect": { "placeholder": "All" },
+      "WorkflowTypeFilterSelect": { "placeholder": "All" },
+      "WorkflowIdFilterSelect": { "placeholder": "All" },
+      "WorkflowStepFilterSelect": { "placeholder": "All" },
+      "YearFilterSelect": { "placeholder": "All" },
+      "MonthFilterSelect": { "placeholder": "All" },
+      "ApplyFilterBtn": { "label": "Filter" },
+      "ResetFilterBtn": { "label": "Reset" },
+      "DocumentsTitle": { "label": "Documents" },
+      "DocumentsUnit": { "label": "count" },
+      "ChunksTokensTitle": { "label": "Chunks & Tokens" },
+      "ChunksTokensUnit": { "label": "chunks / k tokens" },
+      "NoMonthlyActivityLabel": {
+        "label": "No monthly workflow activity recorded"
+      },
+      "NoDailyActivityLabel": {
+        "label": "No workflow activity recorded for this month"
+      },
+      "AllOption": { "label": "All" },
+      "InputSeries": { "label": "Input" },
+      "ProcessedSeries": { "label": "Processed" },
+      "SentToNextStepSeries": { "label": "Sent to next step" },
+      "DiscardedSeries": { "label": "Discarded" },
+      "ErrorsSeries": { "label": "Errors" },
+      "ChunksSeries": { "label": "Chunks" },
+      "TokensSeries": { "label": "Tokens (k)" }
+    }
+  },
   "GeboAIContentViewerModule": {
     "GeboAIContentViewerComponent": {
       "ShowingContentTitle": { "label": "Showing content" }
@@ -596,6 +640,8 @@
   },
   "GeboAIOauth2RegistrationModule": {
     "Oauth2ProviderRegistration": {
+      "AuthenticationPurposeOption": { "label": "Authentication" },
+      "IntegrationPurposeOption": { "label": "Integration client" },
       "NewRegistrationTitle": {
         "label": "Insert new OAUTH2 Authentication/Integration infos"
       },
@@ -662,6 +708,7 @@
   },
   "GeboOauth2SecretModule": {
     "GeboOauth2SecretComponent": {
+      "Oauth2SecretPanel": { "label": "Oauth2 registered client" },
       "clientId": {
         "label": "Client ID",
         "help": "Client identifier for the oauth2 protocol (to be retrieved in the oauth2 authenticated 3rd party software admin area)"
@@ -796,6 +843,57 @@
   },
   "GeboAIUsersGroupPanelModule": {
     "GeboAIUsersManagementComponent": {
+      "SessionsListPanel": { "label": "Active sessions" },
+      "SessionsHelp": {
+        "label": "Tokens currently in use, by user. Revoking a session refuses its tokens from the next request; revoking all the sessions of a user includes your own if you are that user."
+      },
+      "sessionsUsername": { "label": "User", "help": "Part of the user name" },
+      "sessionsKind": {
+        "label": "Kind",
+        "help": "Login sessions, API keys or external OAuth2 tokens"
+      },
+      "sessionsActiveWithin": {
+        "label": "Seen in the last minutes",
+        "help": "Empty for any time"
+      },
+      "SessionsIncludeRevoked": { "label": "Revoked too" },
+      "SessionsIncludeExpired": { "label": "Expired too" },
+      "SearchSessionsBtn": { "label": "Refresh" },
+      "ThSessionUser": { "label": "User" },
+      "ThSessionKind": { "label": "Kind" },
+      "ThSessionSince": { "label": "Since" },
+      "ThSessionLastSeen": { "label": "Last seen" },
+      "ThSessionClient": { "label": "Address and client" },
+      "ThSessionExpires": { "label": "Expires" },
+      "ThSessionState": { "label": "State" },
+      "SessionRevokedState": { "label": "revoked" },
+      "SessionLiveState": { "label": "live" },
+      "ConfirmRevokeSessionBtn": { "label": "Confirm" },
+      "CancelRevokeSessionBtn": { "label": "Cancel" },
+      "ConfirmRevokeUserBtn": { "label": "Confirm all" },
+      "CancelRevokeUserBtn": { "label": "Cancel" },
+      "RevokeSessionBtn": { "label": "Revoke" },
+      "RevokeUserBtn": { "label": "All of this user" },
+      "NoSessionsText": { "label": "No session matches the filters." },
+      "AnyKindOption": { "label": "Any kind" },
+      "SessionKindOption": { "label": "Login session" },
+      "ApiKeyKindOption": { "label": "API key" },
+      "Oauth2KindOption": { "label": "External OAuth2 token" },
+      "SessionsNotLoadedMessage": {
+        "label": "The sessions could not be loaded."
+      },
+      "SessionRevokedMessage": {
+        "label": "Session of {username} revoked: its tokens are refused from now on."
+      },
+      "SessionNotRevokedMessage": {
+        "label": "The session could not be revoked."
+      },
+      "UserSessionsRevokedMessage": {
+        "label": "{count} session(s) of {username} revoked."
+      },
+      "UserSessionsNotRevokedMessage": {
+        "label": "The sessions could not be revoked."
+      },
       "NewGroupBtn": { "label": "new group" },
       "NewUserBtn": { "label": "new user" },
       "UsersListPanel": { "label": "Users list" },

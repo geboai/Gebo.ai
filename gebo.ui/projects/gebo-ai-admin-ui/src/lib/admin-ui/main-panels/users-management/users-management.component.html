@@ -187,22 +187,22 @@
                   <td>{{ session.expiresAt | date:'short' }}</td>
                   <td>
                     @if (session.revoked) {
-                      <span class="text-red-500">revoked</span><br /><small class="text-secondary">{{ session.revokedBy }} {{ session.revokedAt | date:'short' }}</small>
+                      <span id="SessionRevokedState" gebo-ai-text class="text-red-500">revoked</span><br /><small class="text-secondary">{{ session.revokedBy }} {{ session.revokedAt | date:'short' }}</small>
                     } @else {
-                      <span class="text-green-600">live</span>
+                      <span id="SessionLiveState" gebo-ai-text class="text-green-600">live</span>
                     }
                   </td>
                   <td class="text-right white-space-nowrap">
                     @if (!session.revoked) {
                       @if (confirmingSessionCode === session.code) {
-                        <p-button id="ConfirmRevokeSessionBtn_{{session.code}}" gebo-ai-label label="Confirm" severity="danger" size="small" (onClick)="revokeSession(session)"></p-button>
-                        <p-button id="CancelRevokeSessionBtn_{{session.code}}" gebo-ai-label label="Cancel" severity="secondary" [text]="true" size="small" (onClick)="cancelRevoke()"></p-button>
+                        <p-button id="ConfirmRevokeSessionBtn" gebo-ai-label label="Confirm" severity="danger" size="small" (onClick)="revokeSession(session)"></p-button>
+                        <p-button id="CancelRevokeSessionBtn" gebo-ai-label label="Cancel" severity="secondary" [text]="true" size="small" (onClick)="cancelRevoke()"></p-button>
                       } @else if (confirmingUsername === session.username) {
-                        <p-button id="ConfirmRevokeUserBtn_{{session.code}}" gebo-ai-label label="Confirm all" severity="danger" size="small" (onClick)="revokeUserSessions(session.username)"></p-button>
-                        <p-button id="CancelRevokeUserBtn_{{session.code}}" gebo-ai-label label="Cancel" severity="secondary" [text]="true" size="small" (onClick)="cancelRevoke()"></p-button>
+                        <p-button id="ConfirmRevokeUserBtn" gebo-ai-label label="Confirm all" severity="danger" size="small" (onClick)="revokeUserSessions(session.username)"></p-button>
+                        <p-button id="CancelRevokeUserBtn" gebo-ai-label label="Cancel" severity="secondary" [text]="true" size="small" (onClick)="cancelRevoke()"></p-button>
                       } @else {
-                        <p-button id="RevokeSessionBtn_{{session.code}}" gebo-ai-label label="Revoke" severity="danger" [outlined]="true" size="small" icon="pi pi-ban" (onClick)="revokeSession(session)"></p-button>
-                        <p-button id="RevokeUserBtn_{{session.code}}" gebo-ai-label label="All of this user" severity="danger" [text]="true" size="small" (onClick)="revokeUserSessions(session.username)"></p-button>
+                        <p-button id="RevokeSessionBtn" gebo-ai-label label="Revoke" severity="danger" [outlined]="true" size="small" icon="pi pi-ban" (onClick)="revokeSession(session)"></p-button>
+                        <p-button id="RevokeUserBtn" gebo-ai-label label="All of this user" severity="danger" [text]="true" size="small" (onClick)="revokeUserSessions(session.username)"></p-button>
                       }
                     }
                   </td>

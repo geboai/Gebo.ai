@@ -16,9 +16,9 @@
  * It extends AncestorPanelComponent and implements OnInit and OnChanges interfaces.
  */
 
-import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, inject, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { DataPage, EditableUser, GUserSession, PagedModelGUserSession, PagedModelUserInfos, PagedModelUsersGroup, SessionsAdminControllerService, SessionsQuery, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
@@ -49,12 +49,22 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     sessionsPage: DataPage = { page: 0, pageSize: 20 };
     sessionsPaged: PagedModelGUserSession = { content: [] };
     sessionsQuery: SessionsQuery = { username: '', activeWithinMinutes: 15, includeRevoked: false, includeExpired: false };
-    sessionKinds = [
-        { label: 'Any kind', value: undefined },
-        { label: 'Login session', value: 'SESSION' },
-        { label: 'API key', value: 'API_KEY' },
-        { label: 'External OAuth2 token', value: 'OAUTH2' }
-    ];
+    private translationService = inject(GeboAITranslationService);
+    private moduleId = inject(GEBO_AI_MODULE, { optional: true });
+    private fieldHost = inject(GEBO_AI_FIELD_HOST, { optional: true });
+    /** The sessions' texts built here rather than in the template, translated as the template's are; {name} is filled in. */
+    private sessionTexts: { [id: string]: string } = {
+        AnyKindOption: 'Any kind',
+        SessionKindOption: 'Login session',
+        ApiKeyKindOption: 'API key',
+        Oauth2KindOption: 'External OAuth2 token',
+        SessionsNotLoadedMessage: 'The sessions could not be loaded.',
+        SessionRevokedMessage: 'Session of {username} revoked: its tokens are refused from now on.',
+        SessionNotRevokedMessage: 'The session could not be revoked.',
+        UserSessionsRevokedMessage: '{count} session(s) of {username} revoked.',
+        UserSessionsNotRevokedMessage: 'The sessions could not be revoked.'
+    };
+    sessionKinds = this.buildSessionKinds();
     /** The session whose revocation waits for a second click, or the user whose sessions do. */
     confirmingSessionCode?: string;
     confirmingUsername?: string;
@@ -107,9 +117,41 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
      * Initializes the component by loading users and groups data
      */
     ngOnInit(): void {
+        this.translateSessionTexts();
         this.loadUsers();
         this.loadGroups();
         this.loadSessions();
+    }
+
+    private buildSessionKinds(): { label: string, value?: string }[] {
+        return [
+            { label: this.sessionTexts['AnyKindOption'], value: undefined },
+            { label: this.sessionTexts['SessionKindOption'], value: 'SESSION' },
+            { label: this.sessionTexts['ApiKeyKindOption'], value: 'API_KEY' },
+            { label: this.sessionTexts['Oauth2KindOption'], value: 'OAUTH2' }
+        ];
+    }
+
+    private sessionText(id: string, values: { [name: string]: any } = {}): string {
+        return Object.entries(values).reduce((text, [name, value]) => text.split('{' + name + '}').join(String(value)),
+            this.sessionTexts[id]);
+    }
+
+    /** Translates the sessions' texts built here, then the kind options showing them. */
+    private translateSessionTexts(): void {
+        const host = Array.isArray(this.fieldHost) ? this.fieldHost[0] : this.fieldHost;
+        const moduleId = Array.isArray(this.moduleId) ? this.moduleId[0] : this.moduleId;
+        const entityId = host?.getEntityName();
+        if (!moduleId || !entityId) return;
+        const items = Object.entries(this.sessionTexts).map(([id, label]) => ({ id, label }));
+        this.translationService.translateMenuItems(moduleId, entityId, items).subscribe(translated => {
+            const texts = { ...this.sessionTexts };
+            translated.forEach(x => {
+                if (x.id && x.label) texts[x.id] = x.label;
+            });
+            this.sessionTexts = texts;
+            this.sessionKinds = this.buildSessionKinds();
+        });
     }
 
     /** Reloads the sessions from the first page with the current filters. */
@@ -134,7 +176,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
                 this.sessionsPaged = value;
             },
             error: () => {
-                this.sessionsMessage = 'The sessions could not be loaded.';
+                this.sessionsMessage = this.sessionText('SessionsNotLoadedMessage');
             },
             complete: () => {
                 this.loadingSessions = false;
@@ -161,11 +203,11 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
         this.loadingSessions = true;
         this.sessionsAdminService.revokeSession(session.code).subscribe({
             next: () => {
-                this.sessionsMessage = `Session of ${session.username} revoked: its tokens are refused from now on.`;
+                this.sessionsMessage = this.sessionText('SessionRevokedMessage', { username: session.username });
                 this.loadSessions();
             },
             error: () => {
-                this.sessionsMessage = 'The session could not be revoked.';
+                this.sessionsMessage = this.sessionText('SessionNotRevokedMessage');
                 this.loadingSessions = false;
             }
         });
@@ -184,11 +226,11 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
         this.loadingSessions = true;
         this.sessionsAdminService.revokeUserSessions(username).subscribe({
             next: (count) => {
-                this.sessionsMessage = `${count} session(s) of ${username} revoked.`;
+                this.sessionsMessage = this.sessionText('UserSessionsRevokedMessage', { count: count, username: username });
                 this.loadSessions();
             },
             error: () => {
-                this.sessionsMessage = 'The sessions could not be revoked.';
+                this.sessionsMessage = this.sessionText('UserSessionsNotRevokedMessage');
                 this.loadingSessions = false;
             }
         });
