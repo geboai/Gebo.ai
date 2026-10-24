@@ -20,6 +20,7 @@ import com.google.gson.JsonParser;
 import java.util.concurrent.atomic.AtomicInteger;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun;
 import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import lombok.AllArgsConstructor;
 import org.a2aproject.sdk.jsonrpc.common.json.JsonUtil;
@@ -124,7 +125,7 @@ public class A2AServerBuilder {
 			// A network exported with a chat profile runs in that profile's environment,
 			// and the caller waiting for one answer simply reads the frame marked as the
 			// last one: the same run, read the other way.
-			A2AChatEnvironmentRunner.ChatEnvironmentRun run = taskBridge.runInChatEnvironment(config, skillId,
+			ChatEnvironmentRun run = taskBridge.runInChatEnvironment(config, skillId,
 					received, contextId, sink);
 			if (run != null) {
 				try {
@@ -153,7 +154,7 @@ public class A2AServerBuilder {
 	 * The response of a run: the one the frame marked as the last carries, else the
 	 * one the run filled in.
 	 */
-	private GeboChatResponse lastResponseOf(A2AChatEnvironmentRunner.ChatEnvironmentRun run) {
+	private GeboChatResponse lastResponseOf(ChatEnvironmentRun run) {
 		GeboChatResponse fromFrames = null;
 		List<GeboChatMessageEnvelope> frames = run.getFrames().collectList().block(FRAMES_COLLECTION_TIMEOUT);
 		if (frames != null) {
@@ -184,7 +185,7 @@ public class A2AServerBuilder {
 			A2AInboundResources received, String contextId) {
 		final String text = received.getText();
 		final A2ANotificationCollector sink = new A2ANotificationCollector();
-		A2AChatEnvironmentRunner.ChatEnvironmentRun streamed = null;
+		ChatEnvironmentRun streamed = null;
 		A2AError prepareError = null;
 		try {
 			streamed = taskBridge.runInChatEnvironment(config, skillId, received, contextId, sink);
@@ -217,7 +218,7 @@ public class A2AServerBuilder {
 	 * with the documents it rests on.
 	 */
 	private ServerResponse streamFrames(Object id, String contextId,
-			A2AChatEnvironmentRunner.ChatEnvironmentRun run) {
+			ChatEnvironmentRun run) {
 		return ServerResponse.sse(sse -> {
 			final AtomicInteger written = new AtomicInteger();
 			try {

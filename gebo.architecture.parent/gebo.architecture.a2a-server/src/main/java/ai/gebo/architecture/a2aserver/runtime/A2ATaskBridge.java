@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.a2aserver.model.A2AExportedAgent;
 import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
 import lombok.AllArgsConstructor;
@@ -64,7 +65,7 @@ public class A2ATaskBridge {
 	 *                        one
 	 * @return the run, or null when this export is not a network
 	 */
-	public A2AChatEnvironmentRunner.ChatEnvironmentRun runInChatEnvironment(A2AServerConfig serverConfig,
+	public ChatEnvironmentRun runInChatEnvironment(A2AServerConfig serverConfig,
 			String skillId, A2AInboundResources inbound, String chatContextCode, INotificationSink sink)
 			throws AgentException {
 		final A2AExportedAgent exported = resolveExport(serverConfig, skillId);
