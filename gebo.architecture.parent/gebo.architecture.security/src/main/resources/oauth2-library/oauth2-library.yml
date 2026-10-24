@@ -48,22 +48,36 @@ ai.gebo.oauth2.library:
       jwkSetUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/certs"
       userNameAttribute: email
 
+    # Microsoft accounts: personal ones (outlook.com, hotmail.com, live.com) and those
+    # of the organizations listed in the configuration's allowedTenants, on the shared
+    # "common" endpoints, which serve both. Those sign every id token under the issuer
+    # of the person's own tenant, https://login.microsoftonline.com/{tid}/v2.0, and
+    # publish no issuer of their own, so the login checks the token's issuer against
+    # its tenant and the tenant against allowedTenants
+    # (GMicrosoftAccountsIdTokenValidator), not against issuerUri. issuerUri is the
+    # issuer of personal accounts, which all belong to Microsoft's tenant
+    # 9188040d-6c67-4c5b-b112-36a304b66dad: it is what the API matches a bearer token
+    # against. The keys of "common" are those of "consumers" and include every key of
+    # "organizations". The user info is the OIDC one: Spring refuses a user info
+    # response without the id token's "sub", and Graph's /v1.0/me has none.
     - provider: microsoft
       authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
       tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
-      userInfoUri: https://graph.microsoft.com/v1.0/me
-      issuerUri: https://login.microsoftonline.com/common/v2.0
-      introspectionUri: https://login.microsoftonline.com/common/oauth2/v2.0/token/introspect
+      userInfoUri: https://graph.microsoft.com/oidc/userinfo
+      issuerUri: https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad/v2.0
       jwkSetUri: https://login.microsoftonline.com/common/discovery/v2.0/keys
-      userNameAttribute: id
+      userNameAttribute: sub
 
+    # The user name attribute must be a claim of the id token or of /oidc/userinfo:
+    # neither carries "id" (that is a property of Graph's /v1.0/me), and a login whose
+    # attribute is missing fails before Gebo.ai sees the user. "sub" is always there.
     - provider: microsoft_multitenant
       authorizationUri: "https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/authorize"
       tokenUri: "https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token"
       userInfoUri: "https://graph.microsoft.com/oidc/userinfo"
       issuerUri: "https://login.microsoftonline.com/{tenantId}/v2.0"
       jwkSetUri: "https://login.microsoftonline.com/{tenantId}/discovery/v2.0/keys"
-      userNameAttribute: id
+      userNameAttribute: sub
 
   #- provider: facebook
   #  authorization-uri: https://www.facebook.com/v10.0/dialog/oauth

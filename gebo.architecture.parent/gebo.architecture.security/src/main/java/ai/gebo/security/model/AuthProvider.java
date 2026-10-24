@@ -39,18 +39,19 @@ public enum AuthProvider {
 	// github(AuthProviderType.OAUTH2, "GitHub auth provider",
 	// false,Oauth2LoginModel.SPA),
 
-	// Authentication using Microsoft account "common" endpoints.
+	// Authentication using Microsoft accounts on the shared "common" endpoints:
+	// personal accounts, for an installation whose users have no organization of
+	// their own, and the accounts of the organizations it admits.
 	//
-	// NOT OFFERED when configuring a new provider, see getOauth2Providers(): the
-	// "common" endpoints do not issue tokens under a "common" issuer. Microsoft's own
-	// discovery document for them advertises
-	// issuer: https://login.microsoftonline.com/{tenantid}/v2.0, a literal template,
-	// because a real id token is signed under the issuer of the tenant the person
-	// actually belongs to. The login compares the id token's issuer with the
-	// configured one exactly, so a token from here never matches and the login always
-	// fails. microsoft_multitenant, with the organization's tenant id, is the one that
-	// works. The constant stays so that configurations saved against it still load.
-	microsoft(AuthProviderType.OAUTH2, "Microsoft Entra Id auth provider (for public cloud)", false, List.of()),
+	// Those endpoints sign every id token under the issuer of the person's own tenant,
+	// so the login checks the tenant instead of one issuer
+	// (GMicrosoftAccountsIdTokenValidator). allowedTenants lists the tenants admitted:
+	// "consumers" for personal accounts, and the tenant id of each organization. A
+	// configuration saved before it existed admits personal accounts only.
+	microsoft(AuthProviderType.OAUTH2,
+			"Microsoft accounts auth provider (personal accounts and the organizations you list)", false,
+			List.of(Oauth2CustomAttribute.of("allowedTenants",
+					"Who may sign in, comma separated: consumers for personal Microsoft accounts, and the tenant id of each organization to admit"))),
 	// Authentication using Microsoft account "multitenant" endpoints
 	microsoft_multitenant(AuthProviderType.OAUTH2,
 			"Microsoft  Entra Id multitenant auth provider (for private organizations)", true,
@@ -154,10 +155,7 @@ public enum AuthProvider {
 		for (AuthProvider authProvider : values) {
 			switch (authProvider) {
 			case local:
-			case ldap:
-			// offering this one only produced configurations that can never log anybody
-			// in, see the constant: its endpoints do not issue tokens under its issuer
-			case microsoft: {
+			case ldap: {
 				continue;
 			}
 			default: {

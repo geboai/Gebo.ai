@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.security.services.impl.GMicrosoftAccountsIdTokenValidator;
+
 /**
  * Which providers an administrator is offered when configuring single sign-on.
  */
@@ -30,20 +32,31 @@ class AuthProviderTest {
     }
 
     /**
-     * Microsoft's shared endpoints sign each id token under the issuer of the tenant
-     * the person belongs to, never under a shared one, and the login compares that
-     * issuer exactly. A configuration made against them could therefore never log
-     * anybody in, so it is not offered; the organization entry, which takes the
-     * tenant id, is the one that works.
+     * Both kinds of Microsoft configuration can be made: the Microsoft accounts one,
+     * for personal accounts and the organizations it admits, and the one for the
+     * accounts of a single organization, by its tenant id.
      */
     @Test
-    void theSharedMicrosoftEndpointsAreNotOffered() {
-        assertThat(offered()).doesNotContain(AuthProvider.microsoft);
-        assertThat(offered()).contains(AuthProvider.microsoft_multitenant);
+    void bothKindsOfMicrosoftAccountAreOffered() {
+        assertThat(offered()).contains(AuthProvider.microsoft, AuthProvider.microsoft_multitenant);
     }
 
     /**
-     * The constant itself has to stay: installations that saved a configuration
+     * The administration form asks for the attributes a provider declares, and the
+     * login of the Microsoft accounts configuration reads the tenants it admits from
+     * one of them: the two names must be the same, or the list typed in the form would
+     * never be read.
+     */
+    @Test
+    void theMicrosoftAccountsProviderAsksForTheTenantsItAdmits() {
+        assertThat(AuthProvider.microsoft.getAuthProviderDto().getCustomAttributes().stream()
+                .map(attribute -> attribute.getAttributeName()))
+                .containsExactly(GMicrosoftAccountsIdTokenValidator.ALLOWED_TENANTS);
+    }
+
+    /**
+     * The constant for personal accounts was first written against Microsoft's shared
+     * endpoints and is kept under that name: installations that saved a configuration
      * against it still read it back, and an enum that no longer has the name simply
      * fails to load them.
      */
