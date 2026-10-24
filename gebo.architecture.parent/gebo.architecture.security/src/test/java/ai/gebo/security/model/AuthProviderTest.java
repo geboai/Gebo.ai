@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.security.services.impl.GMicrosoftAccountsIdTokenValidator;
+
 /**
  * Which providers an administrator is offered when configuring single sign-on.
  */
@@ -30,13 +32,26 @@ class AuthProviderTest {
     }
 
     /**
-     * Both kinds of Microsoft account can be configured: personal accounts, for an
-     * installation whose users have no organization, and the accounts of one
-     * organization, by its tenant id.
+     * Both kinds of Microsoft configuration can be made: the Microsoft accounts one,
+     * for personal accounts and the organizations it admits, and the one for the
+     * accounts of a single organization, by its tenant id.
      */
     @Test
     void bothKindsOfMicrosoftAccountAreOffered() {
         assertThat(offered()).contains(AuthProvider.microsoft, AuthProvider.microsoft_multitenant);
+    }
+
+    /**
+     * The administration form asks for the attributes a provider declares, and the
+     * login of the Microsoft accounts configuration reads the tenants it admits from
+     * one of them: the two names must be the same, or the list typed in the form would
+     * never be read.
+     */
+    @Test
+    void theMicrosoftAccountsProviderAsksForTheTenantsItAdmits() {
+        assertThat(AuthProvider.microsoft.getAuthProviderDto().getCustomAttributes().stream()
+                .map(attribute -> attribute.getAttributeName()))
+                .containsExactly(GMicrosoftAccountsIdTokenValidator.ALLOWED_TENANTS);
     }
 
     /**

@@ -39,18 +39,19 @@ public enum AuthProvider {
 	// github(AuthProviderType.OAUTH2, "GitHub auth provider",
 	// false,Oauth2LoginModel.SPA),
 
-	// Authentication using a personal Microsoft account, for an installation whose
-	// users have no organization of their own.
+	// Authentication using Microsoft accounts on the shared "common" endpoints:
+	// personal accounts, for an installation whose users have no organization of
+	// their own, and the accounts of the organizations it admits.
 	//
-	// The library entry uses Microsoft's "consumers" endpoints, not the "common" ones
-	// this constant was first written against: "common" signs every id token under the
-	// issuer of the person's own tenant and publishes no issuer of its own, and the
-	// login compares the id token's issuer with the configured one exactly, so no
-	// login through it could succeed. Personal accounts all belong to one Microsoft
-	// tenant, whose issuer is fixed. The name stays, so that configurations saved
-	// against it still load, and they pick up the corrected endpoints.
-	microsoft(AuthProviderType.OAUTH2, "Microsoft personal account auth provider (outlook.com, hotmail.com, live.com)",
-			false, List.of()),
+	// Those endpoints sign every id token under the issuer of the person's own tenant,
+	// so the login checks the tenant instead of one issuer
+	// (GMicrosoftAccountsIdTokenValidator). allowedTenants lists the tenants admitted:
+	// "consumers" for personal accounts, and the tenant id of each organization. A
+	// configuration saved before it existed admits personal accounts only.
+	microsoft(AuthProviderType.OAUTH2,
+			"Microsoft accounts auth provider (personal accounts and the organizations you list)", false,
+			List.of(Oauth2CustomAttribute.of("allowedTenants",
+					"Who may sign in, comma separated: consumers for personal Microsoft accounts, and the tenant id of each organization to admit"))),
 	// Authentication using Microsoft account "multitenant" endpoints
 	microsoft_multitenant(AuthProviderType.OAUTH2,
 			"Microsoft  Entra Id multitenant auth provider (for private organizations)", true,
