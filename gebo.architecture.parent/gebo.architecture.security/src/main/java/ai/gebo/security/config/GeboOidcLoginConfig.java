@@ -10,32 +10,38 @@ package ai.gebo.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.oauth2.client.oidc.authentication.OidcIdTokenDecoderFactory;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.jwt.JwtDecoderFactory;
 
 import ai.gebo.security.services.IGOauth2ConfigurationService;
 import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementationProvider;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGUsersAdminService;
+import ai.gebo.security.services.impl.GOidcIdTokenValidatorFactory;
 import ai.gebo.security.services.impl.GOidcUserService;
 
 /**
- * Puts Gebo's own OpenID Connect user service in front of Spring's.
+ * Puts Gebo's own OpenID Connect user service in front of Spring's, and Gebo's own
+ * check of the id token.
  *
  * <p>
  * When an {@code oauth2Login} does not name one, Spring looks for a single bean of
- * this exact type in the context and falls back to its own only if it finds none.
- * That is how the login policy reaches the OpenID Connect flow without the filter
- * chain having to be touched, and it is the flow every configuration saved through
- * the administration form uses, since they all log in with the standard
- * {@code openid} scopes.
+ * each of these exact types in the context and falls back to its own only if it
+ * finds none. That is how the login policy, and the tenant check of the Microsoft
+ * accounts configuration, reach the OpenID Connect flow without the filter chain
+ * having to be touched, and it is the flow every configuration saved through the
+ * administration form uses, since they all log in with the standard {@code openid}
+ * scopes.
  * </p>
  *
  * <p>
- * The lookup takes the bean only if it is unique, so there must be exactly one of
- * them: a second would send Spring silently back to its own service, and the policy
- * would stop being applied again, with nothing failing to say so.
+ * The lookup takes a bean only if it is unique, so there must be exactly one of
+ * each: a second would send Spring silently back to its own, and the policy or the
+ * check would stop being applied, with nothing failing to say so.
  * </p>
  */
 @Configuration
@@ -49,5 +55,18 @@ public class GeboOidcLoginConfig {
 			IGSecurityAuditLoggerService securityAuditLoggerService) {
 		return new GOidcUserService(oauth2ConfigurationService, userAdminService, securityProperties,
 				oauth2UserSyncProvider, securityAuditLoggerService);
+	}
+
+	/**
+	 * Spring's own id token decoding, with the checks that follow it chosen per
+	 * configuration by {@link GOidcIdTokenValidatorFactory}. Spring uses it for the
+	 * login and for refreshed tokens alike.
+	 */
+	@Bean
+	public JwtDecoderFactory<ClientRegistration> geboOidcIdTokenDecoderFactory(
+			IGOauth2ConfigurationService oauth2ConfigurationService) {
+		OidcIdTokenDecoderFactory factory = new OidcIdTokenDecoderFactory();
+		factory.setJwtValidatorFactory(new GOidcIdTokenValidatorFactory(oauth2ConfigurationService));
+		return factory;
 	}
 }

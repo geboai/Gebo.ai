@@ -48,21 +48,24 @@ ai.gebo.oauth2.library:
       jwkSetUri: "{serverUrl}/realms/{realm}/protocol/openid-connect/certs"
       userNameAttribute: email
 
-    # Personal Microsoft accounts (outlook.com, hotmail.com, live.com), on the
-    # "consumers" endpoints, which is what
-    # https://login.microsoftonline.com/consumers/v2.0/.well-known/openid-configuration
-    # publishes. Not the "common" ones: those sign every token under the issuer of the
-    # person's own tenant and publish no issuer of their own, while the login compares
-    # the configured issuer exactly. Personal accounts all belong to one Microsoft
-    # tenant, 9188040d-6c67-4c5b-b112-36a304b66dad, so theirs is fixed. The user info is
-    # the OIDC one: Spring refuses a user info response without the id token's "sub",
-    # and Graph's /v1.0/me has none.
+    # Microsoft accounts: personal ones (outlook.com, hotmail.com, live.com) and those
+    # of the organizations listed in the configuration's allowedTenants, on the shared
+    # "common" endpoints, which serve both. Those sign every id token under the issuer
+    # of the person's own tenant, https://login.microsoftonline.com/{tid}/v2.0, and
+    # publish no issuer of their own, so the login checks the token's issuer against
+    # its tenant and the tenant against allowedTenants
+    # (GMicrosoftAccountsIdTokenValidator), not against issuerUri. issuerUri is the
+    # issuer of personal accounts, which all belong to Microsoft's tenant
+    # 9188040d-6c67-4c5b-b112-36a304b66dad: it is what the API matches a bearer token
+    # against. The keys of "common" are those of "consumers" and include every key of
+    # "organizations". The user info is the OIDC one: Spring refuses a user info
+    # response without the id token's "sub", and Graph's /v1.0/me has none.
     - provider: microsoft
-      authorizationUri: https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize
-      tokenUri: https://login.microsoftonline.com/consumers/oauth2/v2.0/token
+      authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+      tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token
       userInfoUri: https://graph.microsoft.com/oidc/userinfo
       issuerUri: https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad/v2.0
-      jwkSetUri: https://login.microsoftonline.com/consumers/discovery/v2.0/keys
+      jwkSetUri: https://login.microsoftonline.com/common/discovery/v2.0/keys
       userNameAttribute: sub
 
     # The user name attribute must be a claim of the id token or of /oidc/userinfo:

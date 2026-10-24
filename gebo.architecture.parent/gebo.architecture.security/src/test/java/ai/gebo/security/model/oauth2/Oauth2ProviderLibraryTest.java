@@ -28,6 +28,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.security.model.AuthProvider;
+import ai.gebo.security.services.impl.GMicrosoftAccountsIdTokenValidator;
 
 /**
  * The provider library is the only place a non-generic provider's endpoints come
@@ -196,37 +197,40 @@ class Oauth2ProviderLibraryTest {
     }
 
     /**
-     * The personal Microsoft account entry against what Microsoft publishes at
-     * https://login.microsoftonline.com/consumers/v2.0/.well-known/openid-configuration.
-     * The user info has to be the OIDC one: Spring's OIDC login refuses a user info
-     * response without the id token's {@code sub}, and Graph's /v1.0/me has none.
+     * The Microsoft accounts entry against what Microsoft publishes at
+     * https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration,
+     * except the issuer, which "common" does not have: it is the one of personal
+     * accounts, published for "consumers". The user info has to be the OIDC one:
+     * Spring's OIDC login refuses a user info response without the id token's
+     * {@code sub}, and Graph's /v1.0/me has none.
      */
     @Test
-    void microsoftPersonalAccountsUseTheConsumersEndpoints() {
+    void microsoftAccountsUseTheCommonEndpoints() {
         Map<String, Object> entry = entryOf(AuthProvider.microsoft);
         assertThat(entry).as("the microsoft entry of the provider library").isNotNull();
 
+        assertThat(entry.get("authorizationUri"))
+                .isEqualTo("https://login.microsoftonline.com/common/oauth2/v2.0/authorize");
+        assertThat(entry.get("tokenUri")).isEqualTo("https://login.microsoftonline.com/common/oauth2/v2.0/token");
+        assertThat(entry.get("jwkSetUri")).isEqualTo("https://login.microsoftonline.com/common/discovery/v2.0/keys");
+        assertThat(entry.get("userInfoUri")).isEqualTo("https://graph.microsoft.com/oidc/userinfo");
         assertThat(entry.get("issuerUri"))
                 .isEqualTo("https://login.microsoftonline.com/" + MICROSOFT_PERSONAL_ACCOUNTS_TENANT + "/v2.0");
-        assertThat(entry.get("authorizationUri"))
-                .isEqualTo("https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize");
-        assertThat(entry.get("tokenUri")).isEqualTo("https://login.microsoftonline.com/consumers/oauth2/v2.0/token");
-        assertThat(entry.get("jwkSetUri"))
-                .isEqualTo("https://login.microsoftonline.com/consumers/discovery/v2.0/keys");
-        assertThat(entry.get("userInfoUri")).isEqualTo("https://graph.microsoft.com/oidc/userinfo");
     }
 
     /**
-     * The check Spring's OIDC login runs on every id token, on a registration built
-     * from the personal Microsoft account entry: a token Microsoft issues for a
-     * personal account passes it, while one issued for an organization's tenant does
-     * not, because that tenant is its issuer. The shared "common" endpoints the entry
-     * used to name publish no issuer of their own, so no token ever passed.
+     * The checks an id token goes through, on a registration built from the Microsoft
+     * accounts entry that admits personal accounts and one organization. Spring's own
+     * check passes only personal accounts, whose issuer is the one of the entry: an
+     * organization's tokens carry the issuer of its tenant. Gebo's check passes both
+     * the admitted ones, and refuses an organization that is not admitted.
      */
     @Test
-    void microsoftPersonalAccountTokensPassTheLoginIssuerCheck() {
+    void microsoftAccountsTokensPassTheLoginCheckOfTheirTenant() {
         Map<String, Object> entry = entryOf(AuthProvider.microsoft);
         assertThat(entry).as("the microsoft entry of the provider library").isNotNull();
+        String admitted = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+        String other = "ffffffff-bbbb-cccc-dddd-eeeeeeeeeeee";
 
         Oauth2ProviderConfig providerConfig = new Oauth2ProviderConfig();
         providerConfig.setProvider(AuthProvider.microsoft);
@@ -247,16 +251,27 @@ class Oauth2ProviderLibraryTest {
         GeboOauth2SecretContent secret = new GeboOauth2SecretContent();
         secret.setClientId(clientId);
         secret.setSecret("a-client-secret");
-        secret.setCustomAttributes(new LinkedHashMap<>());
+        LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
+        attributes.put(GMicrosoftAccountsIdTokenValidator.ALLOWED_TENANTS, "consumers, " + admitted);
+        secret.setCustomAttributes(attributes);
 
         ClientRegistration registration = Oauth2ClientRegistration
                 .toClientRegistration(new Oauth2ClientRegistration(secret, runtime));
-        OidcIdTokenValidator validator = new OidcIdTokenValidator(registration);
+        OidcIdTokenValidator spring = new OidcIdTokenValidator(registration);
+        GMicrosoftAccountsIdTokenValidator gebo = new GMicrosoftAccountsIdTokenValidator(registration,
+                GMicrosoftAccountsIdTokenValidator.admittedTenants(attributes));
 
-        assertThat(validator.validate(microsoftIdToken(MICROSOFT_PERSONAL_ACCOUNTS_TENANT, clientId)).getErrors())
+        assertThat(spring.validate(microsoftIdToken(MICROSOFT_PERSONAL_ACCOUNTS_TENANT, clientId)).getErrors())
+                .as("Spring's check of a personal account's id token").isEmpty();
+        assertThat(spring.validate(microsoftIdToken(admitted, clientId)).hasErrors())
+                .as("Spring's check of an organization account's id token").isTrue();
+
+        assertThat(gebo.validate(microsoftIdToken(MICROSOFT_PERSONAL_ACCOUNTS_TENANT, clientId)).getErrors())
                 .as("a personal account's id token").isEmpty();
-        assertThat(validator.validate(microsoftIdToken("aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee", clientId)).hasErrors())
-                .as("an organization account's id token").isTrue();
+        assertThat(gebo.validate(microsoftIdToken(admitted, clientId)).getErrors())
+                .as("the id token of an account of the admitted organization").isEmpty();
+        assertThat(gebo.validate(microsoftIdToken(other, clientId)).hasErrors())
+                .as("the id token of an account of another organization").isTrue();
     }
 
     /**
