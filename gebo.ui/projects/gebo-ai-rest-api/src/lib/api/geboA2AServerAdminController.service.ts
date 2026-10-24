@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { A2AExportKinds } from '../model/a2AExportKinds';
 import { A2AServerConfig } from '../model/a2AServerConfig';
 import { OperationStatusA2AServerConfig } from '../model/operationStatusA2AServerConfig';
 import { OperationStatusBoolean } from '../model/operationStatusBoolean';
@@ -28,7 +29,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboA2AServerAdminControllerService {
 
-    protected basePath = 'http://localhost:12998';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -179,6 +180,42 @@ export class GeboA2AServerAdminControllerService {
         return this.httpClient.request<OperationStatusA2AServerConfig>('get',`${this.basePath}/api/admin/GeboA2AServerAdminController/findByCode`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getExportKindsA2AServer(observe?: 'body', reportProgress?: boolean): Observable<A2AExportKinds>;
+    public getExportKindsA2AServer(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<A2AExportKinds>>;
+    public getExportKindsA2AServer(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<A2AExportKinds>>;
+    public getExportKindsA2AServer(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<A2AExportKinds>('get',`${this.basePath}/api/admin/GeboA2AServerAdminController/getExportKinds`,
+            {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

@@ -23,6 +23,8 @@ public class A2ATaskBridge {
 	private static final Logger LOGGER = LoggerFactory.getLogger(A2ATaskBridge.class);
 	private static final String SINGLE_AGENT_CODE_PREFIX = "a2a-single-";
 	private final GTextAgentsNetworkRunner runner;
+	/** Runs an exported network in the environment a chat would have given it. */
+	private final A2AChatEnvironmentRunner chatEnvironmentRunner;
 
 	/**
 	 * Runs the exported skill as the caller whose identity is in the current
@@ -45,6 +47,42 @@ public class A2ATaskBridge {
 			LOGGER.error("A2A task execution failed for skill '" + skillId + "'", ae);
 			throw ae;
 		}
+	}
+
+	/** The export a skill id names, or null. */
+	public A2AExportedAgent exportOf(A2AServerConfig serverConfig, String skillId) {
+		return resolveExport(serverConfig, skillId);
+	}
+
+	/**
+	 * Runs an exported network in the environment of the chat profile the export
+	 * states, answering with the frames of the run and the response of its last
+	 * one. Only a network has such an environment; a single exported agent is run
+	 * the plain way.
+	 *
+	 * @param chatContextCode the conversation the caller named, or null for a new
+	 *                        one
+	 * @return the run, or null when this export is not a network
+	 */
+	public A2AChatEnvironmentRunner.ChatEnvironmentRun runInChatEnvironment(A2AServerConfig serverConfig,
+			String skillId, A2AInboundResources inbound, String chatContextCode, INotificationSink sink)
+			throws AgentException {
+		final A2AExportedAgent exported = resolveExport(serverConfig, skillId);
+		if (exported == null) {
+			throw new AgentException("No exported skill '" + skillId + "' on A2A server '"
+					+ serverConfig.getExportedRelativeUrl() + "'");
+		}
+		if (exported.getKind() != A2AExportedAgent.Kind.NETWORK) {
+			return null;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("A2A skill '" + skillId + "' runs network:" + exported.getNetworkCode()
+					+ " in the environment of chat profile:" + exported.getChatProfileCode() + " conversation:"
+					+ chatContextCode);
+		}
+		return chatEnvironmentRunner.run(exported.getNetworkCode(),
+				chatEnvironmentRunner.requestOf(inbound.getText(), exported.getChatProfileCode(), chatContextCode),
+				inbound, sink);
 	}
 
 	private A2AExportedAgent resolveExport(A2AServerConfig serverConfig, String skillId) {

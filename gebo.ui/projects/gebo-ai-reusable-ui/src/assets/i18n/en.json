@@ -5488,6 +5488,11 @@
         "label": "Skill name",
         "help": "Skill id/name advertised on the Agent Card (defaults to the code)."
       },
+      "newChatProfileCode": {
+        "label": "Chat profile",
+        "help": "The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. Left empty it sees every knowledge base the calling account can see."
+      },
+      "ChatProfileHeader": { "label": "Chat profile" },
       "GeneralSettingsTab": { "label": "General settings" },
       "ExportedAgentsTab": { "label": "Exported agents & networks" },
       "SecurityAccessSettingsTab": { "label": "Security access settings" },
