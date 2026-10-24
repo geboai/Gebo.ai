@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.a2aserver.config.A2AExportKindsConfig;
 import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.a2aserver.service.A2AServerConfigManagerService;
 import ai.gebo.model.OperationStatus;
@@ -35,6 +36,9 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class GeboA2AServerAdminController {
 
+	private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory
+			.getLogger(GeboA2AServerAdminController.class);
+
 	private final A2AServerConfigManagerService managementService;
 	/**
 	 * The insert/update/delete of an A2A export are security events: each one
@@ -42,6 +46,36 @@ public class GeboA2AServerAdminController {
 	 * Gebo agent or network of agents.
 	 */
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+
+	/** Which kinds of export this installation publishes at all. */
+	private final A2AExportKindsConfig exportKinds;
+
+	/**
+	 * What may be exported here, for the screen that offers it: whether networks of
+	 * agents can be exported, and whether single agents can. The screen offers only
+	 * what this says, and the configuration service refuses anything else whatever
+	 * the screen did.
+	 */
+	@GetMapping(value = "getExportKinds", produces = MediaType.APPLICATION_JSON_VALUE)
+	public A2AExportKinds getExportKindsA2AServer() {
+		final A2AExportKinds kinds = new A2AExportKinds(exportKinds.isNetwokOfAgentsExported(),
+				exportKinds.isAgentsExported());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getExportKindsA2AServer() networks:" + kinds.isNetworksOfAgentsExported() + " agents:"
+					+ kinds.isAgentsExported());
+		}
+		return kinds;
+	}
+
+	/** What the screen is told it may offer. */
+	@lombok.AllArgsConstructor
+	@lombok.Getter
+	public static class A2AExportKinds {
+		/** Whether a network of agents may be exported. */
+		private final boolean networksOfAgentsExported;
+		/** Whether a single agent may be exported. */
+		private final boolean agentsExported;
+	}
 
 	@GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<A2AServerConfig> findAllA2AServer() {
