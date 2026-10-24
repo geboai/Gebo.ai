@@ -177,7 +177,11 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 		}
 	}
 
-	private LLMExtractionResult clean(LLMExtractionResult data) {
+	/**
+	 * The extraction without the objects the model left incomplete: entities, events,
+	 * relations and aliases missing a name, a title, a type or an end.
+	 */
+	static LLMExtractionResult clean(LLMExtractionResult data) {
 		LLMExtractionResult cleanResult = new LLMExtractionResult();
 		List<EntityObject> entities = data.getEntities().stream().filter(GraphDataExtractionServiceImpl::validEntity)
 				.toList();
@@ -190,7 +194,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 					return y;
 				}).filter(u -> u.getParticipantEntities() != null && !u.getParticipantEntities().isEmpty()).toList();
 		cleanResult.setEvents(events);
-		List<RelationObject> relations = cleanResult.getRelations().stream()
+		List<RelationObject> relations = data.getRelations().stream()
 				.filter(GraphDataExtractionServiceImpl::validRelation).toList();
 		cleanResult.setRelations(relations);
 		List<EntityAliasObject> aliases = data
@@ -215,7 +219,7 @@ public class GraphDataExtractionServiceImpl implements IGraphDataExtractionServi
 	}
 
 	private static boolean validRelation(RelationObject x) {
-		return x.getType() != null && validEntity(x.getFromEntity()) && validEntity(x.getToEntity());
+		return x != null && x.getType() != null && validEntity(x.getFromEntity()) && validEntity(x.getToEntity());
 	}
 
 	private String createFormatSpecification(GraphRagExtractionConfig configuration) {

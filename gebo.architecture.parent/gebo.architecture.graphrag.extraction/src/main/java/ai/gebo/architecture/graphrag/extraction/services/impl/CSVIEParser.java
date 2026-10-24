@@ -91,12 +91,20 @@ public class CSVIEParser {
 		return output;
 	}
 
+	/**
+	 * The key a name is looked up by: the fields are read upper cased, the names of the
+	 * entities kept as written, so both sides are compared trimmed and lower cased.
+	 */
+	private static String nameKey(String name) {
+		return name != null ? name.trim().toLowerCase() : null;
+	}
+
 	private static void sanitize(LLMExtractionResult output) {
 		Map<String, EntityObject> entitiesByName = new HashMap<>();
 		Map<String, EventObject> eventsByName = new HashMap<>();
 		output.getEntities().forEach(x -> {
 			if (x.getName() != null) {
-				entitiesByName.put(x.getName().trim().toLowerCase(), x);
+				entitiesByName.put(nameKey(x.getName()), x);
 			}
 		});
 
@@ -105,7 +113,7 @@ public class CSVIEParser {
 			if (event.getParticipantEntities() != null && !event.getParticipantEntities().isEmpty()) {
 				List<EntityObject> completedEntities = new ArrayList<>();
 				event.getParticipantEntities().forEach(x -> {
-					EntityObject matching = entitiesByName.get(x.getName());
+					EntityObject matching = entitiesByName.get(nameKey(x.getName()));
 					if (matching != null) {
 						completedEntities.add(matching);
 					}
@@ -119,7 +127,7 @@ public class CSVIEParser {
 		output.setEvents(eventObjects);
 		output.getEvents().forEach(x -> {
 			if (x.getTitle() != null) {
-				eventsByName.put(x.getTitle().trim().toLowerCase(), x);
+				eventsByName.put(nameKey(x.getTitle()), x);
 			}
 		});
 		List<RelationObject> relations = new ArrayList<>();
@@ -129,10 +137,10 @@ public class CSVIEParser {
 		for (RelationObject relation : output.getRelations()) {
 			if (relation.getFromEntity() != null && relation.getFromEntity().getName() != null
 					&& relation.getToEntity() != null && relation.getToEntity().getName() != null
-					&& entitiesByName.containsKey(relation.getToEntity().getName())
-					&& entitiesByName.containsKey(relation.getFromEntity().getName())) {
-				relation.setFromEntity(entitiesByName.get(relation.getFromEntity().getName()));
-				relation.setToEntity(entitiesByName.get(relation.getToEntity().getName()));
+					&& entitiesByName.containsKey(nameKey(relation.getToEntity().getName()))
+					&& entitiesByName.containsKey(nameKey(relation.getFromEntity().getName()))) {
+				relation.setFromEntity(entitiesByName.get(nameKey(relation.getFromEntity().getName())));
+				relation.setToEntity(entitiesByName.get(nameKey(relation.getToEntity().getName())));
 				relations.add(relation);
 			}
 		}
@@ -141,10 +149,10 @@ public class CSVIEParser {
 		for (EntityAliasObject eAlias : output.getEntityAliases()) {
 			if (eAlias.getAliasObject() != null && eAlias.getReferenceObject() != null
 					&& eAlias.getAliasObject().getName() != null && eAlias.getReferenceObject().getName() != null
-					&& entitiesByName.containsKey(eAlias.getReferenceObject().getName())
-					&& entitiesByName.containsKey(eAlias.getAliasObject().getName())) {
-				eAlias.setAliasObject(entitiesByName.get(eAlias.getAliasObject().getName()));
-				eAlias.setReferenceObject(entitiesByName.get(eAlias.getReferenceObject().getName()));
+					&& entitiesByName.containsKey(nameKey(eAlias.getReferenceObject().getName()))
+					&& entitiesByName.containsKey(nameKey(eAlias.getAliasObject().getName()))) {
+				eAlias.setAliasObject(entitiesByName.get(nameKey(eAlias.getAliasObject().getName())));
+				eAlias.setReferenceObject(entitiesByName.get(nameKey(eAlias.getReferenceObject().getName())));
 				entitiesAliases.add(eAlias);
 			}
 		}
