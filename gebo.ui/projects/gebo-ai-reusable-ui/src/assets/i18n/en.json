@@ -61,7 +61,15 @@
         "detail": "Cannot authenticate with supplied credentials"
       },
       "ForgotPasswordLink": { "label": "Forgot password?" },
-      "OauthProviders": { "label": "Login using provider" }
+      "OauthProviders": { "label": "Login using provider" },
+      "SessionExpiredMessage": {
+        "summary": "Session expired",
+        "detail": "Your session has expired, please log in again"
+      },
+      "SsoRefusedMessage": {
+        "summary": "Access refused",
+        "detail": "Your identity provider recognised you, but this Gebo.ai installation did not accept the login. Ask an administrator to add your account, with the e-mail address the provider knows you by."
+      }
     },
     "message": {
       "LoginComponent": {
@@ -609,6 +617,11 @@
       "issuerUri": {
         "label": "Issuer Uri",
         "help": "Enter the OAUTH2 issuer URL of the provider"
+      },
+      "resourceServerAudiences": {
+        "label": "Accepted audiences",
+        "help": "Which audiences a token sent to the API must carry to be accepted for this provider, separated by commas. Use the audience the provider writes into its access tokens, which is not always the Client ID: Keycloak, for one, names this application only once its client has an audience mapper. Leave it empty to accept any token this provider signed, including one issued to another of its applications. A change applies once the application is restarted.",
+        "placeholder": "Empty: accept any token of this provider"
       },
       "authorizationUri": {
         "label": "Authorization URL",

@@ -1,4 +1,6 @@
 export const DEFAULT_LANGUAGE: string = "en";
+/** Where the language the person chose is kept between visits. */
+export const GEBO_AI_LOCAL_STORAGE_LANG: string = "gebo.ai.lang";
 export interface UIExistingText {
     moduleId?: string | null,
     entityId?: string | null;
