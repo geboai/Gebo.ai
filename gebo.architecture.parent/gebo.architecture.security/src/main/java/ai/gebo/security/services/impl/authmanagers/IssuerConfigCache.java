@@ -8,12 +8,15 @@
  */
 package ai.gebo.security.services.impl.authmanagers;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
+import ai.gebo.security.services.impl.GMicrosoftAccountsIdTokenValidator;
 
 /**
  * Remembers which configured OAuth2 provider a JWT {@code iss} claim belongs to, so
@@ -39,6 +42,12 @@ import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
  * a provider added for that issuer later unknown until a restart, the same fault the
  * other way round; and a token from an unknown issuer goes on to try every configured
  * provider anyway.
+ * </p>
+ *
+ * <p>
+ * Which issuers a configuration answers for is {@link #answersFor}'s to say, here and
+ * wherever a configuration is looked up by issuer: its own one, and for the Microsoft
+ * accounts configuration that of each tenant it admits.
  * </p>
  */
 public final class IssuerConfigCache {
@@ -72,11 +81,11 @@ public final class IssuerConfigCache {
 		String known = registrationIdsByIssuer.get(issuer);
 		if (known != null) {
 			Oauth2RuntimeConfiguration current = byRegistrationId.apply(known);
-			if (current != null && current.getProviderConfig() != null
-					&& issuer.equals(current.getProviderConfig().getIssuerUri())) {
+			if (current != null && answersFor(current, issuer)) {
 				return Optional.of(current);
 			}
-			// deleted, or edited to another issuer: forget it and look again
+			// deleted, or edited to another issuer or to no longer admit its tenant:
+			// forget it and look again
 			registrationIdsByIssuer.remove(issuer, known);
 		}
 		Oauth2RuntimeConfiguration found = loader.get();
@@ -84,5 +93,63 @@ public final class IssuerConfigCache {
 			registrationIdsByIssuer.put(issuer, found.getRegistrationId());
 		}
 		return Optional.ofNullable(found);
+	}
+
+	/**
+	 * Whether a token signed under this issuer belongs to this configuration.
+	 *
+	 * <p>
+	 * For every provider but one that is its own issuer, compared exactly. The
+	 * Microsoft accounts configuration also answers for the issuer of each tenant it
+	 * admits, {@code https://login.microsoftonline.com/{tid}/v2.0}: its people
+	 * belong to several tenants, and each signs under an issuer of its own.
+	 * </p>
+	 *
+	 * <p>
+	 * Like the rest of this class, it only says which configuration's checks a token
+	 * goes to. It reads an issuer nobody has verified yet, and the decoder of that
+	 * configuration then verifies the token in full.
+	 * </p>
+	 *
+	 * @param configuration a configuration as the store hands it out
+	 * @param issuer        the {@code iss} of a token, possibly null
+	 */
+	public static boolean answersFor(Oauth2RuntimeConfiguration configuration, String issuer) {
+		if (issuer == null || configuration.getProviderConfig() == null) {
+			return false;
+		}
+		if (issuer.equals(configuration.getProviderConfig().getIssuerUri())) {
+			return true;
+		}
+		return configuration.getProvider() == AuthProvider.microsoft && GMicrosoftAccountsIdTokenValidator
+				.admitsIssuer(issuer, GMicrosoftAccountsIdTokenValidator.admittedTenants(configuration));
+	}
+
+	/**
+	 * The configuration among these that a token signed under this issuer belongs
+	 * to, preferring the one whose own issuer it is: an organization configured on
+	 * its own is meant more precisely than the Microsoft accounts configuration that
+	 * also admits it.
+	 *
+	 * @param configurations the configurations to look among
+	 * @param issuer         the {@code iss} of a token, possibly null
+	 * @return the configuration, or null when none answers for the issuer
+	 */
+	public static Oauth2RuntimeConfiguration answeringFor(List<Oauth2RuntimeConfiguration> configurations,
+			String issuer) {
+		if (issuer == null) {
+			return null;
+		}
+		Oauth2RuntimeConfiguration admitting = null;
+		for (Oauth2RuntimeConfiguration configuration : configurations) {
+			if (configuration.getProviderConfig() != null
+					&& issuer.equals(configuration.getProviderConfig().getIssuerUri())) {
+				return configuration;
+			}
+			if (admitting == null && answersFor(configuration, issuer)) {
+				admitting = configuration;
+			}
+		}
+		return admitting;
 	}
 }

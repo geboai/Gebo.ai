@@ -54,12 +54,14 @@ ai.gebo.oauth2.library:
     # of the person's own tenant, https://login.microsoftonline.com/{tid}/v2.0, and
     # publish no issuer of their own, so the login checks the token's issuer against
     # its tenant and the tenant against allowedTenants
-    # (GMicrosoftAccountsIdTokenValidator), not against issuerUri. issuerUri is the
-    # issuer of personal accounts, which all belong to Microsoft's tenant
-    # 9188040d-6c67-4c5b-b112-36a304b66dad: it is what the API matches a bearer token
-    # against. The keys of "common" are those of "consumers" and include every key of
-    # "organizations". The user info is the OIDC one: Spring refuses a user info
-    # response without the id token's "sub", and Graph's /v1.0/me has none.
+    # (GMicrosoftAccountsIdTokenValidator), not against issuerUri, and so does the API
+    # with a bearer token (GeboMicrosoftAccountsTenantValidator), verifying it against
+    # jwkSetUri. issuerUri is the issuer of personal accounts, which all belong to
+    # Microsoft's tenant 9188040d-6c67-4c5b-b112-36a304b66dad. The keys of "common" are
+    # those of "consumers" and include every key of "organizations", which the tenants
+    # admitted sign with, unless the application was given signing keys of its own for
+    # claims mapping. The user info is the OIDC one: Spring refuses a user info response
+    # without the id token's "sub", and Graph's /v1.0/me has none.
     - provider: microsoft
       authorizationUri: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
       tokenUri: https://login.microsoftonline.com/common/oauth2/v2.0/token

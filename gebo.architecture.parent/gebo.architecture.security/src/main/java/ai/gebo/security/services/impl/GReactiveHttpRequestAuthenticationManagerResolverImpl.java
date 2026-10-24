@@ -144,8 +144,7 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 	}
 
 	private ReactiveAuthenticationManager singleJwt(Oauth2RuntimeConfiguration cfg) {
-		ReactiveJwtDecoder decoder = reactiveJwtDecoderCache.forIssuerLocation(cfg.getProviderConfig().getIssuerUri(),
-				cfg.getResourceServerAudiences());
+		ReactiveJwtDecoder decoder = reactiveJwtDecoderCache.forConfiguration(cfg);
 		JwtReactiveAuthenticationManager manager = new JwtReactiveAuthenticationManager(decoder);
 		manager.setJwtAuthenticationConverter(
 				new GReactiveJwtAuthenticationConverter(customUserDetailsService, provisioner, cfg));
