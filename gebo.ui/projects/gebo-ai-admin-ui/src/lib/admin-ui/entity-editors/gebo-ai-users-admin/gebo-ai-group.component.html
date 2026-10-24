@@ -12,7 +12,14 @@
 <p-blockUI id="BlockUI"  [target]="groupUI" [blocked]="loading">
   <i class="pi pi-lock" style="font-size: 3rem"></i>
 </p-blockUI>
-<p-panel id="MainPanel" gebo-ai-label #groupUI header="Editing user group" [formGroup]="formGroup">
+<p-panel id="MainPanel" #groupUI [formGroup]="formGroup">
+  <ng-template #header>
+    @if (mode === 'NEW') {
+      <span id="NewGroupTitle" gebo-ai-text class="p-panel-title">New user group</span>
+    } @else {
+      <span id="EditGroupTitle" gebo-ai-text class="p-panel-title">Editing user group</span>
+    }
+  </ng-template>
   @if (!isWizardMode) {
     <div class="grid geboVeryLargeButtonsBar">
       <div class="col-3">

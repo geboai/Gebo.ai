@@ -92,14 +92,15 @@ public class OAuth2AdminController {
 		Oauth2ProviderModifiableData data = new Oauth2ProviderModifiableData();
 		data.setConfigurationType(registration.getRuntimeConfiguration().getConfigurationType());
 		data.setOauth2ClientContent(registration.getClientRegistration());
-		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
 		data.setAuthClientMethod(registration.getRuntimeConfiguration().getClientAuthMethod());
 		data.setAuthGrantType(registration.getRuntimeConfiguration().getAuthGrantType());
 		data.setDescription(registration.getRuntimeConfiguration().getDescription());
 		data.setAuthProvider(registration.getRuntimeConfiguration().getProvider());
 		data.setCode(registration.getRuntimeConfiguration().getRegistrationId());
 		data.setResourceServerAudiences(registration.getRuntimeConfiguration().getResourceServerAudiences());
-		data.setReadOnly(registration.getRuntimeConfiguration().getReadOnly());
+		// only a configuration declared in the application's configuration is read only, the
+		// others carry no value: answered as null, it was refused by the update it was sent back to
+		data.setReadOnly(Boolean.TRUE.equals(registration.getRuntimeConfiguration().getReadOnly()));
 		if (data.getAuthProvider() != null && data.getAuthProvider() == AuthProvider.oauth2_generic) {
 			data.setProviderConfiguration(registration.getRuntimeConfiguration().getProviderConfig());
 		}

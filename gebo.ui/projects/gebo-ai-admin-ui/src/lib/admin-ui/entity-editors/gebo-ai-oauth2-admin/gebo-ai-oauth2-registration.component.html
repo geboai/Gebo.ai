@@ -1,4 +1,11 @@
-<p-panel id="MainPanel" gebo-ai-label header="Insert new OAUTH2 Authentication/Integration infos" [formGroup]="formGroup">
+<p-panel id="MainPanel" [formGroup]="formGroup">
+  <ng-template #header>
+    @if (mode === 'NEW') {
+      <span id="NewRegistrationTitle" gebo-ai-text class="p-panel-title">Insert new OAUTH2 Authentication/Integration infos</span>
+    } @else {
+      <span id="EditRegistrationTitle" gebo-ai-text class="p-panel-title">Editing OAUTH2 Authentication/Integration infos</span>
+    }
+  </ng-template>
   @if (!isWizardMode) {
     <div class="geboButtonsBar" style="vertical-align: baseline;">
       <div class="grid">
