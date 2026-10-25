@@ -33,7 +33,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
  * chat, in another network - does not.
  */
 class ParticipantAdditionalToolSourcesTest {
-	private static final String OUTCOME_SOURCE = "harness-outcome-tool-source";
+	private static final String OUTCOME_SOURCE = "work-outcome-tool-source";
 
 	/** A factory that only has to resolve a participant's configuration. */
 	private static class ConfigurationResolvingFactory

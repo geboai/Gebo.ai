@@ -43,9 +43,9 @@ import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgen
  * everyone puts those tools in front of every chat.
  */
 class AgentAdditionalToolSourcesTest {
-	private static final String OUTCOME_SOURCE = "harness-outcome-tool-source";
-	private static final String GOAL_REACHED = "goalReached";
-	private static final String NEEDS_A_PERSON = "needsAPerson";
+	private static final String OUTCOME_SOURCE = "work-outcome-tool-source";
+	private static final String GOAL_REACHED = "workIsDone";
+	private static final String NEEDS_A_PERSON = "askAPerson";
 
 	private static ToolCallback tool(String name) {
 		ToolCallback callback = mock(ToolCallback.class);
