@@ -84,6 +84,20 @@ public class GAgentConfig extends GBaseObject
 	protected List<String> excludedToolSources = null;
 
 	/**
+	 * The ids of the tool sources whose tools this agent mounts even when the
+	 * installation keeps them out of automatic mounting
+	 * ({@code ai.gebo.agents.tools.auto-mounting.excluded-tool-sources}): the
+	 * counterpart of {@link #excludedToolSources}, for a family of tools that only
+	 * some agents are meant to operate. An agent that mounts every registered tool
+	 * ({@link #subscribeAllTools}) has no other way back to an excluded tool, its
+	 * automatic mounting replacing the tools selected by name
+	 * ({@link #enabledFunctions}) outright. Null or empty when the agent mounts
+	 * nothing the installation excludes; what the configuration itself excludes
+	 * stays excluded.
+	 */
+	protected List<String> additionalToolSources = null;
+
+	/**
 	 * The code of the agent configuration this one is a copy of, only while the copy
 	 * is being inserted: its code is made from it. Neither stored nor exchanged.
 	 */
