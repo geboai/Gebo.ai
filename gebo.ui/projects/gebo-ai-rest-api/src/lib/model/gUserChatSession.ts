@@ -21,6 +21,10 @@ export interface GUserChatSession {
     dateCreated?: Date;
     chatCreationDateTime?: Date;
     username?: string;
+    accessibleUsers?: Array<string>;
+    accessibleGroups?: Array<string>;
+    accessibleToAll?: boolean;
+    aclAliases?: Array<number>;
     contextCode?: string;
     chatProfileCode?: string;
     modelReference?: GObjectRefGBaseChatModelConfig;

@@ -20,6 +20,7 @@ export interface AgentNetworkParticipant {
     communicationList?: Array<string>;
     controller?: boolean;
     canCallTools?: boolean;
+    additionalToolSources?: Array<string>;
     canCallOtherAgents?: boolean;
     networkAgentName?: string;
 }
