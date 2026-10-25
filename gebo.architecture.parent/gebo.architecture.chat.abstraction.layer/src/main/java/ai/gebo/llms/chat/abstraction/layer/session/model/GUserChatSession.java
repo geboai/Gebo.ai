@@ -26,6 +26,8 @@ import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry.ChatSessionEntryIm
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.model.annotations.GObjectReference;
+import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import lombok.Data;
@@ -37,12 +39,47 @@ import lombok.Data;
  */
 @Document
 @Data
-public class GUserChatSession extends GBaseObject {
+public class GUserChatSession extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
 
 	private static final String EMPTY_TEXT = "<<empty text>>";
 	private Date chatCreationDateTime = null; // Timestamp for chat creation
 	@HashIndexed
 	private String username = null; // Username for the chat context
+
+	/**
+	 * Who else may take part in this conversation, beside the person it belongs
+	 * to - who remains its owner.
+	 * <p>
+	 * Granted the way everything else in the platform is granted, and in both of
+	 * the ways it grants things: by naming users and groups, and through the
+	 * access control lists, so an installation enforcing ACLs sees a conversation
+	 * as it sees any other object.
+	 * <p>
+	 * <b>What this does not yet change:</b> the chat list still shows a person
+	 * their own conversations and no others, so nothing yet opens a conversation
+	 * granted this way.
+	 * <p>
+	 * That is a decision, not an oversight. Showing a conversation to several
+	 * people means letting them work in it at the same time, and that is not a
+	 * matter of reading rows: it needs the people in a conversation to see each
+	 * other's turns as they happen, over websockets, with everything that follows
+	 * about who holds it, what arrives while somebody else is writing and how the
+	 * history settles. That is its own piece of work and it is not in this
+	 * release. The grant is modelled now because work that must be answered by
+	 * somebody else needs somewhere to say so, and because saying it on the
+	 * conversation - the way the platform grants anything - is where it will be
+	 * read from when the rest is built.
+	 */
+	private List<String> accessibleUsers = null;
+
+	/** The groups whose members may take part in this conversation. */
+	private List<String> accessibleGroups = null;
+
+	/** Whether everyone may; null or false keeps it to its own people. */
+	private Boolean accessibleToAll = null;
+
+	/** The access control lists this conversation is granted through. */
+	private List<Integer> aclAliases = null;
 	@HashIndexed
 	private String contextCode = null; // Code of the external context this chat belongs to
 	@GObjectReference(referencedType = GChatProfileConfiguration.class)
@@ -133,4 +170,14 @@ public class GUserChatSession extends GBaseObject {
 		return builder.build();
 	}
 
+
+	/**
+	 * The person this conversation belongs to. Not {@code userCreated}: a
+	 * conversation opened for somebody - by work running as them, say - is theirs,
+	 * and the security services ask the owner, not whoever wrote the row.
+	 */
+	@Override
+	public String owner() {
+		return username != null ? username : super.owner();
+	}
 }

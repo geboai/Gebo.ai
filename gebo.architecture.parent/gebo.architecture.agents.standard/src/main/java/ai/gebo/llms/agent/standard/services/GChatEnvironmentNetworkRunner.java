@@ -12,6 +12,7 @@ package ai.gebo.llms.agent.standard.services;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
@@ -201,6 +203,18 @@ public class GChatEnvironmentNetworkRunner {
 	 */
 	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
 			List<String> rulesOfThisRun, INotificationSink sink) throws AgentException {
+		return run(network, request, attachments, rulesOfThisRun, Map.of(), sink);
+	}
+
+	/**
+	 * The same, with values the tools of this run can read from their own tool
+	 * context - how anything a tool needs to know about the run it is serving
+	 * reaches it (see {@code ToolCallbackDeclarationUtil}). A caller whose tools
+	 * must know which of its runs they are in puts that here.
+	 */
+	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
+			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, INotificationSink sink)
+			throws AgentException {
 		if (network == null) {
 			throw new AgentException("There is no network of agents to run");
 		}
@@ -250,8 +264,17 @@ public class GChatEnvironmentNetworkRunner {
 			// The sink buffers what it emits, so reading the frames after the run loses
 			// nothing and reading them as they come loses nothing either.
 			final Flux<GeboChatMessageEnvelope> frames = service.getFlux();
-			final GeboChatMessageEnvelope last = service.executeNetwork(resources.createChatRequestContext(),
-					runtimeData, null);
+			IChatRequestContext context = resources.createChatRequestContext();
+			if (toolsContextOfThisRun != null) {
+				for (Map.Entry<String, Object> entry : toolsContextOfThisRun.entrySet()) {
+					context = context.withToolsContextValue(entry.getKey(), entry.getValue());
+				}
+				if (!toolsContextOfThisRun.isEmpty() && LOGGER.isDebugEnabled()) {
+					LOGGER.debug("The tools of the run are told " + toolsContextOfThisRun.size()
+							+ " thing(s) about it: " + toolsContextOfThisRun.keySet());
+				}
+			}
+			final GeboChatMessageEnvelope last = service.executeNetwork(context, runtimeData, null);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
