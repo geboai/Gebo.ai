@@ -98,15 +98,45 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 			INotificationSink notificationSink, Class<InputType> inputType, Class<OutputType> outputType,
 			ReactiveIdentityUtil runAs, Map<String, RuntimeAgentInfos> agentsCache) throws NetworkOfAgentsException;
 
-	protected RuntimeAgentInfos createRuntimeAgentInfos(GAgentsNetwork network, AgentNetworkParticipant agent)
-			throws NetworkOfAgentsException {
-		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
-				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+	/**
+	 * The configuration this participant runs on: the one its code names, carrying
+	 * what the participant adds to it in this network. Only the tool sources the
+	 * participant mounts on top of its configuration's own
+	 * ({@link AgentNetworkParticipant#getAdditionalToolSources()}) are added, and
+	 * only onto the instance of this run: the configuration service answers every
+	 * lookup with its own object, so the same agent in another network, or in a
+	 * chat, is unaffected.
+	 */
+	protected GAgentConfig configurationOf(AgentNetworkParticipant agent) throws NetworkOfAgentsException {
 		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
 		if (config == null)
 			throw new NetworkOfAgentsException(
 					"The agent config code:" + agent.getAgentConfigCode() + " does not exist");
+		List<String> addedByTheNetwork = agent.getAdditionalToolSources();
+		if (addedByTheNetwork != null && !addedByTheNetwork.isEmpty()) {
+			List<String> mounted = new ArrayList<String>(
+					config.getAdditionalToolSources() != null ? config.getAdditionalToolSources() : List.of());
+			for (String sourceId : addedByTheNetwork) {
+				if (sourceId != null && !sourceId.isBlank() && !mounted.contains(sourceId)) {
+					mounted.add(sourceId);
+				}
+			}
+			config.setAdditionalToolSources(mounted);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + agent.getNetworkAgentName() + " mounts the tool source(s) "
+						+ addedByTheNetwork + " on its agent config code:" + config.getCode()
+						+ " for this network only");
+			}
+		}
+		return config;
+	}
+
+	protected RuntimeAgentInfos createRuntimeAgentInfos(GAgentsNetwork network, AgentNetworkParticipant agent)
+			throws NetworkOfAgentsException {
+		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
+				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		GAgentConfig config = configurationOf(agent);
 		IGGenericAgentService service = agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
 		if (service instanceof IGNetworkAgentService networkService) {
 			if (LOGGER.isDebugEnabled()) {

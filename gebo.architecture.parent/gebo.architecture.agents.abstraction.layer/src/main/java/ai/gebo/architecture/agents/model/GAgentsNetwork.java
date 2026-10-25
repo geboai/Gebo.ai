@@ -67,6 +67,17 @@ public class GAgentsNetwork extends GBaseObject
 
 		private boolean canCallTools = true;
 
+		/**
+		 * The ids of the tool sources this participant mounts in this network even when
+		 * the installation keeps them out of automatic mounting, added to whatever its
+		 * agent configuration already mounts
+		 * ({@link GAgentConfig#getAdditionalToolSources()}). It is how a family of tools
+		 * belongs to the networks that are meant to operate it rather than to every
+		 * agent that mounts all tools: the network names the source on the participant
+		 * that needs it, the installation excludes it for everyone else.
+		 */
+		private List<String> additionalToolSources = null;
+
 		private boolean canCallOtherAgents = false;
 
 		public String getNetworkAgentName() {

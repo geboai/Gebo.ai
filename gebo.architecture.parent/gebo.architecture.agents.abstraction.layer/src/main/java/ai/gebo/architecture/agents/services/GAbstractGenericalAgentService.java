@@ -209,7 +209,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * capabilities descriptor. Mirrors the tool selection performed in
 	 * {@link #getAgentModel(GAgentConfig, ToolCallsListener, INotificationSink, ReactiveIdentityUtil)}:
 	 * when {@code subscribeAllTools} is set every registered tool is advertised
-	 * (with its description), otherwise only the explicitly enabled functions are.
+	 * (with its description), otherwise the explicitly enabled functions are, in
+	 * both cases together with the tools of the sources the configuration mounts on
+	 * top ({@link GAgentConfig#getAdditionalToolSources()}).
 	 */
 	protected void appendConfiguredTools(AgentCapabilities capabilities, GAgentConfig agentConfig) {
 		if (agentConfig == null) {
@@ -242,8 +244,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 							tool.getToolDefinition().name(), tool.getToolDefinition().description()));
 				}
 			}
-		} else if (agentConfig.getEnabledFunctions() != null) {
-			for (String functionName : agentConfig.getEnabledFunctions()) {
+		} else {
+			for (String functionName : resolveMountedToolNames(agentConfig, null)) {
 				if (functionName != null && !functionName.isBlank()) {
 					if (LOGGER.isTraceEnabled()) {
 						LOGGER.trace("Explicitly enabled tool: " + functionName);
@@ -357,7 +359,51 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 						+ " mounts " + names.size() + " function(s) after its own excluded tool sources");
 			}
 		}
+		names = new ArrayList<String>(withTheConfiguredAdditionalSources(agentConfig, names));
 		return names;
+	}
+
+	/**
+	 * Adds back the tools of the sources the configuration mounts on top of what it
+	 * would otherwise reach ({@link GAgentConfig#getAdditionalToolSources()}): the
+	 * families of tools an installation keeps out of automatic mounting because only
+	 * some agents are meant to operate them. It is the last word on the tool set,
+	 * since an agent mounting every registered tool has no other way to an excluded
+	 * one - the automatic mounting replaces the tools selected by name. What the
+	 * configuration itself excludes is not added back: an agent does not contradict
+	 * itself.
+	 */
+	protected List<String> withTheConfiguredAdditionalSources(GAgentConfig agentConfig, List<String> toolNames) {
+		if (agentConfig == null || agentConfig.getAdditionalToolSources() == null
+				|| agentConfig.getAdditionalToolSources().isEmpty()) {
+			return toolNames;
+		}
+		Set<String> added = toolNamesOfSources(agentConfig.getAdditionalToolSources());
+		if (added.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent config code:" + agentConfig.getCode() + " mounts the tool sources "
+						+ agentConfig.getAdditionalToolSources() + " but none of them exports a tool");
+			}
+			return toolNames;
+		}
+		added.removeAll(toolNamesOfSources(agentConfig.getExcludedToolSources()));
+		List<String> mounted = new ArrayList<String>(toolNames != null ? toolNames : List.of());
+		int before = mounted.size();
+		for (String name : added) {
+			if (!mounted.contains(name)) {
+				mounted.add(name);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " mounts " + (mounted.size() - before)
+					+ " tool(s) of its additional tool sources " + agentConfig.getAdditionalToolSources()
+					+ " for agent service id:" + getId());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Tool names added by the additional tool sources of agent config code:"
+					+ agentConfig.getCode() + " : " + added);
+		}
+		return mounted;
 	}
 
 	@Override
@@ -435,14 +481,17 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
-	 * Resolves the set of tool names to keep out of automatic mounting, combining
-	 * the explicitly excluded tool names with every tool contributed by an excluded
-	 * tool source (see {@link AgentsToolsAutoMountingConfig}). Resolved lazily
-	 * through the runtime binder so subclasses do not need the config injected; a
-	 * missing config yields no exclusions.
+	 * Resolves the set of tool names to keep out of automatic mounting: the tools of
+	 * the sources that are mounted only on the agents asking for them
+	 * ({@link #toolNamesOfSourcesMountedOnlyWhenAsked()}), which always hold, plus
+	 * what the installation itself excludes - the tool names it lists and every tool
+	 * of a source it lists (see {@link AgentsToolsAutoMountingConfig}). The
+	 * installation's part is resolved lazily through the runtime binder so
+	 * subclasses do not need the config injected; a missing config leaves only the
+	 * sources' own.
 	 */
 	protected Set<String> autoMountExcludedToolNames() {
-		Set<String> excluded = new HashSet<>();
+		Set<String> excluded = new HashSet<>(toolNamesOfSourcesMountedOnlyWhenAsked());
 		AgentsToolsAutoMountingConfig config;
 		try {
 			config = runtimeBinder.getImplementationOf(AgentsToolsAutoMountingConfig.class);
@@ -472,6 +521,34 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			LOGGER.trace("Auto mount excluded tool names: " + excluded);
 		}
 		return excluded;
+	}
+
+	/**
+	 * The names of the tools of the sources that are mounted only on the agents
+	 * asking for them ({@link IGToolCallbackSource#isMountedOnlyWhenAsked()}): they
+	 * reach an agent only when its configuration, or the network participant it runs
+	 * as, names the source. Unlike the installation's exclusions these always hold,
+	 * so a deployment cannot put them in front of every chat by forgetting a setting.
+	 */
+	protected Set<String> toolNamesOfSourcesMountedOnlyWhenAsked() {
+		Set<String> names = new HashSet<>();
+		if (toolsRepositoryPattern == null) {
+			return names;
+		}
+		List<IGToolCallbackSource> sources = toolsRepositoryPattern.getImplementations();
+		if (sources == null) {
+			return names;
+		}
+		for (IGToolCallbackSource source : sources) {
+			if (source == null || !source.isMountedOnlyWhenAsked()) {
+				continue;
+			}
+			names.addAll(toolNamesOfSources(List.of(source.getId())));
+		}
+		if (!names.isEmpty() && LOGGER.isDebugEnabled()) {
+			LOGGER.debug(names.size() + " tool(s) are mounted only on the agents asking for their source");
+		}
+		return names;
 	}
 
 	/**
