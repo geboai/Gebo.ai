@@ -241,11 +241,32 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestro
               this.plainTextContent = fileType?.treatAs === 'plainText';
               this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
 
-              this.browsableContent = (this.contentMetaInfo?.moduleId === 'webcrawler-module' || this.contentMetaInfo?.referenceType==="WEB");
-              if (this.browsableContent && this.contentMetaInfo?.url) {
+              /**
+               * A reference coming from the web is of either of two kinds. It can
+               * point at a page still living at its own address, and then it is
+               * browsed there and no viewer of a file type applies to it. Or the
+               * page has been archived and Gebo.ai serves the file itself, and then
+               * the file has to be rendered by the viewer of its own type: an
+               * article of a press review is a WEB reference whose archived file is
+               * a pdf, and letting the web viewer claim it too put the protected url
+               * into an iframe, which carries no authorization token and is answered
+               * with a 401. The flags have to stay mutually exclusive because the
+               * template renders every viewer whose flag is on.
+               */
+              const webReference: boolean = this.contentMetaInfo?.moduleId === 'webcrawler-module'
+                || this.contentMetaInfo?.referenceType === "WEB";
+              if (webReference && this.contentMetaInfo?.url) {
+                this.browsableContent = true;
+                this.sourceCodeContent = false;
+                this.plainTextContent = false;
+                this.pdfContent = false;
                 this.externalContentUrl = this.contentMetaInfo.url;
                 this.contentServedByGebo = false;
+              } else {
+                this.browsableContent = webReference && !this.sourceCodeContent
+                  && !this.plainTextContent && !this.pdfContent;
               }
+              console.log("content viewer webReference:" + webReference + " browsedAtItsOwnAddress:" + (webReference && this.contentMetaInfo?.url ? true : false));
             }
             this.downloadableContent = fileType?.uiViewable === false;
             // a document the viewer cannot show (a Word file...) still opens, with its download link
