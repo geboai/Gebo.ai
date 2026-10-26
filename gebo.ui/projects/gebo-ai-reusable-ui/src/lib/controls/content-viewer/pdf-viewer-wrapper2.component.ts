@@ -17,48 +17,68 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, Inject, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { getAuthHeader } from "../../infrastructure/gebo-credentials";
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { Subscription } from "rxjs";
+import { getAuth, getHttpHeaders } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
 import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 
 /**
- * Interface defining the structure for PDF source configuration.
- * Allows specifying a URL, HTTP headers, credentials settings, or raw PDF data.
- */
-interface PDFSrc {
-    url?: string;
-    httpHeaders?: any;
-    withCredentials?: boolean;
-    data?: any;
-}
-
-/**
  * Component that wraps the ngx-extended-pdf-viewer to display PDF documents.
- * It handles authentication by automatically adding authorization headers to requests.
- * The component will only render when a PDF source is provided.
+ *
+ * The contents protected by Gebo.ai are fetched by this component and handed over
+ * to the viewer as bytes, instead of letting the viewer request the url itself.
+ * This is the way the rest of the content viewing area works (see the download
+ * link and the web viewer wrappers) and it is what guarantees the authorization
+ * token reaches the backend:
+ *
+ * - the token is read when the document is actually loaded, so a token renewed
+ *   after this component was created is honoured;
+ * - the request goes through the Angular HttpClient, hence through the standard
+ *   authentication interceptor of the application;
+ * - no credentialed cross origin request is issued. The viewer asked for the
+ *   url on its own with `withCredentials` turned on, and a credentialed request
+ *   is refused by the browser whenever the backend answers
+ *   `Access-Control-Allow-Origin: *`, which is what GeboAICorsFilter does: the
+ *   request was then blocked before being sent and the backend never saw the
+ *   token at all (this happens when the UI is served by the development server
+ *   on another port than the backend).
+ *
+ * The whole file is kept in memory while it is shown, which is the same trade off
+ * the download link wrapper already makes, and it lets the viewer work with the
+ * content controllers whether they support range requests or not.
+ *
+ * The component will only render when a PDF has been loaded.
  */
 @Component({
     selector: "gebo-ai-pdf-viewer-wrapper2",
-    template: "@if (pdfSrc) {<ngx-extended-pdf-viewer  [authorization]='true' [httpHeaders]='httpHeaders'  [src]='pdfSrc'     style='height: 650px;width: 100%' (error)='onError($event)' ></ngx-extended-pdf-viewer>}",
+    template: "@if (pdfData) {<ngx-extended-pdf-viewer  [src]='pdfData'  [filenameForDownload]='fileName'     style='height: 650px;width: 100%' (pdfLoadingFailed)='onError($event)' ></ngx-extended-pdf-viewer>}",
     standalone: false
 })
-export class PDFViewerWrapper2Component implements OnInit, OnChanges {
+export class PDFViewerWrapper2Component implements OnInit, OnChanges, OnDestroy {
     /**
      * Input property for the PDF source URL to be displayed
      */
     @Input() pdfSrc?: string ;
-    
+
     /**
-     * Object containing PDF source configuration
+     * Name proposed to the user when the document is downloaded from the viewer.
+     * The viewer guesses it from the url when it is not given, which the urls of
+     * the Gebo.ai content controllers cannot provide.
      */
-    pdfInfos?: PDFSrc;
-    
+    @Input() fileName?: string;
+
     /**
-     * HTTP headers to be sent with PDF requests, including authorization
+     * Contents of the document being shown, loaded by {@link loadPdf}
      */
-    httpHeaders?:any;
-    
+    protected pdfData?: Uint8Array;
+
+    /**
+     * Loading of the document currently in progress, kept to drop it when the
+     * source changes or the component goes away
+     */
+    private loading?: Subscription;
+
     /**
      * Initializes the component with the necessary dependencies and sets up the PDF viewer
      * @param path Base path for API requests
@@ -66,8 +86,6 @@ export class PDFViewerWrapper2Component implements OnInit, OnChanges {
      */
     constructor(@Inject(BASE_PATH) private path: string, private httpClient: HttpClient) {
         pdfDefaultOptions.assetsFolder = 'assets/bleeding-edge';
-        this.httpHeaders=getAuthHeader();
-        
     }
     
     /**
@@ -84,19 +102,57 @@ export class PDFViewerWrapper2Component implements OnInit, OnChanges {
     ngOnInit(): void {
         console.log("PDF Viewer init");
     }
-    
+
+    /**
+     * Fetches the document with the authorization token of the logged user and
+     * hands its bytes over to the viewer.
+     *
+     * @param url Url serving the document, protected by Gebo.ai
+     */
+    private loadPdf(url: string) {
+        const authenticated: boolean = getAuth()?.token ? true : false;
+        console.log("PDF Viewer loading " + url + " authenticated:" + authenticated);
+        if (!authenticated) {
+            console.error("PDF Viewer: no Gebo.ai credentials available, the content request will be refused: " + url);
+        }
+        this.loading?.unsubscribe();
+        this.loading = this.httpClient.get(url, { headers: getHttpHeaders(), responseType: "arraybuffer" }).subscribe({
+            next: (content) => {
+                this.pdfData = new Uint8Array(content);
+                console.log("PDF Viewer loaded " + url + " bytes:" + this.pdfData.length);
+            },
+            error: (error) => {
+                this.pdfData = undefined;
+                console.error("PDF Viewer cannot load " + url, error);
+            }
+        });
+    }
+
     /**
      * Lifecycle hook that runs when component inputs change
-     * Detects changes to the pdfSrc input and updates the viewer accordingly
+     * Detects changes to the pdfSrc input and loads the document accordingly
      * @param changes Object containing all changed properties
      */
     ngOnChanges(changes: SimpleChanges): void {
-        if (this.pdfSrc && changes["pdfSrc"]) {
-            console.log("PDF Viewer loading "+this.pdfSrc);
-            
-
-
+        if (changes["pdfSrc"]) {
+            this.pdfData = undefined;
+            if (this.pdfSrc) {
+                this.loadPdf(this.pdfSrc);
+            } else {
+                console.log("PDF Viewer source cleared");
+                this.loading?.unsubscribe();
+                this.loading = undefined;
+            }
         }
+    }
+
+    /**
+     * Lifecycle hook that runs when the component is destroyed, dropping a
+     * loading still in progress
+     */
+    ngOnDestroy(): void {
+        this.loading?.unsubscribe();
+        this.loading = undefined;
     }
 
 }

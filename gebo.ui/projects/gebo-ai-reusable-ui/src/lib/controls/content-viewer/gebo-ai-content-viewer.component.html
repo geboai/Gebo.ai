@@ -29,7 +29,8 @@
       <gebo-ai-browse-content-component *ngIf="visible && browsableContent===true "
       [url]="externalContentUrl"></gebo-ai-browse-content-component> -->
       @if (visible && pdfContent) {
-        <gebo-ai-pdf-viewer-wrapper2 [pdfSrc]="externalContentUrl"></gebo-ai-pdf-viewer-wrapper2>
+        <gebo-ai-pdf-viewer-wrapper2 [pdfSrc]="externalContentUrl"
+        [fileName]="contentMetaInfo?.fileName"></gebo-ai-pdf-viewer-wrapper2>
       }
 
       @if (visible && downloadableContent) {
