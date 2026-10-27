@@ -35,6 +35,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkServiceFactory;
+import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -225,6 +226,9 @@ public class GChatEnvironmentNetworkRunner {
 			throw new AgentException("The chat network of agents factory is not available");
 		}
 		IGReactiveChatAgentsNetworkService service = null;
+		// Whether the request was started in the conversation and not ended yet: a run
+		// that fails after that releases it, or the conversation refuses the next one.
+		boolean started = false;
 		try {
 			final IGConfigurableChatModel chatModel = chatSessionLifecycleService.getSessionChatModel(request);
 			final IGConfigurableChatModel serviceModel = chatModelsDao.defaultHandler();
@@ -235,6 +239,7 @@ public class GChatEnvironmentNetworkRunner {
 			final GeboChatResponse response = chatSessionLifecycleService.createEmptyResponse(request);
 			final LLMChatRequestResources resources = chatSessionLifecycleService.startRequest(request, chatModel,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+			started = true;
 			if (rulesOfThisRun != null && !rulesOfThisRun.isEmpty()) {
 				// Beside the rules the conversation and its profile already carry.
 				resources.getRulesToFollow().addAll(rulesOfThisRun);
@@ -279,16 +284,73 @@ public class GChatEnvironmentNetworkRunner {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
 			}
-			return new ChatEnvironmentRun(frames, responseOf(last, response), service,
-					request.getUserChatContextCode());
+			final GeboChatResponse answered = responseOf(last, response);
+			// The run ends as a chat's request ends (see ChatRequestEnding): the answer is
+			// saved as an interaction of the conversation, the session is maintained and
+			// the request is released - so the next run goes on in the same conversation,
+			// with this one behind it, instead of being refused as a concurrent request.
+			ended(request, response, answered, chatModel);
+			started = false;
+			return new ChatEnvironmentRun(frames, answered, service, request.getUserChatContextCode());
 		} catch (AgentException ae) {
+			releaseIfStarted(started, request);
 			disposeQuietly(service);
 			throw ae;
 		} catch (GeboChatSessionLifecycleException | GeboPersistenceException | NetworkOfAgentsException
 				| LLMConfigException | IOException | RuntimeException e) {
+			releaseIfStarted(started, request);
 			disposeQuietly(service);
 			LOGGER.error("The run of network '" + networkCode + "' in a chat environment failed", e);
 			throw new AgentException("The run of network '" + networkCode + "' failed: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Ends the request of a run that answered: the answer is saved on the request's
+	 * own response - whose called functions the recorder filled - the way the chat
+	 * pipeline merges a network's answer, the interaction is saved in the
+	 * conversation, the session maintenance of a completed request runs, and the
+	 * request is released whatever happened before.
+	 */
+	private void ended(GeboChatRequest request, GeboChatResponse response, GeboChatResponse answered,
+			IGConfigurableChatModel chatModel) {
+		try {
+			if (answered != null && answered != response) {
+				response.setQueryResponse(answered.getQueryResponse());
+				response.setDocumentsRef(answered.getDocumentsRef());
+				response.setListedDocumentNames(answered.getListedDocumentNames());
+				response.setAdditionalContents(answered.getAdditionalContents());
+				ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.mergeBackendMessages(answered, response);
+			}
+			chatSessionLifecycleService.endRequest(request, response);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Request:" + request.getId() + " of conversation:" + request.getUserChatContextCode()
+						+ " ended, its interaction saved: answer length:"
+						+ (response.getQueryResponse() != null ? response.getQueryResponse().length() : 0)
+						+ " called functions:"
+						+ (response.getCalledFunctions() != null ? response.getCalledFunctions().size() : 0));
+			}
+		} catch (GeboChatSessionLifecycleException | RuntimeException notEnded) {
+			LOGGER.error("The interaction of request " + request.getId() + " in conversation "
+					+ request.getUserChatContextCode() + " could not be saved", notEnded);
+		}
+		try {
+			chatSessionLifecycleService.chatRequestCompleted(request, chatModel);
+		} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException
+				| RuntimeException notCompleted) {
+			LOGGER.error("Completing request " + request.getId() + " of conversation "
+					+ request.getUserChatContextCode() + " failed", notCompleted);
+		} finally {
+			chatSessionLifecycleService.releaseRequest(request);
+		}
+	}
+
+	/** A run that failed after its request was started leaves the conversation free. */
+	private void releaseIfStarted(boolean started, GeboChatRequest request) {
+		if (started) {
+			LOGGER.debug("Releasing request:" + request.getId() + " of conversation:"
+					+ request.getUserChatContextCode() + " after a failed run");
+			chatSessionLifecycleService.releaseRequest(request);
 		}
 	}
 
