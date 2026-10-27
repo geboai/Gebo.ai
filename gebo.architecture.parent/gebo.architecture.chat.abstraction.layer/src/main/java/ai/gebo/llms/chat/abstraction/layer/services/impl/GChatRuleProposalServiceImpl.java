@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -132,7 +134,7 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 			throws GeboChatSessionLifecycleException, LLMConfigException {
 		GUserChatSession session = sessionRepository.findById(userChatContextCode).orElseThrow(
 				() -> new GeboChatSessionLifecycleException("Chat " + userChatContextCode + " not found"));
-		securityService.checkBeingCreator(session);
+		securityService.checkBeingCreatorOrGranted(session, AclGrantType.WRITE);
 		List<ChatInteractions> interactions = session.getInteractions() != null ? session.getInteractions()
 				: List.of();
 		int rated = -1;

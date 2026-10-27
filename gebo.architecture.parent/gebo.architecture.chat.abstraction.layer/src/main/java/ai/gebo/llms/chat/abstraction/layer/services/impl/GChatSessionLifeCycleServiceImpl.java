@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -211,7 +213,9 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		GUserChatSession session = this.sessionRepository.findById(id)
 				.orElseThrow(GeboChatSessionLifecycleException::new);
-		this.securityService.checkBeingCreator(session);
+		// Its owner, or whoever the conversation is granted to: a harness grants its
+		// conversation to the people it waits for, and they work in it as the owner would.
+		this.securityService.checkBeingCreatorOrGranted(session, AclGrantType.WRITE);
 		return session;
 	}
 

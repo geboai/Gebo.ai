@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
@@ -119,7 +121,7 @@ public class GeboUserChatsController {
 		Optional<GUserChatSession> optional = repository.findById(id);
 		if (optional.isPresent()) {
 			GUserChatSession data = optional.get();
-			securityService.checkBeingCreator(data);
+			securityService.checkBeingCreatorOrGranted(data, AclGrantType.READ);
 			return new GUserChatInfoData(data);
 		}
 		return null;
@@ -201,11 +203,9 @@ public class GeboUserChatsController {
 		Optional<GUserChatSession> optional = repository.findById(code);
 		if (optional.isPresent()) {
 			GUserChatSession uc = optional.get();
-			String currUN = securityService.getCurrentUser().getUsername();
-			if (uc.getUsername().equals(currUN))
-				return UserChatHistory.from(uc);
-			else
-				throw new SecurityException("Trying to access the wrong chat history");
+			// its owner, or whoever it is granted to
+			securityService.checkBeingCreatorOrGranted(uc, AclGrantType.READ);
+			return UserChatHistory.from(uc);
 		} else
 			return null;
 	}
@@ -223,7 +223,7 @@ public class GeboUserChatsController {
 		Optional<GUserChatSession> data = repository.findById(entry.getCode());
 		if (data.isPresent()) {
 			GUserChatSession uc = data.get();
-			securityService.checkBeingCreator(uc);
+			securityService.checkBeingCreatorOrGranted(uc, AclGrantType.WRITE);
 			uc.setDescription(entry.getDescription());
 			repository.save(uc);
 			return GLookupEntry.of(uc);

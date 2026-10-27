@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -85,7 +87,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		Optional<GUserChatSession> opt = this.userChatContextRepository.findById(userChatContextCode);
 		if (opt.isEmpty())
 			throw new RuntimeException("The session " + userChatContextCode + " does not exist");
-		this.securityService.checkBeingCreator(opt.get());
+		this.securityService.checkBeingCreatorOrGranted(opt.get(), AclGrantType.WRITE);
 	}
 
 	private String getExtension(MultipartFile file) {
@@ -228,7 +230,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		Optional<GUserChatSession> contextData = userChatContextRepository.findById(userSessionCode);
 		if (contextData.isEmpty())
 			throw new RuntimeException("Cannot access this chat context because it does not exist");
-		this.securityService.checkBeingCreator(contextData.get());
+		this.securityService.checkBeingCreatorOrGranted(contextData.get(), AclGrantType.WRITE);
 		List<UserUploadedContent> list = new ArrayList<>();
 		List<GUserMessage> messages = new ArrayList<>();
 		List<UserUploadContentServerSide> data = uploadContentsRepository.findAllById(id);
@@ -264,7 +266,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		if (contextData.isPresent() && serverSideContent.isPresent()) {
 			GUserChatSession ctx = contextData.get();
 			UserUploadContentServerSide ssc = serverSideContent.get();
-			this.securityService.checkBeingCreator(ctx);
+			this.securityService.checkBeingCreatorOrGranted(ctx, AclGrantType.READ);
 			this.securityService.checkBeingCreator(ssc);
 			Path path = this.getUploadedFilePath(ssc);
 			return Files.newInputStream(path);
@@ -324,7 +326,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 			throws IOException {
 		Optional<GUserChatSession> contextData = userChatContextRepository.findById(userSessionCode);
 		if (contextData.isPresent()) {
-			securityService.checkBeingCreator(contextData.get());
+			securityService.checkBeingCreatorOrGranted(contextData.get(), AclGrantType.READ);
 			Optional<LLMGeneratedResource> data = this.llmGeneratedResourceRepository.findById(generatedResourceCode);
 			if (data.isPresent())
 				return data.get();
