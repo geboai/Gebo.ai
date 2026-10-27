@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -65,7 +67,7 @@ public class GeboChatPipelinesController {
 		if (session.isEmpty()) {
 			return;
 		}
-		securityService.checkBeingCreator(session.get());
+		securityService.checkBeingCreatorOrGranted(session.get(), AclGrantType.WRITE);
 		chatPipelineService.stopPipeline(userChatContextCode);
 	}
 

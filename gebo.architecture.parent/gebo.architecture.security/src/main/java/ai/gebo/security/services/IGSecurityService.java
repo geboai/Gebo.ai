@@ -162,6 +162,34 @@ public interface IGSecurityService {
 	 */
 	public void checkBeingCreator(GBaseObject o) throws SecurityException;
 
+	/**
+	 * Checks that the current user may act on an object they may not have created:
+	 * its creator passes, and so does whoever the platform's usual checks let
+	 * through for the given action - the users, groups and everyone the object
+	 * names, or its ACLs under the ACL-based policy (see
+	 * {@link #isCanDo(IGObjectWithSecurity, boolean, AclGrantType...)}).
+	 * Administrators are not let through on their role alone: an object its creator
+	 * keeps to themselves stays theirs.
+	 *
+	 * @param object    the object, with the security fields the platform grants by
+	 * @param grantType the action, as the ACLs name it
+	 * @throws SecurityException when the current user is neither its creator nor
+	 *                           granted the action
+	 */
+	public default <T extends GBaseObject & IGObjectWithSecurity & IAclGrantedResource> void checkBeingCreatorOrGranted(
+			T object, AclGrantType... grantType) throws SecurityException {
+		try {
+			checkBeingCreator(object);
+			return;
+		} catch (SecurityException notTheCreator) {
+			// not theirs: the usual checks decide
+		}
+		if (isCanDo(object, false, grantType)) {
+			return;
+		}
+		throw new SecurityException("The actual user is neither the owner of this object nor granted access to it");
+	}
+
 	public IAclGrantedAccessor getCurrentAclGrantedAccessor() throws SecurityException;
 
 	public IAclGrantedAccessor getCurrentAclGrantedAccessor(AclGrantType grantType) throws SecurityException;

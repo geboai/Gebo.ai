@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -196,7 +198,7 @@ public class GChatRulesServiceImpl implements IGChatRulesService {
 		}
 		GUserChatSession session = sessionRepository.findById(userChatContextCode)
 				.orElseThrow(() -> new GeboChatSessionLifecycleException("Chat " + userChatContextCode + " not found"));
-		securityService.checkBeingCreator(session);
+		securityService.checkBeingCreatorOrGranted(session, AclGrantType.WRITE);
 		return session;
 	}
 
