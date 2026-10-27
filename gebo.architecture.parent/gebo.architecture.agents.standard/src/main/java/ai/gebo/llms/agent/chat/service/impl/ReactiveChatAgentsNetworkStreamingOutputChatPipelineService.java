@@ -119,7 +119,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * pipeline response, each once: the network answer is merged onto that response,
 	 * which is what the user receives.
 	 */
-	static void mergeBackendMessages(GeboChatResponse networkResponse, GeboChatResponse pipelineResponse) {
+	public static void mergeBackendMessages(GeboChatResponse networkResponse, GeboChatResponse pipelineResponse) {
 		if (networkResponse == null || pipelineResponse == null || networkResponse == pipelineResponse
 				|| networkResponse.getBackendMessages() == null || networkResponse.getBackendMessages().isEmpty()) {
 			return;
