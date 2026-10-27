@@ -51,8 +51,8 @@ class AgentsCollaborationSessionContinuityTest {
 
 	@Test
 	void aSessionTakesTheIdentityItIsGiven() {
-		AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext("harness-session-42");
-		assertEquals("harness-session-42", session.getId());
+		AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext("a-session-of-its-own-42");
+		assertEquals("a-session-of-its-own-42", session.getId());
 		assertEquals(0, session.getContributionCounter());
 	}
 

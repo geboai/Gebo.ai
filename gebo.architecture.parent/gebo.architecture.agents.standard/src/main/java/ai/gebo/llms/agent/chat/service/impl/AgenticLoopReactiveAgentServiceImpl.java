@@ -241,6 +241,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/** What the mark becomes in the answer the user sees while it streams. */
 	static final String ANSWER_RESTART_RULE = "---";
 
+	/**
+	 * How many cycles the loop used, on the answer's {@code pipelineParams}: the last
+	 * cycle's answer says how many the controller took in all. A caller that nobody is
+	 * waiting for reads it to tell a run that finished from one that merely ran out.
+	 */
+	public static final String AGENTIC_LOOP_CYCLES_PARAM = "agenticLoopCycles";
+	/** How many cycles the loop was allowed, beside {@link #AGENTIC_LOOP_CYCLES_PARAM}. */
+	public static final String AGENTIC_LOOP_MAX_CYCLES_PARAM = "agenticLoopMaxCycles";
+
 	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
 			+ "while the user asked to search or for an analysis, which must rest on what the sources contain now (the chat "
 			+ "history is not a source: the earlier answers and the documents of the chat's earlier answers are no "
@@ -806,6 +815,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			// this response carries the agent's own calls; the calls of the whole request are
 			// recorded on the pipeline response by the request's recorder
 			answer.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
+			// how far the loop went, for whoever reads the answer without having watched it
+			answer.getPipelineParams().put(AGENTIC_LOOP_CYCLES_PARAM, cycle);
+			answer.getPipelineParams().put(AGENTIC_LOOP_MAX_CYCLES_PARAM, maxCycles);
 			return answer;
 		}
 	}
