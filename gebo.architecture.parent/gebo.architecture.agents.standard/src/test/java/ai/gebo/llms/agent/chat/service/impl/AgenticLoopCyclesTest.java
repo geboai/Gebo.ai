@@ -90,6 +90,21 @@ class AgenticLoopCyclesTest {
 	}
 
 	@Test
+	void everyCyclesAnswerSaysHowFarTheLoopWent() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+
+		List<GeboChatMessageEnvelope> out = messages(renderer(agent, 5, Map.of()), "one" + END + "two" + END + "three");
+
+		List<GeboChatResponse> answers = out.stream().filter(x -> x.getContent() instanceof GeboChatResponse)
+				.map(x -> (GeboChatResponse) x.getContent()).toList();
+		assertEquals(List.of(1, 2, 3), answers.stream()
+				.map(x -> x.getPipelineParams().get(AgenticLoopReactiveAgentServiceImpl.AGENTIC_LOOP_CYCLES_PARAM))
+				.toList(), "each cycle's answer counts the cycles so far; the last one counts them all");
+		assertEquals(5, answers.get(answers.size() - 1).getPipelineParams()
+				.get(AgenticLoopReactiveAgentServiceImpl.AGENTIC_LOOP_MAX_CYCLES_PARAM));
+	}
+
+	@Test
 	void theDocumentsOfTheCyclesAnswersAddUpWithoutRepeatingOne() {
 		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
 		Map<String, List<GResponseDocumentRef>> documents = Map.of("one", List.of(document("A")), "two",
