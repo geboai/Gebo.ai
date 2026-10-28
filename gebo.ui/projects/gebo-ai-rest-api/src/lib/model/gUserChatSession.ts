@@ -34,7 +34,6 @@ export interface GUserChatSession {
     interactions?: Array<ChatInteractions>;
     chatModelCode?: string;
     choosedKnowledgeBases?: Array<string>;
-    libraryInstanceIds?: { [key: string]: string; };
     userRequiredLanguage?: string;
     chatLanguage?: string;
 }

@@ -2788,6 +2788,15 @@
       "DEEP_SEARCH_RESPONSE.jira": { "label": "Deep search/Jira Search" },
       "imageGeneration": { "label": "Image generation" }
     },
+    "GeboAIChatLibrariesPanelComponent": {
+      "OpenLibrariesBtn": { "label": "Files built by the agents" },
+      "LibrariesDialog": { "label": "Files built by the agents" },
+      "LibrariesHint": { "label": "What the agents of this conversation work on: each library and the resources it holds. A resource that can be taken away as a file has a download button; the file is what the library holds at this moment." },
+      "ResourceHeader": { "label": "Resource" },
+      "ResourceKindHeader": { "label": "Kind" },
+      "DownloadResourceBtn": { "label": "Download" },
+      "NoResourcesText": { "label": "This library holds no resource." }
+    },
     "GeboAIChatInputShellComponent": {
       "QueryControl": { "placeholder": "Write a message for the chat bot" },
       "PendingSendHint": {

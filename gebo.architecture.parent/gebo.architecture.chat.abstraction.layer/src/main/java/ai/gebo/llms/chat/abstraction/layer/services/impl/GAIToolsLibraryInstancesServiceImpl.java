@@ -10,29 +10,34 @@ package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.AIResource;
+import ai.gebo.architecture.ai.model.AIResourceContent;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.service.IGAIToolsAndResourcesLibrarySource;
 import ai.gebo.architecture.ai.service.IGAIToolsAndResourcesLibrarySourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatLibraryInstances;
+import ai.gebo.llms.chat.abstraction.layer.repository.ChatLibraryInstancesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import lombok.AllArgsConstructor;
 
 /**
- * The library instances a conversation holds, recorded on the conversation
- * itself ({@link GUserChatSession#getLibraryInstanceIds()}) and reclaimed from
- * their sources by whoever enters the conversation to work.
+ * The library instances a conversation holds, recorded against the
+ * conversation ({@link GChatLibraryInstances}, one record per conversation,
+ * apart from the conversation document which is saved whole by whoever touches
+ * it) and reclaimed from their sources by whoever enters the conversation to
+ * work.
  */
 @Service
 @AllArgsConstructor
@@ -41,6 +46,7 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 
 	private final IGAIToolsAndResourcesLibrarySourceRepositoryPattern libraries;
 	private final GUserChatSessionRepository conversations;
+	private final ChatLibraryInstancesRepository held;
 
 	/** A managed type and the source managing it. */
 	private record Managed(AIToolsAndResourcesLibraryType type, IGAIToolsAndResourcesLibrarySource source) {
@@ -76,25 +82,35 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 		return byId;
 	}
 
+	/** What the conversation records, or a fresh record when it records nothing yet. */
+	private GChatLibraryInstances recordOf(String chatSessionCode) {
+		return held.findById(chatSessionCode).orElseGet(() -> {
+			GChatLibraryInstances fresh = new GChatLibraryInstances();
+			fresh.setUserChatContextCode(chatSessionCode);
+			fresh.setDateCreated(new Date());
+			return fresh;
+		});
+	}
+
 	@Override
 	public Map<String, AIToolsAndResourcesLibraryInstance> reclaim(String chatSessionCode,
 			Collection<String> libraryTypeIds) {
-		final Map<String, AIToolsAndResourcesLibraryInstance> held = new LinkedHashMap<>();
+		final Map<String, AIToolsAndResourcesLibraryInstance> reclaimed = new LinkedHashMap<>();
 		if (chatSessionCode == null || libraryTypeIds == null || libraryTypeIds.isEmpty()) {
-			return held;
+			return reclaimed;
 		}
-		final Optional<GUserChatSession> found = conversations.findById(chatSessionCode);
-		if (found.isEmpty()) {
+		final GUserChatSession conversation = conversations.findById(chatSessionCode).orElse(null);
+		if (conversation == null) {
 			LOGGER.warn("There is no conversation:" + chatSessionCode + " to hold library instances");
-			return held;
+			return reclaimed;
 		}
-		final GUserChatSession conversation = found.get();
 		final Map<String, Managed> managed = managed();
+		final GChatLibraryInstances record = recordOf(chatSessionCode);
 		final Map<String, String> ids = new LinkedHashMap<>(
-				conversation.getLibraryInstanceIds() != null ? conversation.getLibraryInstanceIds() : Map.of());
+				record.getInstanceIds() != null ? record.getInstanceIds() : Map.of());
 		boolean changed = false;
 		for (String typeId : libraryTypeIds) {
-			if (typeId == null || typeId.isBlank() || held.containsKey(typeId)) {
+			if (typeId == null || typeId.isBlank() || reclaimed.containsKey(typeId)) {
 				continue;
 			}
 			final Managed library = managed.get(typeId);
@@ -128,13 +144,14 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 				LOGGER.debug("Conversation:" + chatSessionCode + " goes on with instance:" + instance.getId()
 						+ " of library type:" + typeId);
 			}
-			held.put(typeId, instance);
+			reclaimed.put(typeId, instance);
 		}
 		if (changed) {
-			conversation.setLibraryInstanceIds(ids);
-			conversations.save(conversation);
+			record.setInstanceIds(ids);
+			record.setDateModified(new Date());
+			held.save(record);
 		}
-		return held;
+		return reclaimed;
 	}
 
 	/** Whose an instance is: the conversation's, and the person's whose conversation it is. */
@@ -188,44 +205,111 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 	}
 
 	@Override
+	public Map<String, AIToolsAndResourcesLibraryInstance> heldBy(String chatSessionCode) {
+		final Map<String, AIToolsAndResourcesLibraryInstance> instances = new LinkedHashMap<>();
+		final GChatLibraryInstances record = chatSessionCode != null ? held.findById(chatSessionCode).orElse(null)
+				: null;
+		final Map<String, String> ids = record != null ? record.getInstanceIds() : null;
+		if (ids == null || ids.isEmpty()) {
+			return instances;
+		}
+		final Map<String, Managed> managed = managed();
+		for (Map.Entry<String, String> entry : ids.entrySet()) {
+			final Managed library = managed.get(entry.getKey());
+			if (library == null) {
+				continue;
+			}
+			try {
+				final AIToolsAndResourcesLibraryInstance instance = library.source().getInstanceById(entry.getValue(),
+						chatSessionCode);
+				if (instance != null) {
+					instances.put(entry.getKey(), instance);
+				}
+			} catch (RuntimeException unreadable) {
+				LOGGER.warn("Instance:" + entry.getValue() + " of library type:" + entry.getKey()
+						+ " held by conversation:" + chatSessionCode + " could not be read: " + unreadable);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("heldBy(" + chatSessionCode + ") -> " + instances.size() + " instance(s) of " + ids.size()
+					+ " recorded");
+		}
+		return instances;
+	}
+
+	@Override
+	public AIResourceContent download(String chatSessionCode, String libraryTypeId, String resourceId) {
+		if (chatSessionCode == null || libraryTypeId == null || resourceId == null) {
+			return null;
+		}
+		final AIToolsAndResourcesLibraryInstance instance = heldBy(chatSessionCode).get(libraryTypeId);
+		if (instance == null) {
+			LOGGER.warn("Conversation:" + chatSessionCode + " holds no instance of library type:" + libraryTypeId
+					+ ": nothing to download");
+			return null;
+		}
+		final AIResource resource = instance.getResources() != null ? instance.getResources().stream()
+				.filter(r -> r != null && resourceId.equals(r.getId())).findFirst().orElse(null) : null;
+		if (resource == null) {
+			LOGGER.warn("Instance:" + instance.getId() + " of library type:" + libraryTypeId + " has no resource:"
+					+ resourceId + ": nothing to download");
+			return null;
+		}
+		if (resource.getResourceType() == null || !resource.getResourceType().isDownloadable()) {
+			LOGGER.warn("Resource:" + resourceId + " of instance:" + instance.getId() + " is not of a downloadable"
+					+ " type: nothing to download");
+			return null;
+		}
+		final Managed library = managed().get(libraryTypeId);
+		final AIResourceContent content = library != null ? library.source().download(instance, resourceId) : null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("download(" + chatSessionCode + ", " + libraryTypeId + ", " + resourceId + ") -> "
+					+ (content != null ? content.contentType() + " " + content.fileName() : "nothing"));
+		}
+		return content;
+	}
+
+	@Override
 	public void dropHeldBy(String chatSessionCode) {
 		if (chatSessionCode == null) {
 			return;
 		}
-		final GUserChatSession conversation = conversations.findById(chatSessionCode).orElse(null);
-		final Map<String, String> ids = conversation != null ? conversation.getLibraryInstanceIds() : null;
+		final GChatLibraryInstances record = held.findById(chatSessionCode).orElse(null);
+		final Map<String, String> ids = record != null ? record.getInstanceIds() : null;
 		if (ids == null || ids.isEmpty()) {
+			if (record != null) {
+				held.deleteById(chatSessionCode);
+			}
 			return;
 		}
 		final Map<String, Managed> managed = managed();
-		for (Map.Entry<String, String> held : ids.entrySet()) {
-			final Managed library = managed.get(held.getKey());
+		for (Map.Entry<String, String> entry : ids.entrySet()) {
+			final Managed library = managed.get(entry.getKey());
 			if (library == null) {
-				LOGGER.warn("Conversation:" + chatSessionCode + " held instance:" + held.getValue()
-						+ " of library type:" + held.getKey() + " which nobody manages any more: it cannot be dropped");
+				LOGGER.warn("Conversation:" + chatSessionCode + " held instance:" + entry.getValue()
+						+ " of library type:" + entry.getKey() + " which nobody manages any more: it cannot be dropped");
 				continue;
 			}
 			try {
-				final AIToolsAndResourcesLibraryInstance instance = library.source().getInstanceById(held.getValue(),
+				final AIToolsAndResourcesLibraryInstance instance = library.source().getInstanceById(entry.getValue(),
 						chatSessionCode);
 				if (instance == null) {
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Instance:" + held.getValue() + " of library type:" + held.getKey()
+						LOGGER.debug("Instance:" + entry.getValue() + " of library type:" + entry.getKey()
 								+ " is gone already");
 					}
 					continue;
 				}
 				library.source().dropInstance(instance);
-				LOGGER.info("Conversation:" + chatSessionCode + " dropped instance:" + held.getValue()
-						+ " of library type:" + held.getKey());
+				LOGGER.info("Conversation:" + chatSessionCode + " dropped instance:" + entry.getValue()
+						+ " of library type:" + entry.getKey());
 			} catch (RuntimeException notDropped) {
 				// the conversation goes anyway: what could not be released is in the log
-				LOGGER.error("Instance:" + held.getValue() + " of library type:" + held.getKey()
+				LOGGER.error("Instance:" + entry.getValue() + " of library type:" + entry.getKey()
 						+ " held by conversation:" + chatSessionCode + " could not be dropped", notDropped);
 			}
 		}
-		conversation.setLibraryInstanceIds(null);
-		conversations.save(conversation);
+		held.deleteById(chatSessionCode);
 	}
 
 	private static String described(AIToolsAndResourcesLibraryType type) {

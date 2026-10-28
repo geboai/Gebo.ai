@@ -47,6 +47,7 @@ import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
+import { GeboChatLibrariesControllerService } from './api/geboChatLibrariesController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
 import { GeboChatRulesControllerService } from './api/geboChatRulesController.service';
@@ -199,6 +200,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboAgentsNetworkAdminControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
+    GeboChatLibrariesControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
     GeboChatRulesControllerService,

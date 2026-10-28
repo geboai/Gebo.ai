@@ -92,14 +92,6 @@ public class GUserChatSession extends GBaseObject implements IGObjectWithSecurit
 	private String chatModelCode = null; // Code for the chat model used
 	private List<String> choosedKnowledgeBases = null; // List of chosen knowledge bases for the chat
 	/**
-	 * The instances of the libraries of tools and resources this conversation
-	 * holds, by library type id: a working directory, a sandbox, created the first
-	 * time an agent working in this conversation needs one and reclaimed by every
-	 * agent entering its execution here, so that at every step every agent's tools
-	 * work on the same pool of resources. Dropped with the conversation.
-	 */
-	private Map<String, String> libraryInstanceIds = null;
-	/**
 	 * The language the user explicitly asked the answers of this chat in (e.g.
 	 * "French"), named in English; null when the user never asked for one. It holds
 	 * until the user asks for another one.

@@ -19,4 +19,12 @@ public class AIResourceType {
 	private Map<String, Object> metaData = new HashMap<>();
 	@NotNull
 	private AIResourceCategory category = null;
+	/**
+	 * Whether a resource of this type can be handed over as a file - a working
+	 * directory as a zip, a document as itself - through
+	 * {@code IGAIToolsAndResourcesLibrarySource#download}. What the file is and how
+	 * it is made is the source's business; that it can be asked for is declared
+	 * here, so that a user interface offers the download without knowing the type.
+	 */
+	private boolean downloadable = false;
 }

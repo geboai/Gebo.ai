@@ -13,15 +13,15 @@
 export interface DocumentReferenceView { 
     name?: string;
     extension?: string;
-    description?: string;
+    contentType?: string;
     creationDate?: Date;
-    code?: string;
-    relativePath?: string;
-    parentVirtualFolderCode?: string;
-    parentProjectCode?: string;
+    description?: string;
+    messagingModuleId?: string;
     rootKnowledgebaseCode?: string;
     modificationDate?: Date;
-    messagingModuleId?: string;
+    code?: string;
     deleted?: boolean;
-    contentType?: string;
+    parentVirtualFolderCode?: string;
+    relativePath?: string;
+    parentProjectCode?: string;
 }
