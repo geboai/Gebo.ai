@@ -4746,6 +4746,10 @@
         "label": "Tool sources left out",
         "help": "With every registered tool mounted, the tools of these sources are never mounted on this agent: for instance the searches that other agents of the network already run. The system settings may keep other tools out as well; the network editor shows every tool left out and why."
       },
+      "libraryTypeIds": {
+        "label": "Libraries of tools and resources",
+        "help": "The libraries this agent works with, whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a chosen library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available."
+      },
       "temperature": {
         "label": "Temperature",
         "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"

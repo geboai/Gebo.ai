@@ -54,6 +54,9 @@ import ai.gebo.architecture.agents.services.impl.AgentToolCallingManagerFactory;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
+import ai.gebo.architecture.ai.service.AIToolsLibraryTypeToolSource;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -360,7 +363,107 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			}
 		}
 		names = new ArrayList<String>(withTheConfiguredAdditionalSources(agentConfig, names));
+		names = new ArrayList<String>(withTheConfiguredLibraryTypes(agentConfig, names));
 		return names;
+	}
+
+	/**
+	 * The context an agent entering its execution works in, with the libraries its
+	 * configuration names reclaimed from the conversation: the instances the
+	 * conversation holds of those types (created for it when it holds none yet) go
+	 * into the tools context, where the library tools look for the instance to work
+	 * on, and what each holds is added to the rules the agent follows. The same
+	 * context when the agent names no library, or when this installation keeps no
+	 * library instances.
+	 */
+	protected IChatRequestContext withTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig) {
+		if (chatRequestContext == null || agentConfig == null || agentConfig.getLibraryTypeIds() == null
+				|| agentConfig.getLibraryTypeIds().isEmpty()) {
+			return chatRequestContext;
+		}
+		IGAIToolsLibraryInstancesService instances = null;
+		try {
+			instances = runtimeBinder != null ? runtimeBinder.getImplementationOf(IGAIToolsLibraryInstancesService.class)
+					: null;
+		} catch (RuntimeException none) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No library instances are kept in this installation: " + none);
+			}
+		}
+		if (instances == null) {
+			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " names the library types "
+					+ agentConfig.getLibraryTypeIds() + " but this installation keeps no library instances: its"
+					+ " library tools will say the libraries are not available");
+			return chatRequestContext;
+		}
+		final Map<String, AIToolsAndResourcesLibraryInstance> held = instances.reclaim(chatRequestContext.getSessionID(),
+				agentConfig.getLibraryTypeIds());
+		if (held == null || held.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent config code:" + agentConfig.getCode() + " names the library types "
+						+ agentConfig.getLibraryTypeIds() + " but conversation:" + chatRequestContext.getSessionID()
+						+ " holds no instance of them");
+			}
+			return chatRequestContext;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " enters its execution in conversation:"
+					+ chatRequestContext.getSessionID() + " with " + held.size() + " library instance(s): " + held.keySet()
+					+ " for agent service id:" + getId());
+		}
+		return chatRequestContext
+				.withToolsContextValue(ToolCallbackDeclarationUtil.LIBRARY_INSTANCES_CONTEXT_KEY, Map.copyOf(held))
+				.withRulesToFollow(instances.describe(held));
+	}
+
+	/**
+	 * Adds the tools of the library types the configuration names
+	 * ({@link GAgentConfig#getLibraryTypeIds()}): a library comes in block, so
+	 * every tool its type's source exports is mounted, through the tool source
+	 * registered for the type ({@link AIToolsLibraryTypeToolSource#sourceIdOf}).
+	 * A type no source is registered for mounts nothing and is logged: the agent
+	 * names a library this installation does not have.
+	 */
+	protected List<String> withTheConfiguredLibraryTypes(GAgentConfig agentConfig, List<String> toolNames) {
+		if (agentConfig == null || agentConfig.getLibraryTypeIds() == null
+				|| agentConfig.getLibraryTypeIds().isEmpty()) {
+			return toolNames;
+		}
+		final List<String> sourceIds = new ArrayList<String>();
+		for (String typeId : agentConfig.getLibraryTypeIds()) {
+			if (typeId == null || typeId.isBlank()) {
+				continue;
+			}
+			final String sourceId = AIToolsLibraryTypeToolSource.sourceIdOf(typeId);
+			if (toolsRepositoryPattern == null || toolsRepositoryPattern.findByCode(sourceId) == null) {
+				LOGGER.warn("Agent config code:" + agentConfig.getCode() + " names the library type:" + typeId
+						+ " which no library source of this installation manages: nothing of it is mounted");
+				continue;
+			}
+			sourceIds.add(sourceId);
+		}
+		if (sourceIds.isEmpty()) {
+			return toolNames;
+		}
+		final Set<String> added = toolNamesOfSources(sourceIds);
+		final List<String> mounted = new ArrayList<String>(toolNames != null ? toolNames : List.of());
+		final int before = mounted.size();
+		for (String name : added) {
+			if (!mounted.contains(name)) {
+				mounted.add(name);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " mounts " + (mounted.size() - before)
+					+ " tool(s) of its library types " + agentConfig.getLibraryTypeIds() + ", in block, for agent"
+					+ " service id:" + getId());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Tool names added by the library types of agent config code:" + agentConfig.getCode() + " : "
+					+ added);
+		}
+		return mounted;
 	}
 
 	/**

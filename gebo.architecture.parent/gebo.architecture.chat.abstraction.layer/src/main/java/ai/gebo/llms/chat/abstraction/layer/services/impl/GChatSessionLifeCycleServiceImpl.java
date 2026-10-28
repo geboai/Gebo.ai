@@ -92,6 +92,7 @@ import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import io.jsonwebtoken.security.SecurityException;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -120,6 +121,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 	private final IMessageEnvelopeFactory envelopeFactory;
 	private final GeboChatUIServerConfig uiServerConfig;
+	/** The library instances a conversation holds, to drop them with it. */
+	private final IGAIToolsLibraryInstancesService libraryInstances;
 	private final ChatAnswerFeedbackRepository answerFeedbackRepository;
 	private final IGChatRulesService rulesService;
 	/**
@@ -229,6 +232,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		} catch (IOException e) {
 			LOGGER.error("Error deleting session contents for " + code, e);
 		}
+		// what it held - a working directory, a sandbox - goes with it
+		this.libraryInstances.dropHeldBy(code);
 		LOGGER.debug("Removing chat {} with its full and compact states and stored contents", code);
 		this.sessionRepository.deleteById(code);
 	}

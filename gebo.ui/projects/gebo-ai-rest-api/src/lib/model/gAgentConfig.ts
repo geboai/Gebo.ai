@@ -42,6 +42,7 @@ export interface GAgentConfig {
     enabledFunctions?: Array<string>;
     excludedToolSources?: Array<string>;
     additionalToolSources?: Array<string>;
+    libraryTypeIds?: Array<string>;
 }
 export namespace GAgentConfig {
     export type AgentTypeEnum = 'AGENT' | 'AGENTS_NETWORK';

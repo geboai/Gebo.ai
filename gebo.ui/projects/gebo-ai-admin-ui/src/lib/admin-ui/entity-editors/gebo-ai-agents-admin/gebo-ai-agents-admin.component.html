@@ -151,6 +151,15 @@
                       </gebo-ai-field>
                     </div>
 
+                    <div class="col-12">
+                      <gebo-ai-field id="libraryTypeIds" label="Libraries of tools and resources"
+                        help="The libraries this agent works with, whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a chosen library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available.">
+                        <p-multiSelect id="libraryTypeIds" formControlName="libraryTypeIds"
+                          [options]="libraryTypes" optionLabel="description" optionValue="id" display="chip"
+                          [maxSelectedLabels]="100" [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
+                      </gebo-ai-field>
+                    </div>
+
                     @if (formGroup.controls['subscribeAllTools'].value) {
                       <div class="col-12">
                         <gebo-ai-field id="excludedToolSources" label="Tool sources left out"
