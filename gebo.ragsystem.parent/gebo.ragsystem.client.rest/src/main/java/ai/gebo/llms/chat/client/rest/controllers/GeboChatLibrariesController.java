@@ -93,6 +93,9 @@ public class GeboChatLibrariesController {
 				content.contentType() != null ? content.contentType() : MediaType.APPLICATION_OCTET_STREAM_VALUE);
 		response.setHeader("Content-Transfer-Encoding", "binary");
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+		// a page served from another origin (the development server) reads the file
+		// name only when the header is exposed to it
+		response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
 		long written = 0;
 		try (InputStream in = content.content()) {
 			written = in.transferTo(response.getOutputStream());
