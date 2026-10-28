@@ -98,6 +98,18 @@ public class GAgentConfig extends GBaseObject
 	protected List<String> additionalToolSources = null;
 
 	/**
+	 * The ids of the library types this agent works with: bundles of tools and the
+	 * resources those tools work on - a working directory with its file tools, a
+	 * sandbox with its code tools - which an agent is given whole. A library is
+	 * named by its type and comes in block: every tool of it is mounted, none is
+	 * chosen one by one, and the resources are whichever instance of the type the
+	 * run holds (see {@code ToolCallbackDeclarationUtil#LIBRARY_INSTANCES_CONTEXT_KEY});
+	 * in a run that holds none, the tools say the library is not available. Null or
+	 * empty when the agent works with no library.
+	 */
+	protected List<String> libraryTypeIds = null;
+
+	/**
 	 * The code of the agent configuration this one is a copy of, only while the copy
 	 * is being inserted: its code is made from it. Neither stored nor exchanged.
 	 */

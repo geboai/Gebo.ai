@@ -181,9 +181,13 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"
 					+ (agentRole != null ? agentRole.getCode() : null));
 		}
-		// the model wraps the tools with the listener of the context it is called with
+		// the model wraps the tools with the listener of the context it is called with;
+		// the libraries the agent works with are reclaimed from the conversation as it
+		// enters, so that every step of it works on the same pool of resources
 		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(
-				IChatRequestContext.forAgent(chatRequestContext, callBacksListener), agentConfig, request, network,
+				IChatRequestContext.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, agentConfig),
+						callBacksListener),
+				agentConfig, request, network,
 				contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole, agentPrompt, runAs,
 				callBacksListener);
 		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))

@@ -11,6 +11,7 @@ package ai.gebo.architecture.ai.service;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -21,6 +22,8 @@ import org.springframework.ai.tool.definition.ToolDefinition;
 import org.springframework.ai.tool.function.FunctionToolCallback;
 import org.springframework.ai.tool.metadata.ToolMetadata;
 import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
+
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 
 
 /**
@@ -86,6 +89,32 @@ public class ToolCallbackDeclarationUtil {
 		}
 		return codes.stream().filter(code -> code instanceof String text && !text.isBlank()).map(String.class::cast)
 				.distinct().toList();
+	}
+
+	/**
+	 * Tools context key carrying the instances of the libraries of tools and
+	 * resources a run holds, by library type id: a
+	 * {@code Map<String, AIToolsAndResourcesLibraryInstance>}. The tools of a
+	 * library type are bound to an instance only through this: a run that holds no
+	 * instance of a type has that type's tools answer that they are not available.
+	 */
+	public static final String LIBRARY_INSTANCES_CONTEXT_KEY = "geboLibraryInstances";
+
+	/**
+	 * The instance of a library type the tools are called for, or null when the run
+	 * holds none of that type - a call outside a run that holds libraries, or a run
+	 * whose agent names a type nobody created an instance of for it.
+	 */
+	public static AIToolsAndResourcesLibraryInstance libraryInstance(ToolContext toolContext, String libraryTypeId) {
+		if (toolContext == null || toolContext.getContext() == null || libraryTypeId == null) {
+			return null;
+		}
+		Object value = toolContext.getContext().get(LIBRARY_INSTANCES_CONTEXT_KEY);
+		if (!(value instanceof Map<?, ?> instances)) {
+			return null;
+		}
+		Object instance = instances.get(libraryTypeId);
+		return instance instanceof AIToolsAndResourcesLibraryInstance found ? found : null;
 	}
 
 	/**

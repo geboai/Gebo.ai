@@ -299,6 +299,76 @@ public interface IChatRequestContext {
 	}
 
 	/**
+	 * This same context, with more rules to follow after its own (a copy: this
+	 * context's list is never changed); every other value is still read from this
+	 * context. The context itself when nothing is added.
+	 */
+	public default IChatRequestContext withRulesToFollow(List<String> more) {
+		if (more == null || more.isEmpty()) {
+			return this;
+		}
+		final List<String> rules = new java.util.ArrayList<>(getRulesToFollow() != null ? getRulesToFollow() : List.of());
+		rules.addAll(more);
+		final IChatRequestContext self = this;
+		return new IChatRequestContext() {
+			@Override
+			public String getRequestID() {
+				return self.getRequestID();
+			}
+
+			@Override
+			public String getSessionID() {
+				return self.getSessionID();
+			}
+
+			@Override
+			public String getConsolidatedHistory() {
+				return self.getConsolidatedHistory();
+			}
+
+			@Override
+			public List<IChatSessionEntry> getInteractions() {
+				return self.getInteractions();
+			}
+
+			@Override
+			public List<Document> getDocuments() {
+				return self.getDocuments();
+			}
+
+			@Override
+			public String getActualUserRequest() {
+				return self.getActualUserRequest();
+			}
+
+			@Override
+			public Map<String, Object> getToolsContext() {
+				return self.getToolsContext();
+			}
+
+			@Override
+			public Map<String, Object> getPipelineInfos() {
+				return self.getPipelineInfos();
+			}
+
+			@Override
+			public ToolCallsListener getToolCallListener() {
+				return self.getToolCallListener();
+			}
+
+			@Override
+			public List<String> getRulesToFollow() {
+				return rules;
+			}
+
+			@Override
+			public String getUserLanguage() {
+				return self.getUserLanguage();
+			}
+		};
+	}
+
+	/**
 	 * This same context, its tools context also carrying the value under the key (a copy:
 	 * this context's map is never changed); every other value is still read from this
 	 * context.
