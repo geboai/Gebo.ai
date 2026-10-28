@@ -68,6 +68,9 @@ class GSystemMessagesServiceImplTest {
 			return messages.values().stream().filter(m -> audiences.contains(m.getAudience())).toList();
 		});
 		when(messageRepository.findAll()).thenAnswer(i -> List.copyOf(messages.values()));
+		when(messageRepository.findByRecipientsContaining(anyString())).thenAnswer(i -> messages.values().stream()
+				.filter(m -> m.getRecipients() != null && m.getRecipients().contains(i.getArgument(0, String.class)))
+				.toList());
 		doAnswer(i -> messages.remove(i.getArgument(0, String.class))).when(messageRepository)
 				.deleteById(anyString());
 
@@ -105,6 +108,21 @@ class GSystemMessagesServiceImplTest {
 				keys(service.findVisibleFor("admin", true)).stream().sorted().toList());
 		assertEquals(List.of("for-all", "for-users").stream().sorted().toList(),
 				keys(service.findVisibleFor("user", false)).stream().sorted().toList());
+	}
+
+	@Test
+	void aMessageForNamedPeopleIsSeenByThemOnlyWhateverTheirRole() {
+		service.publish(SystemMessagePublication.forPeople("test", "for-ann", MsgServerity.error, "your run failed",
+				null, true, null, java.util.Arrays.asList("ann", " ", null)));
+		service.publish(publication("for-all", SystemMessageAudience.ALL, MsgServerity.info, "e", true, null));
+
+		assertEquals(List.of("for-ann", "for-all"), keys(service.findVisibleFor("ann", false)));
+		assertEquals(List.of("for-ann", "for-all"), keys(service.findVisibleFor("ann", true)),
+				"an administrator named sees it as a person");
+		assertEquals(List.of("for-all"), keys(service.findVisibleFor("bob", false)));
+		assertEquals(List.of("for-all"), keys(service.findVisibleFor("admin", true)),
+				"an administrator not named does not see what is for somebody else");
+		assertEquals(List.of("ann"), messages.get("test:for-ann").getRecipients(), "blank names are not kept");
 	}
 
 	@Test

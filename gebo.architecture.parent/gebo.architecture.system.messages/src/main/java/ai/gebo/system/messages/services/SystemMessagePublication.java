@@ -10,6 +10,7 @@
 package ai.gebo.system.messages.services;
 
 import java.util.Date;
+import java.util.List;
 
 import ai.gebo.model.GUserMessage.MsgServerity;
 import ai.gebo.system.messages.model.SystemMessageAudience;
@@ -28,5 +29,21 @@ import ai.gebo.system.messages.model.SystemMessageAudience;
  * @param expiresAt   when it stops being shown, null for until retracted
  */
 public record SystemMessagePublication(String source, String key, MsgServerity severity, String summary,
-		String detail, SystemMessageAudience audience, boolean dismissible, Date expiresAt) {
+		String detail, SystemMessageAudience audience, boolean dismissible, Date expiresAt, List<String> recipients) {
+	/** A message for an audience, as every message was before messages for named people. */
+	public SystemMessagePublication(String source, String key, MsgServerity severity, String summary, String detail,
+			SystemMessageAudience audience, boolean dismissible, Date expiresAt) {
+		this(source, key, severity, summary, detail, audience, dismissible, expiresAt, null);
+	}
+
+	/**
+	 * A message for named people: only they see it, whatever the audience says.
+	 *
+	 * @param recipients their usernames
+	 */
+	public static SystemMessagePublication forPeople(String source, String key, MsgServerity severity, String summary,
+			String detail, boolean dismissible, Date expiresAt, List<String> recipients) {
+		return new SystemMessagePublication(source, key, severity, summary, detail, SystemMessageAudience.ALL,
+				dismissible, expiresAt, recipients);
+	}
 }

@@ -10,6 +10,7 @@
 package ai.gebo.system.messages.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -47,6 +48,13 @@ public class GSystemMessage {
 	private String detail = null;
 	@NotNull
 	private SystemMessageAudience audience = null;
+	/**
+	 * The people this message is for, by username, when it is for named people
+	 * rather than for an audience: a harness telling the person behind it that a
+	 * run failed, a job telling whoever started it. Empty or null, the audience
+	 * decides who sees it; otherwise only these people do, whatever the audience.
+	 */
+	private List<String> recipients = null;
 	/**
 	 * Whether a user can hide it. A message that must stay visible until its
 	 * publisher retracts it is not dismissible.

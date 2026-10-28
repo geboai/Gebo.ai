@@ -18,6 +18,7 @@ export interface GSystemMessage {
     summary: string;
     detail?: string;
     audience: GSystemMessage.AudienceEnum;
+    recipients?: Array<string>;
     dismissible?: boolean;
     revision?: number;
     createdAt?: Date;
