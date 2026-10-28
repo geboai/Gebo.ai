@@ -17,6 +17,7 @@ export interface AIResourceType {
     consented: Array<AIResourceType.ConsentedEnum>;
     metaData?: { [key: string]: any; };
     category: AIResourceCategory;
+    downloadable?: boolean;
 }
 export namespace AIResourceType {
     export type ConsentedEnum = 'READ_INFORMATIONS' | 'EXECUTE_CODE' | 'WRITE_INFORMATIONS';

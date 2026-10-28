@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.springframework.ai.tool.ToolCallback;
 
+import ai.gebo.architecture.ai.model.AIResourceContent;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 
@@ -57,5 +58,20 @@ public interface IGAIToolsAndResourcesLibrarySource {
 	 * @return the callbacks, never null
 	 */
 	public List<ToolCallback> getToolCallbacks(AIToolsAndResourcesLibraryInstance instance);
+
+	/**
+	 * A resource of an instance as a file, for whoever wants to take it away: its
+	 * content type, a name for it and its bytes. Only for resources whose type
+	 * says so ({@code AIResourceType.downloadable}); a working directory comes as
+	 * a zip, a document as itself. The caller closes the stream. Null when the
+	 * resource is not one of the instance's, or not one that can be handed over -
+	 * which is what this default answers, for a source whose resources never are.
+	 *
+	 * @param instance   an instance this source created
+	 * @param resourceId the id of one of its resources
+	 */
+	public default AIResourceContent download(AIToolsAndResourcesLibraryInstance instance, String resourceId) {
+		return null;
+	}
 
 }

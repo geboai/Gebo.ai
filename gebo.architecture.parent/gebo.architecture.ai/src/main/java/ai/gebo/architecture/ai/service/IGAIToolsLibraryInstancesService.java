@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.architecture.ai.model.AIResourceContent;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 
 /**
@@ -43,6 +44,21 @@ public interface IGAIToolsLibraryInstancesService {
 	 * there are no instances.
 	 */
 	List<String> describe(Map<String, AIToolsAndResourcesLibraryInstance> instances);
+
+	/**
+	 * The instances the conversation holds now, by library type id, as they are:
+	 * nothing is created, an instance that is gone is left out. For whoever looks
+	 * at what a conversation has - its resources, which of them can be taken away.
+	 */
+	Map<String, AIToolsAndResourcesLibraryInstance> heldBy(String chatSessionCode);
+
+	/**
+	 * A resource of an instance the conversation holds, as a file, from the source
+	 * managing its type; null when the conversation holds no such instance, the
+	 * instance has no such resource, or the resource's type is not downloadable.
+	 * The caller closes the stream.
+	 */
+	AIResourceContent download(String chatSessionCode, String libraryTypeId, String resourceId);
 
 	/** Drops every instance the conversation holds; the conversation records none. */
 	void dropHeldBy(String chatSessionCode);

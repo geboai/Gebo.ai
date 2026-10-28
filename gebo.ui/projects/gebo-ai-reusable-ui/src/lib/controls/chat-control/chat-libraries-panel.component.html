@@ -1,0 +1,53 @@
+@if (hasLibraries) {
+  <p-button id="OpenLibrariesBtn" gebo-ai-label icon="pi pi-folder-open" text rounded class="custom-blue-btn"
+    label="Files built by the agents" [disabled]="disabled" (onClick)="open()">
+  </p-button>
+}
+
+<p-dialog id="LibrariesDialog" gebo-ai-label header="Files built by the agents" [(visible)]="visible" [modal]="true"
+  [style]="{ width: '40rem', maxWidth: '95vw' }" appendTo="body">
+  <p id="LibrariesHint" gebo-ai-text>What the agents of this conversation work on: each library and the resources it holds. A resource that can be taken away as a file has a download button; the file is what the library holds at this moment.</p>
+  @if (loading) {
+    <p-progressSpinner styleClass="w-2rem h-2rem"></p-progressSpinner>
+  }
+  @for (instance of instances; track instance.id) {
+    <p-fieldset [legend]="libraryName(instance)" styleClass="mb-2">
+      @if (instance.description) {
+        <p class="text-sm">{{ instance.description }}</p>
+      }
+      <p-table [value]="resourcesOf(instance)" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th id="ResourceHeader" gebo-ai-text>Resource</th>
+            <th id="ResourceKindHeader" gebo-ai-text>Kind</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-resource>
+          <tr>
+            <td>
+              <strong>{{ resource.id }}</strong>
+              @if (resource.description) {
+                <div class="text-sm">{{ resource.description }}</div>
+              }
+            </td>
+            <td>{{ resource.resourceType?.description || resource.resourceType?.id }}</td>
+            <td style="text-align: right;">
+              @if (isDownloadable(resource)) {
+                <p-button id="DownloadResourceBtn" gebo-ai-label icon="pi pi-download" [outlined]="true" label="Download"
+                  [loading]="downloading === (instance.libraryType?.id + '/' + resource.id)"
+                  [disabled]="downloading !== null" (onClick)="download(instance, resource)">
+                </p-button>
+              }
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td id="NoResourcesText" colspan="3" gebo-ai-text>This library holds no resource.</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-fieldset>
+  }
+</p-dialog>

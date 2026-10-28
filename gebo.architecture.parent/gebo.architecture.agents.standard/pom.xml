@@ -18,6 +18,11 @@
 		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.environment</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.graphrag.extraction</artifactId>
 			<version>${project.version}</version>
 		</dependency>

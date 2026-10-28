@@ -26,6 +26,8 @@
 
         <p-contextMenu #contextAddChatBehaviorMenu1 [model]="addBehaviorsMenu" appendTo="body">
         </p-contextMenu>
+        <gebo-ai-chat-libraries-panel [userChatContextCode]="userChatContextCode" [refreshKey]="interactions?.length"
+          [disabled]="loading"></gebo-ai-chat-libraries-panel>
       </div>
       <textarea id="QueryControl" gebo-ai-label rows="5" pTextarea class="chat-input-shell__frame-input" placeholder="Write a message for the chat bot"
         formControlName="query" [autoResize]="true" [required]="true" (keydown.enter)="onEnterKey($event)">
