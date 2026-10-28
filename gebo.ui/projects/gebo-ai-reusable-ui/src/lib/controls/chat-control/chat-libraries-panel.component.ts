@@ -94,6 +94,16 @@ export class GeboAIChatLibrariesPanelComponent implements OnChanges {
         this.visible = true;
     }
 
+    /** The extension a content type usually has, for a file the backend did not name. */
+    private extensionOf(contentType: string | undefined): string {
+        const known: { [type: string]: string } = {
+            'application/zip': '.zip', 'application/pdf': '.pdf', 'text/plain': '.txt', 'text/csv': '.csv',
+            'application/json': '.json', 'text/markdown': '.md', 'text/html': '.html',
+            'application/x-tar': '.tar', 'application/gzip': '.gz'
+        };
+        return known[(contentType || '').split(';')[0].trim()] || '';
+    }
+
     /** Takes the resource away as a file, the way the chat exports an answer. */
     public download(instance: AIToolsAndResourcesLibraryInstance, resource: AIResource): void {
         if (!this.userChatContextCode || !instance.libraryType?.id || !resource.id) {
@@ -108,10 +118,11 @@ export class GeboAIChatLibrariesPanelComponent implements OnChanges {
             observe: 'response'
         }).subscribe({
             next: (response) => {
+                const blob = response.body as Blob;
                 const disposition = response.headers.get('Content-Disposition') || '';
                 const named = /filename="?([^";]+)"?/.exec(disposition);
-                const fileName = named ? named[1] : (resource.id + '.bin');
-                const blob = response.body as Blob;
+                // the name the backend gave, else one from what the file is
+                const fileName = named ? named[1] : (key.replace('/', '-') + this.extensionOf(blob.type));
                 const fileURL = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = fileURL;
