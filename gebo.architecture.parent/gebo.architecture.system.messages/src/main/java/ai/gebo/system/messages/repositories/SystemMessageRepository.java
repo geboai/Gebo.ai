@@ -27,4 +27,7 @@ public interface SystemMessageRepository extends MongoRepository<GSystemMessage,
 	 * @return the messages routed to any of them, expired ones included
 	 */
 	List<GSystemMessage> findByAudienceIn(Collection<SystemMessageAudience> audiences);
+
+	/** The messages for named people one of whom is this username. */
+	List<GSystemMessage> findByRecipientsContaining(String username);
 }
