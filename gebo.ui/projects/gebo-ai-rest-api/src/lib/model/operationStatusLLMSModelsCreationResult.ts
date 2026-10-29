@@ -15,6 +15,6 @@ import { LLMSModelsCreationResult } from './lLMSModelsCreationResult';
 export interface OperationStatusLLMSModelsCreationResult { 
     result?: LLMSModelsCreationResult;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

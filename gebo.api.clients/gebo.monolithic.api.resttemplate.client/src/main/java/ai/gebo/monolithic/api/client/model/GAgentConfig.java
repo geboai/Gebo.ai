@@ -27,7 +27,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -209,6 +209,12 @@ public class GAgentConfig {
 
   @JsonProperty("excludedToolSources")
   private List<String> excludedToolSources = null;
+
+  @JsonProperty("additionalToolSources")
+  private List<String> additionalToolSources = null;
+
+  @JsonProperty("libraryTypeIds")
+  private List<String> libraryTypeIds = null;
 
   public GAgentConfig code(String code) {
     this.code = code;
@@ -754,6 +760,58 @@ public class GAgentConfig {
     this.excludedToolSources = excludedToolSources;
   }
 
+  public GAgentConfig additionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+    return this;
+  }
+
+  public GAgentConfig addAdditionalToolSourcesItem(String additionalToolSourcesItem) {
+    if (this.additionalToolSources == null) {
+      this.additionalToolSources = new ArrayList<>();
+    }
+    this.additionalToolSources.add(additionalToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get additionalToolSources
+   * @return additionalToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getAdditionalToolSources() {
+    return additionalToolSources;
+  }
+
+  public void setAdditionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+  }
+
+  public GAgentConfig libraryTypeIds(List<String> libraryTypeIds) {
+    this.libraryTypeIds = libraryTypeIds;
+    return this;
+  }
+
+  public GAgentConfig addLibraryTypeIdsItem(String libraryTypeIdsItem) {
+    if (this.libraryTypeIds == null) {
+      this.libraryTypeIds = new ArrayList<>();
+    }
+    this.libraryTypeIds.add(libraryTypeIdsItem);
+    return this;
+  }
+
+   /**
+   * Get libraryTypeIds
+   * @return libraryTypeIds
+  **/
+  @Schema(description = "")
+  public List<String> getLibraryTypeIds() {
+    return libraryTypeIds;
+  }
+
+  public void setLibraryTypeIds(List<String> libraryTypeIds) {
+    this.libraryTypeIds = libraryTypeIds;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -791,12 +849,14 @@ public class GAgentConfig {
         Objects.equals(this.accessibleUsers, gagentConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gagentConfig.accessibleToAll) &&
         Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions) &&
-        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources);
+        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources) &&
+        Objects.equals(this.additionalToolSources, gagentConfig.additionalToolSources) &&
+        Objects.equals(this.libraryTypeIds, gagentConfig.libraryTypeIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds);
   }
 
 
@@ -833,6 +893,8 @@ public class GAgentConfig {
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
+    sb.append("    additionalToolSources: ").append(toIndentedString(additionalToolSources)).append("\n");
+    sb.append("    libraryTypeIds: ").append(toIndentedString(libraryTypeIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }

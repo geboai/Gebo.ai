@@ -2,6 +2,7 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
+import ai.gebo.monolithic.api.client.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.monolithic.api.client.model.GLookupEntry;
 import ai.gebo.monolithic.api.client.model.ToolCategoriesTree;
 import ai.gebo.monolithic.api.client.model.ToolSourceInfo;
@@ -24,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
 
 public class FunctionsLookupControllerApi {
     private ApiClient apiClient;
@@ -44,6 +45,44 @@ public class FunctionsLookupControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;AIToolsAndResourcesLibraryType&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<AIToolsAndResourcesLibraryType> getAIToolsAndResourcesLibraryType() throws RestClientException {
+        return getAIToolsAndResourcesLibraryTypeWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;AIToolsAndResourcesLibraryType&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<AIToolsAndResourcesLibraryType>> getAIToolsAndResourcesLibraryTypeWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAIToolsAndResourcesLibraryType").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<AIToolsAndResourcesLibraryType>> returnType = new ParameterizedTypeReference<List<AIToolsAndResourcesLibraryType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 

@@ -31,6 +31,8 @@ Name | Type | Description | Notes
 **accessibleToAll** | **Boolean** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
 **excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
+**additionalToolSources** | **List&lt;String&gt;** |  |  [optional]
+**libraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>
 ## Enum: AgentTypeEnum

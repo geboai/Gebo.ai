@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **summary** | **String** |  | 
 **detail** | **String** |  |  [optional]
 **audience** | [**AudienceEnum**](#AudienceEnum) |  | 
+**recipients** | **List&lt;String&gt;** |  |  [optional]
 **dismissible** | **Boolean** |  |  [optional]
 **revision** | **Long** |  |  [optional]
 **createdAt** | [**Date**](Date.md) |  |  [optional]

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **networkCode** | **String** |  |  [optional]
 **agentConfigCode** | **String** |  |  [optional]
 **skillName** | **String** |  |  [optional]
+**chatProfileCode** | **String** |  |  [optional]
 **exposeMemberCapabilities** | **Boolean** |  |  [optional]
 
 <a name="KindEnum"></a>
