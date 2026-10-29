@@ -99,6 +99,14 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	 * detected. The prompts name it as the answer's language.
 	 */
 	private String userLanguage = null;
+	/**
+	 * Where the run serving this request comes from: {@code CHAT} for a chat,
+	 * else the caller's name ({@code HARNESS}, {@code A2A}, {@code MCP}...); null
+	 * until the run says.
+	 */
+	private String runOrigin = null;
+	/** Whether a person is waiting for the answer; null until the run says. */
+	private Boolean attended = null;
 
 	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {
 		return request.getRewrittenQuery() != null ? request.getRewrittenQuery() : request.getQuery();

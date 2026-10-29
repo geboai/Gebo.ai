@@ -11,13 +11,18 @@ package ai.gebo.architecture.ai.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.repository.PromptConfigRepository;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGStaticPromptsProvider;
+import ai.gebo.architecture.ai.service.IGPromptPlaceholdersCatalog;
 import ai.gebo.architecture.ai.service.IStaticPromptsProviderRepositoryPattern;
 import ai.gebo.architecture.patterns.GAbstractRuntimeConfigurationDao;
 
@@ -26,6 +31,8 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 
 	private final PromptConfigRepository directRepo;
 	private final IStaticPromptsProviderRepositoryPattern implementationsRepoPattern;
+	/** What a prompt may name and be sure somebody fills; looked up late, it may not exist. */
+	private final ObjectProvider<IGPromptPlaceholdersCatalog> placeholdersCatalog;
 
 	/**
 	 * Constructs a new GPromptConfigDaoImpl.
@@ -38,9 +45,17 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	public GPromptConfigDaoImpl(PromptConfigRepository directRepo,
 			IStaticPromptsProviderRepositoryPattern implementationsRepoPattern,
 			GPromptConfigDynamicSource dynamicSource) throws IOException {
+		this(directRepo, implementationsRepoPattern, dynamicSource, null);
+	}
+
+	public GPromptConfigDaoImpl(PromptConfigRepository directRepo,
+			IStaticPromptsProviderRepositoryPattern implementationsRepoPattern,
+			GPromptConfigDynamicSource dynamicSource, ObjectProvider<IGPromptPlaceholdersCatalog> placeholdersCatalog)
+			throws IOException {
 		super(new ArrayList(), dynamicSource);
 		this.directRepo = directRepo;
 		this.implementationsRepoPattern = implementationsRepoPattern;
+		this.placeholdersCatalog = placeholdersCatalog;
 		List<IGStaticPromptsProvider> impls = implementationsRepoPattern.getImplementations();
 		staticConfigs = listPrompts(impls);
 	}
@@ -200,6 +215,7 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	public GPromptTemplateConfig insert(GPromptTemplateConfig config) {
 		if (config.getConfigDeclarated() != null && config.getConfigDeclarated())
 			throw new IllegalStateException("Cannot persist a static declared promptConfig");
+		checkPlaceholders(config);
 		return this.directRepo.insert(config);
 	}
 
@@ -207,7 +223,43 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	public GPromptTemplateConfig update(GPromptTemplateConfig config) {
 		if (config.getConfigDeclarated() != null && config.getConfigDeclarated())
 			throw new IllegalStateException("Cannot persist a static declared promptConfig");
+		checkPlaceholders(config);
 		return this.directRepo.save(config);
+	}
+
+	/**
+	 * A prompt saved with a placeholder nobody fills would fail every call made
+	 * with it: it is refused here instead. What may be named: what the renderer
+	 * fills on every call, what the prompt context providers fill on demand, what
+	 * the agents fill in their prompts, and what the callers of this prompt use
+	 * fill - known from the static prompts of the same use. A use no static prompt
+	 * has, of a prompt that is not an agent's, tells nothing of its callers: it is
+	 * not checked.
+	 */
+	void checkPlaceholders(GPromptTemplateConfig config) {
+		final IGPromptPlaceholdersCatalog catalog = placeholdersCatalog != null ? placeholdersCatalog.getIfAvailable()
+				: null;
+		if (catalog == null || config == null) {
+			return;
+		}
+		final Set<String> named = new LinkedHashSet<String>(config.getPlaceholders().keySet());
+		final Set<String> allowed = new LinkedHashSet<String>(catalog.builtInPlaceholders());
+		allowed.addAll(catalog.knownPlaceholders());
+		boolean useKnown = false;
+		for (GPromptTemplateConfig prompt : staticConfigs) {
+			if (prompt.getPromptUse() != null && prompt.getPromptUse().equals(config.getPromptUse())) {
+				allowed.addAll(prompt.getPlaceholders().keySet());
+				useKnown = true;
+			}
+		}
+		if (!useKnown && !Boolean.TRUE.equals(config.getAgentPrompt())) {
+			return;
+		}
+		named.removeAll(allowed);
+		if (!named.isEmpty()) {
+			throw new IllegalArgumentException("The prompt names placeholders nobody fills: " + named
+					+ ". It may name: " + allowed);
+		}
 	}
 
 	@Override

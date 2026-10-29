@@ -135,7 +135,8 @@ public class GTextAgentsNetworkRunner {
 		final ChatEnvironmentRun run = chatEnvironment.run(GChatEnvironmentRunRequest.builder().network(network)
 				.request(request).attachments(ChatRunAttachments.none())
 				.knowledgeBases(GKnowledgeBaseScope.PROFILE_OR_ALL_VISIBLE).understood(true)
-				.transientConversation(true).origin(origin != null ? origin : DEFAULT_ORIGIN).sink(notifications)
+				.transientConversation(true).origin(origin != null ? origin : DEFAULT_ORIGIN).attended(true)
+				.sink(notifications)
 				.build());
 		try {
 			// the writer's envelopes buffer in the network's sink until read: the run

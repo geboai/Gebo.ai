@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.llms.abstraction.layer.model.GChatRunInfo;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext.ChatRequestContextImpl.ChatRequestContextImplBuilder;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
@@ -58,6 +59,9 @@ public class MinimalChatContext implements ITokensCountable {
 			if (currentRequest.getUserLanguage() != null) {
 				builder = builder.userLanguage(currentRequest.getUserLanguage());
 				toolsContext.put(ToolCallbackDeclarationUtil.USER_LANGUAGE_CONTEXT_KEY, currentRequest.getUserLanguage());
+			}
+			if (currentRequest.getRunOrigin() != null || currentRequest.getAttended() != null) {
+				builder = builder.runInfo(GChatRunInfo.of(currentRequest.getRunOrigin(), currentRequest.getAttended()));
 			}
 		}
 		// the knowledge bases the tools may search, browse and read: the chat's

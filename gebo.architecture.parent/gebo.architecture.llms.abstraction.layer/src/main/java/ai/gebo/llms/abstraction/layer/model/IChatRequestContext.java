@@ -85,6 +85,23 @@ public interface IChatRequestContext {
 		return language != null && !language.isBlank() ? language : USER_LANGUAGE_UNDETECTED;
 	}
 
+	/**
+	 * What the call knows of the run it serves beside the request: where it comes
+	 * from, whether somebody waits for it. Null when nothing is known.
+	 */
+	public default GChatRunInfo getRunInfo() {
+		return null;
+	}
+
+	/**
+	 * The environment of the run the request is served in - what the pipeline
+	 * steps and the caller put there for the network of agents - for whoever
+	 * fills a prompt from it. Empty when the run has none.
+	 */
+	public default Map<String, Object> getRunEnvironment() {
+		return Map.of();
+	}
+
 	public default IChatRequestContext integrateWithDocuments(Object documents) {
 		if (documents == null) {
 			return this;
@@ -146,66 +163,10 @@ public interface IChatRequestContext {
 
 	public default IChatRequestContext cloneWithNewDocumentsList(List<Document> docs) {
 		final List<Document> sampledList = docs != null ? new ArrayList<>(docs) : new ArrayList<>();
-		return new IChatRequestContext() {
-			@Override
-			public String getRequestID() {
-
-				return IChatRequestContext.this.getRequestID();
-			}
-
-			@Override
-			public Map<String, Object> getPipelineInfos() {
-				return IChatRequestContext.this.getPipelineInfos();
-			}
-
-			@Override
-			public String getActualUserRequest() {
-
-				return IChatRequestContext.this.getActualUserRequest();
-			}
-
-			@Override
-			public String getConsolidatedHistory() {
-
-				return IChatRequestContext.this.getConsolidatedHistory();
-			}
-
+		return new ForwardingChatRequestContext(this) {
 			@Override
 			public List<Document> getDocuments() {
-
 				return sampledList;
-			}
-
-			@Override
-			public List<IChatSessionEntry> getInteractions() {
-
-				return IChatRequestContext.this.getInteractions();
-			}
-
-			@Override
-			public Map<String, Object> getToolsContext() {
-
-				return IChatRequestContext.this.getToolsContext();
-			}
-
-			@Override
-			public String getSessionID() {
-
-				return IChatRequestContext.this.getSessionID();
-			}
-
-			public ToolCallsListener getToolCallListener() {
-				return IChatRequestContext.this.getToolCallListener();
-			}
-
-			@Override
-			public List<String> getRulesToFollow() {
-				return IChatRequestContext.this.getRulesToFollow();
-			}
-
-			@Override
-			public String getUserLanguage() {
-				return IChatRequestContext.this.getUserLanguage();
 			}
 		};
 	}
@@ -229,6 +190,13 @@ public interface IChatRequestContext {
 		private final ToolCallsListener toolCallListener;
 		private final List<String> rulesToFollow;
 		private final String userLanguage;
+		private final GChatRunInfo runInfo;
+		private final Map<String, Object> runEnvironment;
+
+		@Override
+		public Map<String, Object> getRunEnvironment() {
+			return runEnvironment != null ? runEnvironment : Map.of();
+		}
 	}
 
 	public static ChatRequestContextImplBuilder builder() {
@@ -240,60 +208,10 @@ public interface IChatRequestContext {
 	 * value is still read from this context, so nothing it carries is frozen.
 	 */
 	public default IChatRequestContext withToolCallListener(ToolCallsListener listener) {
-		return new IChatRequestContext() {
-			@Override
-			public String getRequestID() {
-				return IChatRequestContext.this.getRequestID();
-			}
-
-			@Override
-			public String getSessionID() {
-				return IChatRequestContext.this.getSessionID();
-			}
-
-			@Override
-			public String getConsolidatedHistory() {
-				return IChatRequestContext.this.getConsolidatedHistory();
-			}
-
-			@Override
-			public List<IChatSessionEntry> getInteractions() {
-				return IChatRequestContext.this.getInteractions();
-			}
-
-			@Override
-			public List<Document> getDocuments() {
-				return IChatRequestContext.this.getDocuments();
-			}
-
-			@Override
-			public String getActualUserRequest() {
-				return IChatRequestContext.this.getActualUserRequest();
-			}
-
-			@Override
-			public Map<String, Object> getToolsContext() {
-				return IChatRequestContext.this.getToolsContext();
-			}
-
-			@Override
-			public Map<String, Object> getPipelineInfos() {
-				return IChatRequestContext.this.getPipelineInfos();
-			}
-
+		return new ForwardingChatRequestContext(this) {
 			@Override
 			public ToolCallsListener getToolCallListener() {
 				return listener;
-			}
-
-			@Override
-			public List<String> getRulesToFollow() {
-				return IChatRequestContext.this.getRulesToFollow();
-			}
-
-			@Override
-			public String getUserLanguage() {
-				return IChatRequestContext.this.getUserLanguage();
 			}
 		};
 	}
@@ -309,61 +227,10 @@ public interface IChatRequestContext {
 		}
 		final List<String> rules = new java.util.ArrayList<>(getRulesToFollow() != null ? getRulesToFollow() : List.of());
 		rules.addAll(more);
-		final IChatRequestContext self = this;
-		return new IChatRequestContext() {
-			@Override
-			public String getRequestID() {
-				return self.getRequestID();
-			}
-
-			@Override
-			public String getSessionID() {
-				return self.getSessionID();
-			}
-
-			@Override
-			public String getConsolidatedHistory() {
-				return self.getConsolidatedHistory();
-			}
-
-			@Override
-			public List<IChatSessionEntry> getInteractions() {
-				return self.getInteractions();
-			}
-
-			@Override
-			public List<Document> getDocuments() {
-				return self.getDocuments();
-			}
-
-			@Override
-			public String getActualUserRequest() {
-				return self.getActualUserRequest();
-			}
-
-			@Override
-			public Map<String, Object> getToolsContext() {
-				return self.getToolsContext();
-			}
-
-			@Override
-			public Map<String, Object> getPipelineInfos() {
-				return self.getPipelineInfos();
-			}
-
-			@Override
-			public ToolCallsListener getToolCallListener() {
-				return self.getToolCallListener();
-			}
-
+		return new ForwardingChatRequestContext(this) {
 			@Override
 			public List<String> getRulesToFollow() {
 				return rules;
-			}
-
-			@Override
-			public String getUserLanguage() {
-				return self.getUserLanguage();
 			}
 		};
 	}
@@ -374,64 +241,34 @@ public interface IChatRequestContext {
 	 * context.
 	 */
 	public default IChatRequestContext withToolsContextValue(String key, Object value) {
-		return new IChatRequestContext() {
-			@Override
-			public String getRequestID() {
-				return IChatRequestContext.this.getRequestID();
-			}
-
-			@Override
-			public String getSessionID() {
-				return IChatRequestContext.this.getSessionID();
-			}
-
-			@Override
-			public String getConsolidatedHistory() {
-				return IChatRequestContext.this.getConsolidatedHistory();
-			}
-
-			@Override
-			public List<IChatSessionEntry> getInteractions() {
-				return IChatRequestContext.this.getInteractions();
-			}
-
-			@Override
-			public List<Document> getDocuments() {
-				return IChatRequestContext.this.getDocuments();
-			}
-
-			@Override
-			public String getActualUserRequest() {
-				return IChatRequestContext.this.getActualUserRequest();
-			}
-
+		return new ForwardingChatRequestContext(this) {
 			@Override
 			public Map<String, Object> getToolsContext() {
-				final Map<String, Object> toolsContext = IChatRequestContext.this.getToolsContext() != null
-						? new HashMap<>(IChatRequestContext.this.getToolsContext())
+				final Map<String, Object> toolsContext = delegate.getToolsContext() != null
+						? new HashMap<>(delegate.getToolsContext())
 						: new HashMap<>();
 				toolsContext.put(key, value);
 				return toolsContext;
 			}
+		};
+	}
 
+	/** This same context, serving the given run: what it knows of it is this. */
+	public default IChatRequestContext withRunInfo(GChatRunInfo runInfo) {
+		return new ForwardingChatRequestContext(this) {
 			@Override
-			public Map<String, Object> getPipelineInfos() {
-				return IChatRequestContext.this.getPipelineInfos();
+			public GChatRunInfo getRunInfo() {
+				return runInfo;
 			}
+		};
+	}
 
+	/** This same context, in the given run environment (not copied: the run's own map). */
+	public default IChatRequestContext withRunEnvironment(Map<String, Object> environment) {
+		return new ForwardingChatRequestContext(this) {
 			@Override
-			public ToolCallsListener getToolCallListener() {
-				return IChatRequestContext.this.getToolCallListener();
-			}
-
-			@Override
-			public List<String> getRulesToFollow() {
-				return IChatRequestContext.this.getRulesToFollow();
-			}
-
-			@Override
-			public String getUserLanguage() {
-				return IChatRequestContext.this.getUserLanguage();
+			public Map<String, Object> getRunEnvironment() {
+				return environment != null ? environment : Map.of();
 			}
 		};
 	}

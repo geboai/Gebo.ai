@@ -61,6 +61,9 @@ public class GChatEnvironmentRunRequest {
 	private final boolean transientConversation;
 	/** Where the run comes from ({@code HARNESS}, {@code A2A}, {@code MCP}...), kept on the conversation. */
 	private final String origin;
+	/** Whether a person is waiting for the answer; a tool call or a wake-up by a person is, a timer's is not. */
+	@Builder.Default
+	private final boolean attended = true;
 	/** The people who work in the conversation beside its owner, each when its turn comes. */
 	@Builder.Default
 	private final List<String> sharedWithUsers = List.of();

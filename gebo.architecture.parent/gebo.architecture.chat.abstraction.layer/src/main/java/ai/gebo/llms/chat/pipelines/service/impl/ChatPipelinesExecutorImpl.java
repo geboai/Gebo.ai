@@ -41,6 +41,7 @@ import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelinesExecutor;
+import ai.gebo.llms.abstraction.layer.model.GChatRunInfo;
 import ai.gebo.llms.chat.pipelines.service.IGRequestUnderstandingService;
 import ai.gebo.llms.chat.pipelines.service.IInputChatPipelineStepService;
 import ai.gebo.llms.chat.pipelines.service.IIntermediateProcessingChatPipelineStepService;
@@ -110,6 +111,13 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		// the language of the user's own message, detected once for every step, agent and
 		// tool of the request: the prompts name it as the answer's language
 		detectUserLanguage(request);
+		// a chat: somebody is waiting for the answer, unless the caller said otherwise
+		if (request.getRunOrigin() == null) {
+			request.setRunOrigin(GChatRunInfo.CHAT);
+		}
+		if (request.getAttended() == null) {
+			request.setAttended(Boolean.TRUE);
+		}
 		ChatPipelineConfiguration config = getCfgOrDefault(pipelineCode);
 		IChatPipelineStepService firstService = getStep(config.getStepInputId());
 		IChatPipelineStepService routerService = getStep(config.getStepRouterId());

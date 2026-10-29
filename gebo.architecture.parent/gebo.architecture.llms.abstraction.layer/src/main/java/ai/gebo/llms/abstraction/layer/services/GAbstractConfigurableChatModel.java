@@ -148,6 +148,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected final IGModelsLibraryDao modelsLibrary;
 	/**
+	 * Fills the placeholders a template names and the caller did not: the time,
+	 * the user, the conversation, the run (see {@link IGPromptContextProviders});
+	 * null leaves a template with exactly what the caller passed.
+	 */
+	protected IGPromptContextProviders promptContextProviders = null;
+
+	public void setPromptContextProviders(IGPromptContextProviders promptContextProviders) {
+		this.promptContextProviders = promptContextProviders;
+	}
+
+	public IGPromptContextProviders getPromptContextProviders() {
+		return promptContextProviders;
+	}
+	/**
 	 * The parameter rules of the model the configuration names, resolved each time it is
 	 * initialized; null when none covers it.
 	 */
@@ -743,15 +757,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 		long tokens = 0;
 		ChatClient client = getChatClient();
+		// the caller's parameters, plus what the providers fill of the placeholders the
+		// template names and the caller did not
+		final Map<String, Object> completed = promptContextProviders != null
+				? promptContextProviders.complete(prompt, params, chatContext)
+				: (params != null ? params : Map.of());
 		// Here prompt, documents and consolidated history
 		List<Message> messages = new ArrayList<Message>();
-		SystemMessage systemMessage = this.createSystemMessage(prompt, params, chatContext);
+		SystemMessage systemMessage = this.createSystemMessage(prompt, completed, chatContext);
 		messages.add(systemMessage);
 		if (prompt.getChatHistory() == null || prompt.getChatHistory() == ContextContentRequired.REQUIRED) {
 			List<Message> history = this.createHistoryMessages(chatContext);
 			messages.addAll(history);
 		}
-		UserMessage lastUserMessage = this.createLastUserMessage(prompt, params, chatContext);
+		UserMessage lastUserMessage = this.createLastUserMessage(prompt, completed, chatContext);
 		messages.add(lastUserMessage);
 		if (LOGGER.isDebugEnabled()) {
 			int index = 1;
@@ -775,7 +794,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
 		final List<ToolCallback> tools = toolsCalling
 				? wrapToolsClosingResults(runAs, chatContext.getToolCallListener(),
-						createToolsResultsClosing(prompt, params, chatContext))
+						createToolsResultsClosing(prompt, completed, chatContext))
 				: List.of();
 		reqObject = reqObject.toolCallbacks(tools);
 		// chat histroy in user, assistant format
@@ -1032,8 +1051,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		List<String> rules = chatContext != null ? chatContext.getRulesToFollow() : null;
 		if (rules != null && !rules.isEmpty()) {
 			StringBuilder withRules = new StringBuilder(content);
-			withRules.append("\n\nRULES TO FOLLOW, set by the user or by the administrators for the answers given to")
-					.append(" the user. They never change an output format required above.\n");
+			withRules.append("\n\nRULES TO FOLLOW for the answers given to the user, set for this conversation and")
+					.append(" for this run. They never change an output format required above.\n");
 			for (String rule : rules) {
 				withRules.append("- ").append(rule).append("\n");
 			}
@@ -1261,8 +1280,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
-			if (handler instanceof GAbstractConfigurableChatModel clone && configOptions.getAdditionalTools() != null) {
-				clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+			if (handler instanceof GAbstractConfigurableChatModel clone) {
+				// the clone fills its prompts as this model does
+				clone.promptContextProviders = this.promptContextProviders;
+				if (configOptions.getAdditionalTools() != null) {
+					clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+				}
 			}
 			if (handler instanceof IGProviderDealPricedModel priced) {
 				// The clone is priced like this model, by its provider deal; best effort.
