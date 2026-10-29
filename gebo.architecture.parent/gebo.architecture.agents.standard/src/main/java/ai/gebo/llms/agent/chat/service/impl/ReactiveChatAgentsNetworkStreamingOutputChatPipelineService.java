@@ -23,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataOf;
+import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
 import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -67,6 +68,8 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	protected final IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService;
 	/** Builds the environment of the network, the same a run from outside a chat is given. */
 	protected final GNetworkEnvironmentBuilder environmentBuilder;
+	/** Gives a network that asks for it a memory of the conversation; null for none. */
+	protected final GConversationAgentsSessionFactory conversationMemory;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
 
@@ -103,8 +106,19 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
 			GNetworkEnvironmentBuilder environmentBuilder) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, pipelineType, defaultNetworksService,
+				environmentBuilder, null);
+	}
+
+	/** The same, with the memory a network that asks for it keeps of the conversation. */
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory) {
 		this.factory = factory;
 		this.environmentBuilder = environmentBuilder != null ? environmentBuilder : GNetworkEnvironmentBuilder.plain();
+		this.conversationMemory = conversationMemory;
 		this.agentsNetworkDataSource = agentsNetworkDataSource;
 		this.lifeCycleService = lifeCycleService;
 		this.stepId = stepId;
@@ -227,11 +241,14 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
 			final GAgentsNetwork network = chooseNetwork(runtimeData);
 			final Map<String, Object> environment = buildNetworkEnvironment(runtimeData);
+			// the prompts filled from the environment of the run read it from the request context
+			runtimeData.getRequestResources().setRunEnvironment(environment);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
 			}
 			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink, String.class,
-					GeboChatMessageEnvelope.class, runAs);
+					GeboChatMessageEnvelope.class, runAs,
+					GConversationAgentsSessionFactory.remembers(network) ? conversationMemory : null);
 			// the network is asked the user's question; the request it is asked in is in
 			// its environment, for the agents that need more of it
 			final String question = ChatRuntimeDataOf.query(runtimeData);

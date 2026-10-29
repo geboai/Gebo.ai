@@ -117,5 +117,13 @@ public class GAgentsNetwork extends GBaseObject
 	@Transient
 	@JsonIgnore
 	private String copiedFromCode = null;
+	/**
+	 * Whether the network remembers, from one turn of a conversation to the next,
+	 * what its agents contributed: the shared context of a run is digested when
+	 * the run ends and seeds the next run in the same conversation. Off by
+	 * default: a network that does not ask forgets everything but what the
+	 * conversation itself keeps.
+	 */
+	private Boolean rememberAcrossTurns = null;
 
 }

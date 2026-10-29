@@ -83,6 +83,7 @@ class GChatEnvironmentNetworkRunnerTest {
 		when(chatModels.defaultHandler()).thenReturn(chatModel);
 		IGReactiveChatAgentsNetworkServiceFactory factory = mock(IGReactiveChatAgentsNetworkServiceFactory.class);
 		when(factory.create(any(), any(), any(), any(), any())).thenReturn(service);
+		when(factory.create(any(), any(), any(), any(), any(), any())).thenReturn(service);
 		when(service.getFlux()).thenReturn(Flux.empty());
 		IGRuntimeBinder binder = mock(IGRuntimeBinder.class);
 		when(binder.getImplementationOf(IGReactiveChatAgentsNetworkServiceFactory.class)).thenReturn(factory);
@@ -90,7 +91,7 @@ class GChatEnvironmentNetworkRunnerTest {
 		ObjectProvider<IGUserUploadContentHandler> uploads = mock(ObjectProvider.class);
 		when(uploads.getIfAvailable()).thenReturn(uploadHandler);
 		runner = new GChatEnvironmentNetworkRunner(binder, lifeCycle, chatModels, uploads,
-				GNetworkEnvironmentBuilder.plain(), null);
+				GNetworkEnvironmentBuilder.plain(), null, null);
 		network = new GAgentsNetwork();
 		network.setCode("the-network");
 		request = new GeboChatRequest();

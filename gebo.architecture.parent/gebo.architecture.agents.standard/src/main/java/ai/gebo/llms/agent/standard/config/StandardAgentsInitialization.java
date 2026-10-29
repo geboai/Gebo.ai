@@ -52,6 +52,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
+import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
 import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
@@ -150,7 +151,7 @@ public class StandardAgentsInitialization {
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
 			IGChatSessionLifeCycleService lifeCycleService,
 			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
-			GNetworkEnvironmentBuilder environmentBuilder) {
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory) {
 		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 		if (LOGGER.isDebugEnabled()) {
@@ -162,7 +163,7 @@ public class StandardAgentsInitialization {
 		// pipeline; the default network is the fallback.
 		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource,
 				lifeCycleService, ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID,
-				PipelineType.RAG_PIPELINE, defaultNetworksService, environmentBuilder);
+				PipelineType.RAG_PIPELINE, defaultNetworksService, environmentBuilder, conversationMemory);
 	}
 
 	@Bean

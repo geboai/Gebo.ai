@@ -16,6 +16,8 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
+import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.openchat.pipeline.OpenChatConstants;
 
@@ -32,7 +34,16 @@ public class OpenChatAgentsNetworkStreamingStepService
 			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, defaultNetworksService, null, null);
+	}
+
+	/** The same, with the environment builder of the platform and the memory of the conversation. */
+	public OpenChatAgentsNetworkStreamingStepService(
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory) {
 		super(factory, agentsNetworkDataSource, lifeCycleService, OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP,
-				PipelineType.PURE_CHAT_PIPELINE, defaultNetworksService);
+				PipelineType.PURE_CHAT_PIPELINE, defaultNetworksService, environmentBuilder, conversationMemory);
 	}
 }

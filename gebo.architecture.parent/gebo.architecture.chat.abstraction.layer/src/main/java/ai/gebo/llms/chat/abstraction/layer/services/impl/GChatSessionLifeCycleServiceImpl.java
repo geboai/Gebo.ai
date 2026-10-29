@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -74,6 +75,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionRemovalListener;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
@@ -114,6 +116,9 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGAIDocumentsCacheService documentsCacheService;
 	private final IGPersistentObjectManager persistenceManager;
 	private final IGSecurityService securityService;
+	/** Told of every conversation removed; not final, so the constructor stays what it is. */
+	@Autowired(required = false)
+	private ObjectProvider<IGChatSessionRemovalListener> removalListeners;
 	private final IGMessageBroker broker;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
@@ -321,6 +326,16 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		// what it held - a working directory, a sandbox - goes with it
 		this.libraryInstances.dropHeldBy(code);
+		if (removalListeners != null) {
+			removalListeners.stream().forEach(listener -> {
+				try {
+					listener.chatSessionRemoved(code);
+				} catch (RuntimeException notTold) {
+					LOGGER.error("Removal listener " + listener.getClass().getName() + " failed for chat " + code,
+							notTold);
+				}
+			});
+		}
 		LOGGER.debug("Removing chat {} with its full and compact states and stored contents", code);
 		this.sessionRepository.deleteById(code);
 	}

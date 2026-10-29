@@ -92,17 +92,21 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	private final GNetworkEnvironmentBuilder environmentBuilder;
 	/** Understands the request as the chat pipelines do, when the run asks for it. */
 	private final IGRequestUnderstandingService requestUnderstanding;
+	/** Gives a network that asks for it a memory of the conversation; null for none. */
+	private final GConversationAgentsSessionFactory conversationMemory;
 
 	public GChatEnvironmentNetworkRunner(IGRuntimeBinder runtimeBinder,
 			IGChatSessionLifeCycleService chatSessionLifecycleService, IGChatModelRuntimeConfigurationDao chatModelsDao,
 			ObjectProvider<IGUserUploadContentHandler> uploadContentHandler,
-			GNetworkEnvironmentBuilder environmentBuilder, IGRequestUnderstandingService requestUnderstanding) {
+			GNetworkEnvironmentBuilder environmentBuilder, IGRequestUnderstandingService requestUnderstanding,
+			ObjectProvider<GConversationAgentsSessionFactory> conversationMemory) {
 		this.runtimeBinder = runtimeBinder;
 		this.chatSessionLifecycleService = chatSessionLifecycleService;
 		this.chatModelsDao = chatModelsDao;
 		this.uploadContentHandler = uploadContentHandler;
 		this.environmentBuilder = environmentBuilder != null ? environmentBuilder : GNetworkEnvironmentBuilder.plain();
 		this.requestUnderstanding = requestUnderstanding;
+		this.conversationMemory = conversationMemory != null ? conversationMemory.getIfAvailable() : null;
 	}
 
 	/** What a caller sends along with its question. */
@@ -270,6 +274,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			if (requestUnderstanding != null) {
 				requestUnderstanding.detectLanguage(request);
 			}
+			// what the run is, for the prompts and the tools that ask
+			request.setRunOrigin(run.getOrigin() != null ? run.getOrigin() : "EXTERNAL");
+			request.setAttended(run.isAttended());
 			// The conversation has to exist before its request can be started, and a caller
 			// naming one we have never seen is naming a new one. It is opened - or shared -
 			// before anything reads it, since whoever runs in it must be granted it first.
@@ -307,8 +314,12 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			}
 			final Map<String, Object> environment = environmentBuilder.build(runtimeData, knowledgeBases,
 					run.getEnvironmentOfThisRun());
+			// the prompts filled from the environment of the run read it from the request context
+			resources.setRunEnvironment(environment);
 			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-			service = factory.create(network, run.getSink(), String.class, GeboChatMessageEnvelope.class, runAs);
+			// a network that remembers across the turns of its conversation gets its memory
+			service = factory.create(network, run.getSink(), String.class, GeboChatMessageEnvelope.class, runAs,
+					GConversationAgentsSessionFactory.remembers(network) ? conversationMemory : null);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Running network:" + network.getCode() + " from " + run.getOrigin()
 						+ " in the environment of chat profile:" + request.getChatProfileCode() + " conversation:"
