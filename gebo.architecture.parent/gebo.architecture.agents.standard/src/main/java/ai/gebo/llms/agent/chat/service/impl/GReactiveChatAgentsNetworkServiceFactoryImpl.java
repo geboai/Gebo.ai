@@ -21,12 +21,11 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkServiceFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
 @Service
 public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
-		GAbstractReactiveOutputAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService>
+		GAbstractReactiveOutputAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService>
 		implements IGReactiveChatAgentsNetworkServiceFactory {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GReactiveChatAgentsNetworkServiceFactoryImpl.class);
 	private static final String _REACTIVE_CHAT_AGENTS_NETWORK_DESCRIPTION = "Default reactive chat network of agents";
@@ -44,7 +43,7 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 
 	@Override
 	protected IGReactiveChatAgentsNetworkService createAgentsNetworkService(GAgentsNetwork network,
-			INotificationSink notificationSink, Class<ChatPipelineExecutionRuntimeData> inputType,
+			INotificationSink notificationSink, Class<String> inputType,
 			Class<GeboChatMessageEnvelope> outputType, ReactiveIdentityUtil runAs,
 			Map<String, RuntimeAgentInfos> agentsCache, AdapterWithFlux adapter) {
 		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
@@ -76,9 +75,9 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 	}
 
 	@Override
-	public Class<ChatPipelineExecutionRuntimeData> getInputType() {
-
-		return ChatPipelineExecutionRuntimeData.class;
+	public Class<String> getInputType() {
+		// what the network is asked: the request it is asked in is its environment
+		return String.class;
 	}
 
 }

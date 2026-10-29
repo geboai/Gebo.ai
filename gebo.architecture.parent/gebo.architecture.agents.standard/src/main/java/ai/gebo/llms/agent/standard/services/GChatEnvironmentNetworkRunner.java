@@ -308,8 +308,7 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			final Map<String, Object> environment = environmentBuilder.build(runtimeData, knowledgeBases,
 					run.getEnvironmentOfThisRun());
 			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-			service = factory.create(network, run.getSink(), ChatPipelineExecutionRuntimeData.class,
-					GeboChatMessageEnvelope.class, runAs);
+			service = factory.create(network, run.getSink(), String.class, GeboChatMessageEnvelope.class, runAs);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Running network:" + network.getCode() + " from " + run.getOrigin()
 						+ " in the environment of chat profile:" + request.getChatProfileCode() + " conversation:"
@@ -330,7 +329,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 							+ " thing(s) about it: " + run.getToolsContextOfThisRun().keySet());
 				}
 			}
-			final GeboChatMessageEnvelope last = service.executeNetwork(context, runtimeData, environment);
+			// the network is asked the caller's question; the request is in its environment
+			final GeboChatMessageEnvelope last = service.executeNetwork(context,
+					GeboChatRequest.actualQuery(request), environment);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));

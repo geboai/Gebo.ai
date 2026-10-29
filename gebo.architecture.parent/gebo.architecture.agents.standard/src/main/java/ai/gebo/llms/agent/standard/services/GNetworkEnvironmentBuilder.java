@@ -32,9 +32,9 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
  * <ol>
  * <li>what the pipeline steps put in the request's shared environment
  * ({@link ChatPipelineExecutionRuntimeData#getSharedEnvironment()});</li>
- * <li>the standard entries ({@link StandardAgentsNetworkEnvironmentEntries}):
- * the knowledge bases the run works on, the user intent, the search flags and
- * the user's language;</li>
+ * the standard entries ({@link StandardAgentsNetworkEnvironmentEntries}): the
+ * request's runtime data, the knowledge bases the run works on, the user
+ * intent, the search flags and the user's language;</li>
  * <li>what the {@link IGNetworkEnvironmentContributor contributors} add;</li>
  * <li>what the caller of the run adds for this run.</li>
  * </ol>
@@ -67,6 +67,8 @@ public class GNetworkEnvironmentBuilder {
 		if (runtimeData.getSharedEnvironment() != null) {
 			environment.putAll(runtimeData.getSharedEnvironment());
 		}
+		// the request itself, for the agents that need more of it than its text
+		environment.put(StandardAgentsNetworkEnvironmentEntries.CHAT_RUNTIME_DATA, runtimeData);
 		final GeboChatRequest request = runtimeData.getRequestResources() != null
 				? runtimeData.getRequestResources().getCurrentRequest()
 				: null;

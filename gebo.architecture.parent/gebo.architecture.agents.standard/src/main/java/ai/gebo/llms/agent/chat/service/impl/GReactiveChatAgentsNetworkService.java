@@ -10,14 +10,13 @@ import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class GReactiveChatAgentsNetworkService
-		extends GAbstractReactiveOutputAgentsNetworkService<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope>
+		extends GAbstractReactiveOutputAgentsNetworkService<String, GeboChatMessageEnvelope>
 		implements IGReactiveChatAgentsNetworkService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GReactiveChatAgentsNetworkService.class);
 
@@ -26,7 +25,7 @@ public class GReactiveChatAgentsNetworkService
 
 	public GReactiveChatAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
-			Class<ChatPipelineExecutionRuntimeData> inputType, Class<GeboChatMessageEnvelope> outputType,
+			Class<String> inputType, Class<GeboChatMessageEnvelope> outputType,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
 			AdapterWithFlux<?, GeboChatMessageEnvelope> adapterWithFlux) {
 		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,

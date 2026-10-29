@@ -31,7 +31,6 @@ import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentServ
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.openchat.pipeline.OpenChatConstants;
 import ai.gebo.openchat.pipeline.steps.OpenChatAgentsNetworkStreamingStepService;
 
@@ -122,7 +121,7 @@ public class OpenChatAgentsInitialization {
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
 			IGChatSessionLifeCycleService lifeCycleService,
 			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
-		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 		// The free chats are handed to the network resolved for the pure chat pipeline;
 		// the open-chat network is the fallback.

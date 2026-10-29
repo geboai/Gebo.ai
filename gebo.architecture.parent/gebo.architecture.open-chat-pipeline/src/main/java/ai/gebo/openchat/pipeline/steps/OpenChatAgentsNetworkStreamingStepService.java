@@ -17,7 +17,6 @@ import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.openchat.pipeline.OpenChatConstants;
 
 /**
@@ -30,7 +29,7 @@ public class OpenChatAgentsNetworkStreamingStepService
 		extends ReactiveChatAgentsNetworkStreamingOutputChatPipelineService {
 
 	public OpenChatAgentsNetworkStreamingStepService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
 		super(factory, agentsNetworkDataSource, lifeCycleService, OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP,

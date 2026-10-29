@@ -51,6 +51,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
+import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import reactor.core.publisher.Flux;
 
@@ -173,8 +174,11 @@ class GChatEnvironmentNetworkRunnerTest {
 
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Map<String, Object>> environment = ArgumentCaptor.forClass(Map.class);
-		verify(service).executeNetwork(any(), any(), environment.capture());
+		verify(service).executeNetwork(any(), eq("What is new?"), environment.capture());
 		assertEquals(List.of("kb-1"), environment.getValue().get(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE));
+		assertTrue(environment.getValue()
+				.get(StandardAgentsNetworkEnvironmentEntries.CHAT_RUNTIME_DATA) instanceof ChatPipelineExecutionRuntimeData,
+				"the network is asked the question; the request it is asked in is its environment");
 		assertEquals("yes", environment.getValue().get("OF_THE_CALLER"));
 		verify(resources).setAvailableKnowledgeBaseCodes(List.of("kb-1"));
 		verify(minimalContext).setAvailableKnowledgeBaseCodes(List.of("kb-1"));

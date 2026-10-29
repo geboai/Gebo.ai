@@ -22,6 +22,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
+import ai.gebo.llms.agent.standard.services.ChatRuntimeDataOf;
 import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -45,7 +46,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	public static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
 	private static final String EXCEPTION_CREATING_NETWORK_OF_AGENTS = "Exception creating network of agents";
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
-	protected final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
+	protected final IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
 	protected final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
 	protected final IGChatSessionLifeCycleService lifeCycleService;
 	/**
@@ -70,13 +71,13 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
 
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService) {
 		this(factory, agentsNetworkDataSource, lifeCycleService, SERVICE_ID);
 	}
 
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId) {
 		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, null, null);
@@ -87,7 +88,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * request, the data source's first network being the fallback.
 	 */
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
 		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, pipelineType, defaultNetworksService, null);
@@ -98,7 +99,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * platform's, with its contributors); null for a plain one.
 	 */
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
 			GNetworkEnvironmentBuilder environmentBuilder) {
@@ -229,8 +230,11 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
 			}
-			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink,
-					ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, runAs);
+			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink, String.class,
+					GeboChatMessageEnvelope.class, runAs);
+			// the network is asked the user's question; the request it is asked in is in
+			// its environment, for the agents that need more of it
+			final String question = ChatRuntimeDataOf.query(runtimeData);
 			Flux<GeboChatMessageEnvelope> flux = runtimeNetwork.getFlux();
 			Flux<GeboChatMessageEnvelope> trailingFlux = Flux.defer(() -> {
 				if (LOGGER.isDebugEnabled()) {
@@ -262,7 +266,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 					try {
 
 						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
-								runtimeData, environment);
+								question, environment);
 					} catch (AgentException | LLMConfigException e) {
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
 					}

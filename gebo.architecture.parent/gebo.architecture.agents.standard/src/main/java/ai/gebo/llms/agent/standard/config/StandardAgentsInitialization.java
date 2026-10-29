@@ -66,7 +66,6 @@ import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.security.services.IGSecurityService;
@@ -152,7 +151,7 @@ public class StandardAgentsInitialization {
 			IGChatSessionLifeCycleService lifeCycleService,
 			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
 			GNetworkEnvironmentBuilder environmentBuilder) {
-		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Wiring the default streaming output pipeline step on network service factory:"
@@ -307,7 +306,7 @@ public class StandardAgentsInitialization {
 					+ " internalKnowledgeBaseSearcher:" + (internalKnowledgeBaseConfig != null));
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
-		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String
+		// Non-LLM input node: forwards the query to the controller
 		// and forwards it to the String-input controller.
 		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
 		inputAdapterParticipant.setAgentConfigCode(inputAdapterConfigCode);
