@@ -85,6 +85,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GChatSessionOpeningOptions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
@@ -169,6 +170,12 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void createChatSession(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		createChatSession(request, GChatSessionOpeningOptions.none());
+	}
+
+	@Override
+	public void createChatSession(GeboChatRequest request, GChatSessionOpeningOptions options)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
 
 		if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
 			UserInfos user = securityService.getCurrentUser();
@@ -176,6 +183,13 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			s.setUsername(user.getUsername());
 			s.setChatProfileCode(request.getChatProfileCode());
 			s.setChatModelCode(request.getChatModelCode());
+			if (options != null) {
+				// a run from outside a chat: what it is, and who else works in it
+				s.setTransientRun(options.isTransientRun() ? Boolean.TRUE : null);
+				s.setRunOrigin(options.getRunOrigin());
+				s.setAccessibleUsers(othersThan(options.getSharedWithUsers(), user.getUsername()));
+				s.setAccessibleGroups(othersThan(options.getSharedWithGroups(), null));
+			}
 			if (request.getChatProfileCode() != null) {
 				Optional<GChatProfileConfiguration> data = this.chatProfilesRepository
 						.findById(request.getChatProfileCode());
@@ -222,9 +236,82 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		return session;
 	}
 
+	/** The names given, distinct, without the one left out and without blanks; null when none is left. */
+	private static List<String> othersThan(List<String> names, String leftOut) {
+		if (names == null) {
+			return null;
+		}
+		final List<String> others = names.stream()
+				.filter(name -> name != null && !name.isBlank() && !name.equals(leftOut)).distinct().toList();
+		return others.isEmpty() ? null : new ArrayList<String>(others);
+	}
+
+	@Override
+	public void shareChatSession(String code, List<String> users, List<String> groups)
+			throws GeboChatSessionLifecycleException {
+		if (code == null || code.isBlank()) {
+			throw new GeboChatSessionLifecycleException("session id is null");
+		}
+		final GUserChatSession session = this.sessionRepository.findById(code)
+				.orElseThrow(GeboChatSessionLifecycleException::new);
+		final List<String> moreUsers = othersThan(users, session.getUsername());
+		final List<String> moreGroups = othersThan(groups, null);
+		boolean changed = false;
+		if (moreUsers != null) {
+			final List<String> granted = new ArrayList<String>(
+					session.getAccessibleUsers() != null ? session.getAccessibleUsers() : List.of());
+			for (String name : moreUsers) {
+				if (!granted.contains(name)) {
+					granted.add(name);
+					changed = true;
+				}
+			}
+			session.setAccessibleUsers(granted);
+		}
+		if (moreGroups != null) {
+			final List<String> granted = new ArrayList<String>(
+					session.getAccessibleGroups() != null ? session.getAccessibleGroups() : List.of());
+			for (String name : moreGroups) {
+				if (!granted.contains(name)) {
+					granted.add(name);
+					changed = true;
+				}
+			}
+			session.setAccessibleGroups(granted);
+		}
+		if (changed) {
+			this.sessionRepository.save(session);
+			LOGGER.debug("Chat {} is now shared with users:{} groups:{}", code, session.getAccessibleUsers(),
+					session.getAccessibleGroups());
+		}
+	}
+
+	@Override
+	public int dropTransientChatSessionsOpenedBefore(Date before) {
+		int dropped = 0;
+		for (GUserChatSession session : this.sessionRepository.findByTransientRunTrueAndDateCreatedBefore(before)) {
+			try {
+				remove(session);
+				dropped++;
+			} catch (RuntimeException notDropped) {
+				LOGGER.error("The transient chat " + session.getCode() + " of a run from " + session.getRunOrigin()
+						+ " could not be dropped", notDropped);
+			}
+		}
+		if (dropped > 0) {
+			LOGGER.info("Dropped {} transient chat(s) opened before {} whose run never dropped them", dropped, before);
+		}
+		return dropped;
+	}
+
 	@Override
 	public void removeChatSession(String code) throws GeboChatSessionLifecycleException {
-		GUserChatSession session = get(code);
+		remove(get(code));
+	}
+
+	/** Removes the conversation with everything it holds, whoever asks. */
+	private void remove(GUserChatSession session) {
+		final String code = session.getCode();
 		this.fullSessionStateService.deleteState(code);
 		this.shrinkedSessionStateService.deleteState(code);
 		try {
@@ -1009,6 +1096,19 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
 		if (!isSessionExisting(request))
 			createChatSession(request);
+	}
+
+	@Override
+	public void ensureChatSessionExists(GeboChatRequest request, GChatSessionOpeningOptions options)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		if (!isSessionExisting(request)) {
+			createChatSession(request, options);
+		} else if (options != null && options.isShared()) {
+			// the run goes on in a conversation somebody else may have opened: whoever
+			// the run says works in it is granted it before the conversation is read
+			shareChatSession(request.getUserChatContextCode(), options.getSharedWithUsers(),
+					options.getSharedWithGroups());
+		}
 	}
 
 	private ChatFullSessionState retrieveAndCheck(String id) throws GeboChatSessionLifecycleException {
