@@ -41,9 +41,9 @@ public class A2ATaskBridge {
 		}
 		try {
 			if (exported.getKind() == A2AExportedAgent.Kind.NETWORK) {
-				return runner.runNetwork(exported.getNetworkCode(), inputText, sink);
+				return runner.runNetwork(exported.getNetworkCode(), inputText, sink, "A2A");
 			}
-			return runner.runAgent(exported.getAgentConfigCode(), SINGLE_AGENT_CODE_PREFIX, inputText, sink);
+			return runner.runAgent(exported.getAgentConfigCode(), SINGLE_AGENT_CODE_PREFIX, inputText, sink, "A2A");
 		} catch (AgentException ae) {
 			LOGGER.error("A2A task execution failed for skill '" + skillId + "'", ae);
 			throw ae;

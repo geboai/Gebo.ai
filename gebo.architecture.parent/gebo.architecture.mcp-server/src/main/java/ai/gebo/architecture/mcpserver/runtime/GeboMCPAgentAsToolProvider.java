@@ -72,7 +72,7 @@ public class GeboMCPAgentAsToolProvider {
 			ToolCallback callback = ToolCallbackDeclarationUtil.declare((GeboMcpAgentToolRequest input, ToolContext ctx) -> {
 				try {
 					return runner.runAgent(agentCode, SINGLE_AGENT_CODE_PREFIX,
-							input != null ? input.getRequest() : "", null);
+							input != null ? input.getRequest() : "", null, "MCP");
 				} catch (AgentException e) {
 					LOGGER.error("MCP tool '" + toolName + "' (agent " + agentCode + ") failed", e);
 					throw new IllegalStateException("The agent could not answer: " + e.getMessage(), e);

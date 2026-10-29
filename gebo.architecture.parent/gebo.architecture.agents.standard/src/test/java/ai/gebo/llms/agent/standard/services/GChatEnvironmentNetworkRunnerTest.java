@@ -22,6 +22,15 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyList;
+import java.util.Map;
+import org.mockito.ArgumentCaptor;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GChatSessionOpeningOptions;
+import ai.gebo.model.OperationStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
@@ -54,8 +63,11 @@ class GChatEnvironmentNetworkRunnerTest {
 	private IGChatSessionLifeCycleService lifeCycle;
 	private IGReactiveChatAgentsNetworkService service;
 	private IGConfigurableChatModel chatModel;
+	private IGUserUploadContentHandler uploadHandler;
 	private GeboChatRequest request;
 	private GeboChatResponse response;
+	private LLMChatRequestResources resources;
+	private MinimalChatContext minimalContext;
 	private GAgentsNetwork network;
 	private GChatEnvironmentNetworkRunner runner;
 
@@ -73,9 +85,11 @@ class GChatEnvironmentNetworkRunnerTest {
 		when(service.getFlux()).thenReturn(Flux.empty());
 		IGRuntimeBinder binder = mock(IGRuntimeBinder.class);
 		when(binder.getImplementationOf(IGReactiveChatAgentsNetworkServiceFactory.class)).thenReturn(factory);
+		uploadHandler = mock(IGUserUploadContentHandler.class);
 		ObjectProvider<IGUserUploadContentHandler> uploads = mock(ObjectProvider.class);
-		runner = new GChatEnvironmentNetworkRunner(binder, lifeCycle, chatModels, uploads);
-
+		when(uploads.getIfAvailable()).thenReturn(uploadHandler);
+		runner = new GChatEnvironmentNetworkRunner(binder, lifeCycle, chatModels, uploads,
+				GNetworkEnvironmentBuilder.plain(), null);
 		network = new GAgentsNetwork();
 		network.setCode("the-network");
 		request = new GeboChatRequest();
@@ -84,10 +98,12 @@ class GChatEnvironmentNetworkRunnerTest {
 		request.setQuery("What is new?");
 		response = new GeboChatResponse();
 		response.setId("response-1");
+		resources = mock(LLMChatRequestResources.class);
+		minimalContext = mock(MinimalChatContext.class);
 		when(lifeCycle.getSessionChatModel(request)).thenReturn(chatModel);
 		when(lifeCycle.createEmptyResponse(request)).thenReturn(response);
-		when(lifeCycle.startRequest(eq(request), eq(chatModel), any())).thenReturn(mock(LLMChatRequestResources.class));
-		when(lifeCycle.getMinimalChatContext(eq(request), anyInt())).thenReturn(mock(MinimalChatContext.class));
+		when(lifeCycle.startRequest(eq(request), eq(chatModel), any())).thenReturn(resources);
+		when(lifeCycle.getMinimalChatContext(eq(request), anyInt())).thenReturn(minimalContext);
 	}
 
 	@Test
@@ -107,15 +123,84 @@ class GChatEnvironmentNetworkRunnerTest {
 		ending.verify(lifeCycle).endRequest(request, response);
 		ending.verify(lifeCycle).chatRequestCompleted(request, chatModel);
 		ending.verify(lifeCycle).releaseRequest(request);
+		verify(lifeCycle, never()).removeChatSession(any());
 	}
 
 	@Test
-	void aRunThatFailedReleasesItsRequestAndSavesNothing() throws Exception {
+	void theConversationIsOpenedOrSharedBeforeAnythingReadsIt() throws Exception {
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).origin("HARNESS")
+				.sharedWithUsers(List.of("the-harness-account", "the-admin")).build());
+
+		ArgumentCaptor<GChatSessionOpeningOptions> options = ArgumentCaptor.forClass(GChatSessionOpeningOptions.class);
+		InOrder opening = inOrder(lifeCycle);
+		opening.verify(lifeCycle).ensureChatSessionExists(eq(request), options.capture());
+		opening.verify(lifeCycle).getSessionChatModel(request);
+		assertEquals(List.of("the-harness-account", "the-admin"), options.getValue().getSharedWithUsers());
+		assertEquals("HARNESS", options.getValue().getRunOrigin());
+		assertTrue(!options.getValue().isTransientRun());
+	}
+
+	@Test
+	void theFilesTheCallerSentAreCarriedByTheRequestWhoseStartTakesThemIn() throws Exception {
+		UserUploadedContent stored = new UserUploadedContent();
+		stored.setFileName("notes.txt");
+		when(uploadHandler.chatSessionUpload(eq("conversation-1"), anyList())).thenReturn(OperationStatus.of(List.of(stored)));
+		when(lifeCycle.startRequest(eq(request), eq(chatModel), any())).thenAnswer(invocation -> {
+			assertEquals(List.of(stored), request.getUserUploadedContents(),
+					"the request carries the stored files when it is started, as a chat's does");
+			return resources;
+		});
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run(network, request,
+				new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(), List.of()), null);
+
+		verify(lifeCycle).startRequest(eq(request), eq(chatModel), any());
+		verify(lifeCycle, never()).addUploadedDocument(any(), any(), any(), any());
+	}
+
+	@Test
+	void theNetworkIsGivenTheEnvironmentOfTheRunWithTheKnowledgeBasesOfTheConversation() throws Exception {
+		GKnowledgeBase kb = new GKnowledgeBase();
+		kb.setCode("kb-1");
+		when(lifeCycle.getSessionAvailableKnowledgeBases(request)).thenReturn(List.of(kb));
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.environmentOfThisRun(Map.of("OF_THE_CALLER", "yes")).build());
+
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<Map<String, Object>> environment = ArgumentCaptor.forClass(Map.class);
+		verify(service).executeNetwork(any(), any(), environment.capture());
+		assertEquals(List.of("kb-1"), environment.getValue().get(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE));
+		assertEquals("yes", environment.getValue().get("OF_THE_CALLER"));
+		verify(resources).setAvailableKnowledgeBaseCodes(List.of("kb-1"));
+		verify(minimalContext).setAvailableKnowledgeBaseCodes(List.of("kb-1"));
+	}
+
+	@Test
+	void aTransientConversationIsDroppedWhenTheRunIsOverAndNothingOfItIsKept() throws Exception {
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).transientConversation(true)
+				.origin("MCP").build());
+
+		verify(lifeCycle).releaseRequest(request);
+		verify(lifeCycle).removeChatSession("conversation-1");
+		verify(lifeCycle, never()).endRequest(any(), any());
+		verify(lifeCycle, never()).chatRequestCompleted(any(), any());
+	}
+
+	@Test
+	void aRunThatFailedReleasesItsRequestSavesNothingAndNamesItsConversation() throws Exception {
 		when(service.executeNetwork(any(), any(), any())).thenThrow(new AgentException("The model is down"));
 
-		assertThrows(AgentException.class,
+		GChatEnvironmentRunException failure = assertThrows(GChatEnvironmentRunException.class,
 				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, null));
 
+		assertEquals("conversation-1", failure.getChatContextCode());
 		verify(lifeCycle).releaseRequest(request);
 		verify(lifeCycle, never()).endRequest(any(), any());
 		verify(lifeCycle, never()).chatRequestCompleted(any(), any());

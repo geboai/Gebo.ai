@@ -6,7 +6,6 @@ import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.util.concurrent.atomic.AtomicReference;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,8 +22,7 @@ import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
-import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -66,6 +64,8 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 */
 	protected final PipelineType pipelineType;
 	protected final IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService;
+	/** Builds the environment of the network, the same a run from outside a chat is given. */
+	protected final GNetworkEnvironmentBuilder environmentBuilder;
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
 
@@ -90,7 +90,20 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, pipelineType, defaultNetworksService, null);
+	}
+
+	/**
+	 * The same, building the environment of the network with the given builder (the
+	 * platform's, with its contributors); null for a plain one.
+	 */
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder) {
 		this.factory = factory;
+		this.environmentBuilder = environmentBuilder != null ? environmentBuilder : GNetworkEnvironmentBuilder.plain();
 		this.agentsNetworkDataSource = agentsNetworkDataSource;
 		this.lifeCycleService = lifeCycleService;
 		this.stepId = stepId;
@@ -147,30 +160,13 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin buildNetworkEnvironment(...) pipeline step:" + getStepId());
 		}
-		final Map<String, Object> environment = new HashMap<String, Object>();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		List<GKnowledgeBase> knowledgeBases = lifeCycleService.getSessionAvailableKnowledgeBases(request);
 		List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
-		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
-		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
-				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
-		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED,
-				Boolean.TRUE.equals(request.getSearchRequested()));
-		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN,
-				Boolean.TRUE.equals(request.getSearchForbidden()));
-		// detected on the user's own message when the request entered the pipelines
-		if (request.getUserLanguage() != null) {
-			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE, request.getUserLanguage());
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT) + " searchRequested:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED) + " searchForbidden:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN) + " userLanguage:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE));
-		}
+		// what the pipeline steps put in the shared environment, the standard entries,
+		// the contributors': the same environment a run from outside a chat is given
+		final Map<String, Object> environment = environmentBuilder.build(runtimeData, knowledgeBaseCodes, null);
 		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);
 			LOGGER.trace("<USER_QUERY>");
 			LOGGER.trace(String.valueOf(request.getQuery()));
 			LOGGER.trace("</USER_QUERY>");
