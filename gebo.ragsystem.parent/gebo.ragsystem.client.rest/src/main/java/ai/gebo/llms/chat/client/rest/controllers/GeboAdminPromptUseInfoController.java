@@ -31,7 +31,7 @@ public class GeboAdminPromptUseInfoController {
 	}
 
 	@GetMapping(value = "findAll", produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<GPromptUseInfo> findAll() {
+	public List<GPromptUseInfo> findAllPromptUseInfo() {
 		return promptUseDao.getConfigurations();
 	}
 
