@@ -1394,7 +1394,8 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		try {
 			if (handler != null && hasAnsweredInteraction(context)) {
 				IChatRequestContext ccontext = context.createChatRequestContext();
-				String content = handler.textResponse(prompt, cache, ccontext);
+				// the title prompt takes nothing but the question and the language
+				String content = handler.textResponse(prompt, Map.of(), ccontext);
 				String pureText = ClientChatCallUtil.removeThinking(content);
 				data.setDescription(pureText);
 				saveDescription(context, pureText);

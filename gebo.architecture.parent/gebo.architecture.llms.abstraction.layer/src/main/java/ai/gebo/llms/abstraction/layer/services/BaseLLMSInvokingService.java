@@ -716,7 +716,7 @@ public class BaseLLMSInvokingService {
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams) throws LLMConfigException {
 
-		Map<String, Object> params = new HashMap<>(additionalParams);
+		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
@@ -735,7 +735,7 @@ public class BaseLLMSInvokingService {
 	protected GChatAnswer answerLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams) throws LLMConfigException {
-		Map<String, Object> params = new HashMap<>(additionalParams);
+		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		return chatModel.answer(prompt, params, context);
@@ -766,7 +766,7 @@ public class BaseLLMSInvokingService {
 	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams, Predicate<CharSequence> stopWhen) throws LLMConfigException {
-		Map<String, Object> params = new HashMap<>(additionalParams);
+		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 		final long start = System.currentTimeMillis();
@@ -833,7 +833,7 @@ public class BaseLLMSInvokingService {
 
 		String consolidate() throws LLMConfigException {
 			if (!currentlyCumulated.isEmpty()) {
-				Map<String, Object> params = new HashMap<>(additionalParams);
+				Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 				params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidatedText);
 				params.put(DOCUMENTS_TEMPLATE_VARIABLE, currentlyCumulated);
 				String result = chatModel.textResponse(prompt, params, context);
@@ -917,7 +917,7 @@ public class BaseLLMSInvokingService {
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Object consolidated,
 			Map<String, Object> additionalParams, Class<T> type) throws LLMConfigException {
-		Map<String, Object> params = new HashMap<>(additionalParams);
+		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
