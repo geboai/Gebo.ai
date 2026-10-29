@@ -61,10 +61,10 @@ export class GeboAdminPromptUseInfoControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public findAll(observe?: 'body', reportProgress?: boolean): Observable<Array<GPromptUseInfo>>;
-    public findAll(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GPromptUseInfo>>>;
-    public findAll(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GPromptUseInfo>>>;
-    public findAll(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public findAllPromptUseInfo(observe?: 'body', reportProgress?: boolean): Observable<Array<GPromptUseInfo>>;
+    public findAllPromptUseInfo(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GPromptUseInfo>>>;
+    public findAllPromptUseInfo(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GPromptUseInfo>>>;
+    public findAllPromptUseInfo(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         let headers = this.defaultHeaders;
 
