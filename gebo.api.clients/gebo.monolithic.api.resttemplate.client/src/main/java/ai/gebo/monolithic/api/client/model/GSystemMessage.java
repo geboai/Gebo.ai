@@ -18,12 +18,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 /**
  * GSystemMessage
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
 
 public class GSystemMessage {
   @JsonProperty("id")
@@ -111,6 +113,9 @@ public class GSystemMessage {
 
   }  @JsonProperty("audience")
   private AudienceEnum audience = null;
+
+  @JsonProperty("recipients")
+  private List<String> recipients = null;
 
   @JsonProperty("dismissible")
   private Boolean dismissible = null;
@@ -253,6 +258,32 @@ public class GSystemMessage {
     this.audience = audience;
   }
 
+  public GSystemMessage recipients(List<String> recipients) {
+    this.recipients = recipients;
+    return this;
+  }
+
+  public GSystemMessage addRecipientsItem(String recipientsItem) {
+    if (this.recipients == null) {
+      this.recipients = new ArrayList<>();
+    }
+    this.recipients.add(recipientsItem);
+    return this;
+  }
+
+   /**
+   * Get recipients
+   * @return recipients
+  **/
+  @Schema(description = "")
+  public List<String> getRecipients() {
+    return recipients;
+  }
+
+  public void setRecipients(List<String> recipients) {
+    this.recipients = recipients;
+  }
+
   public GSystemMessage dismissible(Boolean dismissible) {
     this.dismissible = dismissible;
     return this;
@@ -360,6 +391,7 @@ public class GSystemMessage {
         Objects.equals(this.summary, gsystemMessage.summary) &&
         Objects.equals(this.detail, gsystemMessage.detail) &&
         Objects.equals(this.audience, gsystemMessage.audience) &&
+        Objects.equals(this.recipients, gsystemMessage.recipients) &&
         Objects.equals(this.dismissible, gsystemMessage.dismissible) &&
         Objects.equals(this.revision, gsystemMessage.revision) &&
         Objects.equals(this.createdAt, gsystemMessage.createdAt) &&
@@ -369,7 +401,7 @@ public class GSystemMessage {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, source, key, severity, summary, detail, audience, dismissible, revision, createdAt, updatedAt, expiresAt);
+    return Objects.hash(id, source, key, severity, summary, detail, audience, recipients, dismissible, revision, createdAt, updatedAt, expiresAt);
   }
 
 
@@ -385,6 +417,7 @@ public class GSystemMessage {
     sb.append("    summary: ").append(toIndentedString(summary)).append("\n");
     sb.append("    detail: ").append(toIndentedString(detail)).append("\n");
     sb.append("    audience: ").append(toIndentedString(audience)).append("\n");
+    sb.append("    recipients: ").append(toIndentedString(recipients)).append("\n");
     sb.append("    dismissible: ").append(toIndentedString(dismissible)).append("\n");
     sb.append("    revision: ").append(toIndentedString(revision)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");

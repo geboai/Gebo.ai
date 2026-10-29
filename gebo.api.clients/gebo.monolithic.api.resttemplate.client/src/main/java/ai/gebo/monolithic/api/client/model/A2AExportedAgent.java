@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * A2AExportedAgent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
 
 public class A2AExportedAgent {
   /**
@@ -67,6 +67,9 @@ public class A2AExportedAgent {
 
   @JsonProperty("skillName")
   private String skillName = null;
+
+  @JsonProperty("chatProfileCode")
+  private String chatProfileCode = null;
 
   @JsonProperty("exposeMemberCapabilities")
   private Boolean exposeMemberCapabilities = null;
@@ -143,6 +146,24 @@ public class A2AExportedAgent {
     this.skillName = skillName;
   }
 
+  public A2AExportedAgent chatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
+    return this;
+  }
+
+   /**
+   * Get chatProfileCode
+   * @return chatProfileCode
+  **/
+  @Schema(description = "")
+  public String getChatProfileCode() {
+    return chatProfileCode;
+  }
+
+  public void setChatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
+  }
+
   public A2AExportedAgent exposeMemberCapabilities(Boolean exposeMemberCapabilities) {
     this.exposeMemberCapabilities = exposeMemberCapabilities;
     return this;
@@ -175,12 +196,13 @@ public class A2AExportedAgent {
         Objects.equals(this.networkCode, a2AExportedAgent.networkCode) &&
         Objects.equals(this.agentConfigCode, a2AExportedAgent.agentConfigCode) &&
         Objects.equals(this.skillName, a2AExportedAgent.skillName) &&
+        Objects.equals(this.chatProfileCode, a2AExportedAgent.chatProfileCode) &&
         Objects.equals(this.exposeMemberCapabilities, a2AExportedAgent.exposeMemberCapabilities);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(kind, networkCode, agentConfigCode, skillName, exposeMemberCapabilities);
+    return Objects.hash(kind, networkCode, agentConfigCode, skillName, chatProfileCode, exposeMemberCapabilities);
   }
 
 
@@ -193,6 +215,7 @@ public class A2AExportedAgent {
     sb.append("    networkCode: ").append(toIndentedString(networkCode)).append("\n");
     sb.append("    agentConfigCode: ").append(toIndentedString(agentConfigCode)).append("\n");
     sb.append("    skillName: ").append(toIndentedString(skillName)).append("\n");
+    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    exposeMemberCapabilities: ").append(toIndentedString(exposeMemberCapabilities)).append("\n");
     sb.append("}");
     return sb.toString();

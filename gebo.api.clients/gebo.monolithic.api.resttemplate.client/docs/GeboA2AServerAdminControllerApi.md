@@ -1,12 +1,13 @@
 # GeboA2AServerAdminControllerApi
 
-All URIs are relative to *http://localhost:12998*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deleteA2AServer**](GeboA2AServerAdminControllerApi.md#deleteA2AServer) | **DELETE** /api/admin/GeboA2AServerAdminController/deleteA2AServer | 
 [**findAllA2AServer**](GeboA2AServerAdminControllerApi.md#findAllA2AServer) | **GET** /api/admin/GeboA2AServerAdminController/findAll | 
 [**findByCodeA2AServer**](GeboA2AServerAdminControllerApi.md#findByCodeA2AServer) | **GET** /api/admin/GeboA2AServerAdminController/findByCode | 
+[**getExportKindsA2AServer**](GeboA2AServerAdminControllerApi.md#getExportKindsA2AServer) | **GET** /api/admin/GeboA2AServerAdminController/getExportKinds | 
 [**insertA2AServer**](GeboA2AServerAdminControllerApi.md#insertA2AServer) | **POST** /api/admin/GeboA2AServerAdminController/insertA2AServer | 
 [**updateA2AServer**](GeboA2AServerAdminControllerApi.md#updateA2AServer) | **POST** /api/admin/GeboA2AServerAdminController/updateA2AServer | 
 
@@ -125,6 +126,45 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**OperationStatusA2AServerConfig**](OperationStatusA2AServerConfig.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getExportKindsA2AServer"></a>
+# **getExportKindsA2AServer**
+> A2AExportKinds getExportKindsA2AServer()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboA2AServerAdminControllerApi;
+
+
+GeboA2AServerAdminControllerApi apiInstance = new GeboA2AServerAdminControllerApi();
+try {
+    A2AExportKinds result = apiInstance.getExportKindsA2AServer();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboA2AServerAdminControllerApi#getExportKindsA2AServer");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**A2AExportKinds**](A2AExportKinds.md)
 
 ### Authorization
 

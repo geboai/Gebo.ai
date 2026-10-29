@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Oauth2ProviderModifiableData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
 
 public class Oauth2ProviderModifiableData {
   @JsonProperty("code")
@@ -192,6 +194,9 @@ public class Oauth2ProviderModifiableData {
   @JsonProperty("description")
   private String description = null;
 
+  @JsonProperty("resourceServerAudiences")
+  private List<String> resourceServerAudiences = null;
+
   @JsonProperty("readOnly")
   private Boolean readOnly = null;
 
@@ -339,6 +344,32 @@ public class Oauth2ProviderModifiableData {
     this.description = description;
   }
 
+  public Oauth2ProviderModifiableData resourceServerAudiences(List<String> resourceServerAudiences) {
+    this.resourceServerAudiences = resourceServerAudiences;
+    return this;
+  }
+
+  public Oauth2ProviderModifiableData addResourceServerAudiencesItem(String resourceServerAudiencesItem) {
+    if (this.resourceServerAudiences == null) {
+      this.resourceServerAudiences = new ArrayList<>();
+    }
+    this.resourceServerAudiences.add(resourceServerAudiencesItem);
+    return this;
+  }
+
+   /**
+   * Get resourceServerAudiences
+   * @return resourceServerAudiences
+  **/
+  @Schema(description = "")
+  public List<String> getResourceServerAudiences() {
+    return resourceServerAudiences;
+  }
+
+  public void setResourceServerAudiences(List<String> resourceServerAudiences) {
+    this.resourceServerAudiences = resourceServerAudiences;
+  }
+
   public Oauth2ProviderModifiableData readOnly(Boolean readOnly) {
     this.readOnly = readOnly;
     return this;
@@ -375,12 +406,13 @@ public class Oauth2ProviderModifiableData {
         Objects.equals(this.authGrantType, oauth2ProviderModifiableData.authGrantType) &&
         Objects.equals(this.configurationType, oauth2ProviderModifiableData.configurationType) &&
         Objects.equals(this.description, oauth2ProviderModifiableData.description) &&
+        Objects.equals(this.resourceServerAudiences, oauth2ProviderModifiableData.resourceServerAudiences) &&
         Objects.equals(this.readOnly, oauth2ProviderModifiableData.readOnly);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, authProvider, providerConfiguration, oauth2ClientContent, authClientMethod, authGrantType, configurationType, description, readOnly);
+    return Objects.hash(code, authProvider, providerConfiguration, oauth2ClientContent, authClientMethod, authGrantType, configurationType, description, resourceServerAudiences, readOnly);
   }
 
 
@@ -397,6 +429,7 @@ public class Oauth2ProviderModifiableData {
     sb.append("    authGrantType: ").append(toIndentedString(authGrantType)).append("\n");
     sb.append("    configurationType: ").append(toIndentedString(configurationType)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    resourceServerAudiences: ").append(toIndentedString(resourceServerAudiences)).append("\n");
     sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("}");
     return sb.toString();

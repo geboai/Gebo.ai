@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **communicationList** | **List&lt;String&gt;** |  |  [optional]
 **controller** | **Boolean** |  |  [optional]
 **canCallTools** | **Boolean** |  |  [optional]
+**additionalToolSources** | **List&lt;String&gt;** |  |  [optional]
 **canCallOtherAgents** | **Boolean** |  |  [optional]
 **networkAgentName** | **String** |  |  [optional]
 

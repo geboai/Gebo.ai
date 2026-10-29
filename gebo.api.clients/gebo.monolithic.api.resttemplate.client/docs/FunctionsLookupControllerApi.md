@@ -1,14 +1,54 @@
 # FunctionsLookupControllerApi
 
-All URIs are relative to *http://localhost:12998*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**getAIToolsAndResourcesLibraryType**](FunctionsLookupControllerApi.md#getAIToolsAndResourcesLibraryType) | **GET** /api/admin/FunctionsLookupController/getAIToolsAndResourcesLibraryType | 
 [**getAllFunctions**](FunctionsLookupControllerApi.md#getAllFunctions) | **GET** /api/admin/FunctionsLookupController/getAllFunctions | 
 [**getAllFunctionsTree**](FunctionsLookupControllerApi.md#getAllFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllFunctionsTree | 
 [**getAllLocalFunctions**](FunctionsLookupControllerApi.md#getAllLocalFunctions) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctions | 
 [**getAllLocalFunctionsTree**](FunctionsLookupControllerApi.md#getAllLocalFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctionsTree | 
 [**getToolSourceInfos**](FunctionsLookupControllerApi.md#getToolSourceInfos) | **GET** /api/admin/FunctionsLookupController/getToolSourceInfos | 
+
+<a name="getAIToolsAndResourcesLibraryType"></a>
+# **getAIToolsAndResourcesLibraryType**
+> List&lt;AIToolsAndResourcesLibraryType&gt; getAIToolsAndResourcesLibraryType()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.FunctionsLookupControllerApi;
+
+
+FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
+try {
+    List<AIToolsAndResourcesLibraryType> result = apiInstance.getAIToolsAndResourcesLibraryType();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FunctionsLookupControllerApi#getAIToolsAndResourcesLibraryType");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;AIToolsAndResourcesLibraryType&gt;**](AIToolsAndResourcesLibraryType.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="getAllFunctions"></a>
 # **getAllFunctions**

@@ -24,7 +24,7 @@ import java.util.List;
  * AgentNetworkParticipant
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-23T06:28:36.501497659+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
 
 public class AgentNetworkParticipant {
   @JsonProperty("agentConfigCode")
@@ -86,6 +86,9 @@ public class AgentNetworkParticipant {
 
   @JsonProperty("canCallTools")
   private Boolean canCallTools = null;
+
+  @JsonProperty("additionalToolSources")
+  private List<String> additionalToolSources = null;
 
   @JsonProperty("canCallOtherAgents")
   private Boolean canCallOtherAgents = null;
@@ -263,6 +266,32 @@ public class AgentNetworkParticipant {
     this.canCallTools = canCallTools;
   }
 
+  public AgentNetworkParticipant additionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+    return this;
+  }
+
+  public AgentNetworkParticipant addAdditionalToolSourcesItem(String additionalToolSourcesItem) {
+    if (this.additionalToolSources == null) {
+      this.additionalToolSources = new ArrayList<>();
+    }
+    this.additionalToolSources.add(additionalToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get additionalToolSources
+   * @return additionalToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getAdditionalToolSources() {
+    return additionalToolSources;
+  }
+
+  public void setAdditionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+  }
+
   public AgentNetworkParticipant canCallOtherAgents(Boolean canCallOtherAgents) {
     this.canCallOtherAgents = canCallOtherAgents;
     return this;
@@ -318,13 +347,14 @@ public class AgentNetworkParticipant {
         Objects.equals(this.communicationList, agentNetworkParticipant.communicationList) &&
         Objects.equals(this.controller, agentNetworkParticipant.controller) &&
         Objects.equals(this.canCallTools, agentNetworkParticipant.canCallTools) &&
+        Objects.equals(this.additionalToolSources, agentNetworkParticipant.additionalToolSources) &&
         Objects.equals(this.canCallOtherAgents, agentNetworkParticipant.canCallOtherAgents) &&
         Objects.equals(this.networkAgentName, agentNetworkParticipant.networkAgentName);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(agentConfigCode, agentContextualName, inputNode, outputNode, allowedToNotifyUser, communicationPolicy, communicationList, controller, canCallTools, canCallOtherAgents, networkAgentName);
+    return Objects.hash(agentConfigCode, agentContextualName, inputNode, outputNode, allowedToNotifyUser, communicationPolicy, communicationList, controller, canCallTools, additionalToolSources, canCallOtherAgents, networkAgentName);
   }
 
 
@@ -342,6 +372,7 @@ public class AgentNetworkParticipant {
     sb.append("    communicationList: ").append(toIndentedString(communicationList)).append("\n");
     sb.append("    controller: ").append(toIndentedString(controller)).append("\n");
     sb.append("    canCallTools: ").append(toIndentedString(canCallTools)).append("\n");
+    sb.append("    additionalToolSources: ").append(toIndentedString(additionalToolSources)).append("\n");
     sb.append("    canCallOtherAgents: ").append(toIndentedString(canCallOtherAgents)).append("\n");
     sb.append("    networkAgentName: ").append(toIndentedString(networkAgentName)).append("\n");
     sb.append("}");

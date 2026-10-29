@@ -1,16 +1,16 @@
 # GeboAdminPromptUseInfoControllerApi
 
-All URIs are relative to *http://localhost:12998*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**findAll**](GeboAdminPromptUseInfoControllerApi.md#findAll) | **GET** /api/admin/GeboAdminPromptUseController/findAll | 
+[**findAllPromptUseInfo**](GeboAdminPromptUseInfoControllerApi.md#findAllPromptUseInfo) | **GET** /api/admin/GeboAdminPromptUseController/findAll | 
 [**findByCode**](GeboAdminPromptUseInfoControllerApi.md#findByCode) | **GET** /api/admin/GeboAdminPromptUseController/findByCode | 
 [**findByModule**](GeboAdminPromptUseInfoControllerApi.md#findByModule) | **GET** /api/admin/GeboAdminPromptUseController/findByModule | 
 
-<a name="findAll"></a>
-# **findAll**
-> List&lt;GPromptUseInfo&gt; findAll()
+<a name="findAllPromptUseInfo"></a>
+# **findAllPromptUseInfo**
+> List&lt;GPromptUseInfo&gt; findAllPromptUseInfo()
 
 
 
@@ -23,10 +23,10 @@ Method | HTTP request | Description
 
 GeboAdminPromptUseInfoControllerApi apiInstance = new GeboAdminPromptUseInfoControllerApi();
 try {
-    List<GPromptUseInfo> result = apiInstance.findAll();
+    List<GPromptUseInfo> result = apiInstance.findAllPromptUseInfo();
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling GeboAdminPromptUseInfoControllerApi#findAll");
+    System.err.println("Exception when calling GeboAdminPromptUseInfoControllerApi#findAllPromptUseInfo");
     e.printStackTrace();
 }
 ```
