@@ -9,6 +9,13 @@
 */
 -->
 <gebo-ai-notifications [messages]="lastInteractionMessages"></gebo-ai-notifications>
+<div class="gebo-ai-reusable-chat-layout">
+  <!-- CUSTOM AREA on the left of the chat, filled by the page reusing it -->
+  @if (leftArea) {
+    <div class="gebo-ai-reusable-chat-layout__area gebo-ai-reusable-chat-layout__area--left">
+      <ng-container *ngTemplateOutlet="leftArea; context: areaContext"></ng-container>
+    </div>
+  }
 <div class="gebo-ai-reusable-chat">
   <div class="gebo-ai-reusable-chat__info">
     <p-dialog [modal]="true" [(visible)]="userInfoOverlayVisible">
@@ -250,6 +257,12 @@
       [interactionDisabled]="loading" (removeDocument)="onRemoveChatDocument($event)"
       (clearDocuments)="onClearChatDocuments()">
     </gebo-ai-selected-chat-documents>
+    <!-- CUSTOM AREA between the message box and the controls over it, filled by the page reusing the chat -->
+    @if (aboveInputArea) {
+      <div class="gebo-ai-reusable-chat__above-input-area">
+        <ng-container *ngTemplateOutlet="aboveInputArea; context: areaContext"></ng-container>
+      </div>
+    }
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
       [disableFilesBrowsers]="disableFilesBrowsers"
       [hasExternalChatWithDocs]="chosenExternalRefs.length > 0"
@@ -277,6 +290,13 @@
       (cancelAction)="changeDescriptionDialogOpened=false"
     (saveAction)="doSaveChangedDescription()"></gebo-ai-chat-change-description>
   </div>
+</div>
+  <!-- CUSTOM AREA on the right of the chat, filled by the page reusing it -->
+  @if (rightArea) {
+    <div class="gebo-ai-reusable-chat-layout__area gebo-ai-reusable-chat-layout__area--right">
+      <ng-container *ngTemplateOutlet="rightArea; context: areaContext"></ng-container>
+    </div>
+  }
 </div>
 <p-dialog [visible]="feedbackDialogOpened" [modal]="true" [closable]="true" (visibleChange)="$event ? null : closeFeedbackDialog()"
   [style]="{width: '32rem', maxWidth: '95vw'}" [formGroup]="feedbackFormGroup">
