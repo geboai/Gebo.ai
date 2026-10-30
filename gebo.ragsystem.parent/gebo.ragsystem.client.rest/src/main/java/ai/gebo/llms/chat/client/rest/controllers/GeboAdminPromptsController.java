@@ -32,6 +32,9 @@ import ai.gebo.architecture.ai.model.GPromptUseInfo;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.ai.service.IGPromptUseInfoDao;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import org.springframework.beans.factory.ObjectProvider;
+import ai.gebo.architecture.ai.service.IGPromptPlaceholdersCatalog;
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -64,6 +67,34 @@ public class GeboAdminPromptsController {
 	 * Deployment switch telling whether prompt templates may be edited from the UI.
 	 */
 	final GPromptTemplateEditingConfig editingConfig;
+
+	/** What a prompt may name and be sure somebody fills; absent where no provider is deployed. */
+	final ObjectProvider<IGPromptPlaceholdersCatalog> placeholdersCatalog;
+
+	/** The placeholders a prompt may name: what the renderer fills on every call, and what is filled on demand. */
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class KnownPromptPlaceholders {
+		private List<String> builtIn = new ArrayList<String>();
+		private List<String> onDemand = new ArrayList<String>();
+	}
+
+	/**
+	 * The placeholders any prompt may name, beside the ones of its own use (see
+	 * {@link #findGPromptUseInfoByUseCode}): a prompt saved with another one is refused.
+	 */
+	@GetMapping(value = "getKnownPromptPlaceholders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public KnownPromptPlaceholders getKnownPromptPlaceholders() {
+		final IGPromptPlaceholdersCatalog catalog = placeholdersCatalog != null ? placeholdersCatalog.getIfAvailable()
+				: null;
+		final KnownPromptPlaceholders known = new KnownPromptPlaceholders();
+		if (catalog != null) {
+			known.setBuiltIn(catalog.builtInPlaceholders().stream().sorted().toList());
+			known.setOnDemand(catalog.knownPlaceholders().stream().sorted().toList());
+		}
+		return known;
+	}
 
 	/**
 	 * Tells the UI whether prompt template editing (save/delete) is enabled for

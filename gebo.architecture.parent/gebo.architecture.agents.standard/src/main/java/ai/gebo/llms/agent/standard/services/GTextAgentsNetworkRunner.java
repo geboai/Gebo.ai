@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
-import ai.gebo.architecture.agents.model.GAgentsNetwork.CommunicationPolicy;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -91,8 +90,7 @@ public class GTextAgentsNetworkRunner {
 	}
 
 	/**
-	 * Runs a single agent, as a network made of that agent alone behind the chat
-	 * input adapter.
+	 * Runs a single agent, as a network made of that agent alone.
 	 *
 	 * @param codePrefix prefix of the code of the ephemeral network, for the logs
 	 * @throws AgentException when the agent configuration is missing or the run fails
@@ -173,29 +171,21 @@ public class GTextAgentsNetworkRunner {
 	}
 
 	/**
-	 * An ephemeral chat network made of the chat input adapter (the input node,
-	 * turning the chat runtime data into the query) and the agent (the output
-	 * node), for an agent that answers with chat envelopes.
+	 * An ephemeral network made of the agent alone, asked the question itself:
+	 * input and output node at once.
 	 */
 	public GAgentsNetwork adaptedSingleAgentNetwork(String agentConfigCode, String codePrefix) {
-		AgentNetworkParticipant adapter = new AgentNetworkParticipant();
-		adapter.setAgentConfigCode(ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER);
-		adapter.setInputNode(true);
-		adapter.setOutputNode(false);
-		adapter.setCommunicationPolicy(CommunicationPolicy.ALLOW_ALL);
 		AgentNetworkParticipant agent = new AgentNetworkParticipant();
 		agent.setAgentConfigCode(agentConfigCode);
-		agent.setInputNode(false);
+		agent.setInputNode(true);
 		agent.setOutputNode(true);
 		agent.setAllowedToNotifyUser(true);
-		agent.setCommunicationPolicy(CommunicationPolicy.ALLOW_ALL);
-		adapter.setCommunicationList(List.of(agent.getNetworkAgentName()));
-		agent.setCommunicationList(List.of(adapter.getNetworkAgentName()));
+		agent.setCommunicationList(List.of());
 		GAgentsNetwork network = new GAgentsNetwork();
 		network.setCode((codePrefix != null ? codePrefix : "single-") + agentConfigCode);
-		network.setDescription("Ephemeral single-agent chat network for agent " + agentConfigCode);
-		network.setScenarioDescription("Single agent invoked directly from outside a chat, behind the chat input adapter");
-		network.setAgents(new ArrayList<>(List.of(adapter, agent)));
+		network.setDescription("Ephemeral single-agent network for agent " + agentConfigCode);
+		network.setScenarioDescription("Single agent invoked directly from outside a chat");
+		network.setAgents(new ArrayList<>(List.of(agent)));
 		network.setMaxLoopIteration(2);
 		return network;
 	}

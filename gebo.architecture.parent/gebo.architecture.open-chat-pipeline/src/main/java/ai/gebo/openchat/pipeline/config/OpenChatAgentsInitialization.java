@@ -27,7 +27,6 @@ import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.standard.config.StandardAgentsInitialization;
-import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
 import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
@@ -105,7 +104,8 @@ public class OpenChatAgentsInitialization {
 			public List<GAgentsNetwork> getConfigurations() {
 				GAgentsNetwork network = standardInit.createChatAgentsNetwork(OpenChatConstants.OPEN_CHAT_AGENTS_NETWORK,
 						OPEN_CHAT_NETWORK_DESCRIPTION,
-						ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER,
+						// the controller is the input node: no forwarding node in front
+						null,
 						OpenChatConstants.OPEN_CHAT_CONTROLLER_AGENT_CONFIG,
 						OpenChatConstants.OPEN_CHAT_ANSWER_WRITER_AGENT_CONFIG,
 						// null internal-KB config => no internal knowledge-base searcher node.
