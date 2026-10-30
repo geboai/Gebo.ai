@@ -93,6 +93,15 @@
                         [maxFractionDigits]="0" [min]="1" [max]="50"></p-inputNumber>
                       </gebo-ai-field>
                     </div>
+                    <div class="col-6">
+                      <gebo-ai-field id="rememberAcrossTurns" label="Remembers across the turns of a conversation"
+                        help="When on, what the agents worked out in a run is kept for the conversation and read by the next run in it, as the first contribution of their shared context. Off, the network forgets everything but what the conversation itself keeps.">
+                        <div class="flex align-items-center gap-2" gebo-ai-field-element>
+                          <p-checkbox formControlName="rememberAcrossTurns" [binary]="true" inputId="RememberAcrossTurnsCheck"></p-checkbox>
+                          <label for="RememberAcrossTurnsCheck" id="RememberAcrossTurnsLabel" gebo-ai-text class="text-sm">Keep a memory of each conversation</label>
+                        </div>
+                      </gebo-ai-field>
+                    </div>
                     @if (agenticChatNetworksEnabled) {
                       <div class="col-6">
                         <gebo-ai-field id="choosableForPipelineTypes" label="Choosable for chats"

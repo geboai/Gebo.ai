@@ -67,6 +67,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         agentsNetworkServiceFactoryId: new FormControl(null, Validators.required),
         agents: new FormControl(),
         readOnly: new FormControl(),
+        rememberAcrossTurns: new FormControl<boolean>(false),
         choosableForPipelineTypes: new FormControl(),
         accessibleToAll: new FormControl(),
         accessibleUsers: new FormControl(),
@@ -357,7 +358,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     private applyReadOnly(isReadOnly: boolean): void {
         this.readonly = isReadOnly;
-        const controls = ["maxLoopIteration", "choosableForPipelineTypes", "agentsNetworkServiceFactoryId"];
+        const controls = ["maxLoopIteration", "choosableForPipelineTypes", "agentsNetworkServiceFactoryId", "rememberAcrossTurns"];
         if (this.readonly) {
             this.participantFormGroup.disable({ emitEvent: false });
             this.addTargetControl.disable({ emitEvent: false });

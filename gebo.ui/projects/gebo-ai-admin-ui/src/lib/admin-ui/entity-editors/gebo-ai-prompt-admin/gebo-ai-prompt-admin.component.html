@@ -42,6 +42,17 @@
       <div class="col-12">
         <gebo-ai-prompt-editing-component formControlName="promptTemplate"></gebo-ai-prompt-editing-component>
       </div>
+      @if (knownPlaceholders.builtIn?.length || knownPlaceholders.onDemand?.length) {
+        <div class="col-12">
+          <p-message id="KnownPlaceholdersMsg" severity="secondary" styleClass="w-full">
+            <div class="flex flex-column gap-1 text-sm">
+              <span id="KnownPlaceholdersIntro" gebo-ai-text>Beside the placeholders of its own use, a prompt may name these; a prompt naming one nobody fills is refused when saved.</span>
+              <span><span id="BuiltInPlaceholdersLabel" gebo-ai-text class="font-semibold">Filled on every call:</span> <span class="font-monospace">{{ braced(knownPlaceholders.builtIn) }}</span></span>
+              <span><span id="OnDemandPlaceholdersLabel" gebo-ai-text class="font-semibold">Filled when named:</span> <span class="font-monospace">{{ braced(knownPlaceholders.onDemand) }}</span></span>
+            </div>
+          </p-message>
+        </div>
+      }
     </div>
   </div>
 </p-panel>

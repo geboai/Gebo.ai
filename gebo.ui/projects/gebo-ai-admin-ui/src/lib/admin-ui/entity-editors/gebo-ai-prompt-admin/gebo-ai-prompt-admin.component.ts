@@ -24,7 +24,7 @@
  */
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboAdminPromptsControllerService, GPromptTemplateConfig } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboAdminPromptsControllerService, GPromptTemplateConfig, KnownPromptPlaceholders } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
 import { map, Observable, of } from "rxjs";
@@ -52,6 +52,9 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
     /** Whether prompt template editing is enabled for this deployment (server flag). */
     public editingEnabled: boolean = false;
 
+    /** What any prompt may name and be sure somebody fills, beside the placeholders of its own use. */
+    public knownPlaceholders: KnownPromptPlaceholders = { builtIn: [], onDemand: [] };
+
     /** ConfirmationService kept for the delete confirmation dialog. */
     private confirmSvc: ConfirmationService;
 
@@ -74,6 +77,32 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
                 this.editingEnabled = enabled === true;
             }
         });
+        this.geboPromptConfigurationService.getKnownPromptPlaceholders().subscribe({
+            next: (known) => {
+                this.knownPlaceholders = known || { builtIn: [], onDemand: [] };
+            },
+            error: () => {
+                this.knownPlaceholders = { builtIn: [], onDemand: [] };
+            }
+        });
+    }
+
+    /** The placeholders as a prompt names them. */
+    public braced(names?: string[]): string {
+        return (names || []).map(name => "{" + name + "}").join(", ");
+    }
+
+    /**
+     * What the backend said of a failed save: a refused prompt answers a bad
+     * request whose body carries the reason as a message; anything else is a
+     * server error.
+     */
+    private static reasonOf(error: any): string {
+        const messages = error?.error?.messages;
+        if (Array.isArray(messages) && messages.length > 0) {
+            return messages.map((m: any) => (m?.summary ? m.summary + ": " : "") + (m?.detail || "")).join(" ");
+        }
+        return error?.error?.message || error?.message || String(error);
     }
 
     /** The template currently held by the form. */
@@ -141,7 +170,7 @@ export class GeboAIPromptAdminComponent extends BaseEntityEditingComponent<GProm
                 this.cancelAction.emit(true);
             },
             error: (error) => {
-                this.userMessages = [{ id: "SERVERERROR", severity: "error", detail: "Server error saving: " + error }];
+                this.userMessages = [{ id: "SERVERERROR", severity: "error", detail: "Server error saving: " + GeboAIPromptAdminComponent.reasonOf(error) }];
             },
             complete: () => {
                 this.loadingRelatedBackend = false;
