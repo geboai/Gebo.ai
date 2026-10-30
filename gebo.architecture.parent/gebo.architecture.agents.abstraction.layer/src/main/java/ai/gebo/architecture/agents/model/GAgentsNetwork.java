@@ -25,10 +25,6 @@ public class GAgentsNetwork extends GBaseObject
 		ALLOWED, NOT_ALLOWED
 	}
 
-	public static enum CommunicationPolicy {
-		ALLOW_ALL, DENY_ALL, ALLOW_LIST, DENY_LIST
-	}
-
 	public static enum AgentActivationType {
 		ON_RECEIVED_MESSAGE, EVERY_CYCLE
 	}
@@ -52,9 +48,7 @@ public class GAgentsNetwork extends GBaseObject
 		private boolean inputNode;
 		private boolean outputNode;
 		private boolean allowedToNotifyUser = true;
-		@NotNull
-		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
-
+		/** The agents this one may send to: the only thing that decides who talks to whom. */
 		private List<String> communicationList;
 
 		/**

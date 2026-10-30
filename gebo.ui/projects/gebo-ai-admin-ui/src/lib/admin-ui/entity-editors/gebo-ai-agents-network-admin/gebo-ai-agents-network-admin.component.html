@@ -301,11 +301,6 @@
                                 <label for="CanCallOtherAgentsCheck" id="CanCallOtherAgentsLabel" gebo-ai-text class="text-sm">May delegate to other agents</label>
                               </div>
                             </div>
-                            <div class="border-top-1 surface-border pt-2 flex flex-column gap-1">
-                              <label id="PolicyLabel" gebo-ai-text class="text-xs font-semibold text-muted-color">Communication policy</label>
-                              <p-select id="PolicySelect" gebo-ai-label formControlName="communicationPolicy" [options]="policyOptions" optionLabel="label" optionValue="value" dataKey="value" styleClass="w-full" appendTo="body"></p-select>
-                              <span id="PolicyHint" gebo-ai-text class="text-xs text-muted-color">Stored with the participant; the runtime does not enforce it yet.</span>
-                            </div>
                             <div class="border-top-1 surface-border pt-2">
                               <button pButton id="RemoveParticipantBtn" gebo-ai-label label="Remove from the network" icon="pi pi-trash" class="p-button-outlined p-button-danger p-button-sm" [disabled]="readonly" (click)="deleteParticipant(selected)"></button>
                             </div>

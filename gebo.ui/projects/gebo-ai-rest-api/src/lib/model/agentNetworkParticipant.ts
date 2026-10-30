@@ -16,20 +16,10 @@ export interface AgentNetworkParticipant {
     inputNode?: boolean;
     outputNode?: boolean;
     allowedToNotifyUser?: boolean;
-    communicationPolicy: AgentNetworkParticipant.CommunicationPolicyEnum;
     communicationList?: Array<string>;
     controller?: boolean;
     canCallTools?: boolean;
     additionalToolSources?: Array<string>;
     canCallOtherAgents?: boolean;
     networkAgentName?: string;
-}
-export namespace AgentNetworkParticipant {
-    export type CommunicationPolicyEnum = 'ALLOW_ALL' | 'DENY_ALL' | 'ALLOW_LIST' | 'DENY_LIST';
-    export const CommunicationPolicyEnum = {
-        ALLOWALL: 'ALLOW_ALL' as CommunicationPolicyEnum,
-        DENYALL: 'DENY_ALL' as CommunicationPolicyEnum,
-        ALLOWLIST: 'ALLOW_LIST' as CommunicationPolicyEnum,
-        DENYLIST: 'DENY_LIST' as CommunicationPolicyEnum
-    };
 }
