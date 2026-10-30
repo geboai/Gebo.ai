@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SecretWrapperGeboTokenContent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
 
 public class SecretWrapperGeboTokenContent {
   @JsonProperty("contextCode")

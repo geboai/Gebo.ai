@@ -26,7 +26,7 @@ import java.util.List;
  * GAgentsNetwork
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
 
 public class GAgentsNetwork {
   @JsonProperty("code")
@@ -110,6 +110,9 @@ public class GAgentsNetwork {
 
   }  @JsonProperty("choosableForPipelineTypes")
   private List<ChoosableForPipelineTypesEnum> choosableForPipelineTypes = null;
+
+  @JsonProperty("rememberAcrossTurns")
+  private Boolean rememberAcrossTurns = null;
 
   public GAgentsNetwork code(String code) {
     this.code = code;
@@ -454,6 +457,24 @@ public class GAgentsNetwork {
     this.choosableForPipelineTypes = choosableForPipelineTypes;
   }
 
+  public GAgentsNetwork rememberAcrossTurns(Boolean rememberAcrossTurns) {
+    this.rememberAcrossTurns = rememberAcrossTurns;
+    return this;
+  }
+
+   /**
+   * Get rememberAcrossTurns
+   * @return rememberAcrossTurns
+  **/
+  @Schema(description = "")
+  public Boolean isRememberAcrossTurns() {
+    return rememberAcrossTurns;
+  }
+
+  public void setRememberAcrossTurns(Boolean rememberAcrossTurns) {
+    this.rememberAcrossTurns = rememberAcrossTurns;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -480,12 +501,13 @@ public class GAgentsNetwork {
         Objects.equals(this.agents, gagentsNetwork.agents) &&
         Objects.equals(this.readOnly, gagentsNetwork.readOnly) &&
         Objects.equals(this.suggestedPurpose, gagentsNetwork.suggestedPurpose) &&
-        Objects.equals(this.choosableForPipelineTypes, gagentsNetwork.choosableForPipelineTypes);
+        Objects.equals(this.choosableForPipelineTypes, gagentsNetwork.choosableForPipelineTypes) &&
+        Objects.equals(this.rememberAcrossTurns, gagentsNetwork.rememberAcrossTurns);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, maxLoopIteration, accessibleToAll, accessibleUsers, accessibleGroups, aclAliases, agentsNetworkServiceFactoryId, scenarioDescription, agents, readOnly, suggestedPurpose, choosableForPipelineTypes);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, maxLoopIteration, accessibleToAll, accessibleUsers, accessibleGroups, aclAliases, agentsNetworkServiceFactoryId, scenarioDescription, agents, readOnly, suggestedPurpose, choosableForPipelineTypes, rememberAcrossTurns);
   }
 
 
@@ -511,6 +533,7 @@ public class GAgentsNetwork {
     sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
     sb.append("    suggestedPurpose: ").append(toIndentedString(suggestedPurpose)).append("\n");
     sb.append("    choosableForPipelineTypes: ").append(toIndentedString(choosableForPipelineTypes)).append("\n");
+    sb.append("    rememberAcrossTurns: ").append(toIndentedString(rememberAcrossTurns)).append("\n");
     sb.append("}");
     return sb.toString();
   }

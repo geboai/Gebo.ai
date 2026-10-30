@@ -1,6 +1,6 @@
 # GeboAdminPromptsControllerApi
 
-All URIs are relative to *http://localhost:13999*
+All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**findPromptConfigByAgentId**](GeboAdminPromptsControllerApi.md#findPromptConfigByAgentId) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByAgentId | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
 [**getAllPromptConfigsLightList**](GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
+[**getKnownPromptPlaceholders**](GeboAdminPromptsControllerApi.md#getKnownPromptPlaceholders) | **GET** /api/admin/GeboAdminPromptsController/getKnownPromptPlaceholders | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 [**getPromptConfigByFilter**](GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
 [**insertPromptConfig**](GeboAdminPromptsControllerApi.md#insertPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/insertPromptConfig | 
@@ -215,6 +216,45 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;GPromptTemplateLightView&gt;**](GPromptTemplateLightView.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getKnownPromptPlaceholders"></a>
+# **getKnownPromptPlaceholders**
+> KnownPromptPlaceholders getKnownPromptPlaceholders()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+try {
+    KnownPromptPlaceholders result = apiInstance.getKnownPromptPlaceholders();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getKnownPromptPlaceholders");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**KnownPromptPlaceholders**](KnownPromptPlaceholders.md)
 
 ### Authorization
 

@@ -1,6 +1,6 @@
 # SystemMessagesAdminControllerApi
 
-All URIs are relative to *http://localhost:13999*
+All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

@@ -16,6 +16,8 @@ Name | Type | Description | Notes
 **accessibleToAll** | **Boolean** |  |  [optional]
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **contextCode** | **String** |  |  [optional]
+**transientRun** | **Boolean** |  |  [optional]
+**runOrigin** | **String** |  |  [optional]
 **chatProfileCode** | **String** |  |  [optional]
 **modelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **ragChat** | **Boolean** |  |  [optional]

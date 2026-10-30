@@ -26,6 +26,8 @@ export interface GUserChatSession {
     accessibleToAll?: boolean;
     aclAliases?: Array<number>;
     contextCode?: string;
+    transientRun?: boolean;
+    runOrigin?: string;
     chatProfileCode?: string;
     modelReference?: GObjectRefGBaseChatModelConfig;
     ragChat?: boolean;

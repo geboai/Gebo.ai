@@ -33,6 +33,8 @@ export interface GeboChatRequest {
     searchRequested?: boolean;
     searchForbidden?: boolean;
     userLanguage?: string;
+    runOrigin?: string;
+    attended?: boolean;
     additionalContents?: Array<AdditionalContent>;
     tokensSize?: number;
 }

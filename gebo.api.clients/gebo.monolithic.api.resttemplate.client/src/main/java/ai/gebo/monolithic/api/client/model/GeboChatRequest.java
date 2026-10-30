@@ -28,7 +28,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -120,6 +120,12 @@ public class GeboChatRequest {
 
   @JsonProperty("userLanguage")
   private String userLanguage = null;
+
+  @JsonProperty("runOrigin")
+  private String runOrigin = null;
+
+  @JsonProperty("attended")
+  private Boolean attended = null;
 
   @JsonProperty("additionalContents")
   private List<AdditionalContent> additionalContents = null;
@@ -491,6 +497,42 @@ public class GeboChatRequest {
     this.userLanguage = userLanguage;
   }
 
+  public GeboChatRequest runOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+    return this;
+  }
+
+   /**
+   * Get runOrigin
+   * @return runOrigin
+  **/
+  @Schema(description = "")
+  public String getRunOrigin() {
+    return runOrigin;
+  }
+
+  public void setRunOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+  }
+
+  public GeboChatRequest attended(Boolean attended) {
+    this.attended = attended;
+    return this;
+  }
+
+   /**
+   * Get attended
+   * @return attended
+  **/
+  @Schema(description = "")
+  public Boolean isAttended() {
+    return attended;
+  }
+
+  public void setAttended(Boolean attended) {
+    this.attended = attended;
+  }
+
   public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
     return this;
@@ -563,13 +605,15 @@ public class GeboChatRequest {
         Objects.equals(this.searchRequested, geboChatRequest.searchRequested) &&
         Objects.equals(this.searchForbidden, geboChatRequest.searchForbidden) &&
         Objects.equals(this.userLanguage, geboChatRequest.userLanguage) &&
+        Objects.equals(this.runOrigin, geboChatRequest.runOrigin) &&
+        Objects.equals(this.attended, geboChatRequest.attended) &&
         Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, additionalContents, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, runOrigin, attended, additionalContents, tokensSize);
   }
 
 
@@ -596,6 +640,8 @@ public class GeboChatRequest {
     sb.append("    searchRequested: ").append(toIndentedString(searchRequested)).append("\n");
     sb.append("    searchForbidden: ").append(toIndentedString(searchForbidden)).append("\n");
     sb.append("    userLanguage: ").append(toIndentedString(userLanguage)).append("\n");
+    sb.append("    runOrigin: ").append(toIndentedString(runOrigin)).append("\n");
+    sb.append("    attended: ").append(toIndentedString(attended)).append("\n");
     sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");

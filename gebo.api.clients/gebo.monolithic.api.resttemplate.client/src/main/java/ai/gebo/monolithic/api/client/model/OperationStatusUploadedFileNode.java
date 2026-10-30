@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusUploadedFileNode
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
 
 public class OperationStatusUploadedFileNode {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusUploadedFileNode {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasWarnMessages")
-  private Boolean hasWarnMessages = null;
-
   @JsonProperty("hasErrorMessages")
   private Boolean hasErrorMessages = null;
+
+  @JsonProperty("hasWarnMessages")
+  private Boolean hasWarnMessages = null;
 
   public OperationStatusUploadedFileNode result(UploadedFileNode result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusUploadedFileNode {
     this.messages = messages;
   }
 
-  public OperationStatusUploadedFileNode hasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-    return this;
-  }
-
-   /**
-   * Get hasWarnMessages
-   * @return hasWarnMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasWarnMessages() {
-    return hasWarnMessages;
-  }
-
-  public void setHasWarnMessages(Boolean hasWarnMessages) {
-    this.hasWarnMessages = hasWarnMessages;
-  }
-
   public OperationStatusUploadedFileNode hasErrorMessages(Boolean hasErrorMessages) {
     this.hasErrorMessages = hasErrorMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusUploadedFileNode {
     this.hasErrorMessages = hasErrorMessages;
   }
 
+  public OperationStatusUploadedFileNode hasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+    return this;
+  }
+
+   /**
+   * Get hasWarnMessages
+   * @return hasWarnMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasWarnMessages() {
+    return hasWarnMessages;
+  }
+
+  public void setHasWarnMessages(Boolean hasWarnMessages) {
+    this.hasWarnMessages = hasWarnMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusUploadedFileNode {
     OperationStatusUploadedFileNode operationStatusUploadedFileNode = (OperationStatusUploadedFileNode) o;
     return Objects.equals(this.result, operationStatusUploadedFileNode.result) &&
         Objects.equals(this.messages, operationStatusUploadedFileNode.messages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusUploadedFileNode.hasWarnMessages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusUploadedFileNode.hasErrorMessages);
+        Objects.equals(this.hasErrorMessages, operationStatusUploadedFileNode.hasErrorMessages) &&
+        Objects.equals(this.hasWarnMessages, operationStatusUploadedFileNode.hasWarnMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
+    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusUploadedFileNode {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
+    sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

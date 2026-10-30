@@ -330,6 +330,7 @@ export * from './jobsEntriesFilter';
 export * from './jobsEntriesForClassNameFilter';
 export * from './jobsEntriesForJobType';
 export * from './jobsEntriesForProjectEndpointFilter';
+export * from './knownPromptPlaceholders';
 export * from './lLMAutoconfigureCreationData';
 export * from './lLMCreateModelData';
 export * from './lLMCredentialsCreationData';
