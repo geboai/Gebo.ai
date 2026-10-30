@@ -3,7 +3,9 @@
 .gebo-ai-reusable-chat-layout {
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  // not stretched: a stretched chat gets a definite height, and the height: 100% of its
+  // scroll buttons would then take room in it, moving the message box of an empty chat
+  align-items: flex-start;
   gap: var(--gebo-space-3, 0.75rem);
   width: 100%;
 
@@ -19,6 +21,8 @@
 
   @media (max-width: 768px) {
     flex-direction: column;
+    // in a column, stretching gives the full width, not a height
+    align-items: stretch;
 
     &__area {
       position: static;
@@ -41,7 +45,8 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  flex: 1 1 0;
+  // the room the custom side areas leave; in their column on small screens, the height of its content
+  flex: 1 1 auto;
   min-width: 0;
   min-height: calc(100vh - 8rem);
   justify-content: space-between;
