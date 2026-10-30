@@ -77,8 +77,12 @@ public class GNetworkEnvironmentBuilder {
 		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
 				request != null && request.getUserIntent() != null ? request.getUserIntent()
 						: DeliverableIntent.SUMMARY);
+		// a search can only be asked of a run that has something to search: without a
+		// knowledge base the request understanding's flag would only make the agents say
+		// they could not search
+		final boolean searchable = knowledgeBaseCodes != null && !knowledgeBaseCodes.isEmpty();
 		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED,
-				request != null && Boolean.TRUE.equals(request.getSearchRequested()));
+				searchable && request != null && Boolean.TRUE.equals(request.getSearchRequested()));
 		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN,
 				request != null && Boolean.TRUE.equals(request.getSearchForbidden()));
 		// detected on the user's own message when the request was understood
