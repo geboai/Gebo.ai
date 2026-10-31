@@ -718,6 +718,33 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
+	void aDocumentIsCitedByItsFileNameWrittenAsWords() {
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef pistis = document(
+				"Pistis_Sophia_Svelato.pdf");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef gospels = document(
+				"Alcuni-dei-vangeli-non-canonici.pdf");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef archiati = document(
+				"Archiati_Il_Vangelo_di_Giovanni.pdf");
+
+		List<ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef> cited = AgenticLoopReactiveAgentServiceImpl
+				.citedDocuments(List.of(pistis, gospels, archiati),
+						"Il logion 3 (da «Alcuni dei vangeli non canonici») e il cap. 43 di Pistis Sophia svelato "
+								+ "parlano del Regno dentro di noi.");
+
+		assertEquals(List.of(pistis, gospels), cited, "the one only returned by the tools is not cited");
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.citedDocuments(List.of(document("Gnosi.pdf")),
+				"La gnosi è conoscenza.").isEmpty(), "a name this short would match by chance");
+		assertEquals("Pistis_Sophia_Svelato", AgenticLoopReactiveAgentServiceImpl.fileStem("kb/esoterica/Pistis_Sophia_Svelato.pdf"));
+	}
+
+	private static ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef document(String name) {
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef ref = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef();
+		ref.setName(name);
+		ref.setDocumentCode("kb/" + name);
+		return ref;
+	}
+
+	@Test
 	void theDocumentsListedByTheToolsAreCitableTooAndTheBrowsingToolsAreEvidence() {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
 				null, null, NO_RENDERER);

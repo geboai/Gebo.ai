@@ -1177,13 +1177,18 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 	}
 
-	/** The documents an answer cites, by their address or their name. */
+	/**
+	 * The documents an answer cites: by their address, by their name, or by their file
+	 * name without its extension written as words ("Pistis Sophia Svelato" for
+	 * Pistis_Sophia_Svelato.pdf, compared by letters and digits only).
+	 */
 	static List<GResponseDocumentRef> citedDocuments(List<GResponseDocumentRef> documents, String answer) {
 		final List<GResponseDocumentRef> cited = new ArrayList<>();
 		if (answer == null || answer.isBlank()) {
 			return cited;
 		}
 		final String lower = answer.toLowerCase();
+		final String answerLettersAndDigits = lettersAndDigits(answer);
 		final Set<String> addresses = CitedAddresses.addressesIn(answer);
 		for (GResponseDocumentRef ref : documents) {
 			for (String name : citableNames(ref)) {
@@ -1192,7 +1197,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				}
 				final boolean address = name.regionMatches(true, 0, "http", 0, 4);
 				if (address ? addresses.contains(CitedAddresses.normalized(name))
-						: name.trim().length() >= MIN_CITED_NAME_LENGTH && lower.contains(name.trim().toLowerCase())) {
+						: answerCitesName(lower, answerLettersAndDigits, name.trim())) {
 					cited.add(ref);
 					break;
 				}
@@ -1201,10 +1206,36 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return cited;
 	}
 
+	/**
+	 * Whether an answer (lower case, and as letters and digits only) cites a document
+	 * name: as it is, or as its file name without the extension.
+	 */
+	private static boolean answerCitesName(String lowerAnswer, String answerLettersAndDigits, String name) {
+		if (name.length() >= MIN_CITED_NAME_LENGTH && lowerAnswer.contains(name.toLowerCase())) {
+			return true;
+		}
+		final String stem = lettersAndDigits(fileStem(name));
+		return stem.length() >= MIN_CITED_NAME_LENGTH && answerLettersAndDigits.contains(stem);
+	}
+
+	/** A file name without its folders and its extension. */
+	static String fileStem(String name) {
+		final String file = name.substring(Math.max(name.lastIndexOf('/'), name.lastIndexOf('\\')) + 1);
+		final int dot = file.lastIndexOf('.');
+		return dot > 0 ? file.substring(0, dot) : file;
+	}
+
+	/** A text as its letters and digits only, lower case: how a name and its words compare. */
+	static String lettersAndDigits(String text) {
+		return LETTERS_AND_DIGITS.matcher(text.toLowerCase()).replaceAll("");
+	}
+
+	private static final Pattern LETTERS_AND_DIGITS = Pattern.compile("[^\\p{L}\\p{N}]+",
+			Pattern.UNICODE_CHARACTER_CLASS);
+
 	/** Shortest document name looked for in an answer: shorter ones match by chance. */
 	static final int MIN_CITED_NAME_LENGTH = 6;
 
-	/** A document file name as an answer cites it. */
 	/** A file name without its separators (spaces, underscores, hyphens), lower case. */
 	static String compactName(String name) {
 		return name == null ? "" : name.toLowerCase().replaceAll("[\\s_\\-]+", "");

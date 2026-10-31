@@ -51,8 +51,8 @@ class CitedAddressesTest {
 				+ "and [the download page](https://www.postgresql.org/download/), or <https://made.up/page>.",
 				CitedAddressesTest::known, removed::add);
 
-		assertEquals("Source: PostgreSQL Download, web page, . See [the release notes](https://www.postgresql.org/docs/release/) "
-				+ "and the download page, or .", checked);
+		assertEquals("Source: PostgreSQL Download, web page. See [the release notes](https://www.postgresql.org/docs/release/) "
+				+ "and the download page, or.", checked);
 		assertEquals(List.of("https://www.postgresql.org/download/", "https://made.up/page",
 				"https://www.postgresql.org/download/"), removed);
 	}
@@ -87,7 +87,7 @@ class CitedAddressesTest {
 				.collectList().block();
 
 		assertEquals("La versione è la 18. Fonte: PostgreSQL Download e le note: https://www.postgresql.org/docs/release/ "
-				+ ". Altro: ", String.join("", out));
+				+ ". Altro", String.join("", out));
 		assertEquals(List.of("https://www.postgresql.org/download/", "https://made.up/x"), removed);
 		assertEquals("La versione è la 18. Fonte: ", out.get(0), "the text before a link goes through at once");
 	}
@@ -96,9 +96,43 @@ class CitedAddressesTest {
 	void aBracketThatIsNoLinkIsNotHeldBack() {
 		assertEquals("A [1] note".length(), CitedAddresses.safeEnd("A [1] note"));
 		assertEquals(2, CitedAddresses.safeEnd("A [partial link text"));
-		assertEquals(4, CitedAddresses.safeEnd("See https"));
-		assertEquals(4, CitedAddresses.safeEnd("See <https://a.example/x"));
+		// the space before an address waits with it
+		assertEquals(3, CitedAddresses.safeEnd("See https"));
+		assertEquals(3, CitedAddresses.safeEnd("See <https://a.example/x"));
 		assertEquals("See https://a.example/x done".length(), CitedAddresses.safeEnd("See https://a.example/x done"));
+		// as does a separator ending the text: an address may come next
+		assertEquals("p. 60, PDF".length(), CitedAddresses.safeEnd("p. 60, PDF, "));
+	}
+
+	@Test
+	void aRemovedAddressTakesAlongWhatOnlyIntroducedIt() {
+		List<String> removed = new ArrayList<>();
+
+		assertEquals("Blavatsky, The Secret Doctrine, p. 60, PDF.", CitedAddresses.withoutUnknown(
+				"Blavatsky, The Secret Doctrine, p. 60, PDF, https://www.gutenberg.org/ebooks/54824.",
+				CitedAddressesTest::known, removed::add));
+		assertEquals("See the edition for details.",
+				CitedAddresses.withoutUnknown("See the edition (https://made.up/x) for details.",
+						CitedAddressesTest::known, removed::add));
+		assertEquals("PDF, and more", CitedAddresses.withoutUnknown("PDF, https://made.up/x, and more",
+				CitedAddressesTest::known, removed::add));
+		assertEquals("Text - more", CitedAddresses.withoutUnknown("Text - https://made.up/x more",
+				CitedAddressesTest::known, removed::add), "a separator before more words stays");
+		assertEquals("Line one\n\nLine two", CitedAddresses.withoutUnknown("Line one\n- https://made.up/x\nLine two",
+				CitedAddressesTest::known, removed::add), "a bullet left with nothing goes too, the lines stay");
+		assertEquals(5, removed.size());
+	}
+
+	@Test
+	void aSeparatorStreamedApartFromItsAddressGoesWithIt() {
+		List<String> removed = new ArrayList<>();
+		List<String> pieces = List.of("p. 60, PDF,", " https://www.gut", "enberg.org/ebooks/54824", ".\n");
+
+		List<String> out = CitedAddresses.guarded(Flux.fromIterable(pieces), CitedAddressesTest::known, removed::add)
+				.collectList().block();
+
+		assertEquals("p. 60, PDF.\n", String.join("", out));
+		assertEquals(List.of("https://www.gutenberg.org/ebooks/54824"), removed);
 	}
 
 	@Test

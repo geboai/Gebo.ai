@@ -51,6 +51,18 @@ public final class CitedAddresses {
 	/** Longest markdown link text held back while the answer streams. */
 	static final int MAX_HELD_LINK_CHARACTERS = 600;
 	private static final String HTTP_PREFIX = "http";
+	/** Where an address was removed, until {@link #closeGaps} closes the gap it left. */
+	private static final char GAP = '\u0000';
+	private static final String GAP_REGEX = "\\x00";
+	/** What separates an address from the words before it in a citation (the hyphen last: a class). */
+	private static final String SEPARATORS = ",;:–—-";
+	private static final Pattern GAP_IN_BRACKETS = Pattern.compile("[ \\t]*\\([ \\t]*" + GAP_REGEX + "[ \\t]*\\)");
+	/** The separator before a gap that ends its clause: punctuation or the line's end follows. */
+	private static final Pattern SEPARATOR_BEFORE_GAP = Pattern.compile(
+			"[ \\t]*[" + SEPARATORS + "][ \\t]*" + GAP_REGEX + "(?=[ \\t]*(?:[.,;:!?)\\]\\u3011]|$))",
+			Pattern.MULTILINE);
+	private static final Pattern SPACES_BEFORE_GAP = Pattern.compile("[ \\t]+" + GAP_REGEX + "(?=[.,;:!?)])");
+	private static final Pattern SPACES_AROUND_GAP = Pattern.compile("[ \\t]+" + GAP_REGEX + "[ \\t]+");
 
 	private CitedAddresses() {
 	}
@@ -134,8 +146,8 @@ public final class CitedAddresses {
 
 	/**
 	 * The text without the addresses {@code known} rejects: a markdown link keeps its
-	 * text, an address alone is removed; each address removed is told to
-	 * {@code removed}.
+	 * text, an address alone is removed together with what only introduced it (see
+	 * {@link #closeGaps}); each address removed is told to {@code removed}.
 	 */
 	public static String withoutUnknown(String text, Predicate<String> known, Consumer<String> removed) {
 		if (text == null || text.isEmpty() || !text.toLowerCase(Locale.ROOT).contains(HTTP_PREFIX)) {
@@ -159,7 +171,24 @@ public final class CitedAddresses {
 		links.append(text.substring(last));
 		// then the autolinks and the addresses alone
 		final String withoutAutolinks = replaceUnknown(links.toString(), AUTOLINK, 1, known, removed);
-		return replaceUnknown(withoutAutolinks, ADDRESS, 0, known, removed);
+		return closeGaps(replaceUnknown(withoutAutolinks, ADDRESS, 0, known, removed));
+	}
+
+	/**
+	 * The text with the gaps the removed addresses left closed: the brackets around an
+	 * address go with it, and so does the separator before it when the address ended
+	 * its clause ("p. 60, PDF, https://made.up." reads "p. 60, PDF."), the spaces
+	 * left around it collapsing.
+	 */
+	static String closeGaps(String text) {
+		if (text.indexOf(GAP) < 0) {
+			return text;
+		}
+		String closed = GAP_IN_BRACKETS.matcher(text).replaceAll(String.valueOf(GAP));
+		closed = SEPARATOR_BEFORE_GAP.matcher(closed).replaceAll(String.valueOf(GAP));
+		closed = SPACES_BEFORE_GAP.matcher(closed).replaceAll(String.valueOf(GAP));
+		closed = SPACES_AROUND_GAP.matcher(closed).replaceAll(" ");
+		return closed.replace(String.valueOf(GAP), "");
 	}
 
 	private static String replaceUnknown(String text, Pattern pattern, int group, Predicate<String> known,
@@ -175,6 +204,7 @@ public final class CitedAddresses {
 				out.append(matcher.group());
 			} else {
 				removed.accept(address);
+				out.append(GAP);
 				// the sentence's punctuation stays
 				if (group == 0) {
 					out.append(found.substring(address.length()));
@@ -224,17 +254,19 @@ public final class CitedAddresses {
 
 	/**
 	 * How much of the streamed text can be let through: up to an address not ended yet,
-	 * or a markdown link not closed yet (within {@link #MAX_HELD_LINK_CHARACTERS}).
+	 * or a markdown link not closed yet (within {@link #MAX_HELD_LINK_CHARACTERS}). The
+	 * spaces and the separator before an address held back, or ending the text where an
+	 * address may follow, wait with it: removing the address takes them along.
 	 */
 	static int safeEnd(CharSequence text) {
 		final int length = text.length();
-		int safe = length;
+		int addressSafe = length;
 		// the start of an address cut at the end of the text
 		final String lower = text.toString().toLowerCase(Locale.ROOT);
 		for (int start = Math.max(0, length - "https://".length()); start < length; start++) {
 			final String tail = lower.substring(start);
 			if ("https://".startsWith(tail) || "http://".startsWith(tail)) {
-				safe = Math.min(safe, start);
+				addressSafe = Math.min(addressSafe, start);
 				break;
 			}
 		}
@@ -242,15 +274,31 @@ public final class CitedAddresses {
 		final int address = lower.lastIndexOf(HTTP_PREFIX);
 		if (address >= 0 && !hasDelimiterAfter(lower, address)) {
 			final int start = address > 0 && lower.charAt(address - 1) == '<' ? address - 1 : address;
-			safe = Math.min(safe, start);
+			addressSafe = Math.min(addressSafe, start);
 		}
-		// a markdown link not closed yet
+		int safe = beforeSeparator(lower, addressSafe);
+		// a markdown link not closed yet: its text stays, and what comes before it with it
 		final int open = lower.lastIndexOf('[');
 		if (open >= 0 && length - open <= MAX_HELD_LINK_CHARACTERS && lower.indexOf('\n', open) < 0
 				&& linkOpen(lower, open)) {
 			safe = Math.min(safe, open);
 		}
 		return safe;
+	}
+
+	/** Where the spaces and the separator (", ", " - ", ": " ...) ending text[0, end) begin. */
+	private static int beforeSeparator(String text, int end) {
+		int start = end;
+		while (start > 0 && (text.charAt(start - 1) == ' ' || text.charAt(start - 1) == '\t')) {
+			start--;
+		}
+		if (start > 0 && SEPARATORS.indexOf(text.charAt(start - 1)) >= 0) {
+			start--;
+			while (start > 0 && (text.charAt(start - 1) == ' ' || text.charAt(start - 1) == '\t')) {
+				start--;
+			}
+		}
+		return start;
 	}
 
 	private static boolean hasDelimiterAfter(String text, int from) {
