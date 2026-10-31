@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.1</version>
+		<version>4.1.2</version>
 	</parent>
 	<properties>
 		<java.version>21</java.version>
@@ -20,7 +20,7 @@
 		<org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
 		<apache-poi.version>5.5.1</apache-poi.version>
-		<spring.ai.version>2.0.1</spring.ai.version>
+		<spring.ai.version>2.0.2</spring.ai.version>
 		<springdoc.version>3.0.3</springdoc.version>
 		<!-- Official Agent2Agent (A2A) Java SDK (org.a2aproject.sdk, the current group;
 		     the old io.github.a2asdk group is frozen at 0.3.x). gebo.architecture.a2a-*
@@ -41,40 +41,43 @@
 		<!-- Security fixes are normally taken by bumping spring-boot-starter-parent
 		     (and spring.ai.version), NOT by pinning single libraries: an override
 		     drifts out of date and starts pinning its library DOWN once the parent
-		     moves past it, which is what happened to an earlier netty pin here (Boot
-		     4.1.0 managed 4.2.15.Final, the pin lifted it to 4.2.16.Final, and Boot
-		     4.1.1 then managed 4.2.17.Final on its own). The pins below are the
-		     exceptions, each with the condition under which it must go.
-
-		     tomcat: Boot 4.1.1 manages 11.0.24, which
-		     closes CVE-2026-53434/-55276/-59083/-59084 (9.1) and CVE-2026-53404, but
-		     not CVE-2026-66299, whose range is >=11.0.1,<11.0.25. 11.0.25 is GA and a
-		     patch of the very minor the parent already ships, so lifting it is safe.
-		     DROP this property as soon as the parent manages 11.0.25 or later. -->
-		<tomcat.version>11.0.25</tomcat.version>
-		<!-- Jackson: Boot 4.1.1 manages 3.1.5 (tools.jackson, what
-		     Boot 4 runs on) and 2.21.5 (com.fasterxml, still pulled in by libraries), and
-		     both lines are affected by the advisories published 2026-09-28..10-01:
-		     jackson-core CVE-2026-89425 and CVE-2026-89407, jackson-databind
-		     CVE-2026-91777, -91776, -83557, -68497 and -19032. 3.1.7 and 2.21.7 fix all
-		     of them and are patches of the minors the parent already ships.
-		     DROP both properties as soon as the parent manages 3.1.7 / 2.21.7 or later. -->
-		<jackson-bom.version>3.1.7</jackson-bom.version>
-		<jackson-2-bom.version>2.21.7</jackson-2-bom.version>
-		<!-- netty: Boot 4.1.1 manages 4.2.17.Final, inside the range of CVE-2026-89044
-		     (4.2.13.Final through 4.2.17.Final do not properly validate the final
-		     transfer coding of Transfer-Encoding). 4.2.18.Final is the fix, a patch of
-		     the same minor, and the version Boot 4.2 manages.
-		     DROP this property as soon as the parent manages 4.2.18.Final or later. -->
-		<netty.version>4.2.18.Final</netty.version>
-		<!-- MongoDB Java driver: Boot 4.1.1 manages 5.8.1, affected by CVE-2026-18710
-		     (a credential could be written to log output, fixed in 5.9.2) and by
-		     CVE-2026-88032 / CVE-2026-88033 (use-after-free in reactive client-side
-		     encryption, GridFS query injection), fixed only from 5.11.1 - there is no
-		     backport to an older minor. 5.11.1 is the driver Boot 4.2 pairs with its
-		     Spring Data.
+		     moves past it. Boot 4.1.2 did exactly that to the tomcat (11.0.25 pinned,
+		     11.0.27 managed), netty (4.2.18.Final pinned, 4.2.19.Final managed) and
+		     jackson (3.1.7 / 2.21.7, now managed) pins, which are gone. The pins
+		     below are the exceptions, each with the condition under which it must go.
+		     MongoDB Java driver: Boot 4.1.2 still manages 5.8.1, affected by
+		     CVE-2026-18710 (a credential could be written to log output, fixed in
+		     5.9.2) and by CVE-2026-88032 / CVE-2026-88033 (use-after-free in reactive
+		     client-side encryption, GridFS query injection), fixed only from 5.11.1 -
+		     there is no backport to an older minor.
 		     DROP this property as soon as the parent manages 5.11.1 or later. -->
 		<mongodb.version>5.11.1</mongodb.version>
+		<!-- Hazelcast: Boot 4.1.2 manages 5.5.0, affected by CVE-2026-107726
+		     (critical, arbitrary member memory access by a low-privileged client) and
+		     CVE-2026-107725 (authorization bypass in the IMap predicates API), both
+		     fixed only in 5.7.0 (GA, same 5.x API, still Apache 2.0).
+		     DROP this property as soon as the parent manages 5.7.0 or later. -->
+		<hazelcast.version>5.7.0</hazelcast.version>
+		<!-- OpenTelemetry: Boot 4.1.2 manages 1.62.0, affected by CVE-2026-118259
+		     (quadratic CPU in W3C tracestate parsing, reachable from any inbound
+		     request header), fixed in 1.67.0. The API is the stable 1.x line, so
+		     the jump stays compatible with the micrometer tracing bridge.
+		     DROP this property as soon as the parent manages 1.67.0 or later. -->
+		<opentelemetry.version>1.67.0</opentelemetry.version>
+		<!-- RabbitMQ Java client (microservices, via spring-boot-starter-amqp): Boot
+		     4.1.2 manages 5.30.0, affected by CVE-2026-69219, -69220, -63337, -75516
+		     (high) and six moderate/low advisories published 2026-08..10; the last
+		     of them (CVE-2026-106121) is fixed after 5.36.0, and 5.37.0 is the first
+		     release past it. Same 5.x line spring-amqp is built against.
+		     DROP this property as soon as the parent manages 5.37.0 or later. -->
+		<rabbit-amqp-client.version>5.37.0</rabbit-amqp-client.version>
+		<!-- Derby: Boot 4.1.2 manages 10.16.1.1, affected by CVE-2022-46337
+		     (critical, LDAP injection in the authenticator). The 10.16.1.2 fix was
+		     never published to Maven Central; 10.17.1.0 carries it, needs Java 21
+		     (the build already targets it) and is still Derby's latest release. Kept
+		     here with the other pins so every edition built on this parent gets it.
+		     DROP once the parent manages 10.17.1.0 or later. -->
+		<derby.version>10.17.1.0</derby.version>
 		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
@@ -339,6 +342,51 @@
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
 				<version>1.23.2</version>
+			</dependency>
+			<!-- Guava reaches the apps from six directions at six versions: 18.0 through
+			     tika-langdetect-optimaize's language-detector 0.6 (in every module that
+			     ingests content), 31.1-jre via google-api-client, 33.1.0-jre via the
+			     Google Workspace handlers, 33.5.0-jre via spring-ai-vertex-ai-embedding,
+			     33.6.0-android via grpc and 33.6.0-jre via microsoft-graph. All of them
+			     are affected by CVE-2026-102554 (high, CompactHashMap/MapMakerInternal),
+			     and 18.0 also by CVE-2018-10237 and CVE-2023-2976. 33.7.2-jre is the fix;
+			     the -jre flavour is a superset of -android, and language-detector only
+			     uses collection basics that 33.x still has.
+			     DROP once every consumer above brings 33.7.2 or later on its own. -->
+			<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>33.7.2-jre</version>
+			</dependency>
+			<!-- commons-io had no managed version: gebo.architecture.crypting and
+			     gebo.system.ingestion hardcoded 2.18.0 and 2.19.0, and nearest-wins
+			     mediation left 2.11.0 in the build-system handler (via maven-invoker
+			     3.3.0) and 2.13.0 behind milton 4.0.x, both affected by CVE-2024-47554
+			     (high, XmlStreamReader DoS, fixed 2.14.0).
+			     2.20.0 is the highest the build already ran on (testcontainers 2.x asks
+			     for it); the module versions are gone, so every consumer moves with it. -->
+			<dependency>
+				<groupId>commons-io</groupId>
+				<artifactId>commons-io</artifactId>
+				<version>2.20.0</version>
+			</dependency>
+			<!-- commons-compress: testcontainers 1.20.4, still used by some test
+			     scopes, drags 1.24.0, affected by CVE-2024-25710 and CVE-2024-26308
+			     (fixed 1.26.0); most modules already resolve 1.28.0 through poi-ooxml,
+			     and gebo.apps.monolithic.starter no longer hardcodes 1.27.1. -->
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-compress</artifactId>
+				<version>1.28.0</version>
+			</dependency>
+			<!-- commons-beanutils: opencsv 5.10 brings 1.10.0 (and milton 4.0.x brought
+			     1.9.4), affected by CVE-2025-48734 (high, declared-class access
+			     through PropertyUtils, fixed 1.11.0), the version every other module
+			     already resolves. -->
+			<dependency>
+				<groupId>commons-beanutils</groupId>
+				<artifactId>commons-beanutils</artifactId>
+				<version>1.11.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
