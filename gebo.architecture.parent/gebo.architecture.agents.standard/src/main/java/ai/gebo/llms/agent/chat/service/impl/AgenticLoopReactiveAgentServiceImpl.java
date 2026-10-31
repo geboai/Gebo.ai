@@ -1180,7 +1180,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/**
 	 * The documents an answer cites: by their address, by their name, or by their file
 	 * name without its extension written as words ("Pistis Sophia Svelato" for
-	 * Pistis_Sophia_Svelato.pdf, compared by letters and digits only).
+	 * Pistis_Sophia_Svelato.pdf, compared by letters and digits only), even with a few
+	 * words slipped in ("The Secret Doctrine, Vol. 1 of 4" for The-Secret-Doctrine-1-of-4.pdf).
 	 */
 	static List<GResponseDocumentRef> citedDocuments(List<GResponseDocumentRef> documents, String answer) {
 		final List<GResponseDocumentRef> cited = new ArrayList<>();
@@ -1189,6 +1190,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		final String lower = answer.toLowerCase();
 		final String answerLettersAndDigits = lettersAndDigits(answer);
+		final List<String> answerWords = words(answer);
 		final Set<String> addresses = CitedAddresses.addressesIn(answer);
 		for (GResponseDocumentRef ref : documents) {
 			for (String name : citableNames(ref)) {
@@ -1197,7 +1199,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				}
 				final boolean address = name.regionMatches(true, 0, "http", 0, 4);
 				if (address ? addresses.contains(CitedAddresses.normalized(name))
-						: answerCitesName(lower, answerLettersAndDigits, name.trim())) {
+						: answerCitesName(lower, answerLettersAndDigits, answerWords, name.trim())) {
 					cited.add(ref);
 					break;
 				}
@@ -1207,15 +1209,64 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	}
 
 	/**
-	 * Whether an answer (lower case, and as letters and digits only) cites a document
-	 * name: as it is, or as its file name without the extension.
+	 * Whether an answer (lower case, as letters and digits only, and as words) cites a
+	 * document name: as it is, or as its file name without the extension, its words
+	 * joined or in their order with a few others slipped in.
 	 */
-	private static boolean answerCitesName(String lowerAnswer, String answerLettersAndDigits, String name) {
+	private static boolean answerCitesName(String lowerAnswer, String answerLettersAndDigits,
+			List<String> answerWords, String name) {
 		if (name.length() >= MIN_CITED_NAME_LENGTH && lowerAnswer.contains(name.toLowerCase())) {
 			return true;
 		}
-		final String stem = lettersAndDigits(fileStem(name));
-		return stem.length() >= MIN_CITED_NAME_LENGTH && answerLettersAndDigits.contains(stem);
+		final String stem = fileStem(name);
+		final String stemLettersAndDigits = lettersAndDigits(stem);
+		if (stemLettersAndDigits.length() < MIN_CITED_NAME_LENGTH) {
+			return false;
+		}
+		return answerLettersAndDigits.contains(stemLettersAndDigits) || citesWords(answerWords, words(stem));
+	}
+
+	/** Most words an answer may slip between those of a name it cites ("Vol." in "Doctrine, Vol. 1 of 4"). */
+	static final int MAX_WORDS_SLIPPED_IN = 2;
+
+	/**
+	 * Whether a name's words (two at least) appear in the answer's words in their order,
+	 * with {@link #MAX_WORDS_SLIPPED_IN} other words at most between them in all.
+	 */
+	static boolean citesWords(List<String> answerWords, List<String> nameWords) {
+		if (nameWords.size() < 2) {
+			return false;
+		}
+		for (int start = 0; start < answerWords.size(); start++) {
+			if (!answerWords.get(start).equals(nameWords.get(0))) {
+				continue;
+			}
+			int matched = 1;
+			int slipped = 0;
+			for (int i = start + 1; i < answerWords.size() && matched < nameWords.size()
+					&& slipped <= MAX_WORDS_SLIPPED_IN; i++) {
+				if (answerWords.get(i).equals(nameWords.get(matched))) {
+					matched++;
+				} else {
+					slipped++;
+				}
+			}
+			if (matched == nameWords.size() && slipped <= MAX_WORDS_SLIPPED_IN) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** A text's words (its runs of letters and digits), lower case. */
+	static List<String> words(String text) {
+		final List<String> words = new ArrayList<>();
+		for (String word : LETTERS_AND_DIGITS.split(text.toLowerCase())) {
+			if (!word.isEmpty()) {
+				words.add(word);
+			}
+		}
+		return words;
 	}
 
 	/** A file name without its folders and its extension. */

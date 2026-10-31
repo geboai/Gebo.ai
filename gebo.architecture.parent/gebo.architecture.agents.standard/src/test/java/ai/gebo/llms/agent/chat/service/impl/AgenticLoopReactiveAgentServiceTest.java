@@ -737,6 +737,21 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals("Pistis_Sophia_Svelato", AgenticLoopReactiveAgentServiceImpl.fileStem("kb/esoterica/Pistis_Sophia_Svelato.pdf"));
 	}
 
+	@Test
+	void aDocumentIsCitedByItsTitleWithAFewWordsSlippedIn() {
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef doctrine = document(
+				"The-Secret-Doctrine-1-of-4.pdf");
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef steiner = document(
+				"rudolf-steiner-o.o.148.pdf");
+
+		assertEquals(List.of(doctrine), AgenticLoopReactiveAgentServiceImpl.citedDocuments(List.of(doctrine, steiner),
+				"Fonte: The Project Gutenberg EBook of The Secret Doctrine, Vol. 1 of 4, p. 60."),
+				"\"Vol.\" slipped in between the words of the file name");
+		assertTrue(AgenticLoopReactiveAgentServiceImpl.citedDocuments(List.of(doctrine),
+				"The secret of the doctrine, as the first of the four volumes says, is one.").isEmpty(),
+				"the same words scattered over a sentence are no citation");
+	}
+
 	private static ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef document(String name) {
 		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef ref = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef();
 		ref.setName(name);
