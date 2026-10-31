@@ -49,12 +49,7 @@ searchRequested rules:
 * never when the user explicitly asks to answer without searching: from memory, from this conversation, without looking anything up (in any language).
   It wins over the rule above: a request asking not to search is never, even when it names the knowledge base, the documents or the web.
 * false otherwise.
-* A follow-up that only completes the previous question ("And of Italy?", "E per la Germania?", "And in 2020?")
-  asks for a search only when that previous question did: judge the latest user question, never the
-  rewrittenQuery you made of it.
 * Examples:
-  After "What is the capital of France?": "And of Italy?" -> false
-  After "Search the web: when was X founded?": "And Y?" -> true
   "Using the knowledge base, who is X?" -> true
   "What does the knowledge base say about X? Answer only from the documents." -> true
   "Cosa dice la knowledge base su X?" -> true
