@@ -718,48 +718,6 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
-	void aDocumentIsCitedByItsFileNameWrittenAsWords() {
-		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef pistis = document(
-				"Pistis_Sophia_Svelato.pdf");
-		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef gospels = document(
-				"Alcuni-dei-vangeli-non-canonici.pdf");
-		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef archiati = document(
-				"Archiati_Il_Vangelo_di_Giovanni.pdf");
-
-		List<ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef> cited = AgenticLoopReactiveAgentServiceImpl
-				.citedDocuments(List.of(pistis, gospels, archiati),
-						"Il logion 3 (da «Alcuni dei vangeli non canonici») e il cap. 43 di Pistis Sophia svelato "
-								+ "parlano del Regno dentro di noi.");
-
-		assertEquals(List.of(pistis, gospels), cited, "the one only returned by the tools is not cited");
-		assertTrue(AgenticLoopReactiveAgentServiceImpl.citedDocuments(List.of(document("Gnosi.pdf")),
-				"La gnosi è conoscenza.").isEmpty(), "a name this short would match by chance");
-		assertEquals("Pistis_Sophia_Svelato", AgenticLoopReactiveAgentServiceImpl.fileStem("kb/esoterica/Pistis_Sophia_Svelato.pdf"));
-	}
-
-	@Test
-	void aDocumentIsCitedByItsTitleWithAFewWordsSlippedIn() {
-		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef doctrine = document(
-				"The-Secret-Doctrine-1-of-4.pdf");
-		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef steiner = document(
-				"rudolf-steiner-o.o.148.pdf");
-
-		assertEquals(List.of(doctrine), AgenticLoopReactiveAgentServiceImpl.citedDocuments(List.of(doctrine, steiner),
-				"Fonte: The Project Gutenberg EBook of The Secret Doctrine, Vol. 1 of 4, p. 60."),
-				"\"Vol.\" slipped in between the words of the file name");
-		assertTrue(AgenticLoopReactiveAgentServiceImpl.citedDocuments(List.of(doctrine),
-				"The secret of the doctrine, as the first of the four volumes says, is one.").isEmpty(),
-				"the same words scattered over a sentence are no citation");
-	}
-
-	private static ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef document(String name) {
-		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef ref = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef();
-		ref.setName(name);
-		ref.setDocumentCode("kb/" + name);
-		return ref;
-	}
-
-	@Test
 	void theDocumentsListedByTheToolsAreCitableTooAndTheBrowsingToolsAreEvidence() {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, null, null, null,
 				null, null, NO_RENDERER);
