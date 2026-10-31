@@ -26,13 +26,19 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.AgentsSessionCreationContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.agent.standard.memory.GConversationNetworkMemory;
 import ai.gebo.llms.agent.standard.memory.GConversationNetworkMemoryRepository;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 
 class GConversationAgentsSessionFactoryTest {
 	private final GConversationNetworkMemoryRepository memories = mock(GConversationNetworkMemoryRepository.class);
-	private final GConversationAgentsSessionFactory factory = new GConversationAgentsSessionFactory(memories);
+	private final IGDocumentContentRendererProvider renderers = mock(IGDocumentContentRendererProvider.class);
+	private final GConversationAgentsSessionFactory factory = new GConversationAgentsSessionFactory(memories,
+			renderers);
 
 	private static AgentsSessionCreationContext creation(String conversation) {
 		GAgentsNetwork network = new GAgentsNetwork();
@@ -80,6 +86,51 @@ class GConversationAgentsSessionFactoryTest {
 		assertEquals("the-network", saved.getValue().getNetworkCode());
 		assertEquals("the-searcher: Found three documents.\nthe-writer: Paris.", saved.getValue().getDigest());
 		assertEquals(1, saved.getValue().getRuns());
+	}
+
+	/** What a searcher may contribute: no answer, rendered for the agents by a renderer of its own. */
+	record Found(String text) {
+	}
+
+	@Test
+	void aWritersAnswerIsRememberedAsItsTextNotAsTheEnvelopesIdentity() {
+		when(memories.findByConversationCodeAndNetworkCode("conv-1", "the-network")).thenReturn(Optional.empty());
+		GeboChatResponse response = new GeboChatResponse();
+		response.setQueryResponse("Paris is the capital of France.");
+		GeboChatMessageEnvelope answer = new GeboChatMessageEnvelope(response);
+		// the renderers' fallback for a class nobody renders is its toString(): the identity
+		@SuppressWarnings("unchecked")
+		IGDocumentContentRenderer<GeboChatMessageEnvelope> byToString = mock(IGDocumentContentRenderer.class);
+		when(byToString.render(answer)).thenReturn(answer.toString());
+		when(renderers.get(answer)).thenReturn(byToString);
+		AgentsCollaborationSessionContext session = factory.createSessionContext(creation("conv-1"));
+		session.addContribution(AgentsExchangeMessage.of(session, "the-writer", "the-controller", answer,
+				MessageSemantic.RESPONSE), session.getAndIncrementContributionNr());
+
+		factory.sessionCompleted(session, creation("conv-1"), null, null);
+
+		ArgumentCaptor<GConversationNetworkMemory> saved = ArgumentCaptor.forClass(GConversationNetworkMemory.class);
+		verify(memories).save(saved.capture());
+		assertEquals("the-writer: Paris is the capital of France.", saved.getValue().getDigest());
+	}
+
+	@Test
+	void otherDataIsRememberedAsTheAgentsRendererRendersIt() {
+		when(memories.findByConversationCodeAndNetworkCode("conv-1", "the-network")).thenReturn(Optional.empty());
+		Found found = new Found("three documents on Paris");
+		@SuppressWarnings("unchecked")
+		IGDocumentContentRenderer<Found> asTheAgentsReadIt = mock(IGDocumentContentRenderer.class);
+		when(asTheAgentsReadIt.render(found)).thenReturn("Found: three documents on Paris");
+		when(renderers.get(found)).thenReturn(asTheAgentsReadIt);
+		AgentsCollaborationSessionContext session = factory.createSessionContext(creation("conv-1"));
+		session.addContribution(AgentsExchangeMessage.of(session, "the-searcher", "the-controller", found,
+				MessageSemantic.RESPONSE), session.getAndIncrementContributionNr());
+
+		factory.sessionCompleted(session, creation("conv-1"), null, null);
+
+		ArgumentCaptor<GConversationNetworkMemory> saved = ArgumentCaptor.forClass(GConversationNetworkMemory.class);
+		verify(memories).save(saved.capture());
+		assertEquals("the-searcher: Found: three documents on Paris", saved.getValue().getDigest());
 	}
 
 	@Test

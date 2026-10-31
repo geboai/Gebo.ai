@@ -23,8 +23,11 @@ import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsSessionCreationContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.services.IAgentsCollaborationSessionContextFactory;
+import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
+import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.llms.agent.standard.memory.GConversationNetworkMemory;
 import ai.gebo.llms.agent.standard.memory.GConversationNetworkMemoryRepository;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionRemovalListener;
 
@@ -50,9 +53,13 @@ public class GConversationAgentsSessionFactory
 	static final int DIGEST_CHARS = 12_000;
 
 	private final GConversationNetworkMemoryRepository memories;
+	/** The renderers the agents read each other's contributions with. */
+	private final IGDocumentContentRendererProvider renderers;
 
-	public GConversationAgentsSessionFactory(GConversationNetworkMemoryRepository memories) {
+	public GConversationAgentsSessionFactory(GConversationNetworkMemoryRepository memories,
+			IGDocumentContentRendererProvider renderers) {
 		this.memories = memories;
+		this.renderers = renderers;
 	}
 
 	/** Whether this network asked to remember across the turns of a conversation. */
@@ -143,7 +150,7 @@ public class GConversationAgentsSessionFactory
 	 * from the start so that the most recent are kept; the memory of an earlier run
 	 * is not digested again.
 	 */
-	static String digestOf(AgentsCollaborationSessionContext session) {
+	String digestOf(AgentsCollaborationSessionContext session) {
 		final List<AgentProducedSessionContribution> all = session.getSampledContributions();
 		final List<String> lines = new ArrayList<String>();
 		final int from = Math.max(0, all.size() - CONTRIBUTIONS_KEPT);
@@ -171,13 +178,36 @@ public class GConversationAgentsSessionFactory
 		return digest.toString().strip();
 	}
 
-	static String textOf(Object data) {
+	/**
+	 * The text of a contribution: an answer is its text (a writer contributes its
+	 * answer in a chat envelope, whose own toString() is only the object's
+	 * identity); any other data is rendered by the renderers the agents read the
+	 * shared context with (a document is its text).
+	 */
+	String textOf(Object data) {
+		if (data == null) {
+			return null;
+		}
 		if (data instanceof String text) {
 			return text;
 		}
 		if (data instanceof GeboChatResponse response) {
 			return response.getQueryResponse();
 		}
-		return data != null ? String.valueOf(data) : null;
+		if (data instanceof GeboChatMessageEnvelope envelope) {
+			return textOf(envelope.getContent());
+		}
+		if (renderers != null) {
+			try {
+				final IGDocumentContentRenderer<Object> renderer = renderers.get(data);
+				if (renderer != null) {
+					return renderer.render(data);
+				}
+			} catch (RuntimeException notRendered) {
+				LOGGER.warn("A contribution of class " + data.getClass().getName()
+						+ " cannot be rendered for the network's memory: its own text is kept", notRendered);
+			}
+		}
+		return String.valueOf(data);
 	}
 }
