@@ -388,6 +388,16 @@
 				<artifactId>commons-beanutils</artifactId>
 				<version>1.11.0</version>
 			</dependency>
+			<!-- Apache HttpClient 4: eureka-client 2.0.6, in every microservice through
+			     spring-cloud-starter-netflix-eureka-client, still asks for 4.5.3, affected
+			     by CVE-2020-13956 (fixed 4.5.13). 4.5.14 is the last 4.x release and the
+			     version the modules declaring httpclient already use; Spring Boot 4 no
+			     longer manages the 4.x line. -->
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>httpclient</artifactId>
+				<version>4.5.14</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>
