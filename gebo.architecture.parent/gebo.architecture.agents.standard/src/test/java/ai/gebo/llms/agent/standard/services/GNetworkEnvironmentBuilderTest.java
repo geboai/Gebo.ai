@@ -53,14 +53,15 @@ class GNetworkEnvironmentBuilderTest {
 	}
 
 	@Test
-	void aSearchIsNotAskedOfARunThatHasNothingToSearch() {
+	void aSearchRequestedReachesTheAgentsEvenWithoutAKnowledgeBase() {
 		GeboChatRequest request = new GeboChatRequest();
 		request.setSearchRequested(true);
 
 		Map<String, Object> environment = GNetworkEnvironmentBuilder.plain().build(runtimeData(request), List.of(),
 				null);
 
-		assertEquals(Boolean.FALSE, environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED));
+		assertEquals(Boolean.TRUE, environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED),
+				"the web searches may answer it: whether a search tool does is the agents' call, as before");
 		assertEquals(DeliverableIntent.UNKNOWN, environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT),
 				"a request not understood has the unknown intent, as the chat step always said");
 	}

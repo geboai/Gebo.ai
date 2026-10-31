@@ -237,8 +237,9 @@ public class StandardAgentsInitialization {
 		}
 		GAgentConfig controller = defaultControllerAgentConfigDataSource().getConfigurations().get(0);
 		GAgentConfig reportWriter = defaultReportWriterConfigDataSource().getConfigurations().get(0);
+		GAgentConfig inputAdapter = defaultInputAdapterConfigDataSource().getConfigurations().get(0);
 		GAgentsNetwork network = createChatAgentsNetwork(DEFAULT_AGENTS_NETWORK, DEFAULT_AGENTS_NETWORK_FOR_CHAT_PURPOSES,
-				null, controller.getCode(), reportWriter.getCode(),
+				inputAdapter.getCode(), controller.getCode(), reportWriter.getCode(),
 				internalKnowledgebaseAgentConfigDataSource);
 		network.setChoosableForPipelineTypes(List.of(PipelineType.RAG_PIPELINE));
 		network.setSuggestedPurpose(FULL_NETWORK_SUGGESTED_PURPOSE);
@@ -306,20 +307,15 @@ public class StandardAgentsInitialization {
 					+ " internalKnowledgeBaseSearcher:" + (internalKnowledgeBaseConfig != null));
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
-		// The question the network is asked reaches the controller as its input: directly,
-		// or through a forwarding input node when one is named (kept for the networks that
-		// name one).
-		final boolean forwarded = inputAdapterConfigCode != null && !inputAdapterConfigCode.isBlank();
-		AgentNetworkParticipant inputAdapterParticipant = null;
-		if (forwarded) {
-			inputAdapterParticipant = new AgentNetworkParticipant();
-			inputAdapterParticipant.setAgentConfigCode(inputAdapterConfigCode);
-			inputAdapterParticipant.setInputNode(true);
-			inputAdapterParticipant.setOutputNode(false);
-		}
+		// Non-LLM input node: forwards the query to the controller
+		// and forwards it to the String-input controller.
+		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
+		inputAdapterParticipant.setAgentConfigCode(inputAdapterConfigCode);
+		inputAdapterParticipant.setInputNode(true);
+		inputAdapterParticipant.setOutputNode(false);
 		AgentNetworkParticipant controllerParticipant = new AgentNetworkParticipant();
 		controllerParticipant.setAgentConfigCode(controllerConfigCode);
-		controllerParticipant.setInputNode(!forwarded);
+		controllerParticipant.setInputNode(false);
 		// the controller: the network's max loop iteration is its cycle budget, the
 		// gather/finalize cycles it may run before it must deliver the final answer
 		controllerParticipant.setController(true);
@@ -358,9 +354,7 @@ public class StandardAgentsInitialization {
 		// (agentConfigCode plus any contextual suffix) - the key the runtime registers
 		// each participant under (see GAbstractAgentsNetworkServiceFactory) - not the raw
 		// GAgentConfig code.
-		if (forwarded) {
-			inputAdapterParticipant.setCommunicationList(List.of(controllerParticipant.getNetworkAgentName()));
-		}
+		inputAdapterParticipant.setCommunicationList(List.of(controllerParticipant.getNetworkAgentName()));
 		// Controller coordinates every worker (searchers + tool-calling agent) and the
 		// writer/reporter.
 		List<String> coordinatedAgentNames = new ArrayList<>();
@@ -375,9 +369,7 @@ public class StandardAgentsInitialization {
 		}
 		// The writer/reporter reports back to the controller.
 		outParticipant.setCommunicationList(List.of(controllerParticipant.getNetworkAgentName()));
-		if (forwarded) {
-			participants.add(inputAdapterParticipant);
-		}
+		participants.add(inputAdapterParticipant);
 		participants.add(controllerParticipant);
 		participants.addAll(workerParticipants);
 		participants.add(outParticipant);

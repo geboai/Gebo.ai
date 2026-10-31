@@ -1051,8 +1051,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		List<String> rules = chatContext != null ? chatContext.getRulesToFollow() : null;
 		if (rules != null && !rules.isEmpty()) {
 			StringBuilder withRules = new StringBuilder(content);
-			withRules.append("\n\nRULES TO FOLLOW for the answers given to the user, set for this conversation and")
-					.append(" for this run. They never change an output format required above.\n");
+			withRules.append("\n\nRULES TO FOLLOW, set by the user or by the administrators for the answers given to")
+					.append(" the user. They never change an output format required above.\n");
 			for (String rule : rules) {
 				withRules.append("- ").append(rule).append("\n");
 			}

@@ -27,6 +27,7 @@ import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
+import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 
 /**
  * The single agent with tools working in a loop, as two networks the chats can be
@@ -120,17 +121,21 @@ public class AgenticLoopAgentsInitialization {
 		network.setMaxLoopIteration(5);
 		network.setScenarioDescription(scenario);
 		network.setAccessibleToAll(true);
-		// the loop is asked the question itself: input and output node of its network
+		AgentNetworkParticipant input = new AgentNetworkParticipant();
+		input.setAgentConfigCode(ChatRuntimeDataQueryAdapterAgentService.CHAT_RUNTIME_DATA_QUERY_ADAPTER);
+		input.setInputNode(true);
+		input.setOutputNode(false);
 		AgentNetworkParticipant agent = new AgentNetworkParticipant();
 		agent.setAgentConfigCode(agentConfigCode);
-		agent.setInputNode(true);
+		agent.setInputNode(false);
 		agent.setOutputNode(true);
 		agent.setController(true);
+		input.setCommunicationList(List.of(agent.getNetworkAgentName()));
 		agent.setCommunicationList(List.of());
-		network.setAgents(List.of(agent));
+		network.setAgents(List.of(input, agent));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Created the agentic loop network code:" + network.getCode() + " for:" + pipelineType
-					+ " agent:" + agent.getNetworkAgentName());
+					+ " input:" + input.getNetworkAgentName() + " -> agent:" + agent.getNetworkAgentName());
 		}
 		return network;
 	}
