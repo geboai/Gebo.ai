@@ -19,7 +19,7 @@
  * documented placeholders (loaded as a {@link GPromptUseInfo} via its use code)
  * are highlighted and cross-checked against the edited text.
  */
-import { ChangeDetectorRef, Component, forwardRef, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import {
     AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
     ValidationErrors, Validator, Validators
@@ -34,11 +34,31 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
 const PLACEHOLDER_HIGHLIGHT_CLASS = "gebo-prompt-placeholder-highlight";
 
 /**
+ * CSS class applied by Monaco to the placeholders nothing fills.
+ */
+const UNKNOWN_PLACEHOLDER_CLASS = "gebo-prompt-placeholder-unknown";
+
+/**
+ * A placeholder as the backend reads it from a template ({name}, the name trimmed).
+ */
+const PLACEHOLDER_PATTERN = /\{([^{}]+)\}/g;
+
+/**
+ * The name inside the braces trimmed as Java's String.trim() does: only the
+ * characters up to U+0020, so a name means here what it means to the save.
+ */
+function trimAsJava(name: string): string {
+    return name.replace(/^[\u0000- ]+|[\u0000- ]+$/g, "");
+}
+
+/**
  * Component for editing an AI prompt template configuration.
  * Every field except the (read-only) prompt use code is editable; the system and
  * user prompt templates are edited via Monaco, with the documented placeholders
  * highlighted. The control is valid only when every mandatory field is filled and
- * all documented placeholders appear in the concatenated template text.
+ * all documented placeholders appear in the concatenated template text; with
+ * checkUnknownPlaceholders, also only when the templates name nothing the
+ * prompt templates save would refuse.
  */
 @Component({
     selector: "gebo-ai-prompt-editing-component",
@@ -78,6 +98,36 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
 
     /** Documented placeholder codes that are NOT yet present in the template text. */
     public missingPlaceholders: string[] = [];
+
+    /** Placeholders in the template text that nothing fills: the save refuses such a prompt. */
+    public unknownPlaceholders: string[] = [];
+
+    /**
+     * What the template may name, as the save checks it; null while unknown or
+     * when the save does not check the names of such a prompt.
+     */
+    private allowedPlaceholders: string[] | null = null;
+
+    /** The use and agent flag the allowed names were asked for. */
+    private allowedPlaceholdersKey?: string;
+
+    private checkUnknown: boolean = false;
+
+    /**
+     * Also flags the placeholders nothing fills, as the prompt templates save
+     * does. Off where the edited prompt is not saved as a prompt template (an
+     * agent's own loop prompt), which no such check refuses.
+     */
+    @Input()
+    set checkUnknownPlaceholders(check: boolean) {
+        this.checkUnknown = check === true;
+        this.allowedPlaceholdersKey = undefined;
+        this.refreshAllowedPlaceholders();
+    }
+
+    get checkUnknownPlaceholders(): boolean {
+        return this.checkUnknown;
+    }
 
     /** Loading flag driving the panel block-ui while the use info is fetched. */
     public loading: boolean = false;
@@ -139,7 +189,9 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
     ngOnInit(): void {
         this.formSubscription = this.formGroup.valueChanges.subscribe(() => {
             this.emitValue();
+            this.refreshAllowedPlaceholders();
             this.recomputeMissingPlaceholders();
+            this.recomputeUnknownPlaceholders();
             this.applyDecorations(this.systemEditor);
             this.applyDecorations(this.userEditor);
             this.applyDecorations(this.toolsResultsEditor);
@@ -175,6 +227,50 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
             agentId: obj?.agentId ?? null
         }, { emitEvent: false });
         this.loadUseInfo(obj?.promptUse);
+        this.refreshAllowedPlaceholders();
+    }
+
+    /**
+     * Asks the backend what the template may name, when the use or the agent
+     * flag changed since it was last asked; until it answers nothing is flagged.
+     */
+    private refreshAllowedPlaceholders(): void {
+        const raw = this.formGroup.getRawValue();
+        const useCode: string | null | undefined = raw.promptUse;
+        const agentPrompt: boolean = raw.agentPrompt === true;
+        const key = this.checkUnknown && useCode ? useCode + "|" + agentPrompt : "";
+        if (key === this.allowedPlaceholdersKey) {
+            return;
+        }
+        this.allowedPlaceholdersKey = key;
+        this.allowedPlaceholders = null;
+        this.refreshPlaceholderChecks();
+        if (!key || !useCode) {
+            return;
+        }
+        this.promptsService.getAllowedPromptPlaceholders(useCode, agentPrompt).subscribe({
+            next: (allowed) => {
+                if (this.allowedPlaceholdersKey !== key) {
+                    return;
+                }
+                this.allowedPlaceholders = allowed?.checked ? (allowed.allowed ?? []) : null;
+                this.refreshPlaceholderChecks();
+                this.changeDetectorRef.markForCheck();
+            },
+            error: () => {
+                // nothing flagged here: the save still checks
+            }
+        });
+    }
+
+    /** Recomputes both placeholder checks, the highlighting and the validity. */
+    private refreshPlaceholderChecks(): void {
+        this.recomputeMissingPlaceholders();
+        this.recomputeUnknownPlaceholders();
+        this.applyDecorations(this.systemEditor);
+        this.applyDecorations(this.userEditor);
+        this.applyDecorations(this.toolsResultsEditor);
+        this.onValidatorChange();
     }
 
     /**
@@ -253,6 +349,33 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
     }
 
     /**
+     * The placeholders the system, user and tools results templates name, each
+     * template read on its own as the backend reads it.
+     */
+    private namedPlaceholders(): string[] {
+        const names: string[] = [];
+        for (const field of ["systemPromptTemplate", "userPromptTemplate", "toolsResultsPromptTemplate"]) {
+            const text: string = this.formGroup.controls[field].value ?? "";
+            for (const match of text.matchAll(PLACEHOLDER_PATTERN)) {
+                const name = trimAsJava(match[1]);
+                if (name.length > 0 && names.indexOf(name) < 0) {
+                    names.push(name);
+                }
+            }
+        }
+        return names;
+    }
+
+    /**
+     * Recomputes the placeholders the template names that nothing fills, when the
+     * names are checked and the backend said what may be named.
+     */
+    private recomputeUnknownPlaceholders(): void {
+        const allowed = this.checkUnknown ? this.allowedPlaceholders : null;
+        this.unknownPlaceholders = allowed ? this.namedPlaceholders().filter(name => allowed.indexOf(name) < 0) : [];
+    }
+
+    /**
      * Rebuilds the current value from the form and notifies the forms API.
      */
     private emitValue(): void {
@@ -294,6 +417,10 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
         if (this.missingPlaceholders.length > 0) {
             errors["missingPlaceholders"] = { missing: this.missingPlaceholders };
         }
+        this.recomputeUnknownPlaceholders();
+        if (this.unknownPlaceholders.length > 0) {
+            errors["unknownPlaceholders"] = { unknown: this.unknownPlaceholders };
+        }
         return Object.keys(errors).length > 0 ? errors : null;
     }
 
@@ -324,14 +451,44 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
         this.applyDecorations(this.toolsResultsEditor);
     }
 
+    /** Whether a decoration pass is running, and the editors still to decorate. */
+    private decorating: boolean = false;
+    private editorsToDecorate: Set<any> = new Set<any>();
+
     /**
-     * Highlights every documented placeholder occurrence ({code}) in the given editor.
+     * Decorates the given editor. A multi-character edit (a paste) has Monaco emit
+     * its content changes while the decorations of the first one are being set, so
+     * this is entered again before that pass has kept its decoration ids: the
+     * nested request is queued and run after it, with the ids it kept, instead of
+     * leaving decorations nobody removes.
      * @param editor the Monaco editor to decorate
      */
     private applyDecorations(editor: any): void {
         if (!editor) {
             return;
         }
+        this.editorsToDecorate.add(editor);
+        if (this.decorating) {
+            return;
+        }
+        this.decorating = true;
+        try {
+            while (this.editorsToDecorate.size > 0) {
+                const next = this.editorsToDecorate.values().next().value;
+                this.editorsToDecorate.delete(next);
+                this.decorate(next);
+            }
+        } finally {
+            this.decorating = false;
+        }
+    }
+
+    /**
+     * Highlights every documented placeholder occurrence ({code}) in the given
+     * editor, and marks the placeholders nothing fills.
+     * @param editor the Monaco editor to decorate
+     */
+    private decorate(editor: any): void {
         const model = editor.getModel ? editor.getModel() : undefined;
         const monaco = (window as any).monaco;
         if (!model || !monaco) {
@@ -353,6 +510,18 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
                         hoverMessage: placeholder.description ? { value: placeholder.description } : undefined
                     }
                 });
+            }
+        }
+        if (this.unknownPlaceholders.length > 0) {
+            const matches = model.findMatches(PLACEHOLDER_PATTERN.source, false, true, true, null, true);
+            for (const match of matches) {
+                const name = trimAsJava(match.matches?.[1] ?? "");
+                if (this.unknownPlaceholders.indexOf(name) >= 0) {
+                    decorations.push({
+                        range: match.range,
+                        options: { inlineClassName: UNKNOWN_PLACEHOLDER_CLASS }
+                    });
+                }
             }
         }
         if (editor === this.systemEditor) {

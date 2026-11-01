@@ -237,29 +237,41 @@ public class GPromptConfigDaoImpl extends GAbstractRuntimeConfigurationDao<GProm
 	 * not checked.
 	 */
 	void checkPlaceholders(GPromptTemplateConfig config) {
-		final IGPromptPlaceholdersCatalog catalog = placeholdersCatalog != null ? placeholdersCatalog.getIfAvailable()
-				: null;
-		if (catalog == null || config == null) {
+		if (config == null) {
+			return;
+		}
+		final Set<String> allowed = allowedPlaceholders(config.getPromptUse(), config.getAgentPrompt());
+		if (allowed == null) {
 			return;
 		}
 		final Set<String> named = new LinkedHashSet<String>(config.getPlaceholders().keySet());
-		final Set<String> allowed = new LinkedHashSet<String>(catalog.builtInPlaceholders());
-		allowed.addAll(catalog.knownPlaceholders());
-		boolean useKnown = false;
-		for (GPromptTemplateConfig prompt : staticConfigs) {
-			if (prompt.getPromptUse() != null && prompt.getPromptUse().equals(config.getPromptUse())) {
-				allowed.addAll(prompt.getPlaceholders().keySet());
-				useKnown = true;
-			}
-		}
-		if (!useKnown && !Boolean.TRUE.equals(config.getAgentPrompt())) {
-			return;
-		}
 		named.removeAll(allowed);
 		if (!named.isEmpty()) {
 			throw new IllegalArgumentException("The prompt names placeholders nobody fills: " + named
 					+ ". It may name: " + allowed);
 		}
+	}
+
+	@Override
+	public Set<String> allowedPlaceholders(String promptUse, Boolean agentPrompt) {
+		final IGPromptPlaceholdersCatalog catalog = placeholdersCatalog != null ? placeholdersCatalog.getIfAvailable()
+				: null;
+		if (catalog == null) {
+			return null;
+		}
+		final Set<String> allowed = new LinkedHashSet<String>(catalog.builtInPlaceholders());
+		allowed.addAll(catalog.knownPlaceholders());
+		boolean useKnown = false;
+		for (GPromptTemplateConfig prompt : staticConfigs) {
+			if (prompt.getPromptUse() != null && prompt.getPromptUse().equals(promptUse)) {
+				allowed.addAll(prompt.getPlaceholders().keySet());
+				useKnown = true;
+			}
+		}
+		if (!useKnown && !Boolean.TRUE.equals(agentPrompt)) {
+			return null;
+		}
+		return allowed;
 	}
 
 	@Override

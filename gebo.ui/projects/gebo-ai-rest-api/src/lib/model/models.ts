@@ -22,6 +22,7 @@ export * from './aggregateRequestBodyConfluenceResultsExtractionData';
 export * from './aggregateRequestBodyGoogleDriveResultsExtractionData';
 export * from './aggregateRequestBodyJiraResultsExtractionData';
 export * from './aggregateRequestBodyMicrosoftResultsExtractionData';
+export * from './allowedPromptPlaceholders';
 export * from './answerFeedbackRequest';
 export * from './authProviderDto';
 export * from './authResponse';

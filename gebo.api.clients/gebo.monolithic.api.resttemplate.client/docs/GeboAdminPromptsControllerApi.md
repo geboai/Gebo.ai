@@ -9,6 +9,7 @@ Method | HTTP request | Description
 [**findPromptConfigByAgentId**](GeboAdminPromptsControllerApi.md#findPromptConfigByAgentId) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByAgentId | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
 [**getAllPromptConfigsLightList**](GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
+[**getAllowedPromptPlaceholders**](GeboAdminPromptsControllerApi.md#getAllowedPromptPlaceholders) | **GET** /api/admin/GeboAdminPromptsController/getAllowedPromptPlaceholders | 
 [**getKnownPromptPlaceholders**](GeboAdminPromptsControllerApi.md#getKnownPromptPlaceholders) | **GET** /api/admin/GeboAdminPromptsController/getKnownPromptPlaceholders | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 [**getPromptConfigByFilter**](GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
@@ -216,6 +217,51 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;GPromptTemplateLightView&gt;**](GPromptTemplateLightView.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAllowedPromptPlaceholders"></a>
+# **getAllowedPromptPlaceholders**
+> AllowedPromptPlaceholders getAllowedPromptPlaceholders(promptUse, agentPrompt)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+String promptUse = "promptUse_example"; // String | 
+Boolean agentPrompt = true; // Boolean | 
+try {
+    AllowedPromptPlaceholders result = apiInstance.getAllowedPromptPlaceholders(promptUse, agentPrompt);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getAllowedPromptPlaceholders");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **promptUse** | **String**|  |
+ **agentPrompt** | **Boolean**|  | [optional]
+
+### Return type
+
+[**AllowedPromptPlaceholders**](AllowedPromptPlaceholders.md)
 
 ### Authorization
 

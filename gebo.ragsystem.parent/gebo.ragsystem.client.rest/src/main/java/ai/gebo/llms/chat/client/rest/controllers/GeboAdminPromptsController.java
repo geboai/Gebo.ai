@@ -96,6 +96,28 @@ public class GeboAdminPromptsController {
 		return known;
 	}
 
+	/** The placeholders a saved prompt of a use may name, as the save checks them. */
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class AllowedPromptPlaceholders {
+		/** Whether the save checks the names of such a prompt at all. */
+		private boolean checked = false;
+		private List<String> allowed = new ArrayList<String>();
+	}
+
+	/**
+	 * What a saved prompt of this use may name: the save refuses a prompt naming
+	 * anything else, so the editor can say it while the prompt is written.
+	 */
+	@GetMapping(value = "getAllowedPromptPlaceholders", produces = MediaType.APPLICATION_JSON_VALUE)
+	public AllowedPromptPlaceholders getAllowedPromptPlaceholders(@RequestParam("promptUse") String promptUse,
+			@RequestParam(value = "agentPrompt", required = false) Boolean agentPrompt) {
+		final java.util.Set<String> allowed = promptConfigDao.allowedPlaceholders(promptUse, agentPrompt);
+		return allowed == null ? new AllowedPromptPlaceholders()
+				: new AllowedPromptPlaceholders(true, allowed.stream().sorted().toList());
+	}
+
 	/**
 	 * Tells the UI whether prompt template editing (save/delete) is enabled for
 	 * this deployment. When false the admin editor keeps save and delete disabled

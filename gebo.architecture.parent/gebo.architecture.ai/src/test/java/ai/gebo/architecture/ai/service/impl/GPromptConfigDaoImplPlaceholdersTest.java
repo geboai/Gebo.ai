@@ -9,6 +9,8 @@
 package ai.gebo.architecture.ai.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -84,5 +86,15 @@ class GPromptConfigDaoImplPlaceholdersTest {
 	void aUseNothingIsKnownOfIsNotChecked() {
 		assertDoesNotThrow(() -> dao.checkPlaceholders(
 				GPromptTemplateConfig.of("{whateverTheCallerFills}", "{question}", "a-new-use")));
+	}
+
+	@Test
+	void theAllowedNamesAreWhatTheSaveChecks() {
+		assertEquals(Set.of("question", "documents", "userLanguage", "currentDate", "INPUT", "deliverableTypesList"),
+				dao.allowedPlaceholders("routing", null));
+		assertEquals(Set.of("question", "documents", "userLanguage", "currentDate", "INPUT"),
+				dao.allowedPlaceholders("my-agent", true));
+		assertNull(dao.allowedPlaceholders("a-new-use", null));
+		assertNull(dao.allowedPlaceholders("a-new-use", false));
 	}
 }

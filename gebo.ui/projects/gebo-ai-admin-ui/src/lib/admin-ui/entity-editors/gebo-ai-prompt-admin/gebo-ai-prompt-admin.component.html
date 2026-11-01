@@ -40,7 +40,7 @@
     }
     <div class="grid" [formGroup]="formGroup">
       <div class="col-12">
-        <gebo-ai-prompt-editing-component formControlName="promptTemplate"></gebo-ai-prompt-editing-component>
+        <gebo-ai-prompt-editing-component formControlName="promptTemplate" [checkUnknownPlaceholders]="true"></gebo-ai-prompt-editing-component>
       </div>
       @if (knownPlaceholders.builtIn?.length || knownPlaceholders.onDemand?.length) {
         <div class="col-12">

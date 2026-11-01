@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { AllowedPromptPlaceholders } from '../model/allowedPromptPlaceholders';
 import { GPromptTemplateConfig } from '../model/gPromptTemplateConfig';
 import { GPromptTemplateLightView } from '../model/gPromptTemplateLightView';
 import { GPromptUseInfo } from '../model/gPromptUseInfo';
@@ -274,6 +275,58 @@ export class GeboAdminPromptsControllerService {
 
         return this.httpClient.request<Array<GPromptTemplateLightView>>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList`,
             {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param promptUse 
+     * @param agentPrompt 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getAllowedPromptPlaceholders(promptUse: string, agentPrompt?: boolean, observe?: 'body', reportProgress?: boolean): Observable<AllowedPromptPlaceholders>;
+    public getAllowedPromptPlaceholders(promptUse: string, agentPrompt?: boolean, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<AllowedPromptPlaceholders>>;
+    public getAllowedPromptPlaceholders(promptUse: string, agentPrompt?: boolean, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<AllowedPromptPlaceholders>>;
+    public getAllowedPromptPlaceholders(promptUse: string, agentPrompt?: boolean, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (promptUse === null || promptUse === undefined) {
+            throw new Error('Required parameter promptUse was null or undefined when calling getAllowedPromptPlaceholders.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (promptUse !== undefined && promptUse !== null) {
+            queryParameters = queryParameters.set('promptUse', <any>promptUse);
+        }
+        if (agentPrompt !== undefined && agentPrompt !== null) {
+            queryParameters = queryParameters.set('agentPrompt', <any>agentPrompt);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<AllowedPromptPlaceholders>('get',`${this.basePath}/api/admin/GeboAdminPromptsController/getAllowedPromptPlaceholders`,
+            {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

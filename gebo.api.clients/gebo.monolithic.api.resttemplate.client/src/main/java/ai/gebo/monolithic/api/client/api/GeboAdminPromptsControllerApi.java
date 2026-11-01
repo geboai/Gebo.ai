@@ -2,6 +2,7 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
+import ai.gebo.monolithic.api.client.model.AllowedPromptPlaceholders;
 import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 import ai.gebo.monolithic.api.client.model.GPromptTemplateLightView;
 import ai.gebo.monolithic.api.client.model.GPromptUseInfo;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-01T10:19:30.389565706+01:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -260,6 +261,54 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GPromptTemplateLightView>> returnType = new ParameterizedTypeReference<List<GPromptTemplateLightView>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param promptUse  (required)
+     * @param agentPrompt  (optional)
+     * @return AllowedPromptPlaceholders
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public AllowedPromptPlaceholders getAllowedPromptPlaceholders(String promptUse, Boolean agentPrompt) throws RestClientException {
+        return getAllowedPromptPlaceholdersWithHttpInfo(promptUse, agentPrompt).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param promptUse  (required)
+     * @param agentPrompt  (optional)
+     * @return ResponseEntity&lt;AllowedPromptPlaceholders&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<AllowedPromptPlaceholders> getAllowedPromptPlaceholdersWithHttpInfo(String promptUse, Boolean agentPrompt) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'promptUse' is set
+        if (promptUse == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'promptUse' when calling getAllowedPromptPlaceholders");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getAllowedPromptPlaceholders").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "promptUse", promptUse));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "agentPrompt", agentPrompt));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<AllowedPromptPlaceholders> returnType = new ParameterizedTypeReference<AllowedPromptPlaceholders>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
