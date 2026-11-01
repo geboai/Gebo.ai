@@ -18,7 +18,7 @@ import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 /**
  * The mapping of the Models API answer, fed with the json shape the api documents
  * (https://platform.claude.com/docs/en/api/http/beta/models/retrieve), including the
- * fields newer than the sdk on the classpath.
+ * lifecycle fields and thinking.types.disabled.
  */
 class AnthropicModelInfoMapperTest {
 
