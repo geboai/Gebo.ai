@@ -9,6 +9,8 @@
 package ai.gebo.llms.agent.standard.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -156,11 +158,42 @@ class GChatEnvironmentNetworkRunnerTest {
 		});
 		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
 
-		runner.run(network, request,
-				new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(), List.of()), null);
+		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.attachments(new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(), List.of())).build());
 
 		verify(lifeCycle).startRequest(eq(request), eq(chatModel), any());
 		verify(lifeCycle, never()).addUploadedDocument(any(), any(), any(), any());
+	}
+
+	@Test
+	void anExportedNetworkRunsAsItAlwaysHas() throws Exception {
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run(network, request, ChatRunAttachments.none(), null);
+
+		verify(lifeCycle).ensureChatSessionExists(request);
+		verify(lifeCycle, never()).ensureChatSessionExists(any(), any());
+		verify(lifeCycle, never()).getSessionAvailableKnowledgeBases(any());
+		verify(resources, never()).setAvailableKnowledgeBaseCodes(any());
+		verify(resources, never()).setRunEnvironment(any());
+		verify(service).executeNetwork(any(), eq("What is new?"), isNull());
+		assertNull(request.getRunOrigin(), "an exported network's request does not say where it comes from");
+		assertNull(request.getUserLanguage(), "nor is its language detected");
+	}
+
+	@Test
+	void theFilesAnExportedNetworkIsSentAreAddedToItsRequestAsAChatAddsAnUpload() throws Exception {
+		UserUploadedContent stored = new UserUploadedContent();
+		stored.setFileName("notes.txt");
+		when(uploadHandler.chatSessionUpload(eq("conversation-1"), anyList())).thenReturn(OperationStatus.of(List.of(stored)));
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run(network, request,
+				new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(), List.of()), null);
+
+		InOrder adding = inOrder(lifeCycle);
+		adding.verify(lifeCycle).addUploadedDocument(eq(request), eq(stored), eq(chatModel), any());
+		adding.verify(lifeCycle).startRequest(eq(request), eq(chatModel), any());
 	}
 
 	@Test
@@ -203,9 +236,22 @@ class GChatEnvironmentNetworkRunnerTest {
 		when(service.executeNetwork(any(), any(), any())).thenThrow(new AgentException("The model is down"));
 
 		GChatEnvironmentRunException failure = assertThrows(GChatEnvironmentRunException.class,
-				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, null));
+				() -> runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).build()));
 
 		assertEquals("conversation-1", failure.getChatContextCode());
+		verify(lifeCycle).releaseRequest(request);
+		verify(lifeCycle, never()).endRequest(any(), any());
+		verify(lifeCycle, never()).chatRequestCompleted(any(), any());
+		verify(service).dispose();
+	}
+
+	@Test
+	void aRunOfAnExportedNetworkThatFailedReleasesItsRequestAndSavesNothing() throws Exception {
+		when(service.executeNetwork(any(), any(), any())).thenThrow(new AgentException("The model is down"));
+
+		assertThrows(AgentException.class,
+				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, null));
+
 		verify(lifeCycle).releaseRequest(request);
 		verify(lifeCycle, never()).endRequest(any(), any());
 		verify(lifeCycle, never()).chatRequestCompleted(any(), any());

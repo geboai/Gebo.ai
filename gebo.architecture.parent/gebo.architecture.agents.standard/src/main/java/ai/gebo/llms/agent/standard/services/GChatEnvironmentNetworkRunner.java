@@ -235,15 +235,166 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	 * context - how anything a tool needs to know about the run it is serving
 	 * reaches it (see {@code ToolCallbackDeclarationUtil}). A caller whose tools
 	 * must know which of its runs they are in puts that here.
+	 * <p>
+	 * This is the run an exported A2A network makes, and it runs as it always has:
+	 * the request is neither understood nor told where it comes from, the network
+	 * works on the knowledge bases the conversation's profile gives it, and it is
+	 * given no environment of its own. {@link #run(GChatEnvironmentRunRequest)} is
+	 * the run that does those things.
 	 */
 	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
 			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, INotificationSink sink)
 			throws AgentException {
-		return run(GChatEnvironmentRunRequest.builder().network(network).request(request)
-				.attachments(attachments != null ? attachments : ChatRunAttachments.none())
-				.rulesOfThisRun(rulesOfThisRun != null ? rulesOfThisRun : List.of())
-				.toolsContextOfThisRun(toolsContextOfThisRun != null ? toolsContextOfThisRun : Map.of()).sink(sink)
-				.build());
+		if (network == null) {
+			throw new AgentException("There is no network of agents to run");
+		}
+		final String networkCode = network.getCode();
+		final IGReactiveChatAgentsNetworkServiceFactory factory = runtimeBinder
+				.getImplementationOf(IGReactiveChatAgentsNetworkServiceFactory.class);
+		if (factory == null) {
+			throw new AgentException("The chat network of agents factory is not available");
+		}
+		IGReactiveChatAgentsNetworkService service = null;
+		// Whether the request was started in the conversation and not ended yet: a run
+		// that fails after that releases it, or the conversation refuses the next one.
+		boolean started = false;
+		try {
+			final IGConfigurableChatModel chatModel = chatSessionLifecycleService.getSessionChatModel(request);
+			final IGConfigurableChatModel serviceModel = chatModelsDao.defaultHandler();
+			// The conversation has to exist before its request can be started, and a caller
+			// naming one we have never seen is naming a new one.
+			chatSessionLifecycleService.ensureChatSessionExists(request);
+			attachAddingUploads(request, attachments, chatModel);
+			final GeboChatResponse response = chatSessionLifecycleService.createEmptyResponse(request);
+			final LLMChatRequestResources resources = chatSessionLifecycleService.startRequest(request, chatModel,
+					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+			started = true;
+			if (rulesOfThisRun != null && !rulesOfThisRun.isEmpty()) {
+				// Beside the rules the conversation and its profile already carry.
+				resources.getRulesToFollow().addAll(rulesOfThisRun);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("The run follows " + rulesOfThisRun.size() + " rule(s) of its own, beside the "
+							+ "conversation's");
+				}
+			}
+			final MinimalChatContext minimalChatContext = chatSessionLifecycleService.getMinimalChatContext(request,
+					IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel));
+			// Every tool the run calls is recorded into the response, so what comes back
+			// says what was done to answer, as a chat's response does.
+			final ToolCallsListener toolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
+			resources.setToolCallsListener(toolCalls);
+			minimalChatContext.setToolCallsListener(toolCalls);
+			final ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null,
+					chatModel.getContextLength(), resources, response, minimalChatContext, true);
+			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+			service = factory.create(network, sink, String.class, GeboChatMessageEnvelope.class, runAs);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Running network:" + network.getCode() + " in the environment of chat profile:"
+						+ request.getChatProfileCode() + " conversation:" + request.getUserChatContextCode()
+						+ " over " + knowledgeBasesOf(resources) + " knowledge base(s), context window:"
+						+ chatModel.getContextLength());
+			}
+			// The sink buffers what it emits, so reading the frames after the run loses
+			// nothing and reading them as they come loses nothing either.
+			final Flux<GeboChatMessageEnvelope> frames = service.getFlux();
+			IChatRequestContext context = resources.createChatRequestContext();
+			if (toolsContextOfThisRun != null) {
+				for (Map.Entry<String, Object> entry : toolsContextOfThisRun.entrySet()) {
+					context = context.withToolsContextValue(entry.getKey(), entry.getValue());
+				}
+				if (!toolsContextOfThisRun.isEmpty() && LOGGER.isDebugEnabled()) {
+					LOGGER.debug("The tools of the run are told " + toolsContextOfThisRun.size()
+							+ " thing(s) about it: " + toolsContextOfThisRun.keySet());
+				}
+			}
+			// the network is asked the question its input adapter used to read from the
+			// minimal chat context's current request, which is this request
+			final String question = GeboChatRequest.actualQuery(request);
+			final GeboChatMessageEnvelope last = service.executeNetwork(context, question != null ? question : "",
+					null);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
+						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
+			}
+			final GeboChatResponse answered = responseOf(last, response);
+			// The run ends as a chat's request ends (see ChatRequestEnding): the answer is
+			// saved as an interaction of the conversation, the session is maintained and
+			// the request is released - so the next run goes on in the same conversation,
+			// with this one behind it, instead of being refused as a concurrent request.
+			ended(request, response, answered, chatModel);
+			started = false;
+			return new ChatEnvironmentRun(frames, answered, service, request.getUserChatContextCode());
+		} catch (AgentException ae) {
+			releaseIfStarted(started, request);
+			disposeQuietly(service);
+			throw ae;
+		} catch (GeboChatSessionLifecycleException | GeboPersistenceException | NetworkOfAgentsException
+				| LLMConfigException | IOException | RuntimeException e) {
+			releaseIfStarted(started, request);
+			disposeQuietly(service);
+			LOGGER.error("The run of network '" + networkCode + "' in a chat environment failed", e);
+			throw new AgentException("The run of network '" + networkCode + "' failed: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Attaches what an A2A caller sent, before the request is started: the knowledge
+	 * bases and documents it stated, and the files it sent, stored in the
+	 * conversation's own area and added to the request as a chat adds an upload.
+	 */
+	private void attachAddingUploads(GeboChatRequest request, ChatRunAttachments attachments,
+			IGConfigurableChatModel chatModel) {
+		if (attachments == null || attachments.isEmpty()) {
+			return;
+		}
+		if (!attachments.getKnowledgeBases().isEmpty()) {
+			request.setChoosedKnowledgeBases(List.copyOf(attachments.getKnowledgeBases()));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The caller asked the run to work on " + attachments.getKnowledgeBases().size()
+						+ " stated knowledge base(s)");
+			}
+		}
+		if (!attachments.getDocuments().isEmpty()) {
+			final List<String> forced = new ArrayList<>(
+					request.getForcedRequestDocuments() != null ? request.getForcedRequestDocuments() : List.of());
+			forced.addAll(attachments.getDocuments());
+			request.setForcedRequestDocuments(forced);
+		}
+		if (attachments.getFiles().isEmpty()) {
+			return;
+		}
+		final IGUserUploadContentHandler uploads = uploadContentHandler.getIfAvailable();
+		if (uploads == null) {
+			LOGGER.warn("The caller sent " + attachments.getFiles().size()
+					+ " file(s) but this installation cannot take uploads: they are left out of the run");
+			return;
+		}
+		final OperationStatus<List<UserUploadedContent>> stored = uploads
+				.chatSessionUpload(request.getUserChatContextCode(), attachments.getFiles());
+		final List<UserUploadedContent> contents = stored != null ? stored.getResult() : null;
+		if (contents == null || contents.isEmpty()) {
+			LOGGER.warn("The file(s) the caller sent could not be stored: they are left out of the run");
+			return;
+		}
+		for (UserUploadedContent content : contents) {
+			try {
+				chatSessionLifecycleService.addUploadedDocument(request, content, chatModel,
+						LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("The file " + content.getFileName() + " the caller sent is part of the run");
+				}
+			} catch (GeboChatSessionLifecycleException | IOException | RuntimeException notAttached) {
+				// One attachment that cannot be taken in must not lose the question it came
+				// with: the run goes on without it, and the log says which.
+				LOGGER.error("The file " + content.getFileName()
+						+ " the caller sent could not be added to the run; it goes on without it", notAttached);
+			}
+		}
+	}
+
+	private int knowledgeBasesOf(LLMChatRequestResources resources) {
+		final List<String> codes = resources != null ? resources.getAvailableKnowledgeBaseCodes() : null;
+		return codes != null ? codes.size() : 0;
 	}
 
 	@Override

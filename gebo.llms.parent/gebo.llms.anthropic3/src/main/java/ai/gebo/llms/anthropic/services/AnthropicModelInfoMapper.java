@@ -9,10 +9,13 @@
 
 package ai.gebo.llms.anthropic.services;
 
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 
 import com.anthropic.core.JsonField;
 import com.anthropic.core.JsonValue;
@@ -20,6 +23,7 @@ import com.anthropic.models.beta.models.BetaCapabilitySupport;
 import com.anthropic.models.beta.models.BetaEffortCapability;
 import com.anthropic.models.beta.models.BetaModelCapabilities;
 import com.anthropic.models.beta.models.BetaModelInfo;
+import com.anthropic.models.beta.models.BetaModelLine;
 import com.anthropic.models.beta.models.BetaThinkingCapability;
 import com.anthropic.models.beta.models.BetaThinkingTypes;
 
@@ -32,9 +36,10 @@ import ai.gebo.llms.models.metainfos.ModelMetaInfo;
  * <p>
  * Every field is read through its raw {@code JsonField}: the typed accessors of the
  * sdk throw when the api leaves a field out, and a model the sdk only partly knows
- * must still be listed. The fields newer than the sdk on the classpath (lifecycle,
- * line, deprecated_at, retires_at, thinking.types.disabled) are read from the
- * additional properties, where the sdk keeps what it has no field for.
+ * must still be listed. The lifecycle fields (lifecycle, line, deprecated_at,
+ * retires_at) and thinking.types.disabled are read from the sdk's own fields, which
+ * anthropic-java has since 2.72; an sdk without them keeps them in the additional
+ * properties, where they are read otherwise.
  */
 final class AnthropicModelInfoMapper {
 
@@ -71,9 +76,9 @@ final class AnthropicModelInfoMapper {
 			meta.setSupportsReasoning(c._thinking().asKnown().map(BetaThinkingCapability::_supported)
 					.flatMap(JsonField::asKnown).orElse(null));
 		});
-		String lifecycle = string(extra, "lifecycle");
-		String deprecatedAt = string(extra, "deprecated_at");
-		String retiresAt = string(extra, "retires_at");
+		String lifecycle = text(info._lifecycle(), BetaModelInfo.Lifecycle::asString, extra, "lifecycle");
+		String deprecatedAt = text(info._deprecatedAt(), ISO_OFFSET_DATE_TIME::format, extra, "deprecated_at");
+		String retiresAt = text(info._retiresAt(), ISO_OFFSET_DATE_TIME::format, extra, "retires_at");
 		boolean deprecated = LIFECYCLE_DEPRECATED.equals(lifecycle);
 		meta.setDeprecated(lifecycle != null ? deprecated : null);
 		meta.setDeprecationDate(deprecatedAt);
@@ -90,7 +95,7 @@ final class AnthropicModelInfoMapper {
 		choice.setSupportsStructuredOutput(meta.getSupportsStructuredOutput());
 		if (lifecycle != null)
 			choice.getModelDetails().put(LIFECYCLE, lifecycle);
-		String line = string(extra, "line");
+		String line = text(info._line(), BetaModelLine::asString, extra, "line");
 		if (line != null)
 			choice.getModelDetails().put(LINE, line);
 		if (meta.getMaxOutputToken() != null)
@@ -116,7 +121,10 @@ final class AnthropicModelInfoMapper {
 		boolean adaptive = Boolean.TRUE.equals(supported(types.get()._adaptive()));
 		boolean budget = Boolean.TRUE.equals(supported(types.get()._enabled()));
 		// Missing means accepted: the api reports false exactly when "disabled" is refused
-		boolean disabled = !Boolean.FALSE.equals(supportedFlag(types.get()._additionalProperties().get("disabled")));
+		Boolean disabledSupported = supported(types.get()._disabled());
+		if (disabledSupported == null)
+			disabledSupported = supportedFlag(types.get()._additionalProperties().get("disabled"));
+		boolean disabled = !Boolean.FALSE.equals(disabledSupported);
 		Set<String> levels = new LinkedHashSet<>();
 		capabilities.get()._effort().asKnown().filter(e -> e._supported().asKnown().orElse(false)).ifPresent(e -> {
 			addIfSupported(levels, "low", e._low());
@@ -151,6 +159,26 @@ final class AnthropicModelInfoMapper {
 		return plain(value) instanceof Map<?, ?> object && object.get("supported") instanceof Boolean supported
 				? supported
 				: null;
+	}
+
+	/**
+	 * A field as the text the api sent: the sdk's own field when it parsed it, the raw
+	 * string when it could not, else the additional property of that name.
+	 */
+	private static <T> String text(JsonField<T> field, Function<T, String> asText, Map<String, JsonValue> extra,
+			String key) {
+		Optional<T> known = field.asKnown();
+		if (known.isPresent()) {
+			try {
+				return asText.apply(known.get());
+			} catch (RuntimeException e) {
+				// not a string value: read as the raw json below
+			}
+		}
+		Optional<JsonValue> raw = field.asUnknown();
+		if (raw.isPresent() && plain(raw.get()) instanceof String text)
+			return text;
+		return string(extra, key);
 	}
 
 	private static String string(Map<String, JsonValue> extra, String key) {
