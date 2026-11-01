@@ -29,6 +29,7 @@ export interface GAgentsNetwork {
     readOnly?: boolean;
     suggestedPurpose?: string;
     choosableForPipelineTypes?: Array<GAgentsNetwork.ChoosableForPipelineTypesEnum>;
+    rememberAcrossTurns?: boolean;
 }
 export namespace GAgentsNetwork {
     export type ChoosableForPipelineTypesEnum = 'RAG_PIPELINE' | 'PURE_CHAT_PIPELINE';

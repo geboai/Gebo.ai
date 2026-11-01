@@ -52,6 +52,8 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
+import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
+import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
 import ai.gebo.llms.agent.standard.services.DocumentsSearchNetworkAgentServiceWrapper;
@@ -65,7 +67,6 @@ import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.agent.standardtools.StandardSearchesToolsImpl;
 import ai.gebo.llms.agent.standardtools.WebSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.llms.deepsearch.service.IGExternalSearchSecurityService;
 import ai.gebo.security.services.IGSecurityService;
@@ -149,8 +150,9 @@ public class StandardAgentsInitialization {
 			@Autowired @Qualifier(IDynamicAgentsNetworkDataSource.DEFAULT_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource networkDataSource,
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
 			IGChatSessionLifeCycleService lifeCycleService,
-			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
-		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory) {
+		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Wiring the default streaming output pipeline step on network service factory:"
@@ -161,7 +163,7 @@ public class StandardAgentsInitialization {
 		// pipeline; the default network is the fallback.
 		return new ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(factory, networkDataSource,
 				lifeCycleService, ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID,
-				PipelineType.RAG_PIPELINE, defaultNetworksService);
+				PipelineType.RAG_PIPELINE, defaultNetworksService, environmentBuilder, conversationMemory);
 	}
 
 	@Bean
@@ -305,7 +307,7 @@ public class StandardAgentsInitialization {
 					+ " internalKnowledgeBaseSearcher:" + (internalKnowledgeBaseConfig != null));
 		}
 		List<AgentNetworkParticipant> participants = new ArrayList<>();
-		// Non-LLM input node: adapts ChatPipelineExecutionRuntimeData -> query String
+		// Non-LLM input node: forwards the query to the controller
 		// and forwards it to the String-input controller.
 		AgentNetworkParticipant inputAdapterParticipant = new AgentNetworkParticipant();
 		inputAdapterParticipant.setAgentConfigCode(inputAdapterConfigCode);

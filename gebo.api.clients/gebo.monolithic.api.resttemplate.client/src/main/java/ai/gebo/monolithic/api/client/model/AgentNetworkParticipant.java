@@ -24,7 +24,7 @@ import java.util.List;
  * AgentNetworkParticipant
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
 
 public class AgentNetworkParticipant {
   @JsonProperty("agentConfigCode")
@@ -41,42 +41,6 @@ public class AgentNetworkParticipant {
 
   @JsonProperty("allowedToNotifyUser")
   private Boolean allowedToNotifyUser = null;
-
-  /**
-   * Gets or Sets communicationPolicy
-   */
-  public enum CommunicationPolicyEnum {
-    ALLOW_ALL("ALLOW_ALL"),
-    DENY_ALL("DENY_ALL"),
-    ALLOW_LIST("ALLOW_LIST"),
-    DENY_LIST("DENY_LIST");
-
-    private String value;
-
-    CommunicationPolicyEnum(String value) {
-      this.value = value;
-    }
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-    @JsonCreator
-    public static CommunicationPolicyEnum fromValue(String input) {
-      for (CommunicationPolicyEnum b : CommunicationPolicyEnum.values()) {
-        if (b.value.equals(input)) {
-          return b;
-        }
-      }
-      return null;
-    }
-
-  }  @JsonProperty("communicationPolicy")
-  private CommunicationPolicyEnum communicationPolicy = null;
 
   @JsonProperty("communicationList")
   private List<String> communicationList = null;
@@ -184,24 +148,6 @@ public class AgentNetworkParticipant {
 
   public void setAllowedToNotifyUser(Boolean allowedToNotifyUser) {
     this.allowedToNotifyUser = allowedToNotifyUser;
-  }
-
-  public AgentNetworkParticipant communicationPolicy(CommunicationPolicyEnum communicationPolicy) {
-    this.communicationPolicy = communicationPolicy;
-    return this;
-  }
-
-   /**
-   * Get communicationPolicy
-   * @return communicationPolicy
-  **/
-  @Schema(required = true, description = "")
-  public CommunicationPolicyEnum getCommunicationPolicy() {
-    return communicationPolicy;
-  }
-
-  public void setCommunicationPolicy(CommunicationPolicyEnum communicationPolicy) {
-    this.communicationPolicy = communicationPolicy;
   }
 
   public AgentNetworkParticipant communicationList(List<String> communicationList) {
@@ -343,7 +289,6 @@ public class AgentNetworkParticipant {
         Objects.equals(this.inputNode, agentNetworkParticipant.inputNode) &&
         Objects.equals(this.outputNode, agentNetworkParticipant.outputNode) &&
         Objects.equals(this.allowedToNotifyUser, agentNetworkParticipant.allowedToNotifyUser) &&
-        Objects.equals(this.communicationPolicy, agentNetworkParticipant.communicationPolicy) &&
         Objects.equals(this.communicationList, agentNetworkParticipant.communicationList) &&
         Objects.equals(this.controller, agentNetworkParticipant.controller) &&
         Objects.equals(this.canCallTools, agentNetworkParticipant.canCallTools) &&
@@ -354,7 +299,7 @@ public class AgentNetworkParticipant {
 
   @Override
   public int hashCode() {
-    return Objects.hash(agentConfigCode, agentContextualName, inputNode, outputNode, allowedToNotifyUser, communicationPolicy, communicationList, controller, canCallTools, additionalToolSources, canCallOtherAgents, networkAgentName);
+    return Objects.hash(agentConfigCode, agentContextualName, inputNode, outputNode, allowedToNotifyUser, communicationList, controller, canCallTools, additionalToolSources, canCallOtherAgents, networkAgentName);
   }
 
 
@@ -368,7 +313,6 @@ public class AgentNetworkParticipant {
     sb.append("    inputNode: ").append(toIndentedString(inputNode)).append("\n");
     sb.append("    outputNode: ").append(toIndentedString(outputNode)).append("\n");
     sb.append("    allowedToNotifyUser: ").append(toIndentedString(allowedToNotifyUser)).append("\n");
-    sb.append("    communicationPolicy: ").append(toIndentedString(communicationPolicy)).append("\n");
     sb.append("    communicationList: ").append(toIndentedString(communicationList)).append("\n");
     sb.append("    controller: ").append(toIndentedString(controller)).append("\n");
     sb.append("    canCallTools: ").append(toIndentedString(canCallTools)).append("\n");

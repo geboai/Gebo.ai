@@ -15,6 +15,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusGBedrockImageModelConfig { 
     result?: GBedrockImageModelConfig;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

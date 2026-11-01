@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **readOnly** | **Boolean** |  |  [optional]
 **suggestedPurpose** | **String** |  |  [optional]
 **choosableForPipelineTypes** | [**List&lt;ChoosableForPipelineTypesEnum&gt;**](#List&lt;ChoosableForPipelineTypesEnum&gt;) |  |  [optional]
+**rememberAcrossTurns** | **Boolean** |  |  [optional]
 
 <a name="List<ChoosableForPipelineTypesEnum>"></a>
 ## Enum: List&lt;ChoosableForPipelineTypesEnum&gt;

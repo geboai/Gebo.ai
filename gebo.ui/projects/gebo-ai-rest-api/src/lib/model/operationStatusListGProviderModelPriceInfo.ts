@@ -15,6 +15,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusListGProviderModelPriceInfo { 
     result?: Array<GProviderModelPriceInfo>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

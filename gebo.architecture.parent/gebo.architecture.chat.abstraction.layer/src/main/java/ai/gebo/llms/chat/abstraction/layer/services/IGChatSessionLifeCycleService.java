@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.abstraction.layer.services;
 
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -19,6 +20,8 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GChatSessionOpeningOptions;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 
 /******************************************************************************************************
@@ -44,10 +47,42 @@ public interface IGChatSessionLifeCycleService {
 	public void ensureChatSessionExists(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException;
 
+	/**
+	 * The same, for a run from outside a chat: the conversation is opened as the
+	 * options say when the request names none, and shared with whom they name when
+	 * it names an existing one (see {@link GChatSessionOpeningOptions}).
+	 */
+	public void ensureChatSessionExists(GeboChatRequest request, GChatSessionOpeningOptions options)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException;
+
 	public void createChatSession(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException;
 
+	/** Creates the conversation of a run from outside a chat, as the options say. */
+	public void createChatSession(GeboChatRequest request, GChatSessionOpeningOptions options)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException;
+
 	public void removeChatSession(String code) throws GeboChatSessionLifecycleException;
+
+	/**
+	 * Grants the conversation to more people and groups, beside its owner and
+	 * whoever it is granted to already. This is for a run that happens as several
+	 * identities over time (the account a harness runs as, the person who woke it,
+	 * an administrator trying it again), each of which must find the conversation
+	 * granted when its turn comes: it is <b>not</b> checked against the current
+	 * user, so it is for runners, never for a controller.
+	 */
+	public void shareChatSession(String code, List<String> users, List<String> groups)
+			throws GeboChatSessionLifecycleException;
+
+	/**
+	 * Drops the transient conversations opened before the given moment, whose run
+	 * never came back to drop them (see {@link GUserChatSession#getTransientRun()}),
+	 * with their states and stored contents.
+	 *
+	 * @return how many were dropped
+	 */
+	public int dropTransientChatSessionsOpenedBefore(Date before);
 
 	public LLMChatRequestResources startRequest(GeboChatRequest request, IGConfigurableChatModel targetChatModel,
 			LLMRequestGenerationPolicy policy) throws GeboChatSessionLifecycleException, IOException;

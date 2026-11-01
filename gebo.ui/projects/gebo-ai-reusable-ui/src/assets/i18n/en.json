@@ -5938,7 +5938,7 @@
       "PromptChangeDisclaimer": {
         "label": "Changing a prompt template will change the behavior of llms decisions and responses, if unsure of what you are doing do not modify it"
       },
-      "MissingPlaceholdersLabel": { "label": "Missing mandatory placeholders" },
+      "MissingPlaceholdersLabel": { "label": "Missing mandatory placeholders" },"UnknownPlaceholdersLabel":{"label":"Placeholders nothing fills, the prompt cannot be saved"},
       "agentPromptLabel": { "label": "Agent prompt" },
       "systemPromptTemplateLabel": { "label": "System prompt template" },
       "userPromptTemplateLabel": { "label": "User prompt template" },

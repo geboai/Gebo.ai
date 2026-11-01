@@ -33,5 +33,13 @@ public class StandardAgentsNetworkEnvironmentEntries {
 	 * Document.
 	 */
 	public static final String CHAT_WITH_DOC_REFS_BY_CODE = "CHAT_WITH_DOC_REFS_BY_CODE";
+	/**
+	 * The {@code ChatPipelineExecutionRuntimeData} of the request the network runs
+	 * on: the current request, its resources, its response. A reference every agent
+	 * reaches through the session it is given (see {@code ChatRuntimeDataOf}),
+	 * instead of the network's input type: the input of a network is what it is
+	 * asked, the request it is asked in is its environment.
+	 */
+	public static final String CHAT_RUNTIME_DATA = "CHAT_RUNTIME_DATA";
 
 }

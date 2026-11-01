@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
@@ -31,5 +32,16 @@ public class ChatPipelineExecutionRuntimeData {
 	private final LLMChatRequestResources requestResources;
 	private final Map<String, Object> sharedEnvironment = new HashMap<String, Object>();
 	private final MinimalChatContext minimalChatContext;
+
+	/**
+	 * The current request, the one the run serves: held by the request resources
+	 * and by the minimal context alike, the same instance, read from here.
+	 */
+	public GeboChatRequest getCurrentRequest() {
+		if (requestResources != null && requestResources.getCurrentRequest() != null) {
+			return requestResources.getCurrentRequest();
+		}
+		return minimalChatContext != null ? minimalChatContext.getCurrentRequest() : null;
+	}
 
 }

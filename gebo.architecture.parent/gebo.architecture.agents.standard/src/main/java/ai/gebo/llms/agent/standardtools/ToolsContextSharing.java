@@ -10,14 +10,11 @@
 package ai.gebo.llms.agent.standardtools;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.ai.document.Document;
 
+import ai.gebo.llms.abstraction.layer.model.ForwardingChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
-import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
-import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 
 /**
  * Shares an object of the calling agent with the tools it calls: the request
@@ -26,46 +23,12 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
  * {@link ToolsProgress}).
  */
 final class ToolsContextSharing {
-
 	private ToolsContextSharing() {
 	}
 
-	/**
-	 * The given request context, its tools context also carrying the value under the
-	 * key: every other value is still read from the given context.
-	 */
+	/** The context, its tools context also carrying the value under the key. */
 	static IChatRequestContext with(IChatRequestContext context, String key, Object value) {
-		return new IChatRequestContext() {
-			@Override
-			public String getRequestID() {
-				return context.getRequestID();
-			}
-
-			@Override
-			public String getSessionID() {
-				return context.getSessionID();
-			}
-
-			@Override
-			public String getConsolidatedHistory() {
-				return context.getConsolidatedHistory();
-			}
-
-			@Override
-			public List<IChatSessionEntry> getInteractions() {
-				return context.getInteractions();
-			}
-
-			@Override
-			public List<Document> getDocuments() {
-				return context.getDocuments();
-			}
-
-			@Override
-			public String getActualUserRequest() {
-				return context.getActualUserRequest();
-			}
-
+		return new ForwardingChatRequestContext(context) {
 			@Override
 			public Map<String, Object> getToolsContext() {
 				final Map<String, Object> toolsContext = context.getToolsContext() != null
@@ -73,26 +36,6 @@ final class ToolsContextSharing {
 						: new HashMap<>();
 				toolsContext.put(key, value);
 				return toolsContext;
-			}
-
-			@Override
-			public Map<String, Object> getPipelineInfos() {
-				return context.getPipelineInfos();
-			}
-
-			@Override
-			public ToolCallsListener getToolCallListener() {
-				return context.getToolCallListener();
-			}
-
-			@Override
-			public List<String> getRulesToFollow() {
-				return context.getRulesToFollow();
-			}
-
-			@Override
-			public String getUserLanguage() {
-				return context.getUserLanguage();
 			}
 		};
 	}

@@ -28,23 +28,22 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 
 /**
- * Input adapter agent for the default chat network. It is the network input node:
- * it does not call an LLM, it simply extracts the user query (rewritten query, or
- * the raw query) from the {@link ChatPipelineExecutionRuntimeData} and forwards it
- * as a plain String to its configured target(s) (the controller), so the rest of
- * the network can be wired on a String input type.
+ * The input node of a chat network: forwards the question the network was
+ * asked to the controller, without calling a model. The request the question
+ * is asked in travels in the session environment (see {@link ChatRuntimeDataOf});
+ * this node is kept for the networks that name it as their input node, and
+ * does nothing a controller as input node would not do.
  */
 @Service
 public class ChatRuntimeDataQueryAdapterAgentService
-		extends GAbstractGenericalNetworkAgentService<ChatPipelineExecutionRuntimeData, String>
-		implements IGNetworkAgentService<ChatPipelineExecutionRuntimeData, String> {
+		extends GAbstractGenericalNetworkAgentService<String, String>
+		implements IGNetworkAgentService<String, String> {
 
-	private static final String DESCRIPTION = "Input adapter that extracts the user query from the chat runtime data and forwards it to the controller, without calling an LLM";
+	private static final String DESCRIPTION = "Input adapter that forwards the user query to the controller, without calling an LLM";
 	public static final String CHAT_RUNTIME_DATA_QUERY_ADAPTER = "chatRuntimeDataQueryAdapter";
 
 	public ChatRuntimeDataQueryAdapterAgentService(IGChatModelRuntimeConfigurationDao chatModelsDao,
@@ -84,8 +83,8 @@ public class ChatRuntimeDataQueryAdapterAgentService
 	}
 
 	@Override
-	public Class<ChatPipelineExecutionRuntimeData> getInputType() {
-		return ChatPipelineExecutionRuntimeData.class;
+	public Class<String> getInputType() {
+		return String.class;
 	}
 
 	@Override
@@ -95,10 +94,10 @@ public class ChatRuntimeDataQueryAdapterAgentService
 
 	@Override
 	public List<AgentsExchangeMessage<String>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<ChatPipelineExecutionRuntimeData> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<ChatPipelineExecutionRuntimeData, String> mySessionContext,
+			AgentPrivateSessionContext<String, String> mySessionContext,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) chat runtime data query adapter persona:"
@@ -134,20 +133,17 @@ public class ChatRuntimeDataQueryAdapterAgentService
 		return out;
 	}
 
-	private String extractQuery(ChatPipelineExecutionRuntimeData runtimeData) throws AgentException {
-		if (runtimeData == null || runtimeData.getMinimalChatContext() == null) {
-			throw new AgentException("No chat context available to extract the user query");
-		}
-		GeboChatRequest request = runtimeData.getMinimalChatContext().getCurrentRequest();
-		if (request == null) {
-			throw new AgentException("No chat request available to extract the user query");
-		}
-		String query = GeboChatRequest.actualQuery(request);
+	/**
+	 * The query the network was asked, which is what the input node is given; the
+	 * request it is asked in is in the session environment, for the agents that
+	 * need more of it (see {@link ChatRuntimeDataOf}).
+	 */
+	private String extractQuery(String payload) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("extractQuery(...) resolved a user query of " + (query != null ? query.length() : 0)
+			LOGGER.debug("extractQuery(...) resolved a user query of " + (payload != null ? payload.length() : 0)
 					+ " character(s)");
 		}
-		return query != null ? query : "";
+		return payload != null ? payload : "";
 	}
 
 }

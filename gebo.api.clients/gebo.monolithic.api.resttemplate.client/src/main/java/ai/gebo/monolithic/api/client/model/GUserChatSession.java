@@ -27,7 +27,7 @@ import java.util.List;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-29T09:28:48.471184600+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
@@ -68,6 +68,12 @@ public class GUserChatSession {
 
   @JsonProperty("contextCode")
   private String contextCode = null;
+
+  @JsonProperty("transientRun")
+  private Boolean transientRun = null;
+
+  @JsonProperty("runOrigin")
+  private String runOrigin = null;
 
   @JsonProperty("chatProfileCode")
   private String chatProfileCode = null;
@@ -357,6 +363,42 @@ public class GUserChatSession {
     this.contextCode = contextCode;
   }
 
+  public GUserChatSession transientRun(Boolean transientRun) {
+    this.transientRun = transientRun;
+    return this;
+  }
+
+   /**
+   * Get transientRun
+   * @return transientRun
+  **/
+  @Schema(description = "")
+  public Boolean isTransientRun() {
+    return transientRun;
+  }
+
+  public void setTransientRun(Boolean transientRun) {
+    this.transientRun = transientRun;
+  }
+
+  public GUserChatSession runOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+    return this;
+  }
+
+   /**
+   * Get runOrigin
+   * @return runOrigin
+  **/
+  @Schema(description = "")
+  public String getRunOrigin() {
+    return runOrigin;
+  }
+
+  public void setRunOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+  }
+
   public GUserChatSession chatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
@@ -576,6 +618,8 @@ public class GUserChatSession {
         Objects.equals(this.accessibleToAll, guserChatSession.accessibleToAll) &&
         Objects.equals(this.aclAliases, guserChatSession.aclAliases) &&
         Objects.equals(this.contextCode, guserChatSession.contextCode) &&
+        Objects.equals(this.transientRun, guserChatSession.transientRun) &&
+        Objects.equals(this.runOrigin, guserChatSession.runOrigin) &&
         Objects.equals(this.chatProfileCode, guserChatSession.chatProfileCode) &&
         Objects.equals(this.modelReference, guserChatSession.modelReference) &&
         Objects.equals(this.ragChat, guserChatSession.ragChat) &&
@@ -590,7 +634,7 @@ public class GUserChatSession {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, accessibleUsers, accessibleGroups, accessibleToAll, aclAliases, contextCode, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, accessibleUsers, accessibleGroups, accessibleToAll, aclAliases, contextCode, transientRun, runOrigin, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
   }
 
 
@@ -612,6 +656,8 @@ public class GUserChatSession {
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
+    sb.append("    transientRun: ").append(toIndentedString(transientRun)).append("\n");
+    sb.append("    runOrigin: ").append(toIndentedString(runOrigin)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    modelReference: ").append(toIndentedString(modelReference)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");

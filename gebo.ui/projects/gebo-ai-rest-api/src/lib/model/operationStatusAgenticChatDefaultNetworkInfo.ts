@@ -15,6 +15,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusAgenticChatDefaultNetworkInfo { 
     result?: AgenticChatDefaultNetworkInfo;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -20,12 +20,12 @@
  */
 
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map, Observable, of } from "rxjs";
+import { forkJoin, map, Observable, of, Subject } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -79,6 +79,36 @@ interface GeboChatTemplatedResponse {
     calledFunctions?: Array<CalledFunction>;
     generatedResources?: LLMGeneratedResource[];
 };
+/**
+ * What the custom areas of the chat (left, right, above the message box) receive
+ * as the context of their template: the chat they are shown with and its state.
+ * <ng-template #chatLeftArea let-chatInfo let-streaming="streaming" let-responses="responses">...</ng-template>
+ */
+export interface GeboAIReusableChatAreaContext {
+    $implicit?: GUserChatInfo;
+    chatInfo?: GUserChatInfo;
+    userChatContextCode?: string;
+    interactions: ReadonlyArray<any>;
+    streaming: boolean;
+    loading: boolean;
+    /**
+     * The last request the chat sent
+     */
+    request?: GeboChatRequest;
+    /**
+     * The last whole answer the chat received
+     */
+    response?: GeboChatResponse;
+    /**
+     * Every request the chat sends, when it sends it
+     */
+    requests: Observable<GeboChatRequest>;
+    /**
+     * Every answer the chat receives, once whole: one for each request, at the end of its
+     * stream (an agent working in cycles gives only its final answer here)
+     */
+    responses: Observable<GeboChatResponse>;
+}
 const moduleId: string = "GeboAIChatControlModule";
 const entityId: string = "GeboAIReusableChatComponent";
 const scrollStart: number = 350;
@@ -321,6 +351,71 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
      * Emitted with the new chat created by branching this one from one of its answers
      */
     @Output() branchedChatAction: EventEmitter<GUserChatInfo> = new EventEmitter();
+
+    /**
+     * The custom areas of the chat, empty and not even laid out unless the page reusing it
+     * fills them: on the left of the chat, on its right, and between the message box and the
+     * controls over it. Filled by a template inside the component's tag
+     * (<ng-template #chatLeftArea>, #chatRightArea, #chatAboveInputArea) or given
+     * through the inputs, which win over the inner templates.
+     */
+    @Input() leftAreaTemplate?: TemplateRef<GeboAIReusableChatAreaContext>;
+    @Input() rightAreaTemplate?: TemplateRef<GeboAIReusableChatAreaContext>;
+    @Input() aboveInputAreaTemplate?: TemplateRef<GeboAIReusableChatAreaContext>;
+    @ContentChild("chatLeftArea") projectedLeftAreaTemplate?: TemplateRef<GeboAIReusableChatAreaContext>;
+    @ContentChild("chatRightArea") projectedRightAreaTemplate?: TemplateRef<GeboAIReusableChatAreaContext>;
+    @ContentChild("chatAboveInputArea") projectedAboveInputAreaTemplate?: TemplateRef<GeboAIReusableChatAreaContext>;
+
+    protected get leftArea(): TemplateRef<GeboAIReusableChatAreaContext> | undefined {
+        return this.leftAreaTemplate || this.projectedLeftAreaTemplate;
+    }
+
+    protected get rightArea(): TemplateRef<GeboAIReusableChatAreaContext> | undefined {
+        return this.rightAreaTemplate || this.projectedRightAreaTemplate;
+    }
+
+    protected get aboveInputArea(): TemplateRef<GeboAIReusableChatAreaContext> | undefined {
+        return this.aboveInputAreaTemplate || this.projectedAboveInputAreaTemplate;
+    }
+
+    private readonly chatRequestsSubject: Subject<GeboChatRequest> = new Subject<GeboChatRequest>();
+    private readonly chatResponsesSubject: Subject<GeboChatResponse> = new Subject<GeboChatResponse>();
+    /**
+     * Every request the chat sends, when it sends it
+     */
+    public readonly chatRequests$: Observable<GeboChatRequest> = this.chatRequestsSubject.asObservable();
+    /**
+     * Every answer the chat receives, once whole (see GeboAIReusableChatAreaContext.responses)
+     */
+    public readonly chatResponses$: Observable<GeboChatResponse> = this.chatResponsesSubject.asObservable();
+    public lastChatRequest?: GeboChatRequest;
+    public lastChatResponse?: GeboChatResponse;
+
+    protected get areaContext(): GeboAIReusableChatAreaContext {
+        return {
+            $implicit: this.chatInfo,
+            chatInfo: this.chatInfo,
+            userChatContextCode: this.userChatContextCode,
+            interactions: this.interactions,
+            streaming: this.chatStreaming,
+            loading: this.loading,
+            request: this.lastChatRequest,
+            response: this.lastChatResponse,
+            requests: this.chatRequests$,
+            responses: this.chatResponses$
+        };
+    }
+
+    private notifyChatRequest(request: GeboChatRequest): void {
+        this.lastChatRequest = request;
+        this.chatRequestsSubject.next(request);
+    }
+
+    private notifyChatResponse(response: GeboChatResponse): void {
+        this.lastChatResponse = response;
+        this.chatResponsesSubject.next(response);
+    }
+
     @ViewChild(GeboAIChatInputShellComponent) chatInputShell!: GeboAIChatInputShellComponent;
     // shown in the last answer, between its reasoning and its text, while it streams
     @ViewChild(GeboAIChatStreamEventsDisplayComponent) streamEventsDisplay?: GeboAIChatStreamEventsDisplayComponent;
@@ -486,6 +581,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
     ngOnDestroy(): void {
         window.document.removeEventListener("scroll", this.chatScrollListener, { capture: true });
         this.chatBodyResizeObserver?.disconnect();
+        this.chatRequestsSubject.complete();
+        this.chatResponsesSubject.complete();
         if (this.followAnswerEndTimer !== undefined) {
             clearTimeout(this.followAnswerEndTimer);
         }
@@ -1360,6 +1457,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                         if (doSpeach === true) {
                             this.speechPlay(response.queryResponse);
                         }
+                        this.notifyChatResponse(response as GeboChatResponse);
                     },
                     error: (error) => {
                         this.stopFollowingAnswer();
@@ -1458,6 +1556,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                 if (doSpeach === true && lastMessage === true && response.queryResponse) {
                     this.speechPlay(response.queryResponse);
                 }
+                // the answer kept the text of the previous messages when the closing one has none
+                this.notifyChatResponse(response);
             }
         }
     }
@@ -1696,6 +1796,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
 
     private dispatchMessage(qry: GeboChatRequest, doSpeach: boolean): void {
         this.startFollowingAnswer();
+        this.notifyChatRequest(qry);
         if (this.useRestOnly === true) {
             this.callRestChat(qry, doSpeach);
         } else {
@@ -1767,12 +1868,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
             request: request,
             loading: false,
         });
+        this.notifyChatRequest(request);
     }
     onExternalModuleResponse(response: GeboChatResponse) {
         const interaction = this.interactions[this.interactions.length - 1];
         if (!interaction.response) {
             interaction.response = response;
         }
+        this.notifyChatResponse(response);
     }
 
     /**

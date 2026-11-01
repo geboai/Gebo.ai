@@ -25,10 +25,6 @@ public class GAgentsNetwork extends GBaseObject
 		ALLOWED, NOT_ALLOWED
 	}
 
-	public static enum CommunicationPolicy {
-		ALLOW_ALL, DENY_ALL, ALLOW_LIST, DENY_LIST
-	}
-
 	public static enum AgentActivationType {
 		ON_RECEIVED_MESSAGE, EVERY_CYCLE
 	}
@@ -52,9 +48,7 @@ public class GAgentsNetwork extends GBaseObject
 		private boolean inputNode;
 		private boolean outputNode;
 		private boolean allowedToNotifyUser = true;
-		@NotNull
-		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
-
+		/** The agents this one may send to: the only thing that decides who talks to whom. */
 		private List<String> communicationList;
 
 		/**
@@ -117,5 +111,13 @@ public class GAgentsNetwork extends GBaseObject
 	@Transient
 	@JsonIgnore
 	private String copiedFromCode = null;
+	/**
+	 * Whether the network remembers, from one turn of a conversation to the next,
+	 * what its agents contributed: the shared context of a run is digested when
+	 * the run ends and seeds the next run in the same conversation. Off by
+	 * default: a network that does not ask forgets everything but what the
+	 * conversation itself keeps.
+	 */
+	private Boolean rememberAcrossTurns = null;
 
 }

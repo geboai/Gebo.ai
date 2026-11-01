@@ -15,6 +15,6 @@ import { GUserMessage } from './gUserMessage';
 export interface OperationStatusListGBedrockTranscriptModelChoice { 
     result?: Array<GBedrockTranscriptModelChoice>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

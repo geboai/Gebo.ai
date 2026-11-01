@@ -39,6 +39,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -504,6 +505,25 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			+ "it did not read in this request (what the chat history says of them is not their content). Search them "
 			+ "with the tools before citing them, or answer without citing them. Documents cited without being read: ";
 
+	/** Whether the prompt names one of the placeholders an agent's session fills. */
+	static boolean namesAnAgentPlaceholder(GPromptTemplateConfig prompt) {
+		if (prompt == null) {
+			return false;
+		}
+		for (String placeholder : List.of(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)) {
+			if (prompt.getPlaceholders().containsKey(placeholder)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, String request, GAgentsNetwork network,
@@ -525,6 +545,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		final Map<String, Object> deliverableParams = new HashMap<>(deliverableTemplateParams(userIntent));
 		// named for the prompts, the user template and the closing of the tools' results
 		deliverableParams.put(USER_LANGUAGE_PARAM, sessionUserLanguage(session));
+		// the network's own placeholders, when the loop's prompt names them: what the
+		// network routed to the loop, its identity, the scenario, the shared context (a
+		// custom loop prompt may; the shipped one names none)
+		if (namesAnAgentPlaceholder(agentPrompt)) {
+			deliverableParams.putAll(createAgentTemplateParams(agentPrompt, network, agentRole, contextAgentPersona,
+					session, mySessionContext, request, null, 0, budget));
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " shapes its answer for the deliverable:"
 					+ userIntent.name() + ", search requested:" + searchRequested + ", answer's language:"

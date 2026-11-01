@@ -15,6 +15,6 @@ import { PathInfo } from './pathInfo';
 export interface OperationStatusListPathInfo { 
     result?: Array<PathInfo>;
     messages?: Array<GUserMessage>;
-    hasWarnMessages?: boolean;
     hasErrorMessages?: boolean;
+    hasWarnMessages?: boolean;
 }

@@ -42,7 +42,7 @@
     "monaco-editor": "^0.57.0",
     "ng-diagram": "^1.2.4",
     "ngx-cookie-service": "^21.3.1",
-    "ngx-extended-pdf-viewer": "^28.1.0",
+    "ngx-extended-pdf-viewer": "^31.0.1",
     "ngx-markdown": "^21.3.0",
     "ngx-monaco-editor-v2": "^21.1.4",
     "primeflex": "^4.0.0",
@@ -55,8 +55,8 @@
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^21.2.19",
-    "@angular/cli": "^21.2.19",
+    "@angular-devkit/build-angular": "^21.2.29",
+    "@angular/cli": "^21.2.29",
     "@angular/compiler-cli": "^21.2.25",
     "@types/jasmine": "~5.1.0",
     "jasmine-core": "~5.1.0",
@@ -65,12 +65,13 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "ng-packagr": "^21.2.5",
+    "ng-packagr": "^21.2.7",
     "typescript": "~5.9.0"
   },
   "overrides": {
     "ngx-monaco-editor-v2": {
       "monaco-editor": "$monaco-editor"
-    }
+    },
+    "dompurify": "^3.4.17"
   }
 }

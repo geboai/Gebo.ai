@@ -82,6 +82,17 @@ public class GUserChatSession extends GBaseObject implements IGObjectWithSecurit
 	private List<Integer> aclAliases = null;
 	@HashIndexed
 	private String contextCode = null; // Code of the external context this chat belongs to
+	/**
+	 * True for a conversation a run from outside a chat (an MCP tool, a single A2A
+	 * agent) opened for itself and drops when the run is over: never listed among
+	 * a person's chats, and swept away if the run never came back to drop it.
+	 */
+	private Boolean transientRun = null;
+	/**
+	 * Where this conversation was opened from, when not from a chat: the name of
+	 * the caller ({@code HARNESS}, {@code A2A}, {@code MCP}...); null for a chat.
+	 */
+	private String runOrigin = null;
 	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	private String chatProfileCode = null; // Chat profile configuration code
 	private GObjectRef<GBaseChatModelConfig> modelReference = null; // Reference to the chat model configuration

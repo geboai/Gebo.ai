@@ -10,6 +10,7 @@
 package ai.gebo.architecture.ai.service;
 
 import java.util.List;
+import java.util.Set;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.patterns.IGRuntimeConfigurationDao;
@@ -43,6 +44,18 @@ public interface IGPromptConfigDao extends IGRuntimeConfigurationDao<GPromptTemp
 	 * @return the default prompt configuration
 	 */
 	GPromptTemplateConfig defaultChatPrompt(Boolean ragPrompt);
+
+	/**
+	 * The placeholders a saved prompt of this use may name: a prompt naming
+	 * another one is refused when saved.
+	 *
+	 * @param promptUse   the use of the prompt
+	 * @param agentPrompt whether the prompt is an agent's
+	 * @return the names, or null when the names of such a prompt are not checked
+	 */
+	default Set<String> allowedPlaceholders(String promptUse, Boolean agentPrompt) {
+		return null;
+	}
 
 	/****************************************************************************
 	 * Get a prompt by its specific use, preferring eventual customized by user one

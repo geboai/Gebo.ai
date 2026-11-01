@@ -278,11 +278,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					+ " chat:" + chatLanguage + " detected:" + detectedLanguage + ")");
 		}
 		if (answerLanguage != null) {
-			runtimeData.getRequestResources().getCurrentRequest().setUserLanguage(answerLanguage);
-			if (runtimeData.getMinimalChatContext() != null
-					&& runtimeData.getMinimalChatContext().getCurrentRequest() != null) {
-				runtimeData.getMinimalChatContext().getCurrentRequest().setUserLanguage(answerLanguage);
-			}
+			// the one current request, held by the resources and the minimal context alike
+			runtimeData.getCurrentRequest().setUserLanguage(answerLanguage);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("User required language asked in the message:" + askedLanguage + " kept on the chat:"

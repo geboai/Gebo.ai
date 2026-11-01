@@ -71,7 +71,7 @@ public class GeboMCPAgentsNetworkAsToolsProvider {
 							: networkCode);
 			ToolCallback callback = ToolCallbackDeclarationUtil.declare((GeboMcpAgentToolRequest input, ToolContext ctx) -> {
 				try {
-					return runner.runNetwork(networkCode, input != null ? input.getRequest() : "", null);
+					return runner.runNetwork(networkCode, input != null ? input.getRequest() : "", null, "MCP");
 				} catch (AgentException e) {
 					LOGGER.error("MCP tool '" + toolName + "' (network " + networkCode + ") failed", e);
 					throw new IllegalStateException("The network could not answer: " + e.getMessage(), e);
