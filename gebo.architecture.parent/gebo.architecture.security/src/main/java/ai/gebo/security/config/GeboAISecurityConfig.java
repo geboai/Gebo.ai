@@ -35,7 +35,6 @@ import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserSer
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -55,7 +54,6 @@ import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementatio
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
-import ai.gebo.security.services.RequestAuditFilter;
 import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
 import ai.gebo.security.services.impl.GReactiveHttpRequestAuthenticationManagerResolverImpl;
@@ -371,8 +369,7 @@ public class GeboAISecurityConfig {
 	 * @throws Exception If an error occurs while configuring HTTP security.
 	 */
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestAuditFilter requestAuditFilter,
-			Environment environment) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, Environment environment) throws Exception {
 		boolean oauth2LoginEnabled = securityConfig.getOauth2LoginEnabled() != null
 				&& securityConfig.getOauth2LoginEnabled();
 		boolean oauth2ResourceServerEnabled = securityConfig.getOauth2ResourceServerEnabled() != null
@@ -423,8 +420,8 @@ public class GeboAISecurityConfig {
 					oauth2 -> oauth2.authenticationManagerResolver(
 						authenticationManagerResolver(oauth2ResourceServerUserProvisioner())));
 		}
-		// request audit for security logging
-		configBuilder.addFilterAfter(requestAuditFilter, AnonymousAuthenticationFilter.class);
+		// The request audit context (RequestAuditFilter) is set by a servlet filter
+		// registered just before this chain, so authentication events have it too.
 		return configBuilder.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
