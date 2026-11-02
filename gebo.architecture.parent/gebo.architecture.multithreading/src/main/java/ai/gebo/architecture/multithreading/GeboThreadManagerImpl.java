@@ -23,6 +23,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import io.micrometer.context.ContextSnapshot;
 import lombok.AllArgsConstructor;
 import reactor.core.scheduler.Scheduler;
 
@@ -85,6 +86,11 @@ public class GeboThreadManagerImpl implements IGeboThreadManager, ApplicationLis
 		// Optional callback to be executed at the end of the runnable's execution
 		private IGEndOfRunningCallback callback = null;
 
+		// The submitting thread's trace and MDC, captured here (the wrapper is built on
+		// that thread) and restored around the run, so the task's logs and security
+		// events carry the trace and correlation id of what started it.
+		private final ContextSnapshot context = GeboTaskContext.capture();
+
 		/**
 		 * Constructor to initialize a wrapper with a given runnable.
 		 *
@@ -134,6 +140,12 @@ public class GeboThreadManagerImpl implements IGeboThreadManager, ApplicationLis
 		 */
 		@Override
 		public void run() {
+			try (ContextSnapshot.Scope scope = context.setThreadLocals()) {
+				runInContext();
+			}
+		}
+
+		private void runInContext() {
 			try {
 				LOGGER.info("Begin running =>" + id);
 				runnable.run();
