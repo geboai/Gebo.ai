@@ -88,6 +88,12 @@
 			<artifactId>gebo.architecture.utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- GeboTaskContext: ReactiveIdentityUtil carries the request's trace and MDC with the identity -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.multithreading</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>ai.gebo</groupId>
