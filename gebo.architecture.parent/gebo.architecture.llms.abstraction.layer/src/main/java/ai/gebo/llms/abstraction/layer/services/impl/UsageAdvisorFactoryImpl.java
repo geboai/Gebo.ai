@@ -1,5 +1,6 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import reactor.core.publisher.SignalType;
 import ai.gebo.core.messages.LLMCallOutcome;
@@ -80,8 +81,11 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		@Override
 		public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
 			// The user is read here, on the subscribing thread: the stream completes on a
-			// Reactor thread whose security context is usually empty.
+			// Reactor thread whose security context is usually empty. The logging context
+			// too, for the same reason: it holds the request's correlation id, client
+			// address and trace, which the call's security event is built from.
 			final String username = LLMUsageRecorder.safeCurrentUsername();
+			final Map<String, String> loggingContext = LLMUsageRecorder.safeLoggingContext();
 			final String stack = LLMUsageRecorder.safeSampleCaller();
 			final long start = System.nanoTime();
 			// The provider emits a Usage object on EVERY streamed chunk, carrying zero counts
@@ -108,8 +112,9 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 						}
 						shape.add(response);
 					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream",
-							() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters, shape,
-									outcomeOf(signal))));
+							() -> LLMUsageRecorder.withLoggingContext(loggingContext,
+									() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters,
+											shape, outcomeOf(signal)))));
 		}
 
 		@Override
