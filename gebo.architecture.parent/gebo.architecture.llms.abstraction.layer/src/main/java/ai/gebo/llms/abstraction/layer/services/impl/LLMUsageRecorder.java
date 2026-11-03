@@ -1,12 +1,14 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.ai.chat.metadata.Usage;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -351,6 +353,45 @@ public class LLMUsageRecorder {
 		} catch (Throwable e) {
 			LOGGER.error("Cannot sample the caller of a model call, the call is accounted without it", e);
 			return null;
+		}
+	}
+
+	/**
+	 * The logging context (MDC) of the calling thread, never failing: null when it
+	 * cannot be read. Taken where a streamed call starts, on the subscribing thread,
+	 * which holds the request's audit context and trace, to be restored with
+	 * {@link #withLoggingContext} where the stream ends, on a Reactor thread whose
+	 * MDC is empty - so the call's security event keeps the request's correlation
+	 * id, client address and trace.
+	 */
+	public static Map<String, String> safeLoggingContext() {
+		try {
+			return MDC.getCopyOfContextMap();
+		} catch (Throwable e) {
+			LOGGER.error("Cannot read the logging context of a model call, the call is accounted without it", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Runs a step with the given logging context in the MDC, putting back the
+	 * thread's own afterwards.
+	 */
+	public static void withLoggingContext(Map<String, String> context, Runnable step) {
+		if (context == null || context.isEmpty()) {
+			step.run();
+			return;
+		}
+		Map<String, String> own = MDC.getCopyOfContextMap();
+		MDC.setContextMap(context);
+		try {
+			step.run();
+		} finally {
+			if (own != null) {
+				MDC.setContextMap(own);
+			} else {
+				MDC.clear();
+			}
 		}
 	}
 

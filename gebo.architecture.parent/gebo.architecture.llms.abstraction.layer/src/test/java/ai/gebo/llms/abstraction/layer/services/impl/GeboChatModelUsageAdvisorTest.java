@@ -133,6 +133,48 @@ class GeboChatModelUsageAdvisorTest {
 	}
 
 	@Test
+	void aStreamEndingOnAnotherThreadIsRecordedWithTheSubscribersLoggingContext() throws InterruptedException {
+		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
+		java.util.concurrent.atomic.AtomicReference<String> correlationId = new java.util.concurrent.atomic.AtomicReference<>();
+		java.util.concurrent.atomic.AtomicReference<String> thread = new java.util.concurrent.atomic.AtomicReference<>();
+		java.util.concurrent.CountDownLatch recorded = new java.util.concurrent.CountDownLatch(1);
+		org.mockito.Mockito.doAnswer(invocation -> {
+			correlationId.set(org.slf4j.MDC.get("correlationId"));
+			thread.set(Thread.currentThread().getName());
+			recorded.countDown();
+			return null;
+		}).when(recorder).record(any(), any(), any(), any(), any(), any(), anyLong(), any(), anyLong(), anyLong(),
+				anyLong(), any());
+		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
+		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
+		// the provider's stream completes on a Reactor thread, as the real ones do
+		when(chain.nextStream(any())).thenReturn(
+				Flux.just(chunk(0, 0, 0), chunk(12, 3, 15)).publishOn(reactor.core.scheduler.Schedulers.single()));
+
+		Flux<ChatClientResponse> stream;
+		org.slf4j.MDC.put("correlationId", "4bf92f3577b34da6a3ce929d0e0e4736");
+		try {
+			stream = advisor.adviseStream(mock(ChatClientRequest.class), chain);
+		} finally {
+			org.slf4j.MDC.remove("correlationId");
+		}
+		stream.blockLast();
+		// doFinally runs on the Reactor thread after the completion has reached
+		// blockLast, so the recording may still be under way when it returns
+		org.junit.jupiter.api.Assertions.assertTrue(recorded.await(10, java.util.concurrent.TimeUnit.SECONDS),
+				"the stream was never recorded");
+
+		org.junit.jupiter.api.Assertions.assertNotNull(thread.get());
+		org.junit.jupiter.api.Assertions.assertNotEquals(Thread.currentThread().getName(), thread.get());
+		org.junit.jupiter.api.Assertions.assertEquals("4bf92f3577b34da6a3ce929d0e0e4736", correlationId.get());
+		// and the Reactor thread is given back without it
+		String leftOver = reactor.core.publisher.Mono.fromCallable(() -> String.valueOf(org.slf4j.MDC.get("correlationId")))
+				.subscribeOn(reactor.core.scheduler.Schedulers.single()).block();
+		org.junit.jupiter.api.Assertions.assertEquals("null", leftOver);
+	}
+
+	@Test
 	void blockingCallRecordsTheFinalUsage() {
 		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
 		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
