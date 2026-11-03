@@ -24,6 +24,8 @@ import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.model.ModelType;
 import io.micrometer.context.ContextSnapshot;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -105,21 +107,46 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 			final TokenCounters counters = new TokenCounters();
 			final AnswerShape shape = new AnswerShape();
 			final FirstTokenTimer firstToken = new FirstTokenTimer();
-			// Per chunk accounting is best effort: a throw here would error the whole stream.
-			return chain.nextStream(request)
-					.doOnNext(response -> LLMUsageRecorder.bestEffort("account a chat chunk", () -> {
-						firstToken.onChunk(response != null ? response.chatResponse() : null);
-						Usage usage = usageOf(response);
-						if (isMeaningful(usage)) {
-							counters.max(usage);
-						}
-						shape.add(response);
-					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream", () -> {
-						try (ContextSnapshot.Scope scope = requestContext.setThreadLocals()) {
-							recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters, shape,
-									outcomeOf(signal));
-						}
-					}));
+			// The thread this stream is subscribed on does not always carry the request's
+			// observation (the agentic network subscribes its answer stream on a scheduler
+			// of its own), but Spring AI's chat client writes its observation, which is
+			// inside the request's, into the Reactor context of the stream: that is the
+			// trace to fall back on where the stream ends.
+			return Flux.deferContextual(contextView -> {
+				final Observation observationInContext = contextView
+						.getOrDefault(ObservationThreadLocalAccessor.KEY, null);
+				// Per chunk accounting is best effort: a throw here would error the whole
+				// stream.
+				return chain.nextStream(request)
+						.doOnNext(response -> LLMUsageRecorder.bestEffort("account a chat chunk", () -> {
+							firstToken.onChunk(response != null ? response.chatResponse() : null);
+							Usage usage = usageOf(response);
+							if (isMeaningful(usage)) {
+								counters.max(usage);
+							}
+							shape.add(response);
+						})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream", () -> {
+							try (ContextSnapshot.Scope scope = requestContext.setThreadLocals()) {
+								insideObservation(observationInContext, () -> recordUsage(username, stack, start,
+										firstToken.firstTokenNanos(), counters, shape, outcomeOf(signal)));
+							}
+						}));
+			});
+		}
+
+		/**
+		 * Runs the step with the given observation current when the thread has none of
+		 * its own after the request's context was restored: the usage message and the
+		 * security event of the call then carry that trace.
+		 */
+		private static void insideObservation(Observation observation, Runnable step) {
+			if (observation == null || ObservationThreadLocalAccessor.getInstance().getValue() != null) {
+				step.run();
+				return;
+			}
+			try (Observation.Scope scope = observation.openScope()) {
+				step.run();
+			}
 		}
 
 		@Override
