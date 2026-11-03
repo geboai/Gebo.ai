@@ -17,6 +17,11 @@ public interface IWorkflowStatusHandler {
 
 	public boolean handleWorkflow(String workFlowId);
 
+	/**
+	 * @return the job's status, or null when the job no longer exists (a job can be
+	 *         deleted, with its endpoint or project or from the jobs log, while its
+	 *         contents are still in flight)
+	 */
 	public ComputedWorkflowResult computeWorkflowStatus(String jobId, String workflowType, String workflowId);
 
 	public ComputedWorkflowStructure getWorkflowStructure(String workflowType, String workflowId,

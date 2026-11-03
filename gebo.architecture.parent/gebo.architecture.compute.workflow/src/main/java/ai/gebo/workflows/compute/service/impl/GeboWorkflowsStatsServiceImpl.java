@@ -259,6 +259,10 @@ public class GeboWorkflowsStatsServiceImpl implements IGeboWorkflowsStatsService
 				: workflowHandlersRepositoryPattern.findByWorkflowsTypeAndWorkflowId(parsedWorkflowType, workflowId);
 		if (!handler.isEmpty()) {
 			ComputedWorkflowResult status = handler.get(0).computeWorkflowStatus(jobId, workflowType, workflowId);
+			if (status == null) {
+				// deleted while the summary was being read: as for a job not found
+				return null;
+			}
 			summary.setWorkflowStatus(status);
 			final List<ComputedWorkflowStatus> itemslist = handler.get(0).items(status.getRootStatus());
 			final TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>> stats = new TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>>();
