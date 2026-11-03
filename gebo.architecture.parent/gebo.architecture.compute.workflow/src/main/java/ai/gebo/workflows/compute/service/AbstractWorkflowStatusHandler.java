@@ -75,6 +75,15 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 		}
 		try {
 			GJobStatus job = persistentObject.findById(GJobStatus.class, jobId);
+			if (job == null) {
+				// A job can be deleted while the contents it sent down the workflow are still
+				// being processed (deleting its endpoint or project,
+				// GAbstractResourcesDisposerFactory, or the job itself from the jobs log,
+				// LogViewController.deleteJobStatus), so status updates keep arriving for it:
+				// a job that is gone has no status and nothing to finish.
+				LOGGER.debug("computeWorkflowStatus({}): the job no longer exists", jobId);
+				return null;
+			}
 
 			WorkflowContext context = new WorkflowContext(job.getKnowledgeBaseCode(), job.getProjectCode(),
 					job.getProjectEndpointReference());

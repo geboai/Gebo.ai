@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.model.GMessageEnvelope;
@@ -40,17 +40,25 @@ import io.micrometer.tracing.propagation.Propagator;
  * starts a new one. Either way it records a span plus a routing-latency timer
  * tagged by source/target module and payload type.
  * </p>
+ * <p>
+ * The {@link Tracer}, {@link Propagator} and {@link MeterRegistry} are looked
+ * up per call rather than required at startup, for the reason given on
+ * {@link TracingMessageEnvelopeFactory}: a {@code @ConditionalOnBean} on a
+ * component-scanned class runs before Spring Boot's auto-configuration has
+ * registered them. Without a tracer the call runs without a span; without a
+ * meter registry it runs without the timer.
+ * </p>
  */
 @Aspect
 @Component
-@ConditionalOnBean(Tracer.class)
 public class MessageBrokerObservabilityAspect {
 
-	private final Tracer tracer;
-	private final Propagator propagator;
-	private final MeterRegistry meterRegistry;
+	private final ObjectProvider<Tracer> tracer;
+	private final ObjectProvider<Propagator> propagator;
+	private final ObjectProvider<MeterRegistry> meterRegistry;
 
-	public MessageBrokerObservabilityAspect(Tracer tracer, Propagator propagator, MeterRegistry meterRegistry) {
+	public MessageBrokerObservabilityAspect(ObjectProvider<Tracer> tracer, ObjectProvider<Propagator> propagator,
+			ObjectProvider<MeterRegistry> meterRegistry) {
 		this.tracer = tracer;
 		this.propagator = propagator;
 		this.meterRegistry = meterRegistry;
@@ -68,28 +76,38 @@ public class MessageBrokerObservabilityAspect {
 		String targetModule = String.valueOf(envelope.getTargetModule());
 		String payloadType = String.valueOf(envelope.getPayloadType());
 
-		Map<String, String> traceContext = envelope.getTraceContext();
-		Span span = (traceContext != null && !traceContext.isEmpty())
-				? propagator.extract(traceContext, Map::get).name(spanName(envelope)).start()
-				: tracer.nextSpan().name(spanName(envelope)).start();
-		span.tag("payloadType", payloadType);
-		span.tag("sourceModule", sourceModule);
-		span.tag("targetModule", targetModule);
-		if (envelope.getWorkflowId() != null) {
-			span.tag("workflowId", envelope.getWorkflowId());
-		}
-		if (envelope.getWorkflowStepId() != null) {
-			span.tag("workflowStepId", envelope.getWorkflowStepId());
+		Tracer currentTracer = tracer.getIfAvailable();
+		Propagator currentPropagator = propagator.getIfAvailable();
+		Span span = null;
+		if (currentTracer != null && currentPropagator != null) {
+			Map<String, String> traceContext = envelope.getTraceContext();
+			span = (traceContext != null && !traceContext.isEmpty())
+					? currentPropagator.extract(traceContext, Map::get).name(spanName(envelope)).start()
+					: currentTracer.nextSpan().name(spanName(envelope)).start();
+			span.tag("payloadType", payloadType);
+			span.tag("sourceModule", sourceModule);
+			span.tag("targetModule", targetModule);
+			if (envelope.getWorkflowId() != null) {
+				span.tag("workflowId", envelope.getWorkflowId());
+			}
+			if (envelope.getWorkflowStepId() != null) {
+				span.tag("workflowStepId", envelope.getWorkflowStepId());
+			}
 		}
 
 		long start = System.nanoTime();
-		try (Tracer.SpanInScope scope = tracer.withSpan(span)) {
+		try (Tracer.SpanInScope scope = span != null ? currentTracer.withSpan(span) : null) {
 			return pjp.proceed();
 		} finally {
-			span.end();
-			Timer.builder("gebo.messaging.broker.routing").tag("sourceModule", sourceModule)
-					.tag("targetModule", targetModule).tag("payloadType", payloadType).register(meterRegistry)
-					.record(System.nanoTime() - start, TimeUnit.NANOSECONDS);
+			if (span != null) {
+				span.end();
+			}
+			MeterRegistry registry = meterRegistry.getIfAvailable();
+			if (registry != null) {
+				Timer.builder("gebo.messaging.broker.routing").tag("sourceModule", sourceModule)
+						.tag("targetModule", targetModule).tag("payloadType", payloadType).register(registry)
+						.record(System.nanoTime() - start, TimeUnit.NANOSECONDS);
+			}
 		}
 	}
 
