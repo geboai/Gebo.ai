@@ -47,6 +47,13 @@ ai.gebo.multilanguage.config.folderPrefix: C:\Users\Paolo\GitHub\Gebo.ai\gebo.ar
 ai.gebo.lucene.config.enabled: false
 ai.gebo.neo4j.enabled: true
 spring:
+  # Reactor operators restore the subscriber's thread locals (the current
+  # observation above all) on the threads they run on, and the reactive HTTP
+  # client reads its parent observation from the Reactor context: the provider
+  # call of a streamed chat then joins the request's trace instead of starting
+  # one of its own.
+  reactor:
+    context-propagation: auto
   neo4j:
     uri: bolt://localhost:7687
 
