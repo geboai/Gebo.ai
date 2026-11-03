@@ -9,6 +9,8 @@
 
 package ai.gebo.microservices.globaltopology.config;
 
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.boot.webclient.WebClientCustomizer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -45,8 +47,16 @@ public class GeboGlobalInternalTopologyAutoConfiguration {
 	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
 	@LoadBalanced
-	public WebClient.Builder geboGlobalTopologyLbWebClientBuilder() {
-		return WebClient.builder();
+	public WebClient.Builder geboGlobalTopologyLbWebClientBuilder(ObjectProvider<WebClientCustomizer> customizers) {
+		// Built as Spring Boot builds its own WebClient.Builder: with the application's
+		// customizers applied. With tracing, that is the observation filter that gives
+		// each call a span and sends the current trace (the traceparent header) to the
+		// service called. Spring Boot's builder bean itself cannot be injected here: it
+		// is a WebClient.Builder like this one, and this one would be a candidate for
+		// its own injection.
+		WebClient.Builder builder = WebClient.builder();
+		customizers.orderedStream().forEach(customizer -> customizer.customize(builder));
+		return builder;
 	}
 
 	@Bean(name = WEB_CLIENT_BEAN)
