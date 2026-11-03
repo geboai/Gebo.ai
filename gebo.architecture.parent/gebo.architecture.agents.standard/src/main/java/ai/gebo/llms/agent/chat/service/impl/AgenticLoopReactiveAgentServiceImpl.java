@@ -89,6 +89,7 @@ import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * A single agent with tools, working in the classic agentic loop over the network
@@ -531,7 +532,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
+			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener, GeboToolCalling toolCalling)
+			throws LLMConfigException, AgentException {
 		final int maxIterations = maxIterations(network, contextAgentPersona);
 		final int budget = agentTokenBudget(agentModel, agentPrompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
@@ -609,7 +611,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					+ " answer held until a search:" + !gate.tools().isEmpty());
 		}
 		final Flux<String> iterations = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
-				loopContext, contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs);
+				loopContext, contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs,
+				toolCalling);
 		// an address no tool returned, nor the user or the chat gave, is made up: removed as
 		// the answer streams
 		final Set<String> removedAddresses = java.util.Collections.synchronizedSet(new LinkedHashSet<>());
@@ -1589,6 +1592,20 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink, ToolCallsListener callBacksListener,
 			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs) {
+		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
+				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs, null);
+	}
+
+	/**
+	 * The same iterations, with what the controlling software adds to every model call
+	 * of the run (see {@link GeboToolCalling}), passed to each iteration's model call;
+	 * null for nothing.
+	 */
+	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
+			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
+			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ToolCallsListener callBacksListener,
+			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) {
 		return Flux.defer(() -> {
 			final Map<String, Object> params = new HashMap<>(deliverableParams);
 			params.put(CURRENT_ITERATION_PROMPT_PARAM, number);
@@ -1626,7 +1643,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						chatRequestContext != null
 								? chatRequestContext.withToolsRoom(ToolsTokenBudget.leftForTools(budget, params))
 								: null,
-						params).map(response -> chunkText(response, finishReason, thinking, ui))
+						params, toolCalling).map(response -> chunkText(response, finishReason, thinking, ui))
 						.filter(chunk -> !chunk.isEmpty()).concatWith(Flux.defer(() -> {
 							// a reasoning no text came after ends with the model's output
 							thinkingTo(ui, thinking.complete());
@@ -1713,7 +1730,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history,
 								lessReasoning != null ? lessReasoning : agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, gate.evidenceRequired() ? gate : SourceGate.NONE, runAs));
+								deliverableParams, gate.evidenceRequired() ? gate : SourceGate.NONE, runAs, toolCalling));
 					}
 					// no iteration left: the answer is shown as it is
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
@@ -1747,7 +1764,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history,
 								againModel != null ? againModel : agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, SourceGate.continuing(gate.coverage()), runAs));
+								deliverableParams, SourceGate.continuing(gate.coverage()), runAs, toolCalling));
 					}
 					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number + " wrote no text"
 							+ (previousEmpty ? " again" : "") + (number < maxIterations ? "" : ", the last one")
@@ -1775,7 +1792,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						final Flux<String> restart = open[0] ? Flux.just(ANSWER_RESTART) : Flux.<String>empty();
 						return restart.concatWith(asUser(runAs, iteration(number + 1, maxIterations, budget, history,
 								againModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
-								callBacksListener, deliverableParams, SourceGate.continuing(gate.coverage()), runAs)));
+								callBacksListener, deliverableParams, SourceGate.continuing(gate.coverage()), runAs,
+								toolCalling)));
 					}
 					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number
 							+ " cut by the output limit (finish reason " + finishReason.get() + ") after " + text.length()
@@ -1843,7 +1861,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						}
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, searched, runAs));
+								deliverableParams, searched, runAs, toolCalling));
 					}
 					// done again already, or no iteration left: the answer is shown as it is, the user
 					// is told what the coverage misses

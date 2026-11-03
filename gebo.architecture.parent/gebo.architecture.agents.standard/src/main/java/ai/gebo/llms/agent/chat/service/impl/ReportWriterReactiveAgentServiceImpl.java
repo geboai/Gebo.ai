@@ -69,6 +69,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 @Service
 public class ReportWriterReactiveAgentServiceImpl
@@ -307,7 +308,8 @@ public class ReportWriterReactiveAgentServiceImpl
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
+			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener, GeboToolCalling toolCalling)
+			throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin createResponse(...) report writer agent id:" + getId() + " persona:"
 					+ (contextAgentPersona != null ? contextAgentPersona.getNetworkAgentName() : null));
@@ -338,7 +340,8 @@ public class ReportWriterReactiveAgentServiceImpl
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Report writer using single-window reactive LLM call (tokenBudget:" + tokenBudget + ")");
 			}
-			textStream = writeReactive(agentModel, agentPrompt, chatRequestContext, params.get(0), notificationSink);
+			textStream = writeReactive(agentModel, agentPrompt, chatRequestContext, params.get(0), notificationSink,
+					toolCalling);
 		} else {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Report writer using token-budget coordinator over " + params.size()
@@ -346,7 +349,7 @@ public class ReportWriterReactiveAgentServiceImpl
 			}
 			textStream = streamThroughEvidenceExtraction(chatRequestContext, network, agentRole,
 					contextAgentPersona, session, mySessionContext, request, agentModel, agentPrompt, params,
-					tokenBudget, runAs, notificationSink);
+					tokenBudget, runAs, notificationSink, toolCalling);
 		}
 
 		return renderOutputStream(textStream, response, session, contextAgentPersona, notificationSink,
@@ -365,6 +368,18 @@ public class ReportWriterReactiveAgentServiceImpl
 	}
 
 	/**
+	 * The same, with what the controlling software adds to the call (see
+	 * {@link GeboToolCalling}): the plain call above when it adds nothing, so that
+	 * whatever overrides the plain one still answers.
+	 */
+	protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
+			GeboToolCalling toolCalling) throws LLMConfigException {
+		return toolCalling == null ? callLLMReactiveResponses(chatModel, prompt, context, params)
+				: chatModel.streamAnswer(prompt, params, context, toolCalling);
+	}
+
+	/**
 	 * The text the writer writes, as it streams: an output of the network, its reasoning
 	 * goes to the user's chat as it comes ({@code notificationSink}, when it is the chat's
 	 * emitter), completed when the text starts.
@@ -372,7 +387,18 @@ public class ReportWriterReactiveAgentServiceImpl
 	protected Flux<String> writeReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> params, INotificationSink notificationSink)
 			throws LLMConfigException {
-		final Flux<GChatAnswerChunk> chunks = callLLMReactiveResponses(chatModel, prompt, context, params);
+		return writeReactive(chatModel, prompt, context, params, notificationSink, null);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to every model call of the run
+	 * (see {@link GeboToolCalling}); null for nothing.
+	 */
+	protected Flux<String> writeReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> params, INotificationSink notificationSink, GeboToolCalling toolCalling)
+			throws LLMConfigException {
+		final Flux<GChatAnswerChunk> chunks = callLLMReactiveResponses(chatModel, prompt, context, params,
+				toolCalling);
 		final ISinkUIEmitter ui = notificationSink instanceof ISinkUIEmitter emitter ? emitter : null;
 		return Flux.defer(() -> {
 			final ThinkingStream thinking = new ThinkingStream();
@@ -565,6 +591,20 @@ public class ReportWriterReactiveAgentServiceImpl
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext, String request,
 			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt, List<Map<String, Object>> params,
 			int tokenBudget, ReactiveIdentityUtil runAs, INotificationSink notificationSink) throws AgentException {
+		return streamThroughEvidenceExtraction(chatRequestContext, network, agentRole, contextAgentPersona, session,
+				mySessionContext, request, agentModel, agentPrompt, params, tokenBudget, runAs, notificationSink, null);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to every model call of the run
+	 * (see {@link GeboToolCalling}); null for nothing.
+	 */
+	protected Flux<String> streamThroughEvidenceExtraction(IChatRequestContext chatRequestContext,
+			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext, String request,
+			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt, List<Map<String, Object>> params,
+			int tokenBudget, ReactiveIdentityUtil runAs, INotificationSink notificationSink, GeboToolCalling toolCalling) throws AgentException {
 		final GPromptTemplateConfig extractorPrompt = resolvePrompt(null,
 				StandardAgentsPromptsLibraryConfig.REPORT_EVIDENCE_EXTRACTOR_PROMPT, false);
 		final int extractorBudget = agentTokenBudget(agentModel, extractorPrompt, chatRequestContext);
@@ -590,13 +630,13 @@ public class ReportWriterReactiveAgentServiceImpl
 				"Agent: " + contextAgentPersona.getNetworkAgentName() + " is extracting the evidence of "
 						+ windows.size() + " part(s)..",
 				ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType.INFO);
-		return extractAll(windows, agentModel, extractorPrompt, chatRequestContext, runAs, failures, emitter)
-				.publishOn(runAs.wrap(Schedulers.boundedElastic())).flatMapMany(extractions -> {
+		return extractAll(windows, agentModel, extractorPrompt, chatRequestContext, runAs, failures, emitter,
+				toolCalling).publishOn(runAs.wrap(Schedulers.boundedElastic())).flatMapMany(extractions -> {
 					try {
 						return runAs.doRunAsWithReturnAndException(() -> {
 							List<String> reduced = reduceExtractions(extractions, finalBudget, groupBudget,
 									extractorParams, agentModel, extractorPrompt, chatRequestContext, runAs, failures,
-									emitter, contextAgentPersona, notificationSink);
+									emitter, contextAgentPersona, notificationSink, toolCalling);
 							StringBuilder evidence = new StringBuilder(String.join(NEWLINE, reduced));
 							if (failures.get() > 0) {
 								LOGGER.warn("Report writer agent id:" + getId() + " " + failures.get()
@@ -617,7 +657,8 @@ public class ReportWriterReactiveAgentServiceImpl
 								LOGGER.trace(evidence.toString());
 								LOGGER.trace("</EXTRACTED_EVIDENCE>");
 							}
-							return writeReactive(agentModel, agentPrompt, chatRequestContext, writing, notificationSink);
+							return writeReactive(agentModel, agentPrompt, chatRequestContext, writing, notificationSink,
+									toolCalling);
 						});
 					} catch (LLMConfigException e) {
 						return Flux.error(e);
@@ -632,6 +673,16 @@ public class ReportWriterReactiveAgentServiceImpl
 	protected Mono<List<String>> extractAll(List<Map<String, Object>> windows, IGConfigurableChatModel agentModel,
 			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
 			AtomicInteger failures, ISinkUIEmitter emitter) {
+		return extractAll(windows, agentModel, extractorPrompt, chatRequestContext, runAs, failures, emitter, null);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to every model call of the run
+	 * (see {@link GeboToolCalling}); null for nothing.
+	 */
+	protected Mono<List<String>> extractAll(List<Map<String, Object>> windows, IGConfigurableChatModel agentModel,
+			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
+			AtomicInteger failures, ISinkUIEmitter emitter, GeboToolCalling toolCalling) {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin extractAll(...) report writer agent id:" + getId() + " over " + windows.size()
 					+ " window(s), parallelism:" + EXTRACTION_PARALLELISM);
@@ -646,7 +697,8 @@ public class ReportWriterReactiveAgentServiceImpl
 										window.get(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)))
 								+ " (tok)");
 					}
-					String extraction = agentModel.textResponse(extractorPrompt, window, chatRequestContext);
+					String extraction = (toolCalling != null ? agentModel.textResponse(extractorPrompt, window, chatRequestContext, toolCalling)
+				: agentModel.textResponse(extractorPrompt, window, chatRequestContext));
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Extracted the evidence of window " + number + " of " + windows.size()
 								+ " into " + ITokensCountable.stringsTokensSize(extraction) + " (tok), relevant:"
@@ -683,6 +735,19 @@ public class ReportWriterReactiveAgentServiceImpl
 			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
 			AtomicInteger failures, ISinkUIEmitter emitter, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink) {
+		return reduceExtractions(extractions, finalBudget, groupBudget, extractorParams, agentModel, extractorPrompt,
+				chatRequestContext, runAs, failures, emitter, contextAgentPersona, notificationSink, null);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to every model call of the run
+	 * (see {@link GeboToolCalling}); null for nothing.
+	 */
+	protected List<String> reduceExtractions(List<String> extractions, int finalBudget, int groupBudget,
+			Map<String, Object> extractorParams, IGConfigurableChatModel agentModel,
+			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
+			AtomicInteger failures, ISinkUIEmitter emitter, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, GeboToolCalling toolCalling) {
 		List<String> current = extractions;
 		int round = 0;
 		while (current.size() > 1 && ITokensCountable.stringsTokensSize(String.join(NEWLINE, current)) > finalBudget
@@ -707,7 +772,7 @@ public class ReportWriterReactiveAgentServiceImpl
 				groupParams.add(params);
 			}
 			List<String> reduced = extractAll(groupParams, agentModel, extractorPrompt, chatRequestContext, runAs,
-					failures, emitter).block();
+					failures, emitter, toolCalling).block();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("reduceExtractions(...) round " + round + " reduced " + current.size()
 						+ " extraction(s) to " + (reduced != null ? reduced.size() : 0) + " of "

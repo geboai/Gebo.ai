@@ -56,6 +56,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Runs a network of agents in the environment a chat gives it, for callers that
@@ -245,6 +246,17 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
 			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, INotificationSink sink)
 			throws AgentException {
+		return run(network, request, attachments, rulesOfThisRun, toolsContextOfThisRun, null, sink);
+	}
+
+	/**
+	 * The same, with what the caller adds to every model call of the run (see
+	 * {@link GeboToolCalling}), passed to the network and by the network to its
+	 * agents; null for nothing.
+	 */
+	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
+			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, GeboToolCalling toolCallingOfThisRun,
+			INotificationSink sink) throws AgentException {
 		if (network == null) {
 			throw new AgentException("There is no network of agents to run");
 		}
@@ -310,8 +322,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			// the network is asked the question its input adapter used to read from the
 			// minimal chat context's current request, which is this request
 			final String question = GeboChatRequest.actualQuery(request);
-			final GeboChatMessageEnvelope last = service.executeNetwork(context, question != null ? question : "",
-					null);
+			final GeboChatMessageEnvelope last = toolCallingOfThisRun != null
+					? service.executeNetwork(context, question != null ? question : "", null, toolCallingOfThisRun)
+					: service.executeNetwork(context, question != null ? question : "", null);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
@@ -492,8 +505,10 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 				}
 			}
 			// the network is asked the caller's question; the request is in its environment
-			final GeboChatMessageEnvelope last = service.executeNetwork(context,
-					GeboChatRequest.actualQuery(request), environment);
+			final GeboChatMessageEnvelope last = run.getToolCallingOfThisRun() != null
+					? service.executeNetwork(context, GeboChatRequest.actualQuery(request), environment,
+							run.getToolCallingOfThisRun())
+					: service.executeNetwork(context, GeboChatRequest.actualQuery(request), environment);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));

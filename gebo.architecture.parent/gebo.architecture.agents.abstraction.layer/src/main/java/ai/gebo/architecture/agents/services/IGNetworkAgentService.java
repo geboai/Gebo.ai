@@ -12,6 +12,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericAgentService {
 	public Class<InputType> getInputType();
@@ -38,4 +39,22 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
 			AgentsExchangeMessage<InputType> msg, int actualContributionNr,
 			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException;
+
+	/**
+	 * The same message, with what the software controlling the run adds to every
+	 * model call of it (see {@link GeboToolCalling}), as the network received it. The
+	 * agent passes it to its model and to whatever it calls that takes one, in one of
+	 * three ways: as it is; one of its own in its place; the two
+	 * {@link GeboToolCalling#merged(GeboToolCalling, GeboToolCalling)}. Null is the
+	 * plain call. An agent that does not take it handles the plain message.
+	 */
+	public default List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling)
+			throws LLMConfigException, AgentException {
+		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
+				notificationSink, session, mySessionContext, runAs, agentsDao);
+	}
 }

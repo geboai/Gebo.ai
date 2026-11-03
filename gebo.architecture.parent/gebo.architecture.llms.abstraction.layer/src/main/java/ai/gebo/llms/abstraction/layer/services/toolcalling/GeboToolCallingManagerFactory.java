@@ -97,4 +97,14 @@ public class GeboToolCallingManagerFactory {
 	public static <T> T control(ToolContext toolContext, Class<T> contract) {
 		return IToolCallingControlsProvider.from(toolContext).get(contract);
 	}
+
+	/**
+	 * The container of the call a tool runs in, for the tool to pass on to a model it
+	 * calls of its own (a deep search's analysis, a service's call): what the
+	 * controlling software loaded reaches the nested call too. Null outside a call
+	 * made with a {@link GeboToolCalling}: the nested call is then the plain one.
+	 */
+	public static GeboToolCalling nestedFrom(ToolContext toolContext) {
+		return GeboToolCalling.from(toolContext);
+	}
 }

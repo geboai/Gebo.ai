@@ -26,6 +26,7 @@ import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Getter;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 @Getter
 public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
@@ -63,6 +64,17 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
+				notificationSink, session, mySessionContext, runAs, agentsDao, null);
+	}
+
+	@Override
+	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) task performer agent id:" + getId() + " persona:"
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
@@ -97,7 +109,8 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from agent model id:" + getId());
 			}
-			output = (OutputType) agentModel.textResponse(prompt, params, agentContext);
+			output = (OutputType) (toolCalling != null ? agentModel.textResponse(prompt, params, agentContext, toolCalling)
+				: agentModel.textResponse(prompt, params, agentContext));
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -107,7 +120,8 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from agent model id:" + getId() + " targetType:"
 						+ outputType.getName());
 			}
-			output = (OutputType) agentModel.structuredResponse(prompt, params, agentContext, outputType);
+			output = (OutputType) (toolCalling != null ? agentModel.structuredResponse(prompt, params, agentContext, outputType, toolCalling)
+				: agentModel.structuredResponse(prompt, params, agentContext, outputType));
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(

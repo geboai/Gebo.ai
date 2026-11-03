@@ -12,6 +12,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, OutputType>
 		extends GAbstractAgentsNetworkService<InputType, OutputType>
@@ -33,14 +34,14 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 	}
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input, Map<String, Object> environment)
-			throws AgentException, LLMConfigException {
+	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) reactive output agents network service, inputType:"
 					+ (input != null ? input.getClass().getName() : null));
 		}
 		try {
-			return super.executeNetwork(chatRequestContext, input, environment);
+			return super.executeNetwork(chatRequestContext, input, environment, toolCalling);
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Completing reactive output sink after executeNetwork(...)");

@@ -45,6 +45,7 @@ import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.RequestSpec;
 import ai.gebo.llms.abstraction.layer.services.RunAsToolCallback;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.security.services.RunAsWithReturn;
 import io.micrometer.observation.ObservationRegistry;
@@ -339,5 +340,73 @@ class GeboToolCallingTest {
 		assertEquals("after the ask", answer);
 		assertEquals(List.of("ready?"), asked.questions);
 		assertEquals(2, toolCalling.getRounds());
+	}
+
+	// ---- what travels through a network: merged, replaced, passed to a nested call
+
+	interface Reports {
+		void report(String text);
+	}
+
+	@Test
+	void anAgentMergesItsOwnContainerWithTheReceivedOne() {
+		Asked runSink = new Asked();
+		Reports agentSink = text -> {
+		};
+		Asked agentAsked = new Asked();
+		GeboToolCalling received = GeboToolCalling.builder().provide(Askable.class, runSink)
+				.mandatoryTool(tool("askUser")).mandatoryTool(tool("remember")).caller("harness:h1").toolsBudget(500)
+				.maxTotalToolCalls(3).build();
+		GeboToolCalling own = GeboToolCalling.builder().provide(Askable.class, agentAsked)
+				.provide(Reports.class, agentSink).mandatoryTool(tool("askUser")).listener(new ToolCallsListener(null))
+				.build();
+
+		GeboToolCalling merged = GeboToolCalling.merged(own, received);
+
+		assertEquals(List.of("remember", "askUser"), names(merged.getMandatoryTools()),
+				"both tools, the agent's askUser in the place of the received one");
+		assertSame(merged.getMandatoryTools().get(1), own.getMandatoryTools().get(0));
+		assertSame(agentAsked, merged.getProvider().get(Askable.class), "the agent's instance found first");
+		assertSame(agentSink, merged.getProvider().get(Reports.class));
+		assertEquals("harness:h1", merged.getCaller(), "the received caller, the agent set none");
+		assertEquals(500, merged.getToolsBudget());
+		assertEquals(3, merged.getLimits().maxTotalToolCalls(), "the received limits, the agent set none");
+		assertSame(own.getListener(), merged.getListener(), "the agent's listener only");
+		assertSame(received, GeboToolCalling.merged(null, received));
+		assertSame(own, GeboToolCalling.merged(own, null));
+	}
+
+	@Test
+	void aToolFindsTheContainerItRunsInToPassItToANestedCall() {
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("agent").build();
+		ToolContext toolContext = new ToolContext(toolCalling.toolsContext(Map.of("other", "value")));
+
+		assertSame(toolCalling, GeboToolCallingManagerFactory.nestedFrom(toolContext));
+		assertSame(toolCalling, GeboToolCalling.from(toolContext));
+		assertNull(GeboToolCallingManagerFactory.nestedFrom(new ToolContext(Map.of())));
+		assertNull(GeboToolCallingManagerFactory.nestedFrom(null));
+	}
+
+	@Test
+	void eachCallRecordsOnItsOwnAndTheLastToEndIsRead() {
+		GeboToolCalling toolCalling = GeboToolCalling.builder().mandatoryTool(askingTool(true)).build();
+		assertEquals(0, toolCalling.getCalls());
+		assertEquals(0, toolCalling.getRounds());
+		ChatClient client = ChatClient.builder(modelAnswering(round -> text("plain"))).build();
+		// a call that ends without any tool, then one a tool ends
+		client.prompt("no tools").advisors(toolCalling.advisor(null)).call().content();
+		assertEquals(1, toolCalling.getCalls());
+		GeboToolCalling.CallRecord first = toolCalling.getLastCall();
+		assertEquals(1, first.getRounds());
+		assertFalse(first.isStoppedByTool());
+
+		ChatClient stopping = ChatClient.builder(modelAnswering(round -> toolCall("askAPerson", "{\"question\":\"q?\"}")))
+				.build();
+		stopping.prompt("ask").toolCallbacks(askingTool(true)).toolContext(toolCalling.toolsContext(null))
+				.advisors(toolCalling.advisor(null)).call().content();
+		assertEquals(2, toolCalling.getCalls());
+		assertTrue(toolCalling.isStoppedByTool());
+		assertEquals(List.of("askAPerson"), toolCalling.getStoppingTools());
+		assertFalse(first.isStoppedByTool(), "the first call's record is untouched by the second");
 	}
 }

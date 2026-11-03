@@ -26,6 +26,7 @@ import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.model.tool.DefaultToolCallingManager;
 import org.springframework.ai.model.tool.ToolCallLimitBehavior;
 import org.springframework.ai.model.tool.ToolCallingManager;
@@ -50,14 +51,30 @@ import io.micrometer.observation.ObservationRegistry;
  * the ones Spring AI registers by default, at the same place in the advisor chain. A
  * call made without one runs exactly as before.
  * <p>
- * What the last call made with it left behind is readable afterwards: how many rounds
- * the model took, whether a tool ended the call ({@link #isStoppedByTool()}: a tool
- * declared as returning directly, what a tool that suspends the work declares, see
- * {@code ToolCallbackDeclarationUtil#returningDirect()}), the turn's messages. One
- * instance may be passed to several calls in turn; each call starts that record again.
+ * One instance travels through every call of a run: the controlling software hands it
+ * to the network, the network to its agents, an agent to the model and to whatever it
+ * calls that takes one (a nested network, a reactive agent), a tool to the model it
+ * calls of its own ({@link #from(ToolContext)}). An agent that receives one passes it
+ * on as it is, or passes one of its own in its place, or passes the two
+ * {@link #merged(GeboToolCalling, GeboToolCalling)}: its mandatory tools and the
+ * received ones, its instances found before the received ones, its limits and caller
+ * when it set them.
+ * <p>
+ * What the last call made with it left behind is readable afterwards
+ * ({@link #getLastCall()}): how many rounds the model took, whether a tool ended the
+ * call ({@link #isStoppedByTool()}: a tool declared as returning directly, what a tool
+ * that suspends the work declares, see {@code ToolCallbackDeclarationUtil#returningDirect()}),
+ * the turn's messages. Each call records on its own, so calls made at the same time
+ * with the same instance do not disturb each other; the last one to end is the one read.
  */
 public final class GeboToolCalling {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeboToolCalling.class);
+
+	/**
+	 * The tools context key the container of a model call travels under, for a tool
+	 * that calls a model of its own to pass it on ({@link #from(ToolContext)}).
+	 */
+	public static final String CONTEXT_KEY = "geboToolCalling";
 
 	/**
 	 * How many tool calls a turn may make, each value left null where Spring AI's own
@@ -73,6 +90,96 @@ public final class GeboToolCalling {
 		}
 	}
 
+	/**
+	 * What one model call made with a {@link GeboToolCalling} left behind: its rounds,
+	 * whether a tool ended it and which, the turn's messages. Written by the call's
+	 * {@link GeboToolCallingAdvisor}, read through the container once the call ended.
+	 */
+	public static final class CallRecord {
+		private final AtomicInteger rounds = new AtomicInteger();
+		private volatile List<String> lastRoundToolCalls = List.of();
+		private volatile boolean stoppedByTool = false;
+		private volatile List<String> stoppingTools = List.of();
+		private volatile List<Message> turnHistory = List.of();
+
+		CallRecord() {
+		}
+
+		/** The model rounds of the call: one, plus one per round of tool calls. */
+		public int getRounds() {
+			return rounds.get();
+		}
+
+		/**
+		 * Whether a tool ended the call: a tool declared as returning directly was
+		 * called, the loop stopped at it and its result is the call's answer.
+		 */
+		public boolean isStoppedByTool() {
+			return stoppedByTool;
+		}
+
+		/** The tools of the round that ended the call, empty when none did. */
+		public List<String> getStoppingTools() {
+			return stoppingTools;
+		}
+
+		/**
+		 * The messages of the call's turn as the tool calling loop left them: the
+		 * request, each round's tool calls and their results.
+		 */
+		public List<Message> getTurnHistory() {
+			return turnHistory;
+		}
+
+		void roundStarted() {
+			rounds.incrementAndGet();
+		}
+
+		void roundAnswered(ChatResponse response) {
+			if (response == null || response.getResults() == null) {
+				return;
+			}
+			final List<String> called = new ArrayList<>();
+			for (Generation generation : response.getResults()) {
+				final AssistantMessage output = generation != null ? generation.getOutput() : null;
+				if (output != null && output.hasToolCalls()) {
+					for (AssistantMessage.ToolCall call : output.getToolCalls()) {
+						if (call != null && call.name() != null && !called.contains(call.name())) {
+							called.add(call.name());
+						}
+					}
+				}
+			}
+			if (!called.isEmpty()) {
+				lastRoundToolCalls = List.copyOf(called);
+			}
+		}
+
+		void turnContinued(ToolExecutionResult toolExecutionResult) {
+			if (toolExecutionResult != null && toolExecutionResult.conversationHistory() != null) {
+				turnHistory = List.copyOf(toolExecutionResult.conversationHistory());
+			}
+		}
+
+		/** The call's last response, or one of its chunks: a tool ended it when it says so. */
+		void answered(ChatResponse response) {
+			final Generation result = response != null ? response.getResult() : null;
+			final String finishReason = result != null && result.getMetadata() != null
+					? result.getMetadata().getFinishReason()
+					: null;
+			if (ToolExecutionResult.FINISH_REASON.equals(finishReason)) {
+				stoppedByTool = true;
+				stoppingTools = lastRoundToolCalls;
+			}
+		}
+
+		@Override
+		public String toString() {
+			return "CallRecord[rounds=" + rounds.get() + ", stoppedByTool=" + stoppedByTool + ", stoppingTools="
+					+ stoppingTools + ", turnHistory=" + turnHistory.size() + " message(s)]";
+		}
+	}
+
 	private final List<ToolCallback> mandatoryTools;
 	private final Map<Class<?>, Object> controls;
 	private final String caller;
@@ -81,12 +188,9 @@ public final class GeboToolCalling {
 	private final Limits limits;
 	private final IToolCallingControlsProvider provider = new Provider();
 
-	// what the last call made with this left behind
-	private final AtomicInteger rounds = new AtomicInteger();
-	private volatile List<String> lastRoundToolCalls = List.of();
-	private volatile boolean stoppedByTool = false;
-	private volatile List<String> stoppingTools = List.of();
-	private volatile List<Message> turnHistory = List.of();
+	// what the last call made with this left behind, and how many calls were made
+	private volatile CallRecord lastCall = new CallRecord();
+	private final AtomicInteger calls = new AtomicInteger();
 
 	private GeboToolCalling(Builder builder) {
 		this.mandatoryTools = List.copyOf(builder.mandatoryTools);
@@ -99,6 +203,52 @@ public final class GeboToolCalling {
 
 	public static Builder builder() {
 		return new Builder();
+	}
+
+	/**
+	 * The container a tool is running in, to pass on to a model it calls of its own;
+	 * null outside a call made with one.
+	 */
+	public static GeboToolCalling from(ToolContext toolContext) {
+		return from(toolContext != null ? toolContext.getContext() : null);
+	}
+
+	public static GeboToolCalling from(Map<String, Object> toolsContext) {
+		return toolsContext != null && toolsContext.get(CONTEXT_KEY) instanceof GeboToolCalling toolCalling
+				? toolCalling
+				: null;
+	}
+
+	/**
+	 * One container out of an agent's own and the one it received: the mandatory
+	 * tools of both (the agent's taking the place of a received one of the same name),
+	 * the instances of both (the agent's found when both loaded the same interface),
+	 * the agent's caller, budget and limits when it set them and the received ones
+	 * otherwise, the agent's listener only - a received listener is never inherited,
+	 * the agent's calls are recorded by the agent's own. Either side null gives the
+	 * other.
+	 */
+	public static GeboToolCalling merged(GeboToolCalling own, GeboToolCalling received) {
+		if (own == null) {
+			return received;
+		}
+		if (received == null) {
+			return own;
+		}
+		final Builder builder = builder();
+		builder.mandatoryTools(received.mandatoryTools);
+		builder.mandatoryTools(own.mandatoryTools);
+		builder.controls.putAll(received.controls);
+		builder.controls.putAll(own.controls);
+		builder.caller = own.caller != null ? own.caller : received.caller;
+		builder.listener = own.listener;
+		builder.toolsBudget = own.toolsBudget != null ? own.toolsBudget : received.toolsBudget;
+		builder.limits = !Limits.SPRING_DEFAULTS.equals(own.limits) ? own.limits : received.limits;
+		final GeboToolCalling merged = builder.build();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Merged " + own + " with the received " + received + " into " + merged);
+		}
+		return merged;
 	}
 
 	/**
@@ -121,7 +271,8 @@ public final class GeboToolCalling {
 
 	/**
 	 * The listener recording every tool call of the model call, null to leave the
-	 * recording to the one the chat request context carries.
+	 * recording to the one the chat request context carries. A container passed
+	 * through a network of agents leaves it null: each agent records its own calls.
 	 */
 	public ToolCallsListener getListener() {
 		return listener;
@@ -137,13 +288,14 @@ public final class GeboToolCalling {
 	}
 
 	/**
-	 * The tools context of a model call made with this: the given one, with the
-	 * provider the tools find there and the tools' budget when one was given (capping
-	 * a budget the context already carries, never replacing it, as the model's room
-	 * does).
+	 * The tools context of a model call made with this: the given one, with this
+	 * container and the provider the tools find there, and the tools' budget when one
+	 * was given (capping a budget the context already carries, never replacing it, as
+	 * the model's room does).
 	 */
 	public Map<String, Object> toolsContext(Map<String, Object> toolsContext) {
 		final Map<String, Object> out = toolsContext != null ? new HashMap<>(toolsContext) : new HashMap<>();
+		out.put(CONTEXT_KEY, this);
 		out.put(IToolCallingControlsProvider.CONTEXT_KEY, provider);
 		if (toolsBudget != null) {
 			final ToolsTokenBudget shared = ToolsTokenBudget.from(out);
@@ -191,16 +343,26 @@ public final class GeboToolCalling {
 		return builder.build();
 	}
 
-	/** The advisor running the tool calling loop of a call made with this. */
+	/** The advisor running the tool calling loop of one call made with this. */
 	public GeboToolCallingAdvisor advisor(ObservationRegistry observationRegistry) {
 		return new GeboToolCallingAdvisor(this, manager(observationRegistry));
 	}
 
 	// ---- what the last call left behind
 
+	/** The record of the last call made with this that ended; an empty one before any. */
+	public CallRecord getLastCall() {
+		return lastCall;
+	}
+
+	/** How many calls made with this ended. */
+	public int getCalls() {
+		return calls.get();
+	}
+
 	/** The model rounds of the last call: one, plus one per round of tool calls. */
 	public int getRounds() {
-		return rounds.get();
+		return lastCall.getRounds();
 	}
 
 	/**
@@ -208,73 +370,37 @@ public final class GeboToolCalling {
 	 * called, the loop stopped at it and its result is the call's answer.
 	 */
 	public boolean isStoppedByTool() {
-		return stoppedByTool;
+		return lastCall.isStoppedByTool();
 	}
 
 	/** The tools of the round that ended the last call, empty when none did. */
 	public List<String> getStoppingTools() {
-		return stoppingTools;
+		return lastCall.getStoppingTools();
 	}
 
 	/**
 	 * The messages of the last call's turn as the tool calling loop left them: the
-	 * request, each round's tool calls and their results. What a call suspended by a
-	 * tool is resumed from.
+	 * request, each round's tool calls and their results.
 	 */
 	public List<Message> getTurnHistory() {
-		return turnHistory;
+		return lastCall.getTurnHistory();
 	}
 
-	void callStarted() {
-		rounds.set(0);
-		lastRoundToolCalls = List.of();
-		stoppedByTool = false;
-		stoppingTools = List.of();
-		turnHistory = List.of();
+	/** A call made with this starts: its own record. */
+	CallRecord callStarted() {
+		return new CallRecord();
 	}
 
-	void roundStarted() {
-		rounds.incrementAndGet();
-	}
-
-	void roundAnswered(ChatResponse response) {
-		if (response == null || response.getResults() == null) {
+	/** A call made with this ended: its record is the one read from now on. */
+	void callEnded(CallRecord record) {
+		if (record == null) {
 			return;
 		}
-		final List<String> called = new ArrayList<>();
-		for (Generation generation : response.getResults()) {
-			final AssistantMessage output = generation != null ? generation.getOutput() : null;
-			if (output != null && output.hasToolCalls()) {
-				for (AssistantMessage.ToolCall call : output.getToolCalls()) {
-					if (call != null && call.name() != null && !called.contains(call.name())) {
-						called.add(call.name());
-					}
-				}
-			}
-		}
-		if (!called.isEmpty()) {
-			lastRoundToolCalls = List.copyOf(called);
-		}
-	}
-
-	void turnContinued(ToolExecutionResult toolExecutionResult) {
-		if (toolExecutionResult != null && toolExecutionResult.conversationHistory() != null) {
-			turnHistory = List.copyOf(toolExecutionResult.conversationHistory());
-		}
-	}
-
-	void callEnded(ChatResponse response) {
-		final Generation result = response != null ? response.getResult() : null;
-		final String finishReason = result != null && result.getMetadata() != null
-				? result.getMetadata().getFinishReason()
-				: null;
-		if (ToolExecutionResult.FINISH_REASON.equals(finishReason)) {
-			stoppedByTool = true;
-			stoppingTools = lastRoundToolCalls;
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("The model call was ended by its tools " + stoppingTools + " after " + rounds.get()
-						+ " round(s)" + (caller != null ? ", caller " + caller : ""));
-			}
+		lastCall = record;
+		calls.incrementAndGet();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("A model call ended" + (caller != null ? " for " + caller : "") + ": " + record
+					+ (record.isStoppedByTool() ? " (ended by its tools)" : ""));
 		}
 	}
 
@@ -372,7 +498,11 @@ public final class GeboToolCalling {
 			return this;
 		}
 
-		/** Records every tool call of the model call, in place of the chat request's recorder. */
+		/**
+		 * Records every tool call of the model call, in place of the chat request's
+		 * recorder. Not for a container passed through a network of agents: there each
+		 * agent records its own calls, forwarded to the request's recorder.
+		 */
 		public Builder listener(ToolCallsListener listener) {
 			this.listener = listener;
 			return this;

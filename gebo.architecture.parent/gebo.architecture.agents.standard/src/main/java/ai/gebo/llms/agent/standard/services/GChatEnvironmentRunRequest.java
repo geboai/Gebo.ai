@@ -17,6 +17,7 @@ import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatRu
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import lombok.Builder;
 import lombok.Getter;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Everything a run of a network of agents in a chat environment is about, for
@@ -40,6 +41,13 @@ public class GChatEnvironmentRunRequest {
 	/** Values the tools of this run read from their tool context. */
 	@Builder.Default
 	private final Map<String, Object> toolsContextOfThisRun = Map.of();
+	/**
+	 * What the caller adds to every model call of this run (see
+	 * {@link GeboToolCalling}): the interfaces the tools call back, the tools every
+	 * call declares, the loop's limits. Passed to the network, which passes it to its
+	 * agents. Null for nothing.
+	 */
+	private final GeboToolCalling toolCallingOfThisRun;
 	/** Entries the caller adds to the environment of the network, last. */
 	@Builder.Default
 	private final Map<String, Object> environmentOfThisRun = Map.of();

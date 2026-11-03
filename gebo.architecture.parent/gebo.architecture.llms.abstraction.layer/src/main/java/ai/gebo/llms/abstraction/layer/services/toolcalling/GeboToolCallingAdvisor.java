@@ -20,19 +20,22 @@ import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.model.tool.ToolExecutionResult;
 
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling.CallRecord;
 import reactor.core.publisher.Flux;
 
 /**
- * The tool calling loop of a model call made with a {@link GeboToolCalling}: Spring
+ * The tool calling loop of one model call made with a {@link GeboToolCalling}: Spring
  * AI's own loop, at its own place in the advisor chain, run by the manager the
- * {@link GeboToolCalling} builds (its limits, the observation registry) and telling it
- * how the call goes - the rounds, the turn's messages, whether a tool ended it. Passed
- * as the call's advisor it takes the place of the one the chat client registers by
- * default (a chat client allows one tool advisor, and registers its own only when the
- * call brings none).
+ * {@link GeboToolCalling} builds (its limits, the observation registry) and recording
+ * how the call goes - the rounds, the turn's messages, whether a tool ended it - in a
+ * {@link CallRecord} of the call's own, handed to the container when the call ends.
+ * Passed as the call's advisor it takes the place of the one the chat client registers
+ * by default (a chat client allows one tool advisor, and registers its own only when
+ * the call brings none).
  */
 public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 	private final GeboToolCalling toolCalling;
+	private volatile CallRecord record;
 
 	GeboToolCallingAdvisor(GeboToolCalling toolCalling, ToolCallingManager toolCallingManager) {
 		super(toolCallingManager, DEFAULT_TOOL_EXECUTION_ELIGIBILITY_CHECKER, DEFAULT_ORDER, true);
@@ -48,39 +51,51 @@ public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 		return "Gebo Tool Calling Advisor";
 	}
 
+	/** The record of the call this advisor runs, started with the loop. */
+	private CallRecord record() {
+		CallRecord current = record;
+		if (current == null) {
+			current = toolCalling.callStarted();
+			record = current;
+		}
+		return current;
+	}
+
 	// ---- blocking calls
 
 	@Override
 	protected ChatClientRequest doInitializeLoop(ChatClientRequest chatClientRequest,
 			CallAdvisorChain callAdvisorChain) {
-		toolCalling.callStarted();
+		record = toolCalling.callStarted();
 		return chatClientRequest;
 	}
 
 	@Override
 	protected ChatClientRequest doBeforeCall(ChatClientRequest chatClientRequest, CallAdvisorChain callAdvisorChain) {
-		toolCalling.roundStarted();
+		record().roundStarted();
 		return chatClientRequest;
 	}
 
 	@Override
 	protected ChatClientResponse doAfterCall(ChatClientResponse chatClientResponse,
 			CallAdvisorChain callAdvisorChain) {
-		toolCalling.roundAnswered(chatClientResponse != null ? chatClientResponse.chatResponse() : null);
+		record().roundAnswered(chatClientResponse != null ? chatClientResponse.chatResponse() : null);
 		return chatClientResponse;
 	}
 
 	@Override
 	protected List<Message> doGetNextInstructionsForToolCall(ChatClientRequest chatClientRequest,
 			ChatClientResponse chatClientResponse, ToolExecutionResult toolExecutionResult) {
-		toolCalling.turnContinued(toolExecutionResult);
+		record().turnContinued(toolExecutionResult);
 		return super.doGetNextInstructionsForToolCall(chatClientRequest, chatClientResponse, toolExecutionResult);
 	}
 
 	@Override
 	protected ChatClientResponse doFinalizeLoop(ChatClientResponse chatClientResponse,
 			CallAdvisorChain callAdvisorChain) {
-		toolCalling.callEnded(chatClientResponse != null ? chatClientResponse.chatResponse() : null);
+		final CallRecord ended = record();
+		ended.answered(chatClientResponse != null ? chatClientResponse.chatResponse() : null);
+		toolCalling.callEnded(ended);
 		return chatClientResponse;
 	}
 
@@ -89,28 +104,28 @@ public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 	@Override
 	protected ChatClientRequest doInitializeLoopStream(ChatClientRequest chatClientRequest,
 			StreamAdvisorChain streamAdvisorChain) {
-		toolCalling.callStarted();
+		record = toolCalling.callStarted();
 		return chatClientRequest;
 	}
 
 	@Override
 	protected ChatClientRequest doBeforeStream(ChatClientRequest chatClientRequest,
 			StreamAdvisorChain streamAdvisorChain) {
-		toolCalling.roundStarted();
+		record().roundStarted();
 		return chatClientRequest;
 	}
 
 	@Override
 	protected ChatClientResponse doAfterStream(ChatClientResponse chatClientResponse,
 			StreamAdvisorChain streamAdvisorChain) {
-		toolCalling.roundAnswered(chatClientResponse != null ? chatClientResponse.chatResponse() : null);
+		record().roundAnswered(chatClientResponse != null ? chatClientResponse.chatResponse() : null);
 		return chatClientResponse;
 	}
 
 	@Override
 	protected List<Message> doGetNextInstructionsForToolCallStream(ChatClientRequest chatClientRequest,
 			ChatClientResponse chatClientResponse, ToolExecutionResult toolExecutionResult) {
-		toolCalling.turnContinued(toolExecutionResult);
+		record().turnContinued(toolExecutionResult);
 		return super.doGetNextInstructionsForToolCallStream(chatClientRequest, chatClientResponse,
 				toolExecutionResult);
 	}
@@ -118,9 +133,11 @@ public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 	@Override
 	protected Flux<ChatClientResponse> doFinalizeLoopStream(Flux<ChatClientResponse> chatClientResponseFlux,
 			StreamAdvisorChain streamAdvisorChain) {
-		// the chunk a tool ended the call with carries the finish reason; the others
-		// leave the record as it is
+		// the chunk a tool ended the call with carries the finish reason; the record is
+		// the container's once the stream ends
+		final CallRecord ended = record();
 		return chatClientResponseFlux
-				.doOnNext(response -> toolCalling.callEnded(response != null ? response.chatResponse() : null));
+				.doOnNext(response -> ended.answered(response != null ? response.chatResponse() : null))
+				.doOnComplete(() -> toolCalling.callEnded(ended));
 	}
 }

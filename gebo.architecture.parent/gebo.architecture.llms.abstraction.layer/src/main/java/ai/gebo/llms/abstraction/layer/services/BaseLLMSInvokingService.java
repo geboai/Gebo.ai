@@ -45,6 +45,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public class BaseLLMSInvokingService {
 
@@ -114,8 +115,14 @@ public class BaseLLMSInvokingService {
 
 	protected String callLLM(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> params) throws LLMConfigException {
+		return callLLM(chatModel, prompt, context, params, null);
+	}
 
-		return chatModel.textResponse(prompt, params, context);
+	protected String callLLM(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> params, GeboToolCalling toolCalling) throws LLMConfigException {
+
+		return (toolCalling != null ? chatModel.textResponse(prompt, params, context, toolCalling)
+				: chatModel.textResponse(prompt, params, context));
 	}
 
 	/**
@@ -646,23 +653,35 @@ public class BaseLLMSInvokingService {
 	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> additionalVariables, Class<T> type)
 			throws LLMConfigException {
+		return callLLMStructuredReturn(chatModel, prompt, context, additionalVariables, type, null);
+	}
+
+	protected <T> T callLLMStructuredReturn(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> additionalVariables, Class<T> type, GeboToolCalling toolCalling) throws LLMConfigException {
 
 		Map<String, Object> params = new HashMap<>(additionalVariables);
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
-		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
+		T data = (T) (toolCalling != null ? chatModel.structuredResponse(prompt, params, context, type, toolCalling)
+				: chatModel.structuredResponse(prompt, params, context, type));
 		return data;
 	}
 
 	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object consolidated, Class<T> type)
 			throws LLMConfigException {
+		return callLLMWithConsolidationStructuredReturn(chatModel, prompt, context, consolidated, type, null);
+	}
+
+	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object consolidated, Class<T> type, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>();
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 
-		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
+		T data = (T) (toolCalling != null ? chatModel.structuredResponse(prompt, params, context, type, toolCalling)
+				: chatModel.structuredResponse(prompt, params, context, type));
 
 		return data;
 	}
@@ -670,21 +689,35 @@ public class BaseLLMSInvokingService {
 	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object consolidated,
 			Map<String, Object> additionalVariables, Class<T> type) throws LLMConfigException {
+		return callLLMWithConsolidationStructuredReturn(chatModel, prompt, context, consolidated, additionalVariables,
+				type, null);
+	}
+
+	protected <T> T callLLMWithConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object consolidated,
+			Map<String, Object> additionalVariables, Class<T> type, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>(additionalVariables);
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 
-		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
+		T data = (T) (toolCalling != null ? chatModel.structuredResponse(prompt, params, context, type, toolCalling)
+				: chatModel.structuredResponse(prompt, params, context, type));
 
 		return data;
 	}
 
 	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Object documents) throws LLMConfigException {
+		return callLLMWithDocuments(chatModel, prompt, context, documents, (GeboToolCalling) null);
+	}
+
+	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Object documents, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>();
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
-		String result = chatModel.textResponse(prompt, params, context);
+		String result = (toolCalling != null ? chatModel.textResponse(prompt, params, context, toolCalling)
+				: chatModel.textResponse(prompt, params, context));
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
 			result = ClientChatCallUtil.removeThinking(result);
@@ -694,11 +727,17 @@ public class BaseLLMSInvokingService {
 
 	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Object documents, Map<String, Object> params) throws LLMConfigException {
+		return callLLMWithDocuments(chatModel, prompt, context, documents, params, (GeboToolCalling) null);
+	}
+
+	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Object documents, Map<String, Object> params, GeboToolCalling toolCalling) throws LLMConfigException {
 
 		Map<String, Object> _params = new HashMap<>(params);
 		_params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
-		String result = chatModel.textResponse(prompt, _params, context);
+		String result = (toolCalling != null ? chatModel.textResponse(prompt, _params, context, toolCalling)
+				: chatModel.textResponse(prompt, _params, context));
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
 			result = ClientChatCallUtil.removeThinking(result);
@@ -709,18 +748,31 @@ public class BaseLLMSInvokingService {
 	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated)
 			throws LLMConfigException {
-		return this.callLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated, Map.of());
+		return callLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated, (GeboToolCalling) null);
+	}
+
+	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated, GeboToolCalling toolCalling) throws LLMConfigException {
+		return this.callLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated, Map.of(),
+				toolCalling);
 	}
 
 	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams) throws LLMConfigException {
+		return callLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated, additionalParams, (GeboToolCalling) null);
+	}
+
+	protected String callLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams, GeboToolCalling toolCalling) throws LLMConfigException {
 
 		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
-		String result = chatModel.textResponse(prompt, params, context);
+		String result = (toolCalling != null ? chatModel.textResponse(prompt, params, context, toolCalling)
+				: chatModel.textResponse(prompt, params, context));
 		final boolean skipThinkingMarkup = chatModel.isApplyThinkingMarkupHandling();
 		if (result != null && skipThinkingMarkup) {
 			result = ClientChatCallUtil.removeThinking(result);
@@ -735,10 +787,18 @@ public class BaseLLMSInvokingService {
 	protected GChatAnswer answerLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams) throws LLMConfigException {
+		return answerLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated,
+				additionalParams, null);
+	}
+
+	protected GChatAnswer answerLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
-		return chatModel.answer(prompt, params, context);
+		return (toolCalling != null ? chatModel.answer(prompt, params, context, toolCalling)
+				: chatModel.answer(prompt, params, context));
 	}
 
 	/**
@@ -752,8 +812,14 @@ public class BaseLLMSInvokingService {
 	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams) throws LLMConfigException {
+		return streamLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated, additionalParams, (GeboToolCalling) null);
+	}
+
+	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams, GeboToolCalling toolCalling) throws LLMConfigException {
 		return streamLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated,
-				additionalParams, null);
+				additionalParams, null, toolCalling);
 	}
 
 	/**
@@ -766,6 +832,12 @@ public class BaseLLMSInvokingService {
 	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
 			Map<String, Object> additionalParams, Predicate<CharSequence> stopWhen) throws LLMConfigException {
+		return streamLLMWithDocumentsAndConsolidation(chatModel, prompt, context, documents, consolidated, additionalParams, stopWhen, (GeboToolCalling) null);
+	}
+
+	protected String streamLLMWithDocumentsAndConsolidation(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, String consolidated,
+			Map<String, Object> additionalParams, Predicate<CharSequence> stopWhen, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
@@ -778,7 +850,8 @@ public class BaseLLMSInvokingService {
 		final AtomicBoolean stopped = new AtomicBoolean(false);
 		final StringBuilder received = new StringBuilder();
 		@SuppressWarnings("unchecked")
-		final Flux<String> stream = chatModel.streamStringResponse(prompt, params, context);
+		final Flux<String> stream = (toolCalling != null ? chatModel.streamStringResponse(prompt, params, context, toolCalling)
+				: chatModel.streamStringResponse(prompt, params, context));
 		stream.filter(piece -> piece != null).doOnNext(piece -> {
 			pieces.incrementAndGet();
 			received.append(piece);
@@ -902,6 +975,13 @@ public class BaseLLMSInvokingService {
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Object consolidated,
 			Class<T> type) throws LLMConfigException {
+		return callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt, context, documents,
+				consolidated, type, null);
+	}
+
+	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Object consolidated,
+			Class<T> type, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>();
 
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
@@ -909,7 +989,8 @@ public class BaseLLMSInvokingService {
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
-		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
+		T data = (T) (toolCalling != null ? chatModel.structuredResponse(prompt, params, context, type, toolCalling)
+				: chatModel.structuredResponse(prompt, params, context, type));
 
 		return data;
 	}
@@ -917,25 +998,39 @@ public class BaseLLMSInvokingService {
 	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Object consolidated,
 			Map<String, Object> additionalParams, Class<T> type) throws LLMConfigException {
+		return callLLMWithDocumentsAndConsolidationStructuredReturn(chatModel, prompt, context, documents,
+				consolidated, additionalParams, type, null);
+	}
+
+	protected <T> T callLLMWithDocumentsAndConsolidationStructuredReturn(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Object consolidated,
+			Map<String, Object> additionalParams, Class<T> type, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = additionalParams != null ? new HashMap<>(additionalParams) : new HashMap<>();
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(CONSOLIDATED_TEMPLATE_VARIABLE, consolidated);
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
 
-		T data = (T) chatModel.structuredResponse(prompt, params, context, type);
+		T data = (T) (toolCalling != null ? chatModel.structuredResponse(prompt, params, context, type, toolCalling)
+				: chatModel.structuredResponse(prompt, params, context, type));
 		return data;
 	}
 
 	protected <T> T callLLMWithDocumentsStructuredReturn(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Class<T> type)
 			throws LLMConfigException {
+		return callLLMWithDocumentsStructuredReturn(chatModel, prompt, context, documents, type, null);
+	}
+
+	protected <T> T callLLMWithDocumentsStructuredReturn(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Object documents, Class<T> type, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>();
 
 		BeanOutputConverter<T> outputConverter = chatModel.createConverter(type);
 		params.put(FORMAT_TEMPLATE_VARIABLE, outputConverter.getFormat());
 		params.put(DOCUMENTS_TEMPLATE_VARIABLE, documents);
-		T data = (T) chatModel.structuredResponse(prompt, params, context, type, outputConverter);
+		T data = (T) (toolCalling != null ? chatModel.structuredResponse(prompt, params, context, type, outputConverter, toolCalling)
+				: chatModel.structuredResponse(prompt, params, context, type, outputConverter));
 
 		return data;
 	}
@@ -1138,7 +1233,13 @@ public class BaseLLMSInvokingService {
 
 	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> params) throws LLMConfigException {
-		return chatModel.streamStringResponse(prompt, params, context);
+		return callLLMReactive(chatModel, prompt, context, params, (GeboToolCalling) null);
+	}
+
+	protected Flux<String> callLLMReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> params, GeboToolCalling toolCalling) throws LLMConfigException {
+		return (toolCalling != null ? chatModel.streamStringResponse(prompt, params, context, toolCalling)
+				: chatModel.streamStringResponse(prompt, params, context));
 	}
 
 	/**
@@ -1148,7 +1249,13 @@ public class BaseLLMSInvokingService {
 	protected Flux<GChatAnswerChunk> callLLMReactiveAnswer(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
 			throws LLMConfigException {
-		return chatModel.streamAnswer(prompt, params, context);
+		return callLLMReactiveAnswer(chatModel, prompt, context, params, null);
+	}
+
+	protected Flux<GChatAnswerChunk> callLLMReactiveAnswer(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params, GeboToolCalling toolCalling) throws LLMConfigException {
+		return (toolCalling != null ? chatModel.streamAnswer(prompt, params, context, toolCalling)
+				: chatModel.streamAnswer(prompt, params, context));
 	}
 
 }

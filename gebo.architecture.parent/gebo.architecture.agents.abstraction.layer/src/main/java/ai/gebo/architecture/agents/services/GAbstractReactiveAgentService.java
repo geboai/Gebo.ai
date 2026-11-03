@@ -35,6 +35,7 @@ import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  AggregatedResponses>
 		extends GAbstractGenericalAgentService
@@ -117,6 +118,17 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException {
+		return execute(chatRequestContext, agentConfig, request, network, contextAgentPersona, notificationSink,
+				session, privateMemory, runAs, null);
+	}
+
+	@Override
+	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
+			throws AgentException, LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin execute(...) reactive agent service id:" + getId() + " agentConfig code:"
@@ -189,7 +201,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 						callBacksListener),
 				agentConfig, request, network,
 				contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole, agentPrompt, runAs,
-				callBacksListener);
+				callBacksListener, toolCalling);
 		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
 				.doOnSubscribe(s -> LOGGER.debug("Begin reactive agentic iteration subscription {} ", getId()))
 				.doOnNext(partial -> {
@@ -212,6 +224,6 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGConfigurableChatModel agentModel,
 			GAgentRole agentRole, GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs,
-			ToolCallsListener callBacksListener) throws LLMConfigException, AgentException;
+			ToolCallsListener callBacksListener, GeboToolCalling toolCalling) throws LLMConfigException, AgentException;
 
 }

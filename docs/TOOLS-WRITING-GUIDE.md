@@ -400,7 +400,44 @@ call is the plain one described above. It carries:
 The call then runs its **own tool calling loop** (`GeboToolCallingAdvisor`, in
 place of the one the chat client registers by default) and, once it returns,
 the container tells what happened: `getRounds()`, `isStoppedByTool()`,
-`getStoppingTools()`.
+`getStoppingTools()`, `getLastCall()`. Each call records on its own, so one
+container shared by calls made at the same time is safe; the last call to end is
+the one read.
+
+### How it travels through a network of agents
+
+The container is an **explicit parameter** at every layer between the
+controlling software and the model, each with an overload taking a trailing
+`GeboToolCalling` (null is the plain run, and the old signatures delegate with
+null): `GChatEnvironmentRunRequest.toolCallingOfThisRun` and the runners
+(`GChatEnvironmentNetworkRunner.run`, `GTextAgentsNetworkRunner.runNetwork` and
+`runAgent`), `IGAgentsNetworkService.executeNetwork`,
+`IGNetworkAgentService.onMessage`, `IGReactiveAgentService.execute` and the
+reactive agents' `createResponse`, the helpers of `BaseLLMSInvokingService`.
+**The method that receives it passes it to every call it makes that takes one**:
+the network to each agent, an agent to its model, the nested-network adapter to
+the inner network, the reactive adapter to `execute`, the report writer to its
+extraction calls. An agent chooses one of three things to pass down:
+
+- **as it is** (the common case);
+- **one of its own in its place**: nothing of the received one applies to its calls;
+- **the two merged**, `GeboToolCalling.merged(mine, received)`: the mandatory
+  tools of both (the agent's taking the place of a received one of the same
+  name), the instances of both (the agent's found first), the agent's caller,
+  budget and limits when it set them else the received ones, the agent's
+  listener only.
+
+A container passed through a network must leave `listener` unset: each agent
+records its own tool calls, forwarded to the request's recorder, and a run-level
+listener would take the place of them all (the network service warns).
+
+**A tool that calls a model of its own** (a deep search's analysis) has no
+parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`
+gives it the container it runs in (null outside a governed call), to pass to the
+model it calls, so what the controlling software loaded reaches the nested call.
+
+A call made with a null container is the plain call, literally the old method of
+the model, so whatever stubs or overrides the plain one still answers.
 
 A tool that must **end the call** (it asked the user something and the work
 waits for the answer; it waits for an external event) is declared with

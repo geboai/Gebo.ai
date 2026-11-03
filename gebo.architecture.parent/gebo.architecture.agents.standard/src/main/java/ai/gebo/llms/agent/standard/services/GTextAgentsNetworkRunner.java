@@ -45,6 +45,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Runs a network of agents, or a single agent, outside a chat: a text request
@@ -97,12 +98,21 @@ public class GTextAgentsNetworkRunner {
 	 * @throws AgentException when the network does not exist or its run fails
 	 */
 	public String runNetwork(String networkCode, String inputText, INotificationSink sink) throws AgentException {
+		return runNetwork(networkCode, inputText, sink, null);
+	}
+
+	/**
+	 * The same, with what the caller adds to every model call of the run (see
+	 * {@link GeboToolCalling}); null for nothing.
+	 */
+	public String runNetwork(String networkCode, String inputText, INotificationSink sink,
+			GeboToolCalling toolCalling) throws AgentException {
 		IAgentsNetworkDao networkDao = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class);
 		GAgentsNetwork network = networkDao.findByCode(networkCode);
 		if (network == null) {
 			throw new AgentException("Network of agents '" + networkCode + "' does not exist");
 		}
-		return runNetwork(network, inputText, sink);
+		return runNetwork(network, inputText, sink, toolCalling);
 	}
 
 	/**
@@ -114,12 +124,21 @@ public class GTextAgentsNetworkRunner {
 	 */
 	public String runAgent(String agentConfigCode, String codePrefix, String inputText, INotificationSink sink)
 			throws AgentException {
+		return runAgent(agentConfigCode, codePrefix, inputText, sink, null);
+	}
+
+	/**
+	 * The same, with what the caller adds to every model call of the run (see
+	 * {@link GeboToolCalling}); null for nothing.
+	 */
+	public String runAgent(String agentConfigCode, String codePrefix, String inputText, INotificationSink sink,
+			GeboToolCalling toolCalling) throws AgentException {
 		if (agentConfigCode == null || agentConfigCode.isBlank()) {
 			throw new AgentException("A single agent run needs the agent configuration code");
 		}
 		final INotificationSink notifications = sink != null ? sink : LOGGING_SINK;
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-		final RunContext context = runContext(inputText);
+		final RunContext context = runContext(inputText, toolCalling);
 		GAgentsNetwork alone = singleAgentNetwork(agentConfigCode, codePrefix);
 		try {
 			return runAsText(alone, notifications, runAs, context);
@@ -137,9 +156,18 @@ public class GTextAgentsNetworkRunner {
 	 */
 	public String runNetwork(GAgentsNetwork network, String inputText, INotificationSink sink)
 			throws AgentException {
+		return runNetwork(network, inputText, sink, null);
+	}
+
+	/**
+	 * The same, with what the caller adds to every model call of the run (see
+	 * {@link GeboToolCalling}); null for nothing.
+	 */
+	public String runNetwork(GAgentsNetwork network, String inputText, INotificationSink sink,
+			GeboToolCalling toolCalling) throws AgentException {
 		final INotificationSink notifications = sink != null ? sink : LOGGING_SINK;
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-		final RunContext context = runContext(inputText);
+		final RunContext context = runContext(inputText, toolCalling);
 		try {
 			return runAsText(network, notifications, runAs, context);
 		} catch (NetworkOfAgentsException notText) {
@@ -151,12 +179,15 @@ public class GTextAgentsNetworkRunner {
 		}
 	}
 
-	/** What a run needs from the caller: the request, their knowledge bases, the environment. */
+	/**
+	 * What a run needs from the caller: the request, their knowledge bases, the
+	 * environment, what they add to the model calls (null for nothing).
+	 */
 	private record RunContext(String inputText, List<String> knowledgeBases, Map<String, Object> environment,
-			IChatRequestContext requestContext) {
+			IChatRequestContext requestContext, GeboToolCalling toolCalling) {
 	}
 
-	private RunContext runContext(String inputText) {
+	private RunContext runContext(String inputText, GeboToolCalling toolCalling) {
 		final String text = inputText != null ? inputText : "";
 		// outside a chat the task works on all the knowledge bases the caller can see,
 		// read here, where the caller's identity is
@@ -168,7 +199,8 @@ public class GTextAgentsNetworkRunner {
 		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT, DeliverableIntent.SUMMARY);
 		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED, Boolean.FALSE);
 		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN, Boolean.FALSE);
-		return new RunContext(text, knowledgeBases, environment, userEnvironment.requestContext(text, knowledgeBases));
+		return new RunContext(text, knowledgeBases, environment, userEnvironment.requestContext(text, knowledgeBases),
+				toolCalling);
 	}
 
 	/**
@@ -195,8 +227,10 @@ public class GTextAgentsNetworkRunner {
 				LOGGER.debug("Network {} runs as text over {} knowledge base(s) of the caller", network.getCode(),
 						context.knowledgeBases().size());
 			}
-			String output = service.executeNetwork(context.requestContext(), context.inputText(),
-					context.environment());
+			String output = context.toolCalling() != null
+					? service.executeNetwork(context.requestContext(), context.inputText(), context.environment(),
+							context.toolCalling())
+					: service.executeNetwork(context.requestContext(), context.inputText(), context.environment());
 			return output != null ? output : "";
 		} catch (AgentException ae) {
 			throw ae;
@@ -266,8 +300,11 @@ public class GTextAgentsNetworkRunner {
 			// a chat network is asked the question its input adapter used to read from the
 			// synthesized request
 			final String question = GeboChatRequest.actualQuery(request);
-			GeboChatMessageEnvelope last = service.executeNetwork(resources.createChatRequestContext(),
-					question != null ? question : "", context.environment());
+			GeboChatMessageEnvelope last = context.toolCalling() != null
+					? service.executeNetwork(resources.createChatRequestContext(), question != null ? question : "",
+							context.environment(), context.toolCalling())
+					: service.executeNetwork(resources.createChatRequestContext(), question != null ? question : "",
+							context.environment());
 			List<GeboChatMessageEnvelope> streamed = flux.collectList().block(CHAT_ANSWER_COLLECTION_TIMEOUT);
 			return answerOf(last, streamed);
 		} catch (AgentException ae) {

@@ -20,6 +20,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Getter;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 @Getter
 public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputType>
@@ -66,6 +67,17 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
+				notificationSink, session, mySessionContext, runAs, agentsDao, null);
+	}
+
+	@Override
+	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) network adapter id:" + getId() + " agentNetworkServiceCode:"
 					+ config.getAgentNetworkServiceCode() + " adaptedAgentNetworkCode:"
@@ -100,8 +112,12 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 					LOGGER.debug("Delegating to adapted agents network '" + config.getAdaptedAgentNetworkCode()
 							+ "' executeNetwork(...)");
 				}
-				OutputType output = (OutputType) agentsNetworkService.executeNetwork(chatRequestContext,
-						msg.getPayload(), session.getEnvironment());
+				// the nested network runs with what the outer one received
+				OutputType output = (OutputType) (toolCalling != null
+						? agentsNetworkService.executeNetwork(chatRequestContext, msg.getPayload(),
+								session.getEnvironment(), toolCalling)
+						: agentsNetworkService.executeNetwork(chatRequestContext, msg.getPayload(),
+								session.getEnvironment()));
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<ADAPTED_NETWORK_OUTPUT adapter=" + getId() + ">");
 					LOGGER.trace(String.valueOf(output));

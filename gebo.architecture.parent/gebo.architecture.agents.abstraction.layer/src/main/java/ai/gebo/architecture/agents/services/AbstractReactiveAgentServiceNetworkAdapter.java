@@ -21,6 +21,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 @AllArgsConstructor
 public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, ResponseType>
@@ -80,6 +81,17 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
+				notificationSink, session, mySessionContext, runAs, agentsDao, null);
+	}
+
+	@Override
+	public List<AgentsExchangeMessage<ResponseType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, int actualContributionNr,
+			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) reactive agent network adapter id:" + getId() + " fromAgent:"
 					+ msg.getFromAgent());
@@ -89,8 +101,11 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_INPUT>");
 		}
-		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, msg.getPayload(),
-				network, contextAgentPersona, notificationSink, session, mySessionContext, runAs);
+		Flux<IGPartialOperation<ResponseType>> flux = toolCalling != null
+				? service.execute(chatRequestContext, config, msg.getPayload(), network, contextAgentPersona,
+						notificationSink, session, mySessionContext, runAs, toolCalling)
+				: service.execute(chatRequestContext, config, msg.getPayload(), network, contextAgentPersona,
+						notificationSink, session, mySessionContext, runAs);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
 			sink.emitNext(x, null);
 			return x;
