@@ -443,7 +443,18 @@ each name themselves as the caller and carry the platform's loop limits
 step passes the request's container to its helper calls
 (`callLLMRepeatableFieldEntryOutput(..., toolCalling)`, `callLLMReactiveAnswer(...,
 toolCalling)`), branching on null so that a request made without one is the
-plain call.
+plain call. The services behind a request pass it on the same way: the LLM
+assisted retrieval and the ranker's irrelevance filter, the deep search data
+sources' query extraction, the documents search agents' planners, queries and
+rankings.
+
+**A model call with nobody above it names itself.** The history consolidation
+(`consolidation:<session code>`), the chat title suggestion (`title:<session
+code>`), the rule proposal (`rules:<conversation code>`, `rules:check`), the RAG
+threshold autotune (`autotune:<vector store>`) and the Enterprise graph analysis
+(`graph-analysis:<endpoint code>`) build their own container with the factory at
+their entry: every model call of the platform is then made by someone who says
+who it is.
 
 **A tool that calls a model of its own** (a deep search's analysis) has no
 parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`

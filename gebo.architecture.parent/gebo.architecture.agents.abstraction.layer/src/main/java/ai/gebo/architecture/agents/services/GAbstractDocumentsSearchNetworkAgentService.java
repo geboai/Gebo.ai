@@ -122,11 +122,17 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				NotificationType.INFO);
 		// how the search went (e.g. the sources it could not reach), told to the agents reading it
 		final List<String> statusNotices = new ArrayList<>();
-		List<Document> documents = retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
+		List<Document> documents = toolCalling != null
+				? retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole, contextAgentPersona,
+						session, mySessionContext, msg, agentsDao, notificationSink, statusNotices, toolCalling)
+				: retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole, contextAgentPersona,
+						session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
 		// what the agent hands over: the documents found, or what it made of them
-		documents = deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session,
-				contextAgentPersona, notificationSink, runAs, statusNotices);
+		documents = toolCalling != null
+				? deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session, contextAgentPersona,
+						notificationSink, runAs, statusNotices, toolCalling)
+				: deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session, contextAgentPersona,
+						notificationSink, runAs, statusNotices);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
 				+ documents.size() + " evidences", NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {

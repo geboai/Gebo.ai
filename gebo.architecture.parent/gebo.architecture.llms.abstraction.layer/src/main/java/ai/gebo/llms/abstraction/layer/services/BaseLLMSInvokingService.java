@@ -325,6 +325,17 @@ public class BaseLLMSInvokingService {
 		return callLLMWithDocuments(chatModel, prompt, context, inputs);
 	}
 
+	/**
+	 * The same, the call made with what the controlling software adds to it (see
+	 * {@link GeboToolCalling}); null for nothing.
+	 */
+	protected String callLLMWithDocuments(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, Map<String, Object> additionalParams, List<Document> inputs,
+			GeboToolCalling toolCalling) throws LLMConfigException {
+		return toolCalling != null ? callLLMWithDocuments(chatModel, prompt, context, inputs, toolCalling)
+				: callLLMWithDocuments(chatModel, prompt, context, inputs);
+	}
+
 	Map<Integer, TokenTextSplitter> splittersCache = new HashMap<Integer, TokenTextSplitter>();
 	private static double AVG_TOKENS_CHARS_RATIO = 4.2;
 
@@ -554,9 +565,31 @@ public class BaseLLMSInvokingService {
 		});
 	}
 
+	/**
+	 * The same, every consolidation call made with what the controlling software adds
+	 * to the call (see {@link GeboToolCalling}); null for nothing.
+	 */
+	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, String pastConsolidation, Map<String, Object> additionalParams,
+			List<LLMInputDocument> input, GeboToolCalling toolCalling) throws LLMConfigException {
+		Iterator<LLMInputDocument> iterator = input.iterator();
+		return callLLMConsolidateText(chatModel, prompt, context, pastConsolidation, additionalParams, () -> {
+			if (iterator.hasNext())
+				return iterator.next();
+			return null;
+		}, toolCalling);
+	}
+
 	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, String pastConsolidation, Map<String, Object> additionalParams,
 			Supplier<LLMInputDocument> input) throws LLMConfigException {
+		return callLLMConsolidateText(chatModel, prompt, context, pastConsolidation, additionalParams, input,
+				(GeboToolCalling) null);
+	}
+
+	protected String callLLMConsolidateText(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
+			IChatRequestContext context, String pastConsolidation, Map<String, Object> additionalParams,
+			Supplier<LLMInputDocument> input, GeboToolCalling toolCalling) throws LLMConfigException {
 		final int contextWindow = chatModel.getContextLength();
 		List<ConsolidationInputBatch> currentBatchesQueue = new ArrayList<BaseLLMSInvokingAndProvidingService.ConsolidationInputBatch>();
 		LLMInputDocument currentInput = null;
@@ -653,8 +686,11 @@ public class BaseLLMSInvokingService {
 						currentText.append(NEWLINE);
 					}
 
-					consolidated = callLLMWithDocumentsAndConsolidation(chatModel, prompt, context,
-							currentText.toString(), consolidated, additionalParams);
+					consolidated = toolCalling != null
+							? callLLMWithDocumentsAndConsolidation(chatModel, prompt, context, currentText.toString(),
+									consolidated, additionalParams, toolCalling)
+							: callLLMWithDocumentsAndConsolidation(chatModel, prompt, context, currentText.toString(),
+									consolidated, additionalParams);
 					fragmentBudget = computeFragmentBudget(consolidated, promptLength, contextWindow, additionalParams);
 				}
 			}

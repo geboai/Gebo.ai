@@ -36,6 +36,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.datasources.model.DeepSearchDataSourceExtractedSearchQueries;
 import ai.gebo.security.services.IGSecurityService;
@@ -107,6 +108,21 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink, List<String> unavailableSources) throws AgentException {
+		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, unavailableSources,
+				null);
+	}
+
+	/** The same, the query's model call and the ranking made with the container when given. */
+	@Override
+	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, List<String> unavailableSources, GeboToolCalling toolCalling)
+			throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
 		if (LOGGER.isDebugEnabled()) {
@@ -119,8 +135,11 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 			// LLM-assisted query extraction using the wrapped service's queries-generation
 			// prompt, runtime-patched with the agent network placeholders at config time
 			// and passed in as `prompt`, fed with the agent placeholder params.
-			DeepSearchDataSourceExtractedSearchQueries extracted = callLLMStructuredReturn(agentModel, prompt,
-					chatRequestContext, params, DeepSearchDataSourceExtractedSearchQueries.class);
+			DeepSearchDataSourceExtractedSearchQueries extracted = toolCalling != null
+					? callLLMStructuredReturn(agentModel, prompt, chatRequestContext, params,
+							DeepSearchDataSourceExtractedSearchQueries.class, toolCalling)
+					: callLLMStructuredReturn(agentModel, prompt, chatRequestContext, params,
+							DeepSearchDataSourceExtractedSearchQueries.class);
 			if (extracted != null && extracted.getSearchQuery() != null) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Query extraction produced " + extracted.getSearchQuery().size() + " quer(ies)");
@@ -169,8 +188,10 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 		// Publish rich refs for these external results (built from the typed SearchResult, so
 		// they carry nestedSearchResult) so the report writer can expose them as chat-with-able.
 		publishChatWithDocumentRefs(results, session);
-		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, matchingKeywords),
-				command, notificationSink);
+		final List<Document> chunked = chunkToDocuments(results, notificationSink, agentModel, command,
+				matchingKeywords);
+		return toolCalling != null ? maybeRank(chunked, command, notificationSink, toolCalling)
+				: maybeRank(chunked, command, notificationSink);
 	}
 
 }

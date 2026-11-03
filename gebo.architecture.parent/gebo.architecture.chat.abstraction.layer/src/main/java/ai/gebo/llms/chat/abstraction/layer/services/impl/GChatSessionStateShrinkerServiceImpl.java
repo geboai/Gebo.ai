@@ -30,6 +30,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.LLMInputDocument;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatConfigs;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
@@ -74,8 +76,10 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao, GeboChatConfigs chatConfig,
 			IGPromptConfigDao promptsDao, ShrinkedChatSessionStateRepository shrinkedStateRepository,
 			ChatFullSessionStateRepository fullStateRepository,
-			MinimalChatContextCacheItemRepository minimalChatContextCacheItemRepository, MongoOperations mongo) {
+			MinimalChatContextCacheItemRepository minimalChatContextCacheItemRepository, MongoOperations mongo,
+			GeboToolCallingManagerFactory toolCallingFactory) {
 		super(chatModelsConfigDao, embeddingModelsRuntimeDao);
+		this.toolCallingFactory = toolCallingFactory;
 		this.mongo = mongo;
 
 		this.chatConfig = chatConfig;
@@ -86,12 +90,29 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 
 	}
 
-	@Override
+	/** The caller the consolidation of a chat names itself as: {@code consolidation:<session code>}. */
+	public static final String CONSOLIDATION_CALLER_PREFIX = "consolidation:";
+	/** Builds what the consolidation adds to its model calls (see {@link #toolCallingOf}). */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
 
+	/**
+	 * What the consolidation of a chat adds to every model call it makes (see
+	 * {@link GeboToolCalling}): itself as the caller, the platform's loop limits. Nobody
+	 * is above a consolidation: it runs after the request, on its own. Null without the
+	 * factory, which is the call as it always has been.
+	 */
+	GeboToolCalling toolCallingOf(String sessionCode) {
+		return toolCallingFactory != null
+				? toolCallingFactory.builder().caller(CONSOLIDATION_CALLER_PREFIX + sessionCode).build()
+				: null;
+	}
+
+	@Override
 	public void shrink(String sessionCode, int tokensBudget) throws LLMConfigException, IOException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin shrink(" + sessionCode + ")");
 		}
+		final GeboToolCalling toolCalling = toolCallingOf(sessionCode);
 		boolean doShrink = false;
 		ChatFullSessionState full = null;
 		ShrinkedChatSessionState oldVersion = new ShrinkedChatSessionState();
@@ -127,7 +148,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				out.setChatHistory(consolidateHistory(full.getChatHistory().getValue(), tokensBudget / 4,
 						this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation(),
 						oldVersion != null ? oldVersion.getChatHistory() : null, shrinkRequestContext, usedChatModel,
-						true));
+						true, toolCalling));
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Chat {}: history summary of {} tokens covers interactions up to {}, {} kept verbatim",
 							sessionCode, out.getChatHistory().getConsolidationTextTokenSize(),
@@ -173,17 +194,17 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 				}
 				out.setRelevantChatWithDocuments(shrinkDocumentList(untillLatest(full, full.getChatWithDocuments()),
 						out.getChatHistory(), oldVersion.getRelevantChatWithDocuments(), tokensBudget, usedChatModel,
-						ShrinkedDocumentOrigin.CHAT_WITH_SELECTED));
+						ShrinkedDocumentOrigin.CHAT_WITH_SELECTED, toolCalling));
 				out.setRelevantRetrievedDocuments(shrinkDocumentList(untillLatest(full, full.getRetrievedDocuments()),
 						out.getChatHistory(), oldVersion.getRelevantRetrievedDocuments(), tokensBudget, usedChatModel,
-						ShrinkedDocumentOrigin.RETRIEVED));
+						ShrinkedDocumentOrigin.RETRIEVED, toolCalling));
 				out.setRelevantLlmGeneratedDocuments(
 						shrinkDocumentList(untillLatest(full, full.getLlmGeneratedDocuments()), out.getChatHistory(),
 								oldVersion.getRelevantLlmGeneratedDocuments(), tokensBudget, usedChatModel,
-								ShrinkedDocumentOrigin.GENERATED));
+								ShrinkedDocumentOrigin.GENERATED, toolCalling));
 				out.setRelevantUploadedDocuments(shrinkDocumentList(untillLatest(full, full.getUploadedDocuments()),
 						out.getChatHistory(), oldVersion.getRelevantUploadedDocuments(), tokensBudget, usedChatModel,
-						ShrinkedDocumentOrigin.UPLOADED));
+						ShrinkedDocumentOrigin.UPLOADED, toolCalling));
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug(
 							"Chat {}: summarized documents of older interactions chat-with:{} retrieved:{} generated:{} uploaded:{}",
@@ -198,7 +219,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							latestRequestsChatWithDocuments, latestRequestsChatWithDocuments.getTokensSize());
 					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
 							new CSSfRelevantShrinkedDocumentList(), tokensBudget, usedChatModel,
-							ShrinkedDocumentOrigin.CHAT_WITH_SELECTED);
+							ShrinkedDocumentOrigin.CHAT_WITH_SELECTED, toolCalling);
 					out.getRelevantChatWithDocuments().addAll(shrinkedDocs);
 				} else {
 					out.setLatestRequestsChatWithDocuments(latestRequestsChatWithDocuments);
@@ -211,7 +232,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							latestRequestsLlmGeneratedDocuments, latestRequestsLlmGeneratedDocuments.getTokensSize());
 					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
 							new CSSfRelevantShrinkedDocumentList(), tokensBudget, usedChatModel,
-							ShrinkedDocumentOrigin.GENERATED);
+							ShrinkedDocumentOrigin.GENERATED, toolCalling);
 					out.getRelevantLlmGeneratedDocuments().addAll(shrinkedDocs);
 				} else {
 					out.setLatestRequestsLlmGeneratedDocuments(latestRequestsLlmGeneratedDocuments);
@@ -224,7 +245,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							latestRequestsRetrievedDocuments, latestRequestsRetrievedDocuments.getTokensSize());
 					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
 							new CSSfRelevantShrinkedDocumentList(), tokensBudget, usedChatModel,
-							ShrinkedDocumentOrigin.RETRIEVED);
+							ShrinkedDocumentOrigin.RETRIEVED, toolCalling);
 					out.getRelevantRetrievedDocuments().addAll(shrinkedDocs);
 				} else {
 					out.setLatestRequestsRetrievedDocuments(latestRequestsRetrievedDocuments);
@@ -236,7 +257,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							latestRequestsUploadedDocuments, latestRequestsUploadedDocuments.getTokensSize());
 					CSSfRelevantShrinkedDocumentList shrinkedDocs = shrinkDocumentList(lrcwd, out.getChatHistory(),
 							new CSSfRelevantShrinkedDocumentList(), tokensBudget, usedChatModel,
-							ShrinkedDocumentOrigin.UPLOADED);
+							ShrinkedDocumentOrigin.UPLOADED, toolCalling);
 					out.getRelevantUploadedDocuments().addAll(shrinkedDocs);
 				} else {
 					out.setLatestRequestsUploadedDocuments(latestRequestsUploadedDocuments);
@@ -330,8 +351,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 
 	private CSSfRelevantShrinkedDocumentList shrinkDocumentList(TokensContainer<? extends CSSReferredContentList> docs,
 			CSSConsolidatedChatHistory consolidated, CSSfRelevantShrinkedDocumentList alreadyElaborated,
-			int tokensBudget, IGConfigurableChatModel usedChatModel, ShrinkedDocumentOrigin origin)
-			throws LLMConfigException, IOException {
+			int tokensBudget, IGConfigurableChatModel usedChatModel, ShrinkedDocumentOrigin origin,
+			GeboToolCalling toolCalling) throws LLMConfigException, IOException {
 		CSSfRelevantShrinkedDocumentList outList = new CSSfRelevantShrinkedDocumentList();
 
 		if (docs != null && docs.getValue() != null && !docs.getValue().getData().isEmpty()) {
@@ -398,8 +419,11 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 							out.setInteractionIndex(content.getInteractionIndex());
 							out.setMetaData(new HashMap<String, Object>(
 									content.getAiDocument().getFragments().get(0).getMetaData()));
-							String text = callLLMConsolidateText(usedChatModel, _prompt,
-									IChatRequestContext.of(question), pastConsolidation, null, toBeConsolidated);
+							String text = toolCalling != null
+									? callLLMConsolidateText(usedChatModel, _prompt, IChatRequestContext.of(question),
+											pastConsolidation, null, toBeConsolidated, toolCalling)
+									: callLLMConsolidateText(usedChatModel, _prompt, IChatRequestContext.of(question),
+											pastConsolidation, null, toBeConsolidated);
 							if (usedChatModel.isApplyThinkingMarkupHandling() && text != null) {
 								text = ClientChatCallUtil.removeThinking(text);
 							}
@@ -442,8 +466,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 	// ones are sent with it; otherwise every interaction of value is new to oldVersion's summary.
 	private CSSConsolidatedChatHistory consolidateHistory(CSSSimplifiedChatHistory value, int historySizeTarget,
 			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion,
-			IChatRequestContext context, IGConfigurableChatModel usedChatModel, boolean incremental)
-			throws LLMConfigException {
+			IChatRequestContext context, IGConfigurableChatModel usedChatModel, boolean incremental,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		List<LLMInputDocument> inputs = new ArrayList<LLMInputDocument>();
 		GPromptTemplateConfig _prompt = promptsDao.findByPromptUse(GeboPromptsLibrary.HISTORY_CONSOLIDATION_PROMPT);
 
@@ -496,8 +520,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 			// history again as chat messages.
 			IChatRequestContext bare = IChatRequestContext.builder().sessionID(context.getSessionID())
 					.actualUserRequest("").interactions(List.of()).build();
-			String consolidated = callLLMConsolidateText(usedChatModel, _prompt, bare, existingSummary, params,
-					inputs);
+			String consolidated = toolCalling != null
+					? callLLMConsolidateText(usedChatModel, _prompt, bare, existingSummary, params, inputs, toolCalling)
+					: callLLMConsolidateText(usedChatModel, _prompt, bare, existingSummary, params, inputs);
 
 			newConsolidation.setConsolidationText(consolidated);
 			newConsolidation.setLastInteractionPointer(lastIndex);
@@ -574,6 +599,7 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		final int verbatim = verbatimInteractions(entries,
 				this.chatConfig.getLeaveLastInteractionsOnHistoryConsolidation(), tokensBudget - summaryTarget);
 		final CSSConsolidatedChatHistory previous = previousMinimalSummary(sessionCode, entries, tokensBudget);
+		final GeboToolCalling toolCalling = toolCallingOf(sessionCode);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Minimal context of chat {} for {} tokens: {} exchange(s) verbatim, previous summary {}",
 					sessionCode, tokensBudget, verbatim,
@@ -581,9 +607,9 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		}
 		CSSConsolidatedChatHistory consolidated = previous != null
 				? this.consolidateHistory(entries, summaryTarget, verbatim, previous, mc.createChatRequestContext(),
-						serviceModel, true)
+						serviceModel, true, toolCalling)
 				: this.consolidateHistory(entries, summaryTarget, verbatim, mc.getChatHistory(),
-						mc.createChatRequestContext(), serviceModel, false);
+						mc.createChatRequestContext(), serviceModel, false, toolCalling);
 		MinimalChatContext newMinimized = new MinimalChatContext();
 		newMinimized.setChatHistory(consolidated);
 		MinimalChatContextCacheItem item = new MinimalChatContextCacheItem();

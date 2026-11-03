@@ -276,6 +276,8 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 		dsr.setUserChatContextCode(request.getUserChatContextCode());
 		dsr.setQuery(GeboChatRequest.actualQuery(request));
 		MinimalChatContext minimalChatContext = runtimeData.getMinimalChatContext();
+		// what the chat added to the request's model calls, when it added something
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		// the documents found are loaded as the deep search tools load them (SearchResultsChunker):
 		// within the loading deadlines of an open network, a few fragments of each document, the
@@ -285,8 +287,11 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			return runAs.doRunAsWithReturn(() -> {
 				final List<SearchWithResults> results;
 				try {
-					results = executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel, serviceModel,
-							chunkingSessionId, topK);
+					results = toolCalling != null
+							? executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel, serviceModel,
+									chunkingSessionId, topK, toolCalling)
+							: executeSearches(dsr, minimalChatContext, deepSearchDefaultConfig, chatModel, serviceModel,
+									chunkingSessionId, topK);
 				} catch (Throwable e) {
 					throw new RuntimeException(e);
 				}
