@@ -142,9 +142,9 @@ ships:
 | Rule | Level | Fires on |
 |---|---|---|
 | 100200 | 0 | Any Gebo.ai audit event (parent rule; groups the whole trail as `gebo_ai`) |
-| 100201 | 3 | Successful login |
-| 100202 | 5 | Failed login |
-| 100203 | 10 | **5 failed logins from the same `sourceIp` within 120 s** (brute force) |
+| 100201 | 3 | Successful login (group `authentication_success`) |
+| 100202 | 5 | Failed login (group `authentication_failed`; the attempted username is `resourceId`, since the request is not authenticated) |
+| 100203 | 10 | **5 failed logins from the same `sourceIp` within 120 s** (brute force; group `authentication_failures`) |
 | 100204 | 8 | Access denied (`outcome=denied`, e.g. `authUnauthorizedAccess`) |
 | 100205 | 3 | Session events (token renew) |
 | 100210 | 7 | Secret / API-key create, rotate, delete |
@@ -521,8 +521,8 @@ grep -i "security-log.jsonl" /var/ossec/logs/ossec.log
 tail -f /var/ossec/logs/alerts/alerts.json | grep -o '"id":"1002[0-9][0-9]"'
 ```
 
-Then generate a real event — log in to Gebo.ai with a wrong password five times
-and rule **100203** should fire.
+Then generate a real event — log in to Gebo.ai with a wrong password five times:
+each attempt is a rule **100202** alert and the fifth also fires **100203**.
 
 In the Wazuh dashboard, `rule.groups: gebo_ai` selects the whole audit trail;
 useful drill-downs are `data.eventType`, `data.action`, `data.outcome`,
@@ -560,6 +560,18 @@ trail, and the retention window above is what your NIS2 evidence period rests on
 - **`sourceIp` is not Wazuh's `srcip`.** Correlate with
   `<same_field>sourceIp</same_field>`, not `<same_source_ip/>` (that is what
   rule 100203 does).
+- **Test `frequency` rules with spaced events.** A `frequency="N"` rule
+  fires on the N-th matching event within `timeframe` (rule 100203: the fifth
+  failed login). But `wazuh-analysisd` matches rules on several threads, and
+  events that arrive in the same second can be processed in parallel without
+  seeing each other: six failed logins fired within one second raised six
+  100202 alerts and no 100203, which then fired on the next attempt. Check such
+  a rule with `wazuh-logtest` (one session, paste the event N times) and, live,
+  with attempts a few seconds apart.
+- **Add Wazuh's own groups when they apply.** The stock dashboards and the
+  Threat Hunting counters key on `authentication_success`,
+  `authentication_failed` and `authentication_failures`; rules 100201-100203
+  carry them, so Gebo.ai logins count there like any other source.
 - **Sibling rules under the same parent are not tried in file order.** Avoid
   broad catch-all rules competing with specific ones under the same
   `<if_sid>`; give each rule a disjoint condition (that is why the shipped rules
