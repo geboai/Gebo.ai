@@ -1,6 +1,5 @@
 package ai.gebo.llms.abstraction.layer.services.impl;
 
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import reactor.core.publisher.SignalType;
 import ai.gebo.core.messages.LLMCallOutcome;
@@ -17,12 +16,14 @@ import org.springframework.core.Ordered;
 import org.springframework.stereotype.Service;
 
 import java.util.function.Supplier;
+import ai.gebo.architecture.multithreading.GeboTaskContext;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.model.ModelType;
+import io.micrometer.context.ContextSnapshot;
 import lombok.AllArgsConstructor;
 import reactor.core.publisher.Flux;
 
@@ -81,11 +82,13 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 		@Override
 		public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
 			// The user is read here, on the subscribing thread: the stream completes on a
-			// Reactor thread whose security context is usually empty. The logging context
-			// too, for the same reason: it holds the request's correlation id, client
-			// address and trace, which the call's security event is built from.
+			// Reactor thread whose security context is usually empty. The request's
+			// context too, for the same reason: its trace (the current observation, so the
+			// usage message sent at the end joins the request's trace instead of starting
+			// one of its own) and its logging context, which holds the correlation id,
+			// client address and trace ids the call's security event is built from.
 			final String username = LLMUsageRecorder.safeCurrentUsername();
-			final Map<String, String> loggingContext = LLMUsageRecorder.safeLoggingContext();
+			final ContextSnapshot requestContext = GeboTaskContext.capture();
 			final String stack = LLMUsageRecorder.safeSampleCaller();
 			final long start = System.nanoTime();
 			// The provider emits a Usage object on EVERY streamed chunk, carrying zero counts
@@ -111,10 +114,12 @@ public class UsageAdvisorFactoryImpl implements IChatModelUsageAdvisorFactory {
 							counters.max(usage);
 						}
 						shape.add(response);
-					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream",
-							() -> LLMUsageRecorder.withLoggingContext(loggingContext,
-									() -> recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters,
-											shape, outcomeOf(signal)))));
+					})).doFinally(signal -> LLMUsageRecorder.bestEffort("account a chat stream", () -> {
+						try (ContextSnapshot.Scope scope = requestContext.setThreadLocals()) {
+							recordUsage(username, stack, start, firstToken.firstTokenNanos(), counters, shape,
+									outcomeOf(signal));
+						}
+					}));
 		}
 
 		@Override
