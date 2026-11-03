@@ -141,7 +141,7 @@ Tools coming from external MCP servers are exported the same way
 | The request id | `ToolCallbackDeclarationUtil.requestId(toolContext)` (key `geboRequestId`); every model call of the same user request shares it, agents' iterations included. Use it for request-scoped state (e.g. not returning the same document twice). |
 | The room | `ToolsTokenBudget.from(toolContext)` (key `geboToolsTokenBudget`), section 5. |
 | The chat's knowledge bases | `LLMtInteractionContextThreadLocal.Context.get()`. It is a **thread local** set by the chat services on the request thread and **not** propagated to other threads: a tool running on a reactive worker can find it `null`. Always handle `null` (fall back to what the user can see, or answer that nothing is available). |
-| What the controlling software loaded for the call | `GeboToolCallingManagerFactory.control(toolContext, MyInterface.class)` (key `geboToolCallingControls`), section 9: `null` when the call was not made with a `GeboToolCalling`, or it loaded nothing for that interface. |
+| What the controlling software loaded for the call | `GeboToolCallingManagerFactory.control(toolContext, MyInterface.class)` (read from the `GeboToolCalling` under the key `geboToolCalling`), section 9: `null` when the call was not made with a `GeboToolCalling`, or it loaded nothing for that interface. |
 | Sharing with the calling agent (agents module only) | `ToolsFoundDocuments.from(toolContext)` (documents that become the answer's sources) and `ToolsProgress.notify(toolContext, ...)` (progress shown to the user), in `gebo.architecture.agents.standard`. |
 
 ### Behaving well
@@ -380,8 +380,8 @@ call is the plain one described above. It carries:
   tool. This is how a tool bound to *this* call (an "ask the user" tool holding
   the caller's state) gets to the model.
 - **Interfaces the tools call back** (`provide(MyInterface.class, impl)`): the
-  controlling software's own instances, stored in the tools context under
-  `geboToolCallingControls`. They work as **deferred callbacks**: the tool
+  controlling software's own instances, carried by the container in the tools
+  context (key `geboToolCalling`). They work as **deferred callbacks**: the tool
   calls the interface, the implementation stores what it was told, the
   controlling software reads it after the call returns. A tool reaches them
   with `GeboToolCallingManagerFactory.control(toolContext, MyInterface.class)`

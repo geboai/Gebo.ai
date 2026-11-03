@@ -127,8 +127,8 @@ public class AnthropicChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 			String apiKey = modelsService.resolveApiKey(config);
 
 			// Get the client providers for making API calls
@@ -232,8 +232,7 @@ public class AnthropicChatModelConfigurationSupportService
 				}
 			}
 			AnthropicChatOptions anthropicChatOptions = builder.build();
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			// Create the final AnthropicChatModel using the builder pattern (Spring AI 2.0)
 			AnthropicChatModel model = AnthropicChatModel.builder()

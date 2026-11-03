@@ -233,8 +233,7 @@ class GeboToolCallingTest {
 		}
 
 		@Override
-		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) {
+		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type) {
 			return mock(ChatModel.class);
 		}
 	}
@@ -291,7 +290,9 @@ class GeboToolCallingTest {
 		DefaultChatClientRequestSpec request = (DefaultChatClientRequestSpec) spec.getRequestSpec();
 		assertEquals(List.of("askAPerson"), names(request.getToolCallbacks()));
 		assertTrue(request.getToolCallbacks().get(0) instanceof RunAsToolCallback, "wrapped as every tool is");
-		assertSame(toolCalling.getProvider(), request.getToolContext().get(IToolCallingControlsProvider.CONTEXT_KEY));
+		assertSame(toolCalling, request.getToolContext().get(GeboToolCalling.CONTEXT_KEY));
+		assertSame(toolCalling.getProvider(),
+				GeboToolCallingManagerFactory.controlsOf(new ToolContext(request.getToolContext())));
 		assertEquals("yes", request.getToolContext().get("given"), "the request's context is kept");
 		assertEquals(1, request.getAdvisors().stream().filter(a -> a instanceof GeboToolCallingAdvisor).count());
 		assertEquals(1, request.getAdvisors().stream().filter(Advisor.class::isInstance)
@@ -307,7 +308,7 @@ class GeboToolCallingTest {
 		spec = model.prepareCall(prompt(ContextContentRequired.NOT_REQUIRED), Map.of(), context(), runningInPlace());
 		request = (DefaultChatClientRequestSpec) spec.getRequestSpec();
 		assertTrue(request.getToolCallbacks().isEmpty());
-		assertNull(request.getToolContext().get(IToolCallingControlsProvider.CONTEXT_KEY));
+		assertNull(request.getToolContext().get(GeboToolCalling.CONTEXT_KEY));
 		assertTrue(request.getAdvisors().stream().noneMatch(a -> a instanceof GeboToolCallingAdvisor));
 	}
 

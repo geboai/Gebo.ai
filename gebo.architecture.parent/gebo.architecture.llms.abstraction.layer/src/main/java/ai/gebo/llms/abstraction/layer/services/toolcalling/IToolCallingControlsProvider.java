@@ -33,9 +33,6 @@ import org.springframework.ai.chat.model.ToolContext;
  * with a {@link GeboToolCalling} it finds {@link #NONE}.
  */
 public interface IToolCallingControlsProvider {
-	/** The tools context key the provider of a model call travels under. */
-	public static final String CONTEXT_KEY = "geboToolCallingControls";
-
 	/** The provider of a call nobody loaded anything for. */
 	public static final IToolCallingControlsProvider NONE = new IToolCallingControlsProvider() {
 		@Override
@@ -88,8 +85,7 @@ public interface IToolCallingControlsProvider {
 	}
 
 	public static IToolCallingControlsProvider from(Map<String, Object> toolsContext) {
-		return toolsContext != null && toolsContext.get(CONTEXT_KEY) instanceof IToolCallingControlsProvider provider
-				? provider
-				: NONE;
+		final GeboToolCalling toolCalling = GeboToolCalling.from(toolsContext);
+		return toolCalling != null ? toolCalling.getProvider() : NONE;
 	}
 }

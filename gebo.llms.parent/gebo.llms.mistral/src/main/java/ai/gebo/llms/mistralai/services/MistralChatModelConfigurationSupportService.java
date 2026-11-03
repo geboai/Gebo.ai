@@ -113,8 +113,8 @@ public class MistralChatModelConfigurationSupportService
 		 *                            credentials
 		 */
 		@Override
-		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -222,7 +222,7 @@ public class MistralChatModelConfigurationSupportService
 					.mistralAiApi(mistralApi)
 					.options(options)
 					.toolCallingManager(
-							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
+							functionsRepo.createToolCallingManager())
 					.retryTemplate(retryTemplate)
 					.observationRegistry(observationRegistry)
 					.build();

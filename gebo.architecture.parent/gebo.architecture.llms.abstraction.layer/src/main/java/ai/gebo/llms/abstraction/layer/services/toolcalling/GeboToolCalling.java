@@ -296,7 +296,6 @@ public final class GeboToolCalling {
 	public Map<String, Object> toolsContext(Map<String, Object> toolsContext) {
 		final Map<String, Object> out = toolsContext != null ? new HashMap<>(toolsContext) : new HashMap<>();
 		out.put(CONTEXT_KEY, this);
-		out.put(IToolCallingControlsProvider.CONTEXT_KEY, provider);
 		if (toolsBudget != null) {
 			final ToolsTokenBudget shared = ToolsTokenBudget.from(out);
 			if (shared != null) {

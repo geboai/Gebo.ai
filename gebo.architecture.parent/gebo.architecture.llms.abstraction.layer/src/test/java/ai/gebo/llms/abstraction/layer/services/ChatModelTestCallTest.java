@@ -29,7 +29,6 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
-import org.springframework.ai.model.tool.ToolCallingManager;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -60,8 +59,7 @@ class ChatModelTestCallTest {
 		}
 
 		@Override
-		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) {
+		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type) {
 			return model;
 		}
 	}

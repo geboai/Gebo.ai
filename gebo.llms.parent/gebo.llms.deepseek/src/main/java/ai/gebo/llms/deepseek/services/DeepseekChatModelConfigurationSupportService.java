@@ -127,7 +127,7 @@ public class DeepseekChatModelConfigurationSupportService
 		 * @throws LLMConfigException if configuration fails
 		 */
 		@Override
-		protected DeepSeekChatModel configureModel(GDeepseekChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
+		protected DeepSeekChatModel configureModel(GDeepseekChatModelConfig config, GChatModelType type)
 				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
@@ -247,8 +247,7 @@ public class DeepseekChatModelConfigurationSupportService
 			}
 
 			DeepSeekChatOptions deepseekChatOptions = builder.build();
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			DeepSeekChatModel model = new DeepSeekChatModel(deepseekApi, deepseekChatOptions, toolCallingManager,
 					retryTemplate, observationRegistry);

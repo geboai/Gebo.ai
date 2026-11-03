@@ -618,7 +618,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			LOGGER.debug("withThinking(...) model " + model.getCode() + " with thinking " + thinking + " and "
 					+ (functions != null ? functions.size() : 0) + " enabled function(s)");
 		}
-		return model.cloneWithOptions("", new ChatModelConfigOptions(null, null, thinking, functions, null));
+		return model.cloneWithOptions("", new ChatModelConfigOptions(null, null, thinking, functions));
 	}
 
 	/**

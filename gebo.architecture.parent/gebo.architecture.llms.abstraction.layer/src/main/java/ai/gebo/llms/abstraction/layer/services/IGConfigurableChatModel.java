@@ -18,7 +18,6 @@ import org.springframework.ai.chat.client.ChatClient.ChatClientRequestSpec;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.converter.BeanOutputConverter;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 
@@ -218,7 +217,6 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		private final Double topP;
 		private final ChatModelThinkingOption thinking;
 		private final List<String> toolsName;
-		private final ToolCallingManager toolCallingManager;
 		/**
 		 * Tools made for one use of the model, not in the tools repository (e.g. an agent's
 		 * notifyUser, bound to its notification sink): the model declares them with the
@@ -227,8 +225,8 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		private final List<ToolCallback> additionalTools;
 
 		public ChatModelConfigOptions(Double temperature, Double topP, ChatModelThinkingOption thinking,
-				List<String> toolsName, ToolCallingManager toolCallingManager) {
-			this(temperature, topP, thinking, toolsName, toolCallingManager, null);
+				List<String> toolsName) {
+			this(temperature, topP, thinking, toolsName, null);
 		}
 	}
 

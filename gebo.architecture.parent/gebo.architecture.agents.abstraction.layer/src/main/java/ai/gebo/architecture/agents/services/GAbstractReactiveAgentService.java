@@ -176,15 +176,13 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			}
 		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, additionalTools, runAs), additionalTools);
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions, additionalTools);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final IGConfigurableChatModel baseModel = copiedModel;
 		thinkingVariants.put(agentModel,
 				thinking -> baseModel.cloneWithOptions(getId(),
 						new ChatModelConfigOptions(configOptions.getTemperature(), configOptions.getTopP(), thinking,
-								configOptions.getToolsName(), configOptions.getToolCallingManager(),
-								configOptions.getAdditionalTools())));
+								configOptions.getToolsName(), configOptions.getAdditionalTools())));
 
 		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
 				agentConfig.getMainLoopPromptUseCode(), false);

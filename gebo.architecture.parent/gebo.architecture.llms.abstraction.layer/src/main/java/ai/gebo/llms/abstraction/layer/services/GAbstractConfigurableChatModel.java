@@ -38,7 +38,6 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
 import tools.jackson.core.JacksonException;
@@ -120,7 +119,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	/**
 	 * The application's shared Micrometer {@link ObservationRegistry}, passed
-	 * down to {@link #configureModel(GBaseChatModelConfig, GChatModelType, ToolCallingManager)}
+	 * down to {@link #configureModel(GBaseChatModelConfig, GChatModelType)}
 	 * implementations so Spring AI's built-in chat-model observability actually
 	 * reports into it, instead of each vendor building its own disconnected
 	 * registry.
@@ -225,14 +224,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Abstract method for configuring the chat model. Implementations must define
 	 * how the model is configured.
 	 * 
-	 * @param config            The model configuration to use.
-	 * @param type              The type of the chat model.
-	 * @param toolsCallsManager TODO
+	 * @param config The model configuration to use.
+	 * @param type   The type of the chat model.
 	 * @return An instance of ChatModelType.
 	 * @throws LLMConfigException If configuration fails.
 	 */
-	protected abstract ChatModelType configureModel(ModelConfig config, GChatModelType type,
-			ToolCallingManager toolsCallsManager) throws LLMConfigException;
+	protected abstract ChatModelType configureModel(ModelConfig config, GChatModelType type)
+			throws LLMConfigException;
 
 	/**
 	 * Initializes the chat model with the given configuration and type.
@@ -264,8 +262,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 		this.config = config;
 		final ModelConfig requestConfig = requestConfig(config);
-		this.model = configureModel(requestConfig, type, null);
-		Builder builder = ChatClient.builder(configureModel(requestConfig, type, null));
+		this.model = configureModel(requestConfig, type);
+		Builder builder = ChatClient.builder(configureModel(requestConfig, type));
 		// Priced through this model's getPricingConditions(), read when each call ends; a
 		// call's answer read from its answer generation, not from a reasoning one; the
 		// reasoning of every model round apart from the answer, every provider alike.
@@ -1396,29 +1394,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					LOGGER.error("Cannot attach the provider deals to a clone of chat model code=" + getCode(), e);
 				}
 			}
-			if (configOptions.getToolCallingManager() == null) {
-				handler.initialize(modelConfigClone, type);
-			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {
-				configurableChatModel.config = modelConfigClone;
-				configurableChatModel.type = this.type;
-				// the clone follows the parameter rules too: an agent's temperature never
-				// reaches a model refusing it
-				configurableChatModel.parameterRules = configurableChatModel.parameterRulesOf(modelConfigClone, type);
-				final GBaseChatModelConfig requestConfig = configurableChatModel.requestConfig(modelConfigClone);
-				configurableChatModel.model = configurableChatModel.configureModel(requestConfig, type,
-						configOptions.getToolCallingManager());
-				configurableChatModel.chatClient = ChatClient
-						.builder(configurableChatModel.configureModel(requestConfig, type,
-								configOptions.getToolCallingManager()))
-						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),
-								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration),
-								configurableChatModel.thinkingNormalization())
-						.build();
-			} else
-				throw new IllegalStateException(
-						"The actual configurable chat model is not an GAbstractConfigurableChatModel");
-
+			// the clone is initialised as this model was: its parameter rules (an agent's
+			// temperature never reaches a model refusing it), its model and its chat client
+			// with the same advisors; the tools it declares reach every call as callbacks,
+			// so no tool calling manager of its own is needed
+			handler.initialize(modelConfigClone, type);
 			return handler;
 		} catch (JacksonException e) {
 			throw new LLMConfigException("Cannot clone model correctly");
