@@ -25,6 +25,8 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.mcpserver.model.GeboMCPAgentTool;
 import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
 import ai.gebo.llms.agent.standard.services.UserKnowledgeBasesExecutionEnvironment;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
@@ -46,13 +48,35 @@ public class GeboMCPAgentAsToolProvider {
 	private final GTextAgentsNetworkRunner runner;
 	private final GeboMcpSecurityContextSupport securitySupport;
 	private final UserKnowledgeBasesExecutionEnvironment userEnvironment;
+	/** Builds what the MCP server adds to every model call of a tool's run (see {@link #toolCallingOf}). */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
+
+	/** The caller an MCP tool's run names itself as: {@code mcp:<server url>/<tool>}. */
+	public static final String MCP_CALLER_PREFIX = "mcp:";
+
+	/**
+	 * What the MCP server adds to every model call of a tool's run (see
+	 * {@link GeboToolCalling}): the server and the tool as the caller, the platform's
+	 * loop limits, no listener. One per call: a run's records are its own.
+	 */
+	GeboToolCalling toolCallingOf(GeboMCPServerConfig config, String toolName) {
+		return toolCallingFactory.builder()
+				.caller(MCP_CALLER_PREFIX + (config != null ? config.getExportedUniqueRelativeUrl() : null) + "/"
+						+ toolName)
+				.build();
+	}
 
 	public List<SyncToolSpecification> buildTools(GeboMCPServerConfig config) {
+		return McpToolUtils.toSyncToolSpecification(callbacks(config));
+	}
+
+	/** The tools of the exports of the server, as tool callbacks. */
+	List<ToolCallback> callbacks(GeboMCPServerConfig config) {
 		List<GeboMCPAgentTool> exports = config.getAgentAsTools();
-		if (exports == null || exports.isEmpty()) {
-			return new ArrayList<>();
-		}
 		List<ToolCallback> callbacks = new ArrayList<>();
+		if (exports == null || exports.isEmpty()) {
+			return callbacks;
+		}
 		for (GeboMCPAgentTool export : exports) {
 			if (export == null || export.getAgentConfigCode() == null || export.getAgentConfigCode().isBlank()) {
 				continue;
@@ -72,7 +96,7 @@ public class GeboMCPAgentAsToolProvider {
 			ToolCallback callback = ToolCallbackDeclarationUtil.declare((GeboMcpAgentToolRequest input, ToolContext ctx) -> {
 				try {
 					return runner.runAgent(agentCode, SINGLE_AGENT_CODE_PREFIX,
-							input != null ? input.getRequest() : "", null);
+							input != null ? input.getRequest() : "", null, toolCallingOf(config, toolName));
 				} catch (AgentException e) {
 					LOGGER.error("MCP tool '" + toolName + "' (agent " + agentCode + ") failed", e);
 					throw new IllegalStateException("The agent could not answer: " + e.getMessage(), e);
@@ -80,6 +104,6 @@ public class GeboMCPAgentAsToolProvider {
 			}, toolName, description, GeboMcpAgentToolRequest.class, String.class);
 			callbacks.add(new GeboMcpSecurityAwareToolCallback(callback, securitySupport, userEnvironment));
 		}
-		return McpToolUtils.toSyncToolSpecification(callbacks);
+		return callbacks;
 	}
 }

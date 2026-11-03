@@ -286,7 +286,8 @@ public class GTextAgentsNetworkRunner {
 		resources.setChathistory(new CSSConsolidatedChatHistory());
 		resources.setAvailableKnowledgeBaseCodes(context.knowledgeBases());
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null,
-				SYNTHESIZED_REQUEST_CONTEXT_WINDOW, resources, new GeboChatResponse(), minimalChatContext, true);
+				SYNTHESIZED_REQUEST_CONTEXT_WINDOW, resources, new GeboChatResponse(), minimalChatContext, true,
+				context.toolCalling());
 		IGReactiveChatAgentsNetworkService service = null;
 		try {
 			service = factory.create(network, sink, String.class, GeboChatMessageEnvelope.class, runAs);

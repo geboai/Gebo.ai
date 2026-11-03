@@ -800,9 +800,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		final boolean toolsCalling = prompt.getToolsCalling() == null
 				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
-		// the controlling software's recorder when it gave one, else the request's
+		// the controlling software's recorder, when it gave one, records beside the
+		// request's: neither takes the place of the other
 		final ToolCallsListener toolCallListener = toolCalling != null && toolCalling.getListener() != null
-				? toolCalling.getListener()
+				? ToolCallsListener.both(toolCalling.getListener(), chatContext.getToolCallListener())
 				: chatContext.getToolCallListener();
 		final String toolsResultsClosing = toolsCalling ? createToolsResultsClosing(prompt, completed, chatContext)
 				: null;

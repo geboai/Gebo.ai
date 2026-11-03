@@ -21,6 +21,7 @@ import ai.gebo.architecture.agents.services.NetworkOfAgentsException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataOf;
 import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
@@ -194,6 +195,22 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * the chat profile when the step has a pipeline type, otherwise, or when nothing
 	 * resolves, the data source's first one.
 	 */
+	/**
+	 * Runs the network for the request, with what the chat added to the request's
+	 * model calls when it added something (see
+	 * {@link ChatPipelineExecutionRuntimeData#getToolCalling()}); the plain run otherwise.
+	 */
+	protected GeboChatMessageEnvelope executeNetwork(IGReactiveChatAgentsNetworkService runtimeNetwork,
+			ChatPipelineExecutionRuntimeData runtimeData, String question, Map<String, Object> environment)
+			throws AgentException, LLMConfigException {
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+		return toolCalling != null
+				? runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
+						environment, toolCalling)
+				: runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
+						environment);
+	}
+
 	protected GAgentsNetwork chooseNetwork(ChatPipelineExecutionRuntimeData runtimeData)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		if (pipelineType != null && defaultNetworksService != null) {
@@ -281,9 +298,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				}
 				networkExecution.set(Schedulers.boundedElastic().schedule(() -> runAs.doAs(() -> {
 					try {
-
-						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
-								question, environment);
+						executeNetwork(runtimeNetwork, runtimeData, question, environment);
 					} catch (AgentException | LLMConfigException e) {
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
 					}

@@ -134,11 +134,22 @@ public class BaseLLMSInvokingService {
 	protected Map<String, List<String>> callLLMRepeatableFieldEntryOutput(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
 			List<String> validFields) throws LLMConfigException {
-		Map<String, List<String>> outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields);
+		return callLLMRepeatableFieldEntryOutput(chatModel, prompt, context, params, validFields, null);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to the call (see
+	 * {@link GeboToolCalling}); null for nothing.
+	 */
+	protected Map<String, List<String>> callLLMRepeatableFieldEntryOutput(IGConfigurableChatModel chatModel,
+			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
+			List<String> validFields, GeboToolCalling toolCalling) throws LLMConfigException {
+		Map<String, List<String>> outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields,
+				toolCalling);
 		if (outValue.isEmpty() && !validFields.isEmpty()) {
 			LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
 					+ " gave none of the field(s):" + validFields + ", asking once more");
-			outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields);
+			outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields, toolCalling);
 			if (outValue.isEmpty()) {
 				LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:"
 						+ (prompt != null ? prompt.getPromptUse() : null)
@@ -155,14 +166,15 @@ public class BaseLLMSInvokingService {
 	/** One call of the model, its output parsed into the given fields. */
 	private Map<String, List<String>> parseFieldEntryOutput(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
-			List<String> validFields) throws LLMConfigException {
+			List<String> validFields, GeboToolCalling toolCalling) throws LLMConfigException {
 
 		Map<String, String> validFieldsMap = new HashMap<String, String>();
 		for (String fieldName : validFields) {
 			validFieldsMap.put(fieldName.toLowerCase().trim(), fieldName.trim());
 		}
 		Map<String, List<String>> outValue = new HashMap<String, List<String>>();
-		String toBeParsed = callLLM(chatModel, prompt, context, params);
+		String toBeParsed = toolCalling != null ? callLLM(chatModel, prompt, context, params, toolCalling)
+				: callLLM(chatModel, prompt, context, params);
 		if (toBeParsed == null) {
 			toBeParsed = "";
 		}

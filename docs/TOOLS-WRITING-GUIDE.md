@@ -427,9 +427,23 @@ extraction calls. An agent chooses one of three things to pass down:
   budget and limits when it set them else the received ones, the agent's
   listener only.
 
-A container passed through a network must leave `listener` unset: each agent
-records its own tool calls, forwarded to the request's recorder, and a run-level
-listener would take the place of them all (the network service warns).
+A container's `listener` is a run-level recorder: the model chains it beside the
+recorder of the request context (`ToolCallsListener.both`), so every call of the
+run reaches it while each agent keeps recording its own, forwarded to the
+request's recorder as before. Leave it unset unless the run wants a record of
+its own.
+
+**Every entry point loads a container.** A chat request (`chat:<request id>`,
+built by the pipelines executor and the direct chat service, carried by
+`ChatPipelineExecutionRuntimeData.getToolCalling()` to the network step and to
+the steps calling a model), an MCP tool run (`mcp:<server url>/<tool>`), an A2A
+skill run (`a2a:<exported url>/<skill>`) and a harness run (`harness:<code>`)
+each name themselves as the caller and carry the platform's loop limits
+(`gebo.tools.calling.*`, Spring's own when unset) and no listener. A pipeline
+step passes the request's container to its helper calls
+(`callLLMRepeatableFieldEntryOutput(..., toolCalling)`, `callLLMReactiveAnswer(...,
+toolCalling)`), branching on null so that a request made without one is the
+plain call.
 
 **A tool that calls a model of its own** (a deep search's analysis) has no
 parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`

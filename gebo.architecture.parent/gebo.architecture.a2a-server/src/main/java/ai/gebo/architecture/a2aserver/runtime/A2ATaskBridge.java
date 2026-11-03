@@ -9,6 +9,8 @@ import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun;
 import ai.gebo.architecture.agents.services.INotificationSink;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
 import lombok.AllArgsConstructor;
 
@@ -26,6 +28,23 @@ public class A2ATaskBridge {
 	private final GTextAgentsNetworkRunner runner;
 	/** Runs an exported network in the environment a chat would have given it. */
 	private final A2AChatEnvironmentRunner chatEnvironmentRunner;
+	/** Builds what the A2A server adds to every model call of a run (see {@link #toolCallingOf}). */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
+
+	/** The caller an A2A run names itself as: {@code a2a:<exported url>/<skill>}. */
+	public static final String A2A_CALLER_PREFIX = "a2a:";
+
+	/**
+	 * What the A2A server adds to every model call of a run (see
+	 * {@link GeboToolCalling}): the server and the skill as the caller, the platform's
+	 * loop limits, no listener.
+	 */
+	GeboToolCalling toolCallingOf(A2AServerConfig serverConfig, String skillId) {
+		return toolCallingFactory.builder()
+				.caller(A2A_CALLER_PREFIX + (serverConfig != null ? serverConfig.getExportedRelativeUrl() : null)
+						+ "/" + skillId)
+				.build();
+	}
 
 	/**
 	 * Runs the exported skill as the caller whose identity is in the current
@@ -40,10 +59,12 @@ public class A2ATaskBridge {
 					+ serverConfig.getExportedRelativeUrl() + "'");
 		}
 		try {
+			final GeboToolCalling toolCalling = toolCallingOf(serverConfig, skillId);
 			if (exported.getKind() == A2AExportedAgent.Kind.NETWORK) {
-				return runner.runNetwork(exported.getNetworkCode(), inputText, sink);
+				return runner.runNetwork(exported.getNetworkCode(), inputText, sink, toolCalling);
 			}
-			return runner.runAgent(exported.getAgentConfigCode(), SINGLE_AGENT_CODE_PREFIX, inputText, sink);
+			return runner.runAgent(exported.getAgentConfigCode(), SINGLE_AGENT_CODE_PREFIX, inputText, sink,
+					toolCalling);
 		} catch (AgentException ae) {
 			LOGGER.error("A2A task execution failed for skill '" + skillId + "'", ae);
 			throw ae;
@@ -83,7 +104,7 @@ public class A2ATaskBridge {
 		}
 		return chatEnvironmentRunner.run(exported.getNetworkCode(),
 				chatEnvironmentRunner.requestOf(inbound.getText(), exported.getChatProfileCode(), chatContextCode),
-				inbound, sink);
+				inbound, toolCallingOf(serverConfig, skillId), sink);
 	}
 
 	private A2AExportedAgent resolveExport(A2AServerConfig serverConfig, String skillId) {

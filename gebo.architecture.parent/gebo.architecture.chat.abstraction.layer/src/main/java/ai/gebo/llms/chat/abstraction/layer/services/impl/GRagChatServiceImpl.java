@@ -42,6 +42,7 @@ import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigu
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -93,12 +94,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
 			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
-			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber) {
+			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber,
+			GeboToolCallingManagerFactory toolCallingFactory) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
-				securityAuditLoggerService, agentsToolsDescriber);
+				securityAuditLoggerService, agentsToolsDescriber, toolCallingFactory);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -189,7 +191,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
 			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext,
-					retrieved);
+					retrieved, toolCallingOf(request));
 		}
 
 		// Set response details
@@ -347,7 +349,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		// a direct stream, outside the chat pipelines: ended here as the executor ends its
 		return ChatRequestEnding.ending(
 				this.streamChatClient(handler, prompt, Map.of(), kbcontext, request, response,
-						fullRequest.createChatRequestContext(), false, 0, extractedDocuments),
+						fullRequest.createChatRequestContext(), false, 0, extractedDocuments, toolCallingOf(request)),
 				this.chatSessionLifecycleService, request, response, handler, ReactiveIdentityUtil.create());
 
 	}

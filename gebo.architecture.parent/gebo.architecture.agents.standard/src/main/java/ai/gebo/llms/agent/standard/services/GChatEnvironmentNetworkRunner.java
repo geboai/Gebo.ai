@@ -317,7 +317,7 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			resources.setToolCallsListener(toolCalls);
 			minimalChatContext.setToolCallsListener(toolCalls);
 			final ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null,
-					chatModel.getContextLength(), resources, response, minimalChatContext, true);
+					chatModel.getContextLength(), resources, response, minimalChatContext, true, toolCallingOfThisRun);
 			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			service = factory.create(network, sink, String.class, GeboChatMessageEnvelope.class, runAs);
 			if (LOGGER.isDebugEnabled()) {
@@ -492,7 +492,8 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			resources.setToolCallsListener(toolCalls);
 			minimalChatContext.setToolCallsListener(toolCalls);
 			final ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null,
-					chatModel.getContextLength(), resources, response, minimalChatContext, true);
+					chatModel.getContextLength(), resources, response, minimalChatContext, true,
+					run.getToolCallingOfThisRun());
 			if (run.isUnderstood()) {
 				understand(runtimeData, chatModel, serviceModel, run.getSink());
 			}

@@ -182,11 +182,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					+ (network != null ? network.getMaxLoopIteration() : null)
 					+ (toolCalling != null ? " with " + toolCalling : ""));
 		}
-		if (toolCalling != null && toolCalling.getListener() != null) {
-			// each agent records its own tool calls, forwarded to the request's recorder: a
-			// listener on the run's container takes the place of every agent's own
-			LOGGER.warn("The tool calling of network:" + (network != null ? network.getCode() : null)
-					+ " carries a listener: it replaces the recorder of every agent of the run");
+		if (toolCalling != null && toolCalling.getListener() != null && LOGGER.isDebugEnabled()) {
+			// each agent records its own tool calls, forwarded to the request's recorder; a
+			// listener on the run's container records beside them, every call of the run
+			LOGGER.debug("The tool calling of network:" + (network != null ? network.getCode() : null)
+					+ " carries a listener: it records every call of the run beside the agents' own");
 		}
 		if (network.getAgents() == null || network.getAgents().isEmpty())
 			throw new AgentException(NO_AGENTS_CONFIGURED);

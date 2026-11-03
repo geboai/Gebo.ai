@@ -342,6 +342,27 @@ class GeboToolCallingTest {
 		assertEquals(2, toolCalling.getRounds());
 	}
 
+	@Test
+	void aContainerListenerRecordsBesideTheRecorderOfTheRequest() throws Exception {
+		final IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		when(repository.getTools(any())).thenReturn(List.of());
+		final PreparingModel model = new PreparingModel(repository, modelAnswering(
+				round -> round == 1 ? toolCall("askAPerson", "{\"question\":\"ready?\"}") : text("after the ask")));
+		final ToolCallsListener ofTheRequest = new ToolCallsListener();
+		final ToolCallsListener ofTheRun = new ToolCallsListener();
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().provide(Askable.class, new Asked())
+				.mandatoryTool(askingTool(false)).listener(ofTheRun).build();
+		final IChatRequestContext context = IChatRequestContext.builder().actualUserRequest("the question")
+				.consolidatedHistory("").interactions(List.of()).documents(List.of()).toolsContext(Map.of())
+				.pipelineInfos(Map.of()).toolCallListener(ofTheRequest).build();
+
+		model.textResponse(prompt(ContextContentRequired.NOT_REQUIRED), Map.of(), context, toolCalling);
+
+		assertEquals(1, ofTheRequest.getCalls().size(), "the request's recorder keeps recording");
+		assertEquals(1, ofTheRun.getCalls().size(), "the run's recorder records as well");
+		assertEquals("askAPerson", ofTheRun.getCalls().get(0).getName());
+	}
+
 	// ---- what travels through a network: merged, replaced, passed to a nested call
 
 	interface Reports {
