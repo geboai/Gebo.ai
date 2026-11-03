@@ -124,6 +124,29 @@ public class ToolCallbackDeclarationUtil {
 	}
 
 	/**
+	 * The metadata of a tool whose result ends the model call: the tool calling loop
+	 * stops at it and its result is the call's answer (Spring AI's {@code returnDirect}).
+	 * What a tool that suspends the work - waiting for a person's answer, for an
+	 * external event - declares: the model is not called again after it.
+	 */
+	public static ToolMetadata returningDirect() {
+		return ToolMetadata.builder().returnDirect(true).build();
+	}
+
+	/**
+	 * Declares a ToolCallback for a function with a return value and the given
+	 * metadata (see {@link #returningDirect()}).
+	 */
+	public static <T, R> ToolCallback declare(BiFunction<T, ToolContext, R> function, String functionName,
+			String description, Class<T> paramType, Class<R> returnedType, ToolMetadata metadata) {
+		String inputSchema = JsonSchemaGenerator.generateForType(paramType);
+		ToolDefinition toolDefinition = ToolDefinition.builder().name(functionName).description(description)
+				.inputSchema(inputSchema).build();
+		return new FunctionToolCallback<T, R>(toolDefinition,
+				metadata != null ? metadata : ToolMetadata.builder().build(), paramType, function, null);
+	}
+
+	/**
 	 * Declares a ToolCallback for a function with no return.
 	 *
 	 * @param <T>          the input type of the function

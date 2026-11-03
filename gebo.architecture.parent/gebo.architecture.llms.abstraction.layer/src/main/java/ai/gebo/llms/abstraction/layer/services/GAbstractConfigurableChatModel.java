@@ -52,6 +52,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -752,8 +753,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext, ReactiveIdentityUtil runAs) {
+		return prepareCall(prompt, params, chatContext, runAs, null);
+	}
+
+	@Override
+	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin prepareCall(" + prompt.getPromptUse() + ", ...,...)");
+			LOGGER.debug("Begin prepareCall(" + prompt.getPromptUse() + ", ...,...)"
+					+ (toolCalling != null ? " with " + toolCalling : ""));
 		}
 		long tokens = 0;
 		ChatClient client = getChatClient();
@@ -792,25 +800,66 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 		final boolean toolsCalling = prompt.getToolsCalling() == null
 				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
-		final List<ToolCallback> tools = toolsCalling
-				? wrapToolsClosingResults(runAs, chatContext.getToolCallListener(),
-						createToolsResultsClosing(prompt, completed, chatContext))
+		// the controlling software's recorder when it gave one, else the request's
+		final ToolCallsListener toolCallListener = toolCalling != null && toolCalling.getListener() != null
+				? toolCalling.getListener()
+				: chatContext.getToolCallListener();
+		final String toolsResultsClosing = toolsCalling ? createToolsResultsClosing(prompt, completed, chatContext)
+				: null;
+		List<ToolCallback> tools = toolsCalling ? wrapToolsClosingResults(runAs, toolCallListener, toolsResultsClosing)
 				: List.of();
+		if (toolCalling != null && !toolCalling.getMandatoryTools().isEmpty()) {
+			tools = withMandatoryTools(tools, toolCalling.getMandatoryTools(), runAs, toolCallListener,
+					toolsResultsClosing);
+		}
 		reqObject = reqObject.toolCallbacks(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment
 		Map<String, Object> toolContext = chatContext.getToolsContext();
+		if (toolCalling != null) {
+			// what the controlling software loaded for the tools, and the budget it set
+			toolContext = toolCalling.toolsContext(toolContext);
+		}
 		if (!tools.isEmpty()) {
 			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
 		}
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
 		}
+		if (toolCalling != null) {
+			// the call's own tool calling loop, in place of the one the chat client
+			// registers by default (see GeboToolCallingAdvisor)
+			reqObject = reqObject.advisors(toolCalling.advisor(observationRegistry));
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	/**
+	 * The declared tools with the controlling software's mandatory ones, wrapped as the
+	 * others are: a declared tool of the same name gives way to the mandatory instance,
+	 * the one bound to this call.
+	 */
+	protected List<ToolCallback> withMandatoryTools(List<ToolCallback> declared, List<ToolCallback> mandatory,
+			ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener, String toolsResultsClosing) {
+		final List<ToolCallback> out = new ArrayList<>(declared);
+		for (ToolCallback tool : mandatory) {
+			final String name = tool.getToolDefinition().name();
+			if (out.removeIf(x -> name.equals(x.getToolDefinition().name())) && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("prepareCall(...) model:" + getCode() + " the mandatory tool " + name
+						+ " takes the place of the configured one");
+			}
+			out.add(new RunAsToolCallback(tool, runAs, toolCallListener, toolsResultsClosing));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("prepareCall(...) model:" + getCode() + " declares " + mandatory.size()
+					+ " mandatory tool(s) with " + declared.size() + " configured one(s): "
+					+ out.stream().map(x -> x.getToolDefinition().name()).toList());
+		}
+		return out;
 	}
 
 	/**
@@ -1065,12 +1114,19 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return responses(promptTemplate, params, chatContext);
+		return responses(promptTemplate, params, chatContext, null);
+	}
+
+	@Deprecated
+	@Override
+	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext, toolCalling);
 	}
 
 	/** The streamed chunks, normalized (ThinkingNormalizationAdvisor). */
 	private Flux<ChatResponse> responses(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
-			IChatRequestContext chatContext) throws LLMConfigException {
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			long timestamp = 0l;
@@ -1080,7 +1136,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
 						+ chatContext.getPipelineInfos() + "]");
 			}
-			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 			Flux<ChatResponse> res = reqObject.getRequestSpec().stream().chatResponse()
 					.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 			if (LOGGER.isDebugEnabled()) {
@@ -1108,6 +1164,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return streamStringResponse(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			long timestamp = 0l;
@@ -1118,7 +1180,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						+ chatContext.getPipelineInfos() + "]");
 			}
 
-			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...) " + "[session:"
 						+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
@@ -1136,18 +1198,36 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return responses(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
+		return streamAnswer(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext, toolCalling).map(GChatAnswerChunk::of);
 	}
 
 	@Override
 	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return GChatAnswer.of(response(promptTemplate, params, chatContext));
+		return answer(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
+		return GChatAnswer.of(response(promptTemplate, params, chatContext, toolCalling));
 	}
 
 	@Override
 	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return response(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1156,7 +1236,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ chatContext.getSessionID() + " request:" + chatContext.getRequestID() + " pipelineInfos:"
 					+ chatContext.getPipelineInfos() + "]");
 		}
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 		CallResponseSpec res = reqObject.getRequestSpec().call();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End response(" + promptTemplate.getPromptUse() + ", ...,...)  [session:"
@@ -1171,6 +1251,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)
 			throws LLMConfigException {
+		return structuredResponse(promptTemplate, params, chatContext, rt, (GeboToolCalling) null);
+	}
+
+	@Override
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1179,8 +1266,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ (rt != null ? rt.getName() : "NULL") + ")  [session:" + chatContext.getSessionID() + " request: "
 					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
-		ChatClient client = getChatClient();
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 		CallResponseSpec res = reqObject.getRequestSpec().call();
 		ResponseType data = res.entity(rt);
 		if (LOGGER.isDebugEnabled()) {
@@ -1199,6 +1285,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
 			BeanOutputConverter<ResponseType> outputConverter) throws LLMConfigException {
+		return structuredResponse(promptTemplate, params, chatContext, rt, outputConverter, null);
+	}
+
+	@Override
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			BeanOutputConverter<ResponseType> outputConverter, GeboToolCalling toolCalling)
+			throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1208,7 +1302,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ " request: " + chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos()
 					+ "]");
 		}
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 		CallResponseSpec res = reqObject.getRequestSpec().call();
 		ResponseType data = res.entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
@@ -1224,6 +1318,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return textResponse(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1232,7 +1332,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
 					+ chatContext.getPipelineInfos() + "]");
 		}
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 		CallResponseSpec response = reqObject.getRequestSpec().call();
 		String out = response.content();
 		if (LOGGER.isDebugEnabled()) {

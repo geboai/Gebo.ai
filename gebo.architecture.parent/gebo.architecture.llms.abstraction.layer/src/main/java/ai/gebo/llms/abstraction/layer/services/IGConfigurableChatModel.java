@@ -29,6 +29,7 @@ import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
 import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -140,6 +141,42 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 		return new BeanOutputConverter<T>(type);
 	}
 
+	/*
+	 * The same calls made with what the controlling software adds to them (see
+	 * GeboToolCalling): the tools it wants declared whatever the configuration says, the
+	 * interfaces the tools call back, the tool calling loop's limits. A null
+	 * toolCalling is the plain call.
+	 */
+
+	/** @deprecated as {@link #streamResponse(GPromptTemplateConfig, Map, IChatRequestContext)}. */
+	@Deprecated
+	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			GeboToolCalling toolCalling) throws LLMConfigException;
+
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			BeanOutputConverter<ResponseType> outputConverter, GeboToolCalling toolCalling)
+			throws LLMConfigException;
+
 	@AllArgsConstructor
 	@Getter
 	public static class RequestSpec {
@@ -150,6 +187,15 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 
 	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext, ReactiveIdentityUtil runAs) throws LLMConfigException;
+
+	/**
+	 * The call prepared with what the controlling software adds to it (null for the
+	 * plain call): its mandatory tools declared, its interfaces in the tools context,
+	 * its tool calling loop in place of the default one.
+	 */
+	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
+			throws LLMConfigException;
 
 	@FunctionalInterface
 	public static interface UseChatModel<T> {
