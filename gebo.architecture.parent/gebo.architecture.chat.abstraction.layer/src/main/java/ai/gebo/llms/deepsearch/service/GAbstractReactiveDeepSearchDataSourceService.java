@@ -32,6 +32,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
@@ -114,6 +115,20 @@ public abstract class GAbstractReactiveDeepSearchDataSourceService<CustomContent
 			MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, String string, int topK)
 			throws LLMConfigException, IOException, SearchServiceException;
+
+	/**
+	 * The same, the model calls the searches take (a query extraction, a native query)
+	 * made with what the controlling software adds to the request the deep search
+	 * serves (see {@link GeboToolCalling}). A source that makes such calls overrides
+	 * this; by default the searches are made as they always have been, whatever the
+	 * container.
+	 */
+	protected List<SearchWithResults> executeSearches(DeepSearchRequest request, MinimalChatContext minimalChatContext,
+			DeepSearchConfig deepSearchConfig, IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
+			String string, int topK, GeboToolCalling toolCalling)
+			throws LLMConfigException, IOException, SearchServiceException {
+		return executeSearches(request, minimalChatContext, deepSearchConfig, chatModel, serviceModel, string, topK);
+	}
 
 	protected List<SearchResult> flattenSearchResults(List<SearchResult> results) {
 		List<SearchResult> flattened = new ArrayList<SearchResult>();

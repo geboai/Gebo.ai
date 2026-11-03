@@ -181,6 +181,21 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 	}
 
 	/**
+	 * The same, with what the controlling software adds to the model calls of this
+	 * agent (see {@link GeboToolCalling}), for an agent that makes model calls of its
+	 * own in handing over (a deep search analysis). By default the documents are handed
+	 * over as without it.
+	 */
+	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
+			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
+			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices,
+			GeboToolCalling toolCalling) throws AgentException {
+		return deliverDocuments(documents, command, chatRequestContext, agentModel, session, contextAgentPersona,
+				notificationSink, runAs, statusNotices);
+	}
+
+	/**
 	 * Retrieves the documents, adding to {@code statusNotices} what the agents reading
 	 * them must know of how the search went (e.g. the sources it could not reach). By
 	 * default {@link #retrieveDocuments(GPromptTemplateConfig, IChatRequestContext, IGConfigurableChatModel, Map, GAgentsNetwork, GAgentRole, AgentNetworkParticipant, AgentsCollaborationSessionContext, AgentPrivateSessionContext, AgentsExchangeMessage, IGAgentsNetworkRuntimeDao, INotificationSink)},
@@ -195,6 +210,24 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 			INotificationSink notificationSink, List<String> statusNotices) throws AgentException {
 		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
 				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to the model calls of this
+	 * agent (see {@link GeboToolCalling}): an agent whose retrieval makes model calls (a
+	 * search planner, a native query, a ranking) overrides this and makes them with it.
+	 * By default the documents are retrieved as without it.
+	 */
+	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, List<String> statusNotices, GeboToolCalling toolCalling)
+			throws AgentException {
+		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
 	}
 
 	protected abstract List<Document> retrieveDocuments(GPromptTemplateConfig prompt,

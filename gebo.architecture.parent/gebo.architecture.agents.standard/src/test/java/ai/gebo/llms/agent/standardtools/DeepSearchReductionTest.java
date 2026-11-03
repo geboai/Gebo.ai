@@ -14,8 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
@@ -76,6 +79,22 @@ class DeepSearchReductionTest {
 					outcome.setNotCovered(notCovered);
 					return Flux.just(text);
 				});
+	}
+
+	@Test
+	void anAnalysisMadeWithAContainerHandsItToTheAnalysis() {
+		support();
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:r1").build();
+		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(),
+				same(toolCalling))).thenReturn(Flux.just("The analysis"));
+		IChatRequestContext context = mock(IChatRequestContext.class);
+		List<Document> fragments = List.of(fragment("f1", "docA"));
+
+		DeepSearchReduction.Outcome outcome = DeepSearchReduction.reduce(support, "searcher", "the command",
+				Depth.BROAD, fragments, context, agentModel, mock(ReactiveIdentityUtil.class), null, toolCalling);
+
+		assertEquals("The analysis", outcome.analysis());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 	}
 
 	@Test

@@ -17,6 +17,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
@@ -48,15 +49,18 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	private final IGRankerService rankerService;
 
 	private SearchesSuggestions askSearchesSuggestion(MinimalChatContext minimalChatContext,
-			IGConfigurableChatModel targetChatModel) throws LLMConfigException {
+			IGConfigurableChatModel targetChatModel, GeboToolCalling toolCalling) throws LLMConfigException {
 		GPromptTemplateConfig prompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_SEARCH_PLANNER_PROMPT);
 		Map<String, Object> params = new HashMap<String, Object>();
 		Map<String, Object> chatContextParams = new HashMap<>();
 		params.putAll(chatContextParams);
 		IChatRequestContext context = minimalChatContext.createChatRequestContext();
-		Map<String, List<String>> fieldEntries = callLLMRepeatableFieldEntryOutput(targetChatModel, prompt, context,
-				params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
+		Map<String, List<String>> fieldEntries = toolCalling != null
+				? callLLMRepeatableFieldEntryOutput(targetChatModel, prompt, context, params,
+						List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD), toolCalling)
+				: callLLMRepeatableFieldEntryOutput(targetChatModel, prompt, context, params,
+						List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
 		SearchesSuggestions outValue = new SearchesSuggestions();
 		outValue.setRewrittenFullTextSearchSentences(fieldEntries.get(FULL_TEXT_QUERIES_FIELD));
 		outValue.setRewrittenSemanticSearchSentences(fieldEntries.get(SEMANTIC_QUERIES_FIELD));
@@ -71,7 +75,8 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
 			boolean removeIrrelevant) throws GeboChatSessionLifecycleException, LLMConfigException {
-		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant, null);
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant, (Integer) null,
+				null);
 	}
 
 	@Override
@@ -79,16 +84,36 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
 			boolean removeIrrelevant, int tokensBudget) throws GeboChatSessionLifecycleException, LLMConfigException {
 		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant,
-				Integer.valueOf(tokensBudget));
+				Integer.valueOf(tokensBudget), null);
+	}
+
+	@Override
+	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, GeboToolCalling toolCalling)
+			throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant, (Integer) null,
+				toolCalling);
+	}
+
+	@Override
+	public Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, int tokensBudget, GeboToolCalling toolCalling)
+			throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant,
+				Integer.valueOf(tokensBudget), toolCalling);
 	}
 
 	/**
 	 * The documents retrieved, capped to {@code tokensBudget} tokens when given, to the
-	 * tokens budget's share of the target model's context otherwise.
+	 * tokens budget's share of the target model's context otherwise; every model call
+	 * made with the container when given.
 	 */
 	private Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
-			boolean removeIrrelevant, Integer tokensBudget) throws GeboChatSessionLifecycleException, LLMConfigException {
+			boolean removeIrrelevant, Integer tokensBudget, GeboToolCalling toolCalling)
+			throws GeboChatSessionLifecycleException, LLMConfigException {
 		List<GKnowledgeBase> knowledgeBases = chatSessionLifecycleService
 				.getSessionAvailableKnowledgeBases(minimalChatContext.getCurrentRequest());
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
@@ -98,9 +123,10 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 				AIDocumentsSet de = null;
 
 				try {
-					SearchesSuggestions searchSuggestions = askSearchesSuggestion(minimalChatContext, targetChatModel);
+					SearchesSuggestions searchSuggestions = askSearchesSuggestion(minimalChatContext, targetChatModel,
+							toolCalling);
 					de = this.integrateWithAISuggestedSearch(minimalChatContext, targetChatModel, searchSuggestions,
-							knowledgeBases, policy, topK, removeIrrelevant, tokensBudget);
+							knowledgeBases, policy, topK, removeIrrelevant, tokensBudget, toolCalling);
 
 				} catch (Throwable e) {
 					String msg = "Error accessing search/llm assisted";
@@ -118,7 +144,8 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	private AIDocumentsSet integrateWithAISuggestedSearch(MinimalChatContext minimalChatContext,
 			IGConfigurableChatModel targetChatModel, SearchesSuggestions searchSuggestions,
 			List<GKnowledgeBase> knowledgeBases, LLMRequestGenerationPolicy policy, int topK, boolean removeIrrelevant,
-			Integer tokensBudget) throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
+			Integer tokensBudget, GeboToolCalling toolCalling)
+			throws GeboChatSessionLifecycleException, FullTextException, LLMConfigException {
 
 		AIDocumentsSet out = new AIDocumentsSet();
 		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
@@ -144,7 +171,7 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 		out = AIDocumentsSet.join(out, searchResult);
 
 		return userRanker ? rankFound(out, GeboChatRequest.actualQuery(minimalChatContext.getCurrentRequest()), topK,
-				removeIrrelevant) : out;
+				removeIrrelevant, toolCalling) : out;
 	}
 
 	/**
@@ -153,12 +180,21 @@ public class InternalKnowledgeLLMAssistedRetrieveServiceImpl extends BaseLLMSInv
 	 */
 	AIDocumentsSet rankFound(AIDocumentsSet found, String query, int topK, boolean removeIrrelevant)
 			throws LLMConfigException {
+		return rankFound(found, query, topK, removeIrrelevant, null);
+	}
+
+	/** The same, the irrelevance filter's model call made with the container when given. */
+	AIDocumentsSet rankFound(AIDocumentsSet found, String query, int topK, boolean removeIrrelevant,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("rankFound(...) " + found.countFragments() + " fragment(s) topK:" + topK + " removeIrrelevant:"
-					+ removeIrrelevant);
+					+ removeIrrelevant + (toolCalling != null ? " with " + toolCalling : ""));
 		}
-		return removeIrrelevant ? this.rankerService.rankAndRemoveIrrelevant(found, query, topK)
-				: this.rankerService.rank(found, query, topK);
+		if (!removeIrrelevant) {
+			return this.rankerService.rank(found, query, topK);
+		}
+		return toolCalling != null ? this.rankerService.rankAndRemoveIrrelevant(found, query, topK, toolCalling)
+				: this.rankerService.rankAndRemoveIrrelevant(found, query, topK);
 	}
 
 	private AIDocumentsSet search(MinimalChatContext minimalChatContext, SearchesSuggestions searchRewritings,
