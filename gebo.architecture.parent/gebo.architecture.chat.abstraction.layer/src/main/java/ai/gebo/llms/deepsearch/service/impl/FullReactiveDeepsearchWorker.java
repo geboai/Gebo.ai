@@ -408,7 +408,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			if (resultFlux == null) {
 
 				resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request, chatModel, serviceModel,
-					unreadFragments, quotations, relevance, outputThinking);
+					unreadFragments, quotations, relevance, outputThinking, toolCalling);
 				resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
 					if (docsCounter.get() == 0l) {
 						return backupNotFoundDocuments;
@@ -429,7 +429,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				// a source's analysis feeds the final one, which is the output
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request, chatModel, serviceModel,
-					unreadFragments, quotations, relevance, DeepSearchOutputThinking.NONE);
+					unreadFragments, quotations, relevance, DeepSearchOutputThinking.NONE, toolCalling);
 				return flux.buffer();
 			}, maxConcurrentSources).subscribeOn(Schedulers.boundedElastic(), true).buffer();
 			resultFlux = resultsBuffer.map(lists -> {
@@ -609,7 +609,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		// the quotations of the request, checked against their fragments (best effort)
 		final DeepSearchQuotations quotations = new DeepSearchQuotations();
 		Flux<String> resultFlux = generateDeepSearchFlux(docsFlux, context, runAs, sinkUIEmitter, request, chatModel, serviceModel,
-					discardedFragmentIds, quotations, new DeepSearchRelevance(), outputThinking);
+					discardedFragmentIds, quotations, new DeepSearchRelevance(), outputThinking,
+					runtimeData.getToolCalling());
 
 		final StringBuffer cumulative = new StringBuffer();
 		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = quotations.render(withOutputThinking(resultFlux,
@@ -656,10 +657,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			ReactiveIdentityUtil runAs, ISinkUIEmitter sinkUIEmitter, GeboChatRequest request,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			Vector<String> discardedFragmentIds, DeepSearchQuotations quotations, DeepSearchRelevance relevance,
-			DeepSearchOutputThinking outputThinking) {
-		return analysis.analyze(docsFlux, context, runAs, request.getUserIntent(), null, chatModel, serviceModel,
-				discardedFragmentIds, sinkUIEmitter, quotations, relevance, null, sinkUIEmitter::notifyLLMProblems,
-				"Deep search", outputThinking);
+			DeepSearchOutputThinking outputThinking, GeboToolCalling toolCalling) {
+		return toolCalling != null
+				? analysis.analyze(docsFlux, context, runAs, request.getUserIntent(), null, chatModel, serviceModel,
+						discardedFragmentIds, sinkUIEmitter, quotations, relevance, null,
+						sinkUIEmitter::notifyLLMProblems, "Deep search", outputThinking, toolCalling)
+				: analysis.analyze(docsFlux, context, runAs, request.getUserIntent(), null, chatModel, serviceModel,
+						discardedFragmentIds, sinkUIEmitter, quotations, relevance, null,
+						sinkUIEmitter::notifyLLMProblems, "Deep search", outputThinking);
 	}
 
 	/**

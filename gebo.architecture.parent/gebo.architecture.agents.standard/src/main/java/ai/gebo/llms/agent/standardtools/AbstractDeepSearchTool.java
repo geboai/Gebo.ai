@@ -39,6 +39,8 @@ import ai.gebo.architecture.search.service.INativeQueryObject;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.agent.standardtools.DeepSearchToolsSupport.CoverageRules;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.DocumentCoverage;
@@ -336,15 +338,21 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 			// the analysis is asked to fit the room its model call leaves (see lengthTarget)
 			final int roomForAnalysis = ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens());
-			final String analysis = support.analysis()
-					.analyze(Flux.fromIterable(fragments),
-							analysisContext(question, requestId, ToolCallbackDeclarationUtil.userLanguage(toolContext)),
-							ReactiveIdentityUtil.create(), deliverable,
-							TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth(), roomForAnalysis), chatModel,
-							serviceModel,
-							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome)
-					.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
-					.block(DEEP_SEARCH_TIMEOUT);
+			// the container of the call this tool runs in, when it runs in a governed call:
+			// what the controlling software loaded reaches the analysis' model calls too
+			final GeboToolCalling toolCalling = GeboToolCallingManagerFactory.nestedFrom(toolContext);
+			final IChatRequestContext analysisContext = analysisContext(question, requestId,
+					ToolCallbackDeclarationUtil.userLanguage(toolContext));
+			final String completeness = TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth(), roomForAnalysis);
+			final Flux<String> analysisFlux = toolCalling != null
+					? support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
+							ReactiveIdentityUtil.create(), deliverable, completeness, chatModel, serviceModel,
+							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome, toolCalling)
+					: support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
+							ReactiveIdentityUtil.create(), deliverable, completeness, chatModel, serviceModel,
+							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome);
+			final String analysis = analysisFlux.reduce(new StringBuilder(), StringBuilder::append)
+					.map(StringBuilder::toString).block(DEEP_SEARCH_TIMEOUT);
 			// the fragments the analysis left unread are never its sources
 			final Set<String> unreadFragmentIds = analysisOutcome.getUnreadFragmentIds();
 			final Set<String> readFragmentIds = new LinkedHashSet<>(foundByFragmentId.keySet());

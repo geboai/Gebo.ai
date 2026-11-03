@@ -449,6 +449,11 @@ plain call.
 parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`
 gives it the container it runs in (null outside a governed call), to pass to the
 model it calls, so what the controlling software loaded reaches the nested call.
+The deep search tools do so: `AbstractDeepSearchTool` reads it and hands it through
+`DeepSearchToolAnalysis` to `DeepSearchAnalysis`, whose every model call (the partial
+analyses, the folds, the final one) is made with it; the deep search answering a
+chat hands the request's to the same analysis. The search tools that only rank what
+they found call no chat model: there is nothing to pass.
 
 A call made with a null container is the plain call, literally the old method of
 the model, so whatever stubs or overrides the plain one still answers.

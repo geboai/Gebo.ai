@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,8 +26,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
+import ai.gebo.llms.deepsearch.service.DeepSearchOutputThinking;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchAnalysis;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.security.services.ReactiveIdentityUtil;
@@ -58,5 +61,23 @@ class DeepSearchToolAnalysisTest {
 				any(), quotations.capture(), any(), eq(outcome), onFailure.capture(), eq("Deep search tool"));
 		assertSame(outcome.getQuotations(), quotations.getValue(), "the tool lists the quotations of its outcome");
 		assertNull(onFailure.getValue(), "a tool has no pipeline to notify");
+	}
+
+	@Test
+	void anAnalysisMadeWithAContainerHandsItToEveryModelCall() {
+		final DeepSearchAnalysis shared = mock(DeepSearchAnalysis.class);
+		when(shared.analyze(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(),
+				anyString(), any(), any())).thenReturn(Flux.just("The analysis."));
+		final DeepSearchToolAnalysis tool = new DeepSearchToolAnalysis(shared);
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:r1").build();
+
+		final String text = String.join("",
+				tool.analyze(Flux.empty(), null, ReactiveIdentityUtil.create(), DeliverableIntent.ANALISYS, "note", null,
+						null, new Vector<>(), IGProgressNotifier.NONE, null, toolCalling).collectList().block());
+
+		assertEquals("The analysis.", text);
+		verify(shared).analyze(any(), any(), any(), eq(DeliverableIntent.ANALISYS), eq("note"), any(), any(), any(),
+				any(), any(), any(), any(), any(), eq("Deep search tool"), eq(DeepSearchOutputThinking.NONE),
+				same(toolCalling));
 	}
 }
