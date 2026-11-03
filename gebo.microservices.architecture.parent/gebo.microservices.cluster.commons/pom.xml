@@ -24,6 +24,14 @@
 		second copy is a copy that a fix does not reach.
 	-->
 	<dependencies>
+		<!-- Spring Boot's WebClient auto-configuration: the WebClient.Builder bean the
+		     service clients build from, with the application's customizers applied
+		     (with tracing, the observation filter that propagates the current trace to
+		     the service called). Spring Boot 4 ships it apart from spring-boot-webflux. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-webclient</artifactId>
+		</dependency>
 		<!-- GeboMicroservicesTopology: the members whose registered instances may call. -->
 		<dependency>
 			<groupId>ai.gebo.microservices.architecture</groupId>
