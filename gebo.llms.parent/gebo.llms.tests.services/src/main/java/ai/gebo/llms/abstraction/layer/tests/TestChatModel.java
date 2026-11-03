@@ -13,13 +13,16 @@
 package ai.gebo.llms.abstraction.layer.tests;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
+import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
 
 import ai.gebo.architecture.testing.AbstractTestingBusinessLogic;
 import reactor.core.publisher.Flux;
@@ -59,10 +62,38 @@ public class TestChatModel extends AbstractTestingBusinessLogic implements ChatM
 	}
 
 	/**
+	 * Test-global observer of every prompt this model is called with, clones
+	 * included: a test reads from the prompt's options what reached the model (the
+	 * tools declared, the tool context and what the controlling software loaded in
+	 * it). Set it in test setup and clear it in teardown.
+	 */
+	private static volatile Consumer<Prompt> globalPromptObserver = null;
+
+	/** Sets the test-global prompt observer. */
+	public static void setGlobalPromptObserver(Consumer<Prompt> observer) {
+		globalPromptObserver = observer;
+	}
+
+	/** Clears the test-global prompt observer. */
+	public static void clearGlobalPromptObserver() {
+		globalPromptObserver = null;
+	}
+
+	/**
 	 * Default constructor for TestChatModel
 	 */
 	public TestChatModel() {
 
+	}
+
+	/**
+	 * Tool calling options, as every provider's model has: the chat client copies the
+	 * tools declared and the tool context into a prompt only when the model's options
+	 * take them, so a test can see what the platform loaded for the tools of a call.
+	 */
+	@Override
+	public ChatOptions getOptions() {
+		return ToolCallingChatOptions.builder().build();
 	}
 
 	/**
@@ -75,6 +106,10 @@ public class TestChatModel extends AbstractTestingBusinessLogic implements ChatM
 	 */
 	@Override
 	public ChatResponse call(Prompt prompt) {
+		final Consumer<Prompt> observer = globalPromptObserver;
+		if (observer != null) {
+			observer.accept(prompt);
+		}
 		String content = prompt.getContents();
 		Function<String, String> global = globalResponseLogic;
 		String response;
