@@ -208,6 +208,26 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/**
+	 * The same, with what the caller adds to every model call of the run (see
+	 * {@link GeboToolCalling}): a caller outside a chat that wants its runs to say who
+	 * made them, to keep within limits of its own or to provide its tools with
+	 * something passes it here. Null for nothing, which is the run as it always has
+	 * been.
+	 */
+	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, ChatRunAttachments attachments,
+			GeboToolCalling toolCallingOfThisRun, INotificationSink sink) throws AgentException {
+		if (toolCallingOfThisRun == null) {
+			return run(networkCode, request, attachments, sink);
+		}
+		final GAgentsNetwork network = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)
+				.findByCode(networkCode);
+		if (network == null) {
+			throw new AgentException("The network of agents does not exist: " + networkCode);
+		}
+		return run(network, request, attachments, List.of(), Map.of(), toolCallingOfThisRun, sink);
+	}
+
+	/**
 	 * The same, on a network the caller has already resolved and may have adjusted
 	 * for this run - how many times its controller may act, above all.
 	 * <p>

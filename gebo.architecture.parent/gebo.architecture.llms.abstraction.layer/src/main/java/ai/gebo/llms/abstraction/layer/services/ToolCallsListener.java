@@ -62,6 +62,23 @@ public class ToolCallsListener {
 		return parent != null ? parent.child(onCall) : new ToolCallsListener(onCall);
 	}
 
+	/**
+	 * A listener recording its own calls and forwarding each of them to both the given
+	 * ones: how a recorder of a whole run adds itself to the recorder of the request
+	 * the run serves, neither taking the place of the other. Each call reaches each of
+	 * the two, and their own chains, once. One of them missing, or the same one given
+	 * twice, leaves a child of the one there is.
+	 */
+	public static ToolCallsListener both(ToolCallsListener one, ToolCallsListener other) {
+		if (one == null || one == other) {
+			return childOf(other, null);
+		}
+		if (other == null) {
+			return childOf(one, null);
+		}
+		return new ToolCallsListener(one, other::record);
+	}
+
 	public void addCall(String toolName, String toolDescription, String toolInput, String result) {
 		record(new ToolCallExecuted(toolName, toolDescription, toolInput, result));
 	}

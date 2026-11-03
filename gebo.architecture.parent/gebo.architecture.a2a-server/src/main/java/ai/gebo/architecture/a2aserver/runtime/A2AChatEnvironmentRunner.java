@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.INotificationSink;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner;
 import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun;
 import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatRunAttachments;
@@ -49,12 +50,23 @@ public class A2AChatEnvironmentRunner {
 	 */
 	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, A2AInboundResources inbound,
 			INotificationSink sink) throws AgentException {
+		return run(networkCode, request, inbound, null, sink);
+	}
+
+	/**
+	 * The same, with what the A2A server adds to every model call of the run (see
+	 * {@link GeboToolCalling}): null for nothing, which is the run as it always has
+	 * been.
+	 */
+	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, A2AInboundResources inbound,
+			GeboToolCalling toolCalling, INotificationSink sink) throws AgentException {
 		final ChatRunAttachments attachments = inbound == null ? ChatRunAttachments.none()
 				: new ChatRunAttachments(inbound.getFiles(), inbound.getKnowledgeBases(), inbound.getDocuments());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("An A2A caller runs network:" + networkCode + " with " + attachments.getFiles().size()
-					+ " file(s) attached");
+					+ " file(s) attached" + (toolCalling != null ? " and " + toolCalling : ""));
 		}
-		return runner.run(networkCode, request, attachments, sink);
+		return toolCalling != null ? runner.run(networkCode, request, attachments, toolCalling, sink)
+				: runner.run(networkCode, request, attachments, sink);
 	}
 }
