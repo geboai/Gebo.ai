@@ -1,6 +1,7 @@
 package ai.gebo.architecture.agents.services.impl;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.GAbstractAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
@@ -20,9 +21,10 @@ public class DefaultAgentsNetworkServiceReturnLastOutputValue<InputType, OutputT
 	public DefaultAgentsNetworkServiceReturnLastOutputValue(IGAgentServiceRuntimeDao agentsServicesRepository,
 			IAgentRoleDao rolesDao, IGeboThreadManager threadManager, GAgentsNetwork network,
 			INotificationSink notificationSink, Class<InputType> inputType, Class<OutputType> outputType,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) {
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
+			GNetworkOfAgentsSuspensionRepository suspensions) {
 		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
-				runAs, agentsDao);
+				runAs, agentsDao, suspensions);
 
 	}
 

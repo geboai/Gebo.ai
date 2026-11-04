@@ -10,6 +10,7 @@
 package ai.gebo.llms.agent.standard.services;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
@@ -31,9 +32,10 @@ public class GTextAgentsNetworkService extends GAbstractReactiveOutputAgentsNetw
 	public GTextAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
 			Class<String> inputType, Class<String> outputType, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, AdapterWithFlux<?, String> adapterWithFlux) {
+			IGAgentsNetworkRuntimeDao agentsDao, GNetworkOfAgentsSuspensionRepository suspensions,
+			AdapterWithFlux<?, String> adapterWithFlux) {
 		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
-				runAs, agentsDao, adapterWithFlux);
+				runAs, agentsDao, suspensions, adapterWithFlux);
 	}
 
 	@Override

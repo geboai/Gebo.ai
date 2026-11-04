@@ -1,6 +1,8 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
@@ -9,6 +11,8 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
+import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 
 /****************************************************************************************************
  * This interface is used during the execution of a network of agents to permit
@@ -28,13 +32,15 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
  */
 public interface IGNetworkOfAgentsSuspensionHandler {
 	/**********************************************************************************************************
-	 * Initializes the handler for network of agent execution
+	 * Initializes the handler for network of agent execution, with the input the
+	 * network was given: it is part of the cut, since the suspension may be asked
+	 * by the first agent to execute, before anything else of the run exists.
 	 * 
-	 * @param networkExecutionId
 	 * @param agentsNetwork
+	 * @param networkInput  the input of executeNetwork(...)
 	 * @throws AgentException
 	 */
-	public void initialize(GAgentsNetwork agentsNetwork) throws AgentException;
+	public void initialize(GAgentsNetwork agentsNetwork, Object networkInput) throws AgentException;
 
 	/********************************************************************************************************************
 	 * Called by the agent asking for suspension
@@ -95,4 +101,38 @@ public interface IGNetworkOfAgentsSuspensionHandler {
 	public void networkExecutionFinished();
 
 	public List<AgentSuspendedWaitingCondition> suspensionConditions() throws AgentException;
+
+	/**
+	 * Called by the network after an agent's turn, when the run is being suspended:
+	 * the message the agent was executing and the number of that turn. The handler
+	 * keeps it for the agents that asked to suspend the run, since the respawn
+	 * re-executes them with that message; a turn of any other agent is ignored.
+	 */
+	public void setSuspendedAgentTurn(AgentNetworkParticipant participant, AgentsExchangeMessage inputMessage,
+			int contributionNr) throws AgentException;
+
+	/**
+	 * Called by the network when the run is being suspended, after the agents that
+	 * were running ended: the runtime of every agent of the network, its counters
+	 * and its private state, which the respawn restores before delivering anything.
+	 */
+	public void setSuspendingAgentsRuntimeState(List<RuntimeAgentInfos> agentsRuntime) throws AgentException;
+
+	/**
+	 * Called by the network at the start of a respawn, after {@link #initialize}:
+	 * the block the run is respawned from and the conditions resolved for it, by the
+	 * name of the agent that waited for each. The handler is not in suspension
+	 * state after this: the respawned run suspends again only when an agent asks.
+	 */
+	public void respawnFrom(GNetworkOfAgentsSuspension suspension,
+			Map<String, AgentSuspendedWaitingCondition> resolvedConditionsByAgent) throws AgentException;
+
+	/**
+	 * Asked by a respawned agent, in its own control code: the condition it waited
+	 * for, resolved; empty when it was not waiting or the condition is not resolved.
+	 */
+	public Optional<AgentSuspendedWaitingCondition> resolvedConditionOf(AgentNetworkParticipant participant);
+
+	/** The id of the suspension being taken, once an agent asked for it; null before. */
+	public String suspensionId();
 }

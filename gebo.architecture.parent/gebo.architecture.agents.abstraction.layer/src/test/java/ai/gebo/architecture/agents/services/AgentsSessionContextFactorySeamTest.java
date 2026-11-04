@@ -90,7 +90,7 @@ class AgentsSessionContextFactorySeamTest {
 	private static final class TestNetworkService extends GAbstractAgentsNetworkService<String, String> {
 		private TestNetworkService(IGAgentsNetworkRuntimeDao agentsDao, GAgentsNetwork network,
 				INotificationSink notificationSink, IAgentsCollaborationSessionContextFactory sessionFactory) {
-			super(null, null, null, network, notificationSink, String.class, String.class, null, agentsDao,
+			super(null, null, null, network, notificationSink, String.class, String.class, null, agentsDao, null,
 					sessionFactory);
 		}
 

@@ -45,7 +45,13 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 	 * calls that takes one, in one of three ways: as it is; one of its own in its
 	 * place; the two {@link GeboToolCalling#merged(GeboToolCalling, GeboToolCalling)}.
 	 * Never null: the network refuses a run without one.
-	 * @param suspensionHandler TODO
+	 * <p>
+	 * The suspension handler is the run's (see
+	 * {@link IGNetworkOfAgentsSuspensionHandler}): an agent that must wait for
+	 * something outside the run asks it, in its own control code, to suspend the
+	 * run; the network never asks it. The agent then returns as usual: what it
+	 * returns is not delivered but frozen with the rest of the cut, for the
+	 * respawn. Never null: a run that cannot be suspended carries one that refuses.
 	 */
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,

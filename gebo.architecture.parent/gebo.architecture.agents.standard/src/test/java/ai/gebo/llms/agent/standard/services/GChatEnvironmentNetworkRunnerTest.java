@@ -141,7 +141,7 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void theConversationIsOpenedOrSharedBeforeAnythingReadsIt() throws Exception {
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
 				.toolCallingOfThisRun(TOOL_CALLING).origin("HARNESS")
@@ -166,7 +166,7 @@ class GChatEnvironmentNetworkRunnerTest {
 					"the request carries the stored files when it is started, as a chat's does");
 			return resources;
 		});
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
 				.toolCallingOfThisRun(TOOL_CALLING)
@@ -182,7 +182,7 @@ class GChatEnvironmentNetworkRunnerTest {
 		when(networks.findByCode("the-network")).thenReturn(network);
 		when(binder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networks);
 		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("a2a:server/skill").build();
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run("the-network", request, ChatRunAttachments.none(), toolCalling, null);
 
@@ -207,7 +207,7 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void anExportedNetworkRunsAsItAlwaysHas() throws Exception {
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(network, request, ChatRunAttachments.none(), List.of(), Map.of(), TOOL_CALLING, null);
 
@@ -226,7 +226,7 @@ class GChatEnvironmentNetworkRunnerTest {
 		UserUploadedContent stored = new UserUploadedContent();
 		stored.setFileName("notes.txt");
 		when(uploadHandler.chatSessionUpload(eq("conversation-1"), anyList())).thenReturn(OperationStatus.of(List.of(stored)));
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(network, request,
 				new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(),
@@ -242,7 +242,7 @@ class GChatEnvironmentNetworkRunnerTest {
 		GKnowledgeBase kb = new GKnowledgeBase();
 		kb.setCode("kb-1");
 		when(lifeCycle.getSessionAvailableKnowledgeBases(request)).thenReturn(List.of(kb));
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
 				.toolCallingOfThisRun(TOOL_CALLING)
@@ -262,7 +262,7 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void aTransientConversationIsDroppedWhenTheRunIsOverAndNothingOfItIsKept() throws Exception {
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
 				.toolCallingOfThisRun(TOOL_CALLING).transientConversation(true)

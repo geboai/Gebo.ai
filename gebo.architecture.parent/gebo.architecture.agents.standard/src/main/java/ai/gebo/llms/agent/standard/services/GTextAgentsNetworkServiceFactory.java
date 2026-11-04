@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkServiceFactory;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
@@ -53,8 +54,12 @@ public class GTextAgentsNetworkServiceFactory
 		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
 				.getImplementationOf(IGAgentServiceRuntimeDao.class);
 		IAgentRoleDao agentRoleDao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
+		// where the suspended runs of the network are kept
+		GNetworkOfAgentsSuspensionRepository suspensions = runtimeBinder
+				.getImplementationOf(GNetworkOfAgentsSuspensionRepository.class);
 		return new GTextAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
-				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
+				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions,
+				adapter);
 	}
 
 	@Override

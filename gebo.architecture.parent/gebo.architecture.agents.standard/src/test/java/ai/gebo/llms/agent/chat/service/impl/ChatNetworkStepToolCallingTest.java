@@ -23,6 +23,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
@@ -55,7 +56,7 @@ class ChatNetworkStepToolCallingTest {
 	void theRequestsToolCallingReachesTheNetwork() throws Exception {
 		IGReactiveChatAgentsNetworkService network = mock(IGReactiveChatAgentsNetworkService.class);
 		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:request-1").build();
-		when(network.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(network.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		step().executeNetwork(network, runtimeData(toolCalling), "What is new?", Map.of());
 
