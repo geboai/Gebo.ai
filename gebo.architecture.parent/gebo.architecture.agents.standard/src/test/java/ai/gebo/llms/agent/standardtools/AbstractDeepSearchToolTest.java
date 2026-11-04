@@ -184,7 +184,7 @@ class AbstractDeepSearchToolTest {
 				discarded.add("f2");
 			}
 			return Flux.just("The ", "analysis.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any());
 		GeboRagSearchConfig ragSearchConfig = mock(GeboRagSearchConfig.class);
 		when(ragSearchConfig.getDeepSearchGlobalTopK()).thenReturn(30);
 		support = new DeepSearchToolsSupport(provider(analysis), provider(chunkingService), provider(chatModelsDao),
@@ -230,7 +230,6 @@ class AbstractDeepSearchToolTest {
 		assertEquals("The analysis.", result.getAnalysis());
 		verify(analysis).analyze(any(), any(), any(), any(), anyString(), eq(chatModel), eq(serviceModel), any(),
 				any(), any(), same(toolCalling));
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 	}
 
 	@Test
@@ -252,7 +251,7 @@ class AbstractDeepSearchToolTest {
 		// the agent's answer says which documents it rests on
 		assertEquals(List.of("doc-a", "doc-b"), result.getSources().stream().map(Source::getDocumentCode).toList());
 		verify(analysis).analyze(any(), any(), any(), eq(DeliverableIntent.ANALISYS), anyString(), eq(chatModel),
-				eq(serviceModel), any(), any(), any());
+				eq(serviceModel), any(), any(), any(), any());
 	}
 
 	@Test
@@ -262,7 +261,7 @@ class AbstractDeepSearchToolTest {
 			Vector<String> discarded = invocation.getArgument(7);
 			documents.collectList().block().forEach(x -> discarded.add(x.getId()));
 			return Flux.just("An analysis citing the documents.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any());
 		TestDeepSearchTool tool = new TestDeepSearchTool(support,
 				List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b")));
 
@@ -296,7 +295,8 @@ class AbstractDeepSearchToolTest {
 				"Deep search in the test source: analysing \"title doc-a\", \"title doc-b\" (3 fragment(s) of 2 document(s))"),
 				notified, "the documents analysed named");
 		// the analysis reports its progress to the same notifier
-		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), eq(notifier), any());
+		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), eq(notifier), any(),
+				any());
 	}
 
 	@Test
@@ -307,7 +307,7 @@ class AbstractDeepSearchToolTest {
 
 		assertEquals(Status.OK, result.getStatus());
 		verify(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(),
-				eq(IGProgressNotifier.NONE), any());
+				eq(IGProgressNotifier.NONE), any(), any());
 	}
 
 	@Test
@@ -360,7 +360,7 @@ class AbstractDeepSearchToolTest {
 		doAnswer(invocation -> {
 			analysed.set(invocation.getArgument(1));
 			return Flux.just("ok");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any());
 		DeepSearchToolParam param = param("agent question");
 		param.setSearchObjective("what for");
 
@@ -383,7 +383,7 @@ class AbstractDeepSearchToolTest {
 		// another request has its own deep searches
 		assertEquals(Status.OK, tool.deepSearch(param("question"), request("r2")).getStatus());
 		verify(analysis, times(support.maxDeepSearchesPerRequest() + 1)).analyze(any(), any(), any(),
-				any(), anyString(), any(), any(), any(), any(), any());
+				any(), anyString(), any(), any(), any(), any(), any(), any());
 	}
 
 	@Test
@@ -413,13 +413,14 @@ class AbstractDeepSearchToolTest {
 		assertEquals(Status.NOT_ALLOWED, denied.deepSearch(param("question"), null).getStatus());
 
 		assertEquals(Status.NO_RESULTS, empty.deepSearch(param(" "), null).getStatus());
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(),
+				any());
 	}
 
 	@Test
 	void aFailingAnalysisIsAnswered() {
 		doReturn(Flux.error(new IllegalStateException("provider down"))).when(analysis).analyze(any(), any(), any(),
-				any(), anyString(), any(), any(), any(), any(), any());
+				any(), anyString(), any(), any(), any(), any(), any(), any());
 		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
 
 		assertEquals(Status.FAILED, tool.deepSearch(param("question"), null).getStatus());
@@ -466,7 +467,8 @@ class AbstractDeepSearchToolTest {
 		DeepSearchToolResult result = tool.deepSearch(param("question"), full);
 
 		assertEquals(Status.NO_RESULTS, result.getStatus());
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(),
+				any());
 		// not run, it is not one of the request's deep searches
 		for (int i = 0; i < support.maxDeepSearchesPerRequest(); i++) {
 			assertEquals(Status.OK, tool.deepSearch(param("question " + i), request("r1")).getStatus());
@@ -483,7 +485,7 @@ class AbstractDeepSearchToolTest {
 
 		// 800 tokens hold about 600 words, less than the 1000 a BROAD depth asks
 		verify(analysis).analyze(any(), any(), any(), any(), argThat(note -> note.contains("600 words")), any(),
-				any(), any(), any(), any());
+				any(), any(), any(), any(), any());
 		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.FOCUSED, 100_000).contains("400 words"));
 		assertTrue(AbstractDeepSearchTool.lengthTarget(Depth.EXHAUSTIVE, 10).contains(
 				AbstractDeepSearchTool.MIN_ANALYSIS_WORDS + " words"), "never shorter than the minimum");
@@ -866,7 +868,7 @@ class AbstractDeepSearchToolTest {
 			Vector<String> discarded = invocation.getArgument(7);
 			discarded.add("f2");
 			return Flux.just("The analysis.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any());
 		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a"), fragment("f2", "doc-b")));
 
 		DeepSearchToolResult result = tool.deepSearch(param("question"), request("r1"));
@@ -890,7 +892,7 @@ class AbstractDeepSearchToolTest {
 				discarded.add(document.getId());
 			}
 			return Flux.just("Written without documents.");
-		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		}).when(analysis).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any());
 		ToolsFoundDocuments collector = new ToolsFoundDocuments();
 		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a"), fragment("f3", "doc-a")));
 
@@ -914,7 +916,8 @@ class AbstractDeepSearchToolTest {
 				request("r1"));
 		assertEquals(Status.NOT_ALLOWED, repeated.getStatus());
 		assertEquals(AbstractDeepSearchTool.REPEATED_SEARCHES, repeated.getMessage());
-		verify(analysis, times(1)).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
+		verify(analysis, times(1)).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(),
+				any());
 
 		// other searches, another request, another tool run
 		assertEquals(Status.OK, tool.deepSearch(param("question", "open claims"), request("r1")).getStatus());

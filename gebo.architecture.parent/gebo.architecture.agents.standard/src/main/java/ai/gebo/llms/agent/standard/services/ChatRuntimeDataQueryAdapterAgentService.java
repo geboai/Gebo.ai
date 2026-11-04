@@ -99,17 +99,6 @@ public class ChatRuntimeDataQueryAdapterAgentService
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<String, String> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<String>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<String, String> mySessionContext,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) chat runtime data query adapter persona:"

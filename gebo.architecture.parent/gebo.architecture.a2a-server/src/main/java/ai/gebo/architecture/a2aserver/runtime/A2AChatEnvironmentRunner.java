@@ -45,18 +45,9 @@ public class A2AChatEnvironmentRunner {
 	}
 
 	/**
-	 * Runs the exported network in the environment of the chat profile the export
-	 * states, with what the caller sent attached to the request.
-	 */
-	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, A2AInboundResources inbound,
-			INotificationSink sink) throws AgentException {
-		return run(networkCode, request, inbound, null, sink);
-	}
-
-	/**
-	 * The same, with what the A2A server adds to every model call of the run (see
-	 * {@link GeboToolCalling}): null for nothing, which is the run as it always has
-	 * been.
+	 * Runs the network in the conversation of the request, the inbound resources
+	 * attached, with what the A2A server adds to every model call of the run (see
+	 * {@link GeboToolCalling}); required, the runner refuses a run without one.
 	 */
 	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, A2AInboundResources inbound,
 			GeboToolCalling toolCalling, INotificationSink sink) throws AgentException {
@@ -64,9 +55,8 @@ public class A2AChatEnvironmentRunner {
 				: new ChatRunAttachments(inbound.getFiles(), inbound.getKnowledgeBases(), inbound.getDocuments());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("An A2A caller runs network:" + networkCode + " with " + attachments.getFiles().size()
-					+ " file(s) attached" + (toolCalling != null ? " and " + toolCalling : ""));
+					+ " file(s) attached" + (" and " + toolCalling));
 		}
-		return toolCalling != null ? runner.run(networkCode, request, attachments, toolCalling, sink)
-				: runner.run(networkCode, request, attachments, sink);
+		return runner.run(networkCode, request, attachments, toolCalling, sink);
 	}
 }

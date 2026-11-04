@@ -45,47 +45,11 @@ public class DeepSearchToolAnalysis {
 	}
 
 	/**
-	 * Analyses the fragments against the question of the context, sized for the
-	 * given deliverable.
-	 *
-	 * @param completenessNote     added to what the deliverable asks, e.g. who reads
-	 *                             the analysis
-	 * @param chatModel            writes the final analysis
-	 * @param serviceModel         writes the partial analyses
-	 * @param discardedFragmentIds receives the fragments left unprocessed
-	 * @param notifier             tells the user the progress of the analysis
-	 *                             ({@link IGProgressNotifier#NONE} for none)
-	 * @return the final analysis, streamed
-	 */
-	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
-			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier) {
-		return analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
-				discardedFragmentIds, notifier, null);
-	}
-
-	/**
-	 * The same, handing out what the consolidation reports as missing.
-	 *
-	 * @param outcome receives what the last consolidation of the partial analyses
-	 *                reports as missing (its verdict), null when it reports the report
-	 *                complete, left untouched when no consolidation runs (a single
-	 *                batch of fragments, no sufficiency check); and the fragments left
-	 *                unread. May be null
-	 */
-	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
-			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
-			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
-			DeepSearchAnalysisOutcome outcome) {
-		return analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
-				discardedFragmentIds, notifier, outcome, null);
-	}
-
-	/**
-	 * The same, the analysis made with the container the tool runs in (see
-	 * {@link GeboToolCalling}): what the controlling software loaded for the call that
-	 * called the tool reaches the model calls of the analysis too. Null for nothing,
-	 * which is the analysis as it always has been.
+	 * The analysis of the fragments a deep search tool found, made by the pipelines'
+	 * analysis with the tool's outcome and no pipeline to notify of a model failure,
+	 * and with the container the tool runs in (see {@link GeboToolCalling}): what the
+	 * controlling software loaded for the call that called the tool reaches the model
+	 * calls of the analysis too.
 	 */
 	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
 			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
@@ -94,13 +58,10 @@ public class DeepSearchToolAnalysis {
 		// the quotations of this analysis: the outcome's when given, so the tool can list them
 		final DeepSearchQuotations quotations = outcome != null ? outcome.getQuotations()
 				: new DeepSearchQuotations();
-		final Flux<String> analysed = toolCalling != null
-				? analysis.analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+		final Flux<String> analysed = analysis.analyze(fragments, context, runAs, deliverable, completenessNote,
+				chatModel, serviceModel,
 						discardedFragmentIds, notifier, quotations, new DeepSearchRelevance(), outcome, null,
-						"Deep search tool", DeepSearchOutputThinking.NONE, toolCalling)
-				: analysis.analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
-						discardedFragmentIds, notifier, quotations, new DeepSearchRelevance(), outcome, null,
-						"Deep search tool");
+						"Deep search tool", DeepSearchOutputThinking.NONE, toolCalling);
 		// the quotations the standard way, with no fragment id
 		return quotations.render(analysed).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}

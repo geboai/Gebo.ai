@@ -47,6 +47,8 @@ import reactor.core.publisher.Flux;
  * analysis rests on the documents whose fragments were read.
  */
 class DeepSearchReductionTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:DeepSearchReductionTest").build();
 
 	private static Document fragment(String id, String code) {
 		return new Document(id, "text of " + id, Map.of(DocumentMetaInfos.CONTENT_CODE, code));
@@ -70,7 +72,7 @@ class DeepSearchReductionTest {
 
 	/** The analysis answers the given text, leaving the given fragments unread. */
 	private void analysisAnswers(String text, String notCovered, String... unreadFragmentIds) {
-		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any()))
+		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any()))
 				.thenAnswer(invocation -> {
 					DeepSearchAnalysisOutcome outcome = invocation.getArgument(9);
 					for (String id : unreadFragmentIds) {
@@ -94,7 +96,6 @@ class DeepSearchReductionTest {
 				Depth.BROAD, fragments, context, agentModel, mock(ReactiveIdentityUtil.class), null, toolCalling);
 
 		assertEquals("The analysis", outcome.analysis());
-		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 	}
 
 	@Test
@@ -123,7 +124,7 @@ class DeepSearchReductionTest {
 				fragment("f4", "docC"));
 
 		DeepSearchReduction.Outcome outcome = DeepSearchReduction.reduce(support, "searcher", "the command",
-				Depth.EXHAUSTIVE, fragments, context, agentModel, mock(ReactiveIdentityUtil.class), null);
+				Depth.EXHAUSTIVE, fragments, context, agentModel, mock(ReactiveIdentityUtil.class), null, TOOL_CALLING);
 
 		assertTrue(outcome.hasAnalysis());
 		assertEquals("The analysis", outcome.analysis());
@@ -136,7 +137,7 @@ class DeepSearchReductionTest {
 		ArgumentCaptor<IChatRequestContext> analysed = ArgumentCaptor.forClass(IChatRequestContext.class);
 		ArgumentCaptor<String> note = ArgumentCaptor.forClass(String.class);
 		verify(analysis).analyze(any(), analysed.capture(), any(), eq(DeliverableIntent.ANALISYS), note.capture(),
-				eq(agentModel), eq(serviceModel), any(), any(), any());
+				eq(agentModel), eq(serviceModel), any(), any(), any(), any());
 		assertEquals("the command", analysed.getValue().getActualUserRequest());
 		assertEquals("req-1", analysed.getValue().getRequestID());
 		assertEquals("it", analysed.getValue().getUserLanguage());
@@ -151,13 +152,13 @@ class DeepSearchReductionTest {
 		List<Document> fragments = List.of(fragment("f1", "docA"), fragment("f2", "docB"));
 
 		DeepSearchReduction.Outcome nothingRead = DeepSearchReduction.reduce(support, "searcher", "the command",
-				null, fragments, null, agentModel, null, null);
+				null, fragments, null, agentModel, null, null, TOOL_CALLING);
 		assertFalse(nothingRead.hasAnalysis());
 		assertEquals(2, nothingRead.fragmentsFound());
 		assertEquals(0, nothingRead.fragmentsRead());
 
 		DeepSearchReduction.Outcome nothingFound = DeepSearchReduction.reduce(support, "searcher", "the command",
-				Depth.BROAD, List.of(), null, agentModel, null, null);
+				Depth.BROAD, List.of(), null, agentModel, null, null, TOOL_CALLING);
 		assertFalse(nothingFound.hasAnalysis());
 		assertNull(nothingFound.analysis());
 	}
@@ -168,7 +169,7 @@ class DeepSearchReductionTest {
 		when(chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES)).thenReturn(null);
 
 		DeepSearchReduction.Outcome outcome = DeepSearchReduction.reduce(support, "searcher", "the command",
-				Depth.BROAD, List.of(fragment("f1", "docA")), null, agentModel, null, null);
+				Depth.BROAD, List.of(fragment("f1", "docA")), null, agentModel, null, null, TOOL_CALLING);
 
 		assertFalse(outcome.hasAnalysis());
 	}

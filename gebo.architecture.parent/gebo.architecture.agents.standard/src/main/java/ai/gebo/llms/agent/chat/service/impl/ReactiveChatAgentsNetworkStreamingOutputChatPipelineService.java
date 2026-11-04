@@ -196,19 +196,16 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * resolves, the data source's first one.
 	 */
 	/**
-	 * Runs the network for the request, with what the chat added to the request's
-	 * model calls when it added something (see
-	 * {@link ChatPipelineExecutionRuntimeData#getToolCalling()}); the plain run otherwise.
+	 * Runs the network for the request, with what the chat adds to the request's
+	 * model calls (see {@link ChatPipelineExecutionRuntimeData#getToolCalling()}),
+	 * built by the pipelines executor for every request.
 	 */
 	protected GeboChatMessageEnvelope executeNetwork(IGReactiveChatAgentsNetworkService runtimeNetwork,
 			ChatPipelineExecutionRuntimeData runtimeData, String question, Map<String, Object> environment)
 			throws AgentException, LLMConfigException {
 		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
-		return toolCalling != null
-				? runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
-						environment, toolCalling)
-				: runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
-						environment);
+		return runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
+						environment, toolCalling);
 	}
 
 	protected GAgentsNetwork chooseNetwork(ChatPipelineExecutionRuntimeData runtimeData)

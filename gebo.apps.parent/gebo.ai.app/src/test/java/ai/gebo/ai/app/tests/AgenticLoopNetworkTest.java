@@ -40,6 +40,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Integration test for the agentic-loop agents network (a single autonomous agent
@@ -64,6 +65,8 @@ import reactor.core.publisher.Flux;
 		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK"
 })
 public class AgenticLoopNetworkTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgenticLoopNetworkTest").build();
 
 	private static final String ANSWER_MARKER = "AGENTIC_LOOP_TEST_ANSWER";
 	private static final String USER_QUESTION = "What is the capital of France?";
@@ -121,7 +124,7 @@ public class AgenticLoopNetworkTest extends AbstractBaseTestLLmsIntegrationTests
 		resources.setChathistory(new CSSConsolidatedChatHistory());
 
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192, resources,
-				new GeboChatResponse(), minimalChatContext, true);
+				new GeboChatResponse(), minimalChatContext, true, TOOL_CALLING);
 
 		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
 

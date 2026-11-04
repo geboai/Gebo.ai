@@ -125,16 +125,6 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<String, String> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<String>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<String, String> mySessionContext,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 
 		String inputText = msg.getPayload() != null ? msg.getPayload() : "";

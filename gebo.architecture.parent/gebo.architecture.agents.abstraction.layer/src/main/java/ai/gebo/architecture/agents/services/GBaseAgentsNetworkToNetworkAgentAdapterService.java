@@ -66,17 +66,6 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) network adapter id:" + getId() + " agentNetworkServiceCode:"
@@ -113,11 +102,9 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 							+ "' executeNetwork(...)");
 				}
 				// the nested network runs with what the outer one received
-				OutputType output = (OutputType) (toolCalling != null
-						? agentsNetworkService.executeNetwork(chatRequestContext, msg.getPayload(),
-								session.getEnvironment(), toolCalling)
-						: agentsNetworkService.executeNetwork(chatRequestContext, msg.getPayload(),
-								session.getEnvironment()));
+				OutputType output = (OutputType) agentsNetworkService.executeNetwork(chatRequestContext,
+						msg.getPayload(),
+								session.getEnvironment(), toolCalling);
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<ADAPTED_NETWORK_OUTPUT adapter=" + getId() + ">");
 					LOGGER.trace(String.valueOf(output));

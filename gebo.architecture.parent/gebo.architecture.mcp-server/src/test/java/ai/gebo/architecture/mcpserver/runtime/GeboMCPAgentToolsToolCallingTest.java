@@ -89,7 +89,6 @@ class GeboMCPAgentToolsToolCallingTest {
 		assertTrue(answer.contains("answered"), "the network's text, as the tool gives it back: " + answer);
 		ArgumentCaptor<GeboToolCalling> toolCalling = ArgumentCaptor.forClass(GeboToolCalling.class);
 		verify(runner).runNetwork(eq("the-network"), eq("hi"), isNull(), toolCalling.capture());
-		verify(runner, never()).runNetwork(any(String.class), any(), any());
 		assertEquals("mcp:sales/askSales", toolCalling.getValue().getCaller());
 		assertNull(toolCalling.getValue().getListener());
 	}

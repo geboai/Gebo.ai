@@ -33,12 +33,15 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * The report writer is an output of its network: its reasoning goes to the user's chat as
  * it comes, completed when the text starts, and its text is the answer only.
  */
 class ReportWriterThinkingTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:ReportWriterThinkingTest").build();
 	private static final IGDocumentContentRendererProvider NO_RENDERER = new IGDocumentContentRendererProvider() {
 		@Override
 		public <T> IGDocumentContentRenderer<T> get(T doc) {
@@ -55,7 +58,8 @@ class ReportWriterThinkingTest {
 		return new ReportWriterReactiveAgentServiceImpl(null, null, null, null, null, null, NO_RENDERER) {
 			@Override
 			protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
-					GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params) {
+					GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
+							GeboToolCalling toolCalling) {
 				return Flux.just(chunks);
 			}
 		};
@@ -68,7 +72,7 @@ class ReportWriterThinkingTest {
 
 		final List<String> text = writer(chunk("Outline: intro, findings.\n", ""), chunk("Then the summary.\n", ""),
 				chunk("", "# Report"), chunk("", "\n\nBody.")).writeReactive(mock(IGConfigurableChatModel.class),
-						new GPromptTemplateConfig(), null, Map.of(), chat)
+						new GPromptTemplateConfig(), null, Map.of(), chat, TOOL_CALLING)
 				.doOnNext(order::add).collectList().block();
 
 		assertEquals(List.of("# Report", "\n\nBody."), text, "the text is the answer only");
@@ -86,7 +90,7 @@ class ReportWriterThinkingTest {
 	void aSinkThatIsNoChatGetsTheTextOnly() throws Exception {
 		assertEquals(List.of("Text."), writer(chunk("Thinking.\n", ""), chunk("", "Text."))
 				.writeReactive(mock(IGConfigurableChatModel.class), new GPromptTemplateConfig(), null, Map.of(),
-						mock(INotificationSink.class))
+						mock(INotificationSink.class), TOOL_CALLING)
 				.collectList().block());
 	}
 }

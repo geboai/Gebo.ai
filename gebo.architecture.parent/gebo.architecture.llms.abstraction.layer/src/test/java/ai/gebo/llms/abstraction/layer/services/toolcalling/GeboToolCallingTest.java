@@ -2,6 +2,7 @@ package ai.gebo.llms.abstraction.layer.services.toolcalling;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -403,10 +404,14 @@ class GeboToolCallingTest {
 		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("agent").build();
 		ToolContext toolContext = new ToolContext(toolCalling.toolsContext(Map.of("other", "value")));
 
-		assertSame(toolCalling, GeboToolCallingManagerFactory.nestedFrom(toolContext));
+		assertSame(toolCalling, GeboToolCallingManagerFactory.nestedFrom(toolContext, "deepSearch"));
 		assertSame(toolCalling, GeboToolCalling.from(toolContext));
-		assertNull(GeboToolCallingManagerFactory.nestedFrom(new ToolContext(Map.of())));
-		assertNull(GeboToolCallingManagerFactory.nestedFrom(null));
+		// outside a governed call the tool gets one of its own, naming itself
+		final GeboToolCalling own = GeboToolCallingManagerFactory.nestedFrom(new ToolContext(Map.of()), "deepSearch");
+		assertNotNull(own, "a tool always has a container for its own model calls");
+		assertEquals(GeboToolCallingManagerFactory.TOOL_CALLER_PREFIX + "deepSearch", own.getCaller());
+		assertEquals(GeboToolCallingManagerFactory.TOOL_CALLER_PREFIX + "deepSearch",
+				GeboToolCallingManagerFactory.nestedFrom(null, "deepSearch").getCaller());
 	}
 
 	@Test

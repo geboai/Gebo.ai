@@ -45,7 +45,7 @@ public class GChatEnvironmentRunRequest {
 	 * What the caller adds to every model call of this run (see
 	 * {@link GeboToolCalling}): the interfaces the tools call back, the tools every
 	 * call declares, the loop's limits. Passed to the network, which passes it to its
-	 * agents. Null for nothing.
+	 * agents. Required: a run without one is refused.
 	 */
 	private final GeboToolCalling toolCallingOfThisRun;
 	/** Entries the caller adds to the environment of the network, last. */

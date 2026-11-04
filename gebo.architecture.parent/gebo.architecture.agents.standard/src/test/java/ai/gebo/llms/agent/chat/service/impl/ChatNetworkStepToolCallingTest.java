@@ -60,17 +60,5 @@ class ChatNetworkStepToolCallingTest {
 		step().executeNetwork(network, runtimeData(toolCalling), "What is new?", Map.of());
 
 		verify(network).executeNetwork(any(), eq("What is new?"), eq(Map.of()), same(toolCalling));
-		verify(network, never()).executeNetwork(any(), any(), any());
-	}
-
-	@Test
-	void aRequestWithoutOneRunsTheNetworkAsItAlwaysHas() throws Exception {
-		IGReactiveChatAgentsNetworkService network = mock(IGReactiveChatAgentsNetworkService.class);
-		when(network.executeNetwork(any(), any(), any())).thenReturn(null);
-
-		step().executeNetwork(network, runtimeData(null), "What is new?", Map.of());
-
-		verify(network).executeNetwork(any(), eq("What is new?"), eq(Map.of()));
-		verify(network, never()).executeNetwork(any(), any(), any(), any());
 	}
 }

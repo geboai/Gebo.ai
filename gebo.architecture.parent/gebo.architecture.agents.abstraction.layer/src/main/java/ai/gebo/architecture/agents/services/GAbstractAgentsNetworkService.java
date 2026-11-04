@@ -37,6 +37,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private static final String NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE = "Network input node does not support a matching type ";
 	private static final String NO_INPUT_NODE_CONFIGURED_IN_AGENTS_NETWORK = "No input node configured in agents network";
 	private static final String NO_AGENTS_CONFIGURED = "No agents configured";
+	private static final String NO_TOOL_CALLING_FOR_THE_RUN = "The run has no tool calling:"
+			+ " the entry point of a run builds one for every call of it";
 	private static final String NO_RUNTIME_ALLOCATED_FOR_INPUT_NODE = "No runtime agent allocated for input node: ";
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
@@ -169,20 +171,16 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	@Override
 	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			Map<String, Object> environment) throws AgentException, LLMConfigException {
-		return executeNetwork(chatRequestContext, input, environment, null);
-	}
-
-	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
 			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
 					+ " inputType:" + (input != null ? input.getClass().getName() : null) + " maxLoopIteration:"
 					+ (network != null ? network.getMaxLoopIteration() : null)
-					+ (toolCalling != null ? " with " + toolCalling : ""));
+					+ " with " + toolCalling);
 		}
-		if (toolCalling != null && toolCalling.getListener() != null && LOGGER.isDebugEnabled()) {
+		if (toolCalling == null)
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
+		if (toolCalling.getListener() != null && LOGGER.isDebugEnabled()) {
 			// each agent records its own tool calls, forwarded to the request's recorder; a
 			// listener on the run's container records beside them, every call of the run
 			LOGGER.debug("The tool calling of network:" + (network != null ? network.getCode() : null)
@@ -375,14 +373,10 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			notificationSink.next("Agent: " + participantName + " is working...", NotificationType.DEBUG);
 			List<AgentsExchangeMessage<?>> messages;
 			try {
-				// no container: the plain message, literally the agent's old method
-				messages = toolCalling != null
-						? inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
+				messages = inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
 								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
-								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao, toolCalling)
-						: inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
-								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
-								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao);
+								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao,
+										toolCalling);
 			} catch (Throwable failure) {
 				if (isInputNode) {
 					// The input node seeds the whole network: if it fails there is nothing

@@ -359,40 +359,20 @@ public class ReportWriterReactiveAgentServiceImpl
 	/**
 	 * The model's answer as it streams, with what its text alone does not carry: its
 	 * reasoning, every provider alike and every model round of its tools included, and why
-	 * it stopped.
-	 */
-	protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
-			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params)
-			throws LLMConfigException {
-		return chatModel.streamAnswer(prompt, params, context);
-	}
-
-	/**
-	 * The same, with what the controlling software adds to the call (see
-	 * {@link GeboToolCalling}): the plain call above when it adds nothing, so that
-	 * whatever overrides the plain one still answers.
+	 * it stopped; made with what the controlling software adds to the call (see
+	 * {@link GeboToolCalling}).
 	 */
 	protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
 			GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
 			GeboToolCalling toolCalling) throws LLMConfigException {
-		return toolCalling == null ? callLLMReactiveResponses(chatModel, prompt, context, params)
-				: chatModel.streamAnswer(prompt, params, context, toolCalling);
+		return chatModel.streamAnswer(prompt, params, context, toolCalling);
 	}
 
 	/**
 	 * The text the writer writes, as it streams: an output of the network, its reasoning
 	 * goes to the user's chat as it comes ({@code notificationSink}, when it is the chat's
-	 * emitter), completed when the text starts.
-	 */
-	protected Flux<String> writeReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-			IChatRequestContext context, Map<String, Object> params, INotificationSink notificationSink)
-			throws LLMConfigException {
-		return writeReactive(chatModel, prompt, context, params, notificationSink, null);
-	}
-
-	/**
-	 * The same, with what the controlling software adds to every model call of the run
-	 * (see {@link GeboToolCalling}); null for nothing.
+	 * emitter), completed when the text starts; made with what the controlling software
+	 * adds to every model call of the run (see {@link GeboToolCalling}).
 	 */
 	protected Flux<String> writeReactive(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
 			IChatRequestContext context, Map<String, Object> params, INotificationSink notificationSink, GeboToolCalling toolCalling)
@@ -583,21 +563,8 @@ public class ReportWriterReactiveAgentServiceImpl
 	 * each reduced to the flat list of its relevant facts with their sources; while
 	 * the extractions do not fit the final writing call they are grouped and reduced
 	 * again with the same prompt; the writer prompt then writes the answer from them,
-	 * with its own previous output as the base.
-	 */
-	protected Flux<String> streamThroughEvidenceExtraction(IChatRequestContext chatRequestContext,
-			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext, String request,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt, List<Map<String, Object>> params,
-			int tokenBudget, ReactiveIdentityUtil runAs, INotificationSink notificationSink) throws AgentException {
-		return streamThroughEvidenceExtraction(chatRequestContext, network, agentRole, contextAgentPersona, session,
-				mySessionContext, request, agentModel, agentPrompt, params, tokenBudget, runAs, notificationSink, null);
-	}
-
-	/**
-	 * The same, with what the controlling software adds to every model call of the run
-	 * (see {@link GeboToolCalling}); null for nothing.
+	 * with its own previous output as the base. Every model call is made with what
+	 * the controlling software adds to the run (see {@link GeboToolCalling}).
 	 */
 	protected Flux<String> streamThroughEvidenceExtraction(IChatRequestContext chatRequestContext,
 			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
@@ -668,17 +635,8 @@ public class ReportWriterReactiveAgentServiceImpl
 
 	/**
 	 * Runs the extraction prompt over every window, a few at a time, keeping the
-	 * windows' order; a failed call is logged, counted and left out.
-	 */
-	protected Mono<List<String>> extractAll(List<Map<String, Object>> windows, IGConfigurableChatModel agentModel,
-			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
-			AtomicInteger failures, ISinkUIEmitter emitter) {
-		return extractAll(windows, agentModel, extractorPrompt, chatRequestContext, runAs, failures, emitter, null);
-	}
-
-	/**
-	 * The same, with what the controlling software adds to every model call of the run
-	 * (see {@link GeboToolCalling}); null for nothing.
+	 * windows' order; a failed call is logged, counted and left out. Each call is made
+	 * with what the controlling software adds to the run (see {@link GeboToolCalling}).
 	 */
 	protected Mono<List<String>> extractAll(List<Map<String, Object>> windows, IGConfigurableChatModel agentModel,
 			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
@@ -697,8 +655,8 @@ public class ReportWriterReactiveAgentServiceImpl
 										window.get(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)))
 								+ " (tok)");
 					}
-					String extraction = (toolCalling != null ? agentModel.textResponse(extractorPrompt, window, chatRequestContext, toolCalling)
-				: agentModel.textResponse(extractorPrompt, window, chatRequestContext));
+					String extraction = agentModel.textResponse(extractorPrompt, window, chatRequestContext,
+							toolCalling);
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Extracted the evidence of window " + number + " of " + windows.size()
 								+ " into " + ITokensCountable.stringsTokensSize(extraction) + " (tok), relevant:"
@@ -728,20 +686,8 @@ public class ReportWriterReactiveAgentServiceImpl
 	 * Reduces the extractions until they fit the final writing call: they are grouped
 	 * as long as a group fits one extraction call, and each group is extracted again.
 	 * When grouping no longer reduces them, the budget is shared equally among them
-	 * as a last resort.
-	 */
-	protected List<String> reduceExtractions(List<String> extractions, int finalBudget, int groupBudget,
-			Map<String, Object> extractorParams, IGConfigurableChatModel agentModel,
-			GPromptTemplateConfig extractorPrompt, IChatRequestContext chatRequestContext, ReactiveIdentityUtil runAs,
-			AtomicInteger failures, ISinkUIEmitter emitter, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink) {
-		return reduceExtractions(extractions, finalBudget, groupBudget, extractorParams, agentModel, extractorPrompt,
-				chatRequestContext, runAs, failures, emitter, contextAgentPersona, notificationSink, null);
-	}
-
-	/**
-	 * The same, with what the controlling software adds to every model call of the run
-	 * (see {@link GeboToolCalling}); null for nothing.
+	 * as a last resort. Each call is made with what the controlling software adds to
+	 * the run (see {@link GeboToolCalling}).
 	 */
 	protected List<String> reduceExtractions(List<String> extractions, int finalBudget, int groupBudget,
 			Map<String, Object> extractorParams, IGConfigurableChatModel agentModel,

@@ -79,17 +79,6 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<List<Document>>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<SearchAgentCommand> msg, int actualContributionNr,
-			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) documents search agent id:" + getId() + " persona:"
@@ -122,17 +111,13 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 				NotificationType.INFO);
 		// how the search went (e.g. the sources it could not reach), told to the agents reading it
 		final List<String> statusNotices = new ArrayList<>();
-		List<Document> documents = toolCalling != null
-				? retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole, contextAgentPersona,
-						session, mySessionContext, msg, agentsDao, notificationSink, statusNotices, toolCalling)
-				: retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole, contextAgentPersona,
-						session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
+		List<Document> documents = retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole,
+				contextAgentPersona,
+						session, mySessionContext, msg, agentsDao, notificationSink, statusNotices, toolCalling);
 		// what the agent hands over: the documents found, or what it made of them
-		documents = toolCalling != null
-				? deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session, contextAgentPersona,
-						notificationSink, runAs, statusNotices, toolCalling)
-				: deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session, contextAgentPersona,
-						notificationSink, runAs, statusNotices);
+		documents = deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session,
+				contextAgentPersona,
+						notificationSink, runAs, statusNotices, toolCalling);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
 				+ documents.size() + " evidences", NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
@@ -173,12 +158,16 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 	 * @param agentModel         the model the agent runs with
 	 * @param session            the collaboration session of the network
 	 * @param runAs              the identity the agent runs as
+	 * @param toolCalling        what the controlling software adds to the model calls
+	 *                           of this agent (see {@link GeboToolCalling}), for an
+	 *                           agent that makes model calls of its own in handing
+	 *                           over (a deep search analysis)
 	 */
 	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
 			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
 			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices)
-			throws AgentException {
+			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices,
+			GeboToolCalling toolCalling) throws AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("deliverDocuments(...) documents search agent id:" + getId() + " hands over "
 					+ (documents != null ? documents.size() : 0) + " document(s) as retrieved");
@@ -187,60 +176,19 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 	}
 
 	/**
-	 * The same, with what the controlling software adds to the model calls of this
-	 * agent (see {@link GeboToolCalling}), for an agent that makes model calls of its
-	 * own in handing over (a deep search analysis). By default the documents are handed
-	 * over as without it.
-	 */
-	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
-			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
-			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices,
-			GeboToolCalling toolCalling) throws AgentException {
-		return deliverDocuments(documents, command, chatRequestContext, agentModel, session, contextAgentPersona,
-				notificationSink, runAs, statusNotices);
-	}
-
-	/**
 	 * Retrieves the documents, adding to {@code statusNotices} what the agents reading
-	 * them must know of how the search went (e.g. the sources it could not reach). By
-	 * default {@link #retrieveDocuments(GPromptTemplateConfig, IChatRequestContext, IGConfigurableChatModel, Map, GAgentsNetwork, GAgentRole, AgentNetworkParticipant, AgentsCollaborationSessionContext, AgentPrivateSessionContext, AgentsExchangeMessage, IGAgentsNetworkRuntimeDao, INotificationSink)},
-	 * telling nothing.
+	 * them must know of how the search went (e.g. the sources it could not reach), with
+	 * what the controlling software adds to the model calls of this agent (see
+	 * {@link GeboToolCalling}): an agent whose retrieval makes model calls (a search
+	 * planner, a native query, a ranking) makes them with it.
 	 */
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink, List<String> statusNotices) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink);
-	}
-
-	/**
-	 * The same, with what the controlling software adds to the model calls of this
-	 * agent (see {@link GeboToolCalling}): an agent whose retrieval makes model calls (a
-	 * search planner, a native query, a ranking) overrides this and makes them with it.
-	 * By default the documents are retrieved as without it.
-	 */
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+	protected abstract List<Document> retrieveDocuments(GPromptTemplateConfig prompt,
+			IChatRequestContext chatRequestContext,
 			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
 			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink, List<String> statusNotices, GeboToolCalling toolCalling)
-			throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, statusNotices);
-	}
-
-	protected abstract List<Document> retrieveDocuments(GPromptTemplateConfig prompt,
-			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel, Map<String, Object> params,
-			GAgentsNetwork network, GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink) throws AgentException;
+			throws AgentException;
 }

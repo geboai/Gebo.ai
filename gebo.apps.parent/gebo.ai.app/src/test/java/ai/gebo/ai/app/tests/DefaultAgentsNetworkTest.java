@@ -41,6 +41,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Integration test for the standard default agents network (controller +
@@ -71,6 +72,8 @@ import reactor.core.publisher.Flux;
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=DEFAULT_AGENTS_NETWORK" })
 public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:DefaultAgentsNetworkTest").build();
 
 	private static final String ANSWER_MARKER = "GEBO_TEST_ANSWER_42";
 	private static final String WRITING_INSTRUCTION = "Write a concise direct answer to the user question.";
@@ -155,7 +158,7 @@ public class DefaultAgentsNetworkTest extends AbstractBaseTestLLmsIntegrationTes
 		resources.setChathistory(new CSSConsolidatedChatHistory());
 
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192, resources,
-				new GeboChatResponse(), minimalChatContext, true);
+				new GeboChatResponse(), minimalChatContext, true, TOOL_CALLING);
 
 		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
 

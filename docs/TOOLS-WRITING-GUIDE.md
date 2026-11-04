@@ -372,8 +372,9 @@ The software that makes a model call (an agent, a network, the harness, a
 service) can hand the call a **`GeboToolCalling`**: a per-call container built
 with `GeboToolCallingManagerFactory.builder()` and passed to the overloads of
 `IGConfigurableChatModel` that take it (`textResponse(..., toolCalling)`,
-`response`, `answer`, `structuredResponse`, `streamAnswer`, ...). Without it the
-call is the plain one described above. It carries:
+`response`, `answer`, `structuredResponse`, `streamAnswer`, ...). Inside a run
+of agents it is required at every layer (see below); the model's plain methods
+remain for a caller outside any run. It carries:
 
 - **Mandatory tools** (`mandatoryTool(...)`): declared on the call whatever the
   model configuration says, wrapped in `RunAsToolCallback` like every other
@@ -406,10 +407,11 @@ the one read.
 
 ### How it travels through a network of agents
 
-The container is an **explicit parameter** at every layer between the
-controlling software and the model, each with an overload taking a trailing
-`GeboToolCalling` (null is the plain run, and the old signatures delegate with
-null): `GChatEnvironmentRunRequest.toolCallingOfThisRun` and the runners
+The container is an **explicit, required parameter** at every layer between
+the controlling software and the model, the trailing `GeboToolCalling` of one
+signature with no form without it: a network given none refuses the run with an
+`AgentException`, and so do the runners. The entry point of a run is the one
+place that builds it: `GChatEnvironmentRunRequest.toolCallingOfThisRun` and the runners
 (`GChatEnvironmentNetworkRunner.run`, `GTextAgentsNetworkRunner.runNetwork` and
 `runAgent`), `IGAgentsNetworkService.executeNetwork`,
 `IGNetworkAgentService.onMessage`, `IGReactiveAgentService.execute` and the
@@ -442,8 +444,8 @@ each name themselves as the caller and carry the platform's loop limits
 (`gebo.tools.calling.*`, Spring's own when unset) and no listener. A pipeline
 step passes the request's container to its helper calls
 (`callLLMRepeatableFieldEntryOutput(..., toolCalling)`, `callLLMReactiveAnswer(...,
-toolCalling)`), branching on null so that a request made without one is the
-plain call. The services behind a request pass it on the same way: the LLM
+toolCalling)`); every request has one, built by its entry point. The services
+behind a request pass it on the same way: the LLM
 assisted retrieval and the ranker's irrelevance filter, the deep search data
 sources' query extraction, the documents search agents' planners, queries and
 rankings.
@@ -457,17 +459,20 @@ their entry: every model call of the platform is then made by someone who says
 who it is.
 
 **A tool that calls a model of its own** (a deep search's analysis) has no
-parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`
-gives it the container it runs in (null outside a governed call), to pass to the
-model it calls, so what the controlling software loaded reaches the nested call.
+parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext, toolName)`
+gives it the container it runs in, or one of its own (`tool:<tool name>`) when it
+runs outside a governed call, never null, to pass to the model it calls, so what
+the controlling software loaded reaches the nested call.
 The deep search tools do so: `AbstractDeepSearchTool` reads it and hands it through
 `DeepSearchToolAnalysis` to `DeepSearchAnalysis`, whose every model call (the partial
 analyses, the folds, the final one) is made with it; the deep search answering a
 chat hands the request's to the same analysis. The search tools that only rank what
 they found call no chat model: there is nothing to pass.
 
-A call made with a null container is the plain call, literally the old method of
-the model, so whatever stubs or overrides the plain one still answers.
+Below the agents layer the model keeps its plain methods for a caller outside
+any run (and whatever stubs or overrides them still answers); inside a run
+nothing reaches them, every call carrying the run's container. A test running a
+network or an agent builds one for it: `GeboToolCalling.builder().caller("test:<name>").build()`.
 
 A tool that must **end the call** (it asked the user something and the work
 waits for the answer; it waits for an external event) is declared with

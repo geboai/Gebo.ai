@@ -48,6 +48,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.read.ListAppender;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Every chat model call leaves exactly one llmInvokeChat event in the security audit
@@ -58,6 +59,8 @@ import reactor.core.publisher.Flux;
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK" })
 public class ModelCallSecurityAuditIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:ModelCallSecurityAuditIntegrationTest").build();
 
 	private static final String USER_QUESTION = "What is the capital of France?";
 	private static final String ANSWER = "MODEL_AUDIT_TEST_ANSWER: the capital of France is Paris.";
@@ -161,7 +164,7 @@ public class ModelCallSecurityAuditIntegrationTest extends AbstractBaseTestLLmsI
 		resources.setCurrentRequest(request);
 		resources.setChathistory(new CSSConsolidatedChatHistory());
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192, resources,
-				new GeboChatResponse(), minimalChatContext, true);
+				new GeboChatResponse(), minimalChatContext, true, TOOL_CALLING);
 		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
 		ISinkUIEmitter emitter = new ISinkUIEmitter() {
 			@Override

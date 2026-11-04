@@ -11,21 +11,16 @@ public interface IGAgentsNetworkService<InputType, OutputType> {
 
 	String getDescription();
 
-	OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input, Map<String, Object> environment)
-			throws AgentException, LLMConfigException;
-
 	/**
-	 * The same run, with what the software controlling it adds to every model call of
-	 * it (see {@link GeboToolCalling}): the network passes it to each of its agents,
-	 * which pass it to their model and to whatever they call that takes one - a
-	 * nested network, a reactive agent, a tool's own model call. Null is the plain
-	 * run. An implementation that does not take it runs the plain run.
+	 * Runs the network on the input, in the environment, with what the software
+	 * controlling the run adds to every model call of it (see
+	 * {@link GeboToolCalling}): the entry point of the run builds it and every
+	 * agent of the network receives it. Required: a run with no tool calling is
+	 * refused with an {@link AgentException}.
 	 */
-	default OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
-		return executeNetwork(chatRequestContext, input, environment);
-	}
-	
+	OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException;
+
 	Class<OutputType> getOutputType();
 
 	Class<InputType> getInputType();

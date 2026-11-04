@@ -100,17 +100,6 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) tool-calling agent id:" + getId() + " persona:"
@@ -157,8 +146,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from tool-calling agent model id:" + getId());
 			}
-			output = (OutputType) (toolCalling != null ? agentModel.textResponse(prompt, params, callContext, toolCalling)
-				: agentModel.textResponse(prompt, params, callContext));
+			output = (OutputType) agentModel.textResponse(prompt, params, callContext, toolCalling);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -168,8 +156,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from tool-calling agent model id:" + getId()
 						+ " targetType:" + outputType.getName());
 			}
-			output = (OutputType) (toolCalling != null ? agentModel.structuredResponse(prompt, params, callContext, outputType, toolCalling)
-				: agentModel.structuredResponse(prompt, params, callContext, outputType));
+			output = (OutputType) agentModel.structuredResponse(prompt, params, callContext, outputType, toolCalling);
 		}
 
 		if (LOGGER.isDebugEnabled()) {

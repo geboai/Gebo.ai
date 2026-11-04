@@ -23,8 +23,8 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
  * notified and messages not yet delivered are delivered to receiving agents
  * that will cause their execution.
  * 
- *  THE ALGORITHM TO SUSPEND THE NETWORK IS A
- * VERSION OF THE Chandy-Lamport ALGORITHM FOR CUT ON DISTRIBUTED SYSTEMS
+ * THE ALGORITHM TO SUSPEND THE NETWORK IS A VERSION OF THE Chandy-Lamport
+ * ALGORITHM FOR CUT ON DISTRIBUTED SYSTEMS
  */
 public interface IGAgentsSuspensionHandler {
 	/**********************************************************************************************************
@@ -47,7 +47,7 @@ public interface IGAgentsSuspensionHandler {
 	 * @param waitForCondition
 	 * @throws AgentException
 	 */
-	public void enterSuspensionState(String networkExecutionId, GAgentsNetwork agentsNetwork, GAgentConfig agentConfig,
+	public void enterSuspensionState(GAgentsNetwork agentsNetwork, GAgentConfig agentConfig,
 			AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
 			AgentSuspendedWaitingCondition waitForCondition) throws AgentException;
 
@@ -64,8 +64,8 @@ public interface IGAgentsSuspensionHandler {
 	 * @param messages
 	 * @throws AgentException
 	 */
-	public void setSuspendingMessagesNotYetDelivered(String networkExecutionId, GAgentsNetwork agentsNetwork,
-			GAgentConfig agentConfig, AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
+	public void setSuspendingMessagesNotYetDelivered(GAgentsNetwork agentsNetwork, GAgentConfig agentConfig,
+			AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
 			List<AgentsExchangeMessage> messages) throws AgentException;
 
 	/************************************************************************
@@ -86,11 +86,11 @@ public interface IGAgentsSuspensionHandler {
 	 * @param sharedContext
 	 * @throws AgentException
 	 */
-	public void setSuspendingNetworkOfAgentsSharedState(String networkExecutionId,
-			AgentsCollaborationSessionContext sharedContext) throws AgentException;
+	public void setSuspendingNetworkOfAgentsSharedState(AgentsCollaborationSessionContext sharedContext)
+			throws AgentException;
 
 	/**********************************************************
 	 * This causes the network execution to be declared finished
 	 */
-	public void networkExecutionFinished(String networkExecutionId);
+	public void networkExecutionFinished();
 }

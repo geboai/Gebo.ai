@@ -83,6 +83,8 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 @Service
 public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GChatEnvironmentNetworkRunner.class);
+	static final String NO_TOOL_CALLING_FOR_THE_RUN = "The run has no tool calling:"
+			+ " the entry point of a run builds one for every call of it";
 
 	private final IGRuntimeBinder runtimeBinder;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
@@ -190,34 +192,15 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/**
-	 * Runs the named network on the environment of the given request, as the
-	 * identity in the current security context - which a caller with nobody behind
-	 * it must have taken on before calling.
-	 *
-	 * @throws AgentException when the network does not exist or the run cannot be
-	 *                        prepared
-	 */
-	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, ChatRunAttachments attachments,
-			INotificationSink sink) throws AgentException {
-		final GAgentsNetwork network = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)
-				.findByCode(networkCode);
-		if (network == null) {
-			throw new AgentException("The network of agents does not exist: " + networkCode);
-		}
-		return run(network, request, attachments, sink);
-	}
-
-	/**
-	 * The same, with what the caller adds to every model call of the run (see
-	 * {@link GeboToolCalling}): a caller outside a chat that wants its runs to say who
-	 * made them, to keep within limits of its own or to provide its tools with
-	 * something passes it here. Null for nothing, which is the run as it always has
-	 * been.
+	 * Runs the network of the code in the conversation of the request, with what
+	 * the caller adds to every model call of the run (see {@link GeboToolCalling}):
+	 * who made it, the limits it keeps within, what its tools are given. Required:
+	 * the entry point of a run builds one, and a run without one is refused.
 	 */
 	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, ChatRunAttachments attachments,
 			GeboToolCalling toolCallingOfThisRun, INotificationSink sink) throws AgentException {
 		if (toolCallingOfThisRun == null) {
-			return run(networkCode, request, attachments, sink);
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
 		}
 		final GAgentsNetwork network = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)
 				.findByCode(networkCode);
@@ -228,34 +211,11 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/**
-	 * The same, on a network the caller has already resolved and may have adjusted
-	 * for this run - how many times its controller may act, above all.
-	 * <p>
-	 * A chat is bounded because somebody is waiting for the answer. A caller that
-	 * nobody is waiting for can let the network work for as long as the work takes,
-	 * and says so by handing in a network whose loop limit is its own. Adjust a
-	 * copy ({@link GAgentsNetwork#jsonClone()}), never the stored configuration.
-	 */
-	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
-			INotificationSink sink) throws AgentException {
-		return run(network, request, attachments, List.of(), sink);
-	}
-
-	/**
-	 * The same, with rules this run is to follow on top of the conversation's own -
-	 * the way the rules of a chat reach every model call, since that is what they
-	 * are for.
-	 */
-	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
-			List<String> rulesOfThisRun, INotificationSink sink) throws AgentException {
-		return run(network, request, attachments, rulesOfThisRun, Map.of(), sink);
-	}
-
-	/**
-	 * The same, with values the tools of this run can read from their own tool
-	 * context - how anything a tool needs to know about the run it is serving
-	 * reaches it (see {@code ToolCallbackDeclarationUtil}). A caller whose tools
-	 * must know which of its runs they are in puts that here.
+	 * Runs the network in the conversation of the request, with rules this run is
+	 * to follow on top of the conversation's own, values the tools of this run read
+	 * from their tool context (see {@code ToolCallbackDeclarationUtil}), and what
+	 * the caller adds to every model call of the run (see {@link GeboToolCalling}),
+	 * passed to the network and by the network to its agents; required.
 	 * <p>
 	 * This is the run an exported A2A network makes, and it runs as it always has:
 	 * the request is neither understood nor told where it comes from, the network
@@ -264,21 +224,13 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	 * the run that does those things.
 	 */
 	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
-			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, INotificationSink sink)
-			throws AgentException {
-		return run(network, request, attachments, rulesOfThisRun, toolsContextOfThisRun, null, sink);
-	}
-
-	/**
-	 * The same, with what the caller adds to every model call of the run (see
-	 * {@link GeboToolCalling}), passed to the network and by the network to its
-	 * agents; null for nothing.
-	 */
-	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
 			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, GeboToolCalling toolCallingOfThisRun,
 			INotificationSink sink) throws AgentException {
 		if (network == null) {
 			throw new AgentException("There is no network of agents to run");
+		}
+		if (toolCallingOfThisRun == null) {
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
 		}
 		final String networkCode = network.getCode();
 		final IGReactiveChatAgentsNetworkServiceFactory factory = runtimeBinder
@@ -342,9 +294,8 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			// the network is asked the question its input adapter used to read from the
 			// minimal chat context's current request, which is this request
 			final String question = GeboChatRequest.actualQuery(request);
-			final GeboChatMessageEnvelope last = toolCallingOfThisRun != null
-					? service.executeNetwork(context, question != null ? question : "", null, toolCallingOfThisRun)
-					: service.executeNetwork(context, question != null ? question : "", null);
+			final GeboChatMessageEnvelope last = service.executeNetwork(context,
+					question != null ? question : "", null, toolCallingOfThisRun);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
@@ -438,6 +389,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 		if (run.getRequest() == null) {
 			throw new AgentException("There is no request to run the network of agents on");
 		}
+		if (run.getToolCallingOfThisRun() == null) {
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
+		}
 		final GAgentsNetwork network = run.getNetwork();
 		final GeboChatRequest request = run.getRequest();
 		final String networkCode = network.getCode();
@@ -526,10 +480,8 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 				}
 			}
 			// the network is asked the caller's question; the request is in its environment
-			final GeboChatMessageEnvelope last = run.getToolCallingOfThisRun() != null
-					? service.executeNetwork(context, GeboChatRequest.actualQuery(request), environment,
-							run.getToolCallingOfThisRun())
-					: service.executeNetwork(context, GeboChatRequest.actualQuery(request), environment);
+			final GeboChatMessageEnvelope last = service.executeNetwork(context, GeboChatRequest.actualQuery(request),
+					environment, run.getToolCallingOfThisRun());
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));

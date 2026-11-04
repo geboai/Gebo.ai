@@ -128,24 +128,7 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		return DeepSearchReduction.depthOf(command != null ? command.getDeepSearchDepth() : null);
 	}
 
-	/**
-	 * A deep search: the fragments found are analysed batch by batch against the
-	 * command and the analyses reduced into one, handed over as a single document
-	 * with the codes of the documents it rests on ({@link #DEEP_SEARCH_SOURCE_CODES}),
-	 * whose refs are published for the answer's documents. When the analysis cannot
-	 * run the fragments are handed over as they are, and the readers are told.
-	 */
-	@Override
-	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
-			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
-			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices)
-			throws AgentException {
-		return deliverDocuments(documents, command, chatRequestContext, agentModel, session, contextAgentPersona,
-				notificationSink, runAs, statusNotices, null);
-	}
-
-	/** The same, the deep search analysis made with the container when given. */
+	/** The documents as retrieved, or what the deep search asked for makes of them. */
 	@Override
 	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
 			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
@@ -154,7 +137,7 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			GeboToolCalling toolCalling) throws AgentException {
 		if (!deepSearchRequested(command)) {
 			return super.deliverDocuments(documents, command, chatRequestContext, agentModel, session,
-					contextAgentPersona, notificationSink, runAs, statusNotices);
+					contextAgentPersona, notificationSink, runAs, statusNotices, toolCalling);
 		}
 		final List<Document> fragments = documents != null ? documents : List.of();
 		final Depth depth = deepSearchDepth(command);
@@ -175,11 +158,8 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		}
 		DeepSearchReduction.Outcome outcome;
 		try {
-			outcome = toolCalling != null
-					? DeepSearchReduction.reduce(deepSearchSupport(), getId(), command.getCommand(), depth, fragments,
-							chatRequestContext, agentModel, runAs, progressNotifier(notificationSink), toolCalling)
-					: DeepSearchReduction.reduce(deepSearchSupport(), getId(), command.getCommand(), depth, fragments,
-							chatRequestContext, agentModel, runAs, progressNotifier(notificationSink));
+			outcome = DeepSearchReduction.reduce(deepSearchSupport(), getId(), command.getCommand(), depth, fragments,
+							chatRequestContext, agentModel, runAs, progressNotifier(notificationSink), toolCalling);
 		} catch (RuntimeException e) {
 			LOGGER.error("Deep search analysis failed for agent id:" + getId() + ", the fragments found are handed over",
 					e);
@@ -303,29 +283,10 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	}
 
 	/**
-	 * Ranks the documents with the ranker service when the command requests it and a
-	 * ranker is configured; otherwise returns them unchanged.
+	 * The documents ranked when the command asks for it and a ranker is configured,
+	 * the irrelevant ones removed by the ranking's filter, made with the run's
+	 * container; the documents as they are otherwise.
 	 */
-	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command) throws AgentException {
-		return maybeRank(documents, command, null);
-	}
-
-	/**
-	 * Ranks the retrieved documents when asked to, and tells the user which documents
-	 * the search ended up on.
-	 * <p>
-	 * The names are announced after ranking rather than after retrieval on purpose:
-	 * retrieval deliberately over fetches (see {@link #retrievalTopK}) and the ranker
-	 * then discards most of it, so the retrieved set would name documents that never
-	 * reach the answer. What is announced here is what the writer will actually work
-	 * from.
-	 */
-	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command,
-			INotificationSink notificationSink) throws AgentException {
-		return maybeRank(documents, command, notificationSink, null);
-	}
-
-	/** The same, the ranking's irrelevance filter made with the container when given. */
 	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command,
 			INotificationSink notificationSink, GeboToolCalling toolCalling) throws AgentException {
 		if (notificationSink != null && documents != null && !documents.isEmpty() && rankingRequested(command)
@@ -417,10 +378,9 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 					LOGGER.trace(command.getCommand());
 					LOGGER.trace("</RANKING_QUERY>");
 				}
-				List<Document> ranked = toolCalling != null
-						? rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(), command.getTopK(),
-								toolCalling)
-						: rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(), command.getTopK());
+				List<Document> ranked = rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(),
+						command.getTopK(),
+								toolCalling);
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Ranking produced " + (ranked != null ? ranked.size() : 0)
 							+ " document(s) for agent id:" + getId());

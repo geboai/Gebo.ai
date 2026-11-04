@@ -338,19 +338,16 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 			// the analysis is asked to fit the room its model call leaves (see lengthTarget)
 			final int roomForAnalysis = ToolsTokenBudget.grantFor(toolContext, support.maxAnalysisTokens());
-			// the container of the call this tool runs in, when it runs in a governed call:
-			// what the controlling software loaded reaches the analysis' model calls too
-			final GeboToolCalling toolCalling = GeboToolCallingManagerFactory.nestedFrom(toolContext);
+			// the container of the call this tool runs in, or its own outside a governed
+			// call: what the controlling software loaded reaches the analysis' model calls
+			final GeboToolCalling toolCalling = GeboToolCallingManagerFactory.nestedFrom(toolContext,
+					toolName);
 			final IChatRequestContext analysisContext = analysisContext(question, requestId,
 					ToolCallbackDeclarationUtil.userLanguage(toolContext));
 			final String completeness = TOOL_COMPLETENESS_NOTE + lengthTarget(param.getDepth(), roomForAnalysis);
-			final Flux<String> analysisFlux = toolCalling != null
-					? support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
+			final Flux<String> analysisFlux = support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
 							ReactiveIdentityUtil.create(), deliverable, completeness, chatModel, serviceModel,
-							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome, toolCalling)
-					: support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
-							ReactiveIdentityUtil.create(), deliverable, completeness, chatModel, serviceModel,
-							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome);
+							discardedFragmentIds, ToolsProgress.from(toolContext), analysisOutcome, toolCalling);
 			final String analysis = analysisFlux.reduce(new StringBuilder(), StringBuilder::append)
 					.map(StringBuilder::toString).block(DEEP_SEARCH_TIMEOUT);
 			// the fragments the analysis left unread are never its sources

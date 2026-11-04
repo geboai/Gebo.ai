@@ -116,17 +116,6 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
-			throws AgentException, LLMConfigException {
-		return execute(chatRequestContext, agentConfig, request, network, contextAgentPersona, notificationSink,
-				session, privateMemory, runAs, null);
-	}
-
-	@Override
-	public Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
-			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
 			throws AgentException, LLMConfigException {
 
