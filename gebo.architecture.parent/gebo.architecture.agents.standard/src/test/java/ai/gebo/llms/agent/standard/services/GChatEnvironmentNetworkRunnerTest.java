@@ -40,6 +40,7 @@ import org.mockito.InOrder;
 import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.architecture.agents.services.AgentException;
@@ -121,7 +122,8 @@ class GChatEnvironmentNetworkRunnerTest {
 		GeboChatResponse answered = new GeboChatResponse();
 		answered.setQueryResponse("Nothing new since yesterday.");
 		answered.setListedDocumentNames(List.of("the-report.pdf"));
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(new GeboChatMessageEnvelope(answered));
+		when(service.executeNetwork(any(), any(), any(), any()))
+				.thenReturn(NetworkOfAgentsExecutionResult.of(new GeboChatMessageEnvelope(answered)));
 
 		ChatEnvironmentRun run = runner.run(network, request, ChatRunAttachments.none(), null, null, TOOL_CALLING,
 				null);

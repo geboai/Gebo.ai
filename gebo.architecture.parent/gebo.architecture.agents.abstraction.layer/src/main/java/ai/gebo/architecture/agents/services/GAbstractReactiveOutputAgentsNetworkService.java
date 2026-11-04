@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -34,7 +35,7 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 	}
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+	public NetworkOfAgentsExecutionResult<OutputType> executeNetwork(IChatRequestContext chatRequestContext, InputType input,
 			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) reactive output agents network service, inputType:"

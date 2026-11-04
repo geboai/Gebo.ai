@@ -2,6 +2,7 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.Map;
 
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
@@ -18,7 +19,7 @@ public interface IGAgentsNetworkService<InputType, OutputType> {
 	 * agent of the network receives it. Required: a run with no tool calling is
 	 * refused with an {@link AgentException}.
 	 */
-	OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+	NetworkOfAgentsExecutionResult<OutputType> executeNetwork(IChatRequestContext chatRequestContext, InputType input,
 			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException;
 
 	Class<OutputType> getOutputType();

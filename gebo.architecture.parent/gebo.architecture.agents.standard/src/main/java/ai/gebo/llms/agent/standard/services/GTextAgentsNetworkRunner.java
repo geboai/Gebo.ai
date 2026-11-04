@@ -204,7 +204,7 @@ public class GTextAgentsNetworkRunner {
 						context.knowledgeBases().size());
 			}
 			String output = service.executeNetwork(context.requestContext(), context.inputText(),
-					context.environment(), context.toolCalling());
+					context.environment(), context.toolCalling()).getResult();
 			return output != null ? output : "";
 		} catch (AgentException ae) {
 			throw ae;
@@ -276,7 +276,7 @@ public class GTextAgentsNetworkRunner {
 			// synthesized request
 			final String question = GeboChatRequest.actualQuery(request);
 			GeboChatMessageEnvelope last = service.executeNetwork(resources.createChatRequestContext(),
-					question != null ? question : "", context.environment(), context.toolCalling());
+					question != null ? question : "", context.environment(), context.toolCalling()).getResult();
 			List<GeboChatMessageEnvelope> streamed = flux.collectList().block(CHAT_ANSWER_COLLECTION_TIMEOUT);
 			return answerOf(last, streamed);
 		} catch (AgentException ae) {

@@ -45,12 +45,13 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 	 * calls that takes one, in one of three ways: as it is; one of its own in its
 	 * place; the two {@link GeboToolCalling#merged(GeboToolCalling, GeboToolCalling)}.
 	 * Never null: the network refuses a run without one.
+	 * @param suspensionHandler TODO
 	 */
 	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
 			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling)
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler)
 			throws LLMConfigException, AgentException;
 }

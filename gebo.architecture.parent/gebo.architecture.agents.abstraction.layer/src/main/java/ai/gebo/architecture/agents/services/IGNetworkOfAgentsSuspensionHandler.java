@@ -26,7 +26,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
  * THE ALGORITHM TO SUSPEND THE NETWORK IS A VERSION OF THE Chandy-Lamport
  * ALGORITHM FOR CUT ON DISTRIBUTED SYSTEMS
  */
-public interface IGAgentsSuspensionHandler {
+public interface IGNetworkOfAgentsSuspensionHandler {
 	/**********************************************************************************************************
 	 * Initializes the handler for network of agent execution
 	 * 
@@ -34,7 +34,7 @@ public interface IGAgentsSuspensionHandler {
 	 * @param agentsNetwork
 	 * @throws AgentException
 	 */
-	public void initialize(String networkExecutionId, GAgentsNetwork agentsNetwork) throws AgentException;
+	public void initialize(GAgentsNetwork agentsNetwork) throws AgentException;
 
 	/********************************************************************************************************************
 	 * Called by the agent asking for suspension
@@ -93,4 +93,6 @@ public interface IGAgentsSuspensionHandler {
 	 * This causes the network execution to be declared finished
 	 */
 	public void networkExecutionFinished();
+
+	public List<AgentSuspendedWaitingCondition> suspensionConditions() throws AgentException;
 }

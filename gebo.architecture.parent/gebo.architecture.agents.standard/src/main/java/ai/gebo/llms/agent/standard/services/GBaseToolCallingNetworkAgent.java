@@ -19,6 +19,7 @@ import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentServic
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGNetworkOfAgentsSuspensionHandler;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -100,7 +101,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) tool-calling agent id:" + getId() + " persona:"
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)

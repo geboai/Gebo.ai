@@ -20,6 +20,7 @@ import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.AgentsSessionCreationContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -170,13 +171,13 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+	public NetworkOfAgentsExecutionResult<OutputType> executeNetwork(IChatRequestContext chatRequestContext,
+			InputType input, Map<String, Object> environment, GeboToolCalling toolCalling)
+			throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
 					+ " inputType:" + (input != null ? input.getClass().getName() : null) + " maxLoopIteration:"
-					+ (network != null ? network.getMaxLoopIteration() : null)
-					+ " with " + toolCalling);
+					+ (network != null ? network.getMaxLoopIteration() : null) + " with " + toolCalling);
 		}
 		if (toolCalling == null)
 			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
@@ -212,9 +213,17 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		}
 		OutputType producedOutput = null;
 		Throwable failure = null;
+		IGNetworkOfAgentsSuspensionHandler suspensionHandler = null;
 		try {
-			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName, toolCalling);
-			return producedOutput;
+			suspensionHandler.initialize(network);
+			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName, toolCalling,
+					suspensionHandler);
+			if (suspensionHandler.isSuspensionState()) {
+				suspensionHandler.setSuspendingNetworkOfAgentsSharedState(session);
+				suspensionHandler.networkExecutionFinished();
+				return NetworkOfAgentsExecutionResult.suspended(suspensionHandler.suspensionConditions());
+			}
+			return NetworkOfAgentsExecutionResult.of(producedOutput);
 		} catch (AgentException | LLMConfigException | RuntimeException | Error runFailure) {
 			failure = runFailure;
 			throw runFailure;
@@ -227,10 +236,12 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	/**
 	 * The run itself, in the session it collaborates in.
+	 * 
+	 * @param suspensionHandler TODO
 	 */
 	private OutputType executeNetworkInSession(IChatRequestContext chatRequestContext, InputType input,
-			AgentsCollaborationSessionContext session, String inputNodeName, GeboToolCalling toolCalling)
-			throws AgentException, LLMConfigException {
+			AgentsCollaborationSessionContext session, String inputNodeName, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws AgentException, LLMConfigException {
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final RuntimeAgentInfos inputRuntime = agentsDao.findAgentByCode(inputNodeName);
@@ -248,7 +259,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		boolean dynamicExchange = false;
 		try {
 			iterationResult = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
-					inputRuntime, inputMessage, outputType, runAs, toolCalling);
+					inputRuntime, inputMessage, outputType, runAs, toolCalling, suspensionHandler);
 			// A "dynamic exchange" means the input node actually dispatched at least one
 			// message onward into the network. Captured before the delivery loop consumes
 			// iterationResult, so a network that seeds but never propagates can be flagged.
@@ -266,7 +277,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						iterationResult.getOutput());
 				for (List<AgentsExchangeMessage<?>> group : iterationResult.getDeliveryOrder().values()) {
 					CallsResult<OutputType> rowResult = executeNetworkLoopsGroup(chatRequestContext, notificationSink,
-							agentsDao, session, group, outputType, runAs, toolCalling);
+							agentsDao, session, group, outputType, runAs, toolCalling, suspensionHandler);
 					levelResult = join(levelResult, rowResult);
 				}
 				iterationResult = levelResult;
@@ -341,7 +352,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			IChatRequestContext chatRequestContext, INotificationSink notificationSink,
 			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session,
 			RuntimeAgentInfos inputRuntime, AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType,
-			ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
+			ReactiveIdentityUtil runAs, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler)
 			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
 		OutputType output = null;
 		if (LOGGER.isDebugEnabled()) {
@@ -374,9 +386,9 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			List<AgentsExchangeMessage<?>> messages;
 			try {
 				messages = inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
-								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
-								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao,
-										toolCalling);
+						inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
+						notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao, toolCalling,
+						suspensionHandler);
 			} catch (Throwable failure) {
 				if (isInputNode) {
 					// The input node seeds the whole network: if it fails there is nothing
@@ -492,7 +504,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	protected <OutputType> CallsResult<OutputType> executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
 			INotificationSink notificationSink, IGAgentsNetworkRuntimeDao agentsDao,
 			AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup,
-			Class<OutputType> outputType, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
+			Class<OutputType> outputType, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
 		CallsResult<OutputType> out = null;
 		if (executionGroup.isEmpty()) {
@@ -509,7 +522,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
 			out = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agentRuntime, msg,
-					outputType, runAs, toolCalling);
+					outputType, runAs, toolCalling, suspensionHandler);
 		} else {
 			List<CompletableFuture<CallsResult<OutputType>>> completables = new ArrayList<>();
 			for (AgentsExchangeMessage<?> msg : executionGroup) {
@@ -519,11 +532,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
 								return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
-										agent, msg, outputType, runAs, toolCalling);
+										agent, msg, outputType, runAs, toolCalling, suspensionHandler);
 							});
 						else
 							return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agent,
-									msg, outputType, runAs, toolCalling);
+									msg, outputType, runAs, toolCalling, suspensionHandler);
 					} catch (Throwable e) {
 						LOGGER.error("Exception executing network loop for agent:" + msg.getToAgent(), e);
 						return null;

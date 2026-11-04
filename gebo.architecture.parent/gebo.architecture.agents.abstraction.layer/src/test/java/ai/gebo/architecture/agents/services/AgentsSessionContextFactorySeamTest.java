@@ -40,10 +40,10 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Pins the seam that lets a caller living longer than a single run own the
- * session that run collaborates in: that the session the agents are given is the
- * one that caller built, that the caller is told when the run is over and with
- * what, and — above all — that a run with nobody owning its session behaves
- * exactly as it always did.
+ * session that run collaborates in: that the session the agents are given is
+ * the one that caller built, that the caller is told when the run is over and
+ * with what, and — above all — that a run with nobody owning its session
+ * behaves exactly as it always did.
  */
 class AgentsSessionContextFactorySeamTest {
 	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
@@ -83,7 +83,10 @@ class AgentsSessionContextFactorySeamTest {
 		}
 	}
 
-	/** A network service of no behaviour: it exists to run the base's executeNetwork. */
+	/**
+	 * A network service of no behaviour: it exists to run the base's
+	 * executeNetwork.
+	 */
 	private static final class TestNetworkService extends GAbstractAgentsNetworkService<String, String> {
 		private TestNetworkService(IGAgentsNetworkRuntimeDao agentsDao, GAgentsNetwork network,
 				INotificationSink notificationSink, IAgentsCollaborationSessionContextFactory sessionFactory) {
@@ -135,7 +138,7 @@ class AgentsSessionContextFactorySeamTest {
 		when(agent.getInputType()).thenReturn((Class) String.class);
 		try {
 			when(agent.onMessage(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(), any(), any(), any(), any(),
-					any(), any(), any(), any())).thenAnswer(invocation -> {
+					any(), any(), any(), any(), any())).thenAnswer(invocation -> {
 						seenByTheAgent.add(invocation.getArgument(7, AgentsCollaborationSessionContext.class));
 						return List.of();
 					});

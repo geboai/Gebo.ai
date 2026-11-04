@@ -66,7 +66,7 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) network adapter id:" + getId() + " agentNetworkServiceCode:"
 					+ config.getAgentNetworkServiceCode() + " adaptedAgentNetworkCode:"
@@ -102,9 +102,9 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 							+ "' executeNetwork(...)");
 				}
 				// the nested network runs with what the outer one received
-				OutputType output = (OutputType) agentsNetworkService.executeNetwork(chatRequestContext,
-						msg.getPayload(),
-								session.getEnvironment(), toolCalling);
+				OutputType output = (OutputType) agentsNetworkService
+						.executeNetwork(chatRequestContext, msg.getPayload(), session.getEnvironment(), toolCalling)
+						.getResult();
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<ADAPTED_NETWORK_OUTPUT adapter=" + getId() + ">");
 					LOGGER.trace(String.valueOf(output));

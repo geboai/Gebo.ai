@@ -205,7 +205,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			throws AgentException, LLMConfigException {
 		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
 		return runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
-						environment, toolCalling);
+				environment, toolCalling).getResult();
 	}
 
 	protected GAgentsNetwork chooseNetwork(ChatPipelineExecutionRuntimeData runtimeData)

@@ -294,8 +294,8 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			// the network is asked the question its input adapter used to read from the
 			// minimal chat context's current request, which is this request
 			final String question = GeboChatRequest.actualQuery(request);
-			final GeboChatMessageEnvelope last = service.executeNetwork(context,
-					question != null ? question : "", null, toolCallingOfThisRun);
+			final GeboChatMessageEnvelope last = service
+					.executeNetwork(context, question != null ? question : "", null, toolCallingOfThisRun).getResult();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
@@ -481,7 +481,7 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			}
 			// the network is asked the caller's question; the request is in its environment
 			final GeboChatMessageEnvelope last = service.executeNetwork(context, GeboChatRequest.actualQuery(request),
-					environment, run.getToolCallingOfThisRun());
+					environment, run.getToolCallingOfThisRun()).getResult();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
