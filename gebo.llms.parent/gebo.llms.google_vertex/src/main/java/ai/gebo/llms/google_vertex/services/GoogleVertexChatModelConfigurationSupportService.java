@@ -121,8 +121,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there's an error during configuration
 		 */
 		@Override
-		protected GoogleGenAiChatModel configureModel(GGoogleVertexChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected GoogleGenAiChatModel configureModel(GGoogleVertexChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 
 			Client genAiClient = configurator.createGenAiClient(config.getApiSecretCode(), config.getBaseUrl());
 			GoogleGenAiChatOptions.Builder builder = GoogleGenAiChatOptions.builder();
@@ -186,7 +186,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 					.retryTemplate(serviceClientsProviderFactory.get(getType().getCode()).getCoreRetryTemplate())
 					.options(options)
 					.toolCallingManager(
-							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
+							functionsRepo.createToolCallingManager())
 					.observationRegistry(observationRegistry)
 					.build();
 			return model;

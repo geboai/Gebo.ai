@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -62,6 +63,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.AbstractDeepSearchTool.FoundDocument;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchCoverage.SearchCoverage;
@@ -212,6 +214,23 @@ class AbstractDeepSearchToolTest {
 				DeepSearchToolsSupport.DEFAULT_MAX_ANALYSIS_TOKENS);
 		assertTrue(new DeepSearchToolSource(offSupport, noServices, documentsSearch, platformSecurity).tools().isEmpty(),
 				"a product bringing its own deepSearchKnowledgeBase turns the standard one off");
+	}
+
+	@Test
+	void theContainerTheToolRunsInReachesItsAnalysis() {
+		TestDeepSearchTool tool = new TestDeepSearchTool(support, List.of(fragment("f1", "doc-a")));
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:r1").build();
+		doAnswer(invocation -> Flux.just("The analysis.")).when(analysis).analyze(any(), any(), any(), any(),
+				anyString(), any(), any(), any(), any(), any(), any());
+
+		DeepSearchToolResult result = tool.deepSearch(param("agent question", "first search"), new ToolContext(
+				toolCalling.toolsContext(Map.of(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, "r1"))));
+
+		assertEquals(Status.OK, result.getStatus());
+		assertEquals("The analysis.", result.getAnalysis());
+		verify(analysis).analyze(any(), any(), any(), any(), anyString(), eq(chatModel), eq(serviceModel), any(),
+				any(), any(), same(toolCalling));
+		verify(analysis, never()).analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any());
 	}
 
 	@Test

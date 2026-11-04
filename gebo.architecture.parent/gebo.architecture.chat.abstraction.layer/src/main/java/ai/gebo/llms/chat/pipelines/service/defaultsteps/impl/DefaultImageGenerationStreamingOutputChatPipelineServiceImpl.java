@@ -29,6 +29,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -222,8 +223,11 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 					.preparePromptParameters(runtimeData.getMinimalChatContext());
 			params.put(DefaultRoutingChatPipelineStepServiceImpl.REWRITTEN_QUERY_TEMPLATE_PARAM, actualQuery);
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-			Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params,
-					List.of(IMAGE_PROMPT_FIELD));
+			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+			Map<String, List<String>> data = toolCalling != null
+					? callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params, List.of(IMAGE_PROMPT_FIELD),
+							toolCalling)
+					: callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params, List.of(IMAGE_PROMPT_FIELD));
 			List<String> crafted = data.get(IMAGE_PROMPT_FIELD);
 			if (crafted != null && !crafted.isEmpty() && crafted.get(0) != null && !crafted.get(0).isBlank()) {
 				return crafted.get(0);

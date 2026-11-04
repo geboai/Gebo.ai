@@ -54,6 +54,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.ChatModel
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
@@ -90,6 +92,8 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public abstract class AbstractChatService implements IGGenericalChatService {
 	private static final String CONVERSATION_SUMMARY_SO_FAR = "Conversation summary so far:";
+	/** The caller a chat request names itself as to its model calls: {@code chat:<request id>}. */
+	public static final String CHAT_CALLER_PREFIX = "chat:";
 	protected final static ObjectMapper mapper = new ObjectMapper(); // JSON object mapper for
 																		// serialization/deserialization
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass()); // Logger for logging events
@@ -111,6 +115,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected IGSecurityAuditLoggerService securityAuditLoggerService;
 	/** The agents layer's view of the agentic chats' tools: absent without the agents. */
 	final protected ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber;
+	/** Builds what the chat adds to every model call made for a request (see {@link #toolCallingOf}). */
+	final protected GeboToolCallingManagerFactory toolCallingFactory;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	// The llmInvokeChat audit event of every model call is written by the usage
@@ -239,12 +245,40 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GPromptTemplateConfig prompt, final KBContext context, final GeboChatRequest request,
 			final GeboChatResponse response, IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
+		return callChatClient(configurableChatModel, prompt, context, request, response, chatRequestContext,
+				showedDocuments, null);
+	}
+
+	/**
+	 * What the chat adds to every model call made for the request (see
+	 * {@link GeboToolCalling}): the chat as the caller, the platform's loop limits, no
+	 * listener - the request's recorder keeps recording the calls. Null when the
+	 * factory is not there, which is the call as it always has been.
+	 */
+	protected GeboToolCalling toolCallingOf(GeboChatRequest request) {
+		if (toolCallingFactory == null) {
+			return null;
+		}
+		return toolCallingFactory.builder().caller(CHAT_CALLER_PREFIX + (request != null ? request.getId() : null))
+				.build();
+	}
+
+	/**
+	 * The same, with what the chat adds to the model call (see {@link #toolCallingOf});
+	 * null for nothing, which is the call as it always has been.
+	 */
+	protected GeboChatResponse callChatClient(IGConfigurableChatModel configurableChatModel,
+			final GPromptTemplateConfig prompt, final KBContext context, final GeboChatRequest request,
+			final GeboChatResponse response, IChatRequestContext chatRequestContext, AIDocumentsSet showedDocuments,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		try {
 			final DeepSearchQuotations quotations = answerQuotations(prompt, Map.of(), chatRequestContext);
 			// the answer without its reasoning, every provider alike
-			final GChatAnswer answer = writtenAgainIfCut(
-					configurableChatModel.answer(prompt, Map.of(), chatRequestContext), configurableChatModel, prompt,
-					Map.of(), chatRequestContext, response);
+			final GChatAnswer called = toolCalling != null
+					? configurableChatModel.answer(prompt, Map.of(), chatRequestContext, toolCalling)
+					: configurableChatModel.answer(prompt, Map.of(), chatRequestContext);
+			final GChatAnswer answer = writtenAgainIfCut(called, configurableChatModel, prompt, Map.of(),
+					chatRequestContext, response, toolCalling);
 			// the quotations the standard way, checked against the answer's sources (best effort)
 			response.setQueryResponse(quotations.render(answer.answer()));
 			response.setThinkingOutputs(ClientChatCallUtil.thinkingSteps(answer.thinking()));
@@ -284,18 +318,36 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			final GeboChatRequest request, final GeboChatResponse response, IChatRequestContext chatRequestContext,
 			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments)
 			throws LLMConfigException {
+		return streamChatClient(configurableChatModel, prompt, params, context, request, response, chatRequestContext,
+				chatHistoryConsolidation, historySizeTarget, showedDocuments, null);
+	}
+
+	/**
+	 * The same, with what the chat adds to the model call (see {@link #toolCallingOf});
+	 * null for nothing, which is the call as it always has been.
+	 */
+	protected Flux<GeboChatMessageEnvelope> streamChatClient(IGConfigurableChatModel configurableChatModel,
+			final GPromptTemplateConfig prompt, final Map<String, Object> params, final KBContext context,
+			final GeboChatRequest request, final GeboChatResponse response, IChatRequestContext chatRequestContext,
+			boolean chatHistoryConsolidation, int historySizeTarget, AIDocumentsSet showedDocuments,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		// the user of the request, as the model's stream samples it (see streamResponse)
 		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		try {
 			final DeepSearchQuotations quotations = answerQuotations(prompt, params, chatRequestContext);
-			Flux<GChatAnswerChunk> res = configurableChatModel.streamAnswer(prompt, params, chatRequestContext);
+			Flux<GChatAnswerChunk> res = toolCalling != null
+					? configurableChatModel.streamAnswer(prompt, params, chatRequestContext, toolCalling)
+					: configurableChatModel.streamAnswer(prompt, params, chatRequestContext);
 			Flux<GeboChatMessageEnvelope> composed = composeFlux(res, context, request, response,
 					chatRequestContext.getToolsContext(), chatHistoryConsolidation, historySizeTarget,
 					configurableChatModel, showedDocuments, quotations,
 					// the copy of the model is made as the user (its tools resolved for the user): the
 					// stream's thread, where an answer turns out cut, carries no identity
-					thinking -> runAs.doRunAsWithReturnAndException(() -> withThinking(configurableChatModel,
-							thinking).streamAnswer(prompt, params, chatRequestContext)));
+					thinking -> runAs.doRunAsWithReturnAndException(() -> toolCalling != null
+							? withThinking(configurableChatModel, thinking).streamAnswer(prompt, params,
+									chatRequestContext, toolCalling)
+							: withThinking(configurableChatModel, thinking).streamAnswer(prompt, params,
+									chatRequestContext)));
 			return composed;
 		} catch (Throwable th) {
 			LOGGER.error("Error while streaming chat respose", th);
@@ -566,7 +618,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			LOGGER.debug("withThinking(...) model " + model.getCode() + " with thinking " + thinking + " and "
 					+ (functions != null ? functions.size() : 0) + " enabled function(s)");
 		}
-		return model.cloneWithOptions("", new ChatModelConfigOptions(null, null, thinking, functions, null));
+		return model.cloneWithOptions("", new ChatModelConfigOptions(null, null, thinking, functions));
 	}
 
 	/**
@@ -576,7 +628,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	private GChatAnswer writtenAgainIfCut(GChatAnswer answer, IGConfigurableChatModel model,
 			GPromptTemplateConfig prompt, Map<String, Object> params, IChatRequestContext chatRequestContext,
-			GeboChatResponse response) throws LLMConfigException {
+			GeboChatResponse response, GeboToolCalling toolCalling) throws LLMConfigException {
 		final String finish = answer.finishReason();
 		if (!CutAnswer.isCut(finish)) {
 			return answer;
@@ -596,7 +648,9 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 				+ reasoningChars + " reasoning character(s): asked again with thinking " + lower);
 		final GChatAnswer again;
 		try {
-			again = withThinking(model, lower).answer(prompt, params, chatRequestContext);
+			again = toolCalling != null
+					? withThinking(model, lower).answer(prompt, params, chatRequestContext, toolCalling)
+					: withThinking(model, lower).answer(prompt, params, chatRequestContext);
 		} catch (LLMConfigException | RuntimeException e) {
 			LOGGER.error("Cannot ask the cut answer again with thinking " + lower, e);
 			response.getBackendMessages().add(CutAnswer.incompleteWarning());
@@ -649,7 +703,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		recordToolCalls(requestResources, response);
 
 		return callChatClient(chatModel, overriddenPrompt, kbcontext, requestResources.getCurrentRequest(), response,
-				requestResources.createChatRequestContext(), null);
+				requestResources.createChatRequestContext(), null, toolCallingOf(requestResources.getCurrentRequest()));
 	}
 
 	@Override
@@ -666,6 +720,7 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 
 		AIDocumentsSet allDocuments = requestResources.allDocuments();
 		return streamChatClient(chatModel, overriddenPrompt, params, kbcontext, requestResources.getCurrentRequest(),
-				response, requestResources.createChatRequestContext(), shrink, targetSize, allDocuments);
+				response, requestResources.createChatRequestContext(), shrink, targetSize, allDocuments,
+				toolCallingOf(requestResources.getCurrentRequest()));
 	}
 }

@@ -33,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingAndProvidingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
@@ -308,6 +309,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		// each analysis call is given its documents: the request's own are not added to every call
 		final IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext()
 				.cloneWithNewDocumentsList(List.of());
+		// what the chat added to the request's model calls, when it added something
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
 		// prompt template for the final analisys of the documents read directly, or of the
 		// analyses of several sources (the analyses are the shared DeepSearchAnalysis's own)
 		final GPromptTemplateConfig finalAnalisysPrompt = promptsDao
@@ -332,7 +335,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				Map<String, Object> params = new HashMap<>(commonParams);
 				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
 				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-				outFlux = outputThinking.text(callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params));
+				outFlux = outputThinking.text(toolCalling != null
+						? callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params, toolCalling)
+						: callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params));
 			} catch (Throwable th) {
 				LOGGER.error(EXCEPTION_ON_EMPTY_RESULTS, th);
 				outFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
@@ -387,8 +392,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 							params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
 							// read directly, with no partial analysis: the answer may quote them
 							quotations.addSources(documents);
-							resultFlux = DeepSearchVerdict.withoutVerdict(outputThinking
-									.text(callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
+							resultFlux = DeepSearchVerdict.withoutVerdict(outputThinking.text(toolCalling != null
+									? callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params, toolCalling)
+									: callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
 						} catch (Throwable th) {
 							LOGGER.error("Exception on last summary", th);
 							resultFlux = Flux.just(SORRY_SOMETHING_GONE_WRONG);
@@ -402,7 +408,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			if (resultFlux == null) {
 
 				resultFlux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request, chatModel, serviceModel,
-					unreadFragments, quotations, relevance, outputThinking);
+					unreadFragments, quotations, relevance, outputThinking, toolCalling);
 				resultFlux = Flux.concat(resultFlux, Flux.defer(() -> {
 					if (docsCounter.get() == 0l) {
 						return backupNotFoundDocuments;
@@ -423,7 +429,7 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 				Flux<Document> documentFlux = x.get().map(countingMapper);
 				// a source's analysis feeds the final one, which is the output
 				Flux<String> flux = generateDeepSearchFlux(documentFlux, context, runAs, sinkUIEmitter, request, chatModel, serviceModel,
-					unreadFragments, quotations, relevance, DeepSearchOutputThinking.NONE);
+					unreadFragments, quotations, relevance, DeepSearchOutputThinking.NONE, toolCalling);
 				return flux.buffer();
 			}, maxConcurrentSources).subscribeOn(Schedulers.boundedElastic(), true).buffer();
 			resultFlux = resultsBuffer.map(lists -> {
@@ -452,8 +458,9 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 						Map<String, Object> params = new HashMap<>(commonParams);
 						params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, documents);
 						params.put(IChatRequestContext.CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-						out = DeepSearchVerdict.withoutVerdict(outputThinking
-								.text(callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
+						out = DeepSearchVerdict.withoutVerdict(outputThinking.text(toolCalling != null
+								? callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params, toolCalling)
+								: callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
 					} catch (Throwable th) {
 						LOGGER.error("Exception on last summary", th);
 						out = Flux.just(SORRY_SOMETHING_GONE_WRONG);
@@ -602,7 +609,8 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 		// the quotations of the request, checked against their fragments (best effort)
 		final DeepSearchQuotations quotations = new DeepSearchQuotations();
 		Flux<String> resultFlux = generateDeepSearchFlux(docsFlux, context, runAs, sinkUIEmitter, request, chatModel, serviceModel,
-					discardedFragmentIds, quotations, new DeepSearchRelevance(), outputThinking);
+					discardedFragmentIds, quotations, new DeepSearchRelevance(), outputThinking,
+					runtimeData.getToolCalling());
 
 		final StringBuffer cumulative = new StringBuffer();
 		Flux<GeboChatMessageEnvelope> intermediateStreamingFlux = quotations.render(withOutputThinking(resultFlux,
@@ -649,10 +657,14 @@ public class FullReactiveDeepsearchWorker extends BaseLLMSInvokingAndProvidingSe
 			ReactiveIdentityUtil runAs, ISinkUIEmitter sinkUIEmitter, GeboChatRequest request,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel,
 			Vector<String> discardedFragmentIds, DeepSearchQuotations quotations, DeepSearchRelevance relevance,
-			DeepSearchOutputThinking outputThinking) {
-		return analysis.analyze(docsFlux, context, runAs, request.getUserIntent(), null, chatModel, serviceModel,
-				discardedFragmentIds, sinkUIEmitter, quotations, relevance, null, sinkUIEmitter::notifyLLMProblems,
-				"Deep search", outputThinking);
+			DeepSearchOutputThinking outputThinking, GeboToolCalling toolCalling) {
+		return toolCalling != null
+				? analysis.analyze(docsFlux, context, runAs, request.getUserIntent(), null, chatModel, serviceModel,
+						discardedFragmentIds, sinkUIEmitter, quotations, relevance, null,
+						sinkUIEmitter::notifyLLMProblems, "Deep search", outputThinking, toolCalling)
+				: analysis.analyze(docsFlux, context, runAs, request.getUserIntent(), null, chatModel, serviceModel,
+						discardedFragmentIds, sinkUIEmitter, quotations, relevance, null,
+						sinkUIEmitter::notifyLLMProblems, "Deep search", outputThinking);
 	}
 
 	/**

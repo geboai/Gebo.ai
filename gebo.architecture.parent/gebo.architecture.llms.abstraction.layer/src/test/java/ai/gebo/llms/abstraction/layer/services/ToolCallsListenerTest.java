@@ -61,6 +61,34 @@ class ToolCallsListenerTest {
 	}
 
 	@Test
+	void aListenerOfBothForwardsEachCallToBothOnce() {
+		ToolCallsListener request = new ToolCallsListener();
+		ToolCallsListener run = new ToolCallsListener();
+		ToolCallsListener agent = ToolCallsListener.both(request, run).child(null);
+
+		agent.addCall("searchWeb", "web", "{}", "result");
+
+		assertEquals(1, agent.getCalls().size());
+		assertEquals(1, request.getCalls().size(), "the request keeps recording the agents' calls");
+		assertEquals(1, run.getCalls().size(), "the run records them as well");
+		assertSame(request.getCalls().get(0), run.getCalls().get(0), "the very same call reaches both");
+	}
+
+	@Test
+	void aListenerOfBothWithOneMissingIsAChildOfTheOther() {
+		ToolCallsListener request = new ToolCallsListener();
+
+		ToolCallsListener.both(request, null).addCall("searchWeb", "web", "{}", "result");
+		ToolCallsListener.both(null, request).addCall("getActualUser", "user", "{}", "me");
+		ToolCallsListener.both(request, request).addCall("notifyUser", "notify", "{}", "ok");
+		ToolCallsListener.both(null, null).addCall("lost", "nowhere", "{}", "nothing");
+
+		assertEquals(List.of("searchWeb", "getActualUser", "notifyUser"),
+				request.getCalls().stream().map(ToolCallsListener.ToolCallExecuted::getName).toList(),
+				"each call is recorded once, the same listener twice does not double it");
+	}
+
+	@Test
 	void theRequestRecorderFillsTheResponseAsTheCallsHappen() {
 		List<CalledFunction> responseCalledFunctions = new ArrayList<>();
 		ToolCallsListener request = ToolCallsListener.appendingTo(responseCalledFunctions);

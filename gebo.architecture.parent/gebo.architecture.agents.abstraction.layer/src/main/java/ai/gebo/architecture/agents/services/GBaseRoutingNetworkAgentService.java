@@ -40,6 +40,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.Getter;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.type.TypeDescription;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 @Getter
 public class GBaseRoutingNetworkAgentService<InputType, OutputType>
@@ -196,6 +197,17 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
 			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
+				notificationSink, session, mySessionContext, runAs, agentsDao, null);
+	}
+
+	@Override
+	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) routing agent id:" + getId() + " persona:"
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
@@ -271,8 +283,8 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Requesting the routing plan from the agent model, routable peers:" + typesMap.size());
 		}
-		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, agentContext,
-				LinkedHashMap.class);
+		Map<String, Object> populated = (Map) (toolCalling != null ? agentModel.structuredResponse(prompt, params, agentContext, LinkedHashMap.class, toolCalling)
+				: agentModel.structuredResponse(prompt, params, agentContext, LinkedHashMap.class));
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<ROUTING_PLAN agent=" + getId() + ">");
 			LOGGER.trace(String.valueOf(populated));

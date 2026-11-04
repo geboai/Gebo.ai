@@ -20,6 +20,7 @@ read the real implementation next to this guide.
 | `ToolsTokenBudget` | `gebo.architecture.ai` (`ai.gebo.architecture.ai.service`) | The **room** a model call leaves to its tools' results (section 5). |
 | `RunAsToolCallback` | `gebo.architecture.llms.abstraction.layer` | The wrapper every tool runs inside: the user's identity, the tool-call recording, the room accounting. |
 | `GAbstractConfigurableChatModel.prepareCall(...)` | same | Builds every model call: declares the tools, sets the room. |
+| `GeboToolCalling`, `GeboToolCallingManagerFactory` | same (`...services.toolcalling`) | What the software controlling a call adds to it: tools the call must declare, interfaces the tools call back, the loop's limits (section 9). |
 
 A tool module only needs to depend on **`gebo.architecture.ai`**: that is all the
 existing tool modules depend on (standard functions, build systems, MCP clients…).
@@ -112,6 +113,10 @@ A tool is **never mounted by being a bean**: something has to enable it by name.
 3. **Tools made for one use of a model.** `cloneWithOptions(...)` with
    `additionalTools` declares tools that are not in the repository (an agent's
    `notifyUser`), when the configuration enables their names.
+4. **Tools the controlling software brings to one call.** A call made with a
+   `GeboToolCalling` (section 9) declares the container's *mandatory* tools
+   whatever the configuration says, even when the prompt does not require
+   tools; a configured tool of the same name gives way to the mandatory one.
 
 Whatever the path, the tool is wrapped in **`RunAsToolCallback`**, which:
 
@@ -136,6 +141,7 @@ Tools coming from external MCP servers are exported the same way
 | The request id | `ToolCallbackDeclarationUtil.requestId(toolContext)` (key `geboRequestId`); every model call of the same user request shares it, agents' iterations included. Use it for request-scoped state (e.g. not returning the same document twice). |
 | The room | `ToolsTokenBudget.from(toolContext)` (key `geboToolsTokenBudget`), section 5. |
 | The chat's knowledge bases | `LLMtInteractionContextThreadLocal.Context.get()`. It is a **thread local** set by the chat services on the request thread and **not** propagated to other threads: a tool running on a reactive worker can find it `null`. Always handle `null` (fall back to what the user can see, or answer that nothing is available). |
+| What the controlling software loaded for the call | `GeboToolCallingManagerFactory.control(toolContext, MyInterface.class)` (read from the `GeboToolCalling` under the key `geboToolCalling`), section 9: `null` when the call was not made with a `GeboToolCalling`, or it loaded nothing for that interface. |
 | Sharing with the calling agent (agents module only) | `ToolsFoundDocuments.from(toolContext)` (documents that become the answer's sources) and `ToolsProgress.notify(toolContext, ...)` (progress shown to the user), in `gebo.architecture.agents.standard`. |
 
 ### Behaving well
@@ -357,3 +363,145 @@ description that the result can be large, so the model asks for less.
 | `searchCurrentUsersTeamsColleagues` | `UsersFunctions` | Whole users that fit the room. |
 | `getActualUser`, the date tools, `notifyUser` | `UsersFunctions`, `ActualDateFunctions`, agents | Small results: nothing to do. |
 | MCP client tools | `MCPToolsExporter` | Opaque: the wrapper's safety net. |
+
+---
+
+## 9. What the controlling software adds to a call: `GeboToolCalling`
+
+The software that makes a model call (an agent, a network, the harness, a
+service) can hand the call a **`GeboToolCalling`**: a per-call container built
+with `GeboToolCallingManagerFactory.builder()` and passed to the overloads of
+`IGConfigurableChatModel` that take it (`textResponse(..., toolCalling)`,
+`response`, `answer`, `structuredResponse`, `streamAnswer`, ...). Without it the
+call is the plain one described above. It carries:
+
+- **Mandatory tools** (`mandatoryTool(...)`): declared on the call whatever the
+  model configuration says, wrapped in `RunAsToolCallback` like every other
+  tool. This is how a tool bound to *this* call (an "ask the user" tool holding
+  the caller's state) gets to the model.
+- **Interfaces the tools call back** (`provide(MyInterface.class, impl)`): the
+  controlling software's own instances, carried by the container in the tools
+  context (key `geboToolCalling`). They work as **deferred callbacks**: the tool
+  calls the interface, the implementation stores what it was told, the
+  controlling software reads it after the call returns. A tool reaches them
+  with `GeboToolCallingManagerFactory.control(toolContext, MyInterface.class)`
+  (or `controlsOf(toolContext)` for `find`/`has`/`contracts()`), the same way
+  whatever software is behind the call, and answers the model that the thing is
+  not available here when it gets `null`.
+- **Who is calling** (`caller(...)`), the **tool-call recorder** to use instead
+  of the request's (`listener(...)`), a **cap on the room** (`toolsBudget(...)`,
+  section 5).
+- **The loop's limits**: `maxCallsPerTool`, `maxCallsOfTool`, `maxTotalToolCalls`,
+  `onLimitExceeded` (`THROW` or `RETURN_ERROR_RESPONSE`). The builder starts
+  from the configured defaults `gebo.tools.calling.max-calls-per-tool`,
+  `gebo.tools.calling.max-total-calls`, `gebo.tools.calling.on-limit-exceeded`;
+  unset, Spring AI's own apply (40 per tool, 150 per call, `THROW`).
+
+The call then runs its **own tool calling loop** (`GeboToolCallingAdvisor`, in
+place of the one the chat client registers by default) and, once it returns,
+the container tells what happened: `getRounds()`, `isStoppedByTool()`,
+`getStoppingTools()`, `getLastCall()`. Each call records on its own, so one
+container shared by calls made at the same time is safe; the last call to end is
+the one read.
+
+### How it travels through a network of agents
+
+The container is an **explicit parameter** at every layer between the
+controlling software and the model, each with an overload taking a trailing
+`GeboToolCalling` (null is the plain run, and the old signatures delegate with
+null): `GChatEnvironmentRunRequest.toolCallingOfThisRun` and the runners
+(`GChatEnvironmentNetworkRunner.run`, `GTextAgentsNetworkRunner.runNetwork` and
+`runAgent`), `IGAgentsNetworkService.executeNetwork`,
+`IGNetworkAgentService.onMessage`, `IGReactiveAgentService.execute` and the
+reactive agents' `createResponse`, the helpers of `BaseLLMSInvokingService`.
+**The method that receives it passes it to every call it makes that takes one**:
+the network to each agent, an agent to its model, the nested-network adapter to
+the inner network, the reactive adapter to `execute`, the report writer to its
+extraction calls. An agent chooses one of three things to pass down:
+
+- **as it is** (the common case);
+- **one of its own in its place**: nothing of the received one applies to its calls;
+- **the two merged**, `GeboToolCalling.merged(mine, received)`: the mandatory
+  tools of both (the agent's taking the place of a received one of the same
+  name), the instances of both (the agent's found first), the agent's caller,
+  budget and limits when it set them else the received ones, the agent's
+  listener only.
+
+A container's `listener` is a run-level recorder: the model chains it beside the
+recorder of the request context (`ToolCallsListener.both`), so every call of the
+run reaches it while each agent keeps recording its own, forwarded to the
+request's recorder as before. Leave it unset unless the run wants a record of
+its own.
+
+**Every entry point loads a container.** A chat request (`chat:<request id>`,
+built by the pipelines executor and the direct chat service, carried by
+`ChatPipelineExecutionRuntimeData.getToolCalling()` to the network step and to
+the steps calling a model), an MCP tool run (`mcp:<server url>/<tool>`), an A2A
+skill run (`a2a:<exported url>/<skill>`) and a harness run (`harness:<code>`)
+each name themselves as the caller and carry the platform's loop limits
+(`gebo.tools.calling.*`, Spring's own when unset) and no listener. A pipeline
+step passes the request's container to its helper calls
+(`callLLMRepeatableFieldEntryOutput(..., toolCalling)`, `callLLMReactiveAnswer(...,
+toolCalling)`), branching on null so that a request made without one is the
+plain call. The services behind a request pass it on the same way: the LLM
+assisted retrieval and the ranker's irrelevance filter, the deep search data
+sources' query extraction, the documents search agents' planners, queries and
+rankings.
+
+**A model call with nobody above it names itself.** The history consolidation
+(`consolidation:<session code>`), the chat title suggestion (`title:<session
+code>`), the rule proposal (`rules:<conversation code>`, `rules:check`), the RAG
+threshold autotune (`autotune:<vector store>`) and the Enterprise graph analysis
+(`graph-analysis:<endpoint code>`) build their own container with the factory at
+their entry: every model call of the platform is then made by someone who says
+who it is.
+
+**A tool that calls a model of its own** (a deep search's analysis) has no
+parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`
+gives it the container it runs in (null outside a governed call), to pass to the
+model it calls, so what the controlling software loaded reaches the nested call.
+The deep search tools do so: `AbstractDeepSearchTool` reads it and hands it through
+`DeepSearchToolAnalysis` to `DeepSearchAnalysis`, whose every model call (the partial
+analyses, the folds, the final one) is made with it; the deep search answering a
+chat hands the request's to the same analysis. The search tools that only rank what
+they found call no chat model: there is nothing to pass.
+
+A call made with a null container is the plain call, literally the old method of
+the model, so whatever stubs or overrides the plain one still answers.
+
+A tool that must **end the call** (it asked the user something and the work
+waits for the answer; it waits for an external event) is declared with
+`ToolCallbackDeclarationUtil.returningDirect()` as its metadata
+(`declare(function, name, description, paramType, returnType, returningDirect())`):
+the loop stops at it, its result is the call's answer, and
+`isStoppedByTool()` is `true`.
+
+```java
+// the controlling software
+AskUserSink sink = new AskUserSink();                 // its own implementation
+GeboToolCalling toolCalling = factory.builder()
+        .provide(IAskUser.class, sink)
+        .mandatoryTool(ToolCallbackDeclarationUtil.declare(this::askUser, "askUser",
+                "Ask the user a question the work cannot go on without",
+                AskUserParam.class, String.class, ToolCallbackDeclarationUtil.returningDirect()))
+        .caller("agent:" + agentId)
+        .build();
+String answer = model.textResponse(prompt, params, chatContext, toolCalling);
+if (toolCalling.isStoppedByTool()) {
+    String question = sink.question();                // what the tool stored
+    ...                                               // suspend, wait for the person
+}
+
+// the tool
+private String askUser(AskUserParam param, ToolContext toolContext) {
+    IAskUser askUser = GeboToolCallingManagerFactory.control(toolContext, IAskUser.class);
+    if (askUser == null) {
+        return "Asking the user is not available here: decide by yourself.";
+    }
+    askUser.ask(param.getQuestion());
+    return "Question sent to the user: the work waits for the answer.";
+}
+```
+
+The test `GeboToolCallingTest` (`gebo.architecture.llms.abstraction.layer`) shows
+every piece through a real `ChatClient` loop.

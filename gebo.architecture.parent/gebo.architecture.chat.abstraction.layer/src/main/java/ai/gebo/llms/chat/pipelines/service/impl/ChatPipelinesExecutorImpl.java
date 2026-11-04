@@ -16,6 +16,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -73,7 +75,23 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 	 * (the same understanding a run from outside the pipelines is given).
 	 */
 	protected final IGRequestUnderstandingService requestUnderstanding;
+	/** Builds what the chat adds to every model call made for a request (see {@link #toolCallingOf}). */
+	protected final GeboToolCallingManagerFactory toolCallingFactory;
 	private static final Logger LOGGER = LoggerFactory.getLogger(ChatPipelinesExecutorImpl.class);
+
+	/** The caller a chat request names itself as to its model calls: {@code chat:<request id>}. */
+	public static final String CHAT_CALLER_PREFIX = "chat:";
+
+	/**
+	 * What the chat adds to every model call made for the request, by any step or
+	 * agent (see {@link GeboToolCalling}): the chat as the caller, the platform's loop
+	 * limits, no listener - the request's recorder keeps recording the calls of every
+	 * agent, chained from each agent's own.
+	 */
+	protected GeboToolCalling toolCallingOf(GeboChatRequest request) {
+		return toolCallingFactory.builder().caller(CHAT_CALLER_PREFIX + (request != null ? request.getId() : null))
+				.build();
+	}
 
 	/**
 	 * Sets on the request the language its message is written in, when the detector is
@@ -136,7 +154,8 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 			LOGGER.debug("Recording the tool calls of request:" + request.getId() + " into its response");
 		}
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
-				chatModel.getContextLength(), resources, response, minimalChatContext, streaming);
+				chatModel.getContextLength(), resources, response, minimalChatContext, streaming,
+				toolCallingOf(request));
 		if (environment != null) {
 			runtimeData.getSharedEnvironment().putAll(environment);
 		}

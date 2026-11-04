@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -23,9 +25,13 @@ import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
+import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.ranker.model.RankerModel;
@@ -110,6 +116,26 @@ class GRankerServiceImplTest {
 		assertEquals(6, ranked.countFragments());
 		verify(rankerModel, times(1)).call(any(RankingInput.class));
 		verify(chatModelsDao, never()).findByUsesOrGetDefault(any(ChatModelsUses[].class));
+	}
+
+	@Test
+	void theIrrelevanceFilterIsAskedWithTheContainerGiven() throws Exception {
+		IGConfigurableChatModel serviceModel = mock(IGConfigurableChatModel.class);
+		when(serviceModel.getContextLength()).thenReturn(32000);
+		when(chatModelsDao.findByUsesOrGetDefault(any(ChatModelsUses[].class))).thenReturn(serviceModel);
+		GPromptTemplateConfig prompt = new GPromptTemplateConfig();
+		prompt.setPromptUse(GeboPromptsLibrary.RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT);
+		prompt.setSystemPromptTemplate("judge");
+		prompt.setUserPromptTemplate("{question}");
+		when(promptsDao.findByPromptUse(GeboPromptsLibrary.RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT))
+				.thenReturn(prompt);
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:r1").build();
+		when(serviceModel.textResponse(any(), any(), any(), any())).thenReturn("DISCARDED: none");
+
+		service.rankAndRemoveIrrelevant(fragments(6), "query", 6, toolCalling);
+
+		verify(serviceModel, atLeastOnce()).textResponse(any(), any(), any(), same(toolCalling));
+		verify(serviceModel, never()).textResponse(any(), any(), any());
 	}
 
 	@Test

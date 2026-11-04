@@ -31,6 +31,8 @@ import ai.gebo.llms.abstraction.layer.services.ClientChatCallUtil;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatAnswerFeedbackRating;
 import ai.gebo.llms.chat.abstraction.layer.model.ChatRuleConflict;
@@ -63,7 +65,18 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 	private final IGChatRulesService rulesService;
 	/** The platform's language detector: the advice is written in the language of the rule. */
 	private final ObjectProvider<IGLanguageDetector> languageDetector;
+	/** Builds what the rule services add to their model calls: themselves as the caller. */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
 	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+	/** The caller the rule services name themselves as: {@code rules:<conversation code>}, {@code rules:check}. */
+	public static final String RULES_CALLER_PREFIX = "rules:";
+
+	/** What the rule services add to a model call (see {@link GeboToolCalling}); null without the factory. */
+	GeboToolCalling toolCallingOf(String what) {
+		return toolCallingFactory != null ? toolCallingFactory.builder().caller(RULES_CALLER_PREFIX + what).build()
+				: null;
+	}
 	private static final Pattern CONFLICT_LINE = Pattern.compile("^\\s*(\\d+)\\s*[:.)-]\\s*(.*)$");
 
 	@Override
@@ -105,11 +118,14 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 			LOGGER.debug("checkRuleConflicts(...) against " + others.size() + " rule(s), advice language:"
 					+ ruleLanguage);
 		}
-		String reply = ClientChatCallUtil.removeThinking(model.textResponse(prompt,
-				Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, candidate.getText().trim(),
-						IChatRequestContext.DOCUMENTS_PROMPT_PARAM, numbered.toString()),
-				IChatRequestContext.builder().actualUserRequest(candidate.getText().trim()).userLanguage(ruleLanguage)
-						.build()));
+		final Map<String, Object> checkParams = Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM,
+				candidate.getText().trim(), IChatRequestContext.DOCUMENTS_PROMPT_PARAM, numbered.toString());
+		final IChatRequestContext checkContext = IChatRequestContext.builder()
+				.actualUserRequest(candidate.getText().trim()).userLanguage(ruleLanguage).build();
+		final GeboToolCalling checkToolCalling = toolCallingOf("check");
+		String reply = ClientChatCallUtil.removeThinking(checkToolCalling != null
+				? model.textResponse(prompt, checkParams, checkContext, checkToolCalling)
+				: model.textResponse(prompt, checkParams, checkContext));
 		List<ChatRuleConflict> conflicts = new ArrayList<ChatRuleConflict>();
 		if (reply != null) {
 			for (String line : reply.split("\\R")) {
@@ -169,10 +185,14 @@ public class GChatRuleProposalServiceImpl implements IGChatRuleProposalService {
 			LOGGER.debug("proposeRules(...) chat:" + userChatContextCode + " request:" + requestId + " rules language:"
 					+ language);
 		}
-		String reply = model.textResponse(prompt,
-				Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, question, "answer", answer, "feedback",
-						describe(feedback)),
-				historyBefore(interactions, rated, userChatContextCode, question, language));
+		final Map<String, Object> proposalParams = Map.of(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, question,
+				"answer", answer, "feedback", describe(feedback));
+		final IChatRequestContext proposalContext = historyBefore(interactions, rated, userChatContextCode, question,
+				language);
+		final GeboToolCalling proposalToolCalling = toolCallingOf(userChatContextCode);
+		String reply = proposalToolCalling != null
+				? model.textResponse(prompt, proposalParams, proposalContext, proposalToolCalling)
+				: model.textResponse(prompt, proposalParams, proposalContext);
 		return parse(ClientChatCallUtil.removeThinking(reply));
 	}
 

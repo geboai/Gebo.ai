@@ -10,6 +10,7 @@
 package ai.gebo.llms.deepsearch.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -37,6 +38,7 @@ import ai.gebo.architecture.search.model.SearchWithResults;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
@@ -123,12 +125,54 @@ class DeepSearchDataSourceLoadingTest {
 	}
 
 	private static ChatPipelineExecutionRuntimeData runtime(String question) {
+		return runtime(question, null);
+	}
+
+	private static ChatPipelineExecutionRuntimeData runtime(String question, GeboToolCalling toolCalling) {
 		final GeboChatRequest request = new GeboChatRequest();
 		request.setId("request-1");
 		request.setQuery(question);
 		final LLMChatRequestResources resources = new LLMChatRequestResources();
 		resources.setCurrentRequest(request);
-		return new ChatPipelineExecutionRuntimeData(null, 10_000, resources, null, null, true);
+		return new ChatPipelineExecutionRuntimeData(null, 10_000, resources, null, null, true, toolCalling);
+	}
+
+	/** A data source whose searches are made with the container of the request. */
+	static class GovernedResultsDataSource extends FixedResultsDataSource {
+		final List<GeboToolCalling> searchedWith = new ArrayList<>();
+
+		GovernedResultsDataSource(IDocumentsChunkService chunkingService, List<SearchResult> found) {
+			super(chunkingService, found);
+		}
+
+		@Override
+		protected List<SearchWithResults> executeSearches(DeepSearchRequest request,
+				MinimalChatContext minimalChatContext, DeepSearchConfig deepSearchConfig,
+				IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String string, int topK,
+				GeboToolCalling toolCalling) {
+			searchedWith.add(toolCalling);
+			return super.executeSearches(request, minimalChatContext, deepSearchConfig, chatModel, serviceModel, string,
+					topK);
+		}
+	}
+
+	@Test
+	void theSearchesAreMadeWithTheContainerOfTheRequestWhenItHasOne() throws Exception {
+		final IDocumentsChunkService chunkingService = mock(IDocumentsChunkService.class);
+		when(chunkingService.createChunkingSession(anyString())).thenReturn("session");
+		final SearchResult found = result("https://intranet.example/policy");
+		when(chunkingService.streamChunks(any(IGComponentOriginatedDocument.class), any(), anyString()))
+				.thenAnswer(invocation -> chunks(invocation.getArgument(0), 2));
+		final GovernedResultsDataSource source = new GovernedResultsDataSource(chunkingService, List.of(found));
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:request-1").build();
+
+		source.streamSearchResults(runtime("the rotation", toolCalling), null, null, null, "request-session", 10)
+				.collectList().block();
+		source.streamSearchResults(runtime("the rotation"), null, null, null, "request-session", 10).collectList()
+				.block();
+
+		assertEquals(1, source.searchedWith.size(), "a request without a container searches the plain way");
+		assertSame(toolCalling, source.searchedWith.get(0));
 	}
 
 	@Test

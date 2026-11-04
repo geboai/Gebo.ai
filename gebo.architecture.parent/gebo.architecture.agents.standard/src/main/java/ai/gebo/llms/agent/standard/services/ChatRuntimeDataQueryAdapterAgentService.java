@@ -30,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * The input node of a chat network: forwards the question the network was
@@ -99,6 +100,17 @@ public class ChatRuntimeDataQueryAdapterAgentService
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<String, String> mySessionContext,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
+				notificationSink, session, mySessionContext, runAs, agentsDao, null);
+	}
+
+	@Override
+	public List<AgentsExchangeMessage<String>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
+			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<String, String> mySessionContext,
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) chat runtime data query adapter persona:"
 					+ contextAgentPersona.getNetworkAgentName() + " contributionNr:" + actualContributionNr);

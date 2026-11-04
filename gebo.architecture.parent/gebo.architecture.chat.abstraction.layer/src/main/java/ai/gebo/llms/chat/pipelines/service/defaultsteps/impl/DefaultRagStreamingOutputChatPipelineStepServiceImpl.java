@@ -12,6 +12,7 @@ import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -70,9 +71,14 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 					? runtimeData.getRequestResources().getTokensSize()
 					: 0) + (prompt != null ? prompt.getTokensSize() : 0);
 			final int tokensBudget = KnowledgeBaseSearchBudget.forContext(chatModel.getContextLength(), used);
-			Flux<AIDocumentsSet> documentSet = internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(
-					runtimeData.getMinimalChatContext(), serviceModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK, true, tokensBudget);
+			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+			Flux<AIDocumentsSet> documentSet = toolCalling != null
+					? internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
+							serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK, true,
+							tokensBudget, toolCalling)
+					: internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
+							serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK, true,
+							tokensBudget);
 			Flux<GeboChatMessageEnvelope> flux = documentSet.concatMap(ed -> {
 				try {
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(

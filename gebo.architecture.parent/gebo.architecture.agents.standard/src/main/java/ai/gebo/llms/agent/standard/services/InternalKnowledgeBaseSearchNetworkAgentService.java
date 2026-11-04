@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.agent.standardtools.DeepSearchReduction;
 import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
@@ -120,6 +121,21 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
 			INotificationSink notificationSink) throws AgentException {
+		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
+				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>(),
+				null);
+	}
+
+	/** The same, the search planner's call and the ranking made with the container when given. */
+	@Override
+	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
+			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
+			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
+			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
+			INotificationSink notificationSink, List<String> statusNotices, GeboToolCalling toolCalling)
+			throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin retrieveDocuments(...) internal-KB agent command:"
@@ -146,8 +162,11 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			// `prompt` is the runtime-patched planner prompt (agent network placeholders
 			// injected at config time), so it is used directly instead of re-fetching the
 			// raw planner template.
-			Map<String, List<String>> fields = callLLMRepeatableFieldEntryOutput(agentModel, prompt,
-					chatRequestContext, params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
+			Map<String, List<String>> fields = toolCalling != null
+					? callLLMRepeatableFieldEntryOutput(agentModel, prompt, chatRequestContext, params,
+							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD), toolCalling)
+					: callLLMRepeatableFieldEntryOutput(agentModel, prompt, chatRequestContext, params,
+							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
 			if (semanticQueries.isEmpty() && fullTextQueries.isEmpty()) {
@@ -227,7 +246,8 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					index++;
 				}
 			}
-			return maybeRank(documents, command, notificationSink);
+			return toolCalling != null ? maybeRank(documents, command, notificationSink, toolCalling)
+					: maybeRank(documents, command, notificationSink);
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);
 		}

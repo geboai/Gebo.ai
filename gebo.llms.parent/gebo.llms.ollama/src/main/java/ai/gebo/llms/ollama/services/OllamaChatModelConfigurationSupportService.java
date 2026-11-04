@@ -127,7 +127,7 @@ public class OllamaChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type, ToolCallingManager toolsCallsManager)
+		protected OllamaChatModel configureModel(GOllamaChatModelConfig config, GChatModelType type)
 				throws LLMConfigException {
 			org.springframework.ai.ollama.api.OllamaApi.Builder apiBuilder = OllamaApi.builder();
 			apiBuilder.baseUrl(config.getBaseUrl());
@@ -241,8 +241,7 @@ public class OllamaChatModelConfigurationSupportService
 			}
 			
 			OllamaChatOptions options = builder.build();
-			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager(),
+			OllamaChatModel model = new OllamaChatModel(ollamaapi, options, functionsRepo.createToolCallingManager(),
 					observationRegistry, ModelManagementOptions.defaults());
 			return model;
 		}

@@ -19,6 +19,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -39,6 +40,8 @@ import org.mockito.InOrder;
 import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -73,6 +76,7 @@ class GChatEnvironmentNetworkRunnerTest {
 	private MinimalChatContext minimalContext;
 	private GAgentsNetwork network;
 	private GChatEnvironmentNetworkRunner runner;
+	private IGRuntimeBinder binder;
 
 	@BeforeEach
 	@SuppressWarnings("unchecked")
@@ -87,7 +91,7 @@ class GChatEnvironmentNetworkRunnerTest {
 		when(factory.create(any(), any(), any(), any(), any())).thenReturn(service);
 		when(factory.create(any(), any(), any(), any(), any(), any())).thenReturn(service);
 		when(service.getFlux()).thenReturn(Flux.empty());
-		IGRuntimeBinder binder = mock(IGRuntimeBinder.class);
+		binder = mock(IGRuntimeBinder.class);
 		when(binder.getImplementationOf(IGReactiveChatAgentsNetworkServiceFactory.class)).thenReturn(factory);
 		uploadHandler = mock(IGUserUploadContentHandler.class);
 		ObjectProvider<IGUserUploadContentHandler> uploads = mock(ObjectProvider.class);
@@ -163,6 +167,34 @@ class GChatEnvironmentNetworkRunnerTest {
 
 		verify(lifeCycle).startRequest(eq(request), eq(chatModel), any());
 		verify(lifeCycle, never()).addUploadedDocument(any(), any(), any(), any());
+	}
+
+	@Test
+	void anExportedNetworkRunWithAToolCallingHandsItToTheNetwork() throws Exception {
+		IAgentsNetworkDao networks = mock(IAgentsNetworkDao.class);
+		when(networks.findByCode("the-network")).thenReturn(network);
+		when(binder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networks);
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("a2a:server/skill").build();
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+
+		runner.run("the-network", request, ChatRunAttachments.none(), toolCalling, null);
+
+		verify(service).executeNetwork(any(), eq("What is new?"), isNull(), same(toolCalling));
+		verify(service, never()).executeNetwork(any(), any(), any());
+		verify(lifeCycle).ensureChatSessionExists(request);
+		verify(resources, never()).setRunEnvironment(any());
+	}
+
+	@Test
+	void anExportedNetworkRunWithoutAToolCallingIsThePlainRun() throws Exception {
+		IAgentsNetworkDao networks = mock(IAgentsNetworkDao.class);
+		when(networks.findByCode("the-network")).thenReturn(network);
+		when(binder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networks);
+		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+
+		runner.run("the-network", request, ChatRunAttachments.none(), null, null);
+
+		verify(service).executeNetwork(any(), eq("What is new?"), isNull());
 	}
 
 	@Test

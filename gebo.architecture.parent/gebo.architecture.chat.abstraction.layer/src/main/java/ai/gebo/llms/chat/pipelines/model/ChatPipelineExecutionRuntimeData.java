@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
@@ -18,8 +19,19 @@ public class ChatPipelineExecutionRuntimeData {
 	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
 			LLMChatRequestResources requestResources, GeboChatResponse chatResponse,
 			MinimalChatContext minimalChatContext, boolean streamingOutput) {
+		this(configuration, contextWindowSize, requestResources, chatResponse, minimalChatContext, streamingOutput,
+				null);
+	}
+
+	/**
+	 * The same, with what the controlling software adds to every model call made for
+	 * the request (see {@link #getToolCalling()}).
+	 */
+	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
+			LLMChatRequestResources requestResources, GeboChatResponse chatResponse,
+			MinimalChatContext minimalChatContext, boolean streamingOutput, GeboToolCalling toolCalling) {
 		this(configuration, contextWindowSize, contextWindowSize, new ArrayList(), chatResponse, new ArrayList(),
-				streamingOutput, requestResources, minimalChatContext);
+				streamingOutput, requestResources, minimalChatContext, toolCalling);
 	}
 
 	private final ChatPipelineConfiguration configuration;
@@ -32,6 +44,14 @@ public class ChatPipelineExecutionRuntimeData {
 	private final LLMChatRequestResources requestResources;
 	private final Map<String, Object> sharedEnvironment = new HashMap<String, Object>();
 	private final MinimalChatContext minimalChatContext;
+	/**
+	 * What the controlling software adds to every model call made for the request
+	 * (see {@link GeboToolCalling}): who the caller is, the limits of the tool calling
+	 * loop, what the tools are provided with. The steps calling a model or a network of
+	 * agents for the request pass it on, as it is or with their own merged into it.
+	 * Null for a request made without one, which runs as it always has.
+	 */
+	private final GeboToolCalling toolCalling;
 
 	/**
 	 * The current request, the one the run serves: held by the request resources

@@ -66,7 +66,7 @@ class CutAnswerStreamingTest {
 						mock(IGKnowledgebaseVisibilityService.class), mock(IGChatSessionLifeCycleService.class),
 						mock(IGTextToSpeechModelRuntimeConfigurationDao.class),
 						mock(IGTranscriptModelRuntimeConfigurationDao.class), mock(IGSecurityAuditLoggerService.class),
-						null)
+						null, null)
 						.defaultAnswer(Answers.CALLS_REAL_METHODS));
 	}
 

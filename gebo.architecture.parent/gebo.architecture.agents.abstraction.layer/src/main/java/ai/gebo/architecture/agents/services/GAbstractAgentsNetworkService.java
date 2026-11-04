@@ -28,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		implements IGAgentsNetworkService<InputType, OutputType>, IGSessionContextFactoryAware {
@@ -72,8 +73,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	public GAbstractAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
 			Class<InputType> inputType, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao,
-			IAgentsCollaborationSessionContextFactory sessionContextFactory) {
+			IGAgentsNetworkRuntimeDao agentsDao, IAgentsCollaborationSessionContextFactory sessionContextFactory) {
 		this.agentsServicesRepository = agentsServicesRepository;
 		this.rolesDao = rolesDao;
 		this.threadManager = threadManager;
@@ -106,8 +106,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	/**
-	 * The session this run collaborates in: the one the factory builds when there is
-	 * one that builds a usable session, else a session of this run's own.
+	 * The session this run collaborates in: the one the factory builds when there
+	 * is one that builds a usable session, else a session of this run's own.
 	 */
 	protected AgentsCollaborationSessionContext createSessionContext(AgentsSessionCreationContext creation) {
 		final IAgentsCollaborationSessionContextFactory factory = sessionContextFactory;
@@ -123,8 +123,9 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		} catch (Throwable factoryFailure) {
 			// A session builder that cannot build one must not take the run down with it:
 			// the run goes on in a session of its own, and the failure is reported.
-			LOGGER.error("The session factory failed to build a session for network:"
-					+ (network != null ? network.getCode() : null) + "; the run opens one of its own",
+			LOGGER.error(
+					"The session factory failed to build a session for network:"
+							+ (network != null ? network.getCode() : null) + "; the run opens one of its own",
 					factoryFailure);
 		}
 		if (created == null) {
@@ -143,8 +144,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	/**
 	 * Tells whoever built the session that the run is over. Only the factory that
-	 * built a session is told of it, and what it throws never changes the outcome of
-	 * the run.
+	 * built a session is told of it, and what it throws never changes the outcome
+	 * of the run.
 	 */
 	private void sessionCompleted(AgentsCollaborationSessionContext session, AgentsSessionCreationContext creation,
 			OutputType output, Throwable failure) {
@@ -169,10 +170,23 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	@Override
 	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
 			Map<String, Object> environment) throws AgentException, LLMConfigException {
+		return executeNetwork(chatRequestContext, input, environment, null);
+	}
+
+	@Override
+	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
 					+ " inputType:" + (input != null ? input.getClass().getName() : null) + " maxLoopIteration:"
-					+ (network != null ? network.getMaxLoopIteration() : null));
+					+ (network != null ? network.getMaxLoopIteration() : null)
+					+ (toolCalling != null ? " with " + toolCalling : ""));
+		}
+		if (toolCalling != null && toolCalling.getListener() != null && LOGGER.isDebugEnabled()) {
+			// each agent records its own tool calls, forwarded to the request's recorder; a
+			// listener on the run's container records beside them, every call of the run
+			LOGGER.debug("The tool calling of network:" + (network != null ? network.getCode() : null)
+					+ " carries a listener: it records every call of the run beside the agents' own");
 		}
 		if (network.getAgents() == null || network.getAgents().isEmpty())
 			throw new AgentException(NO_AGENTS_CONFIGURED);
@@ -201,7 +215,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		OutputType producedOutput = null;
 		Throwable failure = null;
 		try {
-			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName);
+			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName, toolCalling);
 			return producedOutput;
 		} catch (AgentException | LLMConfigException | RuntimeException | Error runFailure) {
 			failure = runFailure;
@@ -217,7 +231,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	 * The run itself, in the session it collaborates in.
 	 */
 	private OutputType executeNetworkInSession(IChatRequestContext chatRequestContext, InputType input,
-			AgentsCollaborationSessionContext session, String inputNodeName)
+			AgentsCollaborationSessionContext session, String inputNodeName, GeboToolCalling toolCalling)
 			throws AgentException, LLMConfigException {
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
@@ -227,16 +241,16 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		if (!inputRuntime.getService().getInputType().isAssignableFrom(input.getClass()))
 			throw new AgentException(NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE + input.getClass().getName());
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Input node:" + inputNodeName + " bound to agent service id:"
-					+ inputRuntime.getService().getId() + " accepting inputType:"
-					+ inputRuntime.getService().getInputType().getName());
+			LOGGER.debug(
+					"Input node:" + inputNodeName + " bound to agent service id:" + inputRuntime.getService().getId()
+							+ " accepting inputType:" + inputRuntime.getService().getInputType().getName());
 		}
 
 		CallsResult<OutputType> iterationResult = null;
 		boolean dynamicExchange = false;
 		try {
 			iterationResult = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
-					inputRuntime, inputMessage, outputType, runAs);
+					inputRuntime, inputMessage, outputType, runAs, toolCalling);
 			// A "dynamic exchange" means the input node actually dispatched at least one
 			// message onward into the network. Captured before the delivery loop consumes
 			// iterationResult, so a network that seeds but never propagates can be flagged.
@@ -254,7 +268,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						iterationResult.getOutput());
 				for (List<AgentsExchangeMessage<?>> group : iterationResult.getDeliveryOrder().values()) {
 					CallsResult<OutputType> rowResult = executeNetworkLoopsGroup(chatRequestContext, notificationSink,
-							agentsDao, session, group, outputType, runAs);
+							agentsDao, session, group, outputType, runAs, toolCalling);
 					levelResult = join(levelResult, rowResult);
 				}
 				iterationResult = levelResult;
@@ -269,7 +283,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			LOGGER.trace(String.valueOf(producedOutput));
 			LOGGER.trace("</NETWORK_OUTPUT>");
 		}
-		// If the network stopped without any dynamic message exchange between agents and
+		// If the network stopped without any dynamic message exchange between agents
+		// and
 		// produced no output, surface it with ERROR severity: the run terminated dead
 		// (e.g. the input node emitted nothing to route), which the user must be told.
 		if (!dynamicExchange && producedOutput == null) {
@@ -328,7 +343,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			IChatRequestContext chatRequestContext, INotificationSink notificationSink,
 			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session,
 			RuntimeAgentInfos inputRuntime, AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType,
-			ReactiveIdentityUtil runAs)
+			ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
 			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
 		OutputType output = null;
 		if (LOGGER.isDebugEnabled()) {
@@ -360,9 +375,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			notificationSink.next("Agent: " + participantName + " is working...", NotificationType.DEBUG);
 			List<AgentsExchangeMessage<?>> messages;
 			try {
-				messages = inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(), inputMessage,
-						contributionNr, network, inputRuntime.getNetworkParticipantConfig(), notificationSink, session,
-						inputRuntime.getAgentContext(), runAs, agentsDao);
+				// no container: the plain message, literally the agent's old method
+				messages = toolCalling != null
+						? inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
+								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
+								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao, toolCalling)
+						: inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
+								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
+								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao);
 			} catch (Throwable failure) {
 				if (isInputNode) {
 					// The input node seeds the whole network: if it fails there is nothing
@@ -373,19 +393,21 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					LOGGER.error("Input node agent " + participantName + " failed; stopping network", failure);
 					throw new AgentException("Input node agent failed: " + participantName, failure);
 				}
-				// A downstream agent failure is isolated so the network stays resilient: notify,
+				// A downstream agent failure is isolated so the network stays resilient:
+				// notify,
 				// record an empty turn so the private session context stays consistent, and let
 				// the rest of the network proceed. The failing agent's turn has already been
 				// advanced above, so loop termination still progresses.
 				//
-				// Reported as ERROR, not DEBUG. Resilient does not mean silent: the caller still
+				// Reported as ERROR, not DEBUG. Resilient does not mean silent: the caller
+				// still
 				// gets an answer built without whatever this agent was supposed to contribute,
 				// and when the agent that failed is the router that answer is empty. Sending it
 				// at DEBUG put the one account of the failure in the same channel as "is
 				// coordinating...", so a provider rejecting every request looked exactly like a
 				// model with nothing to say.
-				notificationSink.notifyFailure("Agent: " + participantName + " failed, skipped: "
-						+ rootCauseMessage(failure), failure);
+				notificationSink.notifyFailure(
+						"Agent: " + participantName + " failed, skipped: " + rootCauseMessage(failure), failure);
 				LOGGER.error("Agent " + participantName + " failed; continuing network", failure);
 				addToEmptyReturn(inputMessage, contributionNr, inputRuntime.getAgentContext());
 				return new CallsResult<OutputType>(new TreeMap<>(), output);
@@ -403,8 +425,9 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			} else {
 				for (AgentsExchangeMessage<?> msg : messages) {
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Agent:" + participantName + " emitted message to:" + msg.getToAgent()
-								+ " semantic:" + msg.getMessageSemantic() + " executionOrder:" + msg.getExecutionOrder());
+						LOGGER.debug(
+								"Agent:" + participantName + " emitted message to:" + msg.getToAgent() + " semantic:"
+										+ msg.getMessageSemantic() + " executionOrder:" + msg.getExecutionOrder());
 					}
 					if (LOGGER.isTraceEnabled()) {
 						LOGGER.trace("<AGENT_OUTBOUND_MESSAGE from=" + participantName + " to=" + msg.getToAgent()
@@ -475,7 +498,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	protected <OutputType> CallsResult<OutputType> executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
 			INotificationSink notificationSink, IGAgentsNetworkRuntimeDao agentsDao,
 			AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup,
-			Class<OutputType> outputType, ReactiveIdentityUtil runAs)
+			Class<OutputType> outputType, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
 		CallsResult<OutputType> out = null;
 		if (executionGroup.isEmpty()) {
@@ -492,7 +515,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
 			out = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agentRuntime, msg,
-					outputType, runAs);
+					outputType, runAs, toolCalling);
 		} else {
 			List<CompletableFuture<CallsResult<OutputType>>> completables = new ArrayList<>();
 			for (AgentsExchangeMessage<?> msg : executionGroup) {
@@ -502,11 +525,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
 								return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
-										agent, msg, outputType, runAs);
+										agent, msg, outputType, runAs, toolCalling);
 							});
 						else
 							return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agent,
-									msg, outputType, runAs);
+									msg, outputType, runAs, toolCalling);
 					} catch (Throwable e) {
 						LOGGER.error("Exception executing network loop for agent:" + msg.getToAgent(), e);
 						return null;

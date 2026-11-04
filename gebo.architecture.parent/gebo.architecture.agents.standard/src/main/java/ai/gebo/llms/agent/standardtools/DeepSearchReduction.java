@@ -23,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
@@ -128,6 +129,17 @@ public final class DeepSearchReduction {
 	public static Outcome reduce(DeepSearchToolsSupport support, String label, String question, Depth depth,
 			List<Document> fragments, IChatRequestContext context, IGConfigurableChatModel chatModel,
 			ReactiveIdentityUtil runAs, IGProgressNotifier notifier) {
+		return reduce(support, label, question, depth, fragments, context, chatModel, runAs, notifier, null);
+	}
+
+	/**
+	 * The same, the analysis made with what the controlling software adds to the model
+	 * calls of the agent (see {@link GeboToolCalling}); null for nothing, which is the
+	 * analysis as it always has been.
+	 */
+	public static Outcome reduce(DeepSearchToolsSupport support, String label, String question, Depth depth,
+			List<Document> fragments, IChatRequestContext context, IGConfigurableChatModel chatModel,
+			ReactiveIdentityUtil runAs, IGProgressNotifier notifier, GeboToolCalling toolCalling) {
 		final int found = fragments != null ? fragments.size() : 0;
 		if (found == 0) {
 			if (LOGGER.isDebugEnabled()) {
@@ -162,13 +174,16 @@ public final class DeepSearchReduction {
 		}
 		final Vector<String> discardedFragmentIds = new Vector<>();
 		final DeepSearchAnalysisOutcome analysisOutcome = new DeepSearchAnalysisOutcome();
-		final String analysis = support.analysis()
-				.analyze(Flux.fromIterable(fragments), analysisContext,
-						runAs != null ? runAs : ReactiveIdentityUtil.create(), deliverable, completenessNote,
-						finalModel, serviceModel, discardedFragmentIds,
-						notifier != null ? notifier : IGProgressNotifier.NONE, analysisOutcome)
-				.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
-				.block(AbstractDeepSearchTool.DEEP_SEARCH_TIMEOUT);
+		final ReactiveIdentityUtil identity = runAs != null ? runAs : ReactiveIdentityUtil.create();
+		final IGProgressNotifier progress = notifier != null ? notifier : IGProgressNotifier.NONE;
+		final Flux<String> analysed = toolCalling != null
+				? support.analysis().analyze(Flux.fromIterable(fragments), analysisContext, identity, deliverable,
+						completenessNote, finalModel, serviceModel, discardedFragmentIds, progress, analysisOutcome,
+						toolCalling)
+				: support.analysis().analyze(Flux.fromIterable(fragments), analysisContext, identity, deliverable,
+						completenessNote, finalModel, serviceModel, discardedFragmentIds, progress, analysisOutcome);
+		final String analysis = analysed.reduce(new StringBuilder(), StringBuilder::append)
+				.map(StringBuilder::toString).block(AbstractDeepSearchTool.DEEP_SEARCH_TIMEOUT);
 		// the fragments the analysis stopped before were never read: not its sources
 		final Set<String> unread = analysisOutcome.getUnreadFragmentIds();
 		final List<String> sources = new ArrayList<>();

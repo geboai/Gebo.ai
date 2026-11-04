@@ -36,6 +36,7 @@ import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.services.IGSecurityService;
@@ -140,6 +141,17 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices)
 			throws AgentException {
+		return deliverDocuments(documents, command, chatRequestContext, agentModel, session, contextAgentPersona,
+				notificationSink, runAs, statusNotices, null);
+	}
+
+	/** The same, the deep search analysis made with the container when given. */
+	@Override
+	protected List<Document> deliverDocuments(List<Document> documents, SearchAgentCommand command,
+			IChatRequestContext chatRequestContext, IGConfigurableChatModel agentModel,
+			AgentsCollaborationSessionContext session, AgentNetworkParticipant contextAgentPersona,
+			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<String> statusNotices,
+			GeboToolCalling toolCalling) throws AgentException {
 		if (!deepSearchRequested(command)) {
 			return super.deliverDocuments(documents, command, chatRequestContext, agentModel, session,
 					contextAgentPersona, notificationSink, runAs, statusNotices);
@@ -163,8 +175,11 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 		}
 		DeepSearchReduction.Outcome outcome;
 		try {
-			outcome = DeepSearchReduction.reduce(deepSearchSupport(), getId(), command.getCommand(), depth, fragments,
-					chatRequestContext, agentModel, runAs, progressNotifier(notificationSink));
+			outcome = toolCalling != null
+					? DeepSearchReduction.reduce(deepSearchSupport(), getId(), command.getCommand(), depth, fragments,
+							chatRequestContext, agentModel, runAs, progressNotifier(notificationSink), toolCalling)
+					: DeepSearchReduction.reduce(deepSearchSupport(), getId(), command.getCommand(), depth, fragments,
+							chatRequestContext, agentModel, runAs, progressNotifier(notificationSink));
 		} catch (RuntimeException e) {
 			LOGGER.error("Deep search analysis failed for agent id:" + getId() + ", the fragments found are handed over",
 					e);
@@ -307,6 +322,12 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 	 */
 	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command,
 			INotificationSink notificationSink) throws AgentException {
+		return maybeRank(documents, command, notificationSink, null);
+	}
+
+	/** The same, the ranking's irrelevance filter made with the container when given. */
+	protected List<Document> maybeRank(List<Document> documents, SearchAgentCommand command,
+			INotificationSink notificationSink, GeboToolCalling toolCalling) throws AgentException {
 		if (notificationSink != null && documents != null && !documents.isEmpty() && rankingRequested(command)
 				&& rankerService.isRankerConfigured()) {
 			// Ranking is an LLM call over the whole candidate set, so it is a distinct wait
@@ -314,7 +335,7 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 			notificationSink.next("Agent: " + getId() + " is ranking " + documents.size() + " candidate(s)",
 					INotificationSink.NotificationObject.NotificationType.INFO);
 		}
-		final List<Document> outcome = rankDocuments(documents, command);
+		final List<Document> outcome = rankDocuments(documents, command, toolCalling);
 		notifyFoundDocuments(outcome, notificationSink);
 		return outcome;
 	}
@@ -377,7 +398,8 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 				+ String.join(", ", names), INotificationSink.NotificationObject.NotificationType.INFO);
 	}
 
-	private List<Document> rankDocuments(List<Document> documents, SearchAgentCommand command) throws AgentException {
+	private List<Document> rankDocuments(List<Document> documents, SearchAgentCommand command,
+			GeboToolCalling toolCalling) throws AgentException {
 		if (documents == null || documents.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Ranking skipped for agent id:" + getId() + " : nothing was retrieved");
@@ -395,7 +417,10 @@ public abstract class GAbstractStandardDocumentsSearchAgentService extends GAbst
 					LOGGER.trace(command.getCommand());
 					LOGGER.trace("</RANKING_QUERY>");
 				}
-				List<Document> ranked = rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(), command.getTopK());
+				List<Document> ranked = toolCalling != null
+						? rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(), command.getTopK(),
+								toolCalling)
+						: rankerService.rankAndRemoveIrrelevant(documents, command.getCommand(), command.getTopK());
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Ranking produced " + (ranked != null ? ranked.size() : 0)
 							+ " document(s) for agent id:" + getId());

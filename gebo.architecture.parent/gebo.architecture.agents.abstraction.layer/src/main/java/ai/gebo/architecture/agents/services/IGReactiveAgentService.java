@@ -10,6 +10,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public interface IGReactiveAgentService<RequestType, ResponseType> extends IGGenericAgentService {
 
@@ -18,4 +19,19 @@ public interface IGReactiveAgentService<RequestType, ResponseType> extends IGGen
 			INotificationSink notificationSink, AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
 			throws AgentException, LLMConfigException;
+
+	/**
+	 * The same execution, with what the software controlling the run adds to every
+	 * model call of it (see {@link GeboToolCalling}): passed to every model call the
+	 * agent makes, as it is, or one of its own in its place, or the two merged. Null is
+	 * the plain execution. An agent that does not take it runs the plain execution.
+	 */
+	default Flux<IGPartialOperation<ResponseType>> execute(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<RequestType, ResponseType> privateMemory,
+			ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+		return execute(chatRequestContext, agentConfig, request, network, contextAgentPersona, notificationSink, session,
+				privateMemory, runAs);
+	}
 }

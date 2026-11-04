@@ -89,8 +89,8 @@ public class BedrockChatModelConfigurationSupportService
 		}
 
 		@Override
-		protected BedrockProxyChatModel configureModel(GBedrockChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected BedrockProxyChatModel configureModel(GBedrockChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
@@ -130,8 +130,7 @@ public class BedrockChatModelConfigurationSupportService
 			}
 			BedrockChatOptions options = builder.build();
 
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
 			// connectionTimeout to 5s, which cut long streamed generations well before

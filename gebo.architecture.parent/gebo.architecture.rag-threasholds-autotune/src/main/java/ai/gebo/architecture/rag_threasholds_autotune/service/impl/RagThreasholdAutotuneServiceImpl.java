@@ -65,6 +65,8 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.vectorstores.repository.VectorizedContentRepository;
 import ai.gebo.llms.abstraction.layer.vectorstores.EmbedTypeFilters;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.model.DocumentMetaInfos;
 
 @Component
@@ -91,8 +93,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			IGEmbeddingModelRuntimeConfigurationDao embeddingModelsConfigDao,
 			ThreasholdAutotuneProcessResultRepository resultRepo,
 			VectorizedContentRepository vectorizedContentsRepository, RagThreasholdAutotuneConfig config,
-			IGPromptConfigDao promptsDao, IGeboSystemUserService systemUserService) {
+			IGPromptConfigDao promptsDao, IGeboSystemUserService systemUserService,
+			GeboToolCallingManagerFactory toolCallingFactory) {
 		super(chatModelsConfigDao, embeddingModelsConfigDao);
+		this.toolCallingFactory = toolCallingFactory;
 		this.resultRepo = resultRepo;
 		this.vectorizedContentsRepository = vectorizedContentsRepository;
 		this.config = config;
@@ -168,9 +172,27 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		}
 	}
 
+	/** The caller the autotune of a vector store names itself as: {@code autotune:<vector store>}. */
+	public static final String AUTOTUNE_CALLER_PREFIX = "autotune:";
+	/** Builds what the autotune adds to its model calls (see {@link #toolCallingOf}). */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
+
+	/**
+	 * What the autotune of a vector store adds to every model call it makes (see
+	 * {@link GeboToolCalling}): itself as the caller, the platform's loop limits. Nobody
+	 * is above an autotune: it runs on its timer. Null without the factory, which is the
+	 * call as it always has been.
+	 */
+	GeboToolCalling toolCallingOf(String vectorStoreId) {
+		return toolCallingFactory != null
+				? toolCallingFactory.builder().caller(AUTOTUNE_CALLER_PREFIX + vectorStoreId).build()
+				: null;
+	}
+
 	@Override
 	public void processAutotune(String vectorStoreId) throws LLMConfigException {
 		final int MAXQUESTIONS = this.config.getAutotuneMaxGeneratedQuestions();
+		final GeboToolCalling toolCalling = toolCallingOf(vectorStoreId);
 
 		ThreasholdAutotuneProcessResult lastEntry = internalFindByVectorStoreId(vectorStoreId);
 		// Documents first, because it is a cheap count and an empty store needs nothing
@@ -241,7 +263,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			final GPromptTemplateConfig inTopicPrompt = promptsDao
 					.findByPromptUse(RagThreasholdAutotunePromptConfig.RAG_IN_TOPIC_QUERY_GENERATOR_PROMPT);
 			final List<AutoTuneQuestion> questions = generateQuestions(serviceChatModel, inTopicPrompt, sampled,
-					MAXQUESTIONS);
+					MAXQUESTIONS, toolCalling);
 			if (questions.isEmpty()) {
 				// Without questions every threshold returns nothing, so the bound discovery
 				// below would walk the threshold past zero and abort on a message that
@@ -306,7 +328,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds = new TreeMap<Double, List<AutoTuneRatedThreashold>>();
 			Map<String, Double> cache = new HashMap<String, Double>();
 			maximizeInTreeSequence(lowerBound, upperBound, fineIncrement, vectorStore, serviceChatModel, questions,
-					rateOrderedOptimizationThreasholds, cache, topK);
+					rateOrderedOptimizationThreasholds, cache, topK, toolCalling);
 			AutoTuneRatedThreashold foundThreashold = selectResult(rateOrderedOptimizationThreasholds);
 			if (foundThreashold == null) {
 				LOGGER.error("No found threashold!!");
@@ -744,13 +766,13 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	private AutoTuneRatedThreashold maximizeInTreeSequence(double lowerBound, double upperBound, double fineIncrement,
 			VectorStore vectorStore, IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions,
 			TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds, Map<String, Double> cache,
-			int topK) throws LLMConfigException {
+			int topK, GeboToolCalling toolCalling) throws LLMConfigException {
 		double lower = round3decimal(lowerBound);
 		double upper = round3decimal(upperBound);
 		evaluateAndRecord(lower, vectorStore, defaultChatModel, questions, cache, topK,
-				rateOrderedOptimizationThreasholds);
+				rateOrderedOptimizationThreasholds, toolCalling);
 		evaluateAndRecord(upper, vectorStore, defaultChatModel, questions, cache, topK,
-				rateOrderedOptimizationThreasholds);
+				rateOrderedOptimizationThreasholds, toolCalling);
 		int remainingSteps = MAX_NARROWING_STEPS;
 		while ((upper - lower) > 2.0 * fineIncrement && remainingSteps-- > 0) {
 			final double lowerProbe = round3decimal(lower + (upper - lower) / 3.0);
@@ -762,9 +784,9 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 			LOGGER.info("maximizeInTreeSequence scanning between: " + lower + "," + lowerProbe + "," + upperProbe + ","
 					+ upper);
 			final AutoTuneRatedThreashold atLowerProbe = evaluateAndRecord(lowerProbe, vectorStore, defaultChatModel,
-					questions, cache, topK, rateOrderedOptimizationThreasholds);
+					questions, cache, topK, rateOrderedOptimizationThreasholds, toolCalling);
 			final AutoTuneRatedThreashold atUpperProbe = evaluateAndRecord(upperProbe, vectorStore, defaultChatModel,
-					questions, cache, topK, rateOrderedOptimizationThreasholds);
+					questions, cache, topK, rateOrderedOptimizationThreasholds, toolCalling);
 			if (atLowerProbe.rating < atUpperProbe.rating) {
 				lower = lowerProbe;
 			} else {
@@ -774,7 +796,7 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 		// One last look at the middle of what survived: the loop stops while the bracket is
 		// still an increment or two wide, and its centre has not necessarily been measured.
 		evaluateAndRecord(round3decimal((lower + upper) / 2.0), vectorStore, defaultChatModel, questions, cache, topK,
-				rateOrderedOptimizationThreasholds);
+				rateOrderedOptimizationThreasholds, toolCalling);
 		return selectResult(rateOrderedOptimizationThreasholds);
 	}
 
@@ -790,10 +812,10 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	 */
 	private AutoTuneRatedThreashold evaluateAndRecord(double threashold, VectorStore vectorStore,
 			IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions, Map<String, Double> cache,
-			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds)
-			throws LLMConfigException {
+			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		final AutoTuneRatedThreashold rated = evaluateThreashold(threashold, vectorStore, defaultChatModel, questions,
-				cache, topK, rateOrderedOptimizationThreasholds);
+				cache, topK, rateOrderedOptimizationThreasholds, toolCalling);
 		final List<AutoTuneRatedThreashold> sameRating = rateOrderedOptimizationThreasholds.computeIfAbsent(rated.rating,
 				k -> new ArrayList<AutoTuneRatedThreashold>());
 		if (sameRating.stream().noneMatch(x -> x.threashold == rated.threashold)) {
@@ -845,8 +867,8 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 
 	private AutoTuneRatedThreashold evaluateThreashold(double threashold, VectorStore vectorStore,
 			IGConfigurableChatModel defaultChatModel, List<AutoTuneQuestion> questions, Map<String, Double> cache,
-			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds)
-			throws LLMConfigException {
+			int topK, TreeMap<Double, List<AutoTuneRatedThreashold>> rateOrderedOptimizationThreasholds,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		double globalRating = 0.0;
 		double evaluationPoints = 0.0;
 		double totalDistance = 0.0;
@@ -915,8 +937,11 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 					.toList();
 			List<Document> toCalculate = matchWithRate.stream().filter(x -> x.rating == null).map(y -> y.document)
 					.toList();
-			String csvExtracted = callLLMWithDocuments(defaultChatModel, ratingPrompt,
-					IChatRequestContext.of(question.text), new HashMap<String, Object>(), toCalculate);
+			String csvExtracted = toolCalling != null
+					? callLLMWithDocuments(defaultChatModel, ratingPrompt, IChatRequestContext.of(question.text),
+							new HashMap<String, Object>(), toCalculate, toolCalling)
+					: callLLMWithDocuments(defaultChatModel, ratingPrompt, IChatRequestContext.of(question.text),
+							new HashMap<String, Object>(), toCalculate);
 			List<AutoTuneMatchRate> matches = readCSVLines(csvExtracted, 2, this::readMatchRate).toList();
 			List<AutoTuneMatchWithRate> rated = new ArrayList<AutoTuneMatchWithRate>(alreadyMatched);
 			for (AutoTuneMatchRate match : matches) {
@@ -1049,14 +1074,17 @@ public class RagThreasholdAutotuneServiceImpl extends BaseLLMSInvokingAndProvidi
 	 * remaining batches still run, so one bad answer no longer costs the whole tuning.
 	 */
 	private List<AutoTuneQuestion> generateQuestions(IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt,
-			List<Document> sampled, int maxQuestions) throws LLMConfigException {
+			List<Document> sampled, int maxQuestions, GeboToolCalling toolCalling) throws LLMConfigException {
 		final int perCall = Math.max(1, config.getAutotuneQuestionChunksPerCall());
 		final List<AutoTuneQuestion> out = new ArrayList<AutoTuneQuestion>();
 		final Map<String, Boolean> alreadyAsked = new HashMap<String, Boolean>();
 		for (int from = 0; from < sampled.size() && out.size() < maxQuestions; from += perCall) {
 			final int to = Math.min(from + perCall, sampled.size());
-			final String csvResult = callLLMWithDocuments(chatModel, prompt,
-					IChatRequestContext.of("Sampling queries"), Map.of(), sampled.subList(from, to));
+			final String csvResult = toolCalling != null
+					? callLLMWithDocuments(chatModel, prompt, IChatRequestContext.of("Sampling queries"), Map.of(),
+							sampled.subList(from, to), toolCalling)
+					: callLLMWithDocuments(chatModel, prompt, IChatRequestContext.of("Sampling queries"), Map.of(),
+							sampled.subList(from, to));
 			final List<AutoTuneQuestion> parsed = parseQuestions(csvResult);
 			if (parsed.isEmpty()) {
 				LOGGER.warn("Fragments [" + from + "," + to + ") produced no autotune question. " + chatModel.getCode()

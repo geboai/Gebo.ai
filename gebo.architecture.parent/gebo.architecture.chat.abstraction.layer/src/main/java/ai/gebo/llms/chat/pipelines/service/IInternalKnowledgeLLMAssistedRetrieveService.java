@@ -3,6 +3,7 @@ package ai.gebo.llms.chat.pipelines.service;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
@@ -39,5 +40,26 @@ public interface IInternalKnowledgeLLMAssistedRetrieveService {
 			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
 			boolean removeIrrelevant, int tokensBudget) throws GeboChatSessionLifecycleException, LLMConfigException {
 		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant);
+	}
+
+	/**
+	 * The same, every model call of the retrieval (the searches suggestion, the
+	 * irrelevance filter) made with what the controlling software adds to the request
+	 * it serves (see {@link GeboToolCalling}); null for nothing, which is the retrieval
+	 * as it always has been.
+	 */
+	public default Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, GeboToolCalling toolCalling)
+			throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant);
+	}
+
+	/** The same, the contents found capped to {@code tokensBudget} tokens. */
+	public default Flux<AIDocumentsSet> doDocumentsRetrieve(MinimalChatContext minimalChatContext,
+			IGConfigurableChatModel targetChatModel, LLMRequestGenerationPolicy policy, int topK,
+			boolean removeIrrelevant, int tokensBudget, GeboToolCalling toolCalling)
+			throws GeboChatSessionLifecycleException, LLMConfigException {
+		return doDocumentsRetrieve(minimalChatContext, targetChatModel, policy, topK, removeIrrelevant, tokensBudget);
 	}
 }

@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -27,6 +28,7 @@ import org.junit.jupiter.api.Test;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMRequestGenerationPolicy;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -61,6 +63,23 @@ class InternalKnowledgeLLMAssistedRetrieveRankingTest {
 		verify(ranker, never()).rankAndRemoveIrrelevant(any(AIDocumentsSet.class), anyString(), anyInt());
 
 		assertSame(filtered, service.rankFound(found, "query", 8, true), "the RAG chat: irrelevant ones removed");
+	}
+
+	@Test
+	void theIrrelevanceFilterIsAskedWithTheContainerOfTheRequest() throws Exception {
+		IGRankerService ranker = mock(IGRankerService.class);
+		AIDocumentsSet found = new AIDocumentsSet();
+		AIDocumentsSet filtered = new AIDocumentsSet();
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:r1").build();
+		when(ranker.rankAndRemoveIrrelevant(any(AIDocumentsSet.class), anyString(), anyInt(), same(toolCalling)))
+				.thenReturn(filtered);
+		InternalKnowledgeLLMAssistedRetrieveServiceImpl service = new InternalKnowledgeLLMAssistedRetrieveServiceImpl(
+				mock(IGChatSessionLifeCycleService.class), mock(ChatPipelinesConfiguration.class),
+				mock(IGPromptConfigDao.class), mock(IGDocumentsSearchService.class), mock(IGSecurityService.class),
+				ranker);
+
+		assertSame(filtered, service.rankFound(found, "query", 8, true, toolCalling));
+		verify(ranker, never()).rankAndRemoveIrrelevant(any(AIDocumentsSet.class), anyString(), anyInt());
 	}
 
 	@Test

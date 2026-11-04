@@ -11,7 +11,6 @@ package ai.gebo.llms.abstraction.layer.tests;
 
 import java.util.List;
 
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -80,7 +79,7 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 		 * @throws LLMConfigException If there's an error during configuration
 		 */
 		@Override
-		protected TestChatModel configureModel(TestChatModelConfiguration config, GChatModelType type, ToolCallingManager toolsCallsManager)
+		protected TestChatModel configureModel(TestChatModelConfiguration config, GChatModelType type)
 				throws LLMConfigException {
 			TestChatModel m = new TestChatModel();
 			m.setConfiguration(config);

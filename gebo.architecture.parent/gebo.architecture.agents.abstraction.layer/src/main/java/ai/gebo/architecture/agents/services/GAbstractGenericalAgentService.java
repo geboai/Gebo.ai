@@ -50,7 +50,6 @@ import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
-import ai.gebo.architecture.agents.services.impl.AgentToolCallingManagerFactory;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -758,9 +757,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs),
-				additionalFunctions);
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions, additionalFunctions);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getAgentModel(...) for agent service id:" + getId());
@@ -801,37 +798,6 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		ToolCallback callBack = ToolCallbackDeclarationUtil.declare(activeConsumer, NOTIFY_USER_TOOL,
 				NOTIFY_USER_TOOL_DESCRIPTION, UserMessageToolParam.class);
 		return callBack;
-	}
-
-	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
-			List<String> allFunctions, List<ToolCallback> additionalTools, ReactiveIdentityUtil runAs) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin createToolCallingManager(...) agent service id:" + getId() + " functions:"
-					+ (allFunctions != null ? allFunctions.size() : 0) + " additionalTools:"
-					+ (additionalTools != null ? additionalTools.size() : 0));
-		}
-		List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, allFunctions,
-				toolsRepositoryPattern);
-		if (additionalTools != null && !additionalTools.isEmpty()) {
-			wrapped = new ArrayList<ToolCallback>(wrapped);
-			// Wrap the dynamically-provided tools (e.g. notifyUser, bound to the notification
-			// sink) and ADD them to the resolvable set. Previously the wrapped result was
-			// assigned to a local and dropped, so notifyUser had a name in allFunctions but no
-			// callback in callMap - AgentToolCallingManagerFactory.resolve("notifyUser") returned
-			// null and the tool was never callable.
-			wrapped.addAll(GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, additionalTools));
-		}
-		final Map<String, ToolCallback> map = new HashMap<>();
-		for (ToolCallback toolCallback : wrapped) {
-			map.put(toolCallback.getToolDefinition().name(), toolCallback);
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End createToolCallingManager(...) agent service id:" + getId() + " wrapped tools:" + map.size());
-		}
-		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Wrapped tool names for agent service id:" + getId() + " : " + map.keySet());
-		}
-		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
 	}
 
 	protected static String extractContent(ChatResponse chatResponse) {

@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
 
@@ -55,8 +54,7 @@ class AdditionalToolsDeclarationTest {
 		}
 
 		@Override
-		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) {
+		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type) {
 			return mock(ChatModel.class);
 		}
 	}
@@ -87,7 +85,7 @@ class AdditionalToolsDeclarationTest {
 		ToolCallback notEnabled = tool("notEnabled");
 		IGConfigurableChatModel agentModel = model.cloneWithOptions("agent-",
 				new ChatModelConfigOptions(null, null, null, List.of("searchKnowledgeBase", "notifyUser"),
-						mock(ToolCallingManager.class), List.of(notifyUser, notEnabled)));
+						List.of(notifyUser, notEnabled)));
 
 		List<ToolCallback> declared = agentModel.wrapTools(mock(ReactiveIdentityUtil.class), null);
 

@@ -27,6 +27,7 @@ import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
@@ -190,8 +191,15 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		GPromptTemplateConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
-				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD, USER_REQUIRED_LANGUAGE_FIELD));
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+		Map<String, List<String>> data = toolCalling != null
+				? callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
+						List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD,
+								USER_REQUIRED_LANGUAGE_FIELD),
+						toolCalling)
+				: callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
+						List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD,
+								USER_REQUIRED_LANGUAGE_FIELD));
 		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
@@ -354,8 +362,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			final int documentsTokenBudget = Math.min(remainingContext,
 					this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-			decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,
-					List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS, PIPELINE_EXECUTOR_SUGGESTION));
+			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+			decisionMap = toolCalling != null
+					? callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,
+							List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS, PIPELINE_EXECUTOR_SUGGESTION), toolCalling)
+					: callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,
+							List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS, PIPELINE_EXECUTOR_SUGGESTION));
 			sanitizeSearchedSystems(decisionMap);
 			// extracting user intent
 

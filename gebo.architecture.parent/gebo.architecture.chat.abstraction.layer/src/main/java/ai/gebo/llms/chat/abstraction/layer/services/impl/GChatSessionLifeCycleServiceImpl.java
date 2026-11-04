@@ -57,6 +57,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatUIServerConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
@@ -131,6 +133,11 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGAIToolsLibraryInstancesService libraryInstances;
 	private final ChatAnswerFeedbackRepository answerFeedbackRepository;
 	private final IGChatRulesService rulesService;
+	/** Builds what the title suggestion adds to its model call: itself as the caller. */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
+
+	/** The caller the title suggestion of a chat names itself as: {@code title:<session code>}. */
+	public static final String TITLE_CALLER_PREFIX = "title:";
 	/**
 	 * Writes the chat title alone (see {@link #suggestChatDescription(String)}):
 	 * a whole-session save there overwrote the first answer when a handler saved
@@ -1409,8 +1416,13 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		try {
 			if (handler != null && hasAnsweredInteraction(context)) {
 				IChatRequestContext ccontext = context.createChatRequestContext();
-				// the title prompt takes nothing but the question and the language
-				String content = handler.textResponse(prompt, Map.of(), ccontext);
+				// the title prompt takes nothing but the question and the language; the call
+				// names itself: nobody is above a title suggestion
+				final GeboToolCalling toolCalling = toolCallingFactory != null
+						? toolCallingFactory.builder().caller(TITLE_CALLER_PREFIX + id).build()
+						: null;
+				String content = toolCalling != null ? handler.textResponse(prompt, Map.of(), ccontext, toolCalling)
+						: handler.textResponse(prompt, Map.of(), ccontext);
 				String pureText = ClientChatCallUtil.removeThinking(content);
 				data.setDescription(pureText);
 				saveDescription(context, pureText);

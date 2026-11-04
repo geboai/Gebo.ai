@@ -111,8 +111,8 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected ChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected ChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
 				throw new LLMConfigException("OpenAI api cannot work without needed api key configuration");
@@ -194,8 +194,7 @@ public class OpenAIChatModelConfigurationSupportService
 
 			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(getCode())));
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			// The models of version 6 and later go through the Responses API, whose tool calls
 			// Chat Completions does not carry for them (OpenAiResponsesChatModel); the others
 			// stay on Spring AI's Chat Completions model

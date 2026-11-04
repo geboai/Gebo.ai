@@ -17,8 +17,10 @@ import org.springframework.stereotype.Service;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
+import ai.gebo.llms.deepsearch.service.DeepSearchOutputThinking;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchAnalysis;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchQuotations;
 import ai.gebo.llms.deepsearch.service.impl.DeepSearchRelevance;
@@ -75,12 +77,30 @@ public class DeepSearchToolAnalysis {
 			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
 			DeepSearchAnalysisOutcome outcome) {
+		return analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+				discardedFragmentIds, notifier, outcome, null);
+	}
+
+	/**
+	 * The same, the analysis made with the container the tool runs in (see
+	 * {@link GeboToolCalling}): what the controlling software loaded for the call that
+	 * called the tool reaches the model calls of the analysis too. Null for nothing,
+	 * which is the analysis as it always has been.
+	 */
+	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
+			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
+			DeepSearchAnalysisOutcome outcome, GeboToolCalling toolCalling) {
 		// the quotations of this analysis: the outcome's when given, so the tool can list them
 		final DeepSearchQuotations quotations = outcome != null ? outcome.getQuotations()
 				: new DeepSearchQuotations();
-		final Flux<String> analysed = analysis.analyze(fragments, context, runAs, deliverable, completenessNote,
-				chatModel, serviceModel, discardedFragmentIds, notifier, quotations, new DeepSearchRelevance(), outcome,
-				null, "Deep search tool");
+		final Flux<String> analysed = toolCalling != null
+				? analysis.analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+						discardedFragmentIds, notifier, quotations, new DeepSearchRelevance(), outcome, null,
+						"Deep search tool", DeepSearchOutputThinking.NONE, toolCalling)
+				: analysis.analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+						discardedFragmentIds, notifier, quotations, new DeepSearchRelevance(), outcome, null,
+						"Deep search tool");
 		// the quotations the standard way, with no fragment id
 		return quotations.render(analysed).subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 	}
