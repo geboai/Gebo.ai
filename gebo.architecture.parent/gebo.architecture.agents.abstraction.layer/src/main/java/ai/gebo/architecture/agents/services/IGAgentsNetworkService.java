@@ -29,7 +29,8 @@ public interface IGAgentsNetworkService<InputType, OutputType> {
 	 * Respawns a suspended run from the block it was saved as (see
 	 * {@link GNetworkOfAgentsSuspension}) with the conditions resolved for it, each
 	 * matched to the one saved by its id and carrying the value waited for. The
-	 * network must be the one of the block. The collaboration goes on from the cut:
+	 * service must be created for the block, by the factory of its network: a
+	 * service whose agents already ran is refused. The collaboration goes on from the cut:
 	 * the agents whose condition is resolved are re-executed with the message each
 	 * was executing, what the run had not delivered is delivered, and the run ends
 	 * with an output or suspends again, into a new block, when an agent asks or a

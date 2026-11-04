@@ -62,6 +62,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private static final String SUSPENSION_OF_ANOTHER_NETWORK = "The suspension is of another network: ";
 	private static final String SUSPENSION_WITHOUT_SHARED_STATE = "The suspension has no shared state to respawn from: ";
 	private static final String SUSPENDED_AGENT_WITHOUT_TURN = "The suspension does not say which message the agent was executing: ";
+	private static final String SERVICE_ALREADY_RUN = "A respawn needs a network service created for the block,"
+			+ " this one already ran: ";
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
 	private final IGeboThreadManager threadManager;
@@ -607,11 +609,21 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	/**
 	 * Restores the runtime of every agent of the cut into the agents of this
-	 * service: its counters, and its private state replayed turn by turn. An agent
-	 * of the cut this service has no runtime for is skipped, with a warning.
+	 * service: its counters, and its private state replayed turn by turn. The service
+	 * must be created for the block, by the factory of its network: one whose agents
+	 * already ran is refused, since restoring over their state would mix two runs,
+	 * and a service streaming its output completed its sink with its run anyway.
+	 * An agent of the cut this service has no runtime for is skipped, with a warning.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void restoreAgentsRuntime(GNetworkOfAgentsSuspension suspension) throws AgentException {
+		for (RuntimeAgentInfos runtime : agentsRuntime()) {
+			final boolean ran = runtime.getInvocations().get() > 0 || runtime.getTurnOfExecution() > 0
+					|| (runtime.getAgentContext() != null && !runtime.getAgentContext().getInteractions().isEmpty());
+			if (ran)
+				throw new AgentException(
+						SERVICE_ALREADY_RUN + runtime.getNetworkParticipantConfig().getNetworkAgentName());
+		}
 		for (AgentRuntimeState state : suspension.getAgentsRuntime()) {
 			final RuntimeAgentInfos runtime = state.getNetworkAgentName() != null
 					? agentsDao.findAgentByCode(state.getNetworkAgentName())

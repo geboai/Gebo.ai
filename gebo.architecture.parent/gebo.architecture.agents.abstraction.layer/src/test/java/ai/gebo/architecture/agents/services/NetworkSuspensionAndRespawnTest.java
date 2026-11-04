@@ -161,10 +161,15 @@ class NetworkSuspensionAndRespawnTest {
 		network.setCode("the-network");
 		network.setAgents(List.of(asker, writer));
 		network.setMaxLoopIteration(10);
+		service = newService();
+	}
+
+	/** A service created for the network, as the factory creates one: fresh runtimes over the agents. */
+	private TestNetworkService newService() throws Exception {
 		Map<String, RuntimeAgentInfos> runtimes = new HashMap<String, RuntimeAgentInfos>();
-		runtimes.put(ASKER, runtimeOf(asker, asker()));
-		runtimes.put(WRITER, runtimeOf(writer, writer()));
-		service = new TestNetworkService(IGAgentsNetworkRuntimeDao.of(runtimes));
+		runtimes.put(ASKER, runtimeOf(network.getAgents().get(0), asker()));
+		runtimes.put(WRITER, runtimeOf(network.getAgents().get(1), writer()));
+		return new TestNetworkService(IGAgentsNetworkRuntimeDao.of(runtimes));
 	}
 
 	private NetworkOfAgentsExecutionResult<String> run() throws Exception {
@@ -209,6 +214,8 @@ class NetworkSuspensionAndRespawnTest {
 		AgentSuspendedWaitingCondition answered = block.getSuspendedAgents().get(0).getWaitingCondition()
 				.toCondition();
 		answered.setInstanceValue("2024");
+		// the respawn runs on a service created for the block, as the factory creates one
+		service = newService();
 
 		@SuppressWarnings("unchecked")
 		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
@@ -229,6 +236,7 @@ class NetworkSuspensionAndRespawnTest {
 	void respawningTheBlockWithoutTheAnswerDeliversWhatWasFrozenAndSuspendsAgainIntoANewBlock() throws Exception {
 		run();
 		GNetworkOfAgentsSuspension block = saved.get(0);
+		service = newService();
 
 		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
 				IChatRequestContext.of("resume"), block, List.of(), TOOL_CALLING);
@@ -253,10 +261,23 @@ class NetworkSuspensionAndRespawnTest {
 	}
 
 	@Test
+	void aServiceWhoseAgentsAlreadyRanIsRefused() throws Exception {
+		run();
+		GNetworkOfAgentsSuspension block = saved.get(0);
+
+		AgentException refusal = assertThrows(AgentException.class, () -> service.respawnNetworkExecution(
+				IChatRequestContext.of("resume"), block, List.of(), TOOL_CALLING));
+
+		assertTrue(refusal.getMessage().contains("created for the block"), refusal.getMessage());
+		assertTrue(messagesSeenByTheWriter.isEmpty(), "nothing was delivered");
+	}
+
+	@Test
 	void aBlockOfAnotherNetworkIsRefused() throws Exception {
 		run();
 		GNetworkOfAgentsSuspension block = saved.get(0);
 		block.setNetworkCode("another-network");
+		service = newService();
 
 		assertThrows(AgentException.class, () -> service.respawnNetworkExecution(IChatRequestContext.of("resume"),
 				block, List.of(), TOOL_CALLING));
