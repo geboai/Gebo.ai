@@ -489,15 +489,22 @@ the network to suspend the run for each condition declared
 (`IGNetworkOfAgentsSuspensionHandler.enterSuspensionState`). The run is saved
 as a block and respawned when the conditions are resolved; the agent is then
 re-executed on the same message, told the answer first (see
-`ResolvedConditionText`). The tool-calling agents and the adapted reactive
-agents do this already: a waiting tool only needs mounting on the agent.
+`ResolvedConditionText`). Every agent calling a model does this already
+(`AgentSuspensionTurn`): a waiting tool only needs mounting on the agent. A
+structured model call a waiting tool ended answers null: there is no result to parse.
 
-`AskUserSingleChoiceQuestionTool` and `AskUserMultipleChoiceQuestionTool` (source
-`ask-user-choice-question-tool-source`, mounted only on the agents that name it)
-are the tools of the common case: a question the user answers with one of the
+`AskUserSingleChoiceQuestionTool` and `AskUserMultipleChoiceQuestionTool` (library
+type `user-questions-and-clarifications`, mounted only on the agents naming it among
+their `libraryTypeIds`) are the tools of the common case: a question the user answers with one of the
 options the model chose, or with all those that apply. Each option has a label
 and a description, and the user may explain in their own words when the model
 allows it.
+A tool ending the call is not read by the model, so their descriptions tell it
+beforehand that its work stops and starts again from the same message with the
+answer; what it wants to keep it writes in the optional `notesForLater`, saved on
+the condition, given back with the answer and never shown to the user: the called
+functions of a response leave it out. Tell the model to write the values themselves:
+told only "write what you need", it notes that it has them.
 
 ```java
 // the tool

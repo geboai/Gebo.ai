@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
+import org.springframework.ai.tool.metadata.ToolMetadata;
 
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
@@ -132,6 +133,7 @@ public class AIToolsLibraryTypeToolSource implements IGToolCallbackSource {
 	 */
 	final class LibraryToolStandIn implements ToolCallback {
 		private final ToolDefinition definition;
+		private final ToolMetadata metadata;
 
 		LibraryToolStandIn(ToolReference reference) {
 			final boolean declared = reference.getInputSchema() != null && !reference.getInputSchema().isBlank();
@@ -142,11 +144,18 @@ public class AIToolsLibraryTypeToolSource implements IGToolCallbackSource {
 			this.definition = ToolDefinition.builder().name(reference.getName())
 					.description(reference.getDescription() != null ? reference.getDescription() : reference.getName())
 					.inputSchema(declared ? reference.getInputSchema() : NO_INPUT_SCHEMA).build();
+			this.metadata = ToolMetadata.builder().returnDirect(reference.isReturnDirect()).build();
 		}
 
 		@Override
 		public ToolDefinition getToolDefinition() {
 			return definition;
+		}
+
+		/** What the tool of the instance declares: the tool calling loop reads it here, not there. */
+		@Override
+		public ToolMetadata getToolMetadata() {
+			return metadata;
 		}
 
 		@Override

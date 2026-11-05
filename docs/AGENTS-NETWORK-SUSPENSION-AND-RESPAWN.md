@@ -20,7 +20,9 @@ waited for whole, and everything not yet delivered is frozen in its place.
 | agents abstraction | `GNetworkOfAgentsSuspension` | The block: network copy and input, conversation and request, suspended agents (one entry each, with its turn and all its conditions), frozen deliveries, every agent's runtime, the shared state. |
 | agents abstraction | `IGAgentsNetworkService.respawnNetworkExecution` | Respawns a block with the resolved conditions on a service **created for the block** by the factory. |
 | agents abstraction | `IGWaitExternalCondition`, `GWaitExternalConditionSink` | The contract a tool declares a condition through; the sink the agent loads for each model call. |
-| agents abstraction | `AskUserSingleChoiceQuestionTool`, `AskUserMultipleChoiceQuestionTool`, `AskUserChoiceQuestionToolSource` | The tools of the common case: a question with one answer, or with several, among options with a label and a description, an explanation of the user's own when allowed. Mounted only on the agents that name their source. |
+| agents abstraction | `AgentSuspensionTurn` | What an agent able to wait does around its model calls in one turn: loads the sink, tells the model the answers on a respawn, asks the suspension once the calls ended. Used by the reactive adapter and by the tool-calling, task performer, routing and documents search agents. An agent only suspends when one of its tools declares a condition: in practice, when its configuration names the user questions library. A search agent is told the answers in its search command. |
+| agents abstraction | `AskUserSingleChoiceQuestionTool`, `AskUserMultipleChoiceQuestionTool` | The tools of the common case: a question with one answer, or with several, among options with a label and a description, an explanation of the user's own when allowed. |
+| agents standard | `UserQuestionsLibrarySource` | The library bundling those tools, "User questions and clarifications tool" (type `user-questions-and-clarifications`). It holds no resources, and its instance keeps nothing. Mounted only on the agents that name the library type among their `libraryTypeIds`: the agentic loop agents. |
 | chat abstraction | `NetworkOfAgentsSuspendedState`, `AgentSuspendedWaitingConditionDto` | What the client reads: the block id and one DTO per condition. |
 | chat abstraction | `NetworkOfAgentsSuspendedStateReaction`, `AgentSuspendedWaitingConditionReactionDto` | What the client sends back on the respawn. |
 | chat abstraction | `IAgentSuspendedWaitingConditionTransportTranslator` | One per kind of condition: condition to DTO, reaction into the saved condition. `ClarificationConditionTransportTranslator`, `DefaultConditionTransportTranslator` (the fallback). |
@@ -82,7 +84,12 @@ waited for whole, and everything not yet delivered is frozen in its place.
    environment are given again by the respawning step), restores every agent's
    counters and private turns, and re-executes the suspended agents whose conditions
    are resolved, each once, with the message it was executing, every answer told first
-   (`ResolvedConditionText`). An agent goes on when at least one of its conditions is
+   (`ResolvedConditionText`), followed by the notes the agent wrote to itself when it
+   stopped, if any (`notesForLater` on the condition, saved in the block, never sent
+   to the client and left out of the recorded tool calls by `ToolCallsListener`). An
+   agent whose model reads the request from the context, as the agentic loop does, is
+   given a context asking the same told text (`AgentSuspensionTurn.toldContext`): what
+   the user wrote last is only the answer. An agent goes on when at least one of its conditions is
    resolved and no mandatory one is left, those left counting as declined; with a
    mandatory one left it keeps waiting for all of them. The frozen deliveries follow in
    their order, then the normal loop.

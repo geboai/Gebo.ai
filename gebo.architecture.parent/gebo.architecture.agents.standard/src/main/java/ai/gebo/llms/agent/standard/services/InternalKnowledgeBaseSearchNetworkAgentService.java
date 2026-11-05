@@ -152,6 +152,10 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			Map<String, List<String>> fields = callLLMRepeatableFieldEntryOutput(agentModel, prompt,
 					chatRequestContext, params,
 							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD), toolCalling);
+			if (toolCalling != null && toolCalling.isStoppedByTool()) {
+				// a tool ended the planner's call: there are no queries, and the agent waits
+				return List.of();
+			}
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
 			if (semanticQueries.isEmpty() && fullTextQueries.isEmpty()) {

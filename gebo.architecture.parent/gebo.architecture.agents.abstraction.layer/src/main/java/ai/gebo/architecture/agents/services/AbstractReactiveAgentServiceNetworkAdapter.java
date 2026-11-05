@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
-import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
@@ -91,35 +90,14 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_INPUT>");
 		}
-		// What a tool of the agent's calls declares the run must wait for (see
-		// IGWaitExternalCondition): loaded for every call of the adapted agent, filled
-		// only by a mounted waiting tool, read once its stream ended. The adapter's own
-		// container, merged into the run's: the run's caller, limits and tools stay.
-		final GWaitExternalConditionSink wait = new GWaitExternalConditionSink();
-		final GeboToolCalling callToolCalling = GeboToolCalling.merged(
-				GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build(), toolCalling);
-		// A respawned agent is re-executed on the message it was given, told first what
-		// it waited for and what came of it.
-		final List<AgentSuspendedWaitingCondition> resolved = suspensionHandler != null
-				? suspensionHandler.resolvedConditionsOf(contextAgentPersona)
-				: List.of();
-		RequestType request = msg.getPayload();
-		if (!resolved.isEmpty()) {
-			if (request instanceof String text) {
-				@SuppressWarnings("unchecked")
-				final RequestType told = (RequestType) ResolvedConditionText.prepend(resolved, text);
-				request = told;
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Reactive agent adapter id:" + getId() + " respawned with the answers to " + resolved.size()
-							+ " condition(s)");
-				}
-			} else {
-				LOGGER.warn("Reactive agent adapter id:" + getId() + " respawned with the answers to " + resolved.size()
-						+ " condition(s) but its input is not text ("
-						+ (request != null ? request.getClass().getName() : null) + "): the model is not told the answer");
-			}
-		}
-		Flux<IGPartialOperation<ResponseType>> flux = service.execute(chatRequestContext, config, request, network,
+		// What a tool of the agent's calls declares the run must wait for: read once its
+		// stream ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Reactive agent " + getId(), toolCalling,
+				suspensionHandler, contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
+		final RequestType request = turn.toldInput(msg.getPayload());
+		Flux<IGPartialOperation<ResponseType>> flux = service.execute(turn.toldContext(chatRequestContext, request),
+				config, request, network,
 				contextAgentPersona, notificationSink, session, mySessionContext, runAs, callToolCalling);
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
 			sink.emitNext(x, null);
@@ -130,23 +108,8 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.debug("Reactive agent adapter id:" + getId() + " buffered "
 					+ (buffered != null ? buffered.size() : 0) + " partial operation(s)");
 		}
-		if (wait.isWaiting()) {
-			// A tool declared the run must wait for something from outside it: the adapter
-			// asks the network to suspend the run for each condition and says nothing; what
-			// the agent streamed so far reached the user. Re-executed on this message when
-			// the conditions are resolved.
-			if (suspensionHandler == null) {
-				throw new AgentException("Reactive agent " + getId() + " must wait for " + wait.waited().size()
-						+ " condition(s) but the run has no suspension handler");
-			}
-			for (AgentSuspendedWaitingCondition<?, ?> condition : wait.waited()) {
-				suspensionHandler.enterSuspensionState(network, config, contextAgentPersona, mySessionContext, condition);
-			}
-			if (LOGGER.isInfoEnabled()) {
-				LOGGER.info("Reactive agent adapter id:" + getId() + " asked to suspend the run for "
-						+ wait.waited().size() + " condition(s), the call stopped by tool:"
-						+ callToolCalling.isStoppedByTool());
-			}
+		// what the agent streamed so far reached the user
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
 			return List.of();
 		}
 		ResponseType response = extractResponse(buffered);

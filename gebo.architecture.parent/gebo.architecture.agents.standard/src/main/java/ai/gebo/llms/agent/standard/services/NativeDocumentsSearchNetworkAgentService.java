@@ -129,6 +129,10 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt, chatRequestContext,
 						callParams, queryType,
 								toolCalling);
+				if (toolCalling != null && toolCalling.isStoppedByTool()) {
+					// a tool ended the call: there is no query, and the agent waits
+					return List.of();
+				}
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<NATIVE_QUERY system=" + system.getCode() + ">");
 					LOGGER.trace(String.valueOf(queryObject));

@@ -9,6 +9,7 @@
 package ai.gebo.architecture.ai.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -157,5 +158,20 @@ class AIToolsLibraryTypeToolSourceTest {
 		String answer = toolNamed(source, "listFiles").call("{}", context);
 
 		assertTrue(answer.contains("does not provide it"), answer);
+	}
+
+	@Test
+	void aStandInEndsTheCallOnlyWhenTheReferenceSaysSo() {
+		AWorkingDirectoryLibrary library = new AWorkingDirectoryLibrary();
+		ToolReference ending = new ToolReference();
+		ending.setName("askSomething");
+		ending.setReturnDirect(true);
+		AIToolsAndResourcesLibraryType type = new AIToolsAndResourcesLibraryType();
+		type.setId(TYPE);
+		type.setTools(List.of(ending, library.type.getTools().get(0)));
+		AIToolsLibraryTypeToolSource source = new AIToolsLibraryTypeToolSource(type, library);
+
+		assertTrue(toolNamed(source, "askSomething").getToolMetadata().returnDirect());
+		assertFalse(toolNamed(source, "readFile").getToolMetadata().returnDirect());
 	}
 }

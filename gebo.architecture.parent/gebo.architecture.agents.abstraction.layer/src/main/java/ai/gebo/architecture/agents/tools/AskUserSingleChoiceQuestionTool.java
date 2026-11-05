@@ -21,7 +21,7 @@ public class AskUserSingleChoiceQuestionTool extends GAbstractAskUserChoiceQuest
 	public static final String DESCRIPTION = "Ask the user a question you cannot go on without, when exactly one of the options you give can be the answer,"
 			+ " each with a short label and, when the label alone is not enough, a description;"
 			+ " allow an explanation of their own when the options may not cover their case."
-			+ " The work stops and waits for the answer, so ask only what you really need, once, with everything in one question.";
+			+ STOPS_THE_WORK;
 
 	/** The tool, declared as returning directly: the call ends at it. */
 	public static ToolCallback declare() {

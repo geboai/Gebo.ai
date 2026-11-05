@@ -210,4 +210,20 @@ class ConditionTransportTranslatorsTest {
 			assertFalse(translator.canTranslateReaction(reaction("other", "c", Map.of())));
 		}
 	}
+
+	@Test
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void theAgentsNotesStayOutOfWhatTheClientReadsAndFollowTheCondition() {
+		AgentSuspendedWaitingCondition saved = clarificationCondition(true, false);
+		saved.setNotesForLater("my own reasoning");
+		String id = saved.getSuspendedConditionId();
+
+		assertFalse(clarification.translate(saved).getAttributes().toString().contains("my own reasoning"));
+		assertFalse(fallback.translate(saved).getAttributes().toString().contains("my own reasoning"));
+
+		assertEquals("my own reasoning", clarification
+				.translateReaction(reaction("clarification", id, Map.of("chosenOption", "2024")), saved).getNotesForLater());
+		assertEquals("my own reasoning", clarification
+				.translateReaction(reaction("clarification", id, Map.of("declined", true)), saved).getNotesForLater());
+	}
 }

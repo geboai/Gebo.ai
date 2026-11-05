@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,6 +192,8 @@ public final class GeboToolCalling {
 	// what the last call made with this left behind, and how many calls were made
 	private volatile CallRecord lastCall = new CallRecord();
 	private final AtomicInteger calls = new AtomicInteger();
+	// the container this was merged from: it hears of the calls made with this
+	private volatile GeboToolCalling mergedFrom = null;
 
 	private GeboToolCalling(Builder builder) {
 		this.mandatoryTools = List.copyOf(builder.mandatoryTools);
@@ -225,8 +228,8 @@ public final class GeboToolCalling {
 	 * the instances of both (the agent's found when both loaded the same interface),
 	 * the agent's caller, budget and limits when it set them and the received ones
 	 * otherwise, the agent's listener only - a received listener is never inherited,
-	 * the agent's calls are recorded by the agent's own. Either side null gives the
-	 * other.
+	 * the agent's calls are recorded by the agent's own. The received container hears
+	 * of the calls made with the merged one too. Either side null gives the other.
 	 */
 	public static GeboToolCalling merged(GeboToolCalling own, GeboToolCalling received) {
 		if (own == null) {
@@ -245,6 +248,7 @@ public final class GeboToolCalling {
 		builder.toolsBudget = own.toolsBudget != null ? own.toolsBudget : received.toolsBudget;
 		builder.limits = !Limits.SPRING_DEFAULTS.equals(own.limits) ? own.limits : received.limits;
 		final GeboToolCalling merged = builder.build();
+		merged.mergedFrom = received;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Merged " + own + " with the received " + received + " into " + merged);
 		}
@@ -349,6 +353,34 @@ public final class GeboToolCalling {
 
 	// ---- what the last call left behind
 
+	/**
+	 * What a call made with this parsed of the model's answer; null when a tool ended
+	 * the call, its answer being the tool's word and not what the parsing expects. A
+	 * failure of any other call stays a failure.
+	 *
+	 * @param call the call, made inside the supplier, and its parsing
+	 */
+	public <T> T parsedUnlessStopped(Supplier<T> call) {
+		final CallRecord before = lastCall;
+		try {
+			final T parsed = call.get();
+			return stoppedSince(before) ? null : parsed;
+		} catch (RuntimeException notParsed) {
+			if (!stoppedSince(before)) {
+				throw notParsed;
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("A call ended by the tool(s) " + getStoppingTools() + " has no result to parse: " + notParsed);
+			}
+			return null;
+		}
+	}
+
+	private boolean stoppedSince(CallRecord before) {
+		final CallRecord ended = lastCall;
+		return ended != before && ended.isStoppedByTool();
+	}
+
 	/** The record of the last call made with this that ended; an empty one before any. */
 	public CallRecord getLastCall() {
 		return lastCall;
@@ -397,6 +429,9 @@ public final class GeboToolCalling {
 		}
 		lastCall = record;
 		calls.incrementAndGet();
+		if (mergedFrom != null) {
+			mergedFrom.callEnded(record);
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("A model call ended" + (caller != null ? " for " + caller : "") + ": " + record
 					+ (record.isStoppedByTool() ? " (ended by its tools)" : ""));

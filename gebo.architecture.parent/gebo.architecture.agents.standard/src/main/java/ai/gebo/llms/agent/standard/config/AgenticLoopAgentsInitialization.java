@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Configuration;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
-import ai.gebo.architecture.agents.tools.AskUserChoiceQuestionToolSource;
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
 import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
@@ -29,6 +28,7 @@ import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServ
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
+import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
 
 /**
  * The single agent with tools working in a loop, as two networks the chats can be
@@ -85,8 +85,8 @@ public class AgenticLoopAgentsInitialization {
 		config.setUseDefaultChatModel(true);
 		config.setSubscribeAllTools(true);
 		// the agent answering the user may ask the user a question the work waits for:
-		// the tools are mounted only on the agents that name their source
-		config.setAdditionalToolSources(List.of(AskUserChoiceQuestionToolSource.SOURCE_ID));
+		// the tools are mounted only on the agents that name their library
+		config.setLibraryTypeIds(List.of(UserQuestionsLibrarySource.TYPE_ID));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring the agentic loop agent config code:" + code + " service:" + serviceId
 					+ " on prompt use:" + config.getMainLoopPromptUseCode());

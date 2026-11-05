@@ -1266,8 +1266,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
-		CallResponseSpec res = reqObject.getRequestSpec().call();
-		ResponseType data = res.entity(rt);
+		ResponseType data = toolCalling != null
+				? toolCalling.parsedUnlessStopped(() -> reqObject.getRequestSpec().call().entity(rt))
+				: reqObject.getRequestSpec().call().entity(rt);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ") " + "[session:" + chatContext.getSessionID()
@@ -1302,8 +1303,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
-		CallResponseSpec res = reqObject.getRequestSpec().call();
-		ResponseType data = res.entity(outputConverter);
+		ResponseType data = toolCalling != null
+				? toolCalling.parsedUnlessStopped(() -> reqObject.getRequestSpec().call().entity(outputConverter))
+				: reqObject.getRequestSpec().call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ",..) " + "[session:" + chatContext.getSessionID()

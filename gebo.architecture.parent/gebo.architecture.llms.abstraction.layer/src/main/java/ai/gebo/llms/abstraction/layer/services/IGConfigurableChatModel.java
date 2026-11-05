@@ -167,6 +167,7 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException;
 
+	/** The response, parsed; null when a tool returning directly ended the call. */
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
 			GeboToolCalling toolCalling) throws LLMConfigException;

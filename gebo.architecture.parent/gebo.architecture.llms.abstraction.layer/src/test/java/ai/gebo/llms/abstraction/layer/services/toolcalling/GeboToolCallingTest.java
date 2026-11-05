@@ -436,4 +436,52 @@ class GeboToolCallingTest {
 		assertEquals(List.of("askAPerson"), toolCalling.getStoppingTools());
 		assertFalse(first.isStoppedByTool(), "the first call's record is untouched by the second");
 	}
+
+	/** A structured call: what its answer parses to, through the container. */
+	private static java.util.LinkedHashMap parsed(GeboToolCalling toolCalling, ChatModel model) {
+		return toolCalling.parsedUnlessStopped(() -> ChatClient.builder(model).build().prompt().user("q")
+				.toolCallbacks(askingTool(true)).toolContext(toolCalling.toolsContext(null))
+				.advisors(toolCalling.advisor(ObservationRegistry.NOOP)).call().entity(java.util.LinkedHashMap.class));
+	}
+
+	@Test
+	void aCallEndedByAToolHasNoResultToParse() {
+		final Asked asked = new Asked();
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().provide(Askable.class, asked).build();
+
+		assertNull(parsed(toolCalling, modelAnswering(round -> toolCall("askAPerson", "{\"question\":\"may I?\"}"))));
+
+		assertEquals(List.of("may I?"), asked.questions);
+		assertTrue(toolCalling.isStoppedByTool());
+	}
+
+	@Test
+	void aCallNoToolEndedParsesAsAlways() {
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().build();
+
+		assertEquals(1, parsed(toolCalling, modelAnswering(round -> text("{\"a\":1}"))).get("a"));
+		assertThrows(RuntimeException.class, () -> parsed(toolCalling, modelAnswering(round -> text("not json"))),
+				"an answer that does not parse is a failure");
+	}
+
+	@Test
+	void anEarlierCallEndedByAToolHidesNoFailure() {
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().provide(Askable.class, new Asked()).build();
+		parsed(toolCalling, modelAnswering(round -> toolCall("askAPerson", "{\"question\":\"may I?\"}")));
+
+		assertThrows(IllegalStateException.class, () -> toolCalling.parsedUnlessStopped(() -> {
+			throw new IllegalStateException("the provider is down");
+		}));
+	}
+
+	@Test
+	void theContainerAnAgentMergedFromHearsOfItsCalls() {
+		final GeboToolCalling received = GeboToolCalling.builder().caller("the-run").build();
+		final GeboToolCalling merged = GeboToolCalling.merged(GeboToolCalling.builder().build(), received);
+
+		parsed(merged, modelAnswering(round -> text("{\"a\":1}")));
+
+		assertEquals(1, merged.getCalls());
+		assertEquals(1, received.getCalls());
+	}
 }

@@ -72,7 +72,9 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink,
 				chatRequestContext != null ? chatRequestContext.getToolCallListener() : null);
-		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callBacksListener);
+		// the libraries the agent works with are reclaimed from the conversation as it enters
+		final IChatRequestContext agentContext = IChatRequestContext
+				.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, config), callBacksListener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
@@ -90,15 +92,20 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</TASK_PERFORMER_INPUT>");
 		}
+		// What a tool of this call declares the run must wait for: read once the call
+		// ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Task performer agent " + getId(), toolCalling, suspensionHandler,
+				contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, turn.toldInput(msg.getPayload()), agentsDao, actualContributionNr, tokenBudget);
 
 		OutputType output = null;
 		if (String.class.isAssignableFrom(getOutputType())) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from agent model id:" + getId());
 			}
-			output = (OutputType) agentModel.textResponse(prompt, params, agentContext, toolCalling);
+			output = (OutputType) agentModel.textResponse(prompt, params, agentContext, callToolCalling);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -108,7 +115,11 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from agent model id:" + getId() + " targetType:"
 						+ outputType.getName());
 			}
-			output = (OutputType) agentModel.structuredResponse(prompt, params, agentContext, outputType, toolCalling);
+			output = (OutputType) agentModel.structuredResponse(prompt, params, agentContext, outputType,
+					callToolCalling);
+		}
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
+			return List.of();
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(

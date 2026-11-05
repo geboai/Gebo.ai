@@ -20,7 +20,8 @@ import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool;
  * answer, for a question the user answered (see
  * {@link GAbstractAskUserChoiceQuestionTool#answered}); for any other condition, what was
  * waited for and the value that came; and, for a condition the user declined,
- * that the work goes on without it.
+ * that the work goes on without it. The notes the agent wrote to itself when it
+ * stopped follow, whichever of these it is.
  */
 public final class ResolvedConditionText {
 	private ResolvedConditionText() {
@@ -31,6 +32,13 @@ public final class ResolvedConditionText {
 		if (condition == null) {
 			return null;
 		}
+		final String notes = condition.getNotesForLater();
+		return notes != null && !notes.isBlank()
+				? outcomeOf(condition) + "\nYour notes from before you stopped: " + notes.strip()
+				: outcomeOf(condition);
+	}
+
+	private static String outcomeOf(AgentSuspendedWaitingCondition<?, ?> condition) {
 		if (condition.getInstanceValue() == null) {
 			return "You were waiting for: " + condition.getWaitingConditionStatement()
 					+ "\nThe user chose not to answer: go on without it, saying what you assumed.";

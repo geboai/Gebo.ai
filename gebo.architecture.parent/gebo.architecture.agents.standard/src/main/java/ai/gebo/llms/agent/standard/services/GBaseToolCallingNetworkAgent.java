@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.ai.converter.BeanOutputConverter;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
-import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
@@ -16,14 +15,12 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
+import ai.gebo.architecture.agents.services.AgentSuspensionTurn;
 import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentService;
-import ai.gebo.architecture.agents.services.GWaitExternalConditionSink;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
 import ai.gebo.architecture.agents.services.IGNetworkOfAgentsSuspensionHandler;
-import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
-import ai.gebo.architecture.agents.services.ResolvedConditionText;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -119,7 +116,9 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink,
 				chatRequestContext != null ? chatRequestContext.getToolCallListener() : null);
-		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callBacksListener);
+		// the libraries the agent works with are reclaimed from the conversation as it enters
+		final IChatRequestContext agentContext = IChatRequestContext
+				.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, config), callBacksListener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 
@@ -138,32 +137,12 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</TOOL_CALLING_AGENT_INPUT>");
 		}
-		// What a tool of this call declares the run must wait for (see
-		// IGWaitExternalCondition): loaded for every call, filled only by a mounted
-		// waiting tool, read once the call ended. The agent's own container, merged
-		// into the run's: the run's caller, limits and mandatory tools stay.
-		final GWaitExternalConditionSink wait = new GWaitExternalConditionSink();
-		final GeboToolCalling callToolCalling = GeboToolCalling.merged(
-				GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build(), toolCalling);
-		// A respawned agent is re-executed on the message it was given, told first what
-		// it waited for and what came of it.
-		final List<AgentSuspendedWaitingCondition> resolved = suspensionHandler != null
-				? suspensionHandler.resolvedConditionsOf(contextAgentPersona)
-				: List.of();
-		Object input = msg.getPayload();
-		if (!resolved.isEmpty()) {
-			if (input instanceof String text) {
-				input = ResolvedConditionText.prepend(resolved, text);
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Tool-calling agent id:" + getId() + " respawned with the answers to " + resolved.size()
-							+ " condition(s)");
-				}
-			} else {
-				LOGGER.warn("Tool-calling agent id:" + getId() + " respawned with the answers to " + resolved.size()
-						+ " condition(s) but its input is not text ("
-						+ (input != null ? input.getClass().getName() : null) + "): the model is not told the answer");
-			}
-		}
+		// What a tool of this call declares the run must wait for: read once the call
+		// ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Tool-calling agent " + getId(), toolCalling,
+				suspensionHandler, contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
+		final Object input = turn.toldInput(msg.getPayload());
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, input, agentsDao, actualContributionNr, tokenBudget);
 
@@ -191,22 +170,8 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 					callToolCalling);
 		}
 
-		if (wait.isWaiting()) {
-			// A tool declared the run must wait for something from outside it: the agent
-			// asks the network to suspend the run for each condition, in its own control
-			// code, and says nothing; the model's output, if any, is the tool's word that
-			// the work waits. Re-executed on this message when the conditions are resolved.
-			if (suspensionHandler == null) {
-				throw new AgentException("Tool-calling agent " + getId() + " must wait for "
-						+ wait.waited().size() + " condition(s) but the run has no suspension handler");
-			}
-			for (AgentSuspendedWaitingCondition<?, ?> condition : wait.waited()) {
-				suspensionHandler.enterSuspensionState(network, config, contextAgentPersona, mySessionContext, condition);
-			}
-			if (LOGGER.isInfoEnabled()) {
-				LOGGER.info("Tool-calling agent id:" + getId() + " asked to suspend the run for " + wait.waited().size()
-						+ " condition(s), the call stopped by tool:" + callToolCalling.isStoppedByTool());
-			}
+		// the model's output, if any, is the tool's word that the work waits
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
 			return List.of();
 		}
 		if (LOGGER.isDebugEnabled()) {

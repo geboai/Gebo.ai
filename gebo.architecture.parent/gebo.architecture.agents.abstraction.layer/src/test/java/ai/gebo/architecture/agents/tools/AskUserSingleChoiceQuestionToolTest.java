@@ -12,6 +12,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.util.json.JsonParser;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.services.GWaitExternalConditionSink;
@@ -20,6 +21,7 @@ import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool.Param;
+import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
@@ -141,5 +143,48 @@ class AskUserSingleChoiceQuestionToolTest {
 
 		resolved.setInstanceValue("not a clarification answer");
 		assertNull(AskUserSingleChoiceQuestionTool.answered(resolved));
+	}
+
+	@Test
+	void whatTheModelNotesForLaterIsSavedOnTheCondition() {
+		Param param = param("Which year?", List.of("2023", "2024"), false);
+		param.setNotesForLater("  the report needs the closed year ");
+
+		tool.ask(param, inACallWith(wait));
+
+		assertEquals("the report needs the closed year", wait.waited().get(0).getNotesForLater());
+	}
+
+	@Test
+	void blankNotesAreNoNotes() {
+		Param param = param("Which year?", List.of("2023", "2024"), false);
+		param.setNotesForLater("   ");
+
+		tool.ask(param, inACallWith(wait));
+
+		assertNull(wait.waited().get(0).getNotesForLater());
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void theNotesAreAParameterTheModelMayLeaveOut() {
+		Map<String, Object> schema = JsonParser
+				.fromJson(AskUserSingleChoiceQuestionTool.declare().getToolDefinition().inputSchema(), Map.class);
+
+		assertTrue(((Map<String, Object>) schema.get("properties")).containsKey(ToolCallsListener.NOTES_FOR_LATER),
+				"the parameter is the one kept out of the call as the user sees it");
+		assertFalse(((List<String>) schema.get("required")).contains("notesForLater"));
+		assertTrue(((List<String>) schema.get("required")).contains("question"));
+	}
+
+	@Test
+	void bothToolsTellTheModelTheyStopItsWorkAndWhereToKeepWhatItNeeds() {
+		for (String description : List.of(AskUserSingleChoiceQuestionTool.DESCRIPTION,
+				AskUserMultipleChoiceQuestionTool.DESCRIPTION)) {
+			assertTrue(description.contains("You will not see what this tool returns"), description);
+			assertTrue(description.contains("executed again from the start on the same message"), description);
+			assertTrue(description.contains("notesForLater"), description);
+			assertTrue(description.contains("the very values and results"), description);
+		}
 	}
 }

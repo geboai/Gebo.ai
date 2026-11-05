@@ -146,6 +146,10 @@ public class BaseLLMSInvokingService {
 			List<String> validFields, GeboToolCalling toolCalling) throws LLMConfigException {
 		Map<String, List<String>> outValue = parseFieldEntryOutput(chatModel, prompt, context, params, validFields,
 				toolCalling);
+		if (toolCalling != null && toolCalling.isStoppedByTool()) {
+			// the model called a tool ending the call: asked once more, it would call it again
+			return outValue;
+		}
 		if (outValue.isEmpty() && !validFields.isEmpty()) {
 			LOGGER.warn("callLLMRepeatableFieldEntryOutput(...) prompt:" + (prompt != null ? prompt.getPromptUse() : null)
 					+ " gave none of the field(s):" + validFields + ", asking once more");

@@ -263,6 +263,19 @@ public interface IChatRequestContext {
 		};
 	}
 
+	/**
+	 * This same context, its model calls answering the given request in place of what
+	 * the user wrote last.
+	 */
+	public default IChatRequestContext withActualUserRequest(String request) {
+		return new ForwardingChatRequestContext(this) {
+			@Override
+			public String getActualUserRequest() {
+				return request;
+			}
+		};
+	}
+
 	/** This same context, in the given run environment (not copied: the run's own map). */
 	public default IChatRequestContext withRunEnvironment(Map<String, Object> environment) {
 		return new ForwardingChatRequestContext(this) {

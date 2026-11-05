@@ -90,7 +90,9 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		GAgentRole agentRole = agentRoleDao.findByCode(config.getAgentRoleCode());
 		// this agent's own tool calls, forwarded to the user request's recorder
 		ToolCallsListener listener = agentToolCallsListener(chatRequestContext);
-		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, listener);
+		// the libraries the agent works with are reclaimed from the conversation as it enters
+		final IChatRequestContext agentContext = IChatRequestContext
+				.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, config), listener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
 		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
@@ -105,19 +107,29 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</SEARCH_AGENT_COMMAND>");
 		}
+		// What a tool of this call declares the run must wait for: read once the call
+		// ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Documents search agent " + getId(), toolCalling, suspensionHandler,
+				contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
+		final AgentsExchangeMessage<SearchAgentCommand> told = toldMessage(msg, turn);
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, told.getPayload(), agentsDao, actualContributionNr, tokenBudget);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " is searching...",
 				NotificationType.INFO);
 		// how the search went (e.g. the sources it could not reach), told to the agents reading it
 		final List<String> statusNotices = new ArrayList<>();
 		List<Document> documents = retrieveDocuments(prompt, agentContext, agentModel, params, network, agentRole,
 				contextAgentPersona,
-						session, mySessionContext, msg, agentsDao, notificationSink, statusNotices, toolCalling);
+						session, mySessionContext, told, agentsDao, notificationSink, statusNotices, callToolCalling);
+		// nothing to hand over: the agent searches when it is re-executed on this message
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
+			return List.of();
+		}
 		// what the agent hands over: the documents found, or what it made of them
-		documents = deliverDocuments(documents, msg.getPayload(), agentContext, agentModel, session,
+		documents = deliverDocuments(documents, told.getPayload(), agentContext, agentModel, session,
 				contextAgentPersona,
-						notificationSink, runAs, statusNotices, toolCalling);
+						notificationSink, runAs, statusNotices, callToolCalling);
 		notificationSink.next("Agent: " + contextAgentPersona.getNetworkAgentName() + " has found: "
 				+ documents.size() + " evidences", NotificationType.INFO);
 		if (LOGGER.isDebugEnabled()) {
@@ -144,6 +156,23 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 			}
 		}
 		return List.of(outMsg);
+	}
+
+	/**
+	 * The message the agent works on: on a respawn, its search command with what it
+	 * waited for told first, the only text it is given. The message received stays
+	 * as it is: it is the turn a further suspension keeps.
+	 */
+	private static AgentsExchangeMessage<SearchAgentCommand> toldMessage(AgentsExchangeMessage<SearchAgentCommand> msg,
+			AgentSuspensionTurn turn) {
+		final SearchAgentCommand command = msg.getPayload();
+		final String text = command != null ? turn.toldInput(command.getCommand()) : null;
+		if (command == null || java.util.Objects.equals(text, command.getCommand())) {
+			return msg;
+		}
+		return new AgentsExchangeMessage<SearchAgentCommand>(msg.getCollaborationContextId(), msg.getMessageSemantic(),
+				msg.getFromAgent(), msg.getFromAgentRole(), msg.getToAgent(), command.withCommand(text),
+				msg.getExecutionOrder());
 	}
 
 	/**

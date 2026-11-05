@@ -328,6 +328,8 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		/** What the model chose when it decided to suspend, and its type by name. */
 		private String optionsTypeName = null;
 		private Object llmChosenOptions = null;
+		/** What the agent wrote to itself when it stopped. */
+		private String notesForLater = null;
 
 		public static WaitingCondition of(AgentSuspendedWaitingCondition<?, ?> condition) {
 			if (condition == null) {
@@ -342,6 +344,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			waiting.setMandatory(condition.isMandatory());
 			waiting.setOptionsTypeName(condition.getOptionsType() != null ? condition.getOptionsType().getName() : null);
 			waiting.setLlmChosenOptions(condition.getLlmChosenOptions());
+			waiting.setNotesForLater(condition.getNotesForLater());
 			return waiting;
 		}
 
@@ -355,6 +358,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			final AgentSuspendedWaitingCondition condition = new AgentSuspendedWaitingCondition(classNamed(typeName),
 					waitingConditionStatement, waitedConditionInstanceLLMExplanation, instanceValue, mandatory,
 					optionsTypeName != null ? classNamed(optionsTypeName) : null, llmChosenOptions);
+			condition.setNotesForLater(notesForLater);
 			if (suspendedConditionId != null) {
 				condition.setSuspendedConditionId(suspendedConditionId);
 			}

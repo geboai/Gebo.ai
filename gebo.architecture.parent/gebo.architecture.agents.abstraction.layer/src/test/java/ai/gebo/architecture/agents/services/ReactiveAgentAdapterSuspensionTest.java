@@ -129,8 +129,12 @@ class ReactiveAgentAdapterSuspensionTest {
 
 		List<AgentsExchangeMessage<String>> out = run();
 
-		verify(agent).execute(any(), any(), eq("You asked the user: Which year?\nThe user chose: 2024\n\nWhat is new?"),
-				any(), any(), any(), any(), any(), any(), any());
+		ArgumentCaptor<IChatRequestContext> context = ArgumentCaptor.forClass(IChatRequestContext.class);
+		verify(agent).execute(context.capture(), any(),
+				eq("You asked the user: Which year?\nThe user chose: 2024\n\nWhat is new?"), any(), any(), any(), any(),
+				any(), any(), any());
+		assertEquals("You asked the user: Which year?\nThe user chose: 2024\n\nWhat is new?",
+				context.getValue().getActualUserRequest(), "a model reading the request from the context is told too");
 		assertEquals("In 2024: nothing new.", out.get(0).getPayload());
 		verify(handler, never()).enterSuspensionState(any(), any(), any(), any(), any());
 	}

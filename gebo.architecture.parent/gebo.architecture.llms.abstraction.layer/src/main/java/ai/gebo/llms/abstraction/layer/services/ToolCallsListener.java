@@ -1,16 +1,26 @@
 package ai.gebo.llms.abstraction.layer.services;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Vector;
 import java.util.function.Consumer;
+
+import org.springframework.ai.util.json.JsonParser;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class ToolCallsListener {
+	/**
+	 * The parameter a tool stopping the work offers the model to write to itself: what
+	 * it writes is for the model alone, so it is not part of a call as the user sees it.
+	 */
+	public static final String NOTES_FOR_LATER = "notesForLater";
+
 	@AllArgsConstructor
 	@Getter
 	public static class ToolCallExecuted {
@@ -121,10 +131,29 @@ public class ToolCallsListener {
 
 	/**
 	 * The call as shown to the user: the tool, its description and the input the model
-	 * gave it. The result is left out, it can be a large content.
+	 * gave it, but for the notes the model wrote to itself ({@value #NOTES_FOR_LATER}).
+	 * The result is left out, it can be a large content.
 	 */
 	public static CalledFunction toCalledFunction(ToolCallExecuted call) {
 		return new CalledFunction(call.getName(), call.getToolDescription(),
-				call.getToolInput() != null ? List.of(call.getToolInput()) : List.of(), List.of());
+				call.getToolInput() != null ? List.of(withoutNotes(call.getToolInput())) : List.of(), List.of());
+	}
+
+	/** The input as it is when it has no notes, or when it is not the JSON object a tool reads. */
+	@SuppressWarnings("unchecked")
+	private static String withoutNotes(String toolInput) {
+		if (!toolInput.contains(NOTES_FOR_LATER)) {
+			return toolInput;
+		}
+		try {
+			final Map<String, Object> input = JsonParser.fromJson(toolInput, LinkedHashMap.class);
+			if (!input.containsKey(NOTES_FOR_LATER)) {
+				return toolInput;
+			}
+			input.remove(NOTES_FOR_LATER);
+			return JsonParser.toJson(input);
+		} catch (RuntimeException notAnObject) {
+			return toolInput;
+		}
 	}
 }

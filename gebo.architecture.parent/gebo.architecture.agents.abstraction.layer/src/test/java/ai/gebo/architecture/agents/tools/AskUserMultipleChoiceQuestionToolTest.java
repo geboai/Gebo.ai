@@ -1,7 +1,6 @@
 package ai.gebo.architecture.agents.tools;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -16,7 +15,6 @@ import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.services.GWaitExternalConditionSink;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
-import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
@@ -69,17 +67,5 @@ class AskUserMultipleChoiceQuestionToolTest {
 
 		assertEquals("You asked the user: Which years?\nThe user chose:\n- 2023\n- 2024"
 				+ "\nThe user explained: and the forecast", GAbstractAskUserChoiceQuestionTool.answered(resolved));
-	}
-
-	@Test
-	void theSourceMountsBothToolsOnlyWhenAsked() {
-		AskUserChoiceQuestionToolSource source = new AskUserChoiceQuestionToolSource();
-
-		assertTrue(source.isMountedOnlyWhenAsked());
-		assertEquals(List.of(AskUserSingleChoiceQuestionTool.TOOL_NAME, AskUserMultipleChoiceQuestionTool.TOOL_NAME),
-				source.getFullToolReferences().stream().map(ToolReference::getName).toList());
-		assertEquals(List.of(AskUserSingleChoiceQuestionTool.TOOL_NAME, AskUserMultipleChoiceQuestionTool.TOOL_NAME),
-				source.getToolCallbacks().stream().map(callback -> callback.getToolDefinition().name()).toList());
-		assertFalse(source.getToolCallbacks().isEmpty());
 	}
 }

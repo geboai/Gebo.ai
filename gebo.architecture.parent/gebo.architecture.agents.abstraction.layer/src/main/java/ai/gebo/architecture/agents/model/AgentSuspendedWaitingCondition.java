@@ -36,6 +36,11 @@ public class AgentSuspendedWaitingCondition<T, O> {
 	private Class<O> optionsType = null;
 	/** What the model chose when it decided to suspend: the options it put to whoever resolves the condition. */
 	private O llmChosenOptions = null;
+	/**
+	 * What the agent wrote to itself when it stopped: given back to it with the
+	 * resolved condition, never shown to whoever resolves it. Null when it wrote nothing.
+	 */
+	private String notesForLater = null;
 
 	/** A condition on a value, with nothing chosen by the model. */
 	public AgentSuspendedWaitingCondition(Class<T> type, String waitingConditionStatement,

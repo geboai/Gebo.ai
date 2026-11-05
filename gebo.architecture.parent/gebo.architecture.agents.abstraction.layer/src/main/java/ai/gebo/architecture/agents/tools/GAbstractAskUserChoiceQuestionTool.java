@@ -18,6 +18,7 @@ import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 
 import com.fasterxml.jackson.annotation.JsonClassDescription;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
@@ -47,7 +48,11 @@ import lombok.NoArgsConstructor;
  * <p>
  * On a respawn the agent gives the model the answer (see
  * {@link #answered(AgentSuspendedWaitingCondition)}) rather than letting the
- * tool answer it, since the tool ends every call it is part of.
+ * tool answer it, since the tool ends every call it is part of. The model never
+ * reads what the tool returns, so what it needs to know of this comes with the
+ * tool's description ({@link #STOPS_THE_WORK}), and what it wants to keep for the
+ * respawn it writes in {@link Param#getNotesForLater()}: saved on the condition,
+ * it comes back with the answer and the user does not see it.
  */
 public abstract class GAbstractAskUserChoiceQuestionTool {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractAskUserChoiceQuestionTool.class);
@@ -55,6 +60,12 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 	static final String NO_QUESTION = "The question is missing: say plainly what you need the user to answer.";
 	static final String TOO_FEW_OPTIONS = "Give the user at least two options to choose from, or one option with an explanation of their own allowed.";
 	static final String WAITING = "The question was put to the user: the work stops here and goes on when they answer.";
+	/** How every question tool's description ends: what calling it does to the model's work. */
+	static final String STOPS_THE_WORK = " Ask only what you really need, once, with everything in one question."
+			+ " You will not see what this tool returns: your work stops here, and when the user answers"
+			+ " you are executed again from the start on the same message, told the question and the answer."
+			+ " Do not count on what you worked out up to now being there then: write in notesForLater"
+			+ " the very values and results you will need, not just that you have them.";
 
 	/** What the model gives the tool. */
 	@Data
@@ -72,6 +83,11 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 		@JsonPropertyDescription("True when you cannot go on at all without the answer, so the conversation waits for it;"
 				+ " false when the user may leave it unanswered and go on, you then proceeding without it")
 		private Boolean mandatory = null;
+		@JsonProperty(required = false)
+		@JsonPropertyDescription("Notes to yourself: the very values and results you worked out so far, not just that you have them,"
+				+ " and what you plan to do with the answer."
+				+ " The user does not see them; you get them back with the answer")
+		private String notesForLater = null;
 	}
 
 	/** The name the model calls the tool by. */
@@ -128,11 +144,15 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 		final AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> condition = new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
 				ClarificationAnswer.class, options.getQuestion(), param.getWhyNeeded(), null, mandatory,
 				ClarificationOptions.class, options);
+		if (param.getNotesForLater() != null && !param.getNotesForLater().isBlank()) {
+			condition.setNotesForLater(param.getNotesForLater().strip());
+		}
 		wait.waitFor(condition);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(toolName() + " asked: " + options.getQuestion() + " among " + options.getOptions().size()
 					+ " option(s)" + (options.isCustomAnswerAllowed() ? " or an explanation" : "")
-					+ (mandatory ? ", mandatory" : ", may be left unanswered") + " (condition:"
+					+ (mandatory ? ", mandatory" : ", may be left unanswered")
+					+ (condition.getNotesForLater() != null ? ", with notes for later" : "") + " (condition:"
 					+ condition.getSuspendedConditionId() + ")");
 		}
 		return WAITING;

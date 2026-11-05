@@ -72,6 +72,13 @@ class ToolCallingAgentSuspensionTest {
 			super(null, null, null, null, mock(IAgentRoleDao.class), null, null);
 		}
 
+		/** What the conversation holds is the instances service's: here, a mark in the tools context. */
+		@Override
+		protected IChatRequestContext withTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
+				GAgentConfig agentConfig) {
+			return chatRequestContext.withToolsContextValue("held", agentConfig.getCode());
+		}
+
 		@Override
 		protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
 				INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
@@ -180,5 +187,17 @@ class ToolCallingAgentSuspensionTest {
 		assertEquals("You asked the user: Which year?\nThe user chose: 2024\n\nWhat is new?",
 				inputsGivenToTheModel.get(0), "the answer first, then the message it was executing");
 		verify(handler, never()).enterSuspensionState(any(), any(), any(), any(), any());
+	}
+
+	@Test
+	void theLibrariesOfTheConversationReachTheModelCall() throws Exception {
+		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenReturn("the answer");
+		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+
+		run(new TestAgent());
+
+		ArgumentCaptor<IChatRequestContext> callContext = ArgumentCaptor.forClass(IChatRequestContext.class);
+		verify(model).textResponse(any(), any(), callContext.capture(), any(GeboToolCalling.class));
+		assertEquals("the-agent", callContext.getValue().getToolsContext().get("held"));
 	}
 }
