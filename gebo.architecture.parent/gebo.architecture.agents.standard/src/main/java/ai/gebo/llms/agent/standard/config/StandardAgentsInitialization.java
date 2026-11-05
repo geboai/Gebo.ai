@@ -223,6 +223,10 @@ public class StandardAgentsInitialization {
 		// external searchers).
 		internalKnowledgeBaseAgentConfig.setCustomLoopPrompt(SearchAgentPromptPatcher.withAgentPlaceholders(promptsDao
 				.findByPromptUse(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE)));
+		// the patched prompt is the one that runs; the code it comes from lets a copy of
+		// this configuration be saved by the agent editor, which requires it
+		internalKnowledgeBaseAgentConfig
+				.setMainLoopPromptUseCode(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE);
 		internalKnowledgeBaseAgentConfig.setUseChatModelWithUse(ChatModelsUses.INTERNAL_SERVICES);
 		internalKnowledgeBaseAgentConfig.setEnabledFunctions(List.of());
 		internalKnowledgeBaseAgentConfig.setSubscribeAllTools(false);
@@ -447,6 +451,8 @@ public class StandardAgentsInitialization {
 								? nativeSearch.getNativePromptTemplateUseCode()
 								: search.getQueriesGenerationPromptUseCode();
 						agentConfig.setCustomLoopPrompt(processSearchPrompt(searchPromptUseCode));
+						// the code it comes from: a copy is saved by the agent editor, which requires it
+						agentConfig.setMainLoopPromptUseCode(searchPromptUseCode);
 						agentConfig.setAccessibleToAll(true);
 						agentConfig.setAgentRoleCode(EVIDENCES_SEARCHER_AGENT);
 						agentConfig.setAgentServiceId(serviceId);
