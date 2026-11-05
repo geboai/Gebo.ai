@@ -20,6 +20,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnve
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
@@ -135,5 +136,65 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			throw new ChatPipelineException(
 					"Pipeline => " + pipelineCode + " does not have an PipelineUserMenuProviderService");
 		return handler.getUIMenu(chatProfileCode);
+	}
+
+	@Override
+	public GeboChatResponse respawnAgenticChat(String pipelineCode, @NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException {
+		GeboChatResponse response = null;
+		try {
+			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
+			IGConfigurableChatModel serviceModel = chatModelsDao
+					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+			Flux<GeboChatMessageEnvelope> flux = executor.streamingRespawnAgenticChat(request, environment, chatModel,
+					serviceModel, pipelineCode);
+			Vector<GeboChatMessageEnvelope> responsesList = new Vector<GeboChatMessageEnvelope>();
+			Flux<GeboChatMessageEnvelope> lastMessageFlux = flux.filter(x -> {
+				responsesList.add(x);
+				return x.isLastMessage() && x.getContent() instanceof GeboChatResponse;
+			});
+			GeboChatMessageEnvelope last = lastMessageFlux.blockLast();
+			if (last != null && last.getContent() instanceof GeboChatResponse _response) {
+				response = _response;
+			} else {
+				LOGGER.warn("No GeboChatResponse as output");
+			}
+			return response;
+		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
+			String msg = "Exception applying  respawn  chat pipeline";
+			throw new ChatPipelineException(msg, e);
+		}
+	}
+
+	@Override
+	public Flux<GeboChatMessageEnvelope> streamingRespawnAgenticChat(String pipelineCode,
+			@NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException {
+		try {
+			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
+			IGConfigurableChatModel serviceModel = chatModelsDao
+					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+
+			String processId = request.getUserChatContextCode();
+			Sinks.Empty<Void> stopSink = Sinks.empty();
+
+			if (processId != null) {
+				activeStreams.put(processId, stopSink);
+			}
+
+			Flux<GeboChatMessageEnvelope> flux = executor.streamingRespawnAgenticChat(request, environment, chatModel,
+					serviceModel, pipelineCode);
+
+			if (processId != null) {
+				flux = flux.takeUntilOther(stopSink.asMono()).doFinally(signalType -> activeStreams.remove(processId));
+			}
+			return flux;
+		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
+			String msg = "Exception applying respawn chat pipeline (streaming)";
+			throw new ChatPipelineException(msg, e);
+		}
 	}
 }

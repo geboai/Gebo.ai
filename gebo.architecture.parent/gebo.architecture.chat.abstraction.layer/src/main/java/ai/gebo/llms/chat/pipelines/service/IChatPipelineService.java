@@ -14,22 +14,44 @@ import reactor.core.publisher.Flux;
 
 public interface IChatPipelineService {
 	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request,
-			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException;
+			LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException;
+
+	public GeboChatResponse respawnAgenticChat(String pipelineCode, @NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException;
 
 	public default GeboChatResponse chat(@NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
 			throws ChatPipelineException, GeboChatException {
 		return chat(null, request, environment);
 	}
 
+	public default GeboChatResponse respawnAgenticChat(@NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatException {
+		return respawnAgenticChat(null, request, environment);
+	}
+
 	public Flux<GeboChatMessageEnvelope> streamingChat(String pipelineCode, @NotNull GeboChatRequest request,
-			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException;
+			LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException;
+
+	public Flux<GeboChatMessageEnvelope> streamingRespawnAgenticChat(String pipelineCode,
+			@NotNull GeboChatRequest request, LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException;
 
 	public default Flux<GeboChatMessageEnvelope> streamingChat(@NotNull GeboChatRequest request,
 			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatException {
 		return streamingChat(null, request, environment);
 	}
 
-	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode, String chatProfileCode) throws ChatPipelineException;
+	public default Flux<GeboChatMessageEnvelope> streamingRespawnAgenticChat(@NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment)
+			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException {
+		return streamingRespawnAgenticChat(null, request, environment);
+	}
+
+	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(String pipelineCode, String chatProfileCode)
+			throws ChatPipelineException;
 
 	public void stopPipeline(String userChatContextCode) throws ChatPipelineException;
 }

@@ -45,7 +45,8 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	private List<GResponseDocumentRef> forcedDocumentsRef = new ArrayList<GResponseDocumentRef>(); // Forced document
 																									// references
 	private List<GResponseDocumentRef> documentsRef = new ArrayList<GResponseDocumentRef>(); // Document references
-	// Names of the documents the tools only listed (not read) that the answer names: kept
+	// Names of the documents the tools only listed (not read) that the answer
+	// names: kept
 	// with the chat's history, the next requests may name them
 	private List<String> listedDocumentNames = null;
 	// List of functions called during the interaction
@@ -55,6 +56,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	private String pipelineRouterDecisionCode = null;
 	private LinkedHashMap<String, Object> pipelineParams = new LinkedHashMap<>();
 	private String deepSearchRequestId = null;
+	private NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState = null;
 
 	/**
 	 * Default constructor for GeboTemplatedChatResponse.
@@ -80,6 +82,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 		documentsRef = r.documentsRef;
 		listedDocumentNames = r.listedDocumentNames;
 		calledFunctions = r.calledFunctions;
+		networkOfAgentsSuspendedState = r.networkOfAgentsSuspendedState;
 	}
 
 }

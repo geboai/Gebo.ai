@@ -15,4 +15,5 @@ public class ChatPipelineConfiguration {
 	@NotNull
 	private String stepRouterId = null;
 	private boolean defaultPipeline = false;
+	private String respawnNetworkOfAgentId = null;
 }

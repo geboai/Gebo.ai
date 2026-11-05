@@ -45,8 +45,8 @@ public class GeboChatPipelinesController {
 
 	@PostMapping(value = "streamDefaultChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamDefaultChatPipeline(
-			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException,
-			GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
+			@RequestBody @NotNull @Valid PipelineRequestBody data)
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
 
 		return chatPipelineService.streamingChat(data.getRequest(), toLinkedHashMap(data.getEnvironment()));
 	}
@@ -54,15 +54,16 @@ public class GeboChatPipelinesController {
 	@PostMapping(value = "streamChatPipeline", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Flux<GeboChatMessageEnvelope> streamChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
-			@RequestBody @NotNull @Valid PipelineRequestBody data)
-			throws ChatPipelineException, GeboChatException {
+			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException, GeboChatException {
 
 		return chatPipelineService.streamingChat(pipelineCode, data.getRequest(),
 				toLinkedHashMap(data.getEnvironment()));
 	}
 
 	@GetMapping(value = "stopChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE)
-	public void stopChatPipeline(@RequestParam(name = "userChatContextCode", required = true) String userChatContextCode) throws ChatPipelineException {
+	public void stopChatPipeline(
+			@RequestParam(name = "userChatContextCode", required = true) String userChatContextCode)
+			throws ChatPipelineException {
 		Optional<GUserChatSession> session = sessionRepository.findById(userChatContextCode);
 		if (session.isEmpty()) {
 			return;
@@ -88,8 +89,8 @@ public class GeboChatPipelinesController {
 	@PostMapping(value = "executeChatPipeline", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatResponse executeChatPipeline(
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
-			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException,
-			GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
+			@RequestBody @NotNull @Valid PipelineRequestBody data)
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
 		return chatPipelineService.chat(pipelineCode, data.getRequest(), toLinkedHashMap(data.getEnvironment()));
 	}
 
@@ -107,8 +108,41 @@ public class GeboChatPipelinesController {
 	@GetMapping(value = "personalPipelinesChatMenu", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<PipelineChatMenu> getPersonalPipelinesChatMenu(
 			@RequestParam(name = "chatProfileCode", required = false) String chatProfileCode,
-			@RequestParam(name = "pipelineCode", required = false) String pipelineCode)
-			throws ChatPipelineException {
+			@RequestParam(name = "pipelineCode", required = false) String pipelineCode) throws ChatPipelineException {
 		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode, chatProfileCode);
 	}
+
+	@PostMapping(value = "executeDefaultRespawnAgenticChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GeboChatResponse executeDefaultRespawnAgenticChat(@RequestBody @NotNull @Valid PipelineRequestBody data)
+			throws ChatPipelineException, GeboChatException {
+		return chatPipelineService.respawnAgenticChat(data.getRequest(), toLinkedHashMap(data.getEnvironment()));
+	}
+
+	@PostMapping(value = "executeRespawnAgenticChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public GeboChatResponse executeRespawnAgenticChat(
+			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
+			@RequestBody @NotNull @Valid PipelineRequestBody data)
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
+		return chatPipelineService.respawnAgenticChat(pipelineCode, data.getRequest(),
+				toLinkedHashMap(data.getEnvironment()));
+	}
+
+	@PostMapping(value = "streamDefaultRespawnAgenticChat", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Flux<GeboChatMessageEnvelope> streamDefaultRespawnAgenticChat(
+			@RequestBody @NotNull @Valid PipelineRequestBody data)
+			throws ChatPipelineException, GeboPersistenceException, IOException, LLMConfigException, GeboChatException {
+
+		return chatPipelineService.streamingRespawnAgenticChat(data.getRequest(),
+				toLinkedHashMap(data.getEnvironment()));
+	}
+
+	@PostMapping(value = "streamRespawnAgenticChat", produces = MediaType.TEXT_EVENT_STREAM_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Flux<GeboChatMessageEnvelope> streamRespawnAgenticChat(
+			@RequestParam(name = "pipelineCode", required = false) String pipelineCode,
+			@RequestBody @NotNull @Valid PipelineRequestBody data) throws ChatPipelineException, GeboChatException {
+
+		return chatPipelineService.streamingRespawnAgenticChat(pipelineCode, data.getRequest(),
+				toLinkedHashMap(data.getEnvironment()));
+	}
+
 }
