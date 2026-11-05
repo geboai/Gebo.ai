@@ -129,13 +129,14 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	}
 
 	@Override
-	public List<AgentSuspendedWaitingCondition> resolvedConditionsOf(AgentNetworkParticipant participant) {
+	public List<AgentSuspendedWaitingCondition> takeResolvedConditionsOf(AgentNetworkParticipant participant) {
 		final String name = participant != null ? participant.getNetworkAgentName() : null;
 		if (name == null) {
 			return List.of();
 		}
 		synchronized (this) {
-			return resolvedConditionsByAgent.getOrDefault(name, List.of());
+			final List<AgentSuspendedWaitingCondition> resolved = resolvedConditionsByAgent.remove(name);
+			return resolved != null ? resolved : List.of();
 		}
 	}
 

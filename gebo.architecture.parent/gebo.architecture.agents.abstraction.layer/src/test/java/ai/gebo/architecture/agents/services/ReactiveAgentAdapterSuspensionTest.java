@@ -85,7 +85,7 @@ class ReactiveAgentAdapterSuspensionTest {
 
 	@Test
 	void theWaitSinkIsLoadedInTheAgentsToolCallingBesideWhatTheRunCarries() throws Exception {
-		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
 		when(agent.execute(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
 				.thenReturn(Flux.just(IGPartialOperation.of("the answer", true)));
 
@@ -103,7 +103,7 @@ class ReactiveAgentAdapterSuspensionTest {
 
 	@Test
 	void aToolDeclaringAConditionMakesTheAdapterSuspendTheRunAndSayNothing() throws Exception {
-		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
 		when(agent.execute(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
 				.thenAnswer(invocation -> {
 					// the agent's tool, in the agent's stream, declares what the run waits for
@@ -123,7 +123,7 @@ class ReactiveAgentAdapterSuspensionTest {
 
 	@Test
 	void respawnedWithTheAnswerTheAdapterTellsTheAgentBeforeTheRequest() throws Exception {
-		when(handler.resolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(clarification(ClarificationAnswer.option("2024"))));
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(clarification(ClarificationAnswer.option("2024"))));
 		when(agent.execute(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
 				.thenReturn(Flux.just(IGPartialOperation.of("In 2024: nothing new.", true)));
 

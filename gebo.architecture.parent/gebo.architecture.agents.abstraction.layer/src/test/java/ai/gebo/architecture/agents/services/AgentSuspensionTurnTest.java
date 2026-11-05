@@ -79,7 +79,7 @@ class AgentSuspensionTurnTest {
 
 	@Test
 	void anAgentNotRespawnedKeepsItsInput() {
-		when(handler.resolvedConditionsOf(me)).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(List.of());
 
 		assertEquals("What is new?", turn().toldInput("What is new?"));
 	}
@@ -94,7 +94,7 @@ class AgentSuspensionTurnTest {
 
 	@Test
 	void aRespawnedAgentTellsTheAnswersBeforeTheMessage() {
-		when(handler.resolvedConditionsOf(me)).thenReturn(
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(
 				List.<AgentSuspendedWaitingCondition>of(condition("Which year?", ClarificationAnswer.option("2024"))));
 
 		assertEquals("You asked the user: Which year?\nThe user chose: 2024\n\nWhat is new?",
@@ -103,7 +103,7 @@ class AgentSuspensionTurnTest {
 
 	@Test
 	void aRespawnedAgentsContextAsksWhatItWasToldNotJustTheAnswer() {
-		when(handler.resolvedConditionsOf(me)).thenReturn(
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(
 				List.<AgentSuspendedWaitingCondition>of(condition("Which year?", ClarificationAnswer.option("2024"))));
 		IChatRequestContext context = IChatRequestContext.of("2024");
 
@@ -114,7 +114,7 @@ class AgentSuspensionTurnTest {
 
 	@Test
 	void anAgentNotRespawnedKeepsItsContext() {
-		when(handler.resolvedConditionsOf(me)).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(List.of());
 		IChatRequestContext context = IChatRequestContext.of("What is new?");
 
 		assertSame(context, turn().toldContext(context, "What is new?"));
@@ -122,7 +122,7 @@ class AgentSuspensionTurnTest {
 
 	@Test
 	void anInputThatIsNotTextStaysAsItIs() {
-		when(handler.resolvedConditionsOf(me)).thenReturn(
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(
 				List.<AgentSuspendedWaitingCondition>of(condition("Which year?", ClarificationAnswer.option("2024"))));
 		Object command = new Object();
 

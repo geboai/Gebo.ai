@@ -131,13 +131,13 @@ class ToolCallingAgentSuspensionTest {
 					"{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[{\"label\":\"2023\"},{\"label\":\"2024\"}]}",
 					new org.springframework.ai.chat.model.ToolContext(callToolCalling.toolsContext(Map.of())));
 		});
-		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
 	}
 
 	@Test
 	void theWaitSinkIsLoadedInEveryModelCallBesideWhatTheRunCarries() throws Exception {
 		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenReturn("the answer");
-		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
 
 		List<AgentsExchangeMessage<String>> out = run(new TestAgent());
 
@@ -177,7 +177,7 @@ class ToolCallingAgentSuspensionTest {
 		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> answered = new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
 				ClarificationAnswer.class, "Which year?", "it matters", ClarificationAnswer.option("2024"), true,
 				ClarificationOptions.class, options);
-		when(handler.resolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(answered));
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(answered));
 		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenReturn("In 2024: nothing new.");
 
 		List<AgentsExchangeMessage<String>> out = run(new TestAgent());
@@ -192,7 +192,7 @@ class ToolCallingAgentSuspensionTest {
 	@Test
 	void theLibrariesOfTheConversationReachTheModelCall() throws Exception {
 		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenReturn("the answer");
-		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
 
 		run(new TestAgent());
 

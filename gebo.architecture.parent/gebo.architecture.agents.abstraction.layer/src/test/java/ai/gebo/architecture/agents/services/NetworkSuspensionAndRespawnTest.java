@@ -50,6 +50,7 @@ class NetworkSuspensionAndRespawnTest {
 	private final GNetworkOfAgentsSuspensionRepository repository = mock(GNetworkOfAgentsSuspensionRepository.class);
 	private final List<GNetworkOfAgentsSuspension> saved = new ArrayList<GNetworkOfAgentsSuspension>();
 	private final List<Object> answersSeenByTheAsker = new ArrayList<Object>();
+	private final List<Object> answersLeftForALaterTurn = new ArrayList<Object>();
 	private final List<Object> messagesSeenByTheWriter = new ArrayList<Object>();
 	private GAgentsNetwork network;
 	private TestNetworkService service;
@@ -119,9 +120,10 @@ class NetworkSuspensionAndRespawnTest {
 					AgentPrivateSessionContext mine = invocation.getArgument(8, AgentPrivateSessionContext.class);
 					IGNetworkOfAgentsSuspensionHandler handler = invocation.getArgument(12,
 							IGNetworkOfAgentsSuspensionHandler.class);
-					List<AgentSuspendedWaitingCondition> answers = handler.resolvedConditionsOf(me);
+					List<AgentSuspendedWaitingCondition> answers = handler.takeResolvedConditionsOf(me);
 					if (!answers.isEmpty()) {
 						answersSeenByTheAsker.add(answers.get(0).getInstanceValue());
+						answersLeftForALaterTurn.addAll(handler.takeResolvedConditionsOf(me));
 						return List.of();
 					}
 					handler.enterSuspensionState(network, config, me, mine, new AgentSuspendedWaitingCondition<String, Object>(
@@ -224,6 +226,7 @@ class NetworkSuspensionAndRespawnTest {
 		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
 		assertEquals("wrote: found this about What is new?", respawned.getResult());
 		assertEquals(List.of("2024"), answersSeenByTheAsker, "the asker was re-executed and read its answer");
+		assertTrue(answersLeftForALaterTurn.isEmpty(), "the answer is given once: a later turn is on another message");
 		assertEquals(List.of("found this about What is new?"), messagesSeenByTheWriter,
 				"the frozen message reached the writer");
 		assertEquals(1, saved.size() - 1, "the consumed block is marked, no new block is written");

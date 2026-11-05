@@ -84,7 +84,8 @@ waited for whole, and everything not yet delivered is frozen in its place.
    environment are given again by the respawning step), restores every agent's
    counters and private turns, and re-executes the suspended agents whose conditions
    are resolved, each once, with the message it was executing, every answer told first
-   (`ResolvedConditionText`), followed by the notes the agent wrote to itself when it
+   (`ResolvedConditionText`) on that turn only (`takeResolvedConditionsOf` hands them
+   over once: a later turn of the agent works on another message), followed by the notes the agent wrote to itself when it
    stopped, if any (`notesForLater` on the condition, saved in the block, never sent
    to the client and left out of the recorded tool calls by `ToolCallsListener`). An
    agent whose model reads the request from the context, as the agentic loop does, is

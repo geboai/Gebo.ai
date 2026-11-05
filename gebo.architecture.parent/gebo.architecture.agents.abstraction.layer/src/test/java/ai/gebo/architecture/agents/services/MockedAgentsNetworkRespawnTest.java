@@ -171,7 +171,7 @@ class MockedAgentsNetworkRespawnTest {
 			AgentsCollaborationSessionContext session = (AgentsCollaborationSessionContext) args[7];
 			AgentPrivateSessionContext<?, ?> mine = (AgentPrivateSessionContext<?, ?>) args[8];
 			IGNetworkOfAgentsSuspensionHandler handler = (IGNetworkOfAgentsSuspensionHandler) args[12];
-			List<AgentSuspendedWaitingCondition> answers = handler.resolvedConditionsOf(me);
+			List<AgentSuspendedWaitingCondition> answers = handler.takeResolvedConditionsOf(me);
 			if (!answers.isEmpty()) {
 				for (AgentSuspendedWaitingCondition answer : answers) {
 					answersSeenByTheAsker.add(answer.getInstanceValue());

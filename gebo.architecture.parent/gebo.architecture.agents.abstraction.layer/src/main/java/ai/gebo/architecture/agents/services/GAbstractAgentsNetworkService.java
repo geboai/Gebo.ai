@@ -211,7 +211,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		}
 
 		@Override
-		public List<AgentSuspendedWaitingCondition> resolvedConditionsOf(AgentNetworkParticipant participant) {
+		public List<AgentSuspendedWaitingCondition> takeResolvedConditionsOf(AgentNetworkParticipant participant) {
 			return List.of();
 		}
 

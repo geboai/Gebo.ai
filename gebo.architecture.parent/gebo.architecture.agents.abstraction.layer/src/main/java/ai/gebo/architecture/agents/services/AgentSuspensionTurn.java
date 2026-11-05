@@ -57,7 +57,7 @@ public final class AgentSuspensionTurn {
 		this.participant = participant;
 		this.toolCalling = GeboToolCalling
 				.merged(GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build(), runToolCalling);
-		this.resolved = suspensionHandler != null ? suspensionHandler.resolvedConditionsOf(participant) : List.of();
+		this.resolved = suspensionHandler != null ? suspensionHandler.takeResolvedConditionsOf(participant) : List.of();
 	}
 
 	/**

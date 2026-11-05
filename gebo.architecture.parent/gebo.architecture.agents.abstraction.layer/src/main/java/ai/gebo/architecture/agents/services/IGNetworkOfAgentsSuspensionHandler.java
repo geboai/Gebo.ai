@@ -135,9 +135,11 @@ public interface IGNetworkOfAgentsSuspensionHandler {
 
 	/**
 	 * Asked by a respawned agent, in its own control code: the conditions it waited
-	 * for, resolved; empty when it was not waiting or they are not resolved.
+	 * for, resolved; empty when it was not waiting or they are not resolved. They are
+	 * given once, to the turn re-executing the message the agent was waiting on: a later
+	 * turn of the agent works on another message and gets nothing.
 	 */
-	public List<AgentSuspendedWaitingCondition> resolvedConditionsOf(AgentNetworkParticipant participant);
+	public List<AgentSuspendedWaitingCondition> takeResolvedConditionsOf(AgentNetworkParticipant participant);
 
 	/** The id of the suspension being taken, once an agent asked for it; null before. */
 	public String suspensionId();

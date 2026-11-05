@@ -76,7 +76,7 @@ class AgentsAskingTheUserTest {
 		me.setAllowedToNotifyUser(false);
 		config.setCode("the-agent");
 		network.setCode("the-network");
-		when(handler.resolvedConditionsOf(any())).thenReturn(List.of());
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
 	}
 
 	private final class Performer extends GBaseTaskPerformerNetworkAgentService<String, String> {
@@ -253,7 +253,7 @@ class AgentsAskingTheUserTest {
 		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> answered = new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
 				ClarificationAnswer.class, "Which year?", "it matters", ClarificationAnswer.option("2024"), true,
 				ClarificationOptions.class, options);
-		when(handler.resolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(answered));
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(answered));
 	}
 
 	private void aQuestionSuspendedTheRun() throws Exception {
