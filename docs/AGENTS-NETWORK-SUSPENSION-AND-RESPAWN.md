@@ -73,7 +73,10 @@ waited for whole, and everything not yet delivered is frozen in its place.
    which resolves it with a null value so the agent goes on without it.
 2. A network service is created from the factory for the block's network; a service
    whose agents already ran is refused.
-3. The base rebuilds the session from the shared state, restores every agent's
+3. The base rebuilds the session from the shared state, the caller's environment on
+   top of what the block kept of it (the block keeps only texts, numbers, booleans,
+   dates, enums and collections or maps of them: the runtime objects a chat puts in the
+   environment are given again by the respawning step), restores every agent's
    counters and private turns, and re-executes the suspended agents whose condition is
    resolved with the message each was executing, the answer told first
    (`ResolvedConditionText`). The frozen deliveries follow in their order, then the

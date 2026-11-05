@@ -302,7 +302,7 @@ class MockedAgentsNetworkRespawnTest {
 		@SuppressWarnings("unchecked")
 		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
 				IChatRequestContext.of("resume"), block, List.<AgentSuspendedWaitingCondition<?, ?>>of(answered),
-				TOOL_CALLING);
+				null, TOOL_CALLING);
 
 		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
 		assertEquals(1, routerRuns.get(), "the router, before the cut, is not run again");
@@ -325,7 +325,7 @@ class MockedAgentsNetworkRespawnTest {
 		service = newService();
 
 		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
-				IChatRequestContext.of("resume"), block, List.of(), TOOL_CALLING);
+				IChatRequestContext.of("resume"), block, List.of(), null, TOOL_CALLING);
 
 		assertEquals(NStatus.SUSPENDED, respawned.getExecutedStatus());
 		assertTrue(answersSeenByTheAsker.isEmpty(), "the asker, still waiting, was not re-executed");

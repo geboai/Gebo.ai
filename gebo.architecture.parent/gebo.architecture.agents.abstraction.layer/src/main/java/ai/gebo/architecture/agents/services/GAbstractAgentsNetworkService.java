@@ -418,7 +418,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	@Override
 	public NetworkOfAgentsExecutionResult<OutputType> respawnNetworkExecution(IChatRequestContext chatRequestContext,
 			GNetworkOfAgentsSuspension suspension, List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions,
-			GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (toolCalling == null)
 			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
 		if (suspension == null)
@@ -435,9 +435,13 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					+ (resolvedConditions != null ? resolvedConditions.size() : 0) + " with " + toolCalling);
 		}
 		// The collaboration goes on in the session of the cut, with every contribution
-		// made so far and the environment of the run; whoever builds sessions is not
-		// asked for this one, since it exists, but is told when the run is over.
+		// made so far and what the block kept of the environment, the caller's entries
+		// on top; whoever builds sessions is not asked for this one, since it exists,
+		// but is told when the run is over.
 		final AgentsCollaborationSessionContext session = sessionOf(suspension.getSharedState());
+		if (environment != null) {
+			session.getEnvironment().putAll(environment);
+		}
 		final AgentsSessionCreationContext sessionCreation = sessionCreationContext(chatRequestContext,
 				session.getEnvironment());
 		restoreAgentsRuntime(suspension);

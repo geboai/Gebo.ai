@@ -220,7 +220,7 @@ class NetworkSuspensionAndRespawnTest {
 		@SuppressWarnings("unchecked")
 		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
 				IChatRequestContext.of("resume"), block, List.<AgentSuspendedWaitingCondition<?, ?>>of(answered),
-				TOOL_CALLING);
+				null, TOOL_CALLING);
 
 		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
 		assertEquals("wrote: found this about What is new?", respawned.getResult());
@@ -239,7 +239,7 @@ class NetworkSuspensionAndRespawnTest {
 		service = newService();
 
 		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
-				IChatRequestContext.of("resume"), block, List.of(), TOOL_CALLING);
+				IChatRequestContext.of("resume"), block, List.of(), null, TOOL_CALLING);
 
 		assertEquals(NStatus.SUSPENDED, respawned.getExecutedStatus());
 		assertTrue(answersSeenByTheAsker.isEmpty(), "the asker, still waiting, was not re-executed");
@@ -266,7 +266,7 @@ class NetworkSuspensionAndRespawnTest {
 		GNetworkOfAgentsSuspension block = saved.get(0);
 
 		AgentException refusal = assertThrows(AgentException.class, () -> service.respawnNetworkExecution(
-				IChatRequestContext.of("resume"), block, List.of(), TOOL_CALLING));
+				IChatRequestContext.of("resume"), block, List.of(), null, TOOL_CALLING));
 
 		assertTrue(refusal.getMessage().contains("created for the block"), refusal.getMessage());
 		assertTrue(messagesSeenByTheWriter.isEmpty(), "nothing was delivered");
@@ -280,6 +280,6 @@ class NetworkSuspensionAndRespawnTest {
 		service = newService();
 
 		assertThrows(AgentException.class, () -> service.respawnNetworkExecution(IChatRequestContext.of("resume"),
-				block, List.of(), TOOL_CALLING));
+				block, List.of(), null, TOOL_CALLING));
 	}
 }

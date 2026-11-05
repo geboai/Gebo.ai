@@ -34,13 +34,14 @@ public interface IGAgentsNetworkService<InputType, OutputType> {
 	 * the agents whose condition is resolved are re-executed with the message each
 	 * was executing, what the run had not delivered is delivered, and the run ends
 	 * with an output or suspends again, into a new block, when an agent asks or a
-	 * condition is still unresolved. The request context is the respawning
-	 * caller's, not the one of the suspended run. Required tool calling, as for
-	 * {@link #executeNetwork}.
+	 * condition is still unresolved. The request context and the environment are
+	 * the respawning caller's, not the suspended run's: the block keeps of the
+	 * environment only what it can, and the caller's entries take the place of the
+	 * saved ones. Required tool calling, as for {@link #executeNetwork}.
 	 */
 	NetworkOfAgentsExecutionResult<OutputType> respawnNetworkExecution(IChatRequestContext chatRequestContext,
 			GNetworkOfAgentsSuspension suspension, List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions,
-			GeboToolCalling toolCalling) throws AgentException, LLMConfigException;
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException;
 
 	Class<OutputType> getOutputType();
 

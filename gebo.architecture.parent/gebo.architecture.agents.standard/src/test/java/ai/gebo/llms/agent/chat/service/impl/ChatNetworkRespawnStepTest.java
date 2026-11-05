@@ -133,7 +133,7 @@ class ChatNetworkRespawnStepTest {
 		GNetworkOfAgentsSuspension block = openBlock(saved);
 		GeboChatResponse answered = new GeboChatResponse();
 		answered.setQueryResponse("In 2024: nothing new.");
-		when(network.respawnNetworkExecution(any(), any(), any(), any()))
+		when(network.respawnNetworkExecution(any(), any(), any(), any(), any()))
 				.thenReturn(NetworkOfAgentsExecutionResult.of(new GeboChatMessageEnvelope(answered)));
 		ReactiveChatAgentsNetworkRespawnStreamingOutputChatPipelineService step = step();
 
@@ -142,7 +142,7 @@ class ChatNetworkRespawnStepTest {
 
 		verify(factory).create(any(), any(), any(), any(), any(), any());
 		ArgumentCaptor<List<AgentSuspendedWaitingCondition<?, ?>>> resolved = ArgumentCaptor.forClass(List.class);
-		verify(network).respawnNetworkExecution(any(), any(), resolved.capture(), any());
+		verify(network).respawnNetworkExecution(any(), any(), resolved.capture(), any(), any());
 		verify(network, never()).executeNetwork(any(), any(), any(), any());
 		assertEquals(1, resolved.getValue().size());
 		assertEquals(saved.getSuspendedConditionId(), resolved.getValue().get(0).getSuspendedConditionId(),
@@ -155,7 +155,7 @@ class ChatNetworkRespawnStepTest {
 	@Test
 	void aRespawnThatSuspendsAgainCarriesTheNewStateToTheClient() throws Exception {
 		openBlock(saved);
-		when(network.respawnNetworkExecution(any(), any(), any(), any()))
+		when(network.respawnNetworkExecution(any(), any(), any(), any(), any()))
 				.thenReturn(NetworkOfAgentsExecutionResult.suspended("block-2", List.of(clarification(true))));
 
 		GeboChatResponse response = lastResponseOf(step(),
@@ -181,14 +181,14 @@ class ChatNetworkRespawnStepTest {
 	@Test
 	void anOptionalConditionWithoutReactionStaysWaiting() throws Exception {
 		openBlock(saved, clarification(false));
-		when(network.respawnNetworkExecution(any(), any(), any(), any()))
+		when(network.respawnNetworkExecution(any(), any(), any(), any(), any()))
 				.thenReturn(NetworkOfAgentsExecutionResult.of(new GeboChatMessageEnvelope(new GeboChatResponse())));
 
 		lastResponseOf(step(),
 				runtimeData(reaction("block-1", saved.getSuspendedConditionId(), Map.of("chosenOption", "2024"))));
 
 		ArgumentCaptor<List<AgentSuspendedWaitingCondition<?, ?>>> resolved = ArgumentCaptor.forClass(List.class);
-		verify(network).respawnNetworkExecution(any(), any(), resolved.capture(), any());
+		verify(network).respawnNetworkExecution(any(), any(), resolved.capture(), any(), any());
 		assertEquals(1, resolved.getValue().size(), "only the answered one is resolved; the other waits on");
 	}
 

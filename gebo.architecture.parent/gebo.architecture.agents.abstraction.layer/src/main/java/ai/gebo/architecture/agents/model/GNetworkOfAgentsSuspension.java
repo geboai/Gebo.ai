@@ -10,11 +10,14 @@
 package ai.gebo.architecture.agents.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -55,6 +58,7 @@ import lombok.NoArgsConstructor;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class GNetworkOfAgentsSuspension extends GBaseObject {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GNetworkOfAgentsSuspension.class);
 	/** The code of the network that was run. */
 	@HashIndexed
 	private String networkCode = null;
@@ -356,7 +360,11 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 
 	/**
 	 * The shared state of the collaboration (see
-	 * {@link AgentsCollaborationSessionContext}): what every agent reads.
+	 * {@link AgentsCollaborationSessionContext}): what every agent reads. Of the
+	 * environment only the entries that can be kept are kept: texts, numbers,
+	 * booleans, dates, enums and collections or maps of them. The rest, the runtime
+	 * objects a caller put there for its agents, is what the caller gives again when
+	 * it respawns the run.
 	 */
 	@Data
 	@NoArgsConstructor
@@ -380,9 +388,48 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 				}
 			}
 			if (session.getEnvironment() != null) {
-				state.getEnvironment().putAll(session.getEnvironment());
+				for (Map.Entry<String, Object> entry : session.getEnvironment().entrySet()) {
+					if (isPersistable(entry.getValue(), 0)) {
+						state.getEnvironment().put(entry.getKey(), entry.getValue());
+					} else if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Environment entry:" + entry.getKey() + " of class "
+								+ (entry.getValue() != null ? entry.getValue().getClass().getName() : null)
+								+ " is not kept in the block: the caller gives it again on the respawn");
+					}
+				}
 			}
 			return state;
+		}
+
+		/** Whether a value is a text, a number, a boolean, a date, an enum, or a collection or map of them. */
+		static boolean isPersistable(Object value, int depth) {
+			if (value == null || value instanceof String || value instanceof Number || value instanceof Boolean
+					|| value instanceof Character || value instanceof Date || value instanceof Enum<?>) {
+				return true;
+			}
+			if (depth > 8) {
+				return false;
+			}
+			if (value instanceof Collection<?> collection) {
+				for (Object item : collection) {
+					if (!isPersistable(item, depth + 1)) {
+						return false;
+					}
+				}
+				return true;
+			}
+			if (value instanceof Map<?, ?> map) {
+				for (Map.Entry<?, ?> item : map.entrySet()) {
+					if (!(item.getKey() instanceof String) || !isPersistable(item.getValue(), depth + 1)) {
+						return false;
+					}
+				}
+				return true;
+			}
+			if (value.getClass().isArray()) {
+				return value instanceof Object[] items ? isPersistable(java.util.Arrays.asList(items), depth + 1) : true;
+			}
+			return false;
 		}
 	}
 

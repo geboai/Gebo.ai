@@ -73,7 +73,7 @@ public class NetworkRespawnPlanner {
 		}
 		return new RunPlan(block.getNetwork(), (runtimeNetwork, data, question, environment) -> runtimeNetwork
 				.respawnNetworkExecution(data.getRequestResources().createChatRequestContext(), block, resolved,
-						data.getToolCalling()));
+						environment, data.getToolCalling()));
 	}
 
 	/** The open block of the request's conversation, the one its reaction names when it names one. */

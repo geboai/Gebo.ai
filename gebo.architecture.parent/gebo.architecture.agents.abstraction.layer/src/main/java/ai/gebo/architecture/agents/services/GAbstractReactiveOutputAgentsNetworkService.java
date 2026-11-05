@@ -59,13 +59,14 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 	@Override
 	public NetworkOfAgentsExecutionResult<OutputType> respawnNetworkExecution(IChatRequestContext chatRequestContext,
 			GNetworkOfAgentsSuspension suspension, List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions,
-			GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin respawnNetworkExecution(...) reactive output agents network service, suspension:"
 					+ (suspension != null ? suspension.getCode() : null));
 		}
 		try {
-			return super.respawnNetworkExecution(chatRequestContext, suspension, resolvedConditions, toolCalling);
+			return super.respawnNetworkExecution(chatRequestContext, suspension, resolvedConditions, environment,
+					toolCalling);
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Completing reactive output sink after respawnNetworkExecution(...)");

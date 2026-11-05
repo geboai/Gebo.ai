@@ -284,7 +284,8 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 			dropOpenBlocksOf(suspension.getConversationCode(), suspension.getCode());
 			repository.save(suspension);
 		} catch (RuntimeException e) {
-			LOGGER.error(SAVE_FAILED + suspension.getNetworkCode() + " suspension:" + suspension.getCode(), e);
+			LOGGER.error(SAVE_FAILED + suspension.getNetworkCode() + " suspension:" + suspension.getCode()
+					+ "; values the mapping may not write: " + SuspensionBlockDiagnostics.foreignValues(suspension), e);
 			throw new IllegalStateException(SAVE_FAILED + suspension.getNetworkCode(), e);
 		}
 		if (LOGGER.isInfoEnabled()) {
