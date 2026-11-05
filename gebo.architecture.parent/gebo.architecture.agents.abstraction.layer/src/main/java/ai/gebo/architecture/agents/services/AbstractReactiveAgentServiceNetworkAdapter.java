@@ -1,7 +1,6 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -101,22 +100,22 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 				GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build(), toolCalling);
 		// A respawned agent is re-executed on the message it was given, told first what
 		// it waited for and what came of it.
-		final Optional<AgentSuspendedWaitingCondition> resolved = suspensionHandler != null
-				? suspensionHandler.resolvedConditionOf(contextAgentPersona)
-				: Optional.empty();
+		final List<AgentSuspendedWaitingCondition> resolved = suspensionHandler != null
+				? suspensionHandler.resolvedConditionsOf(contextAgentPersona)
+				: List.of();
 		RequestType request = msg.getPayload();
-		if (resolved.isPresent()) {
+		if (!resolved.isEmpty()) {
 			if (request instanceof String text) {
 				@SuppressWarnings("unchecked")
-				final RequestType told = (RequestType) ResolvedConditionText.prepend(resolved.get(), text);
+				final RequestType told = (RequestType) ResolvedConditionText.prepend(resolved, text);
 				request = told;
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Reactive agent adapter id:" + getId() + " respawned with the answer to condition:"
-							+ resolved.get().getSuspendedConditionId());
+					LOGGER.debug("Reactive agent adapter id:" + getId() + " respawned with the answers to " + resolved.size()
+							+ " condition(s)");
 				}
 			} else {
-				LOGGER.warn("Reactive agent adapter id:" + getId() + " respawned with the answer to condition:"
-						+ resolved.get().getSuspendedConditionId() + " but its input is not text ("
+				LOGGER.warn("Reactive agent adapter id:" + getId() + " respawned with the answers to " + resolved.size()
+						+ " condition(s) but its input is not text ("
 						+ (request != null ? request.getClass().getName() : null) + "): the model is not told the answer");
 			}
 		}

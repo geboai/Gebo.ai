@@ -2,7 +2,6 @@ package ai.gebo.llms.agent.standard.services;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.ai.converter.BeanOutputConverter;
 
@@ -148,20 +147,20 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 				GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build(), toolCalling);
 		// A respawned agent is re-executed on the message it was given, told first what
 		// it waited for and what came of it.
-		final Optional<AgentSuspendedWaitingCondition> resolved = suspensionHandler != null
-				? suspensionHandler.resolvedConditionOf(contextAgentPersona)
-				: Optional.empty();
+		final List<AgentSuspendedWaitingCondition> resolved = suspensionHandler != null
+				? suspensionHandler.resolvedConditionsOf(contextAgentPersona)
+				: List.of();
 		Object input = msg.getPayload();
-		if (resolved.isPresent()) {
+		if (!resolved.isEmpty()) {
 			if (input instanceof String text) {
-				input = ResolvedConditionText.prepend(resolved.get(), text);
+				input = ResolvedConditionText.prepend(resolved, text);
 				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Tool-calling agent id:" + getId() + " respawned with the answer to condition:"
-							+ resolved.get().getSuspendedConditionId());
+					LOGGER.debug("Tool-calling agent id:" + getId() + " respawned with the answers to " + resolved.size()
+							+ " condition(s)");
 				}
 			} else {
-				LOGGER.warn("Tool-calling agent id:" + getId() + " respawned with the answer to condition:"
-						+ resolved.get().getSuspendedConditionId() + " but its input is not text ("
+				LOGGER.warn("Tool-calling agent id:" + getId() + " respawned with the answers to " + resolved.size()
+						+ " condition(s) but its input is not text ("
 						+ (input != null ? input.getClass().getName() : null) + "): the model is not told the answer");
 			}
 		}

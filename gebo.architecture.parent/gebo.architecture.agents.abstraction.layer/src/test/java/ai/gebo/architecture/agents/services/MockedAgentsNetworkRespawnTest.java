@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -67,6 +66,8 @@ class MockedAgentsNetworkRespawnTest {
 	private final List<GNetworkOfAgentsSuspension> saved = new ArrayList<GNetworkOfAgentsSuspension>();
 	private final AtomicInteger routerRuns = new AtomicInteger();
 	private final List<Object> answersSeenByTheAsker = Collections.synchronizedList(new ArrayList<Object>());
+	private boolean askerAsksTwice = false;
+	private boolean secondQuestionMandatory = false;
 	private final List<Integer> askerPriorTurnsWhenRespawned = Collections.synchronizedList(new ArrayList<Integer>());
 	private final List<Object> messagesSeenByTheWriter = Collections.synchronizedList(new ArrayList<Object>());
 	private final List<Integer> contributionsSeenByTheWriter = Collections
@@ -170,17 +171,24 @@ class MockedAgentsNetworkRespawnTest {
 			AgentsCollaborationSessionContext session = (AgentsCollaborationSessionContext) args[7];
 			AgentPrivateSessionContext<?, ?> mine = (AgentPrivateSessionContext<?, ?>) args[8];
 			IGNetworkOfAgentsSuspensionHandler handler = (IGNetworkOfAgentsSuspensionHandler) args[12];
-			Optional<AgentSuspendedWaitingCondition> answer = handler.resolvedConditionOf(me);
-			if (answer.isPresent()) {
-				answersSeenByTheAsker.add(answer.get().getInstanceValue());
+			List<AgentSuspendedWaitingCondition> answers = handler.resolvedConditionsOf(me);
+			if (!answers.isEmpty()) {
+				for (AgentSuspendedWaitingCondition answer : answers) {
+					answersSeenByTheAsker.add(answer.getInstanceValue());
+				}
 				askerPriorTurnsWhenRespawned.add(mine.getInteractions().size());
 				// after what was frozen: the writer is given the answer last
-				return List.of(to(session, ASKER, WRITER, "asker: the year is " + answer.get().getInstanceValue(), 3));
+				return List.of(to(session, ASKER, WRITER, "asker: the year is " + answers.get(0).getInstanceValue(), 3));
 			}
 			try {
 				handler.enterSuspensionState(network, config, me, mine, new AgentSuspendedWaitingCondition<String, List>(
 						String.class, "which year?", "the user's answer", null, false, List.class,
 						List.of("2023", "2024")));
+				if (askerAsksTwice) {
+					handler.enterSuspensionState(network, config, me, mine,
+							new AgentSuspendedWaitingCondition<String, Object>(String.class, "which country?",
+									"the user's answer", null, secondQuestionMandatory));
+				}
 			} catch (AgentException e) {
 				throw new IllegalStateException(e);
 			}
@@ -293,7 +301,7 @@ class MockedAgentsNetworkRespawnTest {
 		run();
 		GNetworkOfAgentsSuspension block = saved.get(0);
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		AgentSuspendedWaitingCondition answered = block.getSuspendedAgents().get(0).getWaitingCondition()
+		AgentSuspendedWaitingCondition answered = block.getSuspendedAgents().get(0).getWaitingConditions().get(0)
 				.toCondition();
 		answered.setInstanceValue("2024");
 		// the respawn runs on a service created for the block, as the factory creates one
@@ -337,9 +345,93 @@ class MockedAgentsNetworkRespawnTest {
 		assertEquals(block.getCode(), again.getRespawnedFromSuspensionCode());
 		assertEquals(again.getCode(), block.getRespawnedToSuspensionCode());
 		assertEquals("ask about What is new?", again.getSuspendedAgents().get(0).getInputMessage().getPayload());
-		assertEquals(List.of("2023", "2024"), again.getSuspendedAgents().get(0).getWaitingCondition().getLlmChosenOptions());
+		assertEquals(List.of("2023", "2024"), again.getSuspendedAgents().get(0).getWaitingConditions().get(0).getLlmChosenOptions());
 		assertEquals(3, again.getSharedState().getContributions().size(),
 				"the router's plan and the writer's two answers are in the shared state");
 		assertTrue(again.getFrozenDeliveries().isEmpty(), "nothing was left undelivered this time");
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private AgentSuspendedWaitingCondition answered(GNetworkOfAgentsSuspension block, int condition, String value) {
+		AgentSuspendedWaitingCondition answered = block.conditions().get(condition).toCondition();
+		answered.setInstanceValue(value);
+		return answered;
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void twoQuestionsOfOneTurnAreOneEntryAndTheAgentIsReExecutedOnceWithBothAnswers() throws Exception {
+		askerAsksTwice = true;
+		run();
+		GNetworkOfAgentsSuspension block = saved.get(0);
+		assertEquals(1, block.getSuspendedAgents().size(), "one entry per agent");
+		assertEquals(2, block.getSuspendedAgents().get(0).getWaitingConditions().size());
+		assertNotNull(block.getSuspendedAgents().get(0).getInputMessage());
+		service = newService();
+
+		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
+				IChatRequestContext.of("resume"), block,
+				List.<AgentSuspendedWaitingCondition<?, ?>>of(answered(block, 0, "2024"), answered(block, 1, "Italy")),
+				null, TOOL_CALLING);
+
+		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
+		assertEquals(List.of("2024", "Italy"), answersSeenByTheAsker, "told both answers");
+		assertEquals(List.of(1), askerPriorTurnsWhenRespawned, "re-executed once");
+		assertNotNull(block.getRespawnedAt());
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void anOptionalQuestionLeftWithoutReactionCountsAsDeclinedWhenTheAgentGoesOn() throws Exception {
+		askerAsksTwice = true;
+		run();
+		GNetworkOfAgentsSuspension block = saved.get(0);
+		service = newService();
+
+		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
+				IChatRequestContext.of("resume"), block,
+				List.<AgentSuspendedWaitingCondition<?, ?>>of(answered(block, 0, "2024")), null, TOOL_CALLING);
+
+		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
+		assertEquals(java.util.Arrays.asList("2024", null), answersSeenByTheAsker, "the other one has no value");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void anAgentWithAMandatoryQuestionLeftKeepsWaitingForAllOfThem() throws Exception {
+		askerAsksTwice = true;
+		secondQuestionMandatory = true;
+		run();
+		GNetworkOfAgentsSuspension block = saved.get(0);
+		service = newService();
+
+		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
+				IChatRequestContext.of("resume"), block,
+				List.<AgentSuspendedWaitingCondition<?, ?>>of(answered(block, 0, "2024")), null, TOOL_CALLING);
+
+		assertEquals(NStatus.SUSPENDED, respawned.getExecutedStatus());
+		assertTrue(answersSeenByTheAsker.isEmpty(), "not re-executed");
+		GNetworkOfAgentsSuspension again = saved.get(1);
+		assertEquals(1, again.getSuspendedAgents().size());
+		assertEquals(2, again.getSuspendedAgents().get(0).getWaitingConditions().size());
+		assertNotNull(again.getSuspendedAgents().get(0).getInputMessage(), "its turn goes on with it");
+	}
+
+	@Test
+	void anAgentWaitingWithNoConditionSuspendsAgainWithItsTurn() throws Exception {
+		run();
+		GNetworkOfAgentsSuspension block = saved.get(0);
+		block.getSuspendedAgents().get(0).getWaitingConditions().clear();
+		service = newService();
+
+		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
+				IChatRequestContext.of("resume"), block, List.<AgentSuspendedWaitingCondition<?, ?>>of(), null,
+				TOOL_CALLING);
+
+		assertEquals(NStatus.SUSPENDED, respawned.getExecutedStatus());
+		GNetworkOfAgentsSuspension again = saved.get(1);
+		assertEquals(1, again.getSuspendedAgents().size());
+		assertTrue(again.getSuspendedAgents().get(0).getWaitingConditions().isEmpty());
+		assertNotNull(again.getSuspendedAgents().get(0).getInputMessage());
 	}
 }

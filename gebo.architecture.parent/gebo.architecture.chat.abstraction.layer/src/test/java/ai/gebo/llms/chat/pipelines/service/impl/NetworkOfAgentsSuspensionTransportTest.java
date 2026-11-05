@@ -65,6 +65,23 @@ class NetworkOfAgentsSuspensionTransportTest {
 	}
 
 	@Test
+	void anAgentWaitingForTwoConditionsShowsThemBothAndAMandatoryOneHoldsTheBlock() {
+		AgentSuspendedWaitingCondition first = clarificationCondition(false);
+		AgentSuspendedWaitingCondition second = clarificationCondition(true);
+		GNetworkOfAgentsSuspension block = new GNetworkOfAgentsSuspension();
+		block.setCode("block-3");
+		SuspendedAgentState entry = SuspendedAgentState.of(null, null, null, first);
+		entry.getWaitingConditions().add(GNetworkOfAgentsSuspension.WaitingCondition.of(second));
+		block.getSuspendedAgents().add(entry);
+
+		NetworkOfAgentsSuspendedState state = transport.stateOf(block);
+
+		assertEquals(List.of(first.getSuspendedConditionId(), second.getSuspendedConditionId()),
+				state.getConditions().stream().map(c -> c.getConditionId()).toList());
+		assertTrue(block.isMandatory());
+	}
+
+	@Test
 	void aBlockLoadedLaterGivesTheSameStateFromItsSavedConditions() {
 		AgentSuspendedWaitingCondition condition = clarificationCondition(false);
 		GNetworkOfAgentsSuspension block = new GNetworkOfAgentsSuspension();

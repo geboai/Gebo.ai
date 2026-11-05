@@ -12,9 +12,10 @@ package ai.gebo.architecture.agents.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.ExchangeMess
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.FrozenDeliveries;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -77,7 +79,12 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	private final List<AgentSuspendedWaitingCondition> conditions = new ArrayList<AgentSuspendedWaitingCondition>();
 	/** On a respawn: the block the run comes from and the conditions resolved, by agent name. */
 	private String respawnedFromSuspensionCode = null;
-	private final Map<String, AgentSuspendedWaitingCondition> resolvedConditionsByAgent = new HashMap<String, AgentSuspendedWaitingCondition>();
+	private final Map<String, List<AgentSuspendedWaitingCondition>> resolvedConditionsByAgent = new HashMap<String, List<AgentSuspendedWaitingCondition>>();
+	/**
+	 * The turns that asked and are not over yet. A turn runs on one thread, which
+	 * tells it from another turn of the same agent in a parallel group.
+	 */
+	private final Set<String> askedInTheirTurn = new HashSet<String>();
 
 	public GMongoNetworkOfAgentsSuspensionHandler(GNetworkOfAgentsSuspensionRepository repository) {
 		this.repository = repository;
@@ -96,6 +103,7 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 		this.suspensionState = false;
 		this.suspension = null;
 		this.conditions.clear();
+		this.askedInTheirTurn.clear();
 		this.respawnedFromSuspensionCode = null;
 		this.resolvedConditionsByAgent.clear();
 		if (LOGGER.isDebugEnabled()) {
@@ -106,7 +114,7 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 
 	@Override
 	public synchronized void respawnFrom(GNetworkOfAgentsSuspension suspension,
-			Map<String, AgentSuspendedWaitingCondition> resolvedConditionsByAgent) throws AgentException {
+			Map<String, List<AgentSuspendedWaitingCondition>> resolvedConditionsByAgent) throws AgentException {
 		this.respawnedFromSuspensionCode = suspension != null ? suspension.getCode() : null;
 		this.resolvedConditionsByAgent.clear();
 		if (resolvedConditionsByAgent != null) {
@@ -121,13 +129,13 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	}
 
 	@Override
-	public Optional<AgentSuspendedWaitingCondition> resolvedConditionOf(AgentNetworkParticipant participant) {
+	public List<AgentSuspendedWaitingCondition> resolvedConditionsOf(AgentNetworkParticipant participant) {
 		final String name = participant != null ? participant.getNetworkAgentName() : null;
 		if (name == null) {
-			return Optional.empty();
+			return List.of();
 		}
 		synchronized (this) {
-			return Optional.ofNullable(resolvedConditionsByAgent.get(name));
+			return resolvedConditionsByAgent.getOrDefault(name, List.of());
 		}
 	}
 
@@ -145,7 +153,17 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 						+ cut.getCode());
 			}
 		}
-		cut.getSuspendedAgents().add(SuspendedAgentState.of(agentConfig, participant, privateContext, waitForCondition));
+		// one entry per agent: asking again adds to what the agent waits for
+		final String name = participant != null ? participant.getNetworkAgentName() : null;
+		final SuspendedAgentState asked = entryOf(cut, name);
+		if (asked == null) {
+			cut.getSuspendedAgents().add(SuspendedAgentState.of(agentConfig, participant, privateContext, waitForCondition));
+		} else if (waitForCondition != null) {
+			asked.getWaitingConditions().add(WaitingCondition.of(waitForCondition));
+		}
+		if (name != null) {
+			askedInTheirTurn.add(turnOf(name));
+		}
 		if (waitForCondition != null) {
 			conditions.add(waitForCondition);
 		}
@@ -164,27 +182,49 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 			return;
 		}
 		final String name = participant.getNetworkAgentName();
-		// the last state of that agent still without its turn: an agent asking twice
-		// in the same run leaves two states, each with the turn it asked in
-		SuspendedAgentState withoutTurn = null;
-		for (SuspendedAgentState state : suspension.getSuspendedAgents()) {
-			if (state.getParticipant() != null && name != null && name.equals(state.getParticipant().getNetworkAgentName())
-					&& state.getInputMessage() == null) {
-				withoutTurn = state;
-			}
-		}
-		if (withoutTurn == null) {
+		final SuspendedAgentState asked = entryOf(suspension, name);
+		if (asked == null || !askedInTheirTurn.remove(turnOf(name))) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent:" + name + " did not ask to suspend the run: its turn is not kept");
 			}
 			return;
 		}
-		withoutTurn.setInputMessage(ExchangeMessageRecord.of(inputMessage));
-		withoutTurn.setContributionNr(contributionNr);
+		if (asked.getInputMessage() != null) {
+			// the agent asked in another turn too, on another message of a parallel group:
+			// its entry is re-executed on the first one, and this one is delivered after it,
+			// the agent knowing the answers by then
+			suspension.getFrozenDeliveries().add(FrozenDeliveries.of(asked.getAgentConfig(), participant, null,
+					List.<AgentsExchangeMessage<?>>of(inputMessage)));
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent:" + name + " asked to suspend the run in a further turn, " + contributionNr
+						+ ": the message it was executing is frozen");
+			}
+			return;
+		}
+		asked.setInputMessage(ExchangeMessageRecord.of(inputMessage));
+		asked.setContributionNr(contributionNr);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agent:" + name + " asked to suspend the run in turn " + contributionNr
 					+ ": the message it was executing is kept for the respawn");
 		}
+	}
+
+	/** The turn the agent is executing on this thread. */
+	private static String turnOf(String name) {
+		return name + "@" + Thread.currentThread().threadId();
+	}
+
+	/** The entry of the agent in the cut; null when it did not ask, or it has no name to tell it by. */
+	private static SuspendedAgentState entryOf(GNetworkOfAgentsSuspension cut, String name) {
+		if (name == null) {
+			return null;
+		}
+		for (SuspendedAgentState state : cut.getSuspendedAgents()) {
+			if (state.getParticipant() != null && name.equals(state.getParticipant().getNetworkAgentName())) {
+				return state;
+			}
+		}
+		return null;
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package ai.gebo.architecture.agents.services;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
@@ -48,7 +47,7 @@ public interface IGNetworkOfAgentsSuspensionHandler {
 			throws AgentException;
 
 	/********************************************************************************************************************
-	 * Called by the agent asking for suspension
+	 * Called by the agent asking for suspension, on the thread executing its turn
 	 * 
 	 * @param networkExecutionId
 	 * @param agentsNetwork
@@ -111,7 +110,9 @@ public interface IGNetworkOfAgentsSuspensionHandler {
 	 * Called by the network after an agent's turn, when the run is being suspended:
 	 * the message the agent was executing and the number of that turn. The handler
 	 * keeps it for the agents that asked to suspend the run, since the respawn
-	 * re-executes them with that message; a turn of any other agent is ignored.
+	 * re-executes them with that message; a turn that did not ask is ignored. An
+	 * agent asking in a further turn has that message frozen, to be delivered after
+	 * its re-execution. Called on the thread that executed the turn.
 	 */
 	public void setSuspendedAgentTurn(AgentNetworkParticipant participant, AgentsExchangeMessage inputMessage,
 			int contributionNr) throws AgentException;
@@ -126,17 +127,17 @@ public interface IGNetworkOfAgentsSuspensionHandler {
 	/**
 	 * Called by the network at the start of a respawn, after {@link #initialize}:
 	 * the block the run is respawned from and the conditions resolved for it, by the
-	 * name of the agent that waited for each. The handler is not in suspension
+	 * name of the agent that waited for them. The handler is not in suspension
 	 * state after this: the respawned run suspends again only when an agent asks.
 	 */
 	public void respawnFrom(GNetworkOfAgentsSuspension suspension,
-			Map<String, AgentSuspendedWaitingCondition> resolvedConditionsByAgent) throws AgentException;
+			Map<String, List<AgentSuspendedWaitingCondition>> resolvedConditionsByAgent) throws AgentException;
 
 	/**
-	 * Asked by a respawned agent, in its own control code: the condition it waited
-	 * for, resolved; empty when it was not waiting or the condition is not resolved.
+	 * Asked by a respawned agent, in its own control code: the conditions it waited
+	 * for, resolved; empty when it was not waiting or they are not resolved.
 	 */
-	public Optional<AgentSuspendedWaitingCondition> resolvedConditionOf(AgentNetworkParticipant participant);
+	public List<AgentSuspendedWaitingCondition> resolvedConditionsOf(AgentNetworkParticipant participant);
 
 	/** The id of the suspension being taken, once an agent asked for it; null before. */
 	public String suspensionId();

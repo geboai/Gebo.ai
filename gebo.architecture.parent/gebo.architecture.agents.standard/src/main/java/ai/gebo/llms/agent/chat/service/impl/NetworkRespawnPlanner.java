@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
-import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.RunPlan;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
@@ -102,11 +102,8 @@ public class NetworkRespawnPlanner {
 	public List<AgentSuspendedWaitingCondition<?, ?>> resolve(GNetworkOfAgentsSuspension block,
 			NetworkOfAgentsSuspendedStateReaction reaction) throws ChatPipelineException {
 		final List<AgentSuspendedWaitingCondition<?, ?>> resolved = new ArrayList<AgentSuspendedWaitingCondition<?, ?>>();
-		for (SuspendedAgentState suspended : block.getSuspendedAgents()) {
-			if (suspended.getWaitingCondition() == null) {
-				continue;
-			}
-			final AgentSuspendedWaitingCondition<?, ?> saved = suspended.getWaitingCondition().toCondition();
+		for (WaitingCondition waiting : block.conditions()) {
+			final AgentSuspendedWaitingCondition<?, ?> saved = waiting.toCondition();
 			final AgentSuspendedWaitingConditionReactionDto answer = reactionTo(reaction, saved.getSuspendedConditionId());
 			if (answer == null) {
 				if (saved.isMandatory()) {

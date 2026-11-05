@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
-import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
@@ -71,10 +71,8 @@ public class NetworkOfAgentsSuspensionTransport {
 			return null;
 		}
 		final List<AgentSuspendedWaitingCondition<?, ?>> conditions = new ArrayList<AgentSuspendedWaitingCondition<?, ?>>();
-		for (SuspendedAgentState suspended : block.getSuspendedAgents()) {
-			if (suspended.getWaitingCondition() != null) {
-				conditions.add(suspended.getWaitingCondition().toCondition());
-			}
+		for (WaitingCondition waiting : block.conditions()) {
+			conditions.add(waiting.toCondition());
 		}
 		return stateOf(block.getCode(), conditions);
 	}

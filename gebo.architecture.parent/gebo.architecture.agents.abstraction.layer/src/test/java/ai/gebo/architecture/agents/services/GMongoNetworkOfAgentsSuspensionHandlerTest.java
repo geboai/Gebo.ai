@@ -142,16 +142,16 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 		assertEquals(1, agent.getPrivateState().getInteractions().size());
 		assertEquals("I need to ask the user", agent.getPrivateState().getInteractions().get(0).getOutput());
 		assertEquals("What is new?", agent.getPrivateState().getInteractions().get(0).getInputMessage().getPayload());
-		assertEquals(waiting.getSuspendedConditionId(), agent.getWaitingCondition().getSuspendedConditionId());
-		assertEquals(String.class.getName(), agent.getWaitingCondition().getTypeName());
-		assertEquals("which year?", agent.getWaitingCondition().getWaitingConditionStatement());
-		assertTrue(agent.getWaitingCondition().isMandatory());
-		assertTrue(agent.getWaitingCondition().toCondition().isMandatory());
-		assertEquals(List.class.getName(), agent.getWaitingCondition().getOptionsTypeName());
-		assertEquals(List.of("2023", "2024"), agent.getWaitingCondition().getLlmChosenOptions(),
+		assertEquals(waiting.getSuspendedConditionId(), agent.getWaitingConditions().get(0).getSuspendedConditionId());
+		assertEquals(String.class.getName(), agent.getWaitingConditions().get(0).getTypeName());
+		assertEquals("which year?", agent.getWaitingConditions().get(0).getWaitingConditionStatement());
+		assertTrue(agent.getWaitingConditions().get(0).isMandatory());
+		assertTrue(agent.getWaitingConditions().get(0).toCondition().isMandatory());
+		assertEquals(List.class.getName(), agent.getWaitingConditions().get(0).getOptionsTypeName());
+		assertEquals(List.of("2023", "2024"), agent.getWaitingConditions().get(0).getLlmChosenOptions(),
 				"what the model chose for the suspension");
 		assertEquals(waiting.getSuspendedConditionId(),
-				agent.getWaitingCondition().toCondition().getSuspendedConditionId(),
+				agent.getWaitingConditions().get(0).toCondition().getSuspendedConditionId(),
 				"a condition read back from the block carries the saved id");
 		// what was not delivered
 		assertEquals(1, saved.getFrozenDeliveries().size());
@@ -219,6 +219,79 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 		assertEquals(2, written.getValue().getSuspendedAgents().size());
 		assertEquals("the-other-config", written.getValue().getSuspendedAgents().get(1).getAgentConfigCode());
 		assertEquals(2, handler.suspensionConditions().size());
+	}
+
+	@Test
+	void anAgentAskingTwiceInItsTurnHasOneEntryWithBothConditionsAndItsTurn() throws AgentException {
+		handler.enterSuspensionState(network, config, participant, privateContext, condition("which year?"));
+		handler.enterSuspensionState(network, config, participant, privateContext, condition("which country?"));
+		handler.setSuspendedAgentTurn(participant, message("router", "the-searcher", "What is new?",
+				MessageSemantic.EXECUTE_AND_SHARE_RESULT), 3);
+		handler.networkExecutionFinished();
+
+		ArgumentCaptor<GNetworkOfAgentsSuspension> written = ArgumentCaptor.forClass(GNetworkOfAgentsSuspension.class);
+		verify(repository, times(1)).save(written.capture());
+		GNetworkOfAgentsSuspension block = written.getValue();
+		assertEquals(1, block.getSuspendedAgents().size(), "one entry per agent");
+		assertEquals(List.of("which year?", "which country?"), block.getSuspendedAgents().get(0).getWaitingConditions()
+				.stream().map(GNetworkOfAgentsSuspension.WaitingCondition::getWaitingConditionStatement).toList());
+		assertEquals("What is new?", block.getSuspendedAgents().get(0).getInputMessage().getPayload());
+		assertEquals(3, block.getSuspendedAgents().get(0).getContributionNr());
+		assertEquals(2, block.conditions().size());
+		assertEquals(2, handler.suspensionConditions().size());
+		assertTrue(block.getFrozenDeliveries().isEmpty());
+	}
+
+	@Test
+	void anAgentAskingInAFurtherTurnHasThatMessageFrozenAndATurnThatDidNotAskIsNotKept() throws AgentException {
+		handler.enterSuspensionState(network, config, participant, privateContext, condition("which year?"));
+		handler.setSuspendedAgentTurn(participant, message("router", "the-searcher", "first",
+				MessageSemantic.EXECUTE_AND_SHARE_RESULT), 1);
+		handler.setSuspendedAgentTurn(participant, message("router", "the-searcher", "it did not ask in this one",
+				MessageSemantic.EXECUTE_AND_SHARE_RESULT), 2);
+		handler.enterSuspensionState(network, config, participant, privateContext, condition("which country?"));
+		handler.setSuspendedAgentTurn(participant, message("router", "the-searcher", "second",
+				MessageSemantic.EXECUTE_AND_SHARE_RESULT), 3);
+		handler.networkExecutionFinished();
+
+		ArgumentCaptor<GNetworkOfAgentsSuspension> written = ArgumentCaptor.forClass(GNetworkOfAgentsSuspension.class);
+		verify(repository, times(1)).save(written.capture());
+		GNetworkOfAgentsSuspension block = written.getValue();
+		assertEquals(1, block.getSuspendedAgents().size());
+		assertEquals("first", block.getSuspendedAgents().get(0).getInputMessage().getPayload());
+		assertEquals(2, block.getSuspendedAgents().get(0).getWaitingConditions().size());
+		assertEquals(1, block.getFrozenDeliveries().size());
+		assertEquals("second", block.getFrozenDeliveries().get(0).getMessages().get(0).getPayload());
+	}
+
+	@Test
+	void twoTurnsOfAnAgentAskingAtTheSameTimeKeepBothMessages() throws Exception {
+		java.util.concurrent.ExecutorService otherTurn = java.util.concurrent.Executors.newSingleThreadExecutor();
+		try {
+			handler.enterSuspensionState(network, config, participant, privateContext, condition("which year?"));
+			otherTurn.submit(() -> {
+				handler.enterSuspensionState(network, config, participant, privateContext, condition("which country?"));
+				return null;
+			}).get();
+			handler.setSuspendedAgentTurn(participant, message("router", "the-searcher", "first",
+					MessageSemantic.EXECUTE_AND_SHARE_RESULT), 1);
+			otherTurn.submit(() -> {
+				handler.setSuspendedAgentTurn(participant, message("router", "the-searcher", "second",
+						MessageSemantic.EXECUTE_AND_SHARE_RESULT), 2);
+				return null;
+			}).get();
+		} finally {
+			otherTurn.shutdownNow();
+		}
+		handler.networkExecutionFinished();
+
+		ArgumentCaptor<GNetworkOfAgentsSuspension> written = ArgumentCaptor.forClass(GNetworkOfAgentsSuspension.class);
+		verify(repository, times(1)).save(written.capture());
+		GNetworkOfAgentsSuspension block = written.getValue();
+		assertEquals(1, block.getSuspendedAgents().size());
+		assertEquals(2, block.getSuspendedAgents().get(0).getWaitingConditions().size());
+		assertEquals("first", block.getSuspendedAgents().get(0).getInputMessage().getPayload());
+		assertEquals("second", block.getFrozenDeliveries().get(0).getMessages().get(0).getPayload());
 	}
 
 	@Test

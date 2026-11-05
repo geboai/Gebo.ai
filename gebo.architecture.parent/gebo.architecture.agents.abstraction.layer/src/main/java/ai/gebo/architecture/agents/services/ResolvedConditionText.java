@@ -9,11 +9,14 @@
 
 package ai.gebo.architecture.agents.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool;
 
 /**
- * What a respawned agent tells its model about the condition it waited for: the
+ * What a respawned agent tells its model about the conditions it waited for: the
  * answer, for a question the user answered (see
  * {@link GAbstractAskUserChoiceQuestionTool#answered}); for any other condition, what was
  * waited for and the value that came; and, for a condition the user declined,
@@ -40,12 +43,22 @@ public final class ResolvedConditionText {
 				+ condition.getInstanceValue();
 	}
 
-	/** The message a respawned agent is re-executed on, the resolved condition told first. */
-	public static String prepend(AgentSuspendedWaitingCondition<?, ?> condition, String message) {
-		final String rendered = render(condition);
-		if (rendered == null) {
+	/** The message a respawned agent is re-executed on, the resolved conditions told first. */
+	@SuppressWarnings("rawtypes")
+	public static String prepend(List<AgentSuspendedWaitingCondition> conditions, String message) {
+		final List<String> rendered = new ArrayList<String>();
+		if (conditions != null) {
+			for (AgentSuspendedWaitingCondition<?, ?> condition : conditions) {
+				final String told = render(condition);
+				if (told != null) {
+					rendered.add(told);
+				}
+			}
+		}
+		if (rendered.isEmpty()) {
 			return message;
 		}
-		return message != null && !message.isBlank() ? rendered + "\n\n" + message : rendered;
+		final String told = String.join("\n\n", rendered);
+		return message != null && !message.isBlank() ? told + "\n\n" + message : told;
 	}
 }

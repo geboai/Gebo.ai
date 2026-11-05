@@ -82,7 +82,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 	/** The input the network was given (the input of executeNetwork), as it is. */
 	private Object networkInput = null;
 	private String networkInputClass = null;
-	/** The agents that asked to suspend the run, in the order they asked. */
+	/** The agents that asked to suspend the run, one entry each, in the order they asked. */
 	private List<SuspendedAgentState> suspendedAgents = new ArrayList<SuspendedAgentState>();
 	/** The messages the run had not delivered, by the agent that produced them. */
 	private List<FrozenDeliveries> frozenDeliveries = new ArrayList<FrozenDeliveries>();
@@ -109,15 +109,28 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 
 	/** Whether a condition of the block is mandatory: the conversation waits for the block. */
 	public boolean isMandatory() {
-		for (SuspendedAgentState suspended : suspendedAgents) {
-			if (suspended.getWaitingCondition() != null && suspended.getWaitingCondition().isMandatory()) {
+		for (WaitingCondition condition : conditions()) {
+			if (condition.isMandatory()) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	/** An agent that asked to suspend the run, and what it waits for. */
+	/** Every condition of the block, agent by agent, in the order they were asked. */
+	public List<WaitingCondition> conditions() {
+		final List<WaitingCondition> conditions = new ArrayList<WaitingCondition>();
+		for (SuspendedAgentState suspended : suspendedAgents) {
+			conditions.addAll(suspended.getWaitingConditions());
+		}
+		return conditions;
+	}
+
+	/**
+	 * An agent that asked to suspend the run, and everything it waits for: one entry
+	 * however many conditions it declared, since it is re-executed once, on the
+	 * message it was executing, told every answer.
+	 */
 	@Data
 	@NoArgsConstructor
 	public static class SuspendedAgentState {
@@ -127,7 +140,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		/** The agent's place in the network: its name, who it talks to. */
 		private AgentNetworkParticipant participant = null;
 		private AgentPrivateState privateState = null;
-		private WaitingCondition waitingCondition = null;
+		private List<WaitingCondition> waitingConditions = new ArrayList<WaitingCondition>();
 		/** The message the agent was executing when it asked, and the number of that turn. */
 		private ExchangeMessageRecord inputMessage = null;
 		private Integer contributionNr = null;
@@ -139,7 +152,9 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			state.setAgentConfig(agentConfig);
 			state.setParticipant(participant);
 			state.setPrivateState(AgentPrivateState.of(privateContext));
-			state.setWaitingCondition(WaitingCondition.of(waitForCondition));
+			if (waitForCondition != null) {
+				state.getWaitingConditions().add(WaitingCondition.of(waitForCondition));
+			}
 			return state;
 		}
 	}

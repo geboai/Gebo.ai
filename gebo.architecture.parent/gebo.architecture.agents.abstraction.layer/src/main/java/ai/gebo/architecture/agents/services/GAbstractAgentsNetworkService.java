@@ -3,9 +3,11 @@ package ai.gebo.architecture.agents.services;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
@@ -35,6 +37,7 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.PrivateInter
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedContribution;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
@@ -202,14 +205,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 		@Override
 		public void respawnFrom(GNetworkOfAgentsSuspension suspension,
-				Map<String, AgentSuspendedWaitingCondition> resolvedConditionsByAgent) throws AgentException {
+				Map<String, List<AgentSuspendedWaitingCondition>> resolvedConditionsByAgent) throws AgentException {
 			throw new AgentException(CANNOT_BE_SUSPENDED + (network != null ? ": " + network.getCode() : "")
 					+ ", so it cannot be respawned");
 		}
 
 		@Override
-		public Optional<AgentSuspendedWaitingCondition> resolvedConditionOf(AgentNetworkParticipant participant) {
-			return Optional.empty();
+		public List<AgentSuspendedWaitingCondition> resolvedConditionsOf(AgentNetworkParticipant participant) {
+			return List.of();
 		}
 
 		@Override
@@ -445,7 +448,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		final AgentsSessionCreationContext sessionCreation = sessionCreationContext(chatRequestContext,
 				session.getEnvironment());
 		restoreAgentsRuntime(suspension);
-		final Map<String, AgentSuspendedWaitingCondition> resolvedByAgent = resolvedByAgent(suspension,
+		final Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent = resolvedByAgent(suspension,
 				resolvedConditions);
 		OutputType producedOutput = null;
 		Throwable failure = null;
@@ -474,17 +477,17 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	/**
 	 * The respawned run itself, in the session of the cut. The suspended agents
-	 * whose condition is resolved are re-executed first, each with the message it
+	 * whose conditions are resolved are re-executed first, each once, with the message it
 	 * was executing when it asked (the re-execution is the same act of the agent,
 	 * not one more of its count); what they produce joins what the run had not
 	 * delivered, in its delivery order, and the delivery goes on as in a run. The
-	 * suspended agents whose condition is not resolved are then suspended again in
+	 * suspended agents whose conditions are not resolved are then suspended again in
 	 * this run's handler, with the turn each was executing, so the run suspends
 	 * again for them, however far the others went.
 	 */
 	private OutputType respawnInSession(IChatRequestContext chatRequestContext,
 			AgentsCollaborationSessionContext session, GNetworkOfAgentsSuspension suspension,
-			Map<String, AgentSuspendedWaitingCondition> resolvedByAgent, GeboToolCalling toolCalling,
+			Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent, GeboToolCalling toolCalling,
 			IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws AgentException, LLMConfigException {
 		final List<AgentsExchangeMessage<?>> reExecuted = new ArrayList<AgentsExchangeMessage<?>>();
 		final List<SuspendedAgentState> stillWaiting = new ArrayList<SuspendedAgentState>();
@@ -538,9 +541,19 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent:" + name + " is still waiting: the respawned run suspends again for it");
 			}
-			suspensionHandler.enterSuspensionState(network, runtime != null ? runtime.getConfig() : waiting.getAgentConfig(),
-					participant, runtime != null ? runtime.getAgentContext() : null,
-					waiting.getWaitingCondition() != null ? waiting.getWaitingCondition().toCondition() : null);
+			// an agent can ask with no condition: it suspends again all the same
+			final List<AgentSuspendedWaitingCondition<?, ?>> waitedFor = new ArrayList<AgentSuspendedWaitingCondition<?, ?>>();
+			for (WaitingCondition condition : waiting.getWaitingConditions()) {
+				waitedFor.add(condition.toCondition());
+			}
+			if (waitedFor.isEmpty()) {
+				waitedFor.add(null);
+			}
+			for (AgentSuspendedWaitingCondition<?, ?> condition : waitedFor) {
+				suspensionHandler.enterSuspensionState(network,
+						runtime != null ? runtime.getConfig() : waiting.getAgentConfig(), participant,
+						runtime != null ? runtime.getAgentContext() : null, condition);
+			}
 			if (waiting.getInputMessage() != null) {
 				suspensionHandler.setSuspendedAgentTurn(participant, waiting.getInputMessage().toMessage(),
 						waiting.getContributionNr() != null ? waiting.getContributionNr() : 0);
@@ -568,29 +581,45 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	/**
-	 * The resolved conditions by the name of the agent that waited for each: a
-	 * resolved condition is matched to a saved one by its id, and one matching no
-	 * saved condition is ignored, with a warning.
+	 * The resolved conditions by the name of the agent that waited for them, for the
+	 * agents to re-execute: a resolved condition is matched to a saved one by its id,
+	 * and one matching no saved condition is ignored, with a warning. An agent is
+	 * re-executed once, so it goes on when at least one of its conditions is resolved
+	 * and no mandatory one is left: those left without a value count as declined. With
+	 * a mandatory one left it keeps waiting for all of them.
 	 */
-	private Map<String, AgentSuspendedWaitingCondition> resolvedByAgent(GNetworkOfAgentsSuspension suspension,
+	private Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent(GNetworkOfAgentsSuspension suspension,
 			List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions) {
-		final Map<String, String> agentByCondition = new HashMap<String, String>();
-		for (SuspendedAgentState suspended : suspension.getSuspendedAgents()) {
-			if (suspended.getWaitingCondition() != null && suspended.getWaitingCondition().getSuspendedConditionId() != null
-					&& nameOf(suspended) != null) {
-				agentByCondition.put(suspended.getWaitingCondition().getSuspendedConditionId(), nameOf(suspended));
-			}
+		final Map<String, AgentSuspendedWaitingCondition> resolvedById = new HashMap<String, AgentSuspendedWaitingCondition>();
+		final Set<String> savedIds = new HashSet<String>();
+		for (WaitingCondition saved : suspension.conditions()) {
+			savedIds.add(saved.getSuspendedConditionId());
 		}
-		final Map<String, AgentSuspendedWaitingCondition> resolvedByAgent = new HashMap<String, AgentSuspendedWaitingCondition>();
 		if (resolvedConditions != null) {
 			for (AgentSuspendedWaitingCondition<?, ?> resolved : resolvedConditions) {
-				final String agent = resolved != null ? agentByCondition.get(resolved.getSuspendedConditionId()) : null;
-				if (agent == null) {
+				if (resolved == null || !savedIds.contains(resolved.getSuspendedConditionId())) {
 					LOGGER.warn("A resolved condition matches none the suspension:" + suspension.getCode()
 							+ " waits for, ignored: " + (resolved != null ? resolved.getSuspendedConditionId() : null));
 					continue;
 				}
-				resolvedByAgent.put(agent, resolved);
+				resolvedById.put(resolved.getSuspendedConditionId(), resolved);
+			}
+		}
+		final Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent = new HashMap<String, List<AgentSuspendedWaitingCondition>>();
+		for (SuspendedAgentState suspended : suspension.getSuspendedAgents()) {
+			final List<AgentSuspendedWaitingCondition> ofTheAgent = new ArrayList<AgentSuspendedWaitingCondition>();
+			boolean anyResolved = false;
+			boolean mandatoryLeft = false;
+			for (WaitingCondition saved : suspended.getWaitingConditions()) {
+				final AgentSuspendedWaitingCondition resolved = resolvedById.get(saved.getSuspendedConditionId());
+				anyResolved |= resolved != null;
+				mandatoryLeft |= resolved == null && saved.isMandatory();
+				ofTheAgent.add(resolved != null ? resolved : saved.toCondition());
+			}
+			if (nameOf(suspended) != null && anyResolved && !mandatoryLeft) {
+				resolvedByAgent.put(nameOf(suspended), ofTheAgent);
+			} else if (anyResolved && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent:" + nameOf(suspended) + " keeps waiting: a mandatory condition of its is not resolved");
 			}
 		}
 		return resolvedByAgent;

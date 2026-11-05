@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -120,9 +119,9 @@ class NetworkSuspensionAndRespawnTest {
 					AgentPrivateSessionContext mine = invocation.getArgument(8, AgentPrivateSessionContext.class);
 					IGNetworkOfAgentsSuspensionHandler handler = invocation.getArgument(12,
 							IGNetworkOfAgentsSuspensionHandler.class);
-					Optional<AgentSuspendedWaitingCondition> answer = handler.resolvedConditionOf(me);
-					if (answer.isPresent()) {
-						answersSeenByTheAsker.add(answer.get().getInstanceValue());
+					List<AgentSuspendedWaitingCondition> answers = handler.resolvedConditionsOf(me);
+					if (!answers.isEmpty()) {
+						answersSeenByTheAsker.add(answers.get(0).getInstanceValue());
 						return List.of();
 					}
 					handler.enterSuspensionState(network, config, me, mine, new AgentSuspendedWaitingCondition<String, Object>(
@@ -211,7 +210,7 @@ class NetworkSuspensionAndRespawnTest {
 		// the answer is given on the condition as read back from the block, as whoever
 		// loads the block and resolves it does
 		@SuppressWarnings({ "unchecked", "rawtypes" })
-		AgentSuspendedWaitingCondition answered = block.getSuspendedAgents().get(0).getWaitingCondition()
+		AgentSuspendedWaitingCondition answered = block.getSuspendedAgents().get(0).getWaitingConditions().get(0)
 				.toCondition();
 		answered.setInstanceValue("2024");
 		// the respawn runs on a service created for the block, as the factory creates one

@@ -215,4 +215,32 @@ class ChatNetworkRespawnStepTest {
 		assertThrows(ChatPipelineException.class,
 				() -> step.execute(runtimeData(null), mock(ISinkUIEmitter.class), null, null));
 	}
+
+	@Test
+	void everyConditionOfAnAgentNeedsItsReactionWhenMandatory() throws Exception {
+		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> first = clarification(true);
+		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> second = clarification(true);
+		GNetworkOfAgentsSuspension block = new GNetworkOfAgentsSuspension();
+		SuspendedAgentState entry = SuspendedAgentState.of(null, null, null, first);
+		entry.getWaitingConditions().add(GNetworkOfAgentsSuspension.WaitingCondition.of(second));
+		block.getSuspendedAgents().add(entry);
+		AgentSuspendedWaitingConditionReactionDto answer = new AgentSuspendedWaitingConditionReactionDto();
+		answer.setConditionType("clarification");
+		answer.setConditionId(first.getSuspendedConditionId());
+		answer.setAttributes(new java.util.LinkedHashMap<String, Object>(Map.of("chosenOption", "2024")));
+		NetworkOfAgentsSuspendedStateReaction reaction = new NetworkOfAgentsSuspendedStateReaction();
+		reaction.setReactions(List.of(answer));
+		NetworkRespawnPlanner planner = new NetworkRespawnPlanner(null, new NetworkOfAgentsSuspensionTransport(
+				new AgentSuspendedWaitingConditionTransportTranslatorRepositoryPatternImpl(
+						List.of(new DefaultConditionTransportTranslator(), new ClarificationConditionTransportTranslator()))));
+
+		assertThrows(ChatPipelineException.class, () -> planner.resolve(block, reaction), "the second has no reaction");
+
+		AgentSuspendedWaitingConditionReactionDto other = new AgentSuspendedWaitingConditionReactionDto();
+		other.setConditionType("clarification");
+		other.setConditionId(second.getSuspendedConditionId());
+		other.setAttributes(new java.util.LinkedHashMap<String, Object>(Map.of("chosenOption", "2023")));
+		reaction.setReactions(List.of(answer, other));
+		assertEquals(2, planner.resolve(block, reaction).size());
+	}
 }

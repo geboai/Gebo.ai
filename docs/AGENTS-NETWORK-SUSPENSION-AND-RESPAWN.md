@@ -17,7 +17,7 @@ waited for whole, and everything not yet delivered is frozen in its place.
 | agents abstraction | `AgentSuspendedWaitingCondition<T, O>` | What an agent waits for: the value type `T`, the statement, the model's explanation, whether it is **mandatory**, and what the model chose (`O`). Its id is what a reaction is matched to. |
 | agents abstraction | `IGNetworkOfAgentsSuspensionHandler` | The handler of one run: agents ask it to suspend (`enterSuspensionState`), the network tells it the cut. |
 | agents abstraction | `GMongoNetworkOfAgentsSuspensionHandler` | The handler that consolidates the cut in memory and writes it as one block when the run is declared finished. A service without a repository hands out a never-suspending handler. |
-| agents abstraction | `GNetworkOfAgentsSuspension` | The block: network copy and input, conversation and request, suspended agents with their turn and condition, frozen deliveries, every agent's runtime, the shared state. |
+| agents abstraction | `GNetworkOfAgentsSuspension` | The block: network copy and input, conversation and request, suspended agents (one entry each, with its turn and all its conditions), frozen deliveries, every agent's runtime, the shared state. |
 | agents abstraction | `IGAgentsNetworkService.respawnNetworkExecution` | Respawns a block with the resolved conditions on a service **created for the block** by the factory. |
 | agents abstraction | `IGWaitExternalCondition`, `GWaitExternalConditionSink` | The contract a tool declares a condition through; the sink the agent loads for each model call. |
 | agents abstraction | `AskUserSingleChoiceQuestionTool`, `AskUserMultipleChoiceQuestionTool`, `AskUserChoiceQuestionToolSource` | The tools of the common case: a question with one answer, or with several, among options with a label and a description, an explanation of the user's own when allowed. Mounted only on the agents that name their source. |
@@ -40,7 +40,10 @@ waited for whole, and everything not yet delivered is frozen in its place.
 2. A mounted waiting tool, declared with `returningDirect()`, finds the contract in its
    tool context and declares the condition (`waitFor`). The loop stops at it.
 3. The agent, seeing the sink filled, calls `enterSuspensionState` for each condition
-   and returns no messages. The agent never calls the handler otherwise.
+   and returns no messages. The agent never calls the handler otherwise. An agent has
+   one entry in the block, however many conditions it declared, for example a model
+   calling two question tools in one turn. Should it ask in a further turn of a
+   parallel group, that turn's message is frozen and delivered after its re-execution.
 4. The network's delivery loop checks `isSuspensionState()` before every group of every
    level. What is still to be delivered is frozen with the producing agent
    (`setSuspendingMessagesNotYetDelivered`); the suspending agents' turns
@@ -77,10 +80,12 @@ waited for whole, and everything not yet delivered is frozen in its place.
    top of what the block kept of it (the block keeps only texts, numbers, booleans,
    dates, enums and collections or maps of them: the runtime objects a chat puts in the
    environment are given again by the respawning step), restores every agent's
-   counters and private turns, and re-executes the suspended agents whose condition is
-   resolved with the message each was executing, the answer told first
-   (`ResolvedConditionText`). The frozen deliveries follow in their order, then the
-   normal loop.
+   counters and private turns, and re-executes the suspended agents whose conditions
+   are resolved, each once, with the message it was executing, every answer told first
+   (`ResolvedConditionText`). An agent goes on when at least one of its conditions is
+   resolved and no mandatory one is left, those left counting as declined; with a
+   mandatory one left it keeps waiting for all of them. The frozen deliveries follow in
+   their order, then the normal loop.
 4. The run ends with an answer, or suspends again into a new block linked to the first;
    the consumed block is marked respawned.
 
@@ -106,6 +111,7 @@ pipeline service with the reaction on the request.
 
 `NetworkSuspensionAndRespawnTest`, `MockedAgentsNetworkRespawnTest` (the base, with
 mocked agents and a parallel group), `GMongoNetworkOfAgentsSuspensionHandlerTest`,
+`ResolvedConditionTextTest`,
 `AskUserSingleChoiceQuestionToolTest`, `AskUserMultipleChoiceQuestionToolTest`,
 `ToolCallingAgentSuspensionTest`,
 `ReactiveAgentAdapterSuspensionTest`, `ConditionTransportTranslatorsTest`,
