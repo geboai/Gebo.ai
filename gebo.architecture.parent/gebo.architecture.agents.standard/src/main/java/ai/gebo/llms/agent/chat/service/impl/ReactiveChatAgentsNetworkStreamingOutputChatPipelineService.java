@@ -146,14 +146,14 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 
 	/** How the network service of a run is launched: run on the question, or respawned from a block. */
 	@FunctionalInterface
-	protected interface NetworkLauncher {
+	public interface NetworkLauncher {
 		NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> launch(IGReactiveChatAgentsNetworkService runtimeNetwork,
 				ChatPipelineExecutionRuntimeData runtimeData, String question, Map<String, Object> environment)
 				throws AgentException, LLMConfigException;
 	}
 
 	/** What a run of this step is: the network to create the service for, and how to launch it. */
-	protected record RunPlan(GAgentsNetwork network, NetworkLauncher launcher) {
+	public record RunPlan(GAgentsNetwork network, NetworkLauncher launcher) {
 	}
 
 	/**

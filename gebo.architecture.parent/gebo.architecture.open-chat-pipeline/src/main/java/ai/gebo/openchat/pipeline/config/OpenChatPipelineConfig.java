@@ -48,6 +48,7 @@ public class OpenChatPipelineConfig {
 		pipeline.setDefaultPipeline(false);
 		pipeline.setStepInputId(DefaultInputChatPipelineStepServiceImpl.DEFAULT_INPUT_STEP);
 		pipeline.setStepRouterId(OpenChatConstants.OPEN_CHAT_ROUTING_STEP);
+		pipeline.setRespawnStepId(OpenChatConstants.OPEN_CHAT_NETWORK_RESPAWN_STEP);
 		chatPipelinesConfiguration.getPipelines().add(pipeline);
 		LOGGER.info("Registered chat pipeline '{}' (input step '{}', router step '{}')",
 				OpenChatConstants.OPEN_CHAT_PIPELINE, DefaultInputChatPipelineStepServiceImpl.DEFAULT_INPUT_STEP,
