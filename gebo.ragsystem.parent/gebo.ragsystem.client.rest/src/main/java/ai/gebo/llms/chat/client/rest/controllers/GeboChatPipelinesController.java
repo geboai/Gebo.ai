@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
@@ -110,6 +111,13 @@ public class GeboChatPipelinesController {
 			@RequestParam(name = "chatProfileCode", required = false) String chatProfileCode,
 			@RequestParam(name = "pipelineCode", required = false) String pipelineCode) throws ChatPipelineException {
 		return chatPipelineService.getPersonalPipelinesChatMenu(pipelineCode, chatProfileCode);
+	}
+
+	/** The suspended network of agents the conversation still waits for; nothing when it waits for none. */
+	@GetMapping(value = "pendingNetworkOfAgentsSuspension", produces = MediaType.APPLICATION_JSON_VALUE)
+	public NetworkOfAgentsSuspendedState pendingNetworkOfAgentsSuspension(
+			@RequestParam(name = "userChatContextCode", required = true) String userChatContextCode) {
+		return chatPipelineService.pendingNetworkOfAgentsSuspension(userChatContextCode).orElse(null);
 	}
 
 	@PostMapping(value = "executeDefaultRespawnAgenticChat", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

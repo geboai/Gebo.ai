@@ -2,10 +2,12 @@ package ai.gebo.llms.chat.pipelines.service;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.pipelines.model.ui.PipelineChatMenu;
@@ -54,4 +56,11 @@ public interface IChatPipelineService {
 			throws ChatPipelineException;
 
 	public void stopPipeline(String userChatContextCode) throws ChatPipelineException;
+
+	/**
+	 * The suspended network of agents the conversation still waits for, as the
+	 * client reacts to it: shown again when the conversation is opened, answered
+	 * through the respawn. Empty when the conversation has no open block.
+	 */
+	public Optional<NetworkOfAgentsSuspendedState> pendingNetworkOfAgentsSuspension(String userChatContextCode);
 }

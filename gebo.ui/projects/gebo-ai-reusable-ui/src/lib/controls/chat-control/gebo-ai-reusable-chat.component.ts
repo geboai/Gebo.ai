@@ -22,7 +22,8 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState } from "@Gebo.ai/gebo-ai-rest-api";
+import { SuspensionAnswer } from "./chat-suspension-answer.component";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of, Subject } from "rxjs";
@@ -69,6 +70,8 @@ interface GeboChatInteraction {
  */
 interface GeboChatTemplatedResponse {
     id?: string;
+    // the network of agents this answer suspended, waiting for the user's reaction
+    networkOfAgentsSuspendedState?: NetworkOfAgentsSuspendedState;
     userChatContextCode?: string;
     usedChatModelCode?: string;
     usedChatModelProvider?: string;
@@ -390,6 +393,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
     public readonly chatResponses$: Observable<GeboChatResponse> = this.chatResponsesSubject.asObservable();
     public lastChatRequest?: GeboChatRequest;
     public lastChatResponse?: GeboChatResponse;
+    /**
+     * The suspended network of agents the conversation waits for: set by the answer that
+     * suspended it and when the conversation is opened again, cleared when answered or
+     * skipped. While a mandatory one is pending only the answer can be sent.
+     */
+    public pendingSuspension?: NetworkOfAgentsSuspendedState;
 
     protected get areaContext(): GeboAIReusableChatAreaContext {
         return {
@@ -1162,6 +1171,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                     this.loadingSearchResult = false;
                     this.chatInfoFormGroup.patchValue({ code: value.code, description: value.description });
                     this.lastInteractionMessages = this.interactions && this.interactions?.length > 0 ? [chat_history_loaded] : [clean_chat_loaded];
+                    this.loadPendingSuspension(value?.code);
                     this.scrollToBottom();
                     if (value?.code && this.interactions.length > 0) {
                         this.loadAnswerFeedbacks(value.code);
@@ -1176,8 +1186,53 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
             });
         } else {
             this.interactions = [];
+            this.pendingSuspension = undefined;
         }
 
+    }
+
+    /** The suspended network of agents the conversation still waits for, shown again to be answered. */
+    private loadPendingSuspension(userChatContextCode?: string): void {
+        this.pendingSuspension = undefined;
+        if (!userChatContextCode) return;
+        this.geboChatPipelineService.pendingNetworkOfAgentsSuspension(userChatContextCode).subscribe({
+            next: (state) => {
+                this.pendingSuspension = state?.networkOfAgentsBlockId ? state : undefined;
+            },
+            error: (err) => {
+                console.error("Cannot read the pending suspension of the conversation", err);
+            }
+        });
+    }
+
+    /** Whether a condition of the pending suspension is mandatory: only the answer can be sent. */
+    public isMandatorySuspension(state?: NetworkOfAgentsSuspendedState): boolean {
+        return !!state?.conditions?.some(c => c.attributes?.["mandatory"] !== false);
+    }
+
+    /**
+     * The user answered the suspended network: the reaction respawns it, the answer shown
+     * as the user's message of a new interaction.
+     */
+    public answerSuspension(answer: SuspensionAnswer): void {
+        if (this.chatStreaming) return;
+        const qry: GeboChatRequest = { ...this.formGroup.value };
+        qry.id = uuidv4();
+        qry.streamResponse = true;
+        qry.query = answer.text;
+        qry.userUploadedContents = [];
+        qry.networkOfAgentsSuspendedStateReaction = answer.reaction;
+        this.pendingSuspension = undefined;
+        this.startFollowingAnswer();
+        this.notifyChatRequest(qry);
+        this.callReactiveChat(qry, false, true);
+    }
+
+    /** The user leaves an optional question unanswered: the conversation goes on, the run is dropped. */
+    public skipSuspension(): void {
+        if (!this.isMandatorySuspension(this.pendingSuspension)) {
+            this.pendingSuspension = undefined;
+        }
     }
 
     /**
@@ -1562,7 +1617,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         }
     }
 
-    private callReactiveChat(r: GeboChatRequest, doSpeach: boolean): void {
+    private callReactiveChat(r: GeboChatRequest, doSpeach: boolean, respawn: boolean = false): void {
         this.loadingChatResponse = true;
         this.currentPipelineRouterDecisionCode = (this.ragsystem === true ? "WAITING" : undefined);
         const suggestChatDescription: boolean = !this.interactions || this.interactions.length === 0;
@@ -1693,6 +1748,12 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                     }
                 }
                 if (recvd.lastMessage === true) {
+                    // the network suspended, waiting for the user: the question is asked here
+                    const suspended: NetworkOfAgentsSuspendedState | undefined = (recvd.content as any)?.networkOfAgentsSuspendedState;
+                    this.pendingSuspension = suspended?.networkOfAgentsBlockId ? suspended : undefined;
+                    if (interaction.response) {
+                        interaction.response.networkOfAgentsSuspendedState = this.pendingSuspension;
+                    }
                     interaction.streamingThinking = undefined;
                     flushText();
                     interaction.loading = false;
@@ -1709,6 +1770,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
             this.stopFollowingAnswer();
             this.chatStreamingErrorOccurred = true;
             console.error("Exception in receiving data", error);
+            if (error?.status === 409 && error?.body?.networkOfAgentsBlockId) {
+                // the conversation waits for the answer to a suspended network of agents
+                this.pendingSuspension = error.body as NetworkOfAgentsSuspendedState;
+                this.lastInteractionMessages = [{ severity: "warn", summary: "The agents are waiting for your answer", detail: "Answer the question before going on" }];
+            }
 
             this.chatInputShell.onStreamError(error);
 
@@ -1735,8 +1801,11 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                 agenticChatRequest.request.chatPipelineProcessId = this.currentPipelineRoutingOption.chatPipelineProcessId;
                 agenticChatRequest.environment = this.currentPipelineRoutingOption.pipelineParams;
             }
-            //this.reactiveChatService.streamRagChat(r, messageCallback, errorCallBack);
-            this.reactiveChatService.streamAgenticChat(agenticChatRequest, this.pipelineId, messageCallback, errorCallBack, onCompleteCallback);
+            if (respawn === true) {
+                this.reactiveChatService.streamRespawnAgenticChat(agenticChatRequest, this.pipelineId, messageCallback, errorCallBack, onCompleteCallback);
+            } else {
+                this.reactiveChatService.streamAgenticChat(agenticChatRequest, this.pipelineId, messageCallback, errorCallBack, onCompleteCallback);
+            }
         } else {
             this.reactiveChatService.streamChat(r, messageCallback, errorCallBack, onCompleteCallback);
         }
@@ -1769,6 +1838,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
      * @param speechOutput Flag to indicate if speech output is desired
      */
     sendMessage(speechOutput?: boolean) {
+        if (this.pendingSuspension && this.isMandatorySuspension(this.pendingSuspension)) {
+            this.lastInteractionMessages = [{ severity: "warn", summary: "The agents are waiting for your answer", detail: "Answer the question above before going on" }];
+            return;
+        }
         const doSpeach = speechOutput === true;
         const qry: GeboChatRequest = this.formGroup.value;
         const uuid: string = uuidv4();

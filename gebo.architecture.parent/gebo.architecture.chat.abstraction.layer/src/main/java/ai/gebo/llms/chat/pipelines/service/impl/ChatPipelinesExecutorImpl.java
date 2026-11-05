@@ -434,112 +434,125 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		}
 	}
 
+	/**
+	 * The runtime data of a respawn, prepared as a run's is (see
+	 * {@link #executeUntillOutput}) but with no input and routing steps to run: the
+	 * request started, its language detected, its origin and attendance defaulted,
+	 * the tool calls recorded into the response, the environment given, and the
+	 * respawner step as the one route.
+	 */
+	protected ChatPipelineExecutionRuntimeData prepareRespawn(GeboChatRequest request, GeboChatResponse response,
+			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, ChatPipelineConfiguration config)
+			throws IOException, LLMConfigException, GeboChatSessionLifecycleException {
+		detectUserLanguage(request);
+		if (request.getRunOrigin() == null) {
+			request.setRunOrigin(GChatRunInfo.CHAT);
+		}
+		if (request.getAttended() == null) {
+			request.setAttended(Boolean.TRUE);
+		}
+		LLMChatRequestResources resources = this.chatSessionLifecycleService.startRequest(request, chatModel,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
+		MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
+				IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel));
+		final ToolCallsListener requestToolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
+		resources.setToolCallsListener(requestToolCalls);
+		minimalChatContext.setToolCallsListener(requestToolCalls);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Recording the tool calls of respawn request:" + request.getId() + " into its response");
+		}
+		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(config,
+				chatModel.getContextLength(), resources, response, minimalChatContext, true, toolCallingOf(request));
+		if (environment != null) {
+			runtimeData.getSharedEnvironment().putAll(environment);
+		}
+		// the one route of a respawn: the respawner step
+		runtimeData.getRoutingDecisions()
+				.add(new RoutingDecision(List.of(config.getRespawnStepId()), null, null, Map.of()));
+		if (runtimeData.getChatResponse() != null) {
+			runtimeData.getChatResponse().setPipelineRouterDecisionCode(config.getRespawnStepId());
+		}
+		return runtimeData;
+	}
+
+	/**
+	 * Respawns the suspended network of agents of the request's conversation: the
+	 * pipeline's respawner step is the one route, checked before the request starts;
+	 * the request is started, run and ended as a run is (see {@link #streamingExecute}).
+	 */
 	@Override
 	public Flux<GeboChatMessageEnvelope> streamingRespawnAgenticChat(@NotNull GeboChatRequest request,
 			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
 			IGConfigurableChatModel serviceModel, String pipelineCode) throws ChatPipelineException, IOException,
 			LLMConfigException, GeboChatSessionLifecycleException, GeboChatException {
-		ChatPipelineConfiguration pipelineConfiguration = getCfgOrDefault(pipelineCode);
-		if (pipelineConfiguration.getRespawnNetworkOfAgentId() != null) {
-			final IChatPipelineStepService respawnerStep = stepsServiceRepoPattern
-					.findByCode(pipelineConfiguration.getRespawnNetworkOfAgentId());
-			GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-
-			if (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null) {
-				response.setUsedChatModelCode(chatModel.getConfig().getChoosedModel().getCode());
-			}
-
-			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
-
-			Sinks.Many<GeboChatMessageEnvelope> sink = Sinks.many().unicast().onBackpressureBuffer();
-
-			ISinkUIEmitter emitter = new SinkUIEmitterImpl(sink);
-			LLMChatRequestResources resources = null;
-			resources = this.chatSessionLifecycleService.startRequest(request, chatModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET);
-			MinimalChatContext minimalChatContext = this.chatSessionLifecycleService.getMinimalChatContext(request,
-					IGChatSessionStateShrinkerService.serviceModelContextBudget(serviceModel));
-			// One recorder for every tool called while answering this request, by any step
-			// or agent: it fills the response's called functions as the calls happen, so
-			// the
-			// response carries them whenever and wherever it is saved or streamed.
-			final ToolCallsListener requestToolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
-			resources.setToolCallsListener(requestToolCalls);
-			minimalChatContext.setToolCallsListener(requestToolCalls);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Recording the tool calls of request:" + request.getId() + " into its response");
-			}
-			ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(pipelineConfiguration,
-					chatModel.getContextLength(), resources, response, minimalChatContext, true,
-					toolCallingOf(request));
-			if (environment != null) {
-				runtimeData.getSharedEnvironment().putAll(environment);
-			}
-			Mono<StreamingLastStep> routingMono = Mono.fromCallable(() -> {
-				return runAs.doRunAsWithReturnAndException(() -> {
-
-					return new StreamingLastStep(runtimeData, respawnerStep, null);
-				});
-			}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic())).onErrorResume(th -> {
-				LOGGER.error("Exception while streaming chat pipeline", th);
-				GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline", th);
-
-				return Mono.just(new StreamingLastStep(null, null, errorMessage));
-			}).cache();
-
-			Flux<GeboChatMessageEnvelope> sideChannelFlux = sink.asFlux()
-					.subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
-
-			Flux<GeboChatMessageEnvelope> mainFlux = routingMono.flatMapMany(lastStepData -> {
-				try {
-					if (lastStepData.getErrorMessage() != null) {
-						return Flux.just(new GeboChatMessageEnvelope(lastStepData.getErrorMessage()));
-					}
-
-					if (lastStepData
-							.getLastStepService() instanceof IStreamingOutputChatPipelineService streamingOutputService) {
-
-						return runAs.doRunAsWithReturnAndException(() -> {
-							Flux<GeboChatMessageEnvelope> routingInfoFlux = Flux
-									.just(buildRoutingInfos(lastStepData.getRuntimeData(), streamingOutputService,
-											response, chatModel, serviceModel));
-
-							// the request ends here, the same way for every route: its interaction
-							// saved as the step's last message passes, before the client gets it, or
-							// however the step's stream ends (see ChatRequestEnding)
-							Flux<GeboChatMessageEnvelope> outputFlux = ChatRequestEnding.ending(
-									streamingOutputService.execute(lastStepData.getRuntimeData(), emitter, chatModel,
-											serviceModel),
-									chatSessionLifecycleService, request, response, chatModel, runAs);
-
-							return Flux.concat(routingInfoFlux, outputFlux);
-						});
-					}
-
-					throw new ChatPipelineException("The step service " + lastStepData.getLastStepService().getStepId()
-							+ " is not a streaming one");
-
-				} catch (Throwable th) {
-					LOGGER.error("Exception while streaming chat pipeline", th);
-					GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline",
-							th);
-
-					return Flux.just(new GeboChatMessageEnvelope(errorMessage));
-				}
-			}).doFinally(signalType -> {
-				emitter.complete();
-				// a request that never reached its output step (its routing failed) is released
-				// here; one that did was ended and released with its stream, and a second
-				// release is a no-op
-				this.chatSessionLifecycleService.releaseRequest(request);
-			}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
-
-			return Flux.defer(() -> Flux.merge(sideChannelFlux, mainFlux))
-					.subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
-		} else
+		final ChatPipelineConfiguration pipelineConfiguration = getCfgOrDefault(pipelineCode);
+		final IChatPipelineStepService respawnerStep = pipelineConfiguration.getRespawnStepId() != null
+				? stepsServiceRepoPattern.findByCode(pipelineConfiguration.getRespawnStepId())
+				: null;
+		if (!(respawnerStep instanceof IStreamingOutputChatPipelineService)) {
 			throw new ChatPipelineException(
-					"Pipeline: " + pipelineCode + " does not have a valid agentic chat respawner");
+					"Pipeline: " + pipelineConfiguration.getCode() + " does not have a valid agentic chat respawner");
+		}
+		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
+		if (chatModel.getConfig() != null && chatModel.getConfig().getChoosedModel() != null) {
+			response.setUsedChatModelCode(chatModel.getConfig().getChoosedModel().getCode());
+		}
+		final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
+		Sinks.Many<GeboChatMessageEnvelope> sink = Sinks.many().unicast().onBackpressureBuffer();
+		ISinkUIEmitter emitter = new SinkUIEmitterImpl(sink);
 
+		Mono<StreamingLastStep> routingMono = Mono.fromCallable(() -> {
+			return runAs.doRunAsWithReturnAndException(() -> {
+				ChatPipelineExecutionRuntimeData runtimeData = prepareRespawn(request, response, environment, chatModel,
+						serviceModel, pipelineConfiguration);
+				return new StreamingLastStep(runtimeData, respawnerStep, null);
+			});
+		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic())).onErrorResume(th -> {
+			LOGGER.error("Exception while streaming the respawn of a chat pipeline", th);
+			GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline", th);
+			return Mono.just(new StreamingLastStep(null, null, errorMessage));
+		}).cache();
+
+		Flux<GeboChatMessageEnvelope> sideChannelFlux = sink.asFlux()
+				.subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
+
+		Flux<GeboChatMessageEnvelope> mainFlux = routingMono.flatMapMany(lastStepData -> {
+			try {
+				if (lastStepData.getErrorMessage() != null) {
+					return Flux.just(new GeboChatMessageEnvelope(lastStepData.getErrorMessage()));
+				}
+				if (lastStepData
+						.getLastStepService() instanceof IStreamingOutputChatPipelineService streamingOutputService) {
+					return runAs.doRunAsWithReturnAndException(() -> {
+						Flux<GeboChatMessageEnvelope> routingInfoFlux = Flux
+								.just(buildRoutingInfos(lastStepData.getRuntimeData(), streamingOutputService, response,
+										chatModel, serviceModel));
+						// the request ends here as every run does (see ChatRequestEnding)
+						Flux<GeboChatMessageEnvelope> outputFlux = ChatRequestEnding.ending(
+								streamingOutputService.execute(lastStepData.getRuntimeData(), emitter, chatModel,
+										serviceModel),
+								chatSessionLifecycleService, request, response, chatModel, runAs);
+						return Flux.concat(routingInfoFlux, outputFlux);
+					});
+				}
+				throw new ChatPipelineException("The step service " + lastStepData.getLastStepService().getStepId()
+						+ " is not a streaming one");
+			} catch (Throwable th) {
+				LOGGER.error("Exception while streaming the respawn of a chat pipeline", th);
+				GUserMessage errorMessage = GUserMessage.errorMessage("Exception while streaming chat pipeline", th);
+				return Flux.just(new GeboChatMessageEnvelope(errorMessage));
+			}
+		}).doFinally(signalType -> {
+			emitter.complete();
+			// a request that never reached the respawner (its preparation failed) is released
+			// here; one that did was ended and released with its stream, and a second
+			// release is a no-op
+			this.chatSessionLifecycleService.releaseRequest(request);
+		}).subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
+
+		return Flux.defer(() -> Flux.merge(sideChannelFlux, mainFlux))
+				.subscribeOn(runAs.wrap(threadManager.getBoundedElastic()));
 	}
 
 }

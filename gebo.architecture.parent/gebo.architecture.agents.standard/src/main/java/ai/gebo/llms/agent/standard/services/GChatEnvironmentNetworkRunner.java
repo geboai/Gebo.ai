@@ -21,6 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import org.springframework.beans.factory.annotation.Autowired;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
+import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -97,6 +101,12 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	private final IGRequestUnderstandingService requestUnderstanding;
 	/** Gives a network that asks for it a memory of the conversation; null for none. */
 	private final GConversationAgentsSessionFactory conversationMemory;
+	/**
+	 * Carries a suspended run to the caller (see {@link NetworkOfAgentsSuspensionTransport}):
+	 * the one Spring gives, with every translator deployed; the plain one otherwise.
+	 */
+	private volatile NetworkOfAgentsSuspensionTransport suspensionTransport = NetworkOfAgentsSuspensionTransport
+			.plain();
 
 	public GChatEnvironmentNetworkRunner(IGRuntimeBinder runtimeBinder,
 			IGChatSessionLifeCycleService chatSessionLifecycleService, IGChatModelRuntimeConfigurationDao chatModelsDao,
@@ -113,6 +123,13 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/** What a caller sends along with its question. */
+	@Autowired(required = false)
+	public void setSuspensionTransport(NetworkOfAgentsSuspensionTransport suspensionTransport) {
+		if (suspensionTransport != null) {
+			this.suspensionTransport = suspensionTransport;
+		}
+	}
+
 	@Getter
 	@AllArgsConstructor
 	public static class ChatRunAttachments {
@@ -157,6 +174,19 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 		/** The response the run filled in, which the last frame also carries. */
 		public GeboChatResponse getResponse() {
 			return response;
+		}
+
+		/**
+		 * The network of agents suspended by this run, waiting for the caller's reaction
+		 * (see {@link NetworkOfAgentsSuspendedState}); null when the run ended with an
+		 * answer. A caller that cannot react gets the question as the answer's text.
+		 */
+		public NetworkOfAgentsSuspendedState getSuspendedState() {
+			return response != null ? response.getNetworkOfAgentsSuspendedState() : null;
+		}
+
+		public boolean isSuspended() {
+			return getSuspendedState() != null;
 		}
 
 		/** Releases the network service of the run. */
@@ -294,13 +324,14 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			// the network is asked the question its input adapter used to read from the
 			// minimal chat context's current request, which is this request
 			final String question = GeboChatRequest.actualQuery(request);
-			final GeboChatMessageEnvelope last = service
-					.executeNetwork(context, question != null ? question : "", null, toolCallingOfThisRun).getResult();
+			final NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result = service.executeNetwork(context,
+					question != null ? question : "", null, toolCallingOfThisRun);
+			final GeboChatMessageEnvelope last = result.getResult();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
 			}
-			final GeboChatResponse answered = responseOf(last, response);
+			final GeboChatResponse answered = carrySuspension(result, responseOf(last, response));
 			// The run ends as a chat's request ends (see ChatRequestEnding): the answer is
 			// saved as an interaction of the conversation, the session is maintained and
 			// the request is released - so the next run goes on in the same conversation,
@@ -480,13 +511,14 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 				}
 			}
 			// the network is asked the caller's question; the request is in its environment
-			final GeboChatMessageEnvelope last = service.executeNetwork(context, GeboChatRequest.actualQuery(request),
-					environment, run.getToolCallingOfThisRun()).getResult();
+			final NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result = service.executeNetwork(context,
+					GeboChatRequest.actualQuery(request), environment, run.getToolCallingOfThisRun());
+			final GeboChatMessageEnvelope last = result.getResult();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
 			}
-			final GeboChatResponse answered = responseOf(last, response);
+			final GeboChatResponse answered = carrySuspension(result, responseOf(last, response));
 			if (run.isTransientConversation()) {
 				// Nothing of a transient conversation is kept: the request is released and
 				// the conversation dropped, with whatever it stored.
@@ -701,6 +733,30 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 				LOGGER.debug("The file " + content.getFileName() + " the caller sent is part of the run");
 			}
 		}
+	}
+
+	/**
+	 * What a run that suspended leaves on its response: the state the caller reacts
+	 * to and, as the answer's text, the conditions rendered for a caller that only
+	 * reads the answer (an A2A client, an MCP caller, a harness). A run that ended
+	 * leaves the response as it is.
+	 */
+	private GeboChatResponse carrySuspension(NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result,
+			GeboChatResponse response) {
+		final NetworkOfAgentsSuspendedState state = suspensionTransport.stateOf(result);
+		if (state == null || response == null) {
+			return response;
+		}
+		response.setNetworkOfAgentsSuspendedState(state);
+		final String rendered = NetworkOfAgentsSuspensionTransport.render(state);
+		final String streamed = response.getQueryResponse();
+		response.setQueryResponse(streamed == null || streamed.isBlank() ? rendered : streamed + "\n\n" + rendered);
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("The run suspended into suspension:" + state.getNetworkOfAgentsBlockId() + " waiting for "
+					+ (state.getConditions() != null ? state.getConditions().size() : 0)
+					+ " condition(s): carried to the caller on the response");
+		}
+		return response;
 	}
 
 	private GeboChatResponse responseOf(GeboChatMessageEnvelope last, GeboChatResponse filledIn) {

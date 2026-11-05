@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.tools.AskUserClarificationToolSource;
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
 import ai.gebo.architecture.agents.services.IGDynamicAgentConfigDataSource;
@@ -83,6 +84,9 @@ public class AgenticLoopAgentsInitialization {
 		config.setAccessibleToAll(true);
 		config.setUseDefaultChatModel(true);
 		config.setSubscribeAllTools(true);
+		// the agent answering the user may ask the user a clarification the work waits
+		// for: the tool is mounted only on the agents that name its source
+		config.setAdditionalToolSources(List.of(AskUserClarificationToolSource.SOURCE_ID));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring the agentic loop agent config code:" + code + " service:" + serviceId
 					+ " on prompt use:" + config.getMainLoopPromptUseCode());

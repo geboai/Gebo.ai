@@ -31,6 +31,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 
 /**
  * Pins what the Mongo suspension handler keeps of a run: nothing while no agent
@@ -56,7 +57,9 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 		participant.setAgentContextualName("the-searcher");
 		privateContext.setCollaborationContextId(session.getId());
 		when(repository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
-		handler.initialize(network, "What is new?");
+		handler.initialize(network, "What is new?",
+				IChatRequestContext.builder().actualUserRequest("What is new?").sessionID("conv-1").requestID("req-1")
+						.build());
 	}
 
 	private AgentsExchangeMessage<String> message(String from, String to, String payload, MessageSemantic semantic) {
@@ -66,13 +69,13 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 	@SuppressWarnings("rawtypes")
 	private AgentSuspendedWaitingCondition<String, List> condition(String statement) {
 		return new AgentSuspendedWaitingCondition<String, List>(String.class, statement, "the user's answer", null,
-				List.class, List.of("2023", "2024"));
+				true, List.class, List.of("2023", "2024"));
 	}
 
 	@Test
 	void aHandlerMustBeInitializedForANetwork() {
 		assertThrows(AgentException.class, () -> new GMongoNetworkOfAgentsSuspensionHandler(repository)
-				.initialize(null, null));
+				.initialize(null, null, null));
 	}
 
 	@Test
@@ -125,6 +128,10 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 		assertEquals("What is new?", saved.getNetworkInput(), "the input of the run is part of the cut");
 		assertEquals(String.class.getName(), saved.getNetworkInputClass());
 		assertEquals(session.getId(), saved.getCollaborationSessionId());
+		assertEquals("conv-1", saved.getConversationCode(), "bound to the conversation of the run");
+		assertEquals("req-1", saved.getRequestId());
+		assertTrue(saved.isOpen());
+		assertTrue(saved.isMandatory());
 		// the agent that asked
 		assertEquals(1, saved.getSuspendedAgents().size());
 		GNetworkOfAgentsSuspension.SuspendedAgentState agent = saved.getSuspendedAgents().get(0);
@@ -138,6 +145,8 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 		assertEquals(waiting.getSuspendedConditionId(), agent.getWaitingCondition().getSuspendedConditionId());
 		assertEquals(String.class.getName(), agent.getWaitingCondition().getTypeName());
 		assertEquals("which year?", agent.getWaitingCondition().getWaitingConditionStatement());
+		assertTrue(agent.getWaitingCondition().isMandatory());
+		assertTrue(agent.getWaitingCondition().toCondition().isMandatory());
 		assertEquals(List.class.getName(), agent.getWaitingCondition().getOptionsTypeName());
 		assertEquals(List.of("2023", "2024"), agent.getWaitingCondition().getLlmChosenOptions(),
 				"what the model chose for the suspension");
@@ -164,6 +173,30 @@ class GMongoNetworkOfAgentsSuspensionHandlerTest {
 		assertEquals(0, saved.getSharedState().getContributions().get(0).getContributionUniqueNr());
 		assertEquals(Map.of("KEY", "value"), saved.getSharedState().getEnvironment());
 		assertTrue(handler.isSuspensionState(), "the state of the run stays suspended for whoever reads it");
+	}
+
+	@Test
+	void writingABlockDropsTheOpenOnesOfItsConversation() throws AgentException {
+		GNetworkOfAgentsSuspension older = new GNetworkOfAgentsSuspension();
+		older.setCode("older");
+		older.setConversationCode("conv-1");
+		GNetworkOfAgentsSuspension answered = new GNetworkOfAgentsSuspension();
+		answered.setCode("answered");
+		answered.setConversationCode("conv-1");
+		answered.setRespawnedAt(new java.util.Date());
+		when(repository.findByConversationCodeAndRespawnedAtIsNullAndDroppedAtIsNull("conv-1"))
+				.thenReturn(List.of(older));
+		handler.enterSuspensionState(network, config, participant, privateContext, condition("which year?"));
+
+		handler.networkExecutionFinished();
+
+		assertNotNull(older.getDroppedAt(), "the conversation holds one open block: the older is dropped");
+		assertFalse(older.isOpen());
+		assertNull(answered.getDroppedAt(), "a block already answered is not touched");
+		ArgumentCaptor<GNetworkOfAgentsSuspension> written = ArgumentCaptor.forClass(GNetworkOfAgentsSuspension.class);
+		verify(repository, times(2)).save(written.capture());
+		assertEquals("older", written.getAllValues().get(0).getCode(), "dropped before the new block is written");
+		assertEquals(handler.suspensionId(), written.getAllValues().get(1).getCode());
 	}
 
 	@Test

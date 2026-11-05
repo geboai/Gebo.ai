@@ -96,6 +96,9 @@ public class AskUserClarificationTool {
 		private List<String> options = null;
 		@JsonPropertyDescription("True when the user may answer with an explanation of their own instead of one of the options")
 		private Boolean customAnswerAllowed = null;
+		@JsonPropertyDescription("True when you cannot go on at all without the answer, so the conversation waits for it;"
+				+ " false when the user may leave it unanswered and go on, you then proceeding without it")
+		private Boolean mandatory = null;
 	}
 
 	/** The tool, declared as returning directly: the call ends at it. */
@@ -138,13 +141,16 @@ public class AskUserClarificationTool {
 		if (options.getOptions().size() < 2 && !(options.getOptions().size() == 1 && options.isCustomAnswerAllowed())) {
 			return TOO_FEW_OPTIONS;
 		}
+		// mandatory unless the model says the user may leave it unanswered
+		final boolean mandatory = !Boolean.FALSE.equals(param.getMandatory());
 		final AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> condition = new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
-				ClarificationAnswer.class, options.getQuestion(), param.getWhyNeeded(), null,
+				ClarificationAnswer.class, options.getQuestion(), param.getWhyNeeded(), null, mandatory,
 				ClarificationOptions.class, options);
 		wait.waitFor(condition);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(TOOL_NAME + " asked: " + options.getQuestion() + " among " + options.getOptions().size()
-					+ " option(s)" + (options.isCustomAnswerAllowed() ? " or an explanation" : "") + " (condition:"
+					+ " option(s)" + (options.isCustomAnswerAllowed() ? " or an explanation" : "")
+					+ (mandatory ? ", mandatory" : ", may be left unanswered") + " (condition:"
 					+ condition.getSuspendedConditionId() + ")");
 		}
 		return WAITING;

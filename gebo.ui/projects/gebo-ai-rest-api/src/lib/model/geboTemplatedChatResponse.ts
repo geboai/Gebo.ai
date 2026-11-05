@@ -15,6 +15,7 @@ import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GUserMessage } from './gUserMessage';
 import { GeboWorkingMemoryWindowOccupation } from './geboWorkingMemoryWindowOccupation';
 import { LLMGeneratedResource } from './lLMGeneratedResource';
+import { NetworkOfAgentsSuspendedState } from './networkOfAgentsSuspendedState';
 
 export interface GeboTemplatedChatResponse { 
     id?: string;
@@ -35,4 +36,6 @@ export interface GeboTemplatedChatResponse {
     pipelineRouterDecisionCode?: string;
     pipelineParams?: { [key: string]: any; };
     deepSearchRequestId?: string;
+    /** The network of agents suspended by this answer, waiting for the user's reaction; absent when none. */
+    networkOfAgentsSuspendedState?: NetworkOfAgentsSuspendedState;
 }

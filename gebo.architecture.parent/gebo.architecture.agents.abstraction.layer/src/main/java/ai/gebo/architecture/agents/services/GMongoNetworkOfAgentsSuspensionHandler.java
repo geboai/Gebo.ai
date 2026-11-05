@@ -35,6 +35,7 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 
 /**
  * The suspension handler of one run that keeps the cut in Mongo (see
@@ -50,6 +51,10 @@ import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionReposito
  * conditions resolved for it: the respawned agents ask it for theirs, and a
  * block this run suspends into says which block it was respawned from.
  * <p>
+ * A block is bound to the conversation and the request of the run, and a
+ * conversation holds one open block at most: writing a block drops the open ones
+ * of its conversation.
+ * <p>
  * The agents of a run call it from their own threads, a group of them at a time;
  * the handler is synchronized, so the cut is consistent whoever adds to it.
  */
@@ -62,6 +67,9 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	private volatile GAgentsNetwork network = null;
 	/** The input the network was given, part of the cut. */
 	private volatile Object networkInput = null;
+	/** The conversation and the request of the run, from its request context; null outside a chat. */
+	private volatile String conversationCode = null;
+	private volatile String requestId = null;
 	private volatile boolean suspensionState = false;
 	/** The cut, consolidated from the first agent asking to suspend the run. */
 	private GNetworkOfAgentsSuspension suspension = null;
@@ -76,19 +84,23 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	}
 
 	@Override
-	public synchronized void initialize(GAgentsNetwork agentsNetwork, Object networkInput) throws AgentException {
+	public synchronized void initialize(GAgentsNetwork agentsNetwork, Object networkInput,
+			IChatRequestContext chatRequestContext) throws AgentException {
 		if (agentsNetwork == null) {
 			throw new AgentException(NOT_INITIALIZED);
 		}
 		this.network = agentsNetwork;
 		this.networkInput = networkInput;
+		this.conversationCode = chatRequestContext != null ? chatRequestContext.getSessionID() : null;
+		this.requestId = chatRequestContext != null ? chatRequestContext.getRequestID() : null;
 		this.suspensionState = false;
 		this.suspension = null;
 		this.conditions.clear();
 		this.respawnedFromSuspensionCode = null;
 		this.resolvedConditionsByAgent.clear();
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Suspension handler initialized for network:" + agentsNetwork.getCode());
+			LOGGER.debug("Suspension handler initialized for network:" + agentsNetwork.getCode() + " conversation:"
+					+ conversationCode + " request:" + requestId);
 		}
 	}
 
@@ -269,6 +281,7 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 		suspension.setFinishedAt(new Date());
 		suspension.setDateModified(suspension.getFinishedAt());
 		try {
+			dropOpenBlocksOf(suspension.getConversationCode(), suspension.getCode());
 			repository.save(suspension);
 		} catch (RuntimeException e) {
 			LOGGER.error(SAVE_FAILED + suspension.getNetworkCode() + " suspension:" + suspension.getCode(), e);
@@ -279,6 +292,31 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 					+ " saved with " + suspension.getSuspendedAgents().size() + " suspended agent(s), "
 					+ suspension.getFrozenDeliveries().size() + " frozen deliver(y/ies)"
 					+ (respawnedFromSuspensionCode != null ? ", respawned from:" + respawnedFromSuspensionCode : ""));
+		}
+	}
+
+	/**
+	 * A conversation holds one open block at most: the ones still open when a new
+	 * block of the same conversation is written are dropped, the respawn of the
+	 * block they belonged to being the one that led here, or a run that went on
+	 * without them.
+	 */
+	private void dropOpenBlocksOf(String conversationCode, String exceptCode) {
+		if (conversationCode == null) {
+			return;
+		}
+		for (GNetworkOfAgentsSuspension open : repository
+				.findByConversationCodeAndRespawnedAtIsNullAndDroppedAtIsNull(conversationCode)) {
+			if (open == null || open.getCode() == null || open.getCode().equals(exceptCode)) {
+				continue;
+			}
+			open.setDroppedAt(new Date());
+			open.setDateModified(open.getDroppedAt());
+			repository.save(open);
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Suspension:" + open.getCode() + " of conversation:" + conversationCode
+						+ " dropped: the conversation suspended again into suspension:" + exceptCode);
+			}
 		}
 	}
 
@@ -310,6 +348,8 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 			suspension.setNetwork(of);
 			suspension.setNetworkInput(networkInput);
 			suspension.setNetworkInputClass(networkInput != null ? networkInput.getClass().getName() : null);
+			suspension.setConversationCode(conversationCode);
+			suspension.setRequestId(requestId);
 			suspension.setRespawnedFromSuspensionCode(respawnedFromSuspensionCode);
 			suspension.setDescription("Suspension of the run of network: " + of.getCode());
 		}

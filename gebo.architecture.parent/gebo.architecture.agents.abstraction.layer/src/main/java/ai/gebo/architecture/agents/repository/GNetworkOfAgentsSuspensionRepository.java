@@ -10,6 +10,7 @@
 package ai.gebo.architecture.agents.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.persistence.IGBaseMongoDBRepository;
@@ -24,4 +25,21 @@ public interface GNetworkOfAgentsSuspensionRepository extends IGBaseMongoDBRepos
 	List<GNetworkOfAgentsSuspension> findByNetworkCode(String networkCode);
 
 	List<GNetworkOfAgentsSuspension> findByCollaborationSessionId(String collaborationSessionId);
+
+	/** The blocks of a conversation still to be answered: neither respawned nor dropped. */
+	List<GNetworkOfAgentsSuspension> findByConversationCodeAndRespawnedAtIsNullAndDroppedAtIsNull(
+			String conversationCode);
+
+	/** The open block of a conversation, which holds one at most; the newest when it holds more. */
+	default Optional<GNetworkOfAgentsSuspension> findOpenByConversationCode(String conversationCode) {
+		if (conversationCode == null) {
+			return Optional.empty();
+		}
+		return findByConversationCodeAndRespawnedAtIsNullAndDroppedAtIsNull(conversationCode).stream()
+				.filter(block -> block != null).max((a, b) -> {
+					final long ta = a.getSuspendedAt() != null ? a.getSuspendedAt().getTime() : 0L;
+					final long tb = b.getSuspendedAt() != null ? b.getSuspendedAt().getTime() : 0L;
+					return Long.compare(ta, tb);
+				});
+	}
 }

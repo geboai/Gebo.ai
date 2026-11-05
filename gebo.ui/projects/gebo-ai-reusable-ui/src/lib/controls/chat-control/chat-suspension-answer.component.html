@@ -1,0 +1,47 @@
+<div class="gebo-ai-reusable-chat__suspension" role="form">
+  <div class="gebo-ai-reusable-chat__suspension-title">
+    <i class="pi pi-question-circle" aria-hidden="true"></i>
+    <span id="SuspensionTitle" gebo-ai-text>The agents need your answer before going on</span>
+  </div>
+  @for (condition of conditions; track condition.conditionId) {
+    <div class="gebo-ai-reusable-chat__suspension-condition">
+      <div class="gebo-ai-reusable-chat__suspension-statement">
+        {{statementOf(condition)}}
+        @if (!isMandatory(condition)) {
+          <span id="OptionalCondition" class="gebo-ai-reusable-chat__suspension-optional" gebo-ai-text>(optional)</span>
+        }
+      </div>
+      @if (explanationOf(condition)) {
+        <div class="gebo-ai-reusable-chat__suspension-explanation"><i>{{explanationOf(condition)}}</i></div>
+      }
+      @if (isClarification(condition)) {
+        @for (option of optionsOf(condition); track option) {
+          <div class="gebo-ai-reusable-chat__suspension-option">
+            <p-radioButton [name]="'option-' + condition.conditionId" [value]="option" [inputId]="condition.conditionId + '-' + $index"
+              [disabled]="disabled" [ngModel]="answerOf(condition).chosenOption"
+              (ngModelChange)="chooseOption(condition, option)"></p-radioButton>
+            <label [for]="condition.conditionId + '-' + $index">{{option}}</label>
+          </div>
+        }
+        @if (customAllowed(condition)) {
+          <textarea pTextarea rows="2" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+            [disabled]="disabled" [(ngModel)]="answerOf(condition).customExplanation"
+            (ngModelChange)="onExplanationChange(condition)"
+            placeholder="Or explain in your own words" gebo-ai-label></textarea>
+        }
+      } @else {
+        <textarea pTextarea rows="2" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+          [disabled]="disabled" [(ngModel)]="answerOf(condition).value"
+          placeholder="Your answer" gebo-ai-label></textarea>
+      }
+    </div>
+  }
+  <div class="gebo-ai-reusable-chat__suspension-buttons">
+    @if (!mandatory) {
+      <p-button id="skipSuspensionBtn" gebo-ai-label label="Skip and go on" severity="secondary" [text]="true"
+        [disabled]="disabled" (onClick)="doSkip()"></p-button>
+    }
+    <p-button id="answerSuspensionBtn" gebo-ai-label label="Answer" icon="pi pi-send"
+      [disabled]="!canSend()" (onClick)="send()"></p-button>
+  </div>
+</div>

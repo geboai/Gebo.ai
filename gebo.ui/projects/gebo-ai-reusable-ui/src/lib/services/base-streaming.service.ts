@@ -26,6 +26,20 @@ export class GeboAIBaseStreamingService {
                 body: JSON.stringify(request)
             })
                 .then(response => {
+                    if (!response.ok) {
+                        // a refusal before the stream: its status and body (a conversation waiting for
+                        // the answer to a suspended network of agents answers 409 with the pending state)
+                        response.text().then(text => {
+                            let body: any = text;
+                            try {
+                                body = text ? JSON.parse(text) : undefined;
+                            } catch (e) {
+                                // plain text stays as it is
+                            }
+                            if (onError) onError({ status: response.status, body: body });
+                        });
+                        return;
+                    }
                     if (!response.body) {
                         throw new Error('No response body found');
                     }

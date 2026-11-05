@@ -147,7 +147,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		private volatile GAgentsNetwork network;
 
 		@Override
-		public void initialize(GAgentsNetwork agentsNetwork, Object networkInput) throws AgentException {
+		public void initialize(GAgentsNetwork agentsNetwork, Object networkInput,
+				IChatRequestContext chatRequestContext) throws AgentException {
 			this.network = agentsNetwork;
 		}
 
@@ -345,7 +346,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		// agent asks it to suspend the run, this service asks it whether one did.
 		final IGNetworkOfAgentsSuspensionHandler suspensionHandler = createSuspensionHandler();
 		try {
-			suspensionHandler.initialize(network, input);
+			suspensionHandler.initialize(network, input, chatRequestContext);
 			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName, toolCalling,
 					suspensionHandler);
 			if (suspensionHandler.isSuspensionState()) {
@@ -446,7 +447,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		Throwable failure = null;
 		final IGNetworkOfAgentsSuspensionHandler suspensionHandler = createSuspensionHandler();
 		try {
-			suspensionHandler.initialize(network, suspension.getNetworkInput());
+			suspensionHandler.initialize(network, suspension.getNetworkInput(), chatRequestContext);
 			suspensionHandler.respawnFrom(suspension, resolvedByAgent);
 			producedOutput = respawnInSession(chatRequestContext, session, suspension, resolvedByAgent, toolCalling,
 					suspensionHandler);

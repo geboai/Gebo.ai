@@ -36,7 +36,12 @@ class AskUserClarificationToolTest {
 	}
 
 	private static Param param(String question, List<String> options, Boolean custom) {
+		return param(question, options, custom, null);
+	}
+
+	private static Param param(String question, List<String> options, Boolean custom, Boolean mandatory) {
 		Param param = new Param();
+		param.setMandatory(mandatory);
 		param.setQuestion(question);
 		param.setWhyNeeded("the report differs by year");
 		param.setOptions(options);
@@ -51,6 +56,7 @@ class AskUserClarificationToolTest {
 		assertEquals(AskUserClarificationTool.TOOL_NAME, callback.getToolDefinition().name());
 		assertTrue(callback.getToolMetadata().returnDirect(), "the loop stops at it: the work waits");
 		assertTrue(callback.getToolDefinition().inputSchema().contains("customAnswerAllowed"));
+		assertTrue(callback.getToolDefinition().inputSchema().contains("mandatory"));
 	}
 
 	@Test
@@ -69,6 +75,14 @@ class AskUserClarificationToolTest {
 		assertEquals("Which year?", options.getQuestion());
 		assertEquals(List.of("2023", "2024"), options.getOptions());
 		assertTrue(options.isCustomAnswerAllowed());
+		assertTrue(condition.isMandatory(), "mandatory unless the model says otherwise");
+	}
+
+	@Test
+	void theModelMaySayTheUserCanLeaveTheQuestionUnanswered() {
+		tool.ask(param("Which year?", List.of("2023", "2024"), false, false), inACallWith(wait));
+
+		assertFalse(wait.waited().get(0).isMandatory());
 	}
 
 	@Test

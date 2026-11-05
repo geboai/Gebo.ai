@@ -1,6 +1,7 @@
 package ai.gebo.architecture.agents.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -178,7 +179,8 @@ class MockedAgentsNetworkRespawnTest {
 			}
 			try {
 				handler.enterSuspensionState(network, config, me, mine, new AgentSuspendedWaitingCondition<String, List>(
-						String.class, "which year?", "the user's answer", null, List.class, List.of("2023", "2024")));
+						String.class, "which year?", "the user's answer", null, false, List.class,
+						List.of("2023", "2024")));
 			} catch (AgentException e) {
 				throw new IllegalStateException(e);
 			}
@@ -264,6 +266,7 @@ class MockedAgentsNetworkRespawnTest {
 		assertNull(result.getResult());
 		assertEquals(1, result.getWaitingConditions().size());
 		assertEquals(List.of("2023", "2024"), result.getWaitingConditions().get(0).getLlmChosenOptions());
+		assertFalse(result.getWaitingConditions().get(0).isMandatory(), "the asker lets the user leave it unanswered");
 		assertEquals(1, routerRuns.get());
 		assertTrue(messagesSeenByTheWriter.isEmpty(), "the writer never ran: what was for it is frozen");
 		assertEquals(1, saved.size());

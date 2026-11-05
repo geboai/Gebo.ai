@@ -13,6 +13,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 
 /****************************************************************************************************
  * This interface is used during the execution of a network of agents to permit
@@ -34,13 +35,17 @@ public interface IGNetworkOfAgentsSuspensionHandler {
 	/**********************************************************************************************************
 	 * Initializes the handler for network of agent execution, with the input the
 	 * network was given: it is part of the cut, since the suspension may be asked
-	 * by the first agent to execute, before anything else of the run exists.
+	 * by the first agent to execute, before anything else of the run exists; and
+	 * with the request context of the run, whose conversation and request the
+	 * block is bound to (null outside a chat).
 	 * 
 	 * @param agentsNetwork
-	 * @param networkInput  the input of executeNetwork(...)
+	 * @param networkInput       the input of executeNetwork(...)
+	 * @param chatRequestContext the request context of executeNetwork(...)
 	 * @throws AgentException
 	 */
-	public void initialize(GAgentsNetwork agentsNetwork, Object networkInput) throws AgentException;
+	public void initialize(GAgentsNetwork agentsNetwork, Object networkInput, IChatRequestContext chatRequestContext)
+			throws AgentException;
 
 	/********************************************************************************************************************
 	 * Called by the agent asking for suspension

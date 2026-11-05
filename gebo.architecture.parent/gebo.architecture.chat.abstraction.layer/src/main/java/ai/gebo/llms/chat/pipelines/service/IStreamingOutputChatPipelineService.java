@@ -14,6 +14,8 @@ import reactor.core.publisher.Flux;
 
 public interface IStreamingOutputChatPipelineService extends IChatPipelineStepService {
 	public static final String DEFAULT_PIPELINE_SERVICE = "DEFAULT_PIPELINE_SERVICE";
+	/** The step that respawns a suspended network of agents of a conversation with the user's reaction. */
+	public static final String DEFAULT_RESPAWN_PIPELINE_SERVICE = "ReactiveChatAgentsNetworkRespawnStreamingOutputChatPipelineService";
 
 	@Override
 	default StepType getStepType() {

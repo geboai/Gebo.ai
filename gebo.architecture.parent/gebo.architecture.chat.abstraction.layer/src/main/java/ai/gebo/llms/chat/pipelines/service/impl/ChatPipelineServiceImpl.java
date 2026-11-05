@@ -1,8 +1,10 @@
 package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -10,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -19,8 +23,10 @@ import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSuspendedException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatModelDao;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
@@ -48,6 +54,9 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	protected final IGRuntimeChatProfileChatModelDao chatProfileDao;
 	protected final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	protected final IPipelineUserMenuProviderServiceRepositoryPattern pipelineUserMenuProviderServiceRepoPattern;
+	/** Where the suspended runs of the networks of agents are kept: a conversation holds one open block at most. */
+	protected final GNetworkOfAgentsSuspensionRepository suspensions;
+	protected final NetworkOfAgentsSuspensionTransport suspensionTransport;
 
 	@Override
 	public GeboChatResponse chat(String pipelineCode, @NotNull GeboChatRequest request,
@@ -55,6 +64,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 		GeboChatResponse response = null;
 		try {
 			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			guardOpenSuspension(request);
 			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
@@ -83,6 +93,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			LinkedHashMap<String, Object> environment) throws ChatPipelineException, GeboChatException {
 		try {
 			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			guardOpenSuspension(request);
 			IGConfigurableChatModel chatModel = this.chatSessionLifecycleService.getSessionChatModel(request);
 			IGConfigurableChatModel serviceModel = chatModelsDao
 					.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
@@ -105,6 +116,51 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			String msg = "Exception applying chat pipeline (streaming)";
 			throw new ChatPipelineException(msg, e);
 		}
+	}
+
+	/**
+	 * A normal interaction in a conversation holding an open block of a suspended
+	 * network of agents: refused when a condition of the block is mandatory, since
+	 * only the respawn with the reaction is possible there; otherwise the block is
+	 * dropped, the user having chosen to go on without answering, and the
+	 * interaction takes place.
+	 */
+	protected void guardOpenSuspension(GeboChatRequest request) throws GeboChatSuspendedException {
+		if (suspensions == null || request == null || request.getUserChatContextCode() == null) {
+			return;
+		}
+		final Optional<GNetworkOfAgentsSuspension> open = suspensions
+				.findOpenByConversationCode(request.getUserChatContextCode());
+		if (open.isEmpty()) {
+			return;
+		}
+		final GNetworkOfAgentsSuspension block = open.get();
+		if (block.isMandatory()) {
+			if (LOGGER.isInfoEnabled()) {
+				LOGGER.info("Conversation:" + request.getUserChatContextCode() + " waits for suspension:" + block.getCode()
+						+ ", a normal interaction is refused");
+			}
+			throw new GeboChatSuspendedException(request.getUserChatContextCode(),
+					suspensionTransport != null ? suspensionTransport.stateOf(block)
+							: NetworkOfAgentsSuspensionTransport.plain().stateOf(block));
+		}
+		block.setDroppedAt(new Date());
+		block.setDateModified(block.getDroppedAt());
+		suspensions.save(block);
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("Conversation:" + request.getUserChatContextCode() + " goes on without answering suspension:"
+					+ block.getCode() + ", dropped");
+		}
+	}
+
+	@Override
+	public Optional<NetworkOfAgentsSuspendedState> pendingNetworkOfAgentsSuspension(String userChatContextCode) {
+		if (suspensions == null || userChatContextCode == null) {
+			return Optional.empty();
+		}
+		final NetworkOfAgentsSuspensionTransport transport = suspensionTransport != null ? suspensionTransport
+				: NetworkOfAgentsSuspensionTransport.plain();
+		return suspensions.findOpenByConversationCode(userChatContextCode).map(transport::stateOf);
 	}
 
 	private IGConfigurableChatModel getContextSpecifiedModelOrDefault(GUserChatSession context) {

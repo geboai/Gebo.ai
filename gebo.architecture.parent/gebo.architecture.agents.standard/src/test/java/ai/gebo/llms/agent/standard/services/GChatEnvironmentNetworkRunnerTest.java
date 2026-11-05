@@ -314,4 +314,22 @@ class GChatEnvironmentNetworkRunnerTest {
 		verify(lifeCycle, never()).releaseRequest(any());
 		verify(lifeCycle, never()).endRequest(any(), any());
 	}
+	@Test
+	void aRunThatSuspendedTellsItOnTheResponseWithTheQuestionAsTheAnswer() throws Exception {
+		ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object> waiting = new ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "Which year?", "the report differs by year", null, true);
+		when(service.executeNetwork(any(), any(), any(), any()))
+				.thenReturn(NetworkOfAgentsExecutionResult.suspended("block-1", List.of(waiting)));
+
+		ChatEnvironmentRun run = runner.run(network, request, ChatRunAttachments.none(), null, null, TOOL_CALLING,
+				null);
+
+		assertTrue(run.isSuspended(), "the caller is told the network waits");
+		assertEquals("block-1", run.getSuspendedState().getNetworkOfAgentsBlockId());
+		assertEquals(1, run.getSuspendedState().getConditions().size());
+		assertEquals(waiting.getSuspendedConditionId(), run.getSuspendedState().getConditions().get(0).getConditionId());
+		assertTrue(run.getResponse().getQueryResponse().startsWith("Which year?"),
+				"a caller that only reads the answer reads the question");
+	}
+
 }

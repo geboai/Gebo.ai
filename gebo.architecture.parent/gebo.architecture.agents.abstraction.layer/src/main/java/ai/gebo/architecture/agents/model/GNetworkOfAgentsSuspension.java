@@ -61,6 +61,14 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 	/** The id of the collaboration session the run collaborated in. */
 	@HashIndexed
 	private String collaborationSessionId = null;
+	/**
+	 * The conversation the run served and the request it answered, from the chat
+	 * request context of the run; null for a run outside a chat. The open block of a
+	 * conversation is the one with its code that was neither respawned nor dropped.
+	 */
+	@HashIndexed
+	private String conversationCode = null;
+	private String requestId = null;
 	/** When the suspension began: the first agent asked for it. */
 	private Date suspendedAt = null;
 	/** When the network declared the run finished, the cut complete and written. */
@@ -83,6 +91,27 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 	/** When this block was respawned, and the block the respawned run suspended into, if it did. */
 	private Date respawnedAt = null;
 	private String respawnedToSuspensionCode = null;
+	/**
+	 * When this block was dropped unanswered: the conversation went on with a normal
+	 * interaction, which it may when no condition is mandatory, or another run of it
+	 * suspended, a conversation holding one open block at most.
+	 */
+	private Date droppedAt = null;
+
+	/** Whether the block is still to be answered: neither respawned nor dropped. */
+	public boolean isOpen() {
+		return respawnedAt == null && droppedAt == null;
+	}
+
+	/** Whether a condition of the block is mandatory: the conversation waits for the block. */
+	public boolean isMandatory() {
+		for (SuspendedAgentState suspended : suspendedAgents) {
+			if (suspended.getWaitingCondition() != null && suspended.getWaitingCondition().isMandatory()) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/** An agent that asked to suspend the run, and what it waits for. */
 	@Data
@@ -276,6 +305,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		private String waitingConditionStatement = null;
 		private String waitedConditionInstanceLLMExplanation = null;
 		private Object instanceValue = null;
+		private boolean mandatory = true;
 		/** What the model chose when it decided to suspend, and its type by name. */
 		private String optionsTypeName = null;
 		private Object llmChosenOptions = null;
@@ -290,6 +320,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			waiting.setWaitingConditionStatement(condition.getWaitingConditionStatement());
 			waiting.setWaitedConditionInstanceLLMExplanation(condition.getWaitedConditionInstanceLLMExplanation());
 			waiting.setInstanceValue(condition.getInstanceValue());
+			waiting.setMandatory(condition.isMandatory());
 			waiting.setOptionsTypeName(condition.getOptionsType() != null ? condition.getOptionsType().getName() : null);
 			waiting.setLlmChosenOptions(condition.getLlmChosenOptions());
 			return waiting;
@@ -303,7 +334,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public AgentSuspendedWaitingCondition<?, ?> toCondition() {
 			final AgentSuspendedWaitingCondition condition = new AgentSuspendedWaitingCondition(classNamed(typeName),
-					waitingConditionStatement, waitedConditionInstanceLLMExplanation, instanceValue,
+					waitingConditionStatement, waitedConditionInstanceLLMExplanation, instanceValue, mandatory,
 					optionsTypeName != null ? classNamed(optionsTypeName) : null, llmChosenOptions);
 			if (suspendedConditionId != null) {
 				condition.setSuspendedConditionId(suspendedConditionId);

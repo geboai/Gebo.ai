@@ -474,39 +474,46 @@ any run (and whatever stubs or overrides them still answers); inside a run
 nothing reaches them, every call carrying the run's container. A test running a
 network or an agent builds one for it: `GeboToolCalling.builder().caller("test:<name>").build()`.
 
-A tool that must **end the call** (it asked the user something and the work
-waits for the answer; it waits for an external event) is declared with
-`ToolCallbackDeclarationUtil.returningDirect()` as its metadata
+A tool that must **end the call** because the work waits for something from
+outside the run (the user's answer to a question, an external event) is declared
+with `ToolCallbackDeclarationUtil.returningDirect()` as its metadata
 (`declare(function, name, description, paramType, returnType, returningDirect())`):
-the loop stops at it, its result is the call's answer, and
-`isStoppedByTool()` is `true`.
+the loop stops at it, its result is the call's answer, and `isStoppedByTool()`
+is `true`. It tells **what** the run waits for through `IGWaitExternalCondition`
+(`gebo.architecture.agents.abstraction.layer`), the contract every agent loads
+in the tool calling of each of its model calls (`GWaitExternalConditionSink`,
+one per call): the tool declares an `AgentSuspendedWaitingCondition` (the type
+of the value waited for, the statement, the model's explanation, whether it is
+mandatory, and what the model chose), and the agent, once the call ended, asks
+the network to suspend the run for each condition declared
+(`IGNetworkOfAgentsSuspensionHandler.enterSuspensionState`). The run is saved
+as a block and respawned when the conditions are resolved; the agent is then
+re-executed on the same message, told the answer first (see
+`ResolvedConditionText`). The tool-calling agents and the adapted reactive
+agents do this already: a waiting tool only needs mounting on the agent.
+
+`AskUserClarificationTool` (source `ask-user-clarification-tool-source`, mounted
+only on the agents that name it) is the tool of the common case: a question the
+user answers with one of the options the model chose, or an explanation of their
+own when the model allows it.
 
 ```java
-// the controlling software
-AskUserSink sink = new AskUserSink();                 // its own implementation
-GeboToolCalling toolCalling = factory.builder()
-        .provide(IAskUser.class, sink)
-        .mandatoryTool(ToolCallbackDeclarationUtil.declare(this::askUser, "askUser",
-                "Ask the user a question the work cannot go on without",
-                AskUserParam.class, String.class, ToolCallbackDeclarationUtil.returningDirect()))
-        .caller("agent:" + agentId)
-        .build();
-String answer = model.textResponse(prompt, params, chatContext, toolCalling);
-if (toolCalling.isStoppedByTool()) {
-    String question = sink.question();                // what the tool stored
-    ...                                               // suspend, wait for the person
-}
-
 // the tool
-private String askUser(AskUserParam param, ToolContext toolContext) {
-    IAskUser askUser = GeboToolCallingManagerFactory.control(toolContext, IAskUser.class);
-    if (askUser == null) {
-        return "Asking the user is not available here: decide by yourself.";
+private String waitForApproval(ApprovalParam param, ToolContext toolContext) {
+    IGWaitExternalCondition wait = GeboToolCallingManagerFactory.control(toolContext,
+            IGWaitExternalCondition.class);
+    if (wait == null) {
+        return "Waiting is not available here: decide by yourself, and say what you assumed.";
     }
-    askUser.ask(param.getQuestion());
-    return "Question sent to the user: the work waits for the answer.";
+    wait.waitFor(new AgentSuspendedWaitingCondition<Approval, ApprovalRequest>(Approval.class,
+            param.getWhatToApprove(), param.getWhyNeeded(), null, true, ApprovalRequest.class,
+            param.toRequest()));
+    return "The approval was requested: the work stops here and goes on when it comes.";
 }
 ```
+
+Where nothing is loaded (a model call outside an agent), the tool answers the
+model that waiting is not available and the loop goes on as the model decides.
 
 The test `GeboToolCallingTest` (`gebo.architecture.llms.abstraction.layer`) shows
 every piece through a real `ChatClient` loop.

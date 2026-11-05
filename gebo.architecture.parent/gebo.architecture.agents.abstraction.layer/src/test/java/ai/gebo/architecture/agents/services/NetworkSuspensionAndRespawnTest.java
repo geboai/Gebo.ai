@@ -126,7 +126,7 @@ class NetworkSuspensionAndRespawnTest {
 						return List.of();
 					}
 					handler.enterSuspensionState(network, config, me, mine, new AgentSuspendedWaitingCondition<String, Object>(
-							String.class, "which year?", "the user's answer", null));
+							String.class, "which year?", "the user's answer", null, true));
 					return List.of(AgentsExchangeMessage.of(session, ASKER, WRITER, "found this about " + msg.getPayload(),
 							MessageSemantic.EXECUTE_AND_SHARE_RESULT));
 				});
