@@ -109,7 +109,7 @@ public class AgenticLoopChatHistoryTest extends AbstractBaseTestLLmsIntegrationT
 	private List<String> runLoop(CSSConsolidatedChatHistory history, AIDocumentsSet chosenDocuments)
 			throws Exception {
 		IStreamingOutputChatPipelineService agentsPipeline = pipelineServices.stream()
-				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
+				.filter(s -> ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID.equals(s.getStepId())).findFirst()
 				.orElseThrow();
 		GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(USER_QUESTION);

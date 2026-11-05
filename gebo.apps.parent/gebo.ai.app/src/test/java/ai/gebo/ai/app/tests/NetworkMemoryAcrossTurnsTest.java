@@ -125,7 +125,7 @@ public class NetworkMemoryAcrossTurnsTest extends AbstractBaseTestLLmsIntegratio
 	private List<String> runTurn(String sessionCode, String question) throws Exception {
 		controllerPrompts.clear();
 		IStreamingOutputChatPipelineService agentsPipeline = pipelineServices.stream()
-				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
+				.filter(s -> ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID.equals(s.getStepId())).findFirst()
 				.orElseThrow();
 		GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(question);

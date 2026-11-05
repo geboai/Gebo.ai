@@ -151,7 +151,7 @@ public class ModelCallSecurityAuditIntegrationTest extends AbstractBaseTestLLmsI
 	@Test
 	public void theModelCallsOfAnAgenticChatAreAudited() throws Exception {
 		IStreamingOutputChatPipelineService agentsPipeline = pipelineServices.stream()
-				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
+				.filter(s -> ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID.equals(s.getStepId())).findFirst()
 				.orElseThrow(() -> new IllegalStateException(
 						"Agents-network pipeline service not present; is ai.gebo.agents.standard.enabled=true?"));
 
