@@ -35,9 +35,10 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkOfAgentsSuspensionHandler;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
 import ai.gebo.architecture.agents.services.INotificationSink;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
+import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -116,16 +117,12 @@ class ToolCallingAgentSuspensionTest {
 				mock(IGAgentsNetworkRuntimeDao.class), RUN_TOOL_CALLING, handler);
 	}
 
-	/** The model calls the clarification tool: in the test, the tool itself, with the call's tool context. */
+	/** The model calls the question tool: in the test, the tool itself, with the call's tool context. */
 	private void theModelAsksTheUser() throws Exception {
 		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenAnswer(invocation -> {
 			GeboToolCalling callToolCalling = invocation.getArgument(3, GeboToolCalling.class);
-			AskUserClarificationTool.Param param = new AskUserClarificationTool.Param();
-			param.setQuestion("Which year?");
-			param.setOptions(List.of("2023", "2024"));
-			param.setMandatory(true);
-			return AskUserClarificationTool.declare().call(
-					"{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[\"2023\",\"2024\"]}",
+			return AskUserSingleChoiceQuestionTool.declare().call(
+					"{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[{\"label\":\"2023\"},{\"label\":\"2024\"}]}",
 					new org.springframework.ai.chat.model.ToolContext(callToolCalling.toolsContext(Map.of())));
 		});
 		when(handler.resolvedConditionOf(any())).thenReturn(Optional.empty());
@@ -161,7 +158,7 @@ class ToolCallingAgentSuspensionTest {
 		assertEquals("Which year?", condition.getValue().getWaitingConditionStatement());
 		assertSame(ClarificationAnswer.class, condition.getValue().getType());
 		assertEquals(List.of("2023", "2024"),
-				((ClarificationOptions) condition.getValue().getLlmChosenOptions()).getOptions());
+				((ClarificationOptions) condition.getValue().getLlmChosenOptions()).labels());
 		assertTrue(condition.getValue().isMandatory());
 		assertEquals(List.of("What is new?"), inputsGivenToTheModel, "the message as it was given");
 	}
@@ -170,7 +167,7 @@ class ToolCallingAgentSuspensionTest {
 	void respawnedWithTheAnswerTheAgentTellsItsModelBeforeTheMessage() throws Exception {
 		ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
-		options.getOptions().addAll(List.of("2023", "2024"));
+		options.getOptions().addAll(List.of(ClarificationOption.of("2023"), ClarificationOption.of("2024")));
 		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> answered = new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
 				ClarificationAnswer.class, "Which year?", "it matters", ClarificationAnswer.option("2024"), true,
 				ClarificationOptions.class, options);

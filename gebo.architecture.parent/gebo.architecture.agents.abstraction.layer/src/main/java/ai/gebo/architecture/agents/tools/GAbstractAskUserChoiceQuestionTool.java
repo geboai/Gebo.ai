@@ -21,6 +21,9 @@ import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
@@ -28,13 +31,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * The tool a model calls to ask the user a clarification it cannot go on
- * without: a question with the options the user chooses one of, and, when the
- * model allows it, an explanation of the user's own in place of an option. An
- * agent that may wait for the user adds it to the tool calling of its model
- * call ({@code GeboToolCalling.Builder#mandatoryTool(callback())}) with an
- * {@link IGWaitExternalCondition} loaded; the tool declares the condition to
- * it, as an {@link AgentSuspendedWaitingCondition} of a {@link ClarificationAnswer}
+ * What the tools asking the user a choice question share: a model calls one to
+ * ask something it cannot go on without, giving the options, each a label and a
+ * description, and, when it allows it, leaving the user room for an explanation
+ * of their own. {@link AskUserSingleChoiceQuestionTool} takes one option,
+ * {@link AskUserMultipleChoiceQuestionTool} any number of them.
+ * <p>
+ * An agent that may wait for the user adds a tool to the tool calling of its
+ * model call ({@code GeboToolCalling.Builder#mandatoryTool(callback())}) with an
+ * {@link IGWaitExternalCondition} loaded; the tool declares the condition to it,
+ * as an {@link AgentSuspendedWaitingCondition} of a {@link ClarificationAnswer}
  * with the {@link ClarificationOptions} the model chose, and ends the call (it
  * returns directly), so that the agent suspends the run for the answer. Where
  * nothing is loaded the tool tells the model to decide by itself.
@@ -43,76 +49,48 @@ import lombok.NoArgsConstructor;
  * {@link #answered(AgentSuspendedWaitingCondition)}) rather than letting the
  * tool answer it, since the tool ends every call it is part of.
  */
-public class AskUserClarificationTool {
-	private static final Logger LOGGER = LoggerFactory.getLogger(AskUserClarificationTool.class);
-	public static final String TOOL_NAME = "askUserClarification";
-	public static final String DESCRIPTION = "Ask the user a clarification you cannot go on without, as a single choice among options you give,"
-			+ " each a short label the user understands; allow an explanation of their own when the options may not cover their case."
-			+ " The work stops and waits for the answer, so ask only what you really need, once, with everything in one question.";
+public abstract class GAbstractAskUserChoiceQuestionTool {
+	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractAskUserChoiceQuestionTool.class);
 	static final String NOT_AVAILABLE = "Asking the user is not available here: decide by yourself, choosing the most likely option, and say which you assumed.";
-	static final String NO_QUESTION = "The question is missing: say plainly what you need the user to clarify.";
+	static final String NO_QUESTION = "The question is missing: say plainly what you need the user to answer.";
 	static final String TOO_FEW_OPTIONS = "Give the user at least two options to choose from, or one option with an explanation of their own allowed.";
 	static final String WAITING = "The question was put to the user: the work stops here and goes on when they answer.";
-
-	/** What the model chose when it decided to ask: the question and the options it put to the user. */
-	@Data
-	@NoArgsConstructor
-	public static class ClarificationOptions {
-		private String question = null;
-		private List<String> options = new ArrayList<String>();
-		private boolean customAnswerAllowed = false;
-	}
-
-	/** The user's answer: the option chosen, or the explanation of their own when none fits. */
-	@Data
-	@NoArgsConstructor
-	public static class ClarificationAnswer {
-		private String chosenOption = null;
-		private String customExplanation = null;
-
-		public static ClarificationAnswer option(String chosenOption) {
-			final ClarificationAnswer answer = new ClarificationAnswer();
-			answer.setChosenOption(chosenOption);
-			return answer;
-		}
-
-		public static ClarificationAnswer explanation(String customExplanation) {
-			final ClarificationAnswer answer = new ClarificationAnswer();
-			answer.setCustomExplanation(customExplanation);
-			return answer;
-		}
-	}
 
 	/** What the model gives the tool. */
 	@Data
 	@NoArgsConstructor
-	@JsonClassDescription("A clarification to ask the user, as a single choice among options")
+	@JsonClassDescription("A question to ask the user, with the options to choose from")
 	public static class Param {
 		@JsonPropertyDescription("The question you need answered before you can go on, asked plainly, with what the user needs to know to answer it")
 		private String question = null;
 		@JsonPropertyDescription("Why you need it: what you cannot decide without the answer")
 		private String whyNeeded = null;
-		@JsonPropertyDescription("The options the user chooses one of: two or more short labels the user understands, in the order to show them")
-		private List<String> options = null;
-		@JsonPropertyDescription("True when the user may answer with an explanation of their own instead of one of the options")
+		@JsonPropertyDescription("The options to choose from: two or more, in the order to show them, each with a short label and, when the label alone does not say what choosing it means, a description")
+		private List<ClarificationOption> options = null;
+		@JsonPropertyDescription("True when the user may answer with an explanation of their own, when the options may not cover their case")
 		private Boolean customAnswerAllowed = null;
 		@JsonPropertyDescription("True when you cannot go on at all without the answer, so the conversation waits for it;"
 				+ " false when the user may leave it unanswered and go on, you then proceeding without it")
 		private Boolean mandatory = null;
 	}
 
-	/** The tool, declared as returning directly: the call ends at it. */
-	public static ToolCallback declare() {
-		return new AskUserClarificationTool().callback();
-	}
+	/** The name the model calls the tool by. */
+	protected abstract String toolName();
 
+	/** What the model reads to decide to call the tool. */
+	protected abstract String toolDescription();
+
+	/** Whether the user may choose more than one option. */
+	protected abstract boolean multipleChoice();
+
+	/** The tool, declared as returning directly: the call ends at it. */
 	public ToolCallback callback() {
-		return ToolCallbackDeclarationUtil.declare(this::ask, TOOL_NAME, DESCRIPTION, Param.class, String.class,
+		return ToolCallbackDeclarationUtil.declare(this::ask, toolName(), toolDescription(), Param.class, String.class,
 				ToolCallbackDeclarationUtil.returningDirect());
 	}
 
 	/**
-	 * Declares the clarification to the loaded {@link IGWaitExternalCondition}: the
+	 * Declares the question to the loaded {@link IGWaitExternalCondition}: the
 	 * condition waits for a {@link ClarificationAnswer}, with the
 	 * {@link ClarificationOptions} the model chose.
 	 */
@@ -121,7 +99,7 @@ public class AskUserClarificationTool {
 				IGWaitExternalCondition.class);
 		if (wait == null) {
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug(TOOL_NAME + " called where nothing can wait for the user: the model decides by itself");
+				LOGGER.debug(toolName() + " called where nothing can wait for the user: the model decides by itself");
 			}
 			return NOT_AVAILABLE;
 		}
@@ -130,10 +108,14 @@ public class AskUserClarificationTool {
 		}
 		final ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion(param.getQuestion().strip());
+		options.setMultipleChoice(multipleChoice());
 		if (param.getOptions() != null) {
-			for (String option : param.getOptions()) {
-				if (option != null && !option.isBlank()) {
-					options.getOptions().add(option.strip());
+			for (ClarificationOption option : param.getOptions()) {
+				if (option != null && option.getLabel() != null && !option.getLabel().isBlank()) {
+					options.getOptions().add(ClarificationOption.of(option.getLabel().strip(),
+							option.getDescription() != null && !option.getDescription().isBlank()
+									? option.getDescription().strip()
+									: null));
 				}
 			}
 		}
@@ -148,7 +130,7 @@ public class AskUserClarificationTool {
 				ClarificationOptions.class, options);
 		wait.waitFor(condition);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug(TOOL_NAME + " asked: " + options.getQuestion() + " among " + options.getOptions().size()
+			LOGGER.debug(toolName() + " asked: " + options.getQuestion() + " among " + options.getOptions().size()
 					+ " option(s)" + (options.isCustomAnswerAllowed() ? " or an explanation" : "")
 					+ (mandatory ? ", mandatory" : ", may be left unanswered") + " (condition:"
 					+ condition.getSuspendedConditionId() + ")");
@@ -157,9 +139,9 @@ public class AskUserClarificationTool {
 	}
 
 	/**
-	 * The user's answer to a clarification, as the agent gives it to the model on a
+	 * The user's answer to a question, as the agent gives it to the model on a
 	 * respawn: the question as it was asked and what the user chose or explained.
-	 * Null when the condition is not a resolved clarification.
+	 * Null when the condition is not a resolved question.
 	 */
 	public static String answered(AgentSuspendedWaitingCondition<?, ?> condition) {
 		if (condition == null || !(condition.getInstanceValue() instanceof ClarificationAnswer answer)) {
@@ -167,8 +149,21 @@ public class AskUserClarificationTool {
 		}
 		final StringBuilder text = new StringBuilder();
 		text.append("You asked the user: ").append(condition.getWaitingConditionStatement());
-		if (answer.getChosenOption() != null && !answer.getChosenOption().isBlank()) {
-			text.append("\nThe user chose: ").append(answer.getChosenOption().strip());
+		final List<String> chosen = new ArrayList<String>();
+		if (answer.getChosenOptions() != null) {
+			for (String option : answer.getChosenOptions()) {
+				if (option != null && !option.isBlank()) {
+					chosen.add(option.strip());
+				}
+			}
+		}
+		if (chosen.size() == 1) {
+			text.append("\nThe user chose: ").append(chosen.get(0));
+		} else if (!chosen.isEmpty()) {
+			text.append("\nThe user chose:");
+			for (String option : chosen) {
+				text.append("\n- ").append(option);
+			}
 		}
 		if (answer.getCustomExplanation() != null && !answer.getCustomExplanation().isBlank()) {
 			text.append("\nThe user explained: ").append(answer.getCustomExplanation().strip());

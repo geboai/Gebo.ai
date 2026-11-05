@@ -15,22 +15,33 @@
         <div class="gebo-ai-reusable-chat__suspension-explanation"><i>{{explanationOf(condition)}}</i></div>
       }
       @if (isClarification(condition)) {
-        @for (option of optionsOf(condition); track option) {
+        @for (option of optionsOf(condition); track $index) {
           <div class="gebo-ai-reusable-chat__suspension-option">
-            <p-radioButton [name]="'option-' + condition.conditionId" [value]="option" [inputId]="condition.conditionId + '-' + $index"
-              [disabled]="disabled" [ngModel]="answerOf(condition).chosenOption"
-              (ngModelChange)="chooseOption(condition, option)"></p-radioButton>
-            <label [for]="condition.conditionId + '-' + $index">{{option}}</label>
+            @if (isMultipleChoice(condition)) {
+              <p-checkbox [binary]="true" [inputId]="condition.conditionId + '-' + $index" [disabled]="disabled"
+                [ngModel]="isChosen(condition, option.label)"
+                (ngModelChange)="toggleOption(condition, option.label, $event)"></p-checkbox>
+            } @else {
+              <p-radioButton [name]="'option-' + condition.conditionId" [value]="option.label" [inputId]="condition.conditionId + '-' + $index"
+                [disabled]="disabled" [ngModel]="answerOf(condition).chosenOption"
+                (ngModelChange)="chooseOption(condition, option.label)"></p-radioButton>
+            }
+            <label [for]="condition.conditionId + '-' + $index" class="gebo-ai-reusable-chat__suspension-option-label">
+              {{option.label}}
+              @if (option.description) {
+                <span class="gebo-ai-reusable-chat__suspension-option-description">{{option.description}}</span>
+              }
+            </label>
           </div>
         }
         @if (customAllowed(condition)) {
-          <textarea pTextarea rows="2" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+          <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
             [disabled]="disabled" [(ngModel)]="answerOf(condition).customExplanation"
             (ngModelChange)="onExplanationChange(condition)"
             placeholder="Or explain in your own words" gebo-ai-label></textarea>
         }
       } @else {
-        <textarea pTextarea rows="2" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+        <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
           [disabled]="disabled" [(ngModel)]="answerOf(condition).value"
           placeholder="Your answer" gebo-ai-label></textarea>
       }

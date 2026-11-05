@@ -17,23 +17,31 @@ export interface SuspensionAnswer {
     text: string;
 }
 
+/** An option of a question: what the user chooses, and what choosing it means. */
+interface QuestionOption {
+    label: string;
+    description?: string;
+}
+
 /** The user's answer to one condition, while they write it. */
 interface ConditionAnswer {
     chosenOption?: string;
+    chosenOptions?: string[];
     customExplanation?: string;
     value?: string;
 }
 
 /**
  * The questions a suspended network of agents asks the user, under the answer that
- * asked them: one block per condition, a single choice among the options the agents
- * chose with an explanation of the user's own when allowed, a value for any other
+ * asked them: one block per condition, a single or multiple choice among the options
+ * the agents chose with an explanation of the user's own when allowed, a value for any other
  * kind of condition. Answering respawns the network with the reaction; a block whose
  * conditions may all be left unanswered can be skipped, the conversation going on.
  */
 @Component({
     selector: "gebo-ai-chat-suspension-answer",
     templateUrl: "chat-suspension-answer.component.html",
+    styleUrls: ["chat-suspension-answer.component.scss"],
     standalone: false,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatSuspensionAnswerComponent"), multi: false }]
 })
@@ -80,9 +88,17 @@ export class GeboAIChatSuspensionAnswerComponent {
         return condition.attributes?.["explanation"];
     }
 
-    optionsOf(condition: AgentSuspendedWaitingConditionDto): string[] {
+    /** The options as labels and descriptions; an answer saved before descriptions existed has plain texts. */
+    optionsOf(condition: AgentSuspendedWaitingConditionDto): QuestionOption[] {
         const options = condition.attributes?.["options"];
-        return Array.isArray(options) ? options : [];
+        if (!Array.isArray(options)) {
+            return [];
+        }
+        return options.map(option => typeof option === "string" ? { label: option } : option);
+    }
+
+    isMultipleChoice(condition: AgentSuspendedWaitingConditionDto): boolean {
+        return condition.attributes?.["multipleChoice"] === true;
     }
 
     customAllowed(condition: AgentSuspendedWaitingConditionDto): boolean {
@@ -104,7 +120,21 @@ export class GeboAIChatSuspensionAnswerComponent {
         answer.customExplanation = undefined;
     }
 
+    isChosen(condition: AgentSuspendedWaitingConditionDto, option: string): boolean {
+        return this.answerOf(condition).chosenOptions?.includes(option) === true;
+    }
+
+    /** On a multiple choice the options chosen stay in the order they are shown, beside any explanation. */
+    toggleOption(condition: AgentSuspendedWaitingConditionDto, option: string, chosen: boolean): void {
+        const answer = this.answerOf(condition);
+        answer.chosenOptions = this.optionsOf(condition).map(o => o.label)
+            .filter(label => label === option ? chosen : this.isChosen(condition, label));
+    }
+
     onExplanationChange(condition: AgentSuspendedWaitingConditionDto): void {
+        if (this.isMultipleChoice(condition)) {
+            return;
+        }
         const answer = this.answerOf(condition);
         if (answer.customExplanation && answer.customExplanation.trim() !== "") {
             answer.chosenOption = undefined;
@@ -114,7 +144,8 @@ export class GeboAIChatSuspensionAnswerComponent {
     isAnswered(condition: AgentSuspendedWaitingConditionDto): boolean {
         const answer = this.answerOf(condition);
         if (this.isClarification(condition)) {
-            return !!answer.chosenOption || (this.customAllowed(condition) && !!answer.customExplanation?.trim());
+            return !!answer.chosenOption || !!answer.chosenOptions?.length
+                || (this.customAllowed(condition) && !!answer.customExplanation?.trim());
         }
         return !!answer.value?.trim();
     }
@@ -147,7 +178,15 @@ export class GeboAIChatSuspensionAnswerComponent {
                 reactions.push(reaction);
                 continue;
             }
-            if (this.isClarification(condition)) {
+            if (this.isMultipleChoice(condition)) {
+                const chosen = answer.chosenOptions ?? [];
+                const explanation = answer.customExplanation?.trim();
+                reaction.attributes!["chosenOptions"] = chosen;
+                if (explanation) {
+                    reaction.attributes!["customExplanation"] = explanation;
+                }
+                lines.push(...chosen, ...(explanation ? [explanation] : []));
+            } else if (this.isClarification(condition)) {
                 if (answer.chosenOption) {
                     reaction.attributes!["chosenOption"] = answer.chosenOption;
                     lines.push(answer.chosenOption);

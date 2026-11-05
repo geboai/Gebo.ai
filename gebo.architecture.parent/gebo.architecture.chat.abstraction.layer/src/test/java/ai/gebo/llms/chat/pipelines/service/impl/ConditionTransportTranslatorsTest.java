@@ -14,8 +14,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
 import ai.gebo.llms.chat.pipelines.service.IAgentSuspendedWaitingConditionTransportTranslator;
@@ -39,7 +40,7 @@ class ConditionTransportTranslatorsTest {
 			boolean customAllowed, boolean mandatory) {
 		ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
-		options.getOptions().addAll(List.of("2023", "2024"));
+		options.getOptions().addAll(List.of(ClarificationOption.of("2023"), ClarificationOption.of("2024")));
 		options.setCustomAnswerAllowed(customAllowed);
 		return new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(ClarificationAnswer.class,
 				"Which year?", "the report differs by year", null, mandatory, ClarificationOptions.class, options);
@@ -77,7 +78,8 @@ class ConditionTransportTranslatorsTest {
 		assertEquals("Which year?", dto.getAttributes().get("question"));
 		assertEquals("Which year?", dto.getAttributes().get("statement"));
 		assertEquals("the report differs by year", dto.getAttributes().get("explanation"));
-		assertEquals(List.of("2023", "2024"), dto.getAttributes().get("options"));
+		assertEquals(List.of(Map.of("label", "2023"), Map.of("label", "2024")), dto.getAttributes().get("options"));
+		assertEquals(Boolean.FALSE, dto.getAttributes().get("multipleChoice"));
 		assertEquals(Boolean.TRUE, dto.getAttributes().get("customAnswerAllowed"));
 		assertEquals(Boolean.FALSE, dto.getAttributes().get("mandatory"));
 	}
@@ -91,13 +93,13 @@ class ConditionTransportTranslatorsTest {
 				reaction("clarification", id, Map.of("chosenOption", " 2024 ")), saved);
 		assertSame(saved, resolved, "the saved condition itself, its id untouched");
 		assertEquals(id, resolved.getSuspendedConditionId());
-		assertEquals("2024", ((ClarificationAnswer) resolved.getInstanceValue()).getChosenOption());
+		assertEquals(List.of("2024"), ((ClarificationAnswer) resolved.getInstanceValue()).getChosenOptions());
 		assertNull(((ClarificationAnswer) resolved.getInstanceValue()).getCustomExplanation());
 
 		clarification.translateReaction(
 				reaction("clarification", id, Map.of("customExplanation", "the fiscal year")), saved);
 		assertEquals("the fiscal year", ((ClarificationAnswer) saved.getInstanceValue()).getCustomExplanation());
-		assertNull(((ClarificationAnswer) saved.getInstanceValue()).getChosenOption());
+		assertTrue(((ClarificationAnswer) saved.getInstanceValue()).getChosenOptions().isEmpty());
 	}
 
 	@Test
@@ -116,6 +118,51 @@ class ConditionTransportTranslatorsTest {
 				reaction("clarification", "another", Map.of("chosenOption", "2024")), saved),
 				"a reaction to another condition");
 		assertNull(saved.getInstanceValue(), "nothing was filled");
+	}
+
+	@Test
+	void anOptionGoesDownWithItsDescription() {
+		AgentSuspendedWaitingCondition condition = clarificationCondition(false, true);
+		((ClarificationOptions) condition.getLlmChosenOptions()).getOptions().set(0,
+				ClarificationOption.of("2023", "the closed year"));
+
+		assertEquals(List.of(Map.of("label", "2023", "description", "the closed year"), Map.of("label", "2024")),
+				clarification.translate(condition).getAttributes().get("options"));
+	}
+
+	@Test
+	void aMultipleChoiceTakesSeveralOptionsAndAnExplanationBesideThem() {
+		AgentSuspendedWaitingCondition saved = clarificationCondition(true, true);
+		((ClarificationOptions) saved.getLlmChosenOptions()).setMultipleChoice(true);
+		assertEquals(Boolean.TRUE, clarification.translate(saved).getAttributes().get("multipleChoice"));
+
+		clarification.translateReaction(reaction("clarification", saved.getSuspendedConditionId(),
+				Map.of("chosenOptions", List.of(" 2023 ", "2024", "2023"), "customExplanation", "and the forecast")), saved);
+
+		ClarificationAnswer answer = (ClarificationAnswer) saved.getInstanceValue();
+		assertEquals(List.of("2023", "2024"), answer.getChosenOptions(), "trimmed, each once, in the order given");
+		assertEquals("and the forecast", answer.getCustomExplanation());
+	}
+
+	@Test
+	void aChoiceIsRefusedWhenItDoesNotFitTheQuestion() {
+		AgentSuspendedWaitingCondition single = clarificationCondition(false, true);
+		String id = single.getSuspendedConditionId();
+		assertThrows(IllegalArgumentException.class, () -> clarification.translateReaction(
+				reaction("clarification", id, Map.of("chosenOptions", List.of("2023", "2024"))), single),
+				"two options on a single choice");
+		assertThrows(IllegalArgumentException.class, () -> clarification.translateReaction(
+				reaction("clarification", id, Map.of("chosenOption", "2023", "customExplanation", "whatever")), single),
+				"an explanation beside an option, where none is allowed");
+
+		AgentSuspendedWaitingCondition multiple = clarificationCondition(false, true);
+		((ClarificationOptions) multiple.getLlmChosenOptions()).setMultipleChoice(true);
+		assertThrows(IllegalArgumentException.class,
+				() -> clarification.translateReaction(reaction("clarification", multiple.getSuspendedConditionId(),
+						Map.of("chosenOptions", List.of("2023", "2025"))), multiple),
+				"one of the options not offered");
+		assertNull(single.getInstanceValue(), "nothing was filled");
+		assertNull(multiple.getInstanceValue(), "nothing was filled");
 	}
 
 	@Test

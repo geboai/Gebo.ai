@@ -16,18 +16,19 @@ import org.springframework.ai.tool.ToolCallback;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.services.GWaitExternalConditionSink;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.Param;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool.Param;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
- * Pins the clarification tool: it ends the call it is part of, declares to the
+ * Pins the single choice question tool: it ends the call it is part of, declares to the
  * loaded wait what the user is asked and among which options, and where nothing
  * is loaded it tells the model to decide by itself.
  */
-class AskUserClarificationToolTest {
-	private final AskUserClarificationTool tool = new AskUserClarificationTool();
+class AskUserSingleChoiceQuestionToolTest {
+	private final AskUserSingleChoiceQuestionTool tool = new AskUserSingleChoiceQuestionTool();
 	private final GWaitExternalConditionSink wait = new GWaitExternalConditionSink();
 
 	private ToolContext inACallWith(IGWaitExternalCondition loaded) {
@@ -44,26 +45,28 @@ class AskUserClarificationToolTest {
 		param.setMandatory(mandatory);
 		param.setQuestion(question);
 		param.setWhyNeeded("the report differs by year");
-		param.setOptions(options);
+		param.setOptions(options != null ? options.stream().map(ClarificationOption::of).toList() : null);
 		param.setCustomAnswerAllowed(custom);
 		return param;
 	}
 
 	@Test
 	void theToolEndsTheCallItIsPartOf() {
-		ToolCallback callback = AskUserClarificationTool.declare();
+		ToolCallback callback = AskUserSingleChoiceQuestionTool.declare();
 
-		assertEquals(AskUserClarificationTool.TOOL_NAME, callback.getToolDefinition().name());
+		assertEquals(AskUserSingleChoiceQuestionTool.TOOL_NAME, callback.getToolDefinition().name());
 		assertTrue(callback.getToolMetadata().returnDirect(), "the loop stops at it: the work waits");
 		assertTrue(callback.getToolDefinition().inputSchema().contains("customAnswerAllowed"));
 		assertTrue(callback.getToolDefinition().inputSchema().contains("mandatory"));
+		assertTrue(callback.getToolDefinition().inputSchema().contains("label"));
+		assertTrue(callback.getToolDefinition().inputSchema().contains("description"));
 	}
 
 	@Test
 	void theQuestionAndTheOptionsAreDeclaredAsTheConditionTheRunWaitsFor() {
 		String told = tool.ask(param("Which year?", List.of("2023", "2024"), true), inACallWith(wait));
 
-		assertEquals(AskUserClarificationTool.WAITING, told);
+		assertEquals(AskUserSingleChoiceQuestionTool.WAITING, told);
 		assertEquals(1, wait.waited().size());
 		AgentSuspendedWaitingCondition<?, ?> condition = wait.waited().get(0);
 		assertEquals("Which year?", condition.getWaitingConditionStatement());
@@ -73,8 +76,9 @@ class AskUserClarificationToolTest {
 		assertSame(ClarificationOptions.class, condition.getOptionsType());
 		ClarificationOptions options = (ClarificationOptions) condition.getLlmChosenOptions();
 		assertEquals("Which year?", options.getQuestion());
-		assertEquals(List.of("2023", "2024"), options.getOptions());
+		assertEquals(List.of("2023", "2024"), options.labels());
 		assertTrue(options.isCustomAnswerAllowed());
+		assertFalse(options.isMultipleChoice(), "the user picks one");
 		assertTrue(condition.isMandatory(), "mandatory unless the model says otherwise");
 	}
 
@@ -87,13 +91,15 @@ class AskUserClarificationToolTest {
 
 	@Test
 	void theToolIsCalledThroughItsCallbackAsTheModelCallsIt() {
-		AskUserClarificationTool.declare().call(
-				"{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[\" 2023 \",\"2024\",\"\"]}",
+		AskUserSingleChoiceQuestionTool.declare().call(
+				"{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[{\"label\":\" 2023 \",\"description\":\" the closed year \"},{\"label\":\"2024\",\"description\":\" \"},{\"label\":\"\"}]}",
 				inACallWith(wait));
 
 		assertEquals(1, wait.waited().size());
 		ClarificationOptions options = (ClarificationOptions) wait.waited().get(0).getLlmChosenOptions();
-		assertEquals(List.of("2023", "2024"), options.getOptions(), "options are trimmed, blank ones dropped");
+		assertEquals(List.of("2023", "2024"), options.labels(), "options are trimmed, blank ones dropped");
+		assertEquals("the closed year", options.getOptions().get(0).getDescription());
+		assertNull(options.getOptions().get(1).getDescription(), "a blank description is no description");
 		assertFalse(options.isCustomAnswerAllowed(), "not allowed unless said");
 	}
 
@@ -101,21 +107,21 @@ class AskUserClarificationToolTest {
 	void whereNothingCanWaitTheModelIsToldToDecideByItself() {
 		String told = tool.ask(param("Which year?", List.of("2023", "2024"), null), new ToolContext(Map.of()));
 
-		assertEquals(AskUserClarificationTool.NOT_AVAILABLE, told);
+		assertEquals(AskUserSingleChoiceQuestionTool.NOT_AVAILABLE, told);
 		assertFalse(wait.isWaiting());
 	}
 
 	@Test
 	void aQuestionWithoutEnoughOptionsIsNotAsked() {
-		assertEquals(AskUserClarificationTool.NO_QUESTION, tool.ask(param(" ", List.of("a", "b"), null),
+		assertEquals(AskUserSingleChoiceQuestionTool.NO_QUESTION, tool.ask(param(" ", List.of("a", "b"), null),
 				inACallWith(wait)));
-		assertEquals(AskUserClarificationTool.TOO_FEW_OPTIONS, tool.ask(param("Which?", List.of("only one"), false),
+		assertEquals(AskUserSingleChoiceQuestionTool.TOO_FEW_OPTIONS, tool.ask(param("Which?", List.of("only one"), false),
 				inACallWith(wait)));
-		assertEquals(AskUserClarificationTool.TOO_FEW_OPTIONS, tool.ask(param("Which?", null, true),
+		assertEquals(AskUserSingleChoiceQuestionTool.TOO_FEW_OPTIONS, tool.ask(param("Which?", null, true),
 				inACallWith(wait)));
 		assertFalse(wait.isWaiting());
 
-		assertEquals(AskUserClarificationTool.WAITING, tool.ask(param("Which?", List.of("only one"), true),
+		assertEquals(AskUserSingleChoiceQuestionTool.WAITING, tool.ask(param("Which?", List.of("only one"), true),
 				inACallWith(wait)), "one option with an explanation of the user's own allowed is a choice");
 	}
 
@@ -127,13 +133,13 @@ class AskUserClarificationToolTest {
 
 		resolved.setInstanceValue(ClarificationAnswer.option("2024"));
 		assertEquals("You asked the user: Which year?\nThe user chose: 2024",
-				AskUserClarificationTool.answered(resolved));
+				AskUserSingleChoiceQuestionTool.answered(resolved));
 
 		resolved.setInstanceValue(ClarificationAnswer.explanation("the fiscal year, not the calendar one"));
 		assertEquals("You asked the user: Which year?\nThe user explained: the fiscal year, not the calendar one",
-				AskUserClarificationTool.answered(resolved));
+				AskUserSingleChoiceQuestionTool.answered(resolved));
 
 		resolved.setInstanceValue("not a clarification answer");
-		assertNull(AskUserClarificationTool.answered(resolved));
+		assertNull(AskUserSingleChoiceQuestionTool.answered(resolved));
 	}
 }

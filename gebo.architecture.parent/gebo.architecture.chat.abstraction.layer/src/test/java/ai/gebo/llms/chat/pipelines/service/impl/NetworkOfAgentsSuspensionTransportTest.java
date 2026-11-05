@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,8 +15,9 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
 import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.AgentSuspendedWaitingConditionTransportTranslatorRepositoryPatternImpl;
 
@@ -34,7 +36,7 @@ class NetworkOfAgentsSuspensionTransportTest {
 			boolean mandatory) {
 		ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
-		options.getOptions().addAll(List.of("2023", "2024"));
+		options.getOptions().addAll(List.of(ClarificationOption.of("2023"), ClarificationOption.of("2024")));
 		options.setCustomAnswerAllowed(true);
 		return new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(ClarificationAnswer.class,
 				"Which year?", "the report differs by year", null, mandatory, ClarificationOptions.class, options);
@@ -74,7 +76,8 @@ class NetworkOfAgentsSuspensionTransportTest {
 		assertEquals("block-2", state.getNetworkOfAgentsBlockId());
 		assertEquals(condition.getSuspendedConditionId(), state.getConditions().get(0).getConditionId(),
 				"the saved id, read back from the block");
-		assertEquals(List.of("2023", "2024"), state.getConditions().get(0).getAttributes().get("options"));
+		assertEquals(List.of(Map.of("label", "2023"), Map.of("label", "2024")),
+				state.getConditions().get(0).getAttributes().get("options"));
 		assertFalse(NetworkOfAgentsSuspensionTransport.isMandatory(state));
 	}
 
@@ -98,5 +101,20 @@ class NetworkOfAgentsSuspensionTransportTest {
 
 		assertEquals("default", state.getConditions().get(0).getConditionType());
 		assertEquals("Which year?", state.getConditions().get(0).getAttributes().get("statement"));
+	}
+
+	@Test
+	void theTextShowsEachOptionWithItsDescriptionAndSaysWhenSeveralMayBeChosen() {
+		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> condition = clarificationCondition(true);
+		ClarificationOptions options = condition.getLlmChosenOptions();
+		options.getOptions().set(0, ClarificationOption.of("2023", "the closed year"));
+		options.setMultipleChoice(true);
+		NetworkOfAgentsSuspendedState state = new NetworkOfAgentsSuspendedState();
+		state.setConditions(List.of(clarification.translate(condition)));
+
+		String text = NetworkOfAgentsSuspensionTransport.render(state);
+
+		assertTrue(text.contains("\n- 2023: the closed year\n- 2024\n"), text);
+		assertTrue(text.contains("(You may choose more than one.)"), text);
 	}
 }

@@ -11,6 +11,7 @@ package ai.gebo.llms.chat.pipelines.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -142,7 +143,10 @@ public class NetworkOfAgentsSuspensionTransport {
 					: null;
 			if (options instanceof List<?> list && !list.isEmpty()) {
 				for (Object option : list) {
-					text.append("\n- ").append(option);
+					text.append("\n- ").append(optionText(option));
+				}
+				if (Boolean.TRUE.equals(dto.getAttributes().get(ClarificationConditionTransportTranslator.MULTIPLE_CHOICE))) {
+					text.append("\n(You may choose more than one.)");
 				}
 				if (Boolean.TRUE.equals(
 						dto.getAttributes().get(ClarificationConditionTransportTranslator.CUSTOM_ANSWER_ALLOWED))) {
@@ -155,5 +159,15 @@ public class NetworkOfAgentsSuspensionTransport {
 			}
 		}
 		return text.toString();
+	}
+
+	/** An option as a line: its label and, when it has one, its description. */
+	private static String optionText(Object option) {
+		if (!(option instanceof Map<?, ?> described)) {
+			return String.valueOf(option);
+		}
+		final Object label = described.get(ClarificationConditionTransportTranslator.OPTION_LABEL);
+		final Object description = described.get(ClarificationConditionTransportTranslator.OPTION_DESCRIPTION);
+		return description != null ? label + ": " + description : String.valueOf(label);
 	}
 }

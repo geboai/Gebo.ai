@@ -20,7 +20,7 @@ waited for whole, and everything not yet delivered is frozen in its place.
 | agents abstraction | `GNetworkOfAgentsSuspension` | The block: network copy and input, conversation and request, suspended agents with their turn and condition, frozen deliveries, every agent's runtime, the shared state. |
 | agents abstraction | `IGAgentsNetworkService.respawnNetworkExecution` | Respawns a block with the resolved conditions on a service **created for the block** by the factory. |
 | agents abstraction | `IGWaitExternalCondition`, `GWaitExternalConditionSink` | The contract a tool declares a condition through; the sink the agent loads for each model call. |
-| agents abstraction | `AskUserClarificationTool`, `AskUserClarificationToolSource` | The tool of the common case: a single choice among options, an explanation of the user's own when allowed. Mounted only on the agents that name its source. |
+| agents abstraction | `AskUserSingleChoiceQuestionTool`, `AskUserMultipleChoiceQuestionTool`, `AskUserChoiceQuestionToolSource` | The tools of the common case: a question with one answer, or with several, among options with a label and a description, an explanation of the user's own when allowed. Mounted only on the agents that name their source. |
 | chat abstraction | `NetworkOfAgentsSuspendedState`, `AgentSuspendedWaitingConditionDto` | What the client reads: the block id and one DTO per condition. |
 | chat abstraction | `NetworkOfAgentsSuspendedStateReaction`, `AgentSuspendedWaitingConditionReactionDto` | What the client sends back on the respawn. |
 | chat abstraction | `IAgentSuspendedWaitingConditionTransportTranslator` | One per kind of condition: condition to DTO, reaction into the saved condition. `ClarificationConditionTransportTranslator`, `DefaultConditionTransportTranslator` (the fallback). |
@@ -106,7 +106,8 @@ pipeline service with the reaction on the request.
 
 `NetworkSuspensionAndRespawnTest`, `MockedAgentsNetworkRespawnTest` (the base, with
 mocked agents and a parallel group), `GMongoNetworkOfAgentsSuspensionHandlerTest`,
-`AskUserClarificationToolTest`, `ToolCallingAgentSuspensionTest`,
+`AskUserSingleChoiceQuestionToolTest`, `AskUserMultipleChoiceQuestionToolTest`,
+`ToolCallingAgentSuspensionTest`,
 `ReactiveAgentAdapterSuspensionTest`, `ConditionTransportTranslatorsTest`,
 `NetworkOfAgentsSuspensionTransportTest`, `ChatPipelineServiceOpenSuspensionTest`,
 `ChatNetworkStepSuspensionTest`, `ChatNetworkRespawnStepTest`,

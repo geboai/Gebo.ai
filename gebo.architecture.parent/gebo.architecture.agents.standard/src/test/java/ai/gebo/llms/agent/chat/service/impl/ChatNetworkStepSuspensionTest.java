@@ -18,8 +18,9 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -68,7 +69,7 @@ class ChatNetworkStepSuspensionTest {
 	private static AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> clarification() {
 		ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
-		options.getOptions().addAll(List.of("2023", "2024"));
+		options.getOptions().addAll(List.of(ClarificationOption.of("2023"), ClarificationOption.of("2024")));
 		return new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(ClarificationAnswer.class,
 				"Which year?", "the report differs by year", null, true, ClarificationOptions.class, options);
 	}

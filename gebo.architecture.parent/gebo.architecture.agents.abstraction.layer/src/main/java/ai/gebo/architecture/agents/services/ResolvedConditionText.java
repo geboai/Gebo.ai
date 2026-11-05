@@ -10,12 +10,12 @@
 package ai.gebo.architecture.agents.services;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool;
+import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool;
 
 /**
  * What a respawned agent tells its model about the condition it waited for: the
- * answer, for a clarification the user gave (see
- * {@link AskUserClarificationTool#answered}); for any other condition, what was
+ * answer, for a question the user answered (see
+ * {@link GAbstractAskUserChoiceQuestionTool#answered}); for any other condition, what was
  * waited for and the value that came; and, for a condition the user declined,
  * that the work goes on without it.
  */
@@ -32,7 +32,7 @@ public final class ResolvedConditionText {
 			return "You were waiting for: " + condition.getWaitingConditionStatement()
 					+ "\nThe user chose not to answer: go on without it, saying what you assumed.";
 		}
-		final String clarification = AskUserClarificationTool.answered(condition);
+		final String clarification = GAbstractAskUserChoiceQuestionTool.answered(condition);
 		if (clarification != null) {
 			return clarification;
 		}

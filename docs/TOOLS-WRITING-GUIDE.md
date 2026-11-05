@@ -492,10 +492,12 @@ re-executed on the same message, told the answer first (see
 `ResolvedConditionText`). The tool-calling agents and the adapted reactive
 agents do this already: a waiting tool only needs mounting on the agent.
 
-`AskUserClarificationTool` (source `ask-user-clarification-tool-source`, mounted
-only on the agents that name it) is the tool of the common case: a question the
-user answers with one of the options the model chose, or an explanation of their
-own when the model allows it.
+`AskUserSingleChoiceQuestionTool` and `AskUserMultipleChoiceQuestionTool` (source
+`ask-user-choice-question-tool-source`, mounted only on the agents that name it)
+are the tools of the common case: a question the user answers with one of the
+options the model chose, or with all those that apply. Each option has a label
+and a description, and the user may explain in their own words when the model
+allows it.
 
 ```java
 // the tool

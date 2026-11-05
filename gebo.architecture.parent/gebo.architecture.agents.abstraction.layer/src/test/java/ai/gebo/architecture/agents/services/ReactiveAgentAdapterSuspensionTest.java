@@ -25,8 +25,9 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import reactor.core.publisher.Flux;
@@ -78,7 +79,7 @@ class ReactiveAgentAdapterSuspensionTest {
 			ClarificationAnswer answer) {
 		ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
-		options.getOptions().addAll(List.of("2023", "2024"));
+		options.getOptions().addAll(List.of(ClarificationOption.of("2023"), ClarificationOption.of("2024")));
 		return new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(ClarificationAnswer.class,
 				"Which year?", "it matters", answer, true, ClarificationOptions.class, options);
 	}

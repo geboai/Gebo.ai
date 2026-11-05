@@ -27,8 +27,9 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAge
 import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationAnswer;
-import ai.gebo.architecture.agents.tools.AskUserClarificationTool.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ClarificationOption;
+import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
@@ -78,7 +79,7 @@ class ChatNetworkRespawnStepTest {
 			boolean mandatory) {
 		ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
-		options.getOptions().addAll(List.of("2023", "2024"));
+		options.getOptions().addAll(List.of(ClarificationOption.of("2023"), ClarificationOption.of("2024")));
 		return new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(ClarificationAnswer.class,
 				"Which year?", "the report differs by year", null, mandatory, ClarificationOptions.class, options);
 	}
@@ -147,7 +148,7 @@ class ChatNetworkRespawnStepTest {
 		assertEquals(1, resolved.getValue().size());
 		assertEquals(saved.getSuspendedConditionId(), resolved.getValue().get(0).getSuspendedConditionId(),
 				"the saved condition, read back from the block");
-		assertEquals("2024", ((ClarificationAnswer) resolved.getValue().get(0).getInstanceValue()).getChosenOption());
+		assertEquals(List.of("2024"), ((ClarificationAnswer) resolved.getValue().get(0).getInstanceValue()).getChosenOptions());
 		assertNull(response.getNetworkOfAgentsSuspendedState(), "the run ended");
 		assertSame(theNetwork, block.getNetwork());
 	}

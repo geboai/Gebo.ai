@@ -61,6 +61,7 @@ import { GeboAIChatStreamEventsDisplayComponent } from "./chat-stream-events-dis
 import { ProgressBarModule } from "primeng/progressbar";
 import { ChipModule } from "primeng/chip";
 import { RadioButtonModule } from "primeng/radiobutton";
+import { CheckboxModule } from "primeng/checkbox";
 import { GeboAIChatSuspensionAnswerComponent } from "./chat-suspension-answer.component";
 @NgModule({
   imports: [CommonModule,
@@ -94,6 +95,7 @@ import { GeboAIChatSuspensionAnswerComponent } from "./chat-suspension-answer.co
     ProgressBarModule,
     ChipModule,
     RadioButtonModule,
+    CheckboxModule,
     GeboAINotificationsModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
