@@ -42,6 +42,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisor;
 import ai.gebo.llms.abstraction.layer.services.IChatModelUsageAdvisorFactory;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel.RequestSpec;
@@ -220,8 +221,11 @@ class GeboToolCallingTest {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	static class PreparingModel extends GAbstractConfigurableChatModel<GBaseChatModelConfig, ChatModel> {
+		private final ChatModel providerModel;
+
 		PreparingModel(IGToolCallbackSourceRepositoryPattern repository, ChatModel model) {
-			super(null, repository, mock(IChatModelUsageAdvisorFactory.class), ObservationRegistry.NOOP, null);
+			super(null, repository, recordingNothing(), ObservationRegistry.NOOP, null);
+			this.providerModel = model;
 			this.config = new GBaseChatModelConfig();
 			this.config.setCode("preparing-model");
 			this.config.setEnabledFunctions(List.of("configured"));
@@ -230,13 +234,21 @@ class GeboToolCallingTest {
 
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
-			return this;
+			return new PreparingModel(toolCallbacksRepository, providerModel);
 		}
 
 		@Override
 		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type) {
-			return mock(ChatModel.class);
+			return providerModel;
 		}
+	}
+
+	private static IChatModelUsageAdvisorFactory recordingNothing() {
+		final IChatModelUsageAdvisor advisor = mock(IChatModelUsageAdvisor.class);
+		when(advisor.getName()).thenReturn("usage");
+		final IChatModelUsageAdvisorFactory factory = mock(IChatModelUsageAdvisorFactory.class);
+		when(factory.create(any(), any(), any())).thenReturn(advisor);
+		return factory;
 	}
 
 	private static ToolCallback tool(String name) {

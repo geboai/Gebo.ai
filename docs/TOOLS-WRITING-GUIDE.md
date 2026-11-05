@@ -506,6 +506,11 @@ the condition, given back with the answer and never shown to the user: the calle
 functions of a response leave it out. Tell the model to write the values themselves:
 told only "write what you need", it notes that it has them.
 
+A prompt with `toolsCalling: NOT_REQUIRED` offers the model no tools at all, library tools
+included, whatever the agent mounts; only the tools the controlling software makes mandatory
+stay. The agent editor warns of an agent in that situation. To let such an agent use its tools,
+set the prompt to `REQUIRED`: a saved copy of a prompt keeps the value it was copied with.
+
 ```java
 // the tool
 private String waitForApproval(ApprovalParam param, ToolContext toolContext) {

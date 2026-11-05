@@ -132,6 +132,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * ones when the configuration enables them.
 	 */
 	protected List<ToolCallback> additionalTools = List.of();
+	/** The client of the calls whose prompt does not allow tools, made at the first of them. */
+	private volatile ChatClient withoutToolsChatClient = null;
 	/**
 	 * The share of what a model call's messages and tools' definitions leave of the
 	 * context that its tools' results may take.
@@ -762,7 +764,6 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ (toolCalling != null ? " with " + toolCalling : ""));
 		}
 		long tokens = 0;
-		ChatClient client = getChatClient();
 		// the caller's parameters, plus what the providers fill of the placeholders the
 		// template names and the caller did not
 		final Map<String, Object> completed = promptContextProviders != null
@@ -794,10 +795,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			}
 		}
 
-		ChatClientRequestSpec reqObject = client.prompt();
-
 		final boolean toolsCalling = prompt.getToolsCalling() == null
 				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
+		ChatClientRequestSpec reqObject = (toolsCalling ? getChatClient() : chatClientWithoutTools()).prompt();
+
 		// the controlling software's recorder, when it gave one, records beside the
 		// request's: neither takes the place of the other
 		final ToolCallsListener toolCallListener = toolCalling != null && toolCalling.getListener() != null
@@ -835,6 +836,33 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	/**
+	 * The chat client of a call whose prompt does not allow tools. A provider's model
+	 * declares the enabled tools in its default options and a request can only add to
+	 * them: with nothing on the request they are still offered, and run unwrapped, not
+	 * recorded and not under the request's identity. Such a call goes through a copy of
+	 * this model enabling no tools, which also leaves out the options a provider takes
+	 * only along with tools. A copy that cannot be made leaves the call on this model.
+	 */
+	private ChatClient chatClientWithoutTools() {
+		final List<String> names = config != null ? config.getEnabledFunctions() : null;
+		if (names == null || names.isEmpty() || toolCallbacksRepository.getTools(names).isEmpty()) {
+			return getChatClient();
+		}
+		if (withoutToolsChatClient == null) {
+			try {
+				if (cloneWithOptions("", new ChatModelConfigOptions(null, null, null, List.of(),
+						List.of())) instanceof GAbstractConfigurableChatModel<?, ?> copy) {
+					withoutToolsChatClient = copy.getChatClient();
+				}
+			} catch (LLMConfigException e) {
+				LOGGER.error("Chat model code=" + getCode() + " cannot be copied without its tools: a prompt not"
+						+ " allowing tools still offers them to the model", e);
+			}
+		}
+		return withoutToolsChatClient != null ? withoutToolsChatClient : getChatClient();
 	}
 
 	/**
