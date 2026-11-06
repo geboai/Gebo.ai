@@ -202,6 +202,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         { id: "NodeSelectedToolsTooltip", label: "The tools selected in the agent configuration" },
         { id: "NodeShowAllToolsTitle", label: "Show all the tools of this agent" },
         { id: "NodeToolFallback", label: "Tool" },
+        { id: "NodeToolCollisionsTooltip", label: "The tool of the library is used, the other one never reaches the model" },
         { id: "NodeExcludedByConfiguration", label: "Left out by this agent's configuration (its tool sources left out)" },
         { id: "NodeExcludedBySystem", label: "Kept out by the system settings" },
         { id: "NodeExcludedByService", label: "Left out by the agent service's own rule" },

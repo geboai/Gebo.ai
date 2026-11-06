@@ -14,7 +14,7 @@
 </p-blockUI>
 <p-panel id="MainPanel" gebo-ai-label #toolingPanel header="Chat pipeline configurations">
   <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
-  <p id="IntroText" gebo-ai-text>Choose a step of a chat pipeline and the tools its models can call in that pipeline. A step with no tools chosen calls none. Direct chats with a model run outside the pipelines and call no tools.</p>
+  <p id="IntroText" gebo-ai-text>Choose a step of a chat pipeline and the tools its models can call in that pipeline. A step with no tools chosen calls none. The sidebar Chat runs in the open chat pipeline: its agents use the tools of their own configuration. A model's test chat runs outside the pipelines and calls no tools.</p>
   <div class="grid">
     <div class="col-12 md:col-4">
       <p-tree id="PipelinesTree" [value]="nodes" selectionMode="single" [(selection)]="selectedNode"

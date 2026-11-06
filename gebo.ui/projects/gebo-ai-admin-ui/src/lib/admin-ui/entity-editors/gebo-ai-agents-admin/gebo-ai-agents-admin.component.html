@@ -160,6 +160,24 @@
                       </gebo-ai-field>
                     </div>
 
+                    @if (toolCollisions.length) {
+                      <div class="col-12">
+                        <div class="flex flex-column gap-1 p-2 border-round border-1 border-red-500 text-red-500 text-sm">
+                          <span class="flex align-items-center gap-2 font-semibold">
+                            <i class="pi pi-exclamation-triangle"></i>
+                            <span id="ToolCollisionsTitle" gebo-ai-text>Tool name collisions: the tool of the library is used, the crossed out one never reaches the model</span>
+                          </span>
+                          @for (collision of toolCollisions; track $index) {
+                            <span>
+                              <span class="font-semibold">{{collision.toolName}}</span>:
+                              {{collision.libraryDescription || collision.libraryTypeId}} ·
+                              <span class="line-through">{{collision.shadowedDescription || collision.shadowedSourceId || collision.shadowedLibraryTypeId}}</span>
+                            </span>
+                          }
+                        </div>
+                      </div>
+                    }
+
                     @if (formGroup.controls['subscribeAllTools'].value) {
                       <div class="col-12">
                         <gebo-ai-field id="excludedToolSources" label="Tool sources left out"

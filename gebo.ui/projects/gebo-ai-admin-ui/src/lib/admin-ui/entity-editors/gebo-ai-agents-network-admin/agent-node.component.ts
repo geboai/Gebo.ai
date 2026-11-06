@@ -125,6 +125,13 @@ import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
                     [pTooltip]="parent.text('NodeSelectedToolsTooltip')" tooltipPosition="top" appendTo="body">SELECTED</span>
                 }
               </div>
+              @if (mounted.collisions?.length) {
+                <span class="flex align-items-center gap-1 text-xs text-red-500" [pTooltip]="collisionsTooltip(mounted)"
+                  tooltipPosition="top" appendTo="body">
+                  <i class="pi pi-exclamation-triangle"></i>
+                  <span id="NodeToolCollisions" gebo-ai-text>Tool name collisions</span> ({{mounted.collisions?.length}})
+                </span>
+              }
               @if (mounted.tools?.length) {
                 <div class="flex flex-wrap gap-1">
                   @for (tool of visibleTools(mounted); track tool.name) {
@@ -252,6 +259,13 @@ export class AgentNodeComponent implements NgDiagramNodeTemplate<AgentNetworkPar
             groups.push({ reason: "UNKNOWN", title: this.parent.text("NodeExcludedUnknown"), tools: untold });
         }
         return groups.filter(group => group.tools.length > 0);
+    }
+
+    /** What the administrator is told of the tools replaced by the ones of a library: the name, who wins, who loses. */
+    protected collisionsTooltip(mounted: AgentMountedTools): string {
+        const collisions = (mounted.collisions || []).map(x => x.toolName + ": " + (x.libraryDescription || x.libraryTypeId)
+            + " > " + (x.shadowedDescription || x.shadowedSourceId || x.shadowedLibraryTypeId));
+        return [this.parent.text("NodeToolCollisionsTooltip"), ...collisions].join(" - ");
     }
 
     protected toolTooltip(tool: MountedTool): string {

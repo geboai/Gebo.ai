@@ -458,7 +458,7 @@
     },
     "GeboAIChatPipelinesToolingWizardComponent": {
       "MainPanel": { "label": "Chat pipeline configurations" },
-      "IntroText": { "label": "Choose a step of a chat pipeline and the tools its models can call in that pipeline. A step with no tools chosen calls none. Direct chats with a model run outside the pipelines and call no tools." },
+      "IntroText": { "label": "Choose a step of a chat pipeline and the tools its models can call in that pipeline. A step with no tools chosen calls none. The sidebar Chat runs in the open chat pipeline: its agents use the tools of their own configuration. A model's test chat runs outside the pipelines and calls no tools." },
       "chatModelFunctions": { "label": "Chat model tools", "help": "The tools the chat model of this step can call" },
       "serviceModelFunctions": { "label": "Service model tools", "help": "The tools the service model of this step can call" },
       "ChatModelNotUsed": { "label": "This step does not use the chat model" },
@@ -4784,6 +4784,7 @@
       "warnSystemAgent": {
         "label": "This is a default system agent, you cannot change its configuration"
       },
+      "ToolCollisionsTitle": { "label": "Tool name collisions: the tool of the library is used, the crossed out one never reaches the model" },
       "CopyBtn": { "label": "Copy" },
       "CopyConfirmation": {
         "message": "The changes not saved are not copied and will be lost: copy the saved agent?",
@@ -5629,6 +5630,8 @@
       "NodeToolsNotCalledTooltip": {
         "label": "These tools are mounted, but this participant is told not to call them"
       },
+      "NodeToolCollisions": { "label": "Tool name collisions" },
+      "NodeToolCollisionsTooltip": { "label": "The tool of the library is used, the other one never reaches the model" },
       "NodeAutoMountingTooltip": {
         "label": "Auto mounting: every registered tool"
       },
