@@ -170,6 +170,12 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
     private systemEditor?: any;
     private userEditor?: any;
     private toolsResultsEditor?: any;
+    /**
+     * Whether the templates are read-only. The Monaco wrapper of a disabled control
+     * stays read-only once it was so and never tells a live editor: the editors are
+     * told here, when they are made and whenever the control changes.
+     */
+    private readOnly: boolean = false;
 
     /** Monaco decoration ids currently applied to each editor. */
     private systemDecorationIds: string[] = [];
@@ -430,6 +436,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
      */
     onSystemEditorInit(editor: any): void {
         this.systemEditor = editor;
+        this.applyReadOnly(this.systemEditor);
         this.applyDecorations(this.systemEditor);
     }
 
@@ -439,6 +446,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
      */
     onUserEditorInit(editor: any): void {
         this.userEditor = editor;
+        this.applyReadOnly(this.userEditor);
         this.applyDecorations(this.userEditor);
     }
 
@@ -448,7 +456,12 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
      */
     onToolsResultsEditorInit(editor: any): void {
         this.toolsResultsEditor = editor;
+        this.applyReadOnly(this.toolsResultsEditor);
         this.applyDecorations(this.toolsResultsEditor);
+    }
+
+    private applyReadOnly(editor: any): void {
+        editor?.updateOptions({ readOnly: this.readOnly });
     }
 
     /** Whether a decoration pass is running, and the editors still to decorate. */
@@ -559,6 +572,10 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
      * @param isDisabled whether the editor should be read-only
      */
     setDisabledState(isDisabled: boolean): void {
+        this.readOnly = isDisabled;
+        this.applyReadOnly(this.systemEditor);
+        this.applyReadOnly(this.userEditor);
+        this.applyReadOnly(this.toolsResultsEditor);
         if (isDisabled) {
             this.formGroup.disable({ emitEvent: false });
         } else {
