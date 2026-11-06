@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -130,6 +132,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final GeboPromptsParametersCacheConfig promptsParamsCacheConfig;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final DefaultPipelineSharedPromptParamsManager paramsManager;
+	/** Tells the tools of the tool using step: this router offers that route with them. */
+	private final IPipelineStepModelsService stepModels;
 	private final DefaultPipelineStreamingDelegatedStepServiceImpl chatAgentService;
 	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
@@ -140,6 +144,27 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	public StepExecutorType getExecutorType() {
 
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Rewrites the user request and decides which step answers it: its tools are offered on both calls.");
+	}
+
+	@Override
+	public List<String> getReachableStepIds() {
+		return List.of(DefaultRagStreamingOutputChatPipelineStepServiceImpl.DEFAULT_RAG_STEP,
+				DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl.DEFAULT_DEEPSEARCH_STREAMING,
+				DefaultToolUsingStreamingOutputChatPipelineServiceImpl.DEFAULT_TOOL_USING_STREAMING,
+				DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING,
+				DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE,
+				DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.IMAGE_GENERATION_STREAMING_SERVICE,
+				DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT);
 	}
 
 	@Override
@@ -298,7 +323,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	}
 
 	private RoutingDecision doDecideRoute(ISinkUIEmitter emitter, ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions,
+			IGConfigurableChatModel serviceModel, String latestInteractions,
 			String rewrited_query) throws GeboChatSessionLifecycleException, LLMConfigException {
 		notifyUser(emitter, CHOOSING_AGENTIC_FLOW, CHOOSING_AGENTIC_FLOW_DESCRIPTION, null, 2000l,
 				NotificationType.INFO);
@@ -320,7 +345,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 							.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
 					Map<String, Object> templateParams = new HashMap<String, Object>();
 
-					String toolsList = paramsManager.toolsListPromptPart(chatModel);
+					String toolsList = paramsManager.toolsListPromptPart(stepModels.chatModelFunctions(
+							runtimeData.getPipelineCode(),
+							DefaultToolUsingStreamingOutputChatPipelineServiceImpl.DEFAULT_TOOL_USING_STREAMING));
 					String internalKnowledgeBaseCatalog = ragInternalKnowledgeBasePromptPart(knowledgeBases);
 					String deepSearchDataSources = deepSearchDataSourcesListPromptPart(knowledgeBases);
 					templateParams.put(
@@ -542,7 +569,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 								.length() > 0) {
 					rd = doHandleUserRequestedRouting(emitter, runtimeData);
 				} else {
-					rd = doDecideRoute(emitter, runtimeData, chatModel, serviceModel, latestInteractions,
+					rd = doDecideRoute(emitter, runtimeData, serviceModel, latestInteractions,
 							rewrited_query);
 				}
 			}

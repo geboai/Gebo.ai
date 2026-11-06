@@ -366,9 +366,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/** The tools of the search sources (see {@link #EVIDENCE_TOOL_SOURCES}) the agent model mounts. */
 	protected MountedSearchTools searchTools(IGConfigurableChatModel<?> agentModel) {
-		final List<String> enabled = agentModel != null && agentModel.getConfig() != null
-				? agentModel.getConfig().getEnabledFunctions()
-				: null;
+		final List<String> enabled = agentModel != null ? agentModel.getToolNames() : null;
 		if (enabled == null || enabled.isEmpty() || toolsRepositoryPattern == null) {
 			return new MountedSearchTools(Set.of(), Set.of());
 		}

@@ -24,6 +24,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.pipelines.config.ChatPipelinesConfiguration;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineStepServiceRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IGRequestUnderstandingService;
 
@@ -38,7 +39,7 @@ class ChatPipelinesExecutorToolCallingTest {
 				mock(ChatPipelinesConfiguration.class), mock(IGChatFullSessionStateService.class),
 				mock(IGChatSessionLifeCycleService.class), mock(ChatProfilesRepository.class),
 				mock(IGeboThreadManager.class), mock(IGRequestUnderstandingService.class),
-				new GeboToolCallingManagerFactory());
+				new GeboToolCallingManagerFactory(), mock(IPipelineStepModelsService.class));
 	}
 
 	@Test

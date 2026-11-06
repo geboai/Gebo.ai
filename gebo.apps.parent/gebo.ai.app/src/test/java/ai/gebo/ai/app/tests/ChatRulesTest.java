@@ -363,7 +363,6 @@ public class ChatRulesTest extends AbstractBaseTestLLmsIntegrationTests {
 		prompt.setUserPromptTemplate("{" + IChatRequestContext.USER_QUESTION_PROMPT_PARAM + "}");
 		prompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		prompt.setContextDocuments(ContextContentRequired.NOT_REQUIRED);
-		prompt.setToolsCalling(ContextContentRequired.NOT_REQUIRED);
 		return prompt;
 	}
 

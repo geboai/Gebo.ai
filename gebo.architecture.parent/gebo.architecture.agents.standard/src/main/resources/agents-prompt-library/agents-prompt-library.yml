@@ -7,7 +7,6 @@ ai.gebo.agents.prompts.library:
     agentId: controllerAgent
     chatHistory: REQUIRED
     contextDocuments: REQUIRED
-    toolsCalling: REQUIRED
   - promptUse: report-answer-writer-agent-prompt
     langCode: en
     systemReference: /agents-prompt-library/en/report-answer-writer-agent-system-prompt.txt
@@ -16,7 +15,6 @@ ai.gebo.agents.prompts.library:
     agentId: ReportWriterNetworkAgentService
     chatHistory: REQUIRED
     contextDocuments: NOT_REQUIRED
-    toolsCalling: NOT_REQUIRED
   - promptUse: tool-calling-agent-prompt
     langCode: en
     systemReference: /agents-prompt-library/en/tool-calling-agent-system-prompt.txt
@@ -25,14 +23,12 @@ ai.gebo.agents.prompts.library:
     agentId: toolCallingAgentService
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
-    toolsCalling: REQUIRED
   - promptUse: report-evidence-extractor-prompt
     langCode: en
     systemReference: /agents-prompt-library/en/report-evidence-extractor-system-prompt.txt
     userReference: /agents-prompt-library/en/report-evidence-extractor-user-prompt.txt
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
-    toolsCalling: NOT_REQUIRED
   - promptUse: default-chat-agent-prompt
     langCode: en
     agentId: AgenticLoopNetworkAgentService
@@ -42,7 +38,6 @@ ai.gebo.agents.prompts.library:
     toolsResultsReference: /agents-prompt-library/en/default-chat-agent-tools-results-prompt.txt
     chatHistory: REQUIRED
     contextDocuments: REQUIRED
-    toolsCalling: REQUIRED
     description: Default Chat Agent prompt
   - promptUse: pure-chat-agent-prompt
     langCode: en
@@ -53,7 +48,6 @@ ai.gebo.agents.prompts.library:
     toolsResultsReference: /agents-prompt-library/en/pure-chat-agent-tools-results-prompt.txt
     chatHistory: REQUIRED
     contextDocuments: REQUIRED
-    toolsCalling: REQUIRED
     description: Chat Agent prompt for the chats without knowledge base
 ai.gebo.agents.prompts.uses:
   - code: default-chat-agent-prompt

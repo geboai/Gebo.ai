@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
-import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -112,7 +111,6 @@ public class GeboLLMSSetupService {
 	private final IGTranscriptModelRuntimeConfigurationDao transcriptModelsRuntimeDao;
 	private final IGTranscriptModelConfigurationSupportServiceRepositoryPattern transcriptModelsSupportRepo;
 	private final LLMSVendorsSetupConfig vendorsSetupConfig;
-	private final IGToolCallbackSourceRepositoryPattern toolsRepo;
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
 
 	// Takes an already-created SecurityEvent (never calls newSecurityEvent()
@@ -708,14 +706,13 @@ public class GeboLLMSSetupService {
 					if (autoconfiguredata.getDefaultChatModel() != null
 							&& autoconfiguredata.getDefaultChatModel().trim().length() > 0) {
 						LLMCreateModelData modelData = createChatModel(secretId, vendorData,
-								autoconfiguredata.getDefaultChatModel(), true, true, ChatModelsUses.CHAT);
+								autoconfiguredata.getDefaultChatModel(), true, ChatModelsUses.CHAT);
 						configs.add(modelData);
 					}
 					if (autoconfiguredata.getInternalServicesModel() != null
 							&& autoconfiguredata.getInternalServicesModel().trim().length() > 0) {
 						LLMCreateModelData modelData = createChatModel(secretId, vendorData,
-								autoconfiguredata.getInternalServicesModel(), false, false,
-								ChatModelsUses.INTERNAL_SERVICES);
+								autoconfiguredata.getInternalServicesModel(), false, ChatModelsUses.INTERNAL_SERVICES);
 						configs.add(modelData);
 					}
 
@@ -789,7 +786,6 @@ public class GeboLLMSSetupService {
 
 	private LLMCreateModelData createModel(String secretId, LLMSVendor vendorData, String model, ModelType type) {
 		LLMCreateModelData md = new LLMCreateModelData();
-		md.setEnableAllFunctions(false);
 		md.setModelCode(model);
 		md.setSecretId(secretId);
 		LLMSModelsPresets preset = vendorData.getPresets().stream().filter(x -> x.getType() == type).toList().get(0);
@@ -802,7 +798,6 @@ public class GeboLLMSSetupService {
 
 	private LLMCreateModelData createEmbeddingModel(String secretId, LLMSVendor vendorData, String embeddingModel) {
 		LLMCreateModelData md = new LLMCreateModelData();
-		md.setEnableAllFunctions(false);
 		md.setModelCode(embeddingModel);
 		md.setSecretId(secretId);
 		LLMSModelsPresets embeddingPreset = vendorData.getPresets().stream()
@@ -816,9 +811,8 @@ public class GeboLLMSSetupService {
 	}
 
 	private LLMCreateModelData createChatModel(String secretId, LLMSVendor vendorData, String chatModel,
-			boolean defaultModel, boolean enableAllFunctions, ChatModelsUses use) {
+			boolean defaultModel, ChatModelsUses use) {
 		LLMCreateModelData md = new LLMCreateModelData();
-		md.setEnableAllFunctions(enableAllFunctions);
 		md.setModelCode(chatModel);
 		md.setSecretId(secretId);
 		LLMSModelsPresets chatPreset = vendorData.getPresets().stream().filter(x -> x.getType() == ModelType.CHAT)
@@ -1096,13 +1090,6 @@ public class GeboLLMSSetupService {
 					}
 					if (config.getThinking() != null) {
 						configuration.setThinking(config.getThinking());
-					}
-					if (config.getEnableAllFunctions() != null && config.getEnableAllFunctions()) {
-						List<ToolCallback> tools = this.toolsRepo.getTools();
-						List<String> names = tools.stream().map(x -> {
-							return x.getToolDefinition().name();
-						}).toList();
-						configuration.setEnabledFunctions(names);
 					}
 					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {

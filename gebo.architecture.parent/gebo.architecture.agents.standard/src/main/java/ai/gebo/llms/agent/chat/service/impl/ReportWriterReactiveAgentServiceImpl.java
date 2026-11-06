@@ -655,8 +655,9 @@ public class ReportWriterReactiveAgentServiceImpl
 										window.get(AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)))
 								+ " (tok)");
 					}
-					String extraction = agentModel.textResponse(extractorPrompt, window, chatRequestContext,
-							toolCalling);
+					// the evidence is read from the text given: tools have nothing to add
+					String extraction = agentModel.withoutTools().textResponse(extractorPrompt, window,
+							chatRequestContext, toolCalling);
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Extracted the evidence of window " + number + " of " + windows.size()
 								+ " into " + ITokensCountable.stringsTokensSize(extraction) + " (tok), relevant:"

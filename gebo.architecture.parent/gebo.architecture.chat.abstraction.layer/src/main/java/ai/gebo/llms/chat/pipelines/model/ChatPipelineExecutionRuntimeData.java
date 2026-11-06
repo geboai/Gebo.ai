@@ -28,6 +28,11 @@ public class ChatPipelineExecutionRuntimeData {
 				streamingOutput, requestResources, minimalChatContext, toolCalling);
 	}
 
+	/** The code of the pipeline of this run; null for a run outside a pipeline. */
+	public String getPipelineCode() {
+		return configuration != null ? configuration.getCode() : null;
+	}
+
 	private final ChatPipelineConfiguration configuration;
 	private final int contextWindowSize;
 	private int remainingTokens = 0;

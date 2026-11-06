@@ -33,6 +33,7 @@ import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
@@ -58,9 +59,15 @@ class DeepSearchReductionTest {
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao = mock(IGChatModelRuntimeConfigurationDao.class);
 	private final IGConfigurableChatModel serviceModel = mock(IGConfigurableChatModel.class);
 	private final IGConfigurableChatModel agentModel = mock(IGConfigurableChatModel.class);
+	private final IGConfigurableChatModel agentModelWithoutTools = mock(IGConfigurableChatModel.class);
 	private final DeepSearchToolsSupport support = mock(DeepSearchToolsSupport.class);
 
 	private DeepSearchToolsSupport support() {
+		try {
+			when(agentModel.withoutTools()).thenReturn(agentModelWithoutTools);
+		} catch (LLMConfigException e) {
+			throw new IllegalStateException(e);
+		}
 		when(support.analysis()).thenReturn(analysis);
 		when(support.chatModelsDao()).thenReturn(chatModelsDao);
 		when(support.maxAnalysisTokens()).thenReturn(16000);
@@ -137,7 +144,7 @@ class DeepSearchReductionTest {
 		ArgumentCaptor<IChatRequestContext> analysed = ArgumentCaptor.forClass(IChatRequestContext.class);
 		ArgumentCaptor<String> note = ArgumentCaptor.forClass(String.class);
 		verify(analysis).analyze(any(), analysed.capture(), any(), eq(DeliverableIntent.ANALISYS), note.capture(),
-				eq(agentModel), eq(serviceModel), any(), any(), any(), any());
+				eq(agentModelWithoutTools), eq(serviceModel), any(), any(), any(), any());
 		assertEquals("the command", analysed.getValue().getActualUserRequest());
 		assertEquals("req-1", analysed.getValue().getRequestID());
 		assertEquals("it", analysed.getValue().getUserLanguage());
@@ -167,6 +174,31 @@ class DeepSearchReductionTest {
 	void noAnalysisWithoutAServiceModel() {
 		support();
 		when(chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES)).thenReturn(null);
+
+		DeepSearchReduction.Outcome outcome = DeepSearchReduction.reduce(support, "searcher", "the command",
+				Depth.BROAD, List.of(fragment("f1", "docA")), null, agentModel, null, null, TOOL_CALLING);
+
+		assertFalse(outcome.hasAnalysis());
+	}
+
+	@Test
+	void theAnalysisRunsOnTheAgentModelWithoutItsTools() throws Exception {
+		support();
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("chat:r1").build();
+		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(),
+				same(toolCalling))).thenReturn(Flux.just("The analysis"));
+
+		DeepSearchReduction.reduce(support, "searcher", "the command", Depth.BROAD, List.of(fragment("f1", "docA")),
+				mock(IChatRequestContext.class), agentModel, mock(ReactiveIdentityUtil.class), null, toolCalling);
+
+		verify(analysis).analyze(any(), any(), any(), any(), anyString(), same(agentModelWithoutTools), any(), any(),
+				any(), any(), same(toolCalling));
+	}
+
+	@Test
+	void noAnalysisWhenTheModelCannotRunWithoutItsTools() throws Exception {
+		support();
+		when(agentModel.withoutTools()).thenThrow(new LLMConfigException("no copy"));
 
 		DeepSearchReduction.Outcome outcome = DeepSearchReduction.reduce(support, "searcher", "the command",
 				Depth.BROAD, List.of(fragment("f1", "docA")), null, agentModel, null, null, TOOL_CALLING);

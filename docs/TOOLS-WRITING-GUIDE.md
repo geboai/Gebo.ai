@@ -97,9 +97,13 @@ Java `toString()`. Size results on that (section 6).
 
 A tool is **never mounted by being a bean**: something has to enable it by name.
 
-1. **A chat model's own tools.** A model configuration lists its tools in
-   `enabledFunctions` (`GBaseChatModelConfig`). `prepareCall` declares them on
-   every call of that model whose prompt requires tools.
+1. **A step of a chat pipeline.** The admin sets, in the "Chat pipeline
+   configurations" setup section, the tools of the chat model and of the service
+   model of each step, per pipeline (`GPipelineStepToolingConfig`). The executor
+   runs the step on clones of the models carrying them
+   (`IPipelineStepModelsService`); a step with none runs on the models as they are.
+   A configured chat model has no tools of its own, so a direct chat with a model
+   calls none. A call that must not use tools runs on `withoutTools()`.
 2. **An agent's tools.** An agent declares its tools by name; an agent with
    `subscribeAllTools` mounts every registered tool, except the ones in
    `ai.gebo.agents.tools.auto-mounting.excluded-tools` /
@@ -505,11 +509,6 @@ answer; what it wants to keep it writes in the optional `notesForLater`, saved o
 the condition, given back with the answer and never shown to the user: the called
 functions of a response leave it out. Tell the model to write the values themselves:
 told only "write what you need", it notes that it has them.
-
-A prompt with `toolsCalling: NOT_REQUIRED` offers the model no tools at all, library tools
-included, whatever the agent mounts; only the tools the controlling software makes mandatory
-stay. The agent editor warns of an agent in that situation. To let such an agent use its tools,
-set the prompt to `REQUIRED`: a saved copy of a prompt keeps the value it was copied with.
 
 ```java
 // the tool

@@ -110,7 +110,7 @@ class SearcherDeepSearchDeliveryTest {
 		persona.setAgentConfigCode("searcher");
 
 		List<Document> delivered = searcher.deliverDocuments(fragments, command(true, SearchAgentCommand.DeepSearchDepth.BROAD),
-				null, mock(IGConfigurableChatModel.class), session, persona, null, null, notices, TOOL_CALLING);
+				null, toolFreeModel(), session, persona, null, null, notices, TOOL_CALLING);
 
 		assertEquals(1, delivered.size(), "one analysis instead of the fragments");
 		Document analysisDocument = delivered.get(0);
@@ -196,5 +196,11 @@ class SearcherDeepSearchDeliveryTest {
 		assertSame(fragments, delivered);
 		assertEquals(1, notices.size());
 		assertTrue(notices.get(0).contains("could not be run"), notices.get(0));
+	}
+
+	private static IGConfigurableChatModel toolFreeModel() throws Exception {
+		final IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		when(model.withoutTools()).thenReturn(model);
+		return model;
 	}
 }

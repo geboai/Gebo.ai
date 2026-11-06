@@ -228,8 +228,13 @@ class GeboToolCallingTest {
 			this.providerModel = model;
 			this.config = new GBaseChatModelConfig();
 			this.config.setCode("preparing-model");
-			this.config.setEnabledFunctions(List.of("configured"));
+			this.toolNames = List.of("configured");
 			this.chatClient = ChatClient.builder(model).build();
+		}
+
+		PreparingModel withNoTools() {
+			this.toolNames = List.of();
+			return this;
 		}
 
 		@Override
@@ -266,14 +271,13 @@ class GeboToolCallingTest {
 		return runAs;
 	}
 
-	private static GPromptTemplateConfig prompt(ContextContentRequired toolsCalling) {
+	private static GPromptTemplateConfig prompt() {
 		final GPromptTemplateConfig prompt = new GPromptTemplateConfig();
 		prompt.setPromptUse("test");
 		prompt.setSystemPromptTemplate("You answer.");
 		prompt.setUserPromptTemplate("{question}");
 		prompt.setChatHistory(ContextContentRequired.NOT_REQUIRED);
 		prompt.setContextDocuments(ContextContentRequired.NOT_REQUIRED);
-		prompt.setToolsCalling(toolsCalling);
 		return prompt;
 	}
 
@@ -288,18 +292,20 @@ class GeboToolCallingTest {
 	}
 
 	@Test
-	void theMandatoryToolsAreDeclaredWhateverThePromptSaysWithTheProviderAndTheLoop() {
+	void theMandatoryToolsAreDeclaredWhateverToolsTheModelHasWithTheProviderAndTheLoop() {
 		final IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
 		final List<ToolCallback> configured = List.of(tool("configured"));
-		when(repository.getTools(any())).thenReturn(configured);
+		when(repository.getTools(any()))
+				.thenAnswer(call -> ((List<?>) call.getArgument(0)).isEmpty() ? List.of() : configured);
 		final PreparingModel model = new PreparingModel(repository, modelAnswering(round -> text("ok")));
+		final PreparingModel noTools = new PreparingModel(repository, modelAnswering(round -> text("ok")))
+				.withNoTools();
 		final Asked asked = new Asked();
 		final GeboToolCalling toolCalling = GeboToolCalling.builder().provide(Askable.class, asked)
 				.mandatoryTool(askingTool(true)).caller("agent-1").build();
 
-		// a prompt without tools: the mandatory one is declared all the same
-		RequestSpec spec = model.prepareCall(prompt(ContextContentRequired.NOT_REQUIRED), Map.of(), context(),
-				runningInPlace(), toolCalling);
+		// a model without tools: the mandatory one is declared all the same
+		RequestSpec spec = noTools.prepareCall(prompt(), Map.of(), context(), runningInPlace(), toolCalling);
 		DefaultChatClientRequestSpec request = (DefaultChatClientRequestSpec) spec.getRequestSpec();
 		assertEquals(List.of("askAPerson"), names(request.getToolCallbacks()));
 		assertTrue(request.getToolCallbacks().get(0) instanceof RunAsToolCallback, "wrapped as every tool is");
@@ -311,14 +317,13 @@ class GeboToolCallingTest {
 		assertEquals(1, request.getAdvisors().stream().filter(Advisor.class::isInstance)
 				.filter(a -> a.getName().contains("Tool Calling")).count(), "one tool calling loop");
 
-		// a prompt with tools: the configured ones and the mandatory one
-		spec = model.prepareCall(prompt(ContextContentRequired.REQUIRED), Map.of(), context(), runningInPlace(),
-				toolCalling);
+		// a model with tools: the configured ones and the mandatory one
+		spec = model.prepareCall(prompt(), Map.of(), context(), runningInPlace(), toolCalling);
 		request = (DefaultChatClientRequestSpec) spec.getRequestSpec();
 		assertEquals(List.of("configured", "askAPerson"), names(request.getToolCallbacks()));
 
 		// a plain call: as before, nothing of the above
-		spec = model.prepareCall(prompt(ContextContentRequired.NOT_REQUIRED), Map.of(), context(), runningInPlace());
+		spec = noTools.prepareCall(prompt(), Map.of(), context(), runningInPlace());
 		request = (DefaultChatClientRequestSpec) spec.getRequestSpec();
 		assertTrue(request.getToolCallbacks().isEmpty());
 		assertNull(request.getToolContext().get(GeboToolCalling.CONTEXT_KEY));
@@ -333,7 +338,7 @@ class GeboToolCallingTest {
 		final PreparingModel model = new PreparingModel(repository, modelAnswering(round -> text("ok")));
 		final ToolCallback bound = tool("configured");
 		final GeboToolCalling toolCalling = GeboToolCalling.builder().mandatoryTool(bound).build();
-		final RequestSpec spec = model.prepareCall(prompt(ContextContentRequired.REQUIRED), Map.of(), context(),
+		final RequestSpec spec = model.prepareCall(prompt(), Map.of(), context(),
 				runningInPlace(), toolCalling);
 		final DefaultChatClientRequestSpec request = (DefaultChatClientRequestSpec) spec.getRequestSpec();
 		assertEquals(List.of("configured"), names(request.getToolCallbacks()), "declared once");
@@ -349,7 +354,7 @@ class GeboToolCallingTest {
 		final GeboToolCalling toolCalling = GeboToolCalling.builder().provide(Askable.class, asked)
 				.mandatoryTool(askingTool(false)).build();
 		// the model runs as whoever calls: the identity is the test's, in place
-		final String answer = model.textResponse(prompt(ContextContentRequired.NOT_REQUIRED), Map.of(), context(),
+		final String answer = model.textResponse(prompt(), Map.of(), context(),
 				toolCalling);
 		assertEquals("after the ask", answer);
 		assertEquals(List.of("ready?"), asked.questions);
@@ -370,7 +375,7 @@ class GeboToolCallingTest {
 				.consolidatedHistory("").interactions(List.of()).documents(List.of()).toolsContext(Map.of())
 				.pipelineInfos(Map.of()).toolCallListener(ofTheRequest).build();
 
-		model.textResponse(prompt(ContextContentRequired.NOT_REQUIRED), Map.of(), context, toolCalling);
+		model.textResponse(prompt(), Map.of(), context, toolCalling);
 
 		assertEquals(1, ofTheRequest.getCalls().size(), "the request's recorder keeps recording");
 		assertEquals(1, ofTheRun.getCalls().size(), "the run's recorder records as well");

@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -71,7 +72,7 @@ class ChatToolCallingTest {
 						mock(IGTextToSpeechModelRuntimeConfigurationDao.class),
 						mock(IGTranscriptModelRuntimeConfigurationDao.class),
 						mock(IGSecurityAuditLoggerService.class), (ObjectProvider<IGChatAgentsToolsDescriber>) null,
-						factory).defaultAnswer(Answers.CALLS_REAL_METHODS));
+						factory, mock(IPipelineStepModelsService.class)).defaultAnswer(Answers.CALLS_REAL_METHODS));
 	}
 
 	private static GChatAnswer answer(String text) {

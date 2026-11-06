@@ -1,5 +1,6 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -176,6 +177,16 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	public StepExecutorType getExecutorType() {
 
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.notUsed();
 	}
 
 	@Override

@@ -100,7 +100,7 @@ class AdditionalToolsDeclarationTest {
 		when(repository.getTools(anyList())).thenReturn(List.of(searchWeb));
 		DeclaringModel model = new DeclaringModel(repository, mock(IChatModelUsageAdvisorFactory.class));
 		model.config = new GBaseChatModelConfig();
-		model.config.setEnabledFunctions(List.of("searchWeb"));
+		model.toolNames = List.of("searchWeb");
 
 		assertEquals(List.of("searchWeb"), names(model.wrapTools(mock(ReactiveIdentityUtil.class), null)));
 	}

@@ -528,12 +528,9 @@ class AgenticLoopReactiveAgentServiceTest {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
 				null, null, null, NO_RENDERER);
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
-		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
-				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
 		// deepSearchWeb is not mounted by this agent
-		when(config.getEnabledFunctions()).thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase",
+		when(model.getToolNames()).thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase",
 				"getDate", GAbstractGenericalAgentService.NOTIFY_USER_TOOL));
-		when(model.getConfig()).thenReturn(config);
 
 		assertEquals(Set.of("deepSearchKnowledgeBase"), agent.evidenceTools(DeliverableIntent.ANALISYS, model));
 		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"),
@@ -554,11 +551,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
 				null, null, null, NO_RENDERER);
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
-		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
-				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
-		when(config.getEnabledFunctions()).thenReturn(List.of("deepSearchKnowledgeBase",
+		when(model.getToolNames()).thenReturn(List.of("deepSearchKnowledgeBase",
 				"browseKnowledgeBaseDocuments", "getKnowledgeBaseDocumentContents"));
-		when(model.getConfig()).thenReturn(config);
 
 		assertEquals(Set.of("deepSearchKnowledgeBase", "getKnowledgeBaseDocumentContents"),
 				agent.evidenceTools(DeliverableIntent.ANALISYS, model));
@@ -584,11 +578,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
 				null, null, null, NO_RENDERER);
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
-		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
-				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
-		when(config.getEnabledFunctions())
+		when(model.getToolNames())
 				.thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase", "countArticles"));
-		when(model.getConfig()).thenReturn(config);
 
 		AgenticLoopReactiveAgentServiceImpl.MountedSearchTools mounted = agent.searchTools(model);
 		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"), mounted.searches(),

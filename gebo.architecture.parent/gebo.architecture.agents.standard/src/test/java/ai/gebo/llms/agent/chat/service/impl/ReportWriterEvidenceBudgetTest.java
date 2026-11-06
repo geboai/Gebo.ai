@@ -117,6 +117,7 @@ class ReportWriterEvidenceBudgetTest {
 	@Test
 	void extractionsOverTheFinalBudgetAreReducedAgainWithTheExtractionPrompt() throws Exception {
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		when(model.withoutTools()).thenReturn(model);
 		GPromptTemplateConfig extractorPrompt = new GPromptTemplateConfig();
 		AtomicInteger calls = new AtomicInteger();
 		when(model.textResponse(any(), any(), any(), any())).thenAnswer(invocation -> {
@@ -147,6 +148,7 @@ class ReportWriterEvidenceBudgetTest {
 	@Test
 	void extractionsWithinTheFinalBudgetAreNotReduced() throws Exception {
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		when(model.withoutTools()).thenReturn(model);
 		List<String> extractions = List.of("- fact one [a]", "- fact two [b]");
 
 		List<String> reduced = writer().reduceExtractions(extractions, 10_000, 5_000, new HashMap<>(), model,

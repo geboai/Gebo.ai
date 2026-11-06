@@ -13,8 +13,6 @@ public class GPromptTemplateLibraryReference {
 	private ContextContentRequired chatHistory = null;
 	@NotNull
 	private ContextContentRequired contextDocuments = null;
-	@NotNull
-	private ContextContentRequired toolsCalling = null;
 	private String langCode = null;
 	private String modelProvider = null;
 	private String modelCode = null;

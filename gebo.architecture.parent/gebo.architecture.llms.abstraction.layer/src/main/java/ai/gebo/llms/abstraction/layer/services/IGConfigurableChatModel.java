@@ -233,5 +233,17 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 
 	public IGConfigurableChatModel<ModelConfig> cloneWithOptions(String codePrefix,
 			ChatModelConfigOptions configOptions) throws LLMConfigException;
+
+	/** The names of the tools this model declares: a configured model has none, a clone those it was given. */
+	public List<String> getToolNames();
+
+	/**
+	 * This model offering no tools, for a call that must not use any: a copy enabling
+	 * none, made once and kept, or this very model when it has no tools to leave out.
+	 * Everything else stays as it is, the code included, so the use of the copy is
+	 * recorded on this model.
+	 */
+	public IGConfigurableChatModel<ModelConfig> withoutTools() throws LLMConfigException;
+
 	public List<ToolCallback> wrapTools(ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener);
 }

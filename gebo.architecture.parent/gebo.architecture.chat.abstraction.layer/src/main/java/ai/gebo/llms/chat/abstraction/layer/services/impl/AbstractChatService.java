@@ -68,6 +68,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.AgentToolsInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.model.GeboChatUserInfo;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
@@ -117,6 +118,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	final protected ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber;
 	/** Builds what the chat adds to every model call made for a request (see {@link #toolCallingOf}). */
 	final protected GeboToolCallingManagerFactory toolCallingFactory;
+	/** Tells the tools configured for the steps of a pipeline, which the users are shown. */
+	final protected IPipelineStepModelsService stepModels;
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
 
 	// The llmInvokeChat audit event of every model call is written by the usage
@@ -133,7 +136,8 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 * @throws LLMConfigException if the model configuration is not found
 	 */
 	@Override
-	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException {
+	public GeboChatUserInfo getChatModelUserInfo(String modelCode, String pipelineCode)
+			throws GeboChatException, LLMConfigException {
 		IGConfigurableChatModel model = chatModelConfigurations.findByCode(modelCode);
 		if (model == null) {
 			throw new LLMConfigException("Chat model: " + modelCode + " does not exist");
@@ -141,11 +145,15 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 		GBaseChatModelConfig config = (GBaseChatModelConfig) model.getConfig();
 		GBaseChatModelChoice choice = (GBaseChatModelChoice) config.getChoosedModel();
 
-		List<String> functions = config.getEnabledFunctions();
-		List<ToolCategoriesTree> trees = callbacksRepoPattern.getEnabledToolsTree(functions);
+		List<ToolCategoriesTree> trees = pipelineCode != null ? pipelineToolsTree(pipelineCode) : List.of();
 		GeboChatUserInfo infos = new GeboChatUserInfo(config.getModelTypeCode(), choice, trees);
 		infos.setAgentsTools(agentsTools(null));
 		return infos;
+	}
+
+	/** The tools the steps of a pipeline can call, as the users are shown them; null is the default pipeline. */
+	protected List<ToolCategoriesTree> pipelineToolsTree(String pipelineCode) {
+		return callbacksRepoPattern.getEnabledToolsTree(stepModels.pipelineFunctions(pipelineCode));
 	}
 
 	/**
@@ -611,12 +619,10 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 	 */
 	protected IGConfigurableChatModel withThinking(IGConfigurableChatModel model, ChatModelThinkingOption thinking)
 			throws LLMConfigException {
-		final List<String> functions = model.getConfig() instanceof GBaseChatModelConfig modelConfig
-				? modelConfig.getEnabledFunctions()
-				: null;
+		final List<String> functions = model.getToolNames();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("withThinking(...) model " + model.getCode() + " with thinking " + thinking + " and "
-					+ (functions != null ? functions.size() : 0) + " enabled function(s)");
+					+ (functions != null ? functions.size() : 0) + " tool(s)");
 		}
 		return model.cloneWithOptions("", new ChatModelConfigOptions(null, null, thinking, functions));
 	}

@@ -151,7 +151,7 @@ class ToolsResultsClosingTest {
 		AdditionalToolsDeclarationTest.DeclaringModel model = new AdditionalToolsDeclarationTest.DeclaringModel(
 				repository, mock(IChatModelUsageAdvisorFactory.class));
 		model.config = new GBaseChatModelConfig();
-		model.config.setEnabledFunctions(List.of("searchWeb"));
+		model.toolNames = List.of("searchWeb");
 
 		List<ToolCallback> closed = model.wrapToolsClosingResults(runningInPlace(), null, CLOSING);
 		List<ToolCallback> open = model.wrapTools(runningInPlace(), null);

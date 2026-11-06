@@ -22,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
@@ -129,7 +130,14 @@ public final class DeepSearchReduction {
 			return Outcome.none(0);
 		}
 		final IGChatModelRuntimeConfigurationDao chatModelsDao = support.chatModelsDao();
-		final IGConfigurableChatModel finalModel = chatModel != null ? chatModel : chatModelsDao.defaultHandler();
+		final IGConfigurableChatModel finalModel;
+		try {
+			// the analysis reads the fragments given: tools have nothing to add
+			finalModel = chatModel != null ? chatModel.withoutTools() : chatModelsDao.defaultHandler();
+		} catch (LLMConfigException e) {
+			LOGGER.error(label + " deep search reduce: the model cannot run without its tools", e);
+			return Outcome.none(found);
+		}
 		final IGConfigurableChatModel serviceModel = chatModelsDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		if (finalModel == null || serviceModel == null) {

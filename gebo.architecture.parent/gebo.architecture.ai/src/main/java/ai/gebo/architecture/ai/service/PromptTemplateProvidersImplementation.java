@@ -112,7 +112,6 @@ public class PromptTemplateProvidersImplementation implements IGStaticPromptsPro
 		}
 		prompt.setChatHistory(reference.getChatHistory());
 		prompt.setContextDocuments(reference.getContextDocuments());
-		prompt.setToolsCalling(reference.getToolsCalling());
 		prompt.setAgentId(reference.getAgentId());
 		prompt.setAgentPrompt(reference.getAgentPrompt());
 		prompt.setDescription(reference.getDescription());
