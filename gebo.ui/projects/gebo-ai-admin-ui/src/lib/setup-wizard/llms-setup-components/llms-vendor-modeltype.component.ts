@@ -5,7 +5,6 @@ import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "primeng/api";
 import { forkJoin, map, Observable, of, Subscription } from "rxjs";
 interface IModelChoice {
-    enableAllFunctions?: boolean;
     setAsDefault?: boolean;
     choosedModel?: string;
 };
@@ -40,7 +39,6 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         baseUrl: new FormControl()
     });
     protected chatModelPresetsFormGroup: FormGroup = new FormGroup({
-        enableAllFunctions: new FormControl(),
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
@@ -73,7 +71,6 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         choosedModel: new FormControl()
     });
     protected chatModelAdvancedFormGroup: FormGroup = new FormGroup({
-        enableAllFunctions: new FormControl(),
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
@@ -501,7 +498,6 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                     baseUrl: providerAccess.baseUrl,
                     doModelsLookup: preset.doModelsLookup === true,
                     secretId: providerAccess.selectedSecret,
-                    enableAllFunctions: modelChoice.enableAllFunctions === true,
                     uses: uses
                 };
                 return out;

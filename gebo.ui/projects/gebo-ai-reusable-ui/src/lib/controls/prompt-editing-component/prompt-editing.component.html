@@ -59,12 +59,6 @@
             </gebo-ai-field>
           </div>
 
-          <div class="col-12 md:col-4">
-            <gebo-ai-field id="toolsCalling" label="Tools calling" placeholder="Select an option" help="Whether tools calling is required by this prompt" [required]="true">
-              <p-select [options]="contextContentOptions" optionLabel="labelCode" optionValue="value" formControlName="toolsCalling" class="w-full" gebo-ai-field-element></p-select>
-            </gebo-ai-field>
-          </div>
-
           <div class="col-12 md:col-3">
             <gebo-ai-field id="langCode" label="Language code" help="Language code this template applies to (e.g. en)">
               <input pInputText id="langCode" formControlName="langCode" gebo-ai-field-element />

@@ -1093,10 +1093,10 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
 
             if (this.chatInfo.chatProfileCode) {
                 menu2BeReloaded = true;
-                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode)];
+                observables = [this.ragChatService.getChatProfileModelMetaInfos(this.chatInfo.chatProfileCode), this.ragChatService.getChatModelUserInfoByChatProfileCode(this.chatInfo.chatProfileCode, this.pipelineId)];
             } else
                 if (this.chatInfo.chatModelCode) {
-                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode)];
+                    observables = [this.chatService.getChatModelMetaInfos(this.chatInfo.chatModelCode), this.chatService.getChatModelUserInfo(this.chatInfo.chatModelCode, this.pipelineId)];
                 }
             if (observables) {
                 this.loadingModelMetaInfo = true;
@@ -1114,14 +1114,14 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
 
             }
             if (this.chatInfo.chatModelCode) {
-                this.chatService.getProviderCapabilities(this.chatInfo.chatModelCode).subscribe({
+                this.chatService.getProviderCapabilities(this.chatInfo.chatModelCode, this.pipelineId).subscribe({
                     next: (capabilities) => {
                         this.capabilities = capabilities;
                     }
 
                 });
             } else if (this.chatInfo.chatProfileCode && this.ragsystem === true) {
-                this.ragChatService.getProfileProviderModelCapabilities(this.chatInfo.chatProfileCode).subscribe({
+                this.ragChatService.getProfileProviderModelCapabilities(this.chatInfo.chatProfileCode, this.pipelineId).subscribe({
                     next: (capabilities) => {
                         this.capabilities = capabilities;
                     }

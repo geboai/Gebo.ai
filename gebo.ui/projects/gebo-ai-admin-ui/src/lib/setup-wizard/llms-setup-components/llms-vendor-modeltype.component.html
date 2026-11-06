@@ -59,13 +59,6 @@
                   gebo-ai-field-element></geboai-editable-listbox-component>
                 </gebo-ai-field>
               </div>
-              <div class="col-6" [formGroup]="chatModelPresetsFormGroup">
-                <gebo-ai-field id="enableAllFunctions" label="enable all function calls"
-                  help="Enable all available tools and function calls, if not set it will possible to enable them later in the llms admin panel">
-                  <p-checkbox formControlName="enableAllFunctions" [binary]="true" gebo-ai-field-element
-                  [trueValue]="true" [falseValue]="false"></p-checkbox>
-                </gebo-ai-field>
-              </div>
             }
             @if (chatPresets.length>0 && showServiceChat) {
               <div class="col-6" [formGroup]="serviceChatModelPresetsFormGroup">
@@ -156,13 +149,6 @@
                 <gebo-ai-field id="chatAdvancedSetAsDefault" label="set as default"
                   help="Set this model as the default chat model (overrides the current one if any).">
                   <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
-                  [trueValue]="true" [falseValue]="false"></p-checkbox>
-                </gebo-ai-field>
-              </div>
-              <div class="col-2" [formGroup]="chatModelAdvancedFormGroup">
-                <gebo-ai-field id="enableAllFunctionsAdv" label="enable all function calls"
-                  help="Enable all available tools and function calls.">
-                  <p-checkbox formControlName="enableAllFunctions" [binary]="true" gebo-ai-field-element
                   [trueValue]="true" [falseValue]="false"></p-checkbox>
                 </gebo-ai-field>
               </div>

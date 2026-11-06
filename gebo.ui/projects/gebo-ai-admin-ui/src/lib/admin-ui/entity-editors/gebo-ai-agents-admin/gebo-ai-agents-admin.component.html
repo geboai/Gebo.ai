@@ -30,11 +30,6 @@
       @if(entity?.readOnly===true) {
         <div ><b id="warnSystemAgent" gebo-ai-text>This is a default system agent, you cannot change its configuration </b></div>
       }
-      @if (mountedToolsNotAllowedByPrompt) {
-        <p-message id="ToolsNotAllowedByPromptWarning" severity="warn" styleClass="w-full mb-2">
-          <span id="ToolsNotAllowedByPromptWarningText" gebo-ai-text>This agent mounts tools or libraries, but its prompt does not allow tools calling: the model will never be offered them. To use them, set Tools calling to REQUIRED in the prompt, customizing it first if it is a standard template.</span>
-        </p-message>
-      }
       <div class="grid geboDialogContent standardTabDialogueHeight">
         <div class="col-12 standardTabDialogueHeight">
           <p-tabs [value]="0" id="TabView">

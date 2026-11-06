@@ -48,7 +48,7 @@ export const knowledgeChatSetupGroup: SetupWizardsSectionGroup = {
     groupId: KNOWLEDGE_CHAT_SETUP_GROUP_ID,
     orderEntry: 5,
     label: "Knowledge & chat",
-    description: "Knowledge bases, graph R.A.G. knowledge extraction, R.A.G. chat profiles and their tuning"
+    description: "Knowledge bases, graph R.A.G. knowledge extraction, R.A.G. chat profiles, their tuning and the tools of the chat pipelines"
 };
 export const externalSearchSetupGroup: SetupWizardsSectionGroup = {
     groupId: EXTERNAL_SEARCH_SETUP_GROUP_ID,

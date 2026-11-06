@@ -268,22 +268,6 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         return !!custom && !!custom.promptUse;
     }
 
-    /**
-     * Whether the agent mounts tools its prompt does not let the model use: such a prompt
-     * offers none, and a prompt that does not say allows them. A standard template the
-     * editor has not loaded is not known, so it warns of nothing.
-     */
-    protected get mountedToolsNotAllowedByPrompt(): boolean {
-        const controls = this.formGroup.controls;
-        const mounted = controls["subscribeAllTools"].value === true
-            || (controls["enabledFunctions"].value?.length ?? 0) > 0
-            || (controls["libraryTypeIds"].value?.length ?? 0) > 0;
-        const prompt: GPromptTemplateConfig | null | undefined = this.promptCustomized
-            ? controls["customLoopPrompt"].value
-            : this.promptTemplates.find(t => t.promptUse === controls["mainLoopPromptUseCode"].value);
-        return mounted && prompt?.toolsCalling === "NOT_REQUIRED";
-    }
-
     private syncPromptControls(): void {
         this.setEnabled(this.formGroup.controls["customLoopPrompt"], this.promptCustomized);
     }

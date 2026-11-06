@@ -456,6 +456,16 @@
       },
       "SetupWizardPanelComponent-setup-ok": { "summary": "Gebo.ai setup OK!" }
     },
+    "GeboAIChatPipelinesToolingWizardComponent": {
+      "MainPanel": { "label": "Chat pipeline configurations" },
+      "IntroText": { "label": "Choose a step of a chat pipeline and the tools its models can call in that pipeline. A step with no tools chosen calls none. Direct chats with a model run outside the pipelines and call no tools." },
+      "chatModelFunctions": { "label": "Chat model tools", "help": "The tools the chat model of this step can call" },
+      "serviceModelFunctions": { "label": "Service model tools", "help": "The tools the service model of this step can call" },
+      "ChatModelNotUsed": { "label": "This step does not use the chat model" },
+      "ServiceModelNotUsed": { "label": "This step does not use the service model" },
+      "SaveStepToolingBtn": { "label": "Save" },
+      "ChooseAStepText": { "label": "Choose a step of a pipeline to set its tools" }
+    },
     "ChatProfileWizardComponent": {
       "AddNewRAGChatProfileFieldset": {
         "label": "Add new R.A.G. chat profile"
