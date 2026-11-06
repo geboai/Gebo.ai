@@ -25,7 +25,7 @@ import java.util.Map;
  * GPromptTemplateConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
 
 public class GPromptTemplateConfig {
   @JsonProperty("code")
@@ -110,40 +110,6 @@ public class GPromptTemplateConfig {
 
   }  @JsonProperty("contextDocuments")
   private ContextDocumentsEnum contextDocuments = null;
-
-  /**
-   * Gets or Sets toolsCalling
-   */
-  public enum ToolsCallingEnum {
-    REQUIRED("REQUIRED"),
-    NOT_REQUIRED("NOT_REQUIRED");
-
-    private String value;
-
-    ToolsCallingEnum(String value) {
-      this.value = value;
-    }
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-    @JsonCreator
-    public static ToolsCallingEnum fromValue(String input) {
-      for (ToolsCallingEnum b : ToolsCallingEnum.values()) {
-        if (b.value.equals(input)) {
-          return b;
-        }
-      }
-      return null;
-    }
-
-  }  @JsonProperty("toolsCalling")
-  private ToolsCallingEnum toolsCalling = null;
 
   @JsonProperty("langCode")
   private String langCode = null;
@@ -299,24 +265,6 @@ public class GPromptTemplateConfig {
 
   public void setContextDocuments(ContextDocumentsEnum contextDocuments) {
     this.contextDocuments = contextDocuments;
-  }
-
-  public GPromptTemplateConfig toolsCalling(ToolsCallingEnum toolsCalling) {
-    this.toolsCalling = toolsCalling;
-    return this;
-  }
-
-   /**
-   * Get toolsCalling
-   * @return toolsCalling
-  **/
-  @Schema(required = true, description = "")
-  public ToolsCallingEnum getToolsCalling() {
-    return toolsCalling;
-  }
-
-  public void setToolsCalling(ToolsCallingEnum toolsCalling) {
-    this.toolsCalling = toolsCalling;
   }
 
   public GPromptTemplateConfig langCode(String langCode) {
@@ -524,7 +472,6 @@ public class GPromptTemplateConfig {
         Objects.equals(this.toolsResultsPromptTemplate, gpromptTemplateConfig.toolsResultsPromptTemplate) &&
         Objects.equals(this.chatHistory, gpromptTemplateConfig.chatHistory) &&
         Objects.equals(this.contextDocuments, gpromptTemplateConfig.contextDocuments) &&
-        Objects.equals(this.toolsCalling, gpromptTemplateConfig.toolsCalling) &&
         Objects.equals(this.langCode, gpromptTemplateConfig.langCode) &&
         Objects.equals(this.promptUse, gpromptTemplateConfig.promptUse) &&
         Objects.equals(this.modelProvider, gpromptTemplateConfig.modelProvider) &&
@@ -539,7 +486,7 @@ public class GPromptTemplateConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, systemPromptTemplate, userPromptTemplate, toolsResultsPromptTemplate, chatHistory, contextDocuments, toolsCalling, langCode, promptUse, modelProvider, modelCode, promptCategory, tokensSize, configDeclarated, agentPrompt, agentId, placeholders);
+    return Objects.hash(code, description, systemPromptTemplate, userPromptTemplate, toolsResultsPromptTemplate, chatHistory, contextDocuments, langCode, promptUse, modelProvider, modelCode, promptCategory, tokensSize, configDeclarated, agentPrompt, agentId, placeholders);
   }
 
 
@@ -555,7 +502,6 @@ public class GPromptTemplateConfig {
     sb.append("    toolsResultsPromptTemplate: ").append(toIndentedString(toolsResultsPromptTemplate)).append("\n");
     sb.append("    chatHistory: ").append(toIndentedString(chatHistory)).append("\n");
     sb.append("    contextDocuments: ").append(toIndentedString(contextDocuments)).append("\n");
-    sb.append("    toolsCalling: ").append(toIndentedString(toolsCalling)).append("\n");
     sb.append("    langCode: ").append(toIndentedString(langCode)).append("\n");
     sb.append("    promptUse: ").append(toIndentedString(promptUse)).append("\n");
     sb.append("    modelProvider: ").append(toIndentedString(modelProvider)).append("\n");

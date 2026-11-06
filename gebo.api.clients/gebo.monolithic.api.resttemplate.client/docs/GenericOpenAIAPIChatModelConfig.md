@@ -19,7 +19,6 @@ Name | Type | Description | Notes
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
-**enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
 **temperature** | **Double** |  |  [optional]
 **forUses** | [**List&lt;ForUsesEnum&gt;**](#List&lt;ForUsesEnum&gt;) |  |  [optional]
 **features** | [**List&lt;FeaturesEnum&gt;**](#List&lt;FeaturesEnum&gt;) |  |  [optional]

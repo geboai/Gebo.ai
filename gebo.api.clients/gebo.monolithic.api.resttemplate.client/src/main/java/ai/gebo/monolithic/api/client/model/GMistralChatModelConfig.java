@@ -26,7 +26,7 @@ import java.util.List;
  * GMistralChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
 
 public class GMistralChatModelConfig {
   @JsonProperty("code")
@@ -76,9 +76,6 @@ public class GMistralChatModelConfig {
 
   @JsonProperty("accessibleToAll")
   private Boolean accessibleToAll = null;
-
-  @JsonProperty("enabledFunctions")
-  private List<String> enabledFunctions = null;
 
   @JsonProperty("temperature")
   private Double temperature = null;
@@ -498,32 +495,6 @@ public class GMistralChatModelConfig {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GMistralChatModelConfig enabledFunctions(List<String> enabledFunctions) {
-    this.enabledFunctions = enabledFunctions;
-    return this;
-  }
-
-  public GMistralChatModelConfig addEnabledFunctionsItem(String enabledFunctionsItem) {
-    if (this.enabledFunctions == null) {
-      this.enabledFunctions = new ArrayList<>();
-    }
-    this.enabledFunctions.add(enabledFunctionsItem);
-    return this;
-  }
-
-   /**
-   * Get enabledFunctions
-   * @return enabledFunctions
-  **/
-  @Schema(description = "")
-  public List<String> getEnabledFunctions() {
-    return enabledFunctions;
-  }
-
-  public void setEnabledFunctions(List<String> enabledFunctions) {
-    this.enabledFunctions = enabledFunctions;
-  }
-
   public GMistralChatModelConfig temperature(Double temperature) {
     this.temperature = temperature;
     return this;
@@ -656,7 +627,6 @@ public class GMistralChatModelConfig {
         Objects.equals(this.accessibleGroups, gmistralChatModelConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gmistralChatModelConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gmistralChatModelConfig.accessibleToAll) &&
-        Objects.equals(this.enabledFunctions, gmistralChatModelConfig.enabledFunctions) &&
         Objects.equals(this.temperature, gmistralChatModelConfig.temperature) &&
         Objects.equals(this.forUses, gmistralChatModelConfig.forUses) &&
         Objects.equals(this.features, gmistralChatModelConfig.features) &&
@@ -666,7 +636,7 @@ public class GMistralChatModelConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, temperature, forUses, features, thinking, maxGeneratedTokens);
   }
 
 
@@ -691,7 +661,6 @@ public class GMistralChatModelConfig {
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
-    sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    forUses: ").append(toIndentedString(forUses)).append("\n");
     sb.append("    features: ").append(toIndentedString(features)).append("\n");

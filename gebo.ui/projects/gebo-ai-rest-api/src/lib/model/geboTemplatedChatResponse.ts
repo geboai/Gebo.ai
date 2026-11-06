@@ -36,6 +36,5 @@ export interface GeboTemplatedChatResponse {
     pipelineRouterDecisionCode?: string;
     pipelineParams?: { [key: string]: any; };
     deepSearchRequestId?: string;
-    /** The network of agents suspended by this answer, waiting for the user's reaction; absent when none. */
     networkOfAgentsSuspendedState?: NetworkOfAgentsSuspendedState;
 }

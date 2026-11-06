@@ -38,6 +38,7 @@ import { FileUploadControllerService } from './api/fileUploadController.service'
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
+import { GeboAdminChatPipelinesToolingControllerService } from './api/geboAdminChatPipelinesToolingController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
@@ -191,6 +192,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FileUploadsControllerService,
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
+    GeboAdminChatPipelinesToolingControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,

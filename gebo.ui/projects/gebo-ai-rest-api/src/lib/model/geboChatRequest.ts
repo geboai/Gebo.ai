@@ -9,10 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-import { NetworkOfAgentsSuspendedStateReaction } from './networkOfAgentsSuspendedStateReaction';
 import { AdditionalContent } from './additionalContent';
 import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
+import { NetworkOfAgentsSuspendedStateReaction } from './networkOfAgentsSuspendedStateReaction';
 import { UserUploadedContent } from './userUploadedContent';
 
 export interface GeboChatRequest { 
@@ -36,7 +36,6 @@ export interface GeboChatRequest {
     userLanguage?: string;
     runOrigin?: string;
     attended?: boolean;
-    /** The reaction to the suspended network of agents this request respawns; absent on a normal request. */
     networkOfAgentsSuspendedStateReaction?: NetworkOfAgentsSuspendedStateReaction;
     additionalContents?: Array<AdditionalContent>;
     tokensSize?: number;

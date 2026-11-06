@@ -23,6 +23,7 @@ Name | Type | Description | Notes
 **userLanguage** | **String** |  |  [optional]
 **runOrigin** | **String** |  |  [optional]
 **attended** | **Boolean** |  |  [optional]
+**networkOfAgentsSuspendedStateReaction** | [**NetworkOfAgentsSuspendedStateReaction**](NetworkOfAgentsSuspendedStateReaction.md) |  |  [optional]
 **additionalContents** | [**List&lt;AdditionalContent&gt;**](AdditionalContent.md) |  |  [optional]
 **tokensSize** | **Integer** |  |  [optional]
 

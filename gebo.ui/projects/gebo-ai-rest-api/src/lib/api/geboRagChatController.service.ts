@@ -34,7 +34,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboRagChatControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -67,21 +67,26 @@ export class GeboRagChatControllerService {
      * 
      * 
      * @param chatProfileCode 
+     * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
-    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
+    public getChatModelUserInfoByChatProfileCode(chatProfileCode: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling getChatModelUserInfoByChatProfileCode.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (chatProfileCode !== undefined && chatProfileCode !== null) {
             queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
         }
 
         let headers = this.defaultHeaders;
@@ -197,21 +202,26 @@ export class GeboRagChatControllerService {
      * 
      * 
      * @param chatProfileCode 
+     * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProfileProviderModelCapabilities(chatProfileCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
-    public getProfileProviderModelCapabilities(chatProfileCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
-    public getProfileProviderModelCapabilities(chatProfileCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
-    public getProfileProviderModelCapabilities(chatProfileCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getProfileProviderModelCapabilities(chatProfileCode: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
+    public getProfileProviderModelCapabilities(chatProfileCode: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
+    public getProfileProviderModelCapabilities(chatProfileCode: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
+    public getProfileProviderModelCapabilities(chatProfileCode: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (chatProfileCode === null || chatProfileCode === undefined) {
             throw new Error('Required parameter chatProfileCode was null or undefined when calling getProfileProviderModelCapabilities.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (chatProfileCode !== undefined && chatProfileCode !== null) {
             queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
         }
 
         let headers = this.defaultHeaders;

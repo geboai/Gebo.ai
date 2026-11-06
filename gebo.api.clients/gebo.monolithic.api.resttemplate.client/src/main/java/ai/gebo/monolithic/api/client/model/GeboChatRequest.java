@@ -17,6 +17,7 @@ import java.util.Arrays;
 import ai.gebo.monolithic.api.client.model.AdditionalContent;
 import ai.gebo.monolithic.api.client.model.GResponseDocumentRef;
 import ai.gebo.monolithic.api.client.model.GeboRagRequestCustomConfig;
+import ai.gebo.monolithic.api.client.model.NetworkOfAgentsSuspendedStateReaction;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -28,7 +29,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -126,6 +127,9 @@ public class GeboChatRequest {
 
   @JsonProperty("attended")
   private Boolean attended = null;
+
+  @JsonProperty("networkOfAgentsSuspendedStateReaction")
+  private NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction = null;
 
   @JsonProperty("additionalContents")
   private List<AdditionalContent> additionalContents = null;
@@ -533,6 +537,24 @@ public class GeboChatRequest {
     this.attended = attended;
   }
 
+  public GeboChatRequest networkOfAgentsSuspendedStateReaction(NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction) {
+    this.networkOfAgentsSuspendedStateReaction = networkOfAgentsSuspendedStateReaction;
+    return this;
+  }
+
+   /**
+   * Get networkOfAgentsSuspendedStateReaction
+   * @return networkOfAgentsSuspendedStateReaction
+  **/
+  @Schema(description = "")
+  public NetworkOfAgentsSuspendedStateReaction getNetworkOfAgentsSuspendedStateReaction() {
+    return networkOfAgentsSuspendedStateReaction;
+  }
+
+  public void setNetworkOfAgentsSuspendedStateReaction(NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction) {
+    this.networkOfAgentsSuspendedStateReaction = networkOfAgentsSuspendedStateReaction;
+  }
+
   public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
     return this;
@@ -607,13 +629,14 @@ public class GeboChatRequest {
         Objects.equals(this.userLanguage, geboChatRequest.userLanguage) &&
         Objects.equals(this.runOrigin, geboChatRequest.runOrigin) &&
         Objects.equals(this.attended, geboChatRequest.attended) &&
+        Objects.equals(this.networkOfAgentsSuspendedStateReaction, geboChatRequest.networkOfAgentsSuspendedStateReaction) &&
         Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, runOrigin, attended, additionalContents, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, runOrigin, attended, networkOfAgentsSuspendedStateReaction, additionalContents, tokensSize);
   }
 
 
@@ -642,6 +665,7 @@ public class GeboChatRequest {
     sb.append("    userLanguage: ").append(toIndentedString(userLanguage)).append("\n");
     sb.append("    runOrigin: ").append(toIndentedString(runOrigin)).append("\n");
     sb.append("    attended: ").append(toIndentedString(attended)).append("\n");
+    sb.append("    networkOfAgentsSuspendedStateReaction: ").append(toIndentedString(networkOfAgentsSuspendedStateReaction)).append("\n");
     sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");

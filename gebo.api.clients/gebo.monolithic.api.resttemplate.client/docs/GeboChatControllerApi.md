@@ -1,6 +1,6 @@
 # GeboChatControllerApi
 
-All URIs are relative to *http://localhost:12999*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -99,7 +99,7 @@ No authorization required
 
 <a name="getChatModelUserInfo"></a>
 # **getChatModelUserInfo**
-> GeboChatUserInfo getChatModelUserInfo(modelCode)
+> GeboChatUserInfo getChatModelUserInfo(modelCode, pipelineCode)
 
 
 
@@ -112,8 +112,9 @@ No authorization required
 
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
 String modelCode = "modelCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    GeboChatUserInfo result = apiInstance.getChatModelUserInfo(modelCode);
+    GeboChatUserInfo result = apiInstance.getChatModelUserInfo(modelCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatControllerApi#getChatModelUserInfo");
@@ -126,6 +127,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **modelCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -142,7 +144,7 @@ No authorization required
 
 <a name="getProviderCapabilities"></a>
 # **getProviderCapabilities**
-> ModelProviderCapabilities getProviderCapabilities(modelCode)
+> ModelProviderCapabilities getProviderCapabilities(modelCode, pipelineCode)
 
 
 
@@ -155,8 +157,9 @@ No authorization required
 
 GeboChatControllerApi apiInstance = new GeboChatControllerApi();
 String modelCode = "modelCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    ModelProviderCapabilities result = apiInstance.getProviderCapabilities(modelCode);
+    ModelProviderCapabilities result = apiInstance.getProviderCapabilities(modelCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboChatControllerApi#getProviderCapabilities");
@@ -169,6 +172,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **modelCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 

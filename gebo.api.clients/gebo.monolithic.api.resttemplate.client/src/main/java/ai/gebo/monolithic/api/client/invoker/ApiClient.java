@@ -50,7 +50,7 @@ import ai.gebo.monolithic.api.client.invoker.auth.HttpBasicAuth;
 import ai.gebo.monolithic.api.client.invoker.auth.ApiKeyAuth;
 import ai.gebo.monolithic.api.client.invoker.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
 
 public class ApiClient {
     public enum CollectionFormat {
@@ -70,7 +70,7 @@ public class ApiClient {
     
     private HttpHeaders defaultHeaders = new HttpHeaders();
     
-    private String basePath = "http://localhost:12999";
+    private String basePath = "http://localhost:13999";
 
     private RestTemplate restTemplate;
 

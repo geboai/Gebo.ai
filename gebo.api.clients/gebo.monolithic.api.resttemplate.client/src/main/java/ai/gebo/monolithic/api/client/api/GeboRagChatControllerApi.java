@@ -30,7 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
 
 public class GeboRagChatControllerApi {
     private ApiClient apiClient;
@@ -55,11 +55,12 @@ public class GeboRagChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param pipelineCode  (optional)
      * @return GeboChatUserInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode) throws RestClientException {
-        return getChatModelUserInfoByChatProfileCodeWithHttpInfo(chatProfileCode).getBody();
+    public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode, String pipelineCode) throws RestClientException {
+        return getChatModelUserInfoByChatProfileCodeWithHttpInfo(chatProfileCode, pipelineCode).getBody();
     }
 
     /**
@@ -67,10 +68,11 @@ public class GeboRagChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;GeboChatUserInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboChatUserInfo> getChatModelUserInfoByChatProfileCodeWithHttpInfo(String chatProfileCode) throws RestClientException {
+    public ResponseEntity<GeboChatUserInfo> getChatModelUserInfoByChatProfileCodeWithHttpInfo(String chatProfileCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -82,6 +84,7 @@ public class GeboRagChatControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"
@@ -183,11 +186,12 @@ public class GeboRagChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param pipelineCode  (optional)
      * @return ModelProviderCapabilities
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ModelProviderCapabilities getProfileProviderModelCapabilities(String chatProfileCode) throws RestClientException {
-        return getProfileProviderModelCapabilitiesWithHttpInfo(chatProfileCode).getBody();
+    public ModelProviderCapabilities getProfileProviderModelCapabilities(String chatProfileCode, String pipelineCode) throws RestClientException {
+        return getProfileProviderModelCapabilitiesWithHttpInfo(chatProfileCode, pipelineCode).getBody();
     }
 
     /**
@@ -195,10 +199,11 @@ public class GeboRagChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
+     * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;ModelProviderCapabilities&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ModelProviderCapabilities> getProfileProviderModelCapabilitiesWithHttpInfo(String chatProfileCode) throws RestClientException {
+    public ResponseEntity<ModelProviderCapabilities> getProfileProviderModelCapabilitiesWithHttpInfo(String chatProfileCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'chatProfileCode' is set
         if (chatProfileCode == null) {
@@ -210,6 +215,7 @@ public class GeboRagChatControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"

@@ -1,6 +1,6 @@
 # GeboRagChatControllerApi
 
-All URIs are relative to *http://localhost:12999*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -15,7 +15,7 @@ Method | HTTP request | Description
 
 <a name="getChatModelUserInfoByChatProfileCode"></a>
 # **getChatModelUserInfoByChatProfileCode**
-> GeboChatUserInfo getChatModelUserInfoByChatProfileCode(chatProfileCode)
+> GeboChatUserInfo getChatModelUserInfoByChatProfileCode(chatProfileCode, pipelineCode)
 
 
 
@@ -28,8 +28,9 @@ Method | HTTP request | Description
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
 String chatProfileCode = "chatProfileCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    GeboChatUserInfo result = apiInstance.getChatModelUserInfoByChatProfileCode(chatProfileCode);
+    GeboChatUserInfo result = apiInstance.getChatModelUserInfoByChatProfileCode(chatProfileCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboRagChatControllerApi#getChatModelUserInfoByChatProfileCode");
@@ -42,6 +43,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chatProfileCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -140,7 +142,7 @@ No authorization required
 
 <a name="getProfileProviderModelCapabilities"></a>
 # **getProfileProviderModelCapabilities**
-> ModelProviderCapabilities getProfileProviderModelCapabilities(chatProfileCode)
+> ModelProviderCapabilities getProfileProviderModelCapabilities(chatProfileCode, pipelineCode)
 
 
 
@@ -153,8 +155,9 @@ No authorization required
 
 GeboRagChatControllerApi apiInstance = new GeboRagChatControllerApi();
 String chatProfileCode = "chatProfileCode_example"; // String | 
+String pipelineCode = "pipelineCode_example"; // String | 
 try {
-    ModelProviderCapabilities result = apiInstance.getProfileProviderModelCapabilities(chatProfileCode);
+    ModelProviderCapabilities result = apiInstance.getProfileProviderModelCapabilities(chatProfileCode, pipelineCode);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling GeboRagChatControllerApi#getProfileProviderModelCapabilities");
@@ -167,6 +170,7 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **chatProfileCode** | **String**|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
