@@ -85,7 +85,7 @@ waited for whole, and everything not yet delivered is frozen in its place.
    counters and private turns, and re-executes the suspended agents whose conditions
    are resolved, each once, with the message it was executing, every answer told first
    (`ResolvedConditionText`) on that turn only (`takeResolvedConditionsOf` hands them
-   over once: a later turn of the agent works on another message), followed by the notes the agent wrote to itself when it
+   over once: a later turn of the agent works on another message, and finds them in its private session, `AgentPrivateSessionContext.getSolvedConditions`, kept in the block and not counted as a turn, so no cycle of a coordinator is spent; the other agents read them in the shared session as a contribution of the asker, `ResolvedConditionText.renderForPeers`, without the notes; search agents read no shared session by design, the coordinator puts what they need in their command), followed by the notes the agent wrote to itself when it
    stopped, if any (`notesForLater` on the condition, saved in the block, never sent
    to the client and left out of the recorded tool calls by `ToolCallsListener`). An
    agent whose model reads the request from the context, as the agentic loop does, is

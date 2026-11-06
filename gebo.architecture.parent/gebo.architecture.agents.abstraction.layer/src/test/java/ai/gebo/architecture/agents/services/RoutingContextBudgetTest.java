@@ -270,4 +270,31 @@ class RoutingContextBudgetTest {
 		GBaseRoutingNetworkAgentService<?, ?> service = routingService();
 		assertEquals("plain text", service.renderSharedContributionData("plain text"));
 	}
+
+	private static ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object> solved() {
+		ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object> condition = new ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "The approval", "it matters", "yes", true);
+		condition.setNotesForLater("the closed year only");
+		return condition;
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void aCoordinatorThatAskedInItsFirstTurnFindsWhatWasSolvedInItsPrivateContext() {
+		ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String> memory = new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>();
+		memory.addSolvedConditions(List.of(solved()));
+
+		String rendered = genericService().render(memory, 3, 2000);
+
+		assertTrue(rendered.contains("You were waiting for: The approval\nIt came: yes"), rendered);
+		assertTrue(rendered.contains("Your notes from before you stopped: the closed year only"), rendered);
+		assertEquals(List.of(), memory.getContributionTurnNumbers(), "a solved condition is not a turn: no cycle is spent");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void withNothingSolvedAndNoTurnThePrivateContextStaysEmpty() {
+		assertEquals("", genericService()
+				.render(new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>(), 3, 2000));
+	}
 }

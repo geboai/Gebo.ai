@@ -229,6 +229,8 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		private String privateContextId = null;
 		private String collaborationContextId = null;
 		private List<PrivateInteraction> interactions = new ArrayList<PrivateInteraction>();
+		/** The conditions the agent waited for in the blocks before this one, solved. */
+		private List<WaitingCondition> solvedConditions = new ArrayList<WaitingCondition>();
 
 		public static AgentPrivateState of(AgentPrivateSessionContext<?, ?> privateContext) {
 			if (privateContext == null) {
@@ -243,6 +245,11 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 					if (interaction instanceof AgentPrivateSessionContext<?, ?>.AgentInteraction turn) {
 						state.getInteractions().add(PrivateInteraction.of(turn));
 					}
+				}
+			}
+			if (privateContext.getSolvedConditions() != null) {
+				for (AgentSuspendedWaitingCondition<?, ?> solved : List.copyOf(privateContext.getSolvedConditions())) {
+					state.getSolvedConditions().add(WaitingCondition.of(solved));
 				}
 			}
 			return state;

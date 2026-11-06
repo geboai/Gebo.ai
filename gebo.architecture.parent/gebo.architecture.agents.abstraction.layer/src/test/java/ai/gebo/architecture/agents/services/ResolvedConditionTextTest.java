@@ -73,4 +73,20 @@ class ResolvedConditionTextTest {
 		assertEquals(saved.getNotesForLater(), WaitingCondition.of(saved).toCondition().getNotesForLater());
 		assertNull(WaitingCondition.of(condition("Which year?", null)).toCondition().getNotesForLater());
 	}
+
+	@Test
+	void theOtherAgentsReadWhoWaitedForWhatWhyAndHowItEndedNeverTheNotes() {
+		assertEquals("Already settled, do not ask for it again. Agent the-asker waited for: Which year?"
+				+ "\nWhy it was needed: it matters\nThe user chose: 2024",
+				ResolvedConditionText.renderForPeers("the-asker",
+						noted(condition("Which year?", ClarificationAnswer.option("2024")))));
+		assertEquals("Already settled, do not ask for it again. Agent the-asker waited for: Which year?"
+				+ "\nWhy it was needed: it matters"
+				+ "\nThe user chose not to answer: go on without it, saying what you assumed.",
+				ResolvedConditionText.renderForPeers("the-asker", noted(condition("Which year?", null))));
+		assertEquals("Already settled, do not ask for it again. Agent the-asker waited for: The approval\nIt came: yes",
+				ResolvedConditionText.renderForPeers("the-asker", new AgentSuspendedWaitingCondition<String, Object>(
+						String.class, "The approval", " ", "yes", true)));
+		assertNull(ResolvedConditionText.renderForPeers("the-asker", null));
+	}
 }

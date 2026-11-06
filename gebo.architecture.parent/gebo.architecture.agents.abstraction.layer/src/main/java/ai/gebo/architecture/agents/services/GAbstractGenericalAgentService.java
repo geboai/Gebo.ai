@@ -1026,6 +1026,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String TURN_OUTPUT = "TURN OUTPUT:";
 	private static final String TURN_INPUT = "TURN INPUT:";
 	private static final String BEGIN_AGENT_TURN_ITEM = "BEGIN AGENT TURN ITEM ";
+	private static final String BEGIN_SOLVED_CONDITIONS = "BEGIN WHAT YOU WAITED FOR AND WAS SOLVED";
+	private static final String END_SOLVED_CONDITIONS = "END WHAT YOU WAITED FOR AND WAS SOLVED";
 	private static final String END_ACTUAL_AGENT_CALL_HISTORY = "END ACTUAL AGENT CALL HISTORY";
 	private static final String BEGIN_ACTUAL_AGENT_CALL_HISTORY = "BEGIN ACTUAL AGENT CALL HISTORY";
 	private static final String END_SHARED_CONTEXT_DELTA = "END SHARED CONTEXT DELTA";
@@ -2159,7 +2161,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			int actualContributionNr, int remainingBudget) {
 		Vector<AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction> interactions = mySessionContext
 				.getInteractions();
-		if (interactions == null || interactions.isEmpty()) {
+		final String solved = ResolvedConditionText.prepend(List.copyOf(mySessionContext.getSolvedConditions()), null);
+		final boolean anySolved = solved != null && !solved.isBlank();
+		if (interactions.isEmpty() && !anySolved) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("render(privateContext) skipped: the private session context holds no interaction");
 			}
@@ -2177,8 +2181,19 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			pieces.add(renderHandlingTruncate(agentInteraction.getInputMessage()));
 			pieces.add(renderOutput(agentInteraction.getOutput()));
 		}
+		if (anySolved) {
+			pieces.add(solved);
+		}
 		List<String> fitted = allocateProportional(pieces, remainingBudget);
 		StringBuffer buffer = new StringBuffer();
+		if (anySolved) {
+			buffer.append(BEGIN_SOLVED_CONDITIONS);
+			buffer.append(NEWLINE);
+			buffer.append(fitted.get(fitted.size() - 1));
+			buffer.append(NEWLINE);
+			buffer.append(END_SOLVED_CONDITIONS);
+			buffer.append(NEWLINE);
+		}
 		buffer.append(BEGIN_ACTUAL_AGENT_CALL_HISTORY);
 		buffer.append(NEWLINE);
 		int index = 1;

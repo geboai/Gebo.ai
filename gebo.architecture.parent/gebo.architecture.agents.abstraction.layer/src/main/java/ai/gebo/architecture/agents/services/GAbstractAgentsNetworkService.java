@@ -501,6 +501,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					throw new AgentException(NO_RUNTIME_ALLOCATED_FOR_AGENT + name);
 				if (runtime.getInvocations().get() > 0)
 					runtime.getInvocations().decrementAndGet();
+				keepSolvedConditions(session, runtime, name, resolvedByAgent.get(name));
 				reExecuted.add(suspended.getInputMessage().toMessage());
 			} else {
 				stillWaiting.add(suspended);
@@ -572,6 +573,32 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					+ (producedOutput != null) + " suspended:" + suspended);
 		}
 		return producedOutput;
+	}
+
+	/**
+	 * What an agent waited for outlives the turn it is told in: the agent keeps it in
+	 * its private session, notes included, for its next turns, and the other agents
+	 * read it in the shared session, without the notes, so that none asks for it again.
+	 * The session of a respawn is rebuilt from the block, so one that fails adds
+	 * nothing to the block it is tried again from.
+	 */
+	@SuppressWarnings("rawtypes")
+	private void keepSolvedConditions(AgentsCollaborationSessionContext session, RuntimeAgentInfos runtime, String name,
+			List<AgentSuspendedWaitingCondition> solved) {
+		if (runtime.getAgentContext() != null) {
+			runtime.getAgentContext().addSolvedConditions(solved);
+		}
+		for (AgentSuspendedWaitingCondition<?, ?> condition : solved) {
+			final String told = ResolvedConditionText.renderForPeers(name, condition);
+			if (told != null) {
+				session.addContribution(AgentsExchangeMessage.of(session, name, null, told, MessageSemantic.RESPONSE),
+						session.getAndIncrementContributionNr());
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent:" + name + " keeps " + solved.size()
+					+ " solved condition(s) in its private session, shared with the other agents");
+		}
 	}
 
 	private static String nameOf(SuspendedAgentState suspended) {
@@ -681,6 +708,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					privateContext.addInteraction(turn.getInputMessage() != null ? turn.getInputMessage().toMessage() : null,
 							turn.getContributionCounter(), turn.getOutput());
 				}
+				final List<AgentSuspendedWaitingCondition> solved = new ArrayList<AgentSuspendedWaitingCondition>();
+				for (WaitingCondition condition : privateState.getSolvedConditions()) {
+					solved.add(condition.toCondition());
+				}
+				privateContext.addSolvedConditions(solved);
 			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Restored agent:" + state.getNetworkAgentName() + " invocations:" + state.getInvocations()

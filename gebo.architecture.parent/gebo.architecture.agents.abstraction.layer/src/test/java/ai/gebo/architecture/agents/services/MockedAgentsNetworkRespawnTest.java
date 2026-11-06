@@ -23,6 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentProducedSessionContribution;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
@@ -68,6 +69,9 @@ class MockedAgentsNetworkRespawnTest {
 	private final List<Object> answersSeenByTheAsker = Collections.synchronizedList(new ArrayList<Object>());
 	private boolean askerAsksTwice = false;
 	private boolean secondQuestionMandatory = false;
+	private boolean askerAsksAgainWhenRespawned = false;
+	private final List<List<String>> solvedKnownToTheAsker = Collections.synchronizedList(new ArrayList<List<String>>());
+	private final List<String> sharedByTheAskerSeenByTheWriter = Collections.synchronizedList(new ArrayList<String>());
 	private final List<Integer> askerPriorTurnsWhenRespawned = Collections.synchronizedList(new ArrayList<Integer>());
 	private final List<Object> messagesSeenByTheWriter = Collections.synchronizedList(new ArrayList<Object>());
 	private final List<Integer> contributionsSeenByTheWriter = Collections
@@ -177,6 +181,23 @@ class MockedAgentsNetworkRespawnTest {
 					answersSeenByTheAsker.add(answer.getInstanceValue());
 				}
 				askerPriorTurnsWhenRespawned.add(mine.getInteractions().size());
+				List<String> solved = new ArrayList<String>();
+				for (AgentSuspendedWaitingCondition<?, ?> known : mine.getSolvedConditions()) {
+					solved.add(known.getWaitingConditionStatement() + "=" + known.getInstanceValue() + "/"
+							+ known.getNotesForLater());
+				}
+				solvedKnownToTheAsker.add(solved);
+				if (askerAsksAgainWhenRespawned) {
+					askerAsksAgainWhenRespawned = false;
+					try {
+						handler.enterSuspensionState(network, config, me, mine,
+								new AgentSuspendedWaitingCondition<String, Object>(String.class, "which country?",
+										"the user's answer", null, true));
+					} catch (AgentException e) {
+						throw new IllegalStateException(e);
+					}
+					return List.of();
+				}
 				// after what was frozen: the writer is given the answer last
 				return List.of(to(session, ASKER, WRITER, "asker: the year is " + answers.get(0).getInstanceValue(), 3));
 			}
@@ -212,6 +233,13 @@ class MockedAgentsNetworkRespawnTest {
 			AgentsCollaborationSessionContext session = (AgentsCollaborationSessionContext) args[7];
 			messagesSeenByTheWriter.add(msg.getPayload());
 			contributionsSeenByTheWriter.add(session.getSampledContributions().size());
+			for (Object contribution : session.getSampledContributions()) {
+				AgentProducedSessionContribution<?> shared = (AgentProducedSessionContribution<?>) contribution;
+				if (ASKER.equals(shared.getAgentName())
+						&& !sharedByTheAskerSeenByTheWriter.contains(String.valueOf(shared.getData()))) {
+					sharedByTheAskerSeenByTheWriter.add(String.valueOf(shared.getData()));
+				}
+			}
 			return List.of(AgentsExchangeMessage.of(session, WRITER, ROUTER, "wrote: " + msg.getPayload(),
 					MessageSemantic.RESPONSE));
 		});
@@ -324,6 +352,58 @@ class MockedAgentsNetworkRespawnTest {
 		assertEquals(2, saved.size(), "the block was written once and marked once");
 		assertNotNull(block.getRespawnedAt());
 		assertNull(block.getRespawnedToSuspensionCode());
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private AgentSuspendedWaitingCondition<?, ?> answerOf(GNetworkOfAgentsSuspension block, String value, String notes) {
+		AgentSuspendedWaitingCondition answered = block.getSuspendedAgents().get(0).getWaitingConditions().get(0)
+				.toCondition();
+		answered.setInstanceValue(value);
+		answered.setNotesForLater(notes);
+		return answered;
+	}
+
+	@SuppressWarnings("unchecked")
+	private NetworkOfAgentsExecutionResult<String> respawn(GNetworkOfAgentsSuspension block,
+			AgentSuspendedWaitingCondition<?, ?> answered) throws Exception {
+		service = newService();
+		return service.respawnNetworkExecution(IChatRequestContext.of("resume"), block,
+				List.<AgentSuspendedWaitingCondition<?, ?>>of(answered), null, TOOL_CALLING);
+	}
+
+	@Test
+	void theAnswerStaysPrivateWithTheNotesAndIsSharedWithoutThemNoTurnSpent() throws Exception {
+		run();
+
+		respawn(saved.get(0), answerOf(saved.get(0), "2024", "the closed year only"));
+
+		assertEquals(List.of(List.of("which year?=2024/the closed year only")), solvedKnownToTheAsker,
+				"the asker keeps what it waited for in its private session, with its notes");
+		assertEquals(List.of("Already settled, do not ask for it again. Agent the-asker waited for: which year?"
+				+ "\nWhy it was needed: the user's answer\nIt came: 2024"), sharedByTheAskerSeenByTheWriter,
+				"the other agents read it in the shared session, without the notes");
+		assertEquals(List.of(1), askerPriorTurnsWhenRespawned, "what was solved is not a turn of the asker");
+	}
+
+	@Test
+	void whatWasSolvedSurvivesAFurtherSuspension() throws Exception {
+		askerAsksAgainWhenRespawned = true;
+		run();
+		GNetworkOfAgentsSuspension first = saved.get(0);
+		NetworkOfAgentsExecutionResult<String> again = respawn(first, answerOf(first, "2024", "a note"));
+		assertEquals(NStatus.SUSPENDED, again.getExecutedStatus(), "the respawned asker asked something else");
+		GNetworkOfAgentsSuspension second = saved.stream().filter(x -> x != first).findFirst().orElseThrow();
+
+		NetworkOfAgentsExecutionResult<String> respawned = respawn(second, answerOf(second, "Italy", null));
+
+		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
+		assertEquals(List.of("which year?=2024/a note", "which country?=Italy/null"),
+				solvedKnownToTheAsker.get(solvedKnownToTheAsker.size() - 1),
+				"the block keeps what was solved before it, and the notes with it");
+		assertEquals(2, sharedByTheAskerSeenByTheWriter.size(),
+				"each answer is shared once: " + sharedByTheAskerSeenByTheWriter);
+		assertTrue(sharedByTheAskerSeenByTheWriter.get(0).contains("which year?"));
+		assertTrue(sharedByTheAskerSeenByTheWriter.get(1).contains("which country?"));
 	}
 
 	@Test

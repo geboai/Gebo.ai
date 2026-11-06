@@ -164,11 +164,20 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 	 * Null when the condition is not a resolved question.
 	 */
 	public static String answered(AgentSuspendedWaitingCondition<?, ?> condition) {
+		final String answer = answerOf(condition);
+		return answer != null ? "You asked the user: " + condition.getWaitingConditionStatement() + answer : null;
+	}
+
+	/**
+	 * What the user chose or explained, each on a line of its own after a line
+	 * break, for whoever tells the question in its own words. Null when the
+	 * condition is not a resolved question.
+	 */
+	public static String answerOf(AgentSuspendedWaitingCondition<?, ?> condition) {
 		if (condition == null || !(condition.getInstanceValue() instanceof ClarificationAnswer answer)) {
 			return null;
 		}
 		final StringBuilder text = new StringBuilder();
-		text.append("You asked the user: ").append(condition.getWaitingConditionStatement());
 		final List<String> chosen = new ArrayList<String>();
 		if (answer.getChosenOptions() != null) {
 			for (String option : answer.getChosenOptions()) {
