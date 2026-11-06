@@ -73,10 +73,10 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink,
 				chatRequestContext != null ? chatRequestContext.getToolCallListener() : null);
 		// the libraries the agent works with are reclaimed from the conversation as it enters
-		final IChatRequestContext agentContext = IChatRequestContext
-				.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, config), callBacksListener);
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, config);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(libraries.context(), callBacksListener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
-				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);

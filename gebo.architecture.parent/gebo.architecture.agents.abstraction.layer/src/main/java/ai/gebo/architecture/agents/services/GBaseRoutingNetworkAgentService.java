@@ -205,10 +205,10 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callsListener = agentToolCallsListener(chatRequestContext);
 		// the libraries the agent works with are reclaimed from the conversation as it enters
-		final IChatRequestContext agentContext = IChatRequestContext
-				.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, config), callsListener);
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, config);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(libraries.context(), callsListener);
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener,
-				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
 		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
 				false);

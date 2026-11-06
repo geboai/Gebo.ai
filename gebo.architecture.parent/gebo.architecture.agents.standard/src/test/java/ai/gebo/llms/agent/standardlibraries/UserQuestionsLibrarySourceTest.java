@@ -34,8 +34,6 @@ import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolReference;
-import ai.gebo.architecture.ai.service.AIToolsLibraryTypeToolSource;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standard.config.AgenticLoopAgentsInitialization;
 
@@ -137,13 +135,10 @@ class UserQuestionsLibrarySourceTest {
 		GWaitExternalConditionSink wait = new GWaitExternalConditionSink();
 		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("a-conversation"));
 		GeboToolCalling toolCalling = GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build();
-		ToolContext context = new ToolContext(toolCalling.toolsContext(Map.of(
-				ToolCallbackDeclarationUtil.LIBRARY_INSTANCES_CONTEXT_KEY,
-				Map.of(UserQuestionsLibrarySource.TYPE_ID, instance))));
-		ToolCallback standIn = tool(new AIToolsLibraryTypeToolSource(type, source).getToolCallbacks(),
-				AskUserSingleChoiceQuestionTool.TOOL_NAME);
+		ToolContext context = new ToolContext(toolCalling.toolsContext(Map.of()));
+		ToolCallback question = tool(source.getToolCallbacks(instance), AskUserSingleChoiceQuestionTool.TOOL_NAME);
 
-		standIn.call(QUESTION, context);
+		question.call(QUESTION, context);
 
 		assertEquals(1, wait.waited().size());
 		assertEquals("Which year?", wait.waited().get(0).getWaitingConditionStatement());
@@ -152,12 +147,11 @@ class UserQuestionsLibrarySourceTest {
 	}
 
 	@Test
-	void theToolsAreMountedOnlyWhenAskedAndEndTheCallThroughTheLibraryToo() {
-		AIToolsLibraryTypeToolSource mounted = new AIToolsLibraryTypeToolSource(type, source);
+	void theToolsOfAnInstanceEndTheCall() {
+		List<ToolCallback> tools = source.getToolCallbacks(source.createInstance(type, List.of("a-conversation")));
 
-		assertTrue(mounted.isMountedOnlyWhenAsked());
-		assertEquals(2, mounted.getToolCallbacks().size());
-		assertTrue(mounted.getToolCallbacks().stream().allMatch(tool -> tool.getToolMetadata().returnDirect()),
+		assertEquals(2, tools.size());
+		assertTrue(tools.stream().allMatch(tool -> tool.getToolMetadata().returnDirect()),
 				"the loop stops at the question: the work waits");
 	}
 

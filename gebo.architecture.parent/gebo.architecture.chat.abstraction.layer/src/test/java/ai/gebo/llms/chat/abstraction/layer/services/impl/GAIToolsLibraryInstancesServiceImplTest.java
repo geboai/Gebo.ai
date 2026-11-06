@@ -28,6 +28,8 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.tool.ToolCallback;
+import org.springframework.ai.tool.definition.ToolDefinition;
 
 import ai.gebo.architecture.ai.model.AIResource;
 import ai.gebo.architecture.ai.model.AIResourceContent;
@@ -223,5 +225,101 @@ class GAIToolsLibraryInstancesServiceImplTest {
 		verify(records).deleteById(CONVERSATION);
 		service.dropHeldBy("no-such-conversation");
 		verify(records, never()).deleteById("no-such-conversation");
+	}
+
+	private static ToolCallback tool(String name) {
+		ToolCallback tool = mock(ToolCallback.class);
+		when(tool.getToolDefinition())
+				.thenReturn(ToolDefinition.builder().name(name).description(name).inputSchema("{}").build());
+		return tool;
+	}
+
+	private static AIToolsAndResourcesLibraryInstance instance(String id) {
+		AIToolsAndResourcesLibraryInstance instance = new AIToolsAndResourcesLibraryInstance();
+		instance.setId(id);
+		return instance;
+	}
+
+	/** The service of an installation with a second library, next to the working directory. */
+	private GAIToolsLibraryInstancesServiceImpl withSandbox(IGAIToolsAndResourcesLibrarySource sandboxes) {
+		AIToolsAndResourcesLibraryType sandbox = new AIToolsAndResourcesLibraryType();
+		sandbox.setId("sandbox");
+		when(sandboxes.getId()).thenReturn("sandboxes");
+		when(sandboxes.getManagedTypes()).thenReturn(List.of(sandbox));
+		IGAIToolsAndResourcesLibrarySourceRepositoryPattern libraries = mock(
+				IGAIToolsAndResourcesLibrarySourceRepositoryPattern.class);
+		when(libraries.getImplementations()).thenReturn(List.of(source, sandboxes));
+		return new GAIToolsLibraryInstancesServiceImpl(libraries, mock(GUserChatSessionRepository.class), records);
+	}
+
+	@Test
+	void theToolsOfAnInstanceAreTheOnesItsSourceBindsToIt() {
+		AIToolsAndResourcesLibraryInstance directory = instance("the-directory");
+		ToolCallback readFile = tool("readFile");
+		when(source.getToolCallbacks(directory)).thenReturn(List.of(readFile));
+
+		assertEquals(List.of(readFile), service.toolsOf(Map.of(WORKING_DIRECTORY, directory)));
+	}
+
+	@Test
+	void noInstancesNoTools() {
+		assertTrue(service.toolsOf(null).isEmpty());
+		assertTrue(service.toolsOf(Map.of()).isEmpty());
+	}
+
+	@Test
+	void anInstanceOfALibraryNobodyManagesGivesNoTools() {
+		assertTrue(service.toolsOf(Map.of("gone", instance("the-gone-one"))).isEmpty());
+	}
+
+	@Test
+	void twoLibrariesDeclaringTheSameToolLeaveTheOneOfTheFirstInstance() {
+		IGAIToolsAndResourcesLibrarySource sandboxes = mock(IGAIToolsAndResourcesLibrarySource.class);
+		GAIToolsLibraryInstancesServiceImpl two = withSandbox(sandboxes);
+		AIToolsAndResourcesLibraryInstance directory = instance("the-directory");
+		AIToolsAndResourcesLibraryInstance box = instance("the-box");
+		ToolCallback directoryRead = tool("readFile");
+		ToolCallback boxRead = tool("readFile");
+		ToolCallback boxRun = tool("runCode");
+		when(source.getToolCallbacks(directory)).thenReturn(List.of(directoryRead));
+		when(sandboxes.getToolCallbacks(box)).thenReturn(List.of(boxRead, boxRun));
+		Map<String, AIToolsAndResourcesLibraryInstance> held = new LinkedHashMap<>();
+		held.put(WORKING_DIRECTORY, directory);
+		held.put("sandbox", box);
+
+		assertEquals(List.of(directoryRead, boxRun), two.toolsOf(held));
+	}
+
+	@Test
+	void aSourceFailingLeavesOutItsToolsAndNoOtherOne() {
+		IGAIToolsAndResourcesLibrarySource sandboxes = mock(IGAIToolsAndResourcesLibrarySource.class);
+		GAIToolsLibraryInstancesServiceImpl two = withSandbox(sandboxes);
+		AIToolsAndResourcesLibraryInstance directory = instance("the-directory");
+		AIToolsAndResourcesLibraryInstance box = instance("the-box");
+		ToolCallback boxRun = tool("runCode");
+		when(source.getToolCallbacks(directory)).thenThrow(new IllegalStateException("no disk"));
+		when(sandboxes.getToolCallbacks(box)).thenReturn(List.of(boxRun));
+		Map<String, AIToolsAndResourcesLibraryInstance> held = new LinkedHashMap<>();
+		held.put(WORKING_DIRECTORY, directory);
+		held.put("sandbox", box);
+
+		assertEquals(List.of(boxRun), two.toolsOf(held));
+	}
+
+	@Test
+	void theTypesNamedAreReadWithNoConversationEachOnceAndInOrder() {
+		IGAIToolsAndResourcesLibrarySource sandboxes = mock(IGAIToolsAndResourcesLibrarySource.class);
+		GAIToolsLibraryInstancesServiceImpl two = withSandbox(sandboxes);
+
+		assertEquals(List.of("sandbox", WORKING_DIRECTORY),
+				two.typesOf(List.of("sandbox", "not-here", WORKING_DIRECTORY, "sandbox")).stream()
+						.map(AIToolsAndResourcesLibraryType::getId).toList());
+		verify(source, never()).createInstance(any(), anyList());
+	}
+
+	@Test
+	void noTypesNamedNoTypes() {
+		assertTrue(service.typesOf(null).isEmpty());
+		assertTrue(service.typesOf(List.of()).isEmpty());
 	}
 }

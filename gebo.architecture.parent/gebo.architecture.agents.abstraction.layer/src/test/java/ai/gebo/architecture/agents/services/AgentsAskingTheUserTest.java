@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.tool.ToolCallback;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
@@ -93,7 +94,8 @@ class AgentsAskingTheUserTest {
 
 		@Override
 		protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
-				INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
+				INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<ToolCallback> libraryTools)
+				throws LLMConfigException {
 			return model;
 		}
 
@@ -127,7 +129,8 @@ class AgentsAskingTheUserTest {
 
 		@Override
 		protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
-				INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
+				INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<ToolCallback> libraryTools)
+				throws LLMConfigException {
 			return model;
 		}
 
@@ -184,7 +187,8 @@ class AgentsAskingTheUserTest {
 
 		@Override
 		protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
-				INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
+				INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<ToolCallback> libraryTools)
+				throws LLMConfigException {
 			return model;
 		}
 

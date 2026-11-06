@@ -91,10 +91,10 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		// this agent's own tool calls, forwarded to the user request's recorder
 		ToolCallsListener listener = agentToolCallsListener(chatRequestContext);
 		// the libraries the agent works with are reclaimed from the conversation as it enters
-		final IChatRequestContext agentContext = IChatRequestContext
-				.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, config), listener);
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, config);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(libraries.context(), listener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
-				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Documents search agent id:" + getId() + " agentRole:"

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.tool.ToolCallback;
 import org.mockito.ArgumentCaptor;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
@@ -74,14 +75,15 @@ class ToolCallingAgentSuspensionTest {
 
 		/** What the conversation holds is the instances service's: here, a mark in the tools context. */
 		@Override
-		protected IChatRequestContext withTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
+		protected AgentLibraries reclaimTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
 				GAgentConfig agentConfig) {
-			return chatRequestContext.withToolsContextValue("held", agentConfig.getCode());
+			return new AgentLibraries(chatRequestContext.withToolsContextValue("held", agentConfig.getCode()), List.of());
 		}
 
 		@Override
 		protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
-				INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
+				INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<ToolCallback> libraryTools)
+				throws LLMConfigException {
 			return model;
 		}
 

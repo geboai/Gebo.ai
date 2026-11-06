@@ -37,8 +37,6 @@ import ai.gebo.architecture.ai.model.AIResourceType.ConsentActions;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolReference;
-import ai.gebo.architecture.ai.service.AIToolsLibraryTypeToolSource;
-import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 
 /**
  * A working directory: a folder of its own the agents build files in with the
@@ -139,14 +137,12 @@ class WorkingDirectoryLibrarySourceTest {
 	}
 
 	@Test
-	void theStandInToolsOfTheTypeReachTheInstanceOfTheRun() {
+	void theToolsOfAnInstanceWorkOnItsFolderWhenCalledByARun() {
 		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("the-conversation"));
-		AIToolsLibraryTypeToolSource standIns = new AIToolsLibraryTypeToolSource(type, source);
-		ToolContext context = new ToolContext(Map.of(ToolCallbackDeclarationUtil.LIBRARY_INSTANCES_CONTEXT_KEY,
-				Map.of(WorkingDirectoryLibrarySource.TYPE_ID, instance)));
+		ToolContext context = new ToolContext(Map.of());
 
-		String written = tool(standIns.getToolCallbacks(), "writeFile").call("{\"path\":\"a.txt\",\"content\":\"hi\"}",
-				context);
+		String written = tool(source.getToolCallbacks(instance), "writeFile")
+				.call("{\"path\":\"a.txt\",\"content\":\"hi\"}", context);
 
 		assertTrue(written.contains("Created a.txt"), written);
 		assertTrue(Files.exists(root.resolve(instance.getId()).resolve("a.txt")));

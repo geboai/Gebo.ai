@@ -103,9 +103,9 @@ public class GAgentConfig extends GBaseObject
 	 * sandbox with its code tools - which an agent is given whole. A library is
 	 * named by its type and comes in block: every tool of it is mounted, none is
 	 * chosen one by one, and the resources are whichever instance of the type the
-	 * run holds (see {@code ToolCallbackDeclarationUtil#LIBRARY_INSTANCES_CONTEXT_KEY});
-	 * in a run that holds none, the tools say the library is not available. Null or
-	 * empty when the agent works with no library.
+	 * conversation holds. The tools are not registered: they are bound to the instance
+	 * when the agent enters its execution, so a run with no conversation has none of
+	 * them. Null or empty when the agent works with no library.
 	 */
 	protected List<String> libraryTypeIds = null;
 

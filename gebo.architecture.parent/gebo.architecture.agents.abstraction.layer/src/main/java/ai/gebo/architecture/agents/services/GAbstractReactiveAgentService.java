@@ -137,8 +137,12 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		}
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = agentToolCallsListener(chatRequestContext);
-		List<String> allFunctions = resolveMountedToolNames(agentConfig,
-				Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null);
+		// the libraries the agent works with are reclaimed from the conversation as it
+		// enters, so that every step of it works on the same pool of resources
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, agentConfig);
+		List<String> allFunctions = withTheBoundLibraryTools(agentConfig, resolveMountedToolNames(agentConfig,
+				Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null),
+				libraries.tools());
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Reactive agent id:" + getId() + " enabled function names: " + allFunctions);
 			LOGGER.trace("<REACTIVE_AGENT_REQUEST agent=" + getId() + ">");
@@ -152,20 +156,24 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		}
 		// tools made for this execution, bound to it (e.g. notifyUser, bound to the
 		// notification sink)
-		final List<ToolCallback> additionalTools = additionalTools(contextAgentPersona, notificationSink);
-		if (additionalTools != null && !additionalTools.isEmpty()) {
+		final List<ToolCallback> executionTools = additionalTools(contextAgentPersona, notificationSink);
+		if (executionTools != null && !executionTools.isEmpty()) {
 			allFunctions = allFunctions != null ? new ArrayList<String>(allFunctions) : new ArrayList<String>();
-			for (ToolCallback tool : additionalTools) {
+			for (ToolCallback tool : executionTools) {
 				allFunctions.add(tool.getToolDefinition().name());
 			}
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Reactive agent id:" + getId() + " adds " + additionalTools.size()
-						+ " execution tool(s): " + additionalTools.stream().map(x -> x.getToolDefinition().name())
+				LOGGER.debug("Reactive agent id:" + getId() + " adds " + executionTools.size()
+						+ " execution tool(s): " + executionTools.stream().map(x -> x.getToolDefinition().name())
 								.toList());
 			}
 		}
+		final List<ToolCallback> boundTools = new ArrayList<ToolCallback>(libraries.tools());
+		if (executionTools != null) {
+			boundTools.addAll(executionTools);
+		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions, additionalTools);
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions, boundTools);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final IGConfigurableChatModel baseModel = copiedModel;
 		thinkingVariants.put(agentModel,
@@ -180,12 +188,9 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"
 					+ (agentRole != null ? agentRole.getCode() : null));
 		}
-		// the model wraps the tools with the listener of the context it is called with;
-		// the libraries the agent works with are reclaimed from the conversation as it
-		// enters, so that every step of it works on the same pool of resources
+		// the model wraps the tools with the listener of the context it is called with
 		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(
-				IChatRequestContext.forAgent(withTheLibrariesOfTheConversation(chatRequestContext, agentConfig),
-						callBacksListener),
+				IChatRequestContext.forAgent(libraries.context(), callBacksListener),
 				agentConfig, request, network,
 				contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole, agentPrompt, runAs,
 				callBacksListener, toolCalling);

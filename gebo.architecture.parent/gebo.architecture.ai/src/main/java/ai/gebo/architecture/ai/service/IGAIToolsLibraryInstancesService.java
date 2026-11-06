@@ -12,8 +12,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.ai.tool.ToolCallback;
+
 import ai.gebo.architecture.ai.model.AIResourceContent;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
+import ai.gebo.architecture.ai.model.ToolsCategory;
 
 /**
  * The instances of the libraries of tools and resources a conversation holds.
@@ -26,6 +30,9 @@ import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
  * The instances go when the conversation goes.
  */
 public interface IGAIToolsLibraryInstancesService {
+	/** The category the tools of a library are shown under; not knowledge base related. */
+	ToolsCategory LIBRARY_CATEGORY = new ToolsCategory("AI_TOOLS_LIBRARIES", "Libraries of tools and resources", false);
+
 	/**
 	 * The instances the conversation holds of the given library types, by type id:
 	 * the ones it holds already, and one created now for every type it holds none
@@ -44,6 +51,30 @@ public interface IGAIToolsLibraryInstancesService {
 	 * there are no instances.
 	 */
 	List<String> describe(Map<String, AIToolsAndResourcesLibraryInstance> instances);
+
+	/**
+	 * The tools of the given instances, as their sources bind them to each instance's
+	 * resources: what an agent holding them mounts on its model for this run, and the
+	 * only way a tool of a library reaches a model. Two libraries declaring a tool of
+	 * the same name is an error, logged as such: the tool of the instance coming first
+	 * stays. An instance whose source cannot give its tools is left out and logged.
+	 *
+	 * @param instances the instances an agent holds, by library type id, as
+	 *                  {@link #reclaim(String, Collection)} gives them
+	 * @return the tools, in the order of the instances; empty when there are none
+	 */
+	List<ToolCallback> toolsOf(Map<String, AIToolsAndResourcesLibraryInstance> instances);
+
+	/**
+	 * The library types managed by this installation among the given ones, in their
+	 * order, each once: what they declare - their tools first of all - can be read
+	 * with no run and no instance, by whoever shows what a configuration mounts. A
+	 * type this installation does not manage is left out and logged.
+	 *
+	 * @param libraryTypeIds the types an agent configuration names
+	 * @return the types; empty when there are none
+	 */
+	List<AIToolsAndResourcesLibraryType> typesOf(Collection<String> libraryTypeIds);
 
 	/**
 	 * The instances the conversation holds now, by library type id, as they are:

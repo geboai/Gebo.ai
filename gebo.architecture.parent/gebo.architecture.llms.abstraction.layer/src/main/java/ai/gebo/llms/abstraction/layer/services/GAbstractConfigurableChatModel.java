@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -432,10 +434,17 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected List<ToolCallback> wrapToolsClosingResults(ReactiveIdentityUtil runAs,
 			ToolCallsListener toolCallListener, String toolsResultsClosing) {
 		List<ToolCallback> tools = this.toolCallbacksRepository.getTools(toolNames);
-
+		// a tool made for this use of the model - a library's, bound to the resources of
+		// this run - takes the place of a registered tool of its name
+		final Set<String> madeForThisUse = new HashSet<>();
+		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			madeForThisUse.add(toolCallback.getToolDefinition().name());
+		}
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+			if (!madeForThisUse.contains(toolCallback.getToolDefinition().name())) {
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+			}
 		}
 		// the tools made for this use of the model are not in the repository: without this
 		// they would be executable but never declared to the model

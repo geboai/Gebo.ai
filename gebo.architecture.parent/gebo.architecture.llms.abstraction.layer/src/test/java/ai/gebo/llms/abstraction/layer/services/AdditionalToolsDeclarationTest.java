@@ -94,6 +94,27 @@ class AdditionalToolsDeclarationTest {
 	}
 
 	@Test
+	void aToolMadeForThisUseTakesThePlaceOfTheRegisteredToolOfItsName() throws Exception {
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		List<ToolCallback> registered = List.of(tool("searchWeb"), tool("readFile"));
+		when(repository.getTools(anyList())).thenReturn(registered);
+		IChatModelUsageAdvisorFactory usage = mock(IChatModelUsageAdvisorFactory.class);
+		when(usage.create(any(), any(), any())).thenReturn(mock(IChatModelUsageAdvisor.class));
+		DeclaringModel model = new DeclaringModel(repository, usage);
+		model.config = new GBaseChatModelConfig();
+		ToolCallback ofTheLibrary = mock(ToolCallback.class);
+		when(ofTheLibrary.getToolDefinition()).thenReturn(
+				ToolDefinition.builder().name("readFile").description("of the library").inputSchema("{}").build());
+		IGConfigurableChatModel agentModel = model.cloneWithOptions("agent-", new ChatModelConfigOptions(null, null,
+				null, List.of("searchWeb", "readFile"), List.of(ofTheLibrary)));
+
+		List<ToolCallback> declared = agentModel.wrapTools(mock(ReactiveIdentityUtil.class), null);
+
+		assertEquals(List.of("searchWeb", "readFile"), names(declared), "one tool of that name is declared");
+		assertEquals("of the library", declared.get(1).getToolDefinition().description());
+	}
+
+	@Test
 	void aModelWithoutToolsOfItsOwnDeclaresTheRepositoryOnes() {
 		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
 		ToolCallback searchWeb = tool("searchWeb");
