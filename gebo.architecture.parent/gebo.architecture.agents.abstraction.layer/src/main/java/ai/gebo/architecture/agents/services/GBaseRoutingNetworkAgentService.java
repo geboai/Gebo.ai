@@ -353,6 +353,11 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 
 			}
 		}
+		if (toBeScheduled.isEmpty()) {
+			LOGGER.warn("Routing agent id:" + getId() + " session:" + session.getId() + " gave no usable command: its plan"
+					+ " has the entries " + (populated != null ? populated.keySet() : null) + " and it can route to "
+					+ toCoordinate + ", so nothing it planned is dispatched on this cycle");
+		}
 		List<AgentsExchangeMessage<?>> out = new ArrayList<>();
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> scheduled = ScheduleTargetAgentEnvelope
 				.normalizeDeliveryPlan(toBeScheduled);

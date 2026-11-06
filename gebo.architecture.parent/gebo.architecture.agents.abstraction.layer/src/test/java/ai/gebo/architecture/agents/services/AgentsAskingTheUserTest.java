@@ -25,8 +25,14 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.read.ListAppender;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
@@ -337,6 +343,31 @@ class AgentsAskingTheUserTest {
 		run(new Router(), "What is new?");
 
 		assertEquals(TOLD + "What is new?", inputsGivenToTheModel.get(0));
+	}
+
+	@Test
+	void aPlanGivingNoUsableCommandIsWarnedOf() throws Exception {
+		theRouterHasAPeer();
+		network.setAgents(List.of());
+		// the JSON schema a model can give back instead of a plan
+		Map<String, Object> noPlan = new LinkedHashMap<String, Object>();
+		noPlan.put("$schema", "https://json-schema.org/draft/2020-12/schema");
+		noPlan.put("type", "object");
+		when(model.structuredResponse(any(), any(), any(), eq(LinkedHashMap.class), any(GeboToolCalling.class)))
+				.thenReturn((LinkedHashMap) noPlan);
+		ListAppender<ILoggingEvent> logged = new ListAppender<ILoggingEvent>();
+		logged.start();
+		Logger logger = (Logger) LoggerFactory.getLogger(Router.class);
+		logger.addAppender(logged);
+		try {
+			run(new Router(), "What is new?");
+		} finally {
+			logger.detachAppender(logged);
+		}
+
+		assertTrue(logged.list.stream().anyMatch(event -> event.getLevel() == Level.WARN
+				&& event.getFormattedMessage().contains("no usable command")
+				&& event.getFormattedMessage().contains("$schema")));
 	}
 
 	@Test
