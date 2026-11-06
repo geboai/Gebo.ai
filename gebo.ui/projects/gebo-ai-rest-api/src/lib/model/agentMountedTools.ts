@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { LibraryToolCollision } from './libraryToolCollision';
 import { MountedTool } from './mountedTool';
 
 export interface AgentMountedTools { 
@@ -17,6 +18,7 @@ export interface AgentMountedTools {
     mountMode?: AgentMountedTools.MountModeEnum;
     tools?: Array<MountedTool>;
     excludedTools?: Array<MountedTool>;
+    collisions?: Array<LibraryToolCollision>;
 }
 export namespace AgentMountedTools {
     export type MountModeEnum = 'AUTO' | 'SELECTED';

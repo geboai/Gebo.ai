@@ -6,6 +6,7 @@ import ai.gebo.monolithic.api.client.model.GAgentConfig;
 import ai.gebo.monolithic.api.client.model.GAgentRole;
 import ai.gebo.monolithic.api.client.model.GBaseObject;
 import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
+import ai.gebo.monolithic.api.client.model.LibraryToolCollision;
 import ai.gebo.monolithic.api.client.model.OperationStatusGAgentConfig;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T15:32:31.107789+01:00[Europe/Rome]")
 
 public class GeboAgentAdminControllerApi {
     private ApiClient apiClient;
@@ -46,6 +47,52 @@ public class GeboAgentAdminControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return List&lt;LibraryToolCollision&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<LibraryToolCollision> checkAgentToolCollisions(GAgentConfig body) throws RestClientException {
+        return checkAgentToolCollisionsWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;List&lt;LibraryToolCollision&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<LibraryToolCollision>> checkAgentToolCollisionsWithHttpInfo(GAgentConfig body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling checkAgentToolCollisions");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentAdminController/checkAgentToolCollisions").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<LibraryToolCollision>> returnType = new ParameterizedTypeReference<List<LibraryToolCollision>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 

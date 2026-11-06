@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **mountMode** | [**MountModeEnum**](#MountModeEnum) |  |  [optional]
 **tools** | [**List&lt;MountedTool&gt;**](MountedTool.md) |  |  [optional]
 **excludedTools** | [**List&lt;MountedTool&gt;**](MountedTool.md) |  |  [optional]
+**collisions** | [**List&lt;LibraryToolCollision&gt;**](LibraryToolCollision.md) |  |  [optional]
 
 <a name="MountModeEnum"></a>
 ## Enum: MountModeEnum

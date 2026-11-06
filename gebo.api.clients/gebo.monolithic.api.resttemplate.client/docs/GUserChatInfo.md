@@ -4,11 +4,11 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **description** | **String** |  |  [optional]
-**chatProfileCode** | **String** |  |  [optional]
-**pipelineCode** | **String** |  |  [optional]
-**chatModelCode** | **String** |  |  [optional]
-**ragChat** | **Boolean** |  |  [optional]
-**chatCreationDateTime** | [**Date**](Date.md) |  |  [optional]
 **code** | **String** |  |  [optional]
-**username** | **String** |  |  [optional]
+**ragChat** | **Boolean** |  |  [optional]
 **contextCode** | **String** |  |  [optional]
+**chatProfileCode** | **String** |  |  [optional]
+**chatModelCode** | **String** |  |  [optional]
+**pipelineCode** | **String** |  |  [optional]
+**chatCreationDateTime** | [**Date**](Date.md) |  |  [optional]
+**username** | **String** |  |  [optional]

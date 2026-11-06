@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * BuildSystemRef
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T11:20:25.212850700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-06T15:32:31.107789+01:00[Europe/Rome]")
 
 public class BuildSystemRef {
   @JsonProperty("buildSystemTypeCode")
