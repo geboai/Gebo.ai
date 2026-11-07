@@ -79,6 +79,16 @@ public final class AgentSuspensionTurn {
 	}
 
 	/**
+	 * Whether a tool of the turn's calls declared what the run must wait for, readable
+	 * while the calls are still streaming: from then on what the call answers is the
+	 * waiting tool's own result, for the model and not for the user, since the agent
+	 * says nothing when it waits.
+	 */
+	public boolean isWaiting() {
+		return wait.isWaiting();
+	}
+
+	/**
 	 * The input of the turn: the message received, with what the agent waited for
 	 * told first when it is re-executed on a respawn. An input that is not text
 	 * stays as it is: there is no place in it for the answers.

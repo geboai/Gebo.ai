@@ -99,8 +99,17 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(turn.toldContext(chatRequestContext, request),
 				config, request, network,
 				contextAgentPersona, notificationSink, session, mySessionContext, runAs, callToolCalling);
+		// Once a tool of the call declared what the run waits for, the agent says nothing:
+		// what the call answers from then on is the waiting tool's own result (a tool
+		// returning directly ends the call with it), written for the model, not for the
+		// user, who is asked the question by the suspension.
+		final int[] keptFromTheUser = { 0 };
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
-			sink.emitNext(x, null);
+			if (turn.isWaiting()) {
+				keptFromTheUser[0]++;
+			} else {
+				sink.emitNext(x, null);
+			}
 			return x;
 		});
 		List<IGPartialOperation<ResponseType>> buffered = duplicatedFlux.collectList().block();
@@ -108,8 +117,12 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.debug("Reactive agent adapter id:" + getId() + " buffered "
 					+ (buffered != null ? buffered.size() : 0) + " partial operation(s)");
 		}
-		// what the agent streamed so far reached the user
+		// what the agent streamed before its tool declared the wait reached the user
 		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Reactive agent adapter id:" + getId() + " waits: " + keptFromTheUser[0]
+						+ " partial operation(s) streamed after the wait was declared kept from the user");
+			}
 			return List.of();
 		}
 		ResponseType response = extractResponse(buffered);

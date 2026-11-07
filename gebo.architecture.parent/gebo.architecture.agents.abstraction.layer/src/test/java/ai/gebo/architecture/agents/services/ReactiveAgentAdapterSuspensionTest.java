@@ -115,10 +115,51 @@ class ReactiveAgentAdapterSuspensionTest {
 		List<AgentsExchangeMessage<String>> out = run();
 
 		assertTrue(out.isEmpty(), "the adapter waits: nothing is said to the network");
+		assertEquals(List.of(), streamedToTheUser(), "the waiting tool's result is for the model, not the user");
 		ArgumentCaptor<AgentSuspendedWaitingCondition> condition = ArgumentCaptor
 				.forClass(AgentSuspendedWaitingCondition.class);
 		verify(handler).enterSuspensionState(eq(network), eq(config), eq(me), any(), condition.capture());
 		assertEquals("Which year?", condition.getValue().getWaitingConditionStatement());
+	}
+
+	@Test
+	void whatTheAgentStreamedBeforeItsToolDeclaredTheWaitReachesTheUserNotWhatFollows() throws Exception {
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
+		when(agent.execute(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+				.thenAnswer(invocation -> {
+					GeboToolCalling callToolCalling = invocation.getArgument(9, GeboToolCalling.class);
+					// the model writes, then calls the waiting tool, whose result ends the call
+					return Flux.concat(Flux.just(IGPartialOperation.of("Let me check one thing with you.", false)),
+							Flux.defer(() -> {
+								callToolCalling.getProvider().get(IGWaitExternalCondition.class)
+										.waitFor(clarification(null));
+								return Flux.just(IGPartialOperation.of("The question was put to the user.", false),
+										IGPartialOperation.of("The question was put to the user.", true));
+							}));
+				});
+
+		List<AgentsExchangeMessage<String>> out = run();
+
+		assertTrue(out.isEmpty(), "the adapter waits: nothing is said to the network");
+		assertEquals(List.of("Let me check one thing with you."), streamedToTheUser());
+		verify(handler).enterSuspensionState(eq(network), eq(config), eq(me), any(), any());
+	}
+
+	@Test
+	void anAgentNotWaitingStreamsAllItWrites() throws Exception {
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
+		when(agent.execute(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()))
+				.thenReturn(Flux.just(IGPartialOperation.of("Nothing", false), IGPartialOperation.of("Nothing new.", true)));
+
+		run();
+
+		assertEquals(List.of("Nothing", "Nothing new."), streamedToTheUser());
+	}
+
+	/** What the adapter passed on to the network's output, the user's stream. */
+	private List<String> streamedToTheUser() {
+		sink.tryEmitComplete();
+		return sink.asFlux().map(IGPartialOperation::getData).collectList().block();
 	}
 
 	@Test
