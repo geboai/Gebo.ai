@@ -178,6 +178,7 @@ class UserQuestionsLibrarySourceTest {
 	void theLibraryTellsTheAgentsThatAQuestionComesBeforeTheirUsualOutput() {
 		String rules = new UserQuestionsLibrarySource().getManagedTypes().get(0).getAgentRules();
 
+		assertTrue(rules.startsWith("## Asking the user"), "a section of its own is read as one: " + rules);
 		assertTrue(rules.contains("do NOT produce your usual output"), rules);
 		assertTrue(rules.contains("yourself"), "an agent left to delegate leaves the question to the writer: " + rules);
 		new UserQuestionsLibrarySource().getManagedTypes().get(0).getTools()

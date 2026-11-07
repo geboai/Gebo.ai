@@ -46,7 +46,9 @@ public class UserQuestionsLibrarySource implements IGAIToolsAndResourcesLibraryS
 	private static final String INSTANCE_DESCRIPTION = "ask the user what you cannot decide without them; the work waits for the answer";
 
 	/** A model whose prompt allows only one kind of output would never call the tools without this. */
-	static final String AGENT_RULES = "If you cannot do your work well without a choice or a fact only the user can give,"
+	static final String AGENT_RULES = "## Asking the user\n\n"
+			+ "If you cannot do your work well without a choice or a fact only the user can give, such as which of several"
+			+ " meanings, periods or products they mean,"
 			+ " do NOT guess, do NOT leave the question to another agent and do NOT produce your usual output: call the"
 			+ " question tool askUserSingleChoiceQuestion yourself, or askUserMultipleChoiceQuestion when several options"
 			+ " can apply. The run stops and you are executed again with the answer. Ask at most once, and only what no"
