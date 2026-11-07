@@ -29,6 +29,12 @@ public final class AgentPrivateSessionContext<InputType, OutputType> {
 	 * stay known in every turn after the one they were told in.
 	 */
 	private final Vector<AgentSuspendedWaitingCondition<?, ?>> solvedConditions = new Vector<>();
+	/**
+	 * What the libraries held in the agent's present turn add to its prompt: set as
+	 * the turn begins, it is not memory and no suspension keeps it, a respawned agent
+	 * reclaims its libraries and gets it again.
+	 */
+	private volatile String additionalRules = "";
 
 	@AllArgsConstructor
 	@Getter
@@ -55,6 +61,14 @@ public final class AgentPrivateSessionContext<InputType, OutputType> {
 			LOGGER.trace(String.valueOf(payload));
 			LOGGER.trace("</PRIVATE_TURN_OUTPUT>");
 		}
+	}
+
+	public String getAdditionalRules() {
+		return additionalRules;
+	}
+
+	public void setAdditionalRules(String additionalRules) {
+		this.additionalRules = additionalRules != null ? additionalRules : "";
 	}
 
 	/** Keeps the conditions given as solved; none given changes nothing. */

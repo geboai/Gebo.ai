@@ -85,13 +85,14 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
 					+ " contributionNr:" + actualContributionNr);
 		}
-		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
-				false);
 		GAgentRole agentRole = agentRoleDao.findByCode(config.getAgentRoleCode());
 		// this agent's own tool calls, forwarded to the user request's recorder
 		ToolCallsListener listener = agentToolCallsListener(chatRequestContext);
 		// the libraries the agent works with are reclaimed from the conversation as it enters
 		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, config);
+		GPromptTemplateConfig prompt = promptOfTheTurn(
+				resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(), false), libraries,
+				mySessionContext);
 		final IChatRequestContext agentContext = IChatRequestContext.forAgent(libraries.context(), listener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, listener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());

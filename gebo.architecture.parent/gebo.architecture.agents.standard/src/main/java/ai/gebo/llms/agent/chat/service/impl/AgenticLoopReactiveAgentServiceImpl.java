@@ -515,7 +515,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
 				AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
 				AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
-				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)) {
+				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
 			if (prompt.getPlaceholders().containsKey(placeholder)) {
 				return true;
 			}
@@ -547,7 +548,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		deliverableParams.put(USER_LANGUAGE_PARAM, sessionUserLanguage(session));
 		// the network's own placeholders, when the loop's prompt names them: what the
 		// network routed to the loop, its identity, the scenario, the shared context (a
-		// custom loop prompt may; the shipped one names none)
+		// custom loop prompt may; the shipped ones name only the additional rules slot)
 		if (namesAnAgentPlaceholder(agentPrompt)) {
 			deliverableParams.putAll(createAgentTemplateParams(agentPrompt, network, agentRole, contextAgentPersona,
 					session, mySessionContext, request, null, 0, budget));

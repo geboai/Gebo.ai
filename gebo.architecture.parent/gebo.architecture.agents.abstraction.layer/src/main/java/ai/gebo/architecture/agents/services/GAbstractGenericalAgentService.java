@@ -383,9 +383,27 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	/**
 	 * What an agent entering its execution has from the libraries its configuration
 	 * names: the context it works in, told what each library holds, and the tools of
-	 * the instances it holds, to mount on its model.
+	 * the instances it holds, to mount on its model, and what they add to its prompt
+	 * (see {@link AgentAdditionalRules}).
 	 */
-	public record AgentLibraries(IChatRequestContext context, List<ToolCallback> tools) {
+	public record AgentLibraries(IChatRequestContext context, List<ToolCallback> tools, String rules) {
+		public AgentLibraries(IChatRequestContext context, List<ToolCallback> tools) {
+			this(context, tools, "");
+		}
+	}
+
+	/**
+	 * The prompt the agent works on in this turn, given the one it resolved: what the
+	 * libraries it holds add to the prompt goes where {@code createAgentTemplateParams}
+	 * finds it, and a prompt that does not name the slot gets it in a copy.
+	 */
+	protected GPromptTemplateConfig promptOfTheTurn(GPromptTemplateConfig prompt, AgentLibraries libraries,
+			AgentPrivateSessionContext<?, ?> mySessionContext) {
+		final String rules = libraries != null ? libraries.rules() : "";
+		if (mySessionContext != null) {
+			mySessionContext.setAdditionalRules(rules);
+		}
+		return AgentAdditionalRules.withSlot(prompt, rules);
 	}
 
 	/** Who keeps the library instances; null in an installation keeping none. */
@@ -438,7 +456,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 					+ chatRequestContext.getSessionID() + " with " + held.size() + " library instance(s): " + held.keySet()
 					+ " and " + tools.size() + " tool(s) of them, for agent service id:" + getId());
 		}
-		return new AgentLibraries(chatRequestContext.withRulesToFollow(instances.describe(held)), tools);
+		return new AgentLibraries(chatRequestContext.withRulesToFollow(instances.describe(held)), tools,
+				AgentAdditionalRules.of(instances.typesOf(held.keySet())));
 	}
 
 	/**
@@ -1177,6 +1196,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			constantParams.put(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput);
 			remainingBudget -= ITokensCountable.stringsTokensSize(renderedInput);
 			tracePlaceholder(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput, remainingBudget);
+		}
+		if (placeholders.containsKey(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
+			// always filled: an empty text when nothing is added to the prompt
+			String additionalRules = mySessionContext != null ? nullToEmpty(mySessionContext.getAdditionalRules()) : "";
+			constantParams.put(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM, additionalRules);
+			remainingBudget -= ITokensCountable.stringsTokensSize(additionalRules);
+			tracePlaceholder(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM, additionalRules,
+					remainingBudget);
 		}
 
 		if (placeholders.containsKey(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM)) {

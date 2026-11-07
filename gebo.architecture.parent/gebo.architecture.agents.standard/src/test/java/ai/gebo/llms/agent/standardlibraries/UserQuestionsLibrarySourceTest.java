@@ -173,4 +173,15 @@ class UserQuestionsLibrarySourceTest {
 		assertTrue(type.getTools().get(0).isReturnDirect());
 		assertFalse(json.contains("returnDirect"), json);
 	}
+
+	@Test
+	void theLibraryTellsTheAgentsThatAQuestionComesBeforeTheirUsualOutput() {
+		String rules = new UserQuestionsLibrarySource().getManagedTypes().get(0).getAgentRules();
+
+		assertTrue(rules.contains("do NOT produce your usual output"), rules);
+		assertTrue(rules.contains("yourself"), "an agent left to delegate leaves the question to the writer: " + rules);
+		new UserQuestionsLibrarySource().getManagedTypes().get(0).getTools()
+				.forEach(tool -> assertTrue(rules.contains(tool.getName()), tool.getName() + " in: " + rules));
+		assertFalse(rules.contains("{"), "the rules go in a template as a value: " + rules);
+	}
 }

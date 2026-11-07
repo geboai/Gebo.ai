@@ -62,6 +62,8 @@ class ToolCallingAgentSuspensionTest {
 	private final IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
 	private final IGNetworkOfAgentsSuspensionHandler handler = mock(IGNetworkOfAgentsSuspensionHandler.class);
 	private final List<Object> inputsGivenToTheModel = new ArrayList<Object>();
+	private final List<String> rulesOfTheTurns = new ArrayList<String>();
+	private String rulesOfTheLibraries = "";
 	private final AgentNetworkParticipant me = new AgentNetworkParticipant();
 	private final GAgentConfig config = new GAgentConfig();
 	private final GAgentsNetwork network = new GAgentsNetwork();
@@ -77,7 +79,8 @@ class ToolCallingAgentSuspensionTest {
 		@Override
 		protected AgentLibraries reclaimTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
 				GAgentConfig agentConfig) {
-			return new AgentLibraries(chatRequestContext.withToolsContextValue("held", agentConfig.getCode()), List.of());
+			return new AgentLibraries(chatRequestContext.withToolsContextValue("held", agentConfig.getCode()), List.of(),
+					rulesOfTheLibraries);
 		}
 
 		@Override
@@ -105,6 +108,7 @@ class ToolCallingAgentSuspensionTest {
 				AgentsCollaborationSessionContext session, AgentPrivateSessionContext<I, O> mySessionContext,
 				Object input, IGAgentsNetworkRuntimeDao agentsDao, int actualContributionNr, int tokenBudget) {
 			inputsGivenToTheModel.add(input);
+			rulesOfTheTurns.add(mySessionContext.getAdditionalRules());
 			return new LinkedHashMap<String, Object>(Map.of("input", String.valueOf(input)));
 		}
 	}
@@ -151,6 +155,23 @@ class ToolCallingAgentSuspensionTest {
 		assertEquals(1, out.size());
 		assertEquals("the answer", out.get(0).getPayload());
 		verify(handler, never()).enterSuspensionState(any(), any(), any(), any(), any());
+	}
+
+	@Test
+	void anAgentHoldingALibraryWithRulesCallsItsModelWithThemInEveryTurnEvenRebuilt() throws Exception {
+		rulesOfTheLibraries = "Ask before going on.";
+		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenReturn("the answer");
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
+
+		run(new TestAgent());
+		run(new TestAgent()); // a new private context, as a respawned agent has
+
+		ArgumentCaptor<GPromptTemplateConfig> prompt = ArgumentCaptor.forClass(GPromptTemplateConfig.class);
+		verify(model, org.mockito.Mockito.times(2)).textResponse(prompt.capture(), any(), any(), any(GeboToolCalling.class));
+		for (GPromptTemplateConfig called : prompt.getAllValues()) {
+			assertTrue(called.getPlaceholders().containsKey("additionalRulesSlot"), called.getSystemPromptTemplate());
+		}
+		assertEquals(List.of("Ask before going on.", "Ask before going on."), rulesOfTheTurns);
 	}
 
 	@Test

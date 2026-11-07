@@ -370,4 +370,31 @@ class AgentLibraryTypesMountingTest {
 		assertEquals(List.of("searchKnowledgeBase", "readFile", "writeFile"), options.getValue().getToolsName());
 		assertEquals(List.of(readFile, writeFile), options.getValue().getAdditionalTools());
 	}
+
+	@Test
+	void whatAPromptGetsFromTheLibrariesIsTheRulesOfTheTypesReallyHeld() {
+		IGAIToolsLibraryInstancesService instances = mock(IGAIToolsLibraryInstancesService.class);
+		Map<String, AIToolsAndResourcesLibraryInstance> reclaimed = Map.of(WORKING_DIRECTORY,
+				new AIToolsAndResourcesLibraryInstance());
+		when(instances.reclaim("the-conversation", List.of(WORKING_DIRECTORY))).thenReturn(reclaimed);
+		when(instances.describe(any())).thenReturn(List.of());
+		when(instances.toolsOf(reclaimed)).thenReturn(List.of());
+		AIToolsAndResourcesLibraryType held = new AIToolsAndResourcesLibraryType();
+		held.setId(WORKING_DIRECTORY);
+		held.setAgentRules("Ask before going on.");
+		when(instances.typesOf(reclaimed.keySet())).thenReturn(List.of(held));
+		AnAgentService service = new AnAgentService(registryOf(), binderOf(instances));
+
+		assertEquals("Ask before going on.", service
+				.reclaimTheLibrariesOfTheConversation(aContextOf("the-conversation", List.of()), aCoder()).rules());
+	}
+
+	@Test
+	void holdingNoLibraryNothingIsAddedToThePrompt() {
+		IGAIToolsLibraryInstancesService instances = mock(IGAIToolsLibraryInstancesService.class);
+		when(instances.reclaim(any(), any())).thenReturn(Map.of());
+		AnAgentService service = new AnAgentService(registryOf(), binderOf(instances));
+
+		assertEquals("", service.reclaimTheLibrariesOfTheConversation(aContextOf(null, List.of()), aCoder()).rules());
+	}
 }

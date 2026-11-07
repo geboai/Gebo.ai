@@ -181,8 +181,9 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 						new ChatModelConfigOptions(configOptions.getTemperature(), configOptions.getTopP(), thinking,
 								configOptions.getToolsName(), configOptions.getAdditionalTools())));
 
-		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
-				agentConfig.getMainLoopPromptUseCode(), false);
+		final GPromptTemplateConfig agentPrompt = promptOfTheTurn(
+				resolvePrompt(agentConfig.getCustomLoopPrompt(), agentConfig.getMainLoopPromptUseCode(), false),
+				libraries, privateMemory);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"

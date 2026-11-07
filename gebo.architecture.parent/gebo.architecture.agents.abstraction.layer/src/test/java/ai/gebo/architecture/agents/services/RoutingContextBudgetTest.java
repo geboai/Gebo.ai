@@ -12,7 +12,13 @@ package ai.gebo.architecture.agents.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.withSettings;
 
 import java.util.ArrayList;
@@ -296,5 +302,68 @@ class RoutingContextBudgetTest {
 	void withNothingSolvedAndNoTurnThePrivateContextStaysEmpty() {
 		assertEquals("", genericService()
 				.render(new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>(), 3, 2000));
+	}
+
+	private static ai.gebo.architecture.ai.model.GPromptTemplateConfig namingTheSlot(String more) {
+		ai.gebo.architecture.ai.model.GPromptTemplateConfig prompt = new ai.gebo.architecture.ai.model.GPromptTemplateConfig();
+		prompt.setPromptUse("a-use");
+		prompt.setSystemPromptTemplate("Do this.\n{additionalRulesSlot}\n" + more);
+		return prompt;
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void aPromptNamingTheSlotHasItFilledWithAnEmptyTextWhenNothingIsAdded() {
+		Map<String, Object> params = genericService().createAgentTemplateParams(namingTheSlot(""), null, null, null, null,
+				new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>(), null, null, 0, 1000);
+
+		assertEquals("", params.get("additionalRulesSlot"));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void theSlotIsFilledWithTheRulesOfTheTurnAndTheyAreTakenFromTheBudget() {
+		GAbstractGenericalAgentService service = genericService();
+		ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String> memory = new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>();
+		String rules = words(50, "rule");
+		memory.setAdditionalRules(rules);
+
+		Map<String, Object> params = service.createAgentTemplateParams(namingTheSlot("{PRIVATE_CONTEXT}"), null, null, null,
+				null, memory, null, null, 0, 1000);
+
+		assertEquals(rules, params.get("additionalRulesSlot"));
+		verify(service).render(any(ai.gebo.architecture.agents.model.AgentPrivateSessionContext.class), anyInt(),
+				eq(1000 - tokens(rules)));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void aTurnWithRulesWorksOnACopyOfThePromptAndKeepsThemForTheFilling() {
+		GAbstractGenericalAgentService service = genericService();
+		ai.gebo.architecture.ai.model.GPromptTemplateConfig saved = new ai.gebo.architecture.ai.model.GPromptTemplateConfig();
+		saved.setPromptUse("a-use");
+		saved.setSystemPromptTemplate("Do this.");
+		ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String> memory = new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>();
+
+		ai.gebo.architecture.ai.model.GPromptTemplateConfig turn = service.promptOfTheTurn(saved,
+				new GAbstractGenericalAgentService.AgentLibraries(null, List.of(), "a rule"), memory);
+
+		assertNotSame(saved, turn);
+		assertEquals("a rule", memory.getAdditionalRules());
+		assertEquals("Do this.", saved.getSystemPromptTemplate());
+		assertEquals("a rule", service.createAgentTemplateParams(turn, null, null, null, null, memory, null, null, 0, 1000)
+				.get("additionalRulesSlot"));
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void aTurnHoldingNoLibraryForgetsTheRulesOfTheTurnBefore() {
+		ai.gebo.architecture.ai.model.GPromptTemplateConfig saved = namingTheSlot("");
+		ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String> memory = new ai.gebo.architecture.agents.model.AgentPrivateSessionContext<String, String>();
+		memory.setAdditionalRules("a rule");
+
+		assertSame(saved, genericService().promptOfTheTurn(saved,
+				new GAbstractGenericalAgentService.AgentLibraries(null, List.of()), memory));
+		assertEquals("", memory.getAdditionalRules());
 	}
 }

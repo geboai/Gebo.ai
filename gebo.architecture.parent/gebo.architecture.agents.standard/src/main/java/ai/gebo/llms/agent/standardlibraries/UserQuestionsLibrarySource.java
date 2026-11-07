@@ -45,6 +45,14 @@ public class UserQuestionsLibrarySource implements IGAIToolsAndResourcesLibraryS
 	private static final String TYPE_DESCRIPTION = "User questions and clarifications tool";
 	private static final String INSTANCE_DESCRIPTION = "ask the user what you cannot decide without them; the work waits for the answer";
 
+	/** A model whose prompt allows only one kind of output would never call the tools without this. */
+	static final String AGENT_RULES = "If you cannot do your work well without a choice or a fact only the user can give,"
+			+ " do NOT guess, do NOT leave the question to another agent and do NOT produce your usual output: call the"
+			+ " question tool askUserSingleChoiceQuestion yourself, or askUserMultipleChoiceQuestion when several options"
+			+ " can apply. The run stops and you are executed again with the answer. Ask at most once, and only what no"
+			+ " agent can find out. In that case calling the tool is your whole output for this turn: this comes before"
+			+ " any other rule of these instructions about what your output must be.";
+
 	private final List<ToolCallback> tools = List.of(AskUserSingleChoiceQuestionTool.declare(),
 			AskUserMultipleChoiceQuestionTool.declare());
 	private final AIToolsAndResourcesLibraryType type = declareType();
@@ -55,6 +63,7 @@ public class UserQuestionsLibrarySource implements IGAIToolsAndResourcesLibraryS
 		declared.setId(TYPE_ID);
 		declared.setDescription(TYPE_DESCRIPTION);
 		declared.setResourcesTypes(List.of());
+		declared.setAgentRules(AGENT_RULES);
 		declared.setTools(List.of(reference(tools.get(0), "Ask the user a question with one answer"),
 				reference(tools.get(1), "Ask the user a question with several answers")));
 		return declared;

@@ -123,8 +123,9 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
-		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
-				false);
+		GPromptTemplateConfig prompt = promptOfTheTurn(
+				resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(), false), libraries,
+				mySessionContext);
 		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Tool-calling agent id:" + getId() + " agentRole:"

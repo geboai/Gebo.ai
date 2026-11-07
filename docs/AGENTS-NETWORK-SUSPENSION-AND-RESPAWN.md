@@ -107,6 +107,23 @@ through a source that is `isMountedOnlyWhenAsked()`, and name the source on the 
 that may wait. Add a translator when the client should see the condition in a form of
 its own; the default translator carries any condition by its types.
 
+## The additional rules slot
+
+A prompt can forbid what a tool needs: a coordinator told that its only output is the
+routing plan never calls a question tool. A library says what must be told in
+`AIToolsAndResourcesLibraryType.agentRules`, and `{additionalRulesSlot}` is where a prompt
+takes it. The text comes from the libraries the turn really holds
+(`AgentAdditionalRules.of`), is set by `promptOfTheTurn` as each turn begins and is filled
+by `createAgentTemplateParams`, taken from the turn's budget; with no rules the slot is an
+empty text. A suspension does not keep it: a respawned agent reclaims its libraries and
+gets it again.
+
+The shipped agent prompts name the slot where it counts, a coordinator at the very end, its
+output contract naming the call of a tool as the one way out of the plan. A saved prompt that does not name it gets it at the end of the system template
+of the turn's copy, only when there are rules; what is saved stays as it is, and search
+prompts take this way too. The evidence extractor of the report writer has no slot: its
+calls have no tools. The rules are for the model, so the REST API leaves them out.
+
 ## Callers outside the chat
 
 `ChatEnvironmentRun.isSuspended()` and `getSuspendedState()` tell A2A, MCP and the

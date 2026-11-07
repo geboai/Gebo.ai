@@ -210,8 +210,9 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
-		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
-				false);
+		GPromptTemplateConfig prompt = promptOfTheTurn(
+				resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(), false), libraries,
+				mySessionContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing agent id:" + getId() + " resolved model:"
 					+ (agentModel != null ? agentModel.getCode() : null) + " role:"

@@ -78,8 +78,9 @@ public class GBaseTaskPerformerNetworkAgentService<InputType, OutputType>
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
 				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
-		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
-				false);
+		GPromptTemplateConfig prompt = promptOfTheTurn(
+				resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(), false), libraries,
+				mySessionContext);
 		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Task performer agent id:" + getId() + " agentRole:"
