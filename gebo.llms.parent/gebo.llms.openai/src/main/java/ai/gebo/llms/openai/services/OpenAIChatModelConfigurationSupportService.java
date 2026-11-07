@@ -158,10 +158,7 @@ public class OpenAIChatModelConfigurationSupportService
 					builder = builder.toolCallbacks(functions);
 					builder.parallelToolCalls(true);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ toolNames.size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + toolNames);
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 			// max_completion_tokens, not max_tokens: OpenAI deprecated max_tokens in its

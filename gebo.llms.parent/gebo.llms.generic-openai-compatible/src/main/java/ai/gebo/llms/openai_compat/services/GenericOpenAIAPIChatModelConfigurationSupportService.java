@@ -265,10 +265,7 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 					builder = builder.toolCallbacks(functions);
 					builder.parallelToolCalls(true);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ toolNames.size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + toolNames);
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 			if (user != null) {

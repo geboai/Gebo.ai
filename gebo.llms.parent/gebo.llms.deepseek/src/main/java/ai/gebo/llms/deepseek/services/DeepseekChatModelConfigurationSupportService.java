@@ -239,10 +239,7 @@ public class DeepseekChatModelConfigurationSupportService
 				if (functions != null && !functions.isEmpty()) {
 					builder = builder.toolCallbacks(functions);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ toolNames.size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + toolNames);
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 

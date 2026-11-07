@@ -869,6 +869,49 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	}
 
 	/**
+	 * The enabled tool names found neither among {@code resolved}, the tools the
+	 * repository gave for them, nor among the tools made for this use of the model. A
+	 * tool made for this use - a library's, bound to the resources of the run, or one
+	 * made for the execution, such as notifyUser - is not in the repository by design:
+	 * it is declared to every call (see {@link #wrapToolsClosingResults}), so it is not
+	 * missing.
+	 */
+	protected List<String> unresolvedToolNames(Collection<ToolCallback> resolved) {
+		final Set<String> found = new HashSet<String>();
+		for (ToolCallback tool : resolved != null ? resolved : List.<ToolCallback>of()) {
+			found.add(tool.getToolDefinition().name());
+		}
+		for (ToolCallback tool : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			found.add(tool.getToolDefinition().name());
+		}
+		final List<String> unresolved = new ArrayList<String>();
+		for (String name : toolNames) {
+			if (!found.contains(name)) {
+				unresolved.add(name);
+			}
+		}
+		return unresolved;
+	}
+
+	/**
+	 * What a provider tells when the repository resolved none of the enabled tools, so
+	 * that the model is configured with no tools of its own: a warning naming the tools
+	 * found nowhere, the ones the model will never declare; when every one is made for
+	 * this use of the model, only a debug line, since each call declares them.
+	 */
+	protected void logToolsNotRegistered(Logger logger, String modelCode, Collection<ToolCallback> resolved) {
+		final List<String> unresolved = unresolvedToolNames(resolved);
+		if (!unresolved.isEmpty()) {
+			logger.warn("Chat model " + modelCode + " enables " + toolNames.size() + " tool(s) but "
+					+ unresolved.size() + " of them resolved to no callback, neither registered nor made for this"
+					+ " use of it, so it is configured without them: " + unresolved);
+		} else if (logger.isDebugEnabled()) {
+			logger.debug("Chat model " + modelCode + " declares its " + toolNames.size()
+					+ " tool(s) on each call: none is registered, all of them are made for this use of it");
+		}
+	}
+
+	/**
 	 * The declared tools with the controlling software's mandatory ones, wrapped as the
 	 * others are: a declared tool of the same name gives way to the mandatory instance,
 	 * the one bound to this call.

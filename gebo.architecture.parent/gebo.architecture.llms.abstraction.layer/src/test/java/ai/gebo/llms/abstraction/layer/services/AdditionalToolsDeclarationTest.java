@@ -12,12 +12,17 @@ package ai.gebo.llms.abstraction.layer.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
@@ -32,7 +37,9 @@ import io.micrometer.observation.ObservationRegistry;
 /**
  * Pins the declaration of the tools made for one use of a model (an agent's
  * notifyUser): they are not in the tools repository, the only source the model
- * declared its tools from, so the model was never told they exist.
+ * declared its tools from, so the model was never told they exist. Since they are
+ * not in the repository by design, a provider configuring the model warns only of
+ * the enabled tools found nowhere.
  */
 class AdditionalToolsDeclarationTest {
 
@@ -124,5 +131,51 @@ class AdditionalToolsDeclarationTest {
 		model.toolNames = List.of("searchWeb");
 
 		assertEquals(List.of("searchWeb"), names(model.wrapTools(mock(ReactiveIdentityUtil.class), null)));
+	}
+
+	/** The model an agent runs: the question tools of its library and its notifyUser bound to it, none registered. */
+	private static DeclaringModel agentModelWith(List<String> enabled, List<ToolCallback> bound) throws Exception {
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		when(repository.getTools(anyList())).thenReturn(List.of());
+		IChatModelUsageAdvisorFactory usage = mock(IChatModelUsageAdvisorFactory.class);
+		when(usage.create(any(), any(), any())).thenReturn(mock(IChatModelUsageAdvisor.class));
+		DeclaringModel model = new DeclaringModel(repository, usage);
+		model.config = new GBaseChatModelConfig();
+		return (DeclaringModel) model.cloneWithOptions("agent-",
+				new ChatModelConfigOptions(null, null, null, enabled, bound));
+	}
+
+	@Test
+	void toolsMadeForThisUseAreNotMissingSoNoWarningIsLogged() throws Exception {
+		DeclaringModel agentModel = agentModelWith(
+				List.of("askUserSingleChoiceQuestion", "askUserMultipleChoiceQuestion", "notifyUser"),
+				List.of(tool("askUserSingleChoiceQuestion"), tool("askUserMultipleChoiceQuestion"), tool("notifyUser")));
+		Logger logger = mock(Logger.class);
+
+		agentModel.logToolsNotRegistered(logger, "agent-model", List.of());
+
+		assertEquals(List.of(), agentModel.unresolvedToolNames(List.of()));
+		verify(logger, never()).warn(anyString());
+	}
+
+	@Test
+	void onlyAToolFoundNowhereIsWarnedOf() throws Exception {
+		DeclaringModel agentModel = agentModelWith(List.of("askUserSingleChoiceQuestion", "searchGone"),
+				List.of(tool("askUserSingleChoiceQuestion")));
+		Logger logger = mock(Logger.class);
+
+		agentModel.logToolsNotRegistered(logger, "agent-model", List.of());
+
+		assertEquals(List.of("searchGone"), agentModel.unresolvedToolNames(List.of()),
+				"the tool bound to this use is not missing, the one in no source is");
+		verify(logger).warn(contains("1 of them resolved to no callback"));
+		verify(logger).warn(contains("[searchGone]"));
+	}
+
+	@Test
+	void aRegisteredToolIsNotMissing() throws Exception {
+		DeclaringModel agentModel = agentModelWith(List.of("searchWeb", "notifyUser"), List.of(tool("notifyUser")));
+
+		assertEquals(List.of(), agentModel.unresolvedToolNames(List.of(tool("searchWeb"))));
 	}
 }
