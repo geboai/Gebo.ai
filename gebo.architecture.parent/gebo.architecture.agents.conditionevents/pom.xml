@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.architecture</groupId>
+		<artifactId>gebo.architecture.parent</artifactId>
+		<version>1.0.6.0-SNAPSHOT</version>
+	</parent>
+	<!--
+	  The events that solve the conditions a suspended network of agents waits for,
+	  from any source (REST, the message broker, ...), each correlated by the
+	  session code and the condition id, merged in one correlation id or given as
+	  the pair. A layer on top of the chat and agents logic: it reads the open
+	  block of a session, checks each value with the condition's own translator and
+	  respawns the network through the chat pipelines, as the session's owner, once
+	  every mandatory condition is solved. The blocks, the network of agents and the
+	  agents services are used as they are.
+	  The REST controller is in gebo.architecture.agents.conditionevents.controllers.
+	-->
+	<artifactId>gebo.architecture.agents.conditionevents</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.chat.abstraction.layer</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
