@@ -12,6 +12,7 @@ package ai.gebo.architecture.persistence.impl;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -439,7 +441,9 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 				GBaseObject example = dependantTypeClass.newInstance();
 				dependantEdge.setAccessor.invoke(example, objectReference);
 				IGBaseMongoDBRepository mongoRepo = repoPattern.findByManagedType(dependantTypeClass);
-				List<? extends GBaseObject> list = mongoRepo.findAll(Example.of(example));
+				ExampleMatcher onlyTheReference = ExampleMatcher.matching()
+						.withIgnorePaths(initializedPropertiesBut(example, dependantEdge.field));
+				List<? extends GBaseObject> list = mongoRepo.findAll(Example.of(example, onlyTheReference));
 				stream = Stream.concat(stream, list.stream());
 			} catch (InstantiationException | IllegalAccessException e) {
 				throw new GeboPersistenceException("Cannot create entity=>" + dependantTypeClass.getName(), e);
@@ -449,6 +453,30 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 			}
 		}
 		return stream;
+	}
+
+	/**
+	 * The properties a fresh instance already holds a value for (an empty list, a
+	 * default flag), other than the reference: the example built on it must match
+	 * the reference alone, or a dependant whose value differs from the default (a
+	 * conversation with turns) would go unseen.
+	 */
+	private static String[] initializedPropertiesBut(GBaseObject example, Field reference)
+			throws IllegalAccessException {
+		final List<String> initialized = new ArrayList<String>();
+		for (Class<?> type = example.getClass(); type != null && type != Object.class; type = type.getSuperclass()) {
+			for (Field field : type.getDeclaredFields()) {
+				if (Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers())
+						|| field.equals(reference) || field.isSynthetic()) {
+					continue;
+				}
+				field.setAccessible(true);
+				if (field.get(example) != null) {
+					initialized.add(field.getName());
+				}
+			}
+		}
+		return initialized.toArray(new String[0]);
 	}
 
 	/**
