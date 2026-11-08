@@ -80,6 +80,25 @@ public class TestChatModel extends AbstractTestingBusinessLogic implements ChatM
 	}
 
 	/**
+	 * Test-global tool calls: when it gives tool calls for a prompt's contents, the
+	 * model answers with those calls instead of text, as a real model asking for its
+	 * tools does; the tool calling advisor of the platform runs them. It is asked
+	 * before the response logic; an empty or null list leaves the answer to it. Set it
+	 * in test setup and clear it in teardown.
+	 */
+	private static volatile Function<String, List<AssistantMessage.ToolCall>> globalToolCallLogic = null;
+
+	/** Sets the test-global tool calls. */
+	public static void setGlobalToolCallLogic(Function<String, List<AssistantMessage.ToolCall>> logic) {
+		globalToolCallLogic = logic;
+	}
+
+	/** Clears the test-global tool calls. */
+	public static void clearGlobalToolCallLogic() {
+		globalToolCallLogic = null;
+	}
+
+	/**
 	 * Default constructor for TestChatModel
 	 */
 	public TestChatModel() {
@@ -111,6 +130,12 @@ public class TestChatModel extends AbstractTestingBusinessLogic implements ChatM
 			observer.accept(prompt);
 		}
 		String content = prompt.getContents();
+		final Function<String, List<AssistantMessage.ToolCall>> toolCallLogic = globalToolCallLogic;
+		final List<AssistantMessage.ToolCall> toolCalls = toolCallLogic != null ? toolCallLogic.apply(content) : null;
+		if (toolCalls != null && !toolCalls.isEmpty()) {
+			return new ChatResponse(
+					List.of(new Generation(AssistantMessage.builder().content("").toolCalls(toolCalls).build())));
+		}
 		Function<String, String> global = globalResponseLogic;
 		String response;
 		if (global != null) {
