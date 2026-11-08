@@ -120,8 +120,10 @@
 						<version>3.0.59</version>
 						<configuration>
 							<inputSpec>${swagger.file}</inputSpec>
-							<!-- Overrides only encoder.mustache; every other file falls back to
-							     swagger-codegen's built-in template. The stock encoder targets
+							<!-- Overrides encoder.mustache and modelGeneric.mustache; every other
+							     file falls back to swagger-codegen's built-in template.
+							     modelGeneric.mustache renders a map-only model as a plain interface
+							     instead of the stock "extends null<String, any>". The stock encoder targets
 							     Angular 10 (ngVersion below) and emits CustomHttpUrlEncodingCodec
 							     WITHOUT the 'override' modifiers this project's TypeScript
 							     requires, so a regeneration used to overwrite the committed
