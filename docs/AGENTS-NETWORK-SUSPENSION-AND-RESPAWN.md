@@ -132,6 +132,92 @@ a caller that only reads the answer reads the question. The text runner renders 
 questions with the block id. Respawning from those callers goes through the chat
 pipeline service with the reaction on the request.
 
+## Conditions solved from outside: condition events
+
+A condition does not have to be answered by the user in the chat. Any system can solve it
+by sending an **event** that names the condition; the events layer keeps the event, matches
+it to the open block, and respawns the network when the block is solved. The layer sits on
+top of the chat and the agents: the block (`GNetworkOfAgentsSuspension`), the network and
+the agents services are unchanged, and the respawn goes through the same chat pipeline
+service as the chat's.
+
+### The correlation id
+
+The **condition id** (`AgentSuspendedWaitingConditionDto.id`, as `pendingNetworkOfAgentsSuspension`
+or the suspended state gives it) is the correlation id, and the **session code** says which
+conversation it belongs to. An event names the condition in either form, or both:
+
+- the composed id, `<sessionCode>:<conditionId>` (`ConditionCorrelationId`, split at the last
+  `:`), kept as the unique id of the event;
+- the pair `sessionCode` + `conditionId`, kept as well, with a unique index.
+
+### The event
+
+`ConditionEvent` solves the condition as a reaction does
+(`AgentSuspendedWaitingConditionReactionDto`): `conditionType` as the pending state names it
+(`clarification`, `default`...) and the `attributes` its translator reads (`chosenOption`,
+`value`, `declined`...). Once a block waits for the condition, the values are checked with
+its translator on a copy of the saved condition: an option that was not offered is
+`REFUSED`, and a later event for the same condition may replace it. Optional:
+
+- `text`, what the source says, for the conversation's history; when no event of a respawn
+  carries one, the text is made from the solved conditions (`IConditionEventTextRenderer`);
+- `sourceSystem`, `sourceEventId` (the same id again is a `DUPLICATE`), `sourceTimestamp`
+  (of two values of the same condition the later wins, `SUPERSEDED` for the older).
+
+The delivery answers a `ConditionEventAck`: `ACCEPTED` (matched to the open block),
+`PENDING` (no block waits for it yet: the run that asks has not ended, it is matched when
+the block is written), `DUPLICATE`, `SUPERSEDED`, `REFUSED` (the reason says why) or `STALE`
+(already used, or its block is closed).
+
+### The channels and who may deliver
+
+| Channel | Way in | Caller |
+|---|---|---|
+| REST | `POST api/users/NetworkOfAgentsConditionEventsController/deliverConditionEvent`; `GET .../conditionEventStatus?correlationId=` (or `sessionCode` + `conditionId`) | the authenticated account: a user's personal API key, a session, an application account |
+| Message broker | `IConditionEventsPublisher.publish(event, onBehalfOf)`, which sends a `ConditionEventPayload` from `ConditionEventsPublisher` to the receiver of `ConditionEventsReceiverFactory` (module `AGENTS-CONDITION-EVENTS`) | the account named, the channel trusted as infrastructure |
+
+The session's owner may deliver to its own sessions, an account with the application
+authority (`APPLICATION` by default) to any, and the broker to any: it is reached only by
+code running in the platform (a workflow step, a harness, a robot), never exposed as is to
+the outside, where REST with the caller's credentials is the way in. Whoever delivers, **the
+respawn runs as the session's owner**. The event keeps the actor and the channel; with no
+`sourceSystem` of its own, a broker event takes the sending component's
+(`AGENTS-CONDITION-EVENTS.CONDITION-EVENTS-PUBLISHER`). The publisher refuses with an
+`IllegalStateException` when no receiver is reachable, instead of leaving the event to the
+broker's log. The delivery is asynchronous on both channels: the outcome is read with the
+status.
+
+### From the event to the respawn
+
+1. `deliver` keeps the event (`GConditionEvent`) and matches it to the session's open block.
+2. The block is respawned when its events solve it: every mandatory condition solved, as the
+   respawn of the chat requires them all in one reaction. A block with no mandatory
+   condition waits `optionalSettleMillis` after its first event for the others, then goes
+   with what it has.
+3. A respawn is claimed by inserting a `GConditionDispatch` keyed by the block code, so one
+   instance runs it; the claim lapses after `dispatchLeaseMillis`. It runs
+   `streamingRespawnAgenticChat` on the session's pipeline, as the owner, with the reaction
+   built from the events and the text as the request.
+4. The events become `DISPATCHED`, then `APPLIED` when the run ends or suspends again (a new
+   block, answered by new events). A failed respawn is tried again after
+   `retryBackoffMillis`, doubling, up to `maxAttempts`, then `FAILED`. An event whose block
+   was respawned or dropped meanwhile becomes `STALE`; one no block ever waited for becomes
+   `EXPIRED` after `pendingTimeToLiveMillis`.
+
+The sweeper (`ConditionEventsSweeper`) expires, retries and evaluates again the sessions
+holding unused events.
+
+### Configuration
+
+`ai.gebo.agents.conditionevents.*`: `enabled` (the sweeper; deliveries are taken either
+way, default `true`), `pendingTimeToLiveMillis` (24 h), `retryBackoffMillis` (30 s),
+`maxAttempts` (5), `optionalSettleMillis` (60 s), `dispatchLeaseMillis` (1 h),
+`applicationAuthority` (`APPLICATION`), `sweepPeriodMillis` (30 s),
+`sweepInitialDelayMillis` (60 s). The modules `gebo.architecture.agents.conditionevents`
+and `gebo.architecture.agents.conditionevents.controllers` are in the monolithic starter and
+in the brain.
+
 ## Tests
 
 `NetworkSuspensionAndRespawnTest`, `MockedAgentsNetworkRespawnTest` (the base, with
@@ -143,3 +229,10 @@ mocked agents and a parallel group), `GMongoNetworkOfAgentsSuspensionHandlerTest
 `NetworkOfAgentsSuspensionTransportTest`, `ChatPipelineServiceOpenSuspensionTest`,
 `ChatNetworkStepSuspensionTest`, `ChatNetworkRespawnStepTest`,
 `GChatEnvironmentNetworkRunnerTest`.
+
+Condition events: `ConditionCorrelationIdTest`, `ConditionEventsServiceImplTest`,
+`ConditionEventsPublisherTest`; end to end in gebo.ai.app with the scripted model,
+`ConditionEventRespawnEndToEndTest` (REST with a personal API key, and the broker through
+the publisher); with real models, `ConditionEventsWithRealLlmsIntegrationTest` in
+`integration-tests/condition-events-integration-tests` (needs `FullSetupSecret`; skips when
+the model never asks, unless `ai.gebo.tests.conditionevents.strictModelBehaviour=true`).
