@@ -110,6 +110,7 @@ import { McpClientConfigControllerService } from './api/mcpClientConfigControlle
 import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
+import { NetworkOfAgentsConditionEventsControllerService } from './api/networkOfAgentsConditionEventsController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
@@ -264,6 +265,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     McpClientSystemsControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
+    NetworkOfAgentsConditionEventsControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,

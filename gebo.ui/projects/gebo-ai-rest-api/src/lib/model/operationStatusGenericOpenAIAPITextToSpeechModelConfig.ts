@@ -15,6 +15,6 @@ import { GenericOpenAIAPITextToSpeechModelConfig } from './genericOpenAIAPITextT
 export interface OperationStatusGenericOpenAIAPITextToSpeechModelConfig { 
     result?: GenericOpenAIAPITextToSpeechModelConfig;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }
