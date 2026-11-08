@@ -1,0 +1,177 @@
+server:
+  port: 0
+  compression:
+    enabled: true
+    mime-types: text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json
+    min-response-size: 1024
+  http2:
+    enabled: true
+  servlet:
+    contextPath: /
+ai.gebo.neo4j.enabled: true
+spring:
+  neo4j:
+    uri: bolt://localhost:7687
+#    authentication:
+#      username: neo4j
+#      password: password
+ai.gebo.security:
+  auth:
+    # Throwaway signing key for the in-process server; a CI job that would rather
+    # not carry one in git can inject GEBO_TEST_TOKEN_SECRET instead.
+    tokenSecret: ${GEBO_TEST_TOKEN_SECRET:04ca023b39512e46d0c2cf4b48d5aac61d34302994c87ed4eff225dcf3b0a218739f3897051a057f9b846a69ea2927a587044164b7bae5e1306219d50b588cb1}
+    tokenExpirationMsec: 99000000
+  cors:
+    allowedOrigins: http://localhost:12999,http://localhost:4200
+  oauth2configs:
+    # KeyCloak oauth2 test configuration
+    - registrationId: keycloakClient
+      description: Keycloak Oauth2 test configuration
+      provider: oauth2_generic
+      client:
+        secret: ltxhyiESLC4FCKnPww6Ylc50HYEIf7Pg
+        clientId: keycloakClient
+        tenantId: default
+        scopes:
+      configurationTypes: AUTHENTICATION
+      providerConfig:
+        provider: oauth2_generic
+        authorizationUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/auth
+        tokenUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/token
+        userInfoUri: http://localhost:8083/realms/MainRealm/protocol/openid-connect/userinfo
+        issuerUri: http://localhost:8083/realms/MainRealm
+        userNameAttribute: email
+reactor.schedulers.defaultPoolSize: 16
+spring.task:
+  execution:
+    pool:
+      max-size: 16
+      queue-capacity: 100
+      keep-alive: "10s"
+# Which LLM vendor modules the monolith loads. Every flag is overridable from the
+# environment (e.g. GEBO_TEST_GOOGLE_VERTEX_ENABLED=true), so a CI job can enable
+# exactly the vendor whose key it holds without touching this file - the vendor
+# actually used is the one named by the FullSetupSecret.
+#
+# ollama defaults to FALSE here on purpose: this suite is the cloud-only one, the
+# tests that need a local inference server live in ../../ollama-integration-tests.
+ai.gebo.llms.config:
+      mistralAIEnabled: ${GEBO_TEST_MISTRAL_ENABLED:true}
+      openAIEnabled: ${GEBO_TEST_OPENAI_ENABLED:true}
+      ollamaEnabled: ${GEBO_TEST_OLLAMA_ENABLED:false}
+      googleVertexEnabled: ${GEBO_TEST_GOOGLE_VERTEX_ENABLED:false}
+      anthropicEnabled: ${GEBO_TEST_ANTHROPIC_ENABLED:true}
+      huggingfaceEnabled: ${GEBO_TEST_HUGGINGFACE_ENABLED:false}
+      deepseekEnabled: ${GEBO_TEST_DEEPSEEK_ENABLED:true}
+      azureOpenAIEnabled: ${GEBO_TEST_AZURE_OPENAI_ENABLED:true}
+
+
+ai.gebo.security.cors.allowedOrigins: no
+ai.gebo.mongodb:
+  enabled: false
+  databaseName: gebo-ai-tests
+  connectionString: mongodb://localhost:27027/gebo-ai-tests?authSource=admin
+ai.gebo.vectorstore:
+  use: QDRANT
+
+spring.jackson:
+  date-format: yyyy-MM-dd HH:mm:ss
+  serialization:
+    INDENT_OUTPUT: true
+ai.gebo.config:
+  setupConfiguresWorkdir: false
+  security: true
+  setup: true
+  customKeyStore: false
+  enableCommunityModules: true
+# No statically declared share: the test creates a temporary folder, registers it
+# through FileSystemSharesSettingControllerApi and publishes it, so nothing here
+# may depend on a path that exists only on a developer machine.
+ai.gebo.filesystem:
+  allowFilesystemSharesUI: true
+
+ai.gebo.node.buildsystems:
+  systems:
+    - code: NODE-ANGULAR
+      buildSystemTypeCode: NODE.BUILD.SYSTEM
+      description: Angular project with npm/node build & packaging system
+    - code: NODE
+      buildSystemTypeCode: NODE.BUILD.SYSTEM
+      description: Node project with Npm/node build & packaging system
+ai.gebo.git.config:
+  systems:
+    - code: DEFAULT_GIT
+      contentManagementSystemType: DEFAULT.GIT.CONTENT.HANDLER
+      description: Git/Bitbucket/GitHub contents handler
+
+ai.gebo.maven.buildsystems:
+  systems:
+    - code: DEFAULT_MAVEN
+      buildSystemTypeCode: MAVEN.BUILD.SYSTEM
+      description: Maven build system 3.X
+      config:
+        # Taken from the runner's environment; unused by this suite, but a
+        # hardcoded developer-machine path would be wrong everywhere else.
+        mavenHome: ${MAVEN_HOME:}
+        javaHome: ${JAVA_HOME:}
+ai.gebo.vectorizator.config:
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  disposerConfig:
+    poolCardinality: 1
+    flushThreshold: 10
+    useSenderThread: true
+vectorizatorReceiverConfig:
+  poolCardinality: 2
+  flushThreshold: 6
+  useSenderThread: true
+  timeout: 10000
+
+ai.gebo.graphrag.processor:
+  discardedExtensions: 
+    - .xls
+    - .xlsx
+    - .ods
+  maximumMessagesCumulatedBytesThreshold: 2097152
+  graphRagProcessorReceiverConfig:
+    poolCardinality: 2
+    flushThreshold: 6
+    useSenderThread: true
+    timeout: 10000
+
+ai.gebo.core.config:
+  mongoDisposerConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 6
+    timeout: 10000
+  userMessagesReceiverConfig:
+    poolCardinality: 1
+    useSenderThread: true
+    flushThreshold: 10
+    timeout: 10000
+# Web search is NOT configured from this file. Since the multi-provider
+# refactoring the active provider (exactly one of google / tavily / brave /
+# searxng / serpapi) is whichever one holds stored credentials, so the harness
+# configures it through the admin API, driven by the FullSetupSecret environment
+# variable - add one entry to its "subsystems" array:
+#
+#   {"product":"TAVILY_SEARCH","apiKey":"<key>"}
+#   {"product":"BRAVE_SEARCH","apiKey":"<token>"}
+#   {"product":"SERPAPI_SEARCH","apiKey":"<key>"}
+#   {"product":"GOOGLE_SEARCH","apiKey":"<key>","id":"<search engine id>"}
+#   {"product":"SEARXNG_SEARCH","basePath":"https://searxng.example","apiKey":"<optional>"}
+#
+# Declaring more than one fails the setup on purpose: only one may be active.
+# See AbstractVendorSetupAndUseTest#setupProducts.
+
+# The admin account and the LLM vendor are likewise taken from FullSetupSecret,
+# not from here. The local-ollama sysinit variant of those blocks lives in
+# ../../ollama-integration-tests.
+
+# External (web) sources for deep search. Turn them off with
+# GEBO_TEST_DEEPSEARCH_EXTERNAL_ENABLED=false when the CI job holds no web-search
+# provider key: the run then exercises setup, embedding and internal-KB chatting
+# only, instead of asking the router for a route it cannot serve.
+ai.gebo.deepsearch:
+       externalSourcesEnabled: ${GEBO_TEST_DEEPSEARCH_EXTERNAL_ENABLED:true}
+       deepSearchUIAllowChooseSources: ${GEBO_TEST_DEEPSEARCH_CHOOSE_SOURCES:true}                     
