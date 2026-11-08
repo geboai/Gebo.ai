@@ -24,6 +24,9 @@ import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.web.FilterChainProxy;
@@ -35,19 +38,28 @@ import org.springframework.web.context.WebApplicationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.application.messaging.IGMessageBroker;
+import ai.gebo.application.messaging.IGMessageEmitter;
+import ai.gebo.application.messaging.IMessageEnvelopeFactory;
+import ai.gebo.application.messaging.SystemComponentType;
+import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
+import ai.gebo.architecture.agents.conditionevents.messaging.ConditionEventPayload;
+import ai.gebo.architecture.agents.conditionevents.messaging.ConditionEventsReceiverFactory;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionEvent;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionDispatch;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionDispatchRepository;
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionEventRepository;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
 import ai.gebo.llms.abstraction.layer.tests.TestChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
@@ -56,24 +68,30 @@ import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
 import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 
 /**
- * An external system solves a suspended network of agents: the whole cycle, with
- * only the model scripted.
+ * An external system solves a suspended network of agents, through each of the
+ * channels the events layer takes: the whole cycle, with only the model scripted.
  * <p>
  * The chat runs through the pipeline service as the client does, on the agentic
  * loop network, whose agent mounts the user questions library. The scripted model
  * calls {@code askUserSingleChoiceQuestion}: the platform's tool calling runs the
- * tool, the agent suspends and the block is written. The external system then
- * answers through REST with a personal API key generated over HTTP, naming the
- * condition by session code and condition id. The events layer matches the answer
- * to the open block, respawns the network as the conversation's user, and the
- * agent, now told what it was waiting for, answers. The event ends APPLIED, its
- * dispatch DONE, the block respawned, and the chat has the answer; the same event
- * sent again is recognised as a duplicate.
+ * tool, the agent suspends and the block is written. The answer then comes, naming
+ * the condition by session code and condition id:
+ * <ul>
+ * <li>through REST, with a personal API key generated over HTTP;</li>
+ * <li>through the message broker, from a component registered as an emitter of
+ * {@link ConditionEventPayload} (the test's own, no platform component emits it
+ * yet), to the events layer's receiver.</li>
+ * </ul>
+ * The events layer matches the answer to the open block, respawns the network as
+ * the conversation's user, and the agent, now told the answer, goes on. The event
+ * ends APPLIED, its dispatch DONE, the block respawned, the chat has the answer;
+ * the same event sent again is recognised as a duplicate.
  */
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK",
 		// Test-only signing key: the test context configures none, and the tokens below must be verifiable.
 		"ai.gebo.security.auth.token-secret=dGVzdC1vbmx5LXNpZ25pbmcta2V5LWZvci10aGUtY29uZGl0aW9uLWV2ZW50cy10ZXN0LW5ldmVyLWEtcmVhbC1zZWNyZXQtMDEyMzQ1Njc4OQ==" })
+@Import(ConditionEventRespawnEndToEndTest.EmitterConfiguration.class)
 public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String GENERATE_KEY = "/api/users/GeneratedUserApiKeyController/generateUserGeneratedApiKey";
 	private static final String DELETE_KEY = "/api/users/GeneratedUserApiKeyController/deleteUserGeneratedApiKey";
@@ -83,7 +101,6 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private static final String ANSWER_MARKER = "GEBO_TEST_CONDITION_EVENT_ANSWER";
 	private static final String USER_QUESTION = "Please answer in English, write me a short holiday note about the country I prefer.";
 	private static final String THE_QUESTION = "Which country do you prefer for your holiday note: Italy or France?";
-	private static final String CHOSEN = "Italy";
 	/** How the respawned agent is told the answer to its question ({@code ResolvedConditionText}). */
 	private static final String TOLD_THE_ANSWER = "You asked the user:";
 	private static final String TOLD_THE_CHOICE = "The user chose: ";
@@ -91,6 +108,50 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private static final String REWRITE_PROMPT_MARKER = "Minimal Question Rewriter";
 	private static final String TITLE_PROMPT_MARKER = "summarization assistant";
 	private static final Duration RESPAWN_TIMEOUT = Duration.ofSeconds(120);
+
+	/**
+	 * A component of the platform sending condition events through the broker: the
+	 * broker routes a message only from a registered emitter of its payload type.
+	 */
+	public static class TestConditionEventsEmitter implements IGMessageEmitter {
+		public static final String MODULE_ID = "TEST-CONDITION-EVENTS-SOURCE";
+		public static final String SYSTEM_ID = "TEST-CONDITION-EVENTS-EMITTER";
+
+		@Override
+		public String getMessagingModuleId() {
+			return MODULE_ID;
+		}
+
+		@Override
+		public String getMessagingSystemId() {
+			return SYSTEM_ID;
+		}
+
+		@Override
+		public SystemComponentType getComponentType() {
+			return SystemComponentType.APPLICATION_COMPONENT;
+		}
+
+		@Override
+		public List<String> getEmittedPayloadTypes() {
+			return List.of(ConditionEventPayload.class.getName());
+		}
+	}
+
+	@TestConfiguration
+	public static class EmitterConfiguration {
+		@Bean
+		public TestConditionEventsEmitter testConditionEventsEmitter() {
+			return new TestConditionEventsEmitter();
+		}
+	}
+
+	/** A condition the network waits for, as the client reads it. */
+	private record Suspended(String sessionCode, String conditionId, String blockCode) {
+		String correlationId() {
+			return new ConditionCorrelationId(sessionCode, conditionId).composed();
+		}
+	}
 
 	@Autowired
 	private IChatPipelineService chatPipelineService;
@@ -104,6 +165,12 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private GConditionEventRepository events;
 	@Autowired
 	private GConditionDispatchRepository dispatches;
+	@Autowired
+	private IGMessageBroker broker;
+	@Autowired
+	private IMessageEnvelopeFactory envelopes;
+	@Autowired
+	private TestConditionEventsEmitter emitter;
 	@Autowired
 	private WebApplicationContext context;
 	@Autowired
@@ -135,8 +202,9 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 				return "deliverable=QA\nrewrittenQuery=" + USER_QUESTION + "\nuserRequiredLanguage=English";
 			}
 			if (prompt.contains(TOLD_THE_ANSWER)) {
-				return ANSWER_MARKER + ": a short holiday note about "
-						+ (prompt.contains(TOLD_THE_CHOICE + CHOSEN) ? CHOSEN : "an unknown country") + ".";
+				final String chosen = prompt.contains(TOLD_THE_CHOICE + "Italy") ? "Italy"
+						: prompt.contains(TOLD_THE_CHOICE + "France") ? "France" : "an unknown country";
+				return ANSWER_MARKER + ": a short holiday note about " + chosen + ".";
 			}
 			return "";
 		});
@@ -170,7 +238,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 				.alwaysDo(result -> impersonateAdminUser()).build();
 	}
 
-	/** Waits for what the respawn, running apart, brings about. */
+	/** Waits for what runs apart (the broker's delivery, the respawn) to come about. */
 	private <T> T await(String what, Supplier<T> probe) throws InterruptedException {
 		final long deadline = System.currentTimeMillis() + RESPAWN_TIMEOUT.toMillis();
 		T value = probe.get();
@@ -182,8 +250,79 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 		return value;
 	}
 
+	/** The chat: the agent asks its question and the network suspends. */
+	private Suspended aSuspendedChat() throws Exception {
+		final GeboChatRequest request = new GeboChatRequest();
+		request.setQuery(USER_QUESTION);
+		lifeCycleService.createChatSession(request);
+		final String sessionCode = request.getUserChatContextCode();
+		assertNotNull(sessionCode, "the lifecycle service assigns the session");
+		final List<GeboChatMessageEnvelope> streamed = chatPipelineService
+				.streamingChat(null, request, new LinkedHashMap<String, Object>()).collectList()
+				.block(Duration.ofSeconds(120));
+		assertNotNull(streamed, "the pipeline answers the first request");
+		final Optional<NetworkOfAgentsSuspendedState> pending = chatPipelineService
+				.pendingNetworkOfAgentsSuspension(sessionCode);
+		assertTrue(pending.isPresent(), "the agent's question suspended the network and the block was written");
+		final NetworkOfAgentsSuspendedState state = pending.get();
+		assertEquals(1, state.getConditions().size(), "one condition is waited for");
+		assertEquals("clarification", state.getConditions().get(0).getConditionType());
+		final Suspended suspended = new Suspended(sessionCode, state.getConditions().get(0).getConditionId(),
+				state.getNetworkOfAgentsBlockId());
+		assertNotNull(suspended.conditionId());
+		return suspended;
+	}
+
+	private ConditionEvent answer(Suspended suspended, String chosen, String sourceSystem, String sourceEventId) {
+		final ConditionEvent event = new ConditionEvent();
+		event.setSessionCode(suspended.sessionCode());
+		event.setConditionId(suspended.conditionId());
+		event.setConditionType("clarification");
+		event.setAttributes(new LinkedHashMap<String, Object>(Map.of("chosenOption", chosen)));
+		event.setSourceSystem(sourceSystem);
+		event.setSourceEventId(sourceEventId);
+		event.setSourceTimestamp(new Date());
+		return event;
+	}
+
+	/** The respawn the event brought about: event APPLIED, dispatch DONE, block respawned, the answer in the chat. */
+	private GConditionEvent verifyApplied(Suspended suspended, String chosen) throws InterruptedException {
+		final GConditionEvent applied = await("the event applied",
+				() -> events.findById(suspended.correlationId())
+						.filter(e -> e.getStatus() == ConditionEventStatus.APPLIED
+								|| e.getStatus() == ConditionEventStatus.FAILED
+								|| e.getStatus() == ConditionEventStatus.STALE)
+						.orElse(null));
+		assertEquals(ConditionEventStatus.APPLIED, applied.getStatus(),
+				"the respawn solved the block: " + applied.getReason());
+		final GConditionDispatch dispatch = dispatches.findById(suspended.blockCode()).orElse(null);
+		assertNotNull(dispatch, "the respawn was claimed once, by block");
+		assertEquals(GConditionDispatch.State.DONE, dispatch.getState(),
+				"the dispatch is done: " + dispatch.getLastFailure());
+		final GNetworkOfAgentsSuspension block = blocks.findById(suspended.blockCode()).orElseThrow();
+		assertNotNull(block.getRespawnedAt(), "the block is marked respawned");
+		assertFalse(chatPipelineService.pendingNetworkOfAgentsSuspension(suspended.sessionCode()).isPresent(),
+				"no block waits any more");
+		final GUserChatSession chat = await("the respawn's answer in the chat", () -> {
+			final GUserChatSession saved = sessionsRepo.findById(suspended.sessionCode()).orElse(null);
+			return saved != null && saved.getInteractions() != null
+					&& saved.getInteractions().stream().anyMatch(this::answeredByTheRespawn) ? saved : null;
+		});
+		final ChatInteractions answered = chat.getInteractions().stream().filter(this::answeredByTheRespawn)
+				.findFirst().orElseThrow();
+		LOGGER.info("The respawned network answered: " + answered.getResponse().getQueryResponse());
+		assertTrue(String.valueOf(answered.getResponse().getQueryResponse()).contains(chosen),
+				"the agent was told the answer the event carried");
+		return applied;
+	}
+
+	private boolean answeredByTheRespawn(ChatInteractions interaction) {
+		return interaction.getResponse() != null
+				&& String.valueOf(interaction.getResponse().getQueryResponse()).contains(ANSWER_MARKER);
+	}
+
 	@Test
-	public void anExternalSystemSolvesTheConditionAndTheNetworkGoesOn() throws Exception {
+	public void anExternalSystemSolvesTheConditionThroughRest() throws Exception {
 		final MockMvc mvc = mvc();
 		final String session = tokens.createToken(DEFAULT_ALL_ROLES_USER,
 				new Date(System.currentTimeMillis() + 600_000));
@@ -197,39 +336,11 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 		final JsonNode key = objectMapper.readTree(generated.getContentAsString());
 		final String apiKey = key.path("apiKey").asText(null);
 		assertNotNull(apiKey, "the key is returned");
-		String sessionCode = null;
+		Suspended suspended = null;
 		try {
-			// 1. the chat: the agent asks its question and the network suspends
-			final GeboChatRequest request = new GeboChatRequest();
-			request.setQuery(USER_QUESTION);
-			lifeCycleService.createChatSession(request);
-			sessionCode = request.getUserChatContextCode();
-			assertNotNull(sessionCode, "the lifecycle service assigns the session");
-			final List<GeboChatMessageEnvelope> streamed = chatPipelineService
-					.streamingChat(null, request, new LinkedHashMap<String, Object>()).collectList()
-					.block(Duration.ofSeconds(120));
-			assertNotNull(streamed, "the pipeline answers the first request");
-
-			final Optional<NetworkOfAgentsSuspendedState> pending = chatPipelineService
-					.pendingNetworkOfAgentsSuspension(sessionCode);
-			assertTrue(pending.isPresent(), "the agent's question suspended the network and the block was written");
-			final NetworkOfAgentsSuspendedState state = pending.get();
-			assertEquals(1, state.getConditions().size(), "one condition is waited for");
-			final String conditionId = state.getConditions().get(0).getConditionId();
-			final String blockCode = state.getNetworkOfAgentsBlockId();
-			assertNotNull(conditionId);
-			assertEquals("clarification", state.getConditions().get(0).getConditionType());
-
-			// 2. the external system answers through REST, with its API key
-			final Map<String, Object> event = new LinkedHashMap<>();
-			event.put("sessionCode", sessionCode);
-			event.put("conditionId", conditionId);
-			event.put("conditionType", "clarification");
-			event.put("attributes", Map.of("chosenOption", CHOSEN));
-			event.put("sourceSystem", "condition-events-integration-test");
-			event.put("sourceEventId", "evt-1");
-			event.put("sourceTimestamp", System.currentTimeMillis());
-			final String body = objectMapper.writeValueAsString(event);
+			suspended = aSuspendedChat();
+			final String body = objectMapper
+					.writeValueAsString(answer(suspended, "Italy", "condition-events-rest-test", "evt-rest-1"));
 			final MockHttpServletResponse delivered = mvc.perform(post(DELIVER)
 					.header("Authorization", "Bearer " + apiKey).contentType(MediaType.APPLICATION_JSON).content(body))
 					.andReturn().getResponse();
@@ -237,61 +348,73 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			final JsonNode ack = objectMapper.readTree(delivered.getContentAsString());
 			LOGGER.info("Condition event acknowledged: " + ack);
 			assertEquals("ACCEPTED", ack.path("outcome").asText(), "the event matches the open block: " + ack);
-			final String correlationId = new ConditionCorrelationId(sessionCode, conditionId).composed();
-			assertEquals(correlationId, ack.path("correlationId").asText(), "both forms of the id are kept");
+			assertEquals(suspended.correlationId(), ack.path("correlationId").asText(),
+					"both forms of the id are kept");
 
-			// 3. the network is respawned as the conversation's user, and the event applied
-			final GConditionEvent applied = await("the event applied", () -> events.findById(correlationId)
-					.filter(e -> e.getStatus() == ConditionEventStatus.APPLIED || e.getStatus() == ConditionEventStatus.FAILED
-							|| e.getStatus() == ConditionEventStatus.STALE)
-					.orElse(null));
-			assertEquals(ConditionEventStatus.APPLIED, applied.getStatus(),
-					"the respawn solved the block: " + applied.getReason());
-			final GConditionDispatch dispatch = dispatches.findById(blockCode).orElse(null);
-			assertNotNull(dispatch, "the respawn was claimed once, by block");
-			assertEquals(GConditionDispatch.State.DONE, dispatch.getState(),
-					"the dispatch is done: " + dispatch.getLastFailure());
-			final GNetworkOfAgentsSuspension block = blocks.findById(blockCode).orElseThrow();
-			assertNotNull(block.getRespawnedAt(), "the block is marked respawned");
-			assertFalse(chatPipelineService.pendingNetworkOfAgentsSuspension(sessionCode).isPresent(),
-					"no block waits any more");
+			final GConditionEvent applied = verifyApplied(suspended, "Italy");
+			assertEquals(ConditionEventCaller.REST, applied.getChannel(), "it came through REST");
+			assertEquals(DEFAULT_ALL_ROLES_USER, applied.getActor(), "sent by the key's user");
 
-			// 4. the chat has the agent's answer, given with what the external system said
-			final String code = sessionCode;
-			final GUserChatSession chat = await("the respawn's answer in the chat", () -> {
-				final GUserChatSession saved = sessionsRepo.findById(code).orElse(null);
-				return saved != null && saved.getInteractions() != null && saved.getInteractions().stream()
-						.anyMatch(i -> i.getResponse() != null
-								&& String.valueOf(i.getResponse().getQueryResponse()).contains(ANSWER_MARKER)) ? saved
-										: null;
-			});
-			final ChatInteractions answered = chat.getInteractions().stream()
-					.filter(i -> i.getResponse() != null
-							&& String.valueOf(i.getResponse().getQueryResponse()).contains(ANSWER_MARKER))
-					.findFirst().orElseThrow();
-			LOGGER.info("The respawned network answered: " + answered.getResponse().getQueryResponse());
-			assertTrue(String.valueOf(answered.getResponse().getQueryResponse()).contains(CHOSEN),
-					"the agent was told the answer the external system gave");
-
-			// 5. the status is readable through REST, by either form of the id
+			// the status is readable through REST
 			final JsonNode view = objectMapper.readTree(mvc
-					.perform(get(STATUS).param("sessionCode", sessionCode).param("conditionId", conditionId)
-							.header("Authorization", "Bearer " + apiKey))
+					.perform(get(STATUS).param("sessionCode", suspended.sessionCode())
+							.param("conditionId", suspended.conditionId()).header("Authorization", "Bearer " + apiKey))
 					.andReturn().getResponse().getContentAsString());
 			assertEquals("APPLIED", view.path("status").asText(), "the status reads APPLIED: " + view);
-			assertEquals(correlationId, view.path("correlationId").asText());
+			assertEquals(suspended.correlationId(), view.path("correlationId").asText());
 
-			// 6. the same event sent again changes nothing
+			// the same event sent again changes nothing
 			final JsonNode again = objectMapper.readTree(mvc.perform(post(DELIVER)
 					.header("Authorization", "Bearer " + apiKey).contentType(MediaType.APPLICATION_JSON).content(body))
 					.andReturn().getResponse().getContentAsString());
 			assertEquals("DUPLICATE", again.path("outcome").asText(), "a redelivery is recognised: " + again);
 		} finally {
-			if (sessionCode != null) {
-				lifeCycleService.removeChatSession(sessionCode);
+			if (suspended != null) {
+				lifeCycleService.removeChatSession(suspended.sessionCode());
 			}
 			mvc.perform(post(DELETE_KEY).param("code", key.path("code").asText())
 					.header("Authorization", "Bearer " + session));
+		}
+	}
+
+	@Test
+	public void aPlatformComponentSolvesTheConditionThroughTheBroker() throws Exception {
+		assertTrue(broker.isRegistered(emitter), "the test's emitter is registered with the broker");
+		assertTrue(broker.checkReceivingComponentPresent(ConditionEventsReceiverFactory.MODULE_ID,
+				ConditionEventsReceiverFactory.SYSTEM_ID), "the events layer's receiver is registered with the broker");
+		Suspended suspended = null;
+		try {
+			suspended = aSuspendedChat();
+			final ConditionEvent event = answer(suspended, "France", null, "evt-broker-1");
+			final GMessageEnvelope<ConditionEventPayload> envelope = envelopes.newMessageFrom(emitter,
+					new ConditionEventPayload(event), DEFAULT_ALL_ROLES_USER);
+			envelope.setTargetModule(ConditionEventsReceiverFactory.MODULE_ID);
+			envelope.setTargetComponent(ConditionEventsReceiverFactory.SYSTEM_ID);
+			envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+			broker.accept(envelope);
+
+			final GConditionEvent applied = verifyApplied(suspended, "France");
+			assertEquals(ConditionEventCaller.MESSAGE, applied.getChannel(), "it came through the broker");
+			assertEquals(DEFAULT_ALL_ROLES_USER, applied.getActor(), "sent on behalf of the envelope's user");
+			assertEquals(TestConditionEventsEmitter.MODULE_ID + "." + TestConditionEventsEmitter.SYSTEM_ID,
+					applied.getSourceSystem(), "with no source of its own, the sending component is the source");
+
+			// the same event sent again changes nothing
+			final GMessageEnvelope<ConditionEventPayload> again = envelopes.newMessageFrom(emitter,
+					new ConditionEventPayload(event), DEFAULT_ALL_ROLES_USER);
+			again.setTargetModule(ConditionEventsReceiverFactory.MODULE_ID);
+			again.setTargetComponent(ConditionEventsReceiverFactory.SYSTEM_ID);
+			again.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
+			broker.accept(again);
+			final String correlationId = suspended.correlationId();
+			await("the redelivery counted", () -> events.findById(correlationId)
+					.filter(e -> e.getDeliveries() >= 2).orElse(null));
+			assertEquals(ConditionEventStatus.APPLIED, events.findById(correlationId).orElseThrow().getStatus(),
+					"a redelivery changes nothing");
+		} finally {
+			if (suspended != null) {
+				lifeCycleService.removeChatSession(suspended.sessionCode());
+			}
 		}
 	}
 }
