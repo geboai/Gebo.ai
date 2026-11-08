@@ -28,21 +28,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.TestPropertySource;
 
 import ai.gebo.application.messaging.IGMessageBroker;
-import ai.gebo.application.messaging.IGMessageEmitter;
-import ai.gebo.application.messaging.IMessageEnvelopeFactory;
-import ai.gebo.application.messaging.SystemComponentType;
-import ai.gebo.application.messaging.model.GMessageEnvelope;
 import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
-import ai.gebo.architecture.agents.conditionevents.messaging.ConditionEventPayload;
+import ai.gebo.architecture.agents.conditionevents.messaging.ConditionEventsPublisher;
 import ai.gebo.architecture.agents.conditionevents.messaging.ConditionEventsReceiverFactory;
+import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsPublisher;
 import ai.gebo.architecture.integration.tests.AbstractVendorSetupAndUseTest;
 import ai.gebo.architecture.integration.tests.model.TestGeboSystemInfo;
 import ai.gebo.architecture.integration.tests.preconditions.RequiresConfig;
@@ -78,9 +72,8 @@ import ai.gebo.monolithic.app.Main;
  * <ul>
  * <li>through REST, with the generated Java client
  * ({@link NetworkOfAgentsConditionEventsControllerApi});</li>
- * <li>through the message broker, from a component registered as an emitter of
- * {@link ConditionEventPayload} (the test's own: no platform component emits it
- * yet), to the events layer's receiver.</li>
+ * <li>through the message broker, sent by the platform's publisher
+ * ({@link IConditionEventsPublisher}) to the events layer's receiver.</li>
  * </ul>
  * What the platform must do fails the test: the event is accepted, the network is
  * respawned as the conversation's user, the event ends APPLIED and the chat gets an
@@ -93,7 +86,6 @@ import ai.gebo.monolithic.app.Main;
 @SpringBootTest(classes = Main.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK" })
-@Import(ConditionEventsWithRealLlmsIntegrationTest.EmitterConfiguration.class)
 @DirtiesContext(classMode = ClassMode.AFTER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiresConfig(value = AbstractVendorSetupAndUseTest.FULL_SETUP_ENVIRONMENT_JSON_STRING,
@@ -119,43 +111,6 @@ public class ConditionEventsWithRealLlmsIntegrationTest extends AbstractVendorSe
 					+ " whether my holiday note should be about Italy or France, with exactly those two options."
 					+ " Do not write anything else before I answer.");
 
-	/**
-	 * A component of the platform sending condition events through the broker: the
-	 * broker routes a message only from a registered emitter of its payload type.
-	 */
-	public static class TestConditionEventsEmitter implements IGMessageEmitter {
-		public static final String MODULE_ID = "TEST-CONDITION-EVENTS-SOURCE";
-		public static final String SYSTEM_ID = "TEST-CONDITION-EVENTS-EMITTER";
-
-		@Override
-		public String getMessagingModuleId() {
-			return MODULE_ID;
-		}
-
-		@Override
-		public String getMessagingSystemId() {
-			return SYSTEM_ID;
-		}
-
-		@Override
-		public SystemComponentType getComponentType() {
-			return SystemComponentType.APPLICATION_COMPONENT;
-		}
-
-		@Override
-		public List<String> getEmittedPayloadTypes() {
-			return List.of(ConditionEventPayload.class.getName());
-		}
-	}
-
-	@TestConfiguration
-	public static class EmitterConfiguration {
-		@Bean
-		public TestConditionEventsEmitter testConditionEventsEmitter() {
-			return new TestConditionEventsEmitter();
-		}
-	}
-
 	/** A condition the network waits for, with the option the test answers it with. */
 	private record Waiting(String sessionCode, String conditionId, String chosen) {
 		String correlationId() {
@@ -166,9 +121,7 @@ public class ConditionEventsWithRealLlmsIntegrationTest extends AbstractVendorSe
 	@Autowired
 	private IGMessageBroker broker;
 	@Autowired
-	private IMessageEnvelopeFactory envelopes;
-	@Autowired
-	private TestConditionEventsEmitter emitter;
+	private IConditionEventsPublisher publisher;
 
 	/** The installation, set up once for the class. */
 	private static TestGeboSystemInfo systemInfo = null;
@@ -369,7 +322,8 @@ public class ConditionEventsWithRealLlmsIntegrationTest extends AbstractVendorSe
 	@Order(2)
 	public void aRealModelsQuestionIsAnsweredThroughTheBroker() throws Exception {
 		final ApiClient apiClient = installation();
-		assertTrue(broker.isRegistered(emitter), "the test's emitter is registered with the broker");
+		assertTrue(broker.isRegistered((ConditionEventsPublisher) publisher),
+				"the platform's publisher is registered with the broker");
 		assertTrue(broker.checkReceivingComponentPresent(ConditionEventsReceiverFactory.MODULE_ID,
 				ConditionEventsReceiverFactory.SYSTEM_ID), "the events layer's receiver is registered with the broker");
 		final List<Waiting> waiting = aChatTheModelSuspends(apiClient);
@@ -384,17 +338,12 @@ public class ConditionEventsWithRealLlmsIntegrationTest extends AbstractVendorSe
 					event.setAttributes(new LinkedHashMap<String, Object>(Map.of("chosenOption", each.chosen())));
 					event.setSourceEventId("evt-broker-" + (++n));
 					event.setSourceTimestamp(new Date());
-					final GMessageEnvelope<ConditionEventPayload> envelope = envelopes.newMessageFrom(emitter,
-							new ConditionEventPayload(event), systemInfo.getUsername());
-					envelope.setTargetModule(ConditionEventsReceiverFactory.MODULE_ID);
-					envelope.setTargetComponent(ConditionEventsReceiverFactory.SYSTEM_ID);
-					envelope.setTargetType(SystemComponentType.APPLICATION_COMPONENT);
-					broker.accept(envelope);
+					publisher.publish(event, systemInfo.getUsername());
 				}
 				verifyRespawned(apiClient, waiting, "through the broker");
 				final ConditionEventView view = new NetworkOfAgentsConditionEventsControllerApi(apiClient)
 						.conditionEventStatus(waiting.get(0).correlationId(), null, null);
-				assertEquals(TestConditionEventsEmitter.MODULE_ID + "." + TestConditionEventsEmitter.SYSTEM_ID,
+				assertEquals(ConditionEventsReceiverFactory.MODULE_ID + "." + ConditionEventsPublisher.SYSTEM_ID,
 						view.getSourceSystem(), "with no source of its own, the sending component is the source");
 			} catch (Exception e) {
 				throw new IllegalStateException(e);
