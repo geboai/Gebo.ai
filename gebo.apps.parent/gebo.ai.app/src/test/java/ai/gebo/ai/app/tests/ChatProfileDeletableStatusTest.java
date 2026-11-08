@@ -7,6 +7,9 @@
 package ai.gebo.ai.app.tests;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -19,12 +22,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.angular.persistence.model.SimpleGObjectRef;
 import ai.gebo.architecture.angular.persistence.service.GeboAngularFormGroupMetaInfoService;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.llms.chat.client.rest.controllers.GeboAdminChatProfilesConfigurationController;
 
 /**
  * A chat profile a conversation runs with is not deletable: the conversation's
@@ -33,7 +38,8 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
  * ({@code checkDeletableBySimpleObjectRef}, which names the type by its simple
  * class name) counts it. A conversation that already has turns counts as much as
  * a new one: the dependants are matched by example on a fresh conversation, whose
- * list of interactions is not null.
+ * list of interactions is not null. The delete endpoint runs the same check, so
+ * a caller going straight to it is refused as well.
  */
 public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest {
 	@Autowired
@@ -42,6 +48,8 @@ public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest 
 	private GUserChatSessionRepository sessions;
 	@Autowired
 	private GeboAngularFormGroupMetaInfoService metaInfo;
+	@Autowired
+	private GeboAdminChatProfilesConfigurationController profilesController;
 
 	private GChatProfileConfiguration aProfile(String description) throws Exception {
 		final GChatProfileConfiguration profile = new GChatProfileConfiguration();
@@ -98,6 +106,28 @@ public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest 
 			persistenceManager.delete(profile);
 			persistenceManager.delete(persistenceManager.findById(GChatProfileConfiguration.class,
 					otherChat.getChatProfileCode()));
+		}
+	}
+
+	@Test
+	public void theDeleteEndpointRefusesAProfileAChatRunsWith() throws Exception {
+		final GChatProfileConfiguration profile = aProfile("Profile the endpoint is asked to delete");
+		final GUserChatSession chat = aChatWithATurn(profile.getCode());
+		try {
+			assertThrows(GeboPersistenceException.class, () -> profilesController.deleteChatProfile(profile),
+					"the chat refers to the profile");
+			assertNotNull(persistenceManager.findById(GChatProfileConfiguration.class, profile.getCode()),
+					"the profile is still there");
+
+			sessions.delete(chat);
+			profilesController.deleteChatProfile(profile);
+			assertNull(persistenceManager.findById(GChatProfileConfiguration.class, profile.getCode()),
+					"once the chat is gone the endpoint deletes it");
+		} finally {
+			sessions.deleteById(chat.getCode());
+			if (persistenceManager.findById(GChatProfileConfiguration.class, profile.getCode()) != null) {
+				persistenceManager.delete(profile);
+			}
 		}
 	}
 }
