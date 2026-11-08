@@ -87,7 +87,7 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 			ConditionEventDispatcher dispatcher, GUserChatSessionRepository sessions,
 			GNetworkOfAgentsSuspensionRepository blocks, IConditionEventsAuthorization authorization,
 			ConditionEventsConfig config, ObjectProvider<IGeboThreadManager> threads) {
-		this(store, matcher, dispatcher, sessions, blocks, authorization, config, executorOf(threads),
+		this(store, matcher, dispatcher, sessions, blocks, authorization, config, lazyExecutorOf(threads),
 				Clock.systemUTC());
 	}
 
@@ -106,9 +106,16 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		this.clock = clock;
 	}
 
-	private static Executor executorOf(ObjectProvider<IGeboThreadManager> threads) {
-		final IGeboThreadManager manager = threads != null ? threads.getIfAvailable() : null;
-		return manager != null && manager.getExecutorService() != null ? manager.getExecutorService() : Runnable::run;
+	/**
+	 * The thread manager is looked up on each evaluation, never at construction:
+	 * this service can be created while the thread manager itself is in creation.
+	 */
+	private static Executor lazyExecutorOf(ObjectProvider<IGeboThreadManager> threads) {
+		return task -> {
+			final IGeboThreadManager manager = threads != null ? threads.getIfAvailable() : null;
+			final Executor executor = manager != null ? manager.getExecutorService() : null;
+			(executor != null ? executor : (Executor) Runnable::run).execute(task);
+		};
 	}
 
 	@Override

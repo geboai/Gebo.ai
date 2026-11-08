@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -41,7 +42,12 @@ public class ConditionEventsReceiverFactory extends GAbstractMessageReceiverFact
 		FACTORY_CONFIG.setUseSenderThread(false);
 		FACTORY_CONFIG.setPoolCardinality(1);
 	}
-	private final IConditionEventsService service;
+	/**
+	 * Resolved on the first message: the receiver factories are collected while
+	 * the thread manager is created, and the service reaches the chat pipelines,
+	 * which need that thread manager.
+	 */
+	private final ObjectProvider<IConditionEventsService> service;
 
 	class ConditionEventsReceiver extends GNestedMessageReceiver {
 		@Override
@@ -53,7 +59,7 @@ public class ConditionEventsReceiverFactory extends GAbstractMessageReceiverFact
 					? envelope.getSourceModule()
 							+ (envelope.getSourceComponent() != null ? "." + envelope.getSourceComponent() : "")
 					: envelope.getSourceComponent();
-			final ConditionEventAck ack = service.deliver(payload.getEvent(),
+			final ConditionEventAck ack = service.getObject().deliver(payload.getEvent(),
 					ConditionEventCaller.trustedChannel(envelope.getUserId(), ConditionEventCaller.MESSAGE, source));
 			if (LOGGER.isInfoEnabled()) {
 				LOGGER.info("Condition event message:" + envelope.getId() + " from:" + source + " -> " + ack.getOutcome()
@@ -62,7 +68,7 @@ public class ConditionEventsReceiverFactory extends GAbstractMessageReceiverFact
 		}
 	}
 
-	public ConditionEventsReceiverFactory(IConditionEventsService service) {
+	public ConditionEventsReceiverFactory(ObjectProvider<IConditionEventsService> service) {
 		super(FACTORY_CONFIG);
 		this.service = service;
 	}
