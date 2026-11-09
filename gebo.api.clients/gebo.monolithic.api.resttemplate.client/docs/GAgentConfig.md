@@ -26,6 +26,7 @@ Name | Type | Description | Notes
 **temperature** | **Double** |  |  [optional]
 **thinking** | [**ThinkingEnum**](#ThinkingEnum) |  |  [optional]
 **readOnly** | **Boolean** |  |  [optional]
+**conditionsExpiry** | [**AgentConditionsExpiry**](AgentConditionsExpiry.md) |  |  [optional]
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
