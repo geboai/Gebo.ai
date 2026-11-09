@@ -382,6 +382,13 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 
 	/**
 	 * Gets a count of related objects for a given object.
+	 * <p>
+	 * The database counts them: nothing is loaded, so the check costs the same
+	 * whatever the dependants hold (a conversation with its whole history), and a
+	 * dependant saved by an older version, that this one could no longer read,
+	 * still counts. Only the types that have dependants are in the map, each
+	 * under the type its reference is declared on.
+	 * </p>
 	 *
 	 * @param object the object to check
 	 * @return a map of related object types and their counts
@@ -390,15 +397,13 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	@Override
 	public Map<Class<? extends GBaseObject>, Integer> getCountRelated(GBaseObject object)
 			throws GeboPersistenceException {
-		Stream<? extends GBaseObject> stream = this.streamRelated(object);
 		final Map<Class<? extends GBaseObject>, Integer> map = new HashMap<Class<? extends GBaseObject>, Integer>();
-		// Count occurrences of each related object type in the stream
-		stream.forEach((x) -> {
-			Integer count = map.get(x.getClass());
-			if (count == null)
-				count = 0;
-			map.put(x.getClass(), new Integer(count.intValue() + 1));
-		});
+		for (DependencyTreeItemEdge dependantEdge : describedAs(object).dependants) {
+			final long count = repositoryOf(dependantEdge).count(dependantsOf(object, dependantEdge));
+			if (count > 0) {
+				map.merge(dependantEdge.from.type, (int) Math.min(count, Integer.MAX_VALUE), Integer::sum);
+			}
+		}
 		return map;
 	}
 
@@ -411,48 +416,64 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	 */
 	@Override
 	public Stream<? extends GBaseObject> streamRelated(GBaseObject object) throws GeboPersistenceException {
+		Stream<? extends GBaseObject> stream = Stream.of();
+		// Process dependency tree to find related objects
+		for (DependencyTreeItemEdge dependantEdge : describedAs(object).dependants) {
+			List<? extends GBaseObject> list = repositoryOf(dependantEdge).findAll(dependantsOf(object, dependantEdge));
+			stream = Stream.concat(stream, list.stream());
+		}
+		return stream;
+	}
 
+	private static DependencyTreeItem describedAs(GBaseObject object) throws GeboPersistenceException {
 		DependencyTreeItem descriptor = descriptors.get(object.getClass());
 		if (descriptor == null)
 			throw new GeboPersistenceException("No described entity=>" + object.getClass().getName());
-		Stream<? extends GBaseObject> stream = Stream.of();
-		// Process dependency tree to find related objects
-		for (DependencyTreeItemEdge dependantEdge : descriptor.dependants) {
-			Class<? extends GBaseObject> dependantTypeClass = dependantEdge.from.type;
-			Object objectReference = null;
-			switch (dependantEdge.dependencyType) {
-			case CODE_RELATION: {
-				objectReference = object.getCode();
-			}
-				break;
-			case OBJECT_REF_RELATION: {
-				GObjectRef ref = GObjectRef.of(object);
-				ref.setDescription(null);
-				objectReference = ref;
-			}
-				break;
-			}
-			if (objectReference == null)
-				throw new GeboPersistenceException(
-						"There is no meaning on accessing object related to a null code or GObjectRef  type=>"
-								+ object.getClass().getName());
-			try {
+		return descriptor;
+	}
 
-				GBaseObject example = dependantTypeClass.newInstance();
-				dependantEdge.setAccessor.invoke(example, objectReference);
-				IGBaseMongoDBRepository mongoRepo = repoPattern.findByManagedType(dependantTypeClass);
-				ExampleMatcher onlyTheReference = ExampleMatcher.matching()
-						.withIgnorePaths(initializedPropertiesBut(example, dependantEdge.field));
-				List<? extends GBaseObject> list = mongoRepo.findAll(Example.of(example, onlyTheReference));
-				stream = Stream.concat(stream, list.stream());
-			} catch (InstantiationException | IllegalAccessException e) {
-				throw new GeboPersistenceException("Cannot create entity=>" + dependantTypeClass.getName(), e);
-			} catch (IllegalArgumentException | InvocationTargetException e) {
-				throw new GeboPersistenceException("Cannot invokate method " + dependantEdge.setAccessor.getName()
-						+ " on entity=>" + dependantTypeClass.getName(), e);
-			}
+	@SuppressWarnings("rawtypes")
+	private IGBaseMongoDBRepository repositoryOf(DependencyTreeItemEdge dependantEdge) {
+		return repoPattern.findByManagedType(dependantEdge.from.type);
+	}
+
+	/**
+	 * The example matching the dependants that refer to the object through the
+	 * edge's reference.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static Example dependantsOf(GBaseObject object, DependencyTreeItemEdge dependantEdge)
+			throws GeboPersistenceException {
+		Class<? extends GBaseObject> dependantTypeClass = dependantEdge.from.type;
+		Object objectReference = null;
+		switch (dependantEdge.dependencyType) {
+		case CODE_RELATION: {
+			objectReference = object.getCode();
 		}
-		return stream;
+			break;
+		case OBJECT_REF_RELATION: {
+			GObjectRef ref = GObjectRef.of(object);
+			ref.setDescription(null);
+			objectReference = ref;
+		}
+			break;
+		}
+		if (objectReference == null)
+			throw new GeboPersistenceException(
+					"There is no meaning on accessing object related to a null code or GObjectRef  type=>"
+							+ object.getClass().getName());
+		try {
+			GBaseObject example = dependantTypeClass.newInstance();
+			dependantEdge.setAccessor.invoke(example, objectReference);
+			ExampleMatcher onlyTheReference = ExampleMatcher.matching()
+					.withIgnorePaths(initializedPropertiesBut(example, dependantEdge.field));
+			return Example.of(example, onlyTheReference);
+		} catch (InstantiationException | IllegalAccessException e) {
+			throw new GeboPersistenceException("Cannot create entity=>" + dependantTypeClass.getName(), e);
+		} catch (IllegalArgumentException | InvocationTargetException e) {
+			throw new GeboPersistenceException("Cannot invokate method " + dependantEdge.setAccessor.getName()
+					+ " on entity=>" + dependantTypeClass.getName(), e);
+		}
 	}
 
 	/**
