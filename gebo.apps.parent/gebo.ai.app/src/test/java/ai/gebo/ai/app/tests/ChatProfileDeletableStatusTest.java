@@ -6,6 +6,7 @@
  */
 package ai.gebo.ai.app.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -19,11 +20,16 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import ai.gebo.architecture.angular.persistence.model.SimpleGObjectRef;
 import ai.gebo.architecture.angular.persistence.service.GeboAngularFormGroupMetaInfoService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
@@ -50,6 +56,8 @@ public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest 
 	private GeboAngularFormGroupMetaInfoService metaInfo;
 	@Autowired
 	private GeboAdminChatProfilesConfigurationController profilesController;
+	@Autowired
+	private MongoTemplate mongoTemplate;
 
 	private GChatProfileConfiguration aProfile(String description) throws Exception {
 		final GChatProfileConfiguration profile = new GChatProfileConfiguration();
@@ -89,6 +97,30 @@ public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest 
 
 			sessions.delete(chat);
 			assertTrue(deletableFromTheAdminUi(profile), "once the chat is gone the profile can go");
+		} finally {
+			sessions.deleteById(chat.getCode());
+			persistenceManager.delete(profile);
+		}
+	}
+
+	/**
+	 * A conversation saved by an older version holds an intent this one no
+	 * longer has: it still counts against deleting its profile, and it reads.
+	 */
+	@Test
+	public void aChatSavedWithARemovedIntentCountsAndReads() throws Exception {
+		final GChatProfileConfiguration profile = aProfile("Profile an old chat runs with");
+		final GUserChatSession chat = aChatWithATurn(profile.getCode());
+		try {
+			mongoTemplate.updateFirst(Query.query(Criteria.where("_id").is(chat.getCode())),
+					new Update().set("interactions.0.request.userIntent", "PURE_SEARCH"), GUserChatSession.class);
+
+			assertFalse(deletableFromTheAdminUi(profile), "the old chat refers to the profile");
+			assertThrows(GeboPersistenceException.class, () -> profilesController.deleteChatProfile(profile),
+					"the endpoint refuses as well");
+			final GUserChatSession read = sessions.findById(chat.getCode()).orElseThrow();
+			assertEquals(DeliverableIntent.UNKNOWN, read.getInteractions().get(0).getRequest().getUserIntent(),
+					"the removed intent reads as unknown");
 		} finally {
 			sessions.deleteById(chat.getCode());
 			persistenceManager.delete(profile);
