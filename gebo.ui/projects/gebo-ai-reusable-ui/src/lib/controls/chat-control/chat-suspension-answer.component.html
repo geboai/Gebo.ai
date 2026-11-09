@@ -56,9 +56,16 @@
         }
       } @else {
         <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
-          [disabled]="disabled" [(ngModel)]="answerOf(condition).value"
+          [disabled]="disabled || goesOnWithout(condition)" [(ngModel)]="answerOf(condition).value"
           placeholder="Your answer" gebo-ai-label></textarea>
       }
+      <div class="gebo-ai-reusable-chat__suspension-option gebo-ai-reusable-chat__suspension-go-on-without">
+        <p-checkbox [binary]="true" [inputId]="condition.conditionId + '-go-on-without'" [disabled]="disabled"
+          [ngModel]="goesOnWithout(condition)" (ngModelChange)="toggleGoOnWithout(condition, $event)"></p-checkbox>
+        <label [for]="condition.conditionId + '-go-on-without'" class="gebo-ai-reusable-chat__suspension-option-label">
+          <span id="GoOnWithoutCondition" gebo-ai-text>No answer: let the agents go on without it</span>
+        </label>
+      </div>
       }
     </div>
   }
@@ -66,6 +73,12 @@
     @if (!mandatory) {
       <p-button id="skipSuspensionBtn" gebo-ai-label label="Skip and go on" severity="secondary" [text]="true"
         [disabled]="disabled" (onClick)="doSkip()"></p-button>
+    }
+    @if (hasOpenConditions) {
+      <p-button id="abandonSuspensionBtn" gebo-ai-label label="Abandon the run" severity="danger" [text]="true"
+        icon="pi pi-times" [disabled]="disabled" (onClick)="doAbandon()"></p-button>
+      <p-button id="goOnWithoutSuspensionBtn" gebo-ai-label label="Go on without the missing answers" severity="secondary"
+        [outlined]="true" icon="pi pi-forward" [disabled]="disabled" (onClick)="goOnWithoutAll()"></p-button>
     }
     <p-button id="answerSuspensionBtn" gebo-ai-label label="Answer" icon="pi pi-send"
       [disabled]="!canSend()" (onClick)="send()"></p-button>
