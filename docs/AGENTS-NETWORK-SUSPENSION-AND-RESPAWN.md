@@ -184,6 +184,15 @@ any block):
 - **abandon**: the block is dropped where it stands (`ABANDONED`, `droppedBy`), the
   conversation is free; refused while a respawn of the block is running.
 
+In the UI (`gebo.ui`): the panel is `GeboAIWaitingConditionsPanelComponent`
+(`gebo-ai-waiting-conditions-panel`, reusable-ui, `GeboAIWaitingConditionsPanelModule`), with
+`administrator` for the administrators' view; the user's page is `GeboAIWaitingConditionsModule`,
+routed by the applications at `ui/waiting-conditions` (menu entry "Agents waiting"), and the
+administrators' view sits under the "Agents/Networks of agents" admin tab. The chat's suspension
+form offers, per condition, "No answer: let the agents go on without it", and for the block "Go on
+without the missing answers" and "Abandon the run". The agent editor sets `conditionsExpiry` in the
+"Large language model & usable tools settings" tab.
+
 From the chat, the owner asks to go on without a condition with the attribute
 `goOnWithout: true` on its answer: the chat's recorder reads it for the conversation's own
 user and marks the event, so a reaction asking it is always recorded. Nothing else may ask

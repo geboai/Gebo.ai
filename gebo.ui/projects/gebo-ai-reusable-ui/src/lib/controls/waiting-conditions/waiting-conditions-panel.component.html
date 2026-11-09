@@ -1,0 +1,117 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+<div class="gebo-ai-waiting-conditions" #waitingPanel>
+  <p-blockUI [target]="waitingPanel" [blocked]="loading">
+    <i class="pi pi-spin pi-spinner" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <div class="gebo-ai-waiting-conditions__toolbar">
+    <span class="gebo-ai-waiting-conditions__count">
+      @if (blocks.length === 0) {
+        <span id="NothingWaiting" gebo-ai-text>No run of agents is waiting.</span>
+      } @else if (administrator) {
+        <span id="RunsWaitingAll" gebo-ai-text>Runs of agents waiting for an answer, every user's:</span> {{blocks.length}}
+      } @else {
+        <span id="RunsWaitingMine" gebo-ai-text>Your runs of agents waiting for an answer:</span> {{blocks.length}}
+      }
+    </span>
+    <p-button id="ReloadWaitingBtn" gebo-ai-label icon="pi pi-refresh" [text]="true" [rounded]="true"
+      severity="secondary" ariaLabel="Reload" (onClick)="reload()"></p-button>
+  </div>
+  @for (message of lastMessages; track $index) {
+    <p-message [severity]="message.severity" styleClass="gebo-ai-waiting-conditions__message">
+      <strong>{{message.summary}}</strong>
+      @if (message.detail) {
+        <span class="gebo-ai-waiting-conditions__message-detail">{{message.detail}}</span>
+      }
+    </p-message>
+  }
+  @for (block of blocks; track trackByBlock($index, block)) {
+    <div class="gebo-ai-waiting-conditions__block" [class.gebo-ai-waiting-conditions__block--expired]="block.expired">
+      <div class="gebo-ai-waiting-conditions__block-header">
+        <div class="gebo-ai-waiting-conditions__block-title">
+          <i class="pi pi-hourglass" aria-hidden="true"></i>
+          <span class="gebo-ai-waiting-conditions__network">{{block.networkCode}}</span>
+          @if (administrator && block.owner) {
+            <span class="gebo-ai-waiting-conditions__owner"><i class="pi pi-user" aria-hidden="true"></i> {{block.owner}}</span>
+          }
+          <span class="gebo-ai-waiting-conditions__since">
+            <span id="SinceLabel" gebo-ai-text>since</span> {{block.suspendedAt | date:'medium'}}
+          </span>
+        </div>
+        <div class="gebo-ai-waiting-conditions__flags">
+          @if (block.mandatory) {
+            <p-tag id="MandatoryTag" gebo-ai-label value="holds the conversation" severity="info"></p-tag>
+          } @else {
+            <p-tag id="OptionalTag" gebo-ai-label value="optional" severity="secondary"></p-tag>
+          }
+          @if (block.unwatched) {
+            <p-tag id="UnwatchedTag" gebo-ai-label value="nobody was watching" severity="warn"></p-tag>
+          }
+          @if (block.expired) {
+            <p-tag id="ExpiredTag" gebo-ai-label value="expired" severity="danger"></p-tag>
+          } @else if (block.earliestExpiryAt) {
+            <p-tag id="ExpiresTag" gebo-ai-label severity="secondary" [value]="(block.earliestExpiryAt | date:'medium') ?? ''" icon="pi pi-clock"></p-tag>
+          }
+        </div>
+      </div>
+      <ul class="gebo-ai-waiting-conditions__conditions">
+        @for (condition of block.conditions; track condition.conditionId) {
+          <li class="gebo-ai-waiting-conditions__condition" [class.gebo-ai-waiting-conditions__condition--solved]="condition.solved">
+            @if (condition.solved) {
+              <i class="pi pi-check-circle" aria-hidden="true"></i>
+            } @else {
+              <p-checkbox [binary]="true" [inputId]="block.blockCode + '-' + condition.conditionId"
+                [ngModel]="isTicked(block, condition)" (ngModelChange)="tick(block, condition, $event)"
+                [disabled]="loading"></p-checkbox>
+            }
+            <label [for]="block.blockCode + '-' + condition.conditionId" class="gebo-ai-waiting-conditions__statement">
+              {{condition.statement}}
+              @if (condition.mandatory === false) {
+                <span id="OptionalCondition" class="gebo-ai-waiting-conditions__muted" gebo-ai-text>(optional)</span>
+              }
+              @if (condition.solved) {
+                <span class="gebo-ai-waiting-conditions__muted">
+                  <span id="AnsweredBy" gebo-ai-text>answered by</span> {{condition.solvedBy}}
+                </span>
+              } @else if (condition.expired) {
+                <span id="ConditionExpired" class="gebo-ai-waiting-conditions__expired" gebo-ai-text>expired, still waiting</span>
+              } @else if (condition.expiresAt) {
+                <span class="gebo-ai-waiting-conditions__muted">
+                  @if (condition.expiryUnblocks) {
+                    <span id="GoesOnAt" gebo-ai-text>goes on without it at</span>
+                  } @else {
+                    <span id="ExpiresAt" gebo-ai-text>expires at</span>
+                  }
+                  {{condition.expiresAt | date:'medium'}}
+                </span>
+              }
+            </label>
+          </li>
+        }
+      </ul>
+      <div class="gebo-ai-waiting-conditions__actions">
+        <a [routerLink]="chatLinkOf(block)" class="p-button p-button-text p-button-secondary gebo-ai-waiting-conditions__link">
+          <i class="pi pi-comments" aria-hidden="true"></i>
+          <span id="OpenChatLink" gebo-ai-text>Open the conversation</span>
+        </a>
+        @if (hasPartialTicks(block)) {
+          <p-button id="GoOnWithoutTickedBtn" gebo-ai-label label="Go on without the ticked answers" icon="pi pi-forward"
+            [outlined]="true" [disabled]="loading" (onClick)="goOnWithout(block)"></p-button>
+        } @else {
+          <p-button id="GoOnWithoutBtn" gebo-ai-label label="Go on without the answers" icon="pi pi-forward"
+            [outlined]="true" [disabled]="loading || openConditionsOf(block).length === 0" (onClick)="goOnWithout(block)"></p-button>
+        }
+        <p-button id="AbandonBtn" gebo-ai-label label="Abandon the run" icon="pi pi-times" severity="danger"
+          [outlined]="true" [disabled]="loading" (onClick)="abandon(block)"></p-button>
+      </div>
+    </div>
+  }
+</div>

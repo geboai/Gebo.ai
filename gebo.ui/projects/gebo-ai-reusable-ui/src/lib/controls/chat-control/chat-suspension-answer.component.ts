@@ -29,7 +29,14 @@ interface ConditionAnswer {
     chosenOptions?: string[];
     customExplanation?: string;
     value?: string;
+    /** No answer: the agents go on without it, mandatory or not, told that the user chose so. */
+    goOnWithout?: boolean;
 }
+
+/** The attribute of an answer asking to go on without the condition (read by the chat only). */
+const GO_ON_WITHOUT = "goOnWithout";
+/** The line shown in the chat for a condition the user goes on without. */
+const GONE_ON_WITHOUT_TEXT = "(no answer: go on without it)";
 
 /**
  * The questions a suspended network of agents asks the user, under the answer that
@@ -53,6 +60,8 @@ export class GeboAIChatSuspensionAnswerComponent {
     @Input() disabled: boolean = false;
     @Output() answer: EventEmitter<SuspensionAnswer> = new EventEmitter<SuspensionAnswer>();
     @Output() skip: EventEmitter<void> = new EventEmitter<void>();
+    /** The user abandons the run of the block whose id is given. */
+    @Output() abandon: EventEmitter<string> = new EventEmitter<string>();
     public answers: { [conditionId: string]: ConditionAnswer } = {};
 
     @Input()
@@ -164,8 +173,28 @@ export class GeboAIChatSuspensionAnswerComponent {
         }
     }
 
+    /** Whether the user chose to go on without this condition's answer. */
+    goesOnWithout(condition: AgentSuspendedWaitingConditionDto): boolean {
+        return this.answerOf(condition).goOnWithout === true;
+    }
+
+    /** Going on without a condition drops whatever was answered to it, and the other way round. */
+    toggleGoOnWithout(condition: AgentSuspendedWaitingConditionDto, goOnWithout: boolean): void {
+        const answer = this.answerOf(condition);
+        answer.goOnWithout = goOnWithout;
+        if (goOnWithout) {
+            answer.chosenOption = undefined;
+            answer.chosenOptions = undefined;
+            answer.customExplanation = undefined;
+            answer.value = undefined;
+        }
+    }
+
     isAnswered(condition: AgentSuspendedWaitingConditionDto): boolean {
         const answer = this.answerOf(condition);
+        if (answer.goOnWithout === true) {
+            return true;
+        }
         if (this.isClarification(condition)) {
             return !!answer.chosenOption || !!answer.chosenOptions?.length
                 || (this.customAllowed(condition) && !!answer.customExplanation?.trim());
@@ -213,7 +242,10 @@ export class GeboAIChatSuspensionAnswerComponent {
                 }
                 continue;
             }
-            if (this.isMultipleChoice(condition)) {
+            if (answer.goOnWithout === true) {
+                reaction.attributes![GO_ON_WITHOUT] = true;
+                lines.push(GONE_ON_WITHOUT_TEXT);
+            } else if (this.isMultipleChoice(condition)) {
                 const chosen = answer.chosenOptions ?? [];
                 const explanation = answer.customExplanation?.trim();
                 reaction.attributes!["chosenOptions"] = chosen;
@@ -244,6 +276,34 @@ export class GeboAIChatSuspensionAnswerComponent {
     doSkip(): void {
         if (!this.mandatory) {
             this.skip.emit();
+        }
+    }
+
+    /** Whether some condition is still asked: the user may go on without every one, or abandon the run. */
+    get hasOpenConditions(): boolean {
+        return this.openConditions.length > 0;
+    }
+
+    /**
+     * The user goes on without every answer still missing, mandatory or not: the agents
+     * resume, told that the user chose so; what was already written is kept as answered.
+     */
+    goOnWithoutAll(): void {
+        if (this.disabled || !this._state || !this.hasOpenConditions) {
+            return;
+        }
+        for (const condition of this.openConditions) {
+            if (!this.isAnswered(condition)) {
+                this.toggleGoOnWithout(condition, true);
+            }
+        }
+        this.send();
+    }
+
+    /** The user abandons the run: it is dropped where it stands, never to be resumed. */
+    doAbandon(): void {
+        if (!this.disabled && this._state?.networkOfAgentsBlockId) {
+            this.abandon.emit(this._state.networkOfAgentsBlockId);
         }
     }
 }

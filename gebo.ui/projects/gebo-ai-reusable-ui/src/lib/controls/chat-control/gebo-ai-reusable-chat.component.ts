@@ -22,7 +22,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState, WaitingConditionsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { SuspensionAnswer } from "./chat-suspension-answer.component";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
@@ -559,6 +559,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         private userChatControllerService: GeboUserChatsControllerService,
         private textToSpeechService: GeboTextToSpeechControllerService,
         private transcriptService: GeboTranscriptControllerService,
+        private waitingConditionsService: WaitingConditionsControllerService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
         this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
@@ -1233,6 +1234,45 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         if (!this.isMandatorySuspension(this.pendingSuspension)) {
             this.pendingSuspension = undefined;
         }
+    }
+
+    /**
+     * The user abandons the suspended run: asked to confirm, the block is dropped where
+     * it stands, never to be resumed, and the conversation is free.
+     */
+    public abandonSuspension(blockId: string): void {
+        if (this.chatStreaming || !blockId) return;
+        const confirmation: ExtendedConfirmation = {
+            id: "ABANDON_SUSPENSION_ACTION",
+            header: "Abandon the waiting run",
+            message: "The agents' run will be abandoned, its questions never answered, and the conversation will be free. Abandon it?",
+            accept: () => {
+                this.waitingConditionsService.abandon(blockId).subscribe({
+                    next: (ack) => {
+                        if (ack?.outcome === "DONE" || ack?.outcome === "NOT_FOUND") {
+                            this.pendingSuspension = undefined;
+                            this.lastInteractionMessages = [{ severity: "info", summary: "The run was abandoned", detail: "The conversation is free." }];
+                        } else {
+                            this.lastInteractionMessages = [{ severity: "warn", summary: "The run was not abandoned", detail: ack?.reason ?? "" }];
+                        }
+                    },
+                    error: (error) => {
+                        console.error("Cannot abandon the waiting run " + blockId, error);
+                        this.lastInteractionMessages = [{ severity: "error", summary: "The run was not abandoned", detail: String(error?.message ?? error) }];
+                    }
+                });
+            }
+        };
+        const translateSubscription = this.geboAiTranslationService.translateConfirmation(moduleId, entityId, confirmation).subscribe({
+            next: (trconfirmation) => {
+                this.confirmService.confirm(trconfirmation ? trconfirmation : confirmation);
+                try {
+                    translateSubscription.unsubscribe();
+                } catch (e) {
+                    // already closed
+                }
+            }
+        });
     }
 
     /**

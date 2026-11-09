@@ -211,6 +211,28 @@
                             </gebo-ai-field>
                           </div>
                         </div>
+                        <p-fieldset id="ConditionsExpiryFieldset" gebo-ai-label legend="Waiting for the user or for external conditions" [toggleable]="false"
+                          formGroupName="conditionsExpiry">
+                          <div class="grid">
+                            <div class="col-12">
+                              <span id="ConditionsExpiryHelp" gebo-ai-text>When this agent stops to ask the user something, or to wait for an answer from outside, its questions wait this long; leave it empty for the platform's default.</span>
+                            </div>
+                            <div class="col-4">
+                              <gebo-ai-field id="expiryMinutes" label="Minutes the questions wait"
+                                help="After this many minutes a question expires; empty or zero leaves the platform's default (no expiry unless configured)">
+                                <p-inputNumber id="expiryMinutes" formControlName="expiryMinutes" [min]="0" [maxFractionDigits]="0"
+                                  styleClass="w-full" gebo-ai-field-element />
+                              </gebo-ai-field>
+                            </div>
+                            <div class="col-8">
+                              <gebo-ai-field id="expiryUnblocks" label="When a question expires the run goes on without the answer"
+                                help="Checked, the agents resume without the answer, told that nobody answered in time; unchecked, the run keeps waiting and its owner is told">
+                                <p-check-box formControlName="expiryUnblocks" [binary]="true" [trueValue]="true" [falseValue]="false"
+                                  gebo-ai-field-element></p-check-box>
+                              </gebo-ai-field>
+                            </div>
+                          </div>
+                        </p-fieldset>
                       </p-tabpanel>
 
                       <p-tabpanel [value]="2">

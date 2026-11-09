@@ -47,7 +47,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         defaultConfiguration: new FormControl(),
         temperature: new FormControl(),
         thinking: new FormControl(),
-        readOnly: new FormControl()
+        readOnly: new FormControl(),
+        // how long the conditions this agent waits for keep waiting, and whether the run goes on then
+        conditionsExpiry: new FormGroup({
+            expiryMinutes: new FormControl(),
+            expiryUnblocks: new FormControl()
+        })
 
     });
     protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
