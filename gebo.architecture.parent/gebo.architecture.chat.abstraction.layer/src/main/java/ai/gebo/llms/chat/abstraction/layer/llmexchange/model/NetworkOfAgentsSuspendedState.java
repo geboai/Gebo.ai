@@ -13,4 +13,10 @@ public class NetworkOfAgentsSuspendedState {
 	@NotNull
 	@NotEmpty
 	private List<AgentSuspendedWaitingConditionDto> conditions = null;
+	/**
+	 * Whether the conditions are answered one at a time, by the chat and by other
+	 * sources alike: an answer may leave some open, and those another source solved
+	 * say so (see the {@code solved} attributes of each condition).
+	 */
+	private boolean answersOneByOne = false;
 }

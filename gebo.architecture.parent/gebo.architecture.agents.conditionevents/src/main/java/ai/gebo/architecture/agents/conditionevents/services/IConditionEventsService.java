@@ -29,6 +29,13 @@ public interface IConditionEventsService {
 	 */
 	ConditionEventAck deliver(ConditionEvent event, ConditionEventCaller caller);
 
+	/**
+	 * Keeps the event as {@link #deliver} does, without evaluating its session
+	 * apart: the caller takes it further itself, as the chat does when its answer
+	 * solves the block and it runs the respawn.
+	 */
+	ConditionEventAck deliverHeld(ConditionEvent event, ConditionEventCaller caller);
+
 	/** What became of the event kept for a condition; empty when none is, or the caller may not know. */
 	Optional<ConditionEventView> status(ConditionCorrelationId correlation, ConditionEventCaller caller);
 

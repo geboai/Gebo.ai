@@ -37,6 +37,9 @@ interface ConditionAnswer {
  * the agents chose with an explanation of the user's own when allowed, a value for any other
  * kind of condition. Answering respawns the network with the reaction; a block whose
  * conditions may all be left unanswered can be skipped, the conversation going on.
+ * Where the conditions are answered one at a time (the state says so) those another
+ * source already solved are shown as answered, and an answer may leave others open:
+ * the agents resume once every mandatory one has an answer, from whichever source.
  */
 @Component({
     selector: "gebo-ai-chat-suspension-answer",
@@ -70,6 +73,26 @@ export class GeboAIChatSuspensionAnswerComponent {
     /** Whether a condition of the block is mandatory: the conversation waits for the block. */
     get mandatory(): boolean {
         return this.conditions.some(c => this.isMandatory(c));
+    }
+
+    /** Whether the conditions are answered one at a time, next to other sources. */
+    get oneByOne(): boolean {
+        return this._state?.answersOneByOne === true;
+    }
+
+    /** Whether an answer of some source already solves the condition: it is not asked again. */
+    isSolved(condition: AgentSuspendedWaitingConditionDto): boolean {
+        return this.oneByOne && condition.attributes?.["solved"] === true;
+    }
+
+    /** The source of the answer that solves the condition. */
+    solvedByOf(condition: AgentSuspendedWaitingConditionDto): string | undefined {
+        return condition.attributes?.["solvedBy"];
+    }
+
+    /** The conditions still asked. */
+    get openConditions(): AgentSuspendedWaitingConditionDto[] {
+        return this.conditions.filter(c => !this.isSolved(c));
     }
 
     isClarification(condition: AgentSuspendedWaitingConditionDto): boolean {
@@ -150,13 +173,21 @@ export class GeboAIChatSuspensionAnswerComponent {
         return !!answer.value?.trim();
     }
 
-    /** Every mandatory condition answered, and at least one answer given. */
+    /**
+     * At least one answer given, and every mandatory condition answered; one at a time,
+     * any answer to a condition still asked.
+     */
     canSend(): boolean {
         if (this.disabled || this.conditions.length === 0) {
             return false;
         }
-        const answered = this.conditions.filter(c => this.isAnswered(c));
-        return answered.length > 0 && this.conditions.every(c => !this.isMandatory(c) || this.isAnswered(c));
+        const answered = this.openConditions.filter(c => this.isAnswered(c));
+        return answered.length > 0 && (this.oneByOne || this.completes());
+    }
+
+    /** Whether the answers leave no mandatory condition still asked unanswered. */
+    private completes(): boolean {
+        return this.openConditions.every(c => !this.isMandatory(c) || this.isAnswered(c));
     }
 
     send(): void {
@@ -165,7 +196,9 @@ export class GeboAIChatSuspensionAnswerComponent {
         }
         const reactions: AgentSuspendedWaitingConditionReactionDto[] = [];
         const lines: string[] = [];
-        for (const condition of this.conditions) {
+        // answers that leave a mandatory condition open leave the optional ones open too
+        const completes = this.completes();
+        for (const condition of this.openConditions) {
             const answer = this.answerOf(condition);
             const reaction: AgentSuspendedWaitingConditionReactionDto = {
                 conditionType: condition.conditionType,
@@ -173,9 +206,11 @@ export class GeboAIChatSuspensionAnswerComponent {
                 attributes: {}
             };
             if (!this.isAnswered(condition)) {
-                // a condition that is not mandatory, left unanswered: declined
-                reaction.attributes!["declined"] = true;
-                reactions.push(reaction);
+                if (completes && !this.isMandatory(condition)) {
+                    // a condition that is not mandatory, left unanswered: declined
+                    reaction.attributes!["declined"] = true;
+                    reactions.push(reaction);
+                }
                 continue;
             }
             if (this.isMultipleChoice(condition)) {

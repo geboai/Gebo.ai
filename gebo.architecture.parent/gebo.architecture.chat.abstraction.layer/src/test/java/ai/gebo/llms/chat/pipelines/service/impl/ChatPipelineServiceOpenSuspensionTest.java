@@ -43,7 +43,7 @@ class ChatPipelineServiceOpenSuspensionTest {
 			mock(IGChatModelRuntimeConfigurationDao.class), mock(IGPersistentObjectManager.class),
 			mock(IGSecurityService.class), mock(IGRuntimeChatProfileChatModelDao.class),
 			mock(IGChatSessionLifeCycleService.class), mock(IPipelineUserMenuProviderServiceRepositoryPattern.class),
-			suspensions, NetworkOfAgentsSuspensionTransport.plain());
+			suspensions, NetworkOfAgentsSuspensionTransport.plain(), null);
 
 	private static GeboChatRequest request() {
 		GeboChatRequest request = new GeboChatRequest();
