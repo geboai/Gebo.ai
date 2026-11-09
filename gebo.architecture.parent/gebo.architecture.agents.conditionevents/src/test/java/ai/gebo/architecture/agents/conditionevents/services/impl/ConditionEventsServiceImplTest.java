@@ -60,6 +60,7 @@ import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.RecordedConditionReaction;
 import ai.gebo.llms.chat.pipelines.service.SolvedCondition;
 import ai.gebo.llms.chat.pipelines.service.impl.GAbstractConditionTransportTranslator;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationReactionAttributes;
 import ai.gebo.llms.chat.pipelines.service.impl.ClarificationConditionTransportTranslator;
 import ai.gebo.llms.chat.pipelines.service.impl.DefaultConditionTransportTranslator;
 import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
@@ -575,6 +576,43 @@ class ConditionEventsServiceImplTest {
 	}
 
 	// ----------------------------------------------------------------------------
+
+	@Test
+	void anAnswerGivenTypedIsKeptAsItsAttributesAndRespawnsTheBlock() {
+		block(question("year", true, "2023", "2024"));
+		final ConditionEvent typed = choice(SESSION + ":year", "2023");
+		typed.setAttributes(null);
+		final ClarificationReactionAttributes answer = new ClarificationReactionAttributes();
+		answer.setChosenOption("2024");
+		typed.setClarificationAttributes(answer);
+
+		final ConditionEventAck ack = service.deliver(typed, application());
+
+		assertEquals(Outcome.ACCEPTED, ack.getOutcome());
+		assertEquals("2024", store.events.get(SESSION + ":year").getAttributes()
+				.get(ClarificationConditionTransportTranslator.CHOSEN_OPTION));
+		assertEquals(1, respawns.size());
+		assertEquals("2024", respawns.get(0).getNetworkOfAgentsSuspendedStateReaction().getReactions().get(0)
+				.getAttributes().get(ClarificationConditionTransportTranslator.CHOSEN_OPTION));
+	}
+
+	@Test
+	void anAnswerGivenTypedStandsForTheChoiceOfTheMapAndIsCheckedAsIt() {
+		block(question("year", true, "2023", "2024"));
+		final ConditionEvent typed = choice(SESSION + ":year", "2023");
+		typed.getAttributes().put("ticket", "T-12");
+		final ClarificationReactionAttributes answer = new ClarificationReactionAttributes();
+		answer.setChosenOption("1999");
+		typed.setClarificationAttributes(answer);
+
+		final ConditionEventAck ack = service.deliver(typed, application());
+
+		assertEquals(Outcome.REFUSED, ack.getOutcome(), "the typed choice is the one checked, not the map's");
+		assertTrue(ack.getReason().contains("1999"), ack.getReason());
+		assertEquals("T-12", store.events.get(SESSION + ":year").getAttributes().get("ticket"),
+				"the other attributes are kept");
+		assertTrue(respawns.isEmpty());
+	}
 
 	private GNetworkOfAgentsSuspension block(AgentSuspendedWaitingCondition<?, ?>... conditions) {
 		final GNetworkOfAgentsSuspension block = new GNetworkOfAgentsSuspension();

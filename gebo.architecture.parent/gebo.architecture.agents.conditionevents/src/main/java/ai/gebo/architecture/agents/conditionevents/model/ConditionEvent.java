@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationReactionAttributes;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DefaultReactionAttributes;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -36,9 +38,22 @@ public class ConditionEvent implements Serializable {
 	/** The type of the condition, as the pending state names it ({@code clarification}, {@code default}...). */
 	@NotNull
 	private String conditionType = null;
-	/** What solves it, as the condition's translator reads it ({@code value}, {@code chosenOption}, {@code declined}...). */
-	@NotNull
+	/**
+	 * What solves it, as the condition's translator reads it ({@code value},
+	 * {@code chosenOption}, {@code declined}...). May be left out when the answer is
+	 * given typed; custom types answer here only.
+	 */
 	private LinkedHashMap<String, Object> attributes = null;
+	/**
+	 * The answer typed, to a condition of the {@code clarification} type: it stands
+	 * for the attributes it covers (see {@link ClarificationReactionAttributes#COVERED}).
+	 */
+	private ClarificationReactionAttributes clarificationAttributes = null;
+	/**
+	 * The answer typed, to a condition of the {@code default} type: it stands for the
+	 * attributes it covers (see {@link DefaultReactionAttributes#COVERED}).
+	 */
+	private DefaultReactionAttributes defaultAttributes = null;
 	/**
 	 * What the source says of it, for the conversation's history; when no event of
 	 * a respawn carries one the text is made from the solved conditions.
@@ -60,4 +75,20 @@ public class ConditionEvent implements Serializable {
 	 * condition the later one is kept. Null orders them by arrival.
 	 */
 	private Date sourceTimestamp = null;
+
+	/**
+	 * A copy of the attributes, with the answer given typed in place of what they
+	 * said of the attributes it covers.
+	 */
+	public LinkedHashMap<String, Object> mergedAttributes() {
+		LinkedHashMap<String, Object> merged = attributes != null ? new LinkedHashMap<String, Object>(attributes)
+				: new LinkedHashMap<String, Object>();
+		if (clarificationAttributes != null) {
+			merged = clarificationAttributes.mergeInto(merged);
+		}
+		if (defaultAttributes != null) {
+			merged = defaultAttributes.mergeInto(merged);
+		}
+		return merged;
+	}
 }

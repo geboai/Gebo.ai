@@ -107,6 +107,38 @@ through a source that is `isMountedOnlyWhenAsked()`, and name the source on the 
 that may wait. Add a translator when the client should see the condition in a form of
 its own; the default translator carries any condition by its types.
 
+## The type of a condition and its typed attributes
+
+The **type** of a condition is the id of the translator that shows it to the client and
+reads the answers to it (`clarification`, `default`, or a custom one). It is kept with the
+condition (`AgentSuspendedWaitingCondition.conditionType`, `WaitingCondition.conditionType`
+in the block) when the run suspends: the suspension handler asks the
+`IWaitingConditionTypeResolver` the network service factories hand it, which the chat layer
+implements with the translator the transport picks. A waiting tool may set a type of its
+own, which is kept as it is.
+
+`NetworkOfAgentsSuspensionTransport.translatorOf` reads a condition with the translator of
+its type, so the answer is read by the translator the question was shown with, whatever
+translators are registered later and in whatever order. A condition with no type (a block
+kept before the type was) or with a type no translator has any more (logged as a warning)
+is read by its kind, as before: the last registered translator that takes it, else the
+default one.
+
+The attributes travel as a map, and the built-in types also travel **typed**, beside it:
+
+| Type | Condition (`AgentSuspendedWaitingConditionDto`) | Answer (reaction, `ConditionEvent`) |
+|---|---|---|
+| `clarification` | `clarificationAttributes`: `ClarificationConditionAttributes` | `clarificationAttributes`: `ClarificationReactionAttributes` |
+| `default` | `defaultAttributes`: `DefaultConditionAttributes` | `defaultAttributes`: `DefaultReactionAttributes` |
+
+The condition's map is always filled, so the clients that read it keep working; the typed
+attributes are made of it. An answer may come typed, with the map or without it: the typed
+answer stands for the attributes it covers (`COVERED`), the map's are dropped, the others are
+kept for the custom extensions. It is merged into the map where it comes in (the chat's
+respawn, before the recorder; the events' `deliver`, before the event is kept; and the
+translators, again, which changes nothing), so whatever reads the attributes reads it. A
+custom type answers with the map only.
+
 ## The additional rules slot
 
 A prompt can forbid what a tool needs: a coordinator told that its only output is the
@@ -156,7 +188,8 @@ conversation it belongs to. An event names the condition in either form, or both
 `ConditionEvent` solves the condition as a reaction does
 (`AgentSuspendedWaitingConditionReactionDto`): `conditionType` as the pending state names it
 (`clarification`, `default`...) and the `attributes` its translator reads (`chosenOption`,
-`value`, `declined`...). Once a block waits for the condition, the values are checked with
+`value`, `declined`...), or the answer typed for the built-in types (see "The type of a
+condition and its typed attributes"), kept as its attributes. Once a block waits for the condition, the values are checked with
 its translator on a copy of the saved condition: an option that was not offered is
 `REFUSED`, and a later event for the same condition may replace it. Optional:
 

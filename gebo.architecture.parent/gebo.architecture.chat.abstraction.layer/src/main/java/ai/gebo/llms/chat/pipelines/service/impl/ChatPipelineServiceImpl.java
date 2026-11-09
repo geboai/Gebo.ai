@@ -321,6 +321,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 		GeboChatResponse response = null;
 		try {
 			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			mergeTypedAnswers(request);
 			final OneByOne oneByOne = recordOneByOne(request);
 			if (oneByOne != null && !oneByOne.recorded().resumes()) {
 				return replyRecorded(request, oneByOne);
@@ -360,6 +361,7 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			throws ChatPipelineException, GeboChatSessionLifecycleException, GeboChatException {
 		try {
 			this.chatSessionLifecycleService.ensureChatSessionExists(request);
+			mergeTypedAnswers(request);
 			final OneByOne oneByOne = recordOneByOne(request);
 			if (oneByOne != null && !oneByOne.recorded().resumes()) {
 				return Flux.just(new GeboChatMessageEnvelope<GeboChatResponse>(replyRecorded(request, oneByOne), true));
@@ -399,6 +401,24 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 		} catch (GeboPersistenceException | IOException | LLMConfigException e) {
 			String msg = "Exception applying respawn chat pipeline (streaming)";
 			throw new ChatPipelineException(msg, e);
+		}
+	}
+
+	/**
+	 * Puts the answers given typed in their attributes, before anything reads them:
+	 * the recorder, the respawner and the texts read the attributes.
+	 */
+	static void mergeTypedAnswers(GeboChatRequest request) {
+		final NetworkOfAgentsSuspendedStateReaction reaction = request != null
+				? request.getNetworkOfAgentsSuspendedStateReaction()
+				: null;
+		if (reaction == null || reaction.getReactions() == null) {
+			return;
+		}
+		for (AgentSuspendedWaitingConditionReactionDto answer : reaction.getReactions()) {
+			if (answer != null) {
+				answer.mergeTypedAttributes();
+			}
 		}
 	}
 }

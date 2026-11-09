@@ -339,6 +339,8 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		private String notesForLater = null;
 		/** Who or what solved it, once solved and when told. */
 		private ConditionSource solvedBy = null;
+		/** The type of the condition: the id of the translator that shows it and reads its answers. */
+		private String conditionType = null;
 
 		public static WaitingCondition of(AgentSuspendedWaitingCondition<?, ?> condition) {
 			if (condition == null) {
@@ -355,6 +357,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			waiting.setLlmChosenOptions(condition.getLlmChosenOptions());
 			waiting.setNotesForLater(condition.getNotesForLater());
 			waiting.setSolvedBy(condition.getSolvedBy());
+			waiting.setConditionType(condition.getConditionType());
 			return waiting;
 		}
 
@@ -370,6 +373,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 					optionsTypeName != null ? classNamed(optionsTypeName) : null, llmChosenOptions);
 			condition.setNotesForLater(notesForLater);
 			condition.setSolvedBy(solvedBy);
+			condition.setConditionType(conditionType);
 			if (suspendedConditionId != null) {
 				condition.setSuspendedConditionId(suspendedConditionId);
 			}

@@ -22,7 +22,9 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationConditionAttributes;
 
 /**
  * Carries a question the agents ask the user (see
@@ -75,6 +77,11 @@ public class ClarificationConditionTransportTranslator extends GAbstractConditio
 		attributes.put(OPTIONS, options != null ? described(options) : List.of());
 		attributes.put(MULTIPLE_CHOICE, options != null && options.isMultipleChoice());
 		attributes.put(CUSTOM_ANSWER_ALLOWED, options != null && options.isCustomAnswerAllowed());
+	}
+
+	@Override
+	protected void typed(AgentSuspendedWaitingConditionDto dto, LinkedHashMap<String, Object> attributes) {
+		dto.setClarificationAttributes(ClarificationConditionAttributes.of(attributes));
 	}
 
 	@Override

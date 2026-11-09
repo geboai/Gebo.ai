@@ -188,8 +188,7 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 			kept.setUserCreated(caller != null ? caller.getName() : null);
 		}
 		kept.setConditionType(event.getConditionType().strip());
-		kept.setAttributes(event.getAttributes() != null ? new LinkedHashMap<String, Object>(event.getAttributes())
-				: new LinkedHashMap<String, Object>());
+		kept.setAttributes(event.mergedAttributes());
 		kept.setText(event.getText());
 		kept.setSource(ConditionSources.ofDelivered(event.getSource(), event.getSourceSystem(), caller,
 				config != null ? config.getApplicationAuthority() : null));

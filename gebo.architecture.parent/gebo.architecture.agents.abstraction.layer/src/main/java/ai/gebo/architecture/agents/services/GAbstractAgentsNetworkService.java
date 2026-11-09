@@ -87,6 +87,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	 * this service builds its own, which is what a plain run does.
 	 */
 	private volatile IAgentsCollaborationSessionContextFactory sessionContextFactory;
+	/** Tells the type of the conditions of a suspended run; null keeps none. */
+	private volatile IWaitingConditionTypeResolver conditionTypeResolver;
 
 	/**
 	 * A network service that owns the sessions of its runs: every run collaborates
@@ -136,7 +138,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	 * run does.
 	 */
 	protected IGNetworkOfAgentsSuspensionHandler createSuspensionHandler() {
-		return suspensions != null ? new GMongoNetworkOfAgentsSuspensionHandler(suspensions)
+		return suspensions != null ? new GMongoNetworkOfAgentsSuspensionHandler(suspensions, conditionTypeResolver)
 				: new NeverSuspendingHandler();
 	}
 
@@ -219,6 +221,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		public String suspensionId() {
 			return null;
 		}
+	}
+
+	/**
+	 * Who tells the type of a condition an agent of a run waits for, kept with it
+	 * when the run is suspended; null keeps none.
+	 */
+	public void setConditionTypeResolver(IWaitingConditionTypeResolver conditionTypeResolver) {
+		this.conditionTypeResolver = conditionTypeResolver;
 	}
 
 	@Override

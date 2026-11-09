@@ -16,4 +16,8 @@ public class AgentSuspendedWaitingConditionDto {
 	@NotEmpty
 	@NotNull
 	private LinkedHashMap<String, Object> attributes = null;
+	/** The attributes typed, for a condition of the {@code clarification} type; null for any other. */
+	private ClarificationConditionAttributes clarificationAttributes = null;
+	/** The attributes typed, for a condition of the {@code default} type; null for any other. */
+	private DefaultConditionAttributes defaultAttributes = null;
 }

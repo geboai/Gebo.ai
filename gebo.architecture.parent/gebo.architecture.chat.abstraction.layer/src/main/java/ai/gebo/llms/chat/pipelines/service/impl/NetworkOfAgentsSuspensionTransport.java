@@ -150,8 +150,29 @@ public class NetworkOfAgentsSuspensionTransport {
 		return state;
 	}
 
-	/** The translator for the condition: the one made for its kind, else the default. */
+	/**
+	 * The translator for the condition: the one of the type kept with it, so that
+	 * the answer is read by the translator the question was shown with; else, for a
+	 * condition kept with no type or with one no translator has any more, the one
+	 * made for its kind, else the default.
+	 */
 	public IAgentSuspendedWaitingConditionTransportTranslator translatorOf(AgentSuspendedWaitingCondition<?, ?> condition) {
+		final String type = condition != null ? condition.getConditionType() : null;
+		if (type != null) {
+			final IAgentSuspendedWaitingConditionTransportTranslator kept = translators != null
+					? translators.findByCode(type)
+					: null;
+			if (kept != null) {
+				return kept;
+			}
+			if (fallback.getId().equals(type)) {
+				return fallback;
+			}
+			if (translators != null) {
+				LOGGER.warn("No translator has the type:" + type + " of condition:"
+						+ condition.getSuspendedConditionId() + ": it is read by the one made for its kind");
+			}
+		}
 		final IAgentSuspendedWaitingConditionTransportTranslator found = translators != null
 				? translators.findTranslator(condition)
 				: null;

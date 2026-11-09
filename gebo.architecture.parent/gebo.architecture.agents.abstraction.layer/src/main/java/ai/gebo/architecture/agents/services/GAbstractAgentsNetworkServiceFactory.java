@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -14,10 +15,10 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType, ServiceType extends IGAgentsNetworkService>
 		implements IGAgentsNetworkServiceFactory<InputType, OutputType, ServiceType> {
@@ -30,6 +31,17 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 	protected final String description;
 	protected final Class<ServiceType> serviceType;
 	protected final IGRuntimeBinder runtimeBinder;
+	/** Tells the type of the conditions of a suspended run, for the services built; null keeps none. */
+	private volatile IWaitingConditionTypeResolver conditionTypeResolver;
+
+	@Autowired(required = false)
+	public void setConditionTypeResolver(IWaitingConditionTypeResolver conditionTypeResolver) {
+		this.conditionTypeResolver = conditionTypeResolver;
+	}
+
+	public IWaitingConditionTypeResolver getConditionTypeResolver() {
+		return conditionTypeResolver;
+	}
 	
 
 	@Override

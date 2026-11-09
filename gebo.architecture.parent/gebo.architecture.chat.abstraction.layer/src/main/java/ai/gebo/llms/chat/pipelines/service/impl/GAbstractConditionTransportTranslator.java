@@ -45,11 +45,19 @@ public abstract class GAbstractConditionTransportTranslator
 		attributes.put(MANDATORY, condition.isMandatory());
 		describe(condition, attributes);
 		dto.setAttributes(attributes);
+		typed(dto, attributes);
 		return dto;
 	}
 
 	/** Adds to the DTO's attributes what this kind of condition shows the client. */
 	protected abstract void describe(AgentSuspendedWaitingCondition condition, LinkedHashMap<String, Object> attributes);
+
+	/**
+	 * Gives the DTO the typed attributes of this type of condition, made of its
+	 * attributes; a type without typed attributes gives none.
+	 */
+	protected void typed(AgentSuspendedWaitingConditionDto dto, LinkedHashMap<String, Object> attributes) {
+	}
 
 	@Override
 	public boolean canTranslateReaction(AgentSuspendedWaitingConditionReactionDto reaction) {
@@ -62,6 +70,8 @@ public abstract class GAbstractConditionTransportTranslator
 		if (reaction == null || savedCondition == null) {
 			throw new IllegalArgumentException("A reaction and the condition it is to are both needed");
 		}
+		// an answer given typed is read as its attributes
+		reaction.mergeTypedAttributes();
 		if (reaction.getConditionId() != null && savedCondition.getSuspendedConditionId() != null
 				&& !reaction.getConditionId().equals(savedCondition.getSuspendedConditionId())) {
 			throw new IllegalArgumentException(NOT_THE_SAVED_CONDITION + reaction.getConditionId() + " is not "

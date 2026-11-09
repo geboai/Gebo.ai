@@ -49,6 +49,7 @@ import ai.gebo.architecture.agents.conditionevents.repository.GConditionDispatch
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionEventRepository;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsPublisher;
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationReactionAttributes;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
@@ -234,6 +235,9 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 		final NetworkOfAgentsSuspendedState state = pending.get();
 		assertEquals(1, state.getConditions().size(), "one condition is waited for");
 		assertEquals("clarification", state.getConditions().get(0).getConditionType());
+		assertNotNull(state.getConditions().get(0).getClarificationAttributes(), "the question is shown typed too");
+		assertEquals(state.getConditions().get(0).getAttributes().get("question"),
+				state.getConditions().get(0).getClarificationAttributes().getQuestion());
 		final Suspended suspended = new Suspended(sessionCode, state.getConditions().get(0).getConditionId(),
 				state.getNetworkOfAgentsBlockId());
 		assertNotNull(suspended.conditionId());
@@ -306,7 +310,11 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 		Suspended suspended = null;
 		try {
 			suspended = aSuspendedChat();
-			final ConditionEvent fromAnna = answer(suspended, "Italy", "condition-events-rest-test", "evt-rest-1");
+			// the answer given typed stands for the choice of the map
+			final ConditionEvent fromAnna = answer(suspended, "France", "condition-events-rest-test", "evt-rest-1");
+			final ClarificationReactionAttributes typed = new ClarificationReactionAttributes();
+			typed.setChosenOption("Italy");
+			fromAnna.setClarificationAttributes(typed);
 			final ConditionSource anna = ConditionSource.of(ConditionSource.Kind.PERSON, "ERP", "arossi", "Anna Rossi");
 			anna.setSessionCode("erp-session-7");
 			fromAnna.setSource(anna);
@@ -322,6 +330,11 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 					"both forms of the id are kept");
 
 			final GConditionEvent applied = verifyApplied(suspended, "Italy");
+			assertEquals("Italy", applied.getAttributes().get("chosenOption"), "kept as its attributes");
+			assertEquals("clarification",
+					blocks.findById(suspended.blockCode()).orElseThrow().getSuspendedAgents().get(0)
+							.getWaitingConditions().get(0).getConditionType(),
+					"the block keeps the type the question was shown with");
 			assertEquals(ConditionEventCaller.REST, applied.getChannel(), "it came through REST");
 			assertEquals(DEFAULT_ALL_ROLES_USER, applied.getActor(), "sent by the key's user");
 			assertEquals("arossi", applied.getSource().getId(), "the source the event says it comes from");

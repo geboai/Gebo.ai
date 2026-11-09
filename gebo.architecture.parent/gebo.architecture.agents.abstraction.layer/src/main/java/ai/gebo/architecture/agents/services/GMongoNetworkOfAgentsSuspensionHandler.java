@@ -66,6 +66,8 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	static final String SAVE_FAILED = "The suspension of the run of network could not be saved: ";
 
 	private final GNetworkOfAgentsSuspensionRepository repository;
+	/** Tells the type of a condition, kept with it; null keeps none, as before. */
+	private final IWaitingConditionTypeResolver conditionTypeResolver;
 	private volatile GAgentsNetwork network = null;
 	/** The input the network was given, part of the cut. */
 	private volatile Object networkInput = null;
@@ -87,7 +89,30 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	private final Set<String> askedInTheirTurn = new HashSet<String>();
 
 	public GMongoNetworkOfAgentsSuspensionHandler(GNetworkOfAgentsSuspensionRepository repository) {
+		this(repository, null);
+	}
+
+	public GMongoNetworkOfAgentsSuspensionHandler(GNetworkOfAgentsSuspensionRepository repository,
+			IWaitingConditionTypeResolver conditionTypeResolver) {
 		this.repository = repository;
+		this.conditionTypeResolver = conditionTypeResolver;
+	}
+
+	/**
+	 * Gives the condition its type, unless it has one: it is kept with the condition,
+	 * so that the answer is read by the translator the question is shown with. A
+	 * type that cannot be told leaves the condition to be read by its kind.
+	 */
+	private void typeOf(AgentSuspendedWaitingCondition condition) {
+		if (condition == null || condition.getConditionType() != null || conditionTypeResolver == null) {
+			return;
+		}
+		try {
+			condition.setConditionType(conditionTypeResolver.typeOf(condition));
+		} catch (RuntimeException notTold) {
+			LOGGER.warn("The type of condition:" + condition.getSuspendedConditionId()
+					+ " could not be told: it is read by its kind", notTold);
+		}
 	}
 
 	@Override
@@ -144,6 +169,7 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	public synchronized void enterSuspensionState(GAgentsNetwork agentsNetwork, GAgentConfig agentConfig,
 			AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
 			AgentSuspendedWaitingCondition waitForCondition) throws AgentException {
+		typeOf(waitForCondition);
 		final GNetworkOfAgentsSuspension cut = cutOf(agentsNetwork, privateContext);
 		if (!suspensionState) {
 			cut.setSuspendedAt(new Date());
