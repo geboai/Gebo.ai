@@ -23,6 +23,8 @@ public final class ConditionEventCaller {
 	/** The channels of the adapters of this module. */
 	public static final String REST = "REST";
 	public static final String MESSAGE = "MESSAGE";
+	/** The chat, answering one condition at a time next to the other sources. */
+	public static final String CHAT = "CHAT";
 
 	private final String name;
 	private final Set<String> authorities;
