@@ -14,7 +14,9 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.ClarificationReactionAttributes;
 import ai.gebo.monolithic.api.client.model.ConditionSource;
+import ai.gebo.monolithic.api.client.model.DefaultReactionAttributes;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -27,7 +29,7 @@ import java.util.Map;
  * ConditionEvent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T15:16:14.129564900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T19:03:18.605928900+01:00[Europe/Rome]")
 
 public class ConditionEvent {
   @JsonProperty("correlationId")
@@ -43,7 +45,13 @@ public class ConditionEvent {
   private String conditionType = null;
 
   @JsonProperty("attributes")
-  private Map<String, Object> attributes = new HashMap<>();
+  private Map<String, Object> attributes = null;
+
+  @JsonProperty("clarificationAttributes")
+  private ClarificationReactionAttributes clarificationAttributes = null;
+
+  @JsonProperty("defaultAttributes")
+  private DefaultReactionAttributes defaultAttributes = null;
 
   @JsonProperty("text")
   private String text = null;
@@ -138,6 +146,9 @@ public class ConditionEvent {
   }
 
   public ConditionEvent putAttributesItem(String key, Object attributesItem) {
+    if (this.attributes == null) {
+      this.attributes = new HashMap<>();
+    }
     this.attributes.put(key, attributesItem);
     return this;
   }
@@ -146,13 +157,49 @@ public class ConditionEvent {
    * Get attributes
    * @return attributes
   **/
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   public Map<String, Object> getAttributes() {
     return attributes;
   }
 
   public void setAttributes(Map<String, Object> attributes) {
     this.attributes = attributes;
+  }
+
+  public ConditionEvent clarificationAttributes(ClarificationReactionAttributes clarificationAttributes) {
+    this.clarificationAttributes = clarificationAttributes;
+    return this;
+  }
+
+   /**
+   * Get clarificationAttributes
+   * @return clarificationAttributes
+  **/
+  @Schema(description = "")
+  public ClarificationReactionAttributes getClarificationAttributes() {
+    return clarificationAttributes;
+  }
+
+  public void setClarificationAttributes(ClarificationReactionAttributes clarificationAttributes) {
+    this.clarificationAttributes = clarificationAttributes;
+  }
+
+  public ConditionEvent defaultAttributes(DefaultReactionAttributes defaultAttributes) {
+    this.defaultAttributes = defaultAttributes;
+    return this;
+  }
+
+   /**
+   * Get defaultAttributes
+   * @return defaultAttributes
+  **/
+  @Schema(description = "")
+  public DefaultReactionAttributes getDefaultAttributes() {
+    return defaultAttributes;
+  }
+
+  public void setDefaultAttributes(DefaultReactionAttributes defaultAttributes) {
+    this.defaultAttributes = defaultAttributes;
   }
 
   public ConditionEvent text(String text) {
@@ -260,6 +307,8 @@ public class ConditionEvent {
         Objects.equals(this.conditionId, conditionEvent.conditionId) &&
         Objects.equals(this.conditionType, conditionEvent.conditionType) &&
         Objects.equals(this.attributes, conditionEvent.attributes) &&
+        Objects.equals(this.clarificationAttributes, conditionEvent.clarificationAttributes) &&
+        Objects.equals(this.defaultAttributes, conditionEvent.defaultAttributes) &&
         Objects.equals(this.text, conditionEvent.text) &&
         Objects.equals(this.sourceSystem, conditionEvent.sourceSystem) &&
         Objects.equals(this.source, conditionEvent.source) &&
@@ -269,7 +318,7 @@ public class ConditionEvent {
 
   @Override
   public int hashCode() {
-    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, attributes, text, sourceSystem, source, sourceEventId, sourceTimestamp);
+    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, attributes, clarificationAttributes, defaultAttributes, text, sourceSystem, source, sourceEventId, sourceTimestamp);
   }
 
 
@@ -283,6 +332,8 @@ public class ConditionEvent {
     sb.append("    conditionId: ").append(toIndentedString(conditionId)).append("\n");
     sb.append("    conditionType: ").append(toIndentedString(conditionType)).append("\n");
     sb.append("    attributes: ").append(toIndentedString(attributes)).append("\n");
+    sb.append("    clarificationAttributes: ").append(toIndentedString(clarificationAttributes)).append("\n");
+    sb.append("    defaultAttributes: ").append(toIndentedString(defaultAttributes)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
     sb.append("    sourceSystem: ").append(toIndentedString(sourceSystem)).append("\n");
     sb.append("    source: ").append(toIndentedString(source)).append("\n");

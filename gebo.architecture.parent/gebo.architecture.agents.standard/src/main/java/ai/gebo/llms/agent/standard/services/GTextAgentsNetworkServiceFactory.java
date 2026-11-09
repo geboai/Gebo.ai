@@ -57,9 +57,11 @@ public class GTextAgentsNetworkServiceFactory
 		// where the suspended runs of the network are kept
 		GNetworkOfAgentsSuspensionRepository suspensions = runtimeBinder
 				.getImplementationOf(GNetworkOfAgentsSuspensionRepository.class);
-		return new GTextAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao, threadManager, network,
-				notificationSink, inputType, outputType, runAs, IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions,
-				adapter);
+		final GTextAgentsNetworkService service = new GTextAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao,
+				threadManager, network, notificationSink, inputType, outputType, runAs,
+				IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions, adapter);
+		service.setConditionTypeResolver(getConditionTypeResolver());
+		return service;
 	}
 
 	@Override

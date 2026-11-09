@@ -46,6 +46,13 @@ public class AgentSuspendedWaitingCondition<T, O> {
 	 * while it waits. The agent is told it, unless it is the conversation's own user.
 	 */
 	private ConditionSource solvedBy = null;
+	/**
+	 * The type of the condition: the id of the translator that shows it to the
+	 * client and reads the answers to it. Kept when the run is suspended, so that an
+	 * answer is read by the translator the question was shown with; null until then,
+	 * and in the blocks kept before it was, which find their translator by kind.
+	 */
+	private String conditionType = null;
 
 	/** A condition on a value, with nothing chosen by the model. */
 	public AgentSuspendedWaitingCondition(Class<T> type, String waitingConditionStatement,

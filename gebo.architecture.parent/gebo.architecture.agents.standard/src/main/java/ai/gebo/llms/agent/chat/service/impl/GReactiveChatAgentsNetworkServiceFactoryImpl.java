@@ -63,9 +63,11 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 			LOGGER.trace("Runtime agent names in the chat network: "
 					+ (agentsCache != null ? agentsCache.keySet() : null));
 		}
-		IGReactiveChatAgentsNetworkService service = new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao,
+		final GReactiveChatAgentsNetworkService built = new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao,
 				agentRoleDao, threadManager, network, notificationSink, inputType, outputType, runAs,
 				IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions, adapter);
+		built.setConditionTypeResolver(getConditionTypeResolver());
+		IGReactiveChatAgentsNetworkService service = built;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End createAgentsNetworkService(...) built service id:" + service.getId());
 		}

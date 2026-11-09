@@ -18,7 +18,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DefaultConditionAttributes;
 
 /**
  * Carries any waiting condition no other translator knows: down, the types by
@@ -57,6 +59,11 @@ public class DefaultConditionTransportTranslator extends GAbstractConditionTrans
 		attributes.put(VALUE_TYPE, condition.getType() != null ? condition.getType().getName() : null);
 		attributes.put(OPTIONS_TYPE, condition.getOptionsType() != null ? condition.getOptionsType().getName() : null);
 		attributes.put(LLM_CHOSEN_OPTIONS, condition.getLlmChosenOptions());
+	}
+
+	@Override
+	protected void typed(AgentSuspendedWaitingConditionDto dto, LinkedHashMap<String, Object> attributes) {
+		dto.setDefaultAttributes(DefaultConditionAttributes.of(attributes));
 	}
 
 	@Override
