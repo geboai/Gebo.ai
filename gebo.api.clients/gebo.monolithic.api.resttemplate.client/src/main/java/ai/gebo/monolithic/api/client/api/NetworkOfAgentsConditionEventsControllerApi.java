@@ -24,7 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T23:11:35.051684500+01:00[Europe/Rome]")
 
 public class NetworkOfAgentsConditionEventsControllerApi {
     private ApiClient apiClient;
@@ -51,11 +51,13 @@ public class NetworkOfAgentsConditionEventsControllerApi {
      * @param correlationId  (optional)
      * @param sessionCode  (optional)
      * @param conditionId  (optional)
+     * @param externalSystem  (optional)
+     * @param externalSessionKey  (optional)
      * @return ConditionEventView
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ConditionEventView conditionEventStatus(String correlationId, String sessionCode, String conditionId) throws RestClientException {
-        return conditionEventStatusWithHttpInfo(correlationId, sessionCode, conditionId).getBody();
+    public ConditionEventView conditionEventStatus(String correlationId, String sessionCode, String conditionId, String externalSystem, String externalSessionKey) throws RestClientException {
+        return conditionEventStatusWithHttpInfo(correlationId, sessionCode, conditionId, externalSystem, externalSessionKey).getBody();
     }
 
     /**
@@ -65,10 +67,12 @@ public class NetworkOfAgentsConditionEventsControllerApi {
      * @param correlationId  (optional)
      * @param sessionCode  (optional)
      * @param conditionId  (optional)
+     * @param externalSystem  (optional)
+     * @param externalSessionKey  (optional)
      * @return ResponseEntity&lt;ConditionEventView&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ConditionEventView> conditionEventStatusWithHttpInfo(String correlationId, String sessionCode, String conditionId) throws RestClientException {
+    public ResponseEntity<ConditionEventView> conditionEventStatusWithHttpInfo(String correlationId, String sessionCode, String conditionId, String externalSystem, String externalSessionKey) throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/users/NetworkOfAgentsConditionEventsController/conditionEventStatus").build().toUriString();
         
@@ -78,6 +82,8 @@ public class NetworkOfAgentsConditionEventsControllerApi {
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "correlationId", correlationId));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "sessionCode", sessionCode));
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "conditionId", conditionId));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "externalSystem", externalSystem));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "externalSessionKey", externalSessionKey));
 
         final String[] accepts = { 
             "application/json"

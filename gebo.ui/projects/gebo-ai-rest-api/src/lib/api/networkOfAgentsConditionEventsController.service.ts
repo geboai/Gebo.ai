@@ -63,13 +63,17 @@ export class NetworkOfAgentsConditionEventsControllerService {
      * @param correlationId 
      * @param sessionCode 
      * @param conditionId 
+     * @param externalSystem 
+     * @param externalSessionKey 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, observe?: 'body', reportProgress?: boolean): Observable<ConditionEventView>;
-    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ConditionEventView>>;
-    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ConditionEventView>>;
-    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, externalSystem?: string, externalSessionKey?: string, observe?: 'body', reportProgress?: boolean): Observable<ConditionEventView>;
+    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, externalSystem?: string, externalSessionKey?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ConditionEventView>>;
+    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, externalSystem?: string, externalSessionKey?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ConditionEventView>>;
+    public conditionEventStatus(correlationId?: string, sessionCode?: string, conditionId?: string, externalSystem?: string, externalSessionKey?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
 
 
 
@@ -83,6 +87,12 @@ export class NetworkOfAgentsConditionEventsControllerService {
         }
         if (conditionId !== undefined && conditionId !== null) {
             queryParameters = queryParameters.set('conditionId', <any>conditionId);
+        }
+        if (externalSystem !== undefined && externalSystem !== null) {
+            queryParameters = queryParameters.set('externalSystem', <any>externalSystem);
+        }
+        if (externalSessionKey !== undefined && externalSessionKey !== null) {
+            queryParameters = queryParameters.set('externalSessionKey', <any>externalSessionKey);
         }
 
         let headers = this.defaultHeaders;

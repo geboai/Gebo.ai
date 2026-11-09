@@ -27,7 +27,7 @@ import java.util.List;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T23:11:35.051684500+01:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
@@ -74,6 +74,12 @@ public class GUserChatSession {
 
   @JsonProperty("runOrigin")
   private String runOrigin = null;
+
+  @JsonProperty("externalSystem")
+  private String externalSystem = null;
+
+  @JsonProperty("externalSessionKey")
+  private String externalSessionKey = null;
 
   @JsonProperty("chatProfileCode")
   private String chatProfileCode = null;
@@ -399,6 +405,42 @@ public class GUserChatSession {
     this.runOrigin = runOrigin;
   }
 
+  public GUserChatSession externalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+    return this;
+  }
+
+   /**
+   * Get externalSystem
+   * @return externalSystem
+  **/
+  @Schema(description = "")
+  public String getExternalSystem() {
+    return externalSystem;
+  }
+
+  public void setExternalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+  }
+
+  public GUserChatSession externalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
+    return this;
+  }
+
+   /**
+   * Get externalSessionKey
+   * @return externalSessionKey
+  **/
+  @Schema(description = "")
+  public String getExternalSessionKey() {
+    return externalSessionKey;
+  }
+
+  public void setExternalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
+  }
+
   public GUserChatSession chatProfileCode(String chatProfileCode) {
     this.chatProfileCode = chatProfileCode;
     return this;
@@ -620,6 +662,8 @@ public class GUserChatSession {
         Objects.equals(this.contextCode, guserChatSession.contextCode) &&
         Objects.equals(this.transientRun, guserChatSession.transientRun) &&
         Objects.equals(this.runOrigin, guserChatSession.runOrigin) &&
+        Objects.equals(this.externalSystem, guserChatSession.externalSystem) &&
+        Objects.equals(this.externalSessionKey, guserChatSession.externalSessionKey) &&
         Objects.equals(this.chatProfileCode, guserChatSession.chatProfileCode) &&
         Objects.equals(this.modelReference, guserChatSession.modelReference) &&
         Objects.equals(this.ragChat, guserChatSession.ragChat) &&
@@ -634,7 +678,7 @@ public class GUserChatSession {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, accessibleUsers, accessibleGroups, accessibleToAll, aclAliases, contextCode, transientRun, runOrigin, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, accessibleUsers, accessibleGroups, accessibleToAll, aclAliases, contextCode, transientRun, runOrigin, externalSystem, externalSessionKey, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
   }
 
 
@@ -658,6 +702,8 @@ public class GUserChatSession {
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("    transientRun: ").append(toIndentedString(transientRun)).append("\n");
     sb.append("    runOrigin: ").append(toIndentedString(runOrigin)).append("\n");
+    sb.append("    externalSystem: ").append(toIndentedString(externalSystem)).append("\n");
+    sb.append("    externalSessionKey: ").append(toIndentedString(externalSessionKey)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    modelReference: ").append(toIndentedString(modelReference)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");

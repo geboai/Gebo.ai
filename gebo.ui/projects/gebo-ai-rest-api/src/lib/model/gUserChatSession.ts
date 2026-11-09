@@ -28,6 +28,8 @@ export interface GUserChatSession {
     contextCode?: string;
     transientRun?: boolean;
     runOrigin?: string;
+    externalSystem?: string;
+    externalSessionKey?: string;
     chatProfileCode?: string;
     modelReference?: GObjectRefGBaseChatModelConfig;
     ragChat?: boolean;
