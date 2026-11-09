@@ -25,7 +25,7 @@ import java.util.List;
  * NetworkOfAgentsSuspendedState
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T12:45:02.532016900+01:00[Europe/Rome]")
 
 public class NetworkOfAgentsSuspendedState {
   @JsonProperty("networkOfAgentsBlockId")
@@ -33,6 +33,9 @@ public class NetworkOfAgentsSuspendedState {
 
   @JsonProperty("conditions")
   private List<AgentSuspendedWaitingConditionDto> conditions = new ArrayList<>();
+
+  @JsonProperty("answersOneByOne")
+  private Boolean answersOneByOne = null;
 
   public NetworkOfAgentsSuspendedState networkOfAgentsBlockId(String networkOfAgentsBlockId) {
     this.networkOfAgentsBlockId = networkOfAgentsBlockId;
@@ -75,6 +78,24 @@ public class NetworkOfAgentsSuspendedState {
     this.conditions = conditions;
   }
 
+  public NetworkOfAgentsSuspendedState answersOneByOne(Boolean answersOneByOne) {
+    this.answersOneByOne = answersOneByOne;
+    return this;
+  }
+
+   /**
+   * Get answersOneByOne
+   * @return answersOneByOne
+  **/
+  @Schema(description = "")
+  public Boolean isAnswersOneByOne() {
+    return answersOneByOne;
+  }
+
+  public void setAnswersOneByOne(Boolean answersOneByOne) {
+    this.answersOneByOne = answersOneByOne;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -86,12 +107,13 @@ public class NetworkOfAgentsSuspendedState {
     }
     NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState = (NetworkOfAgentsSuspendedState) o;
     return Objects.equals(this.networkOfAgentsBlockId, networkOfAgentsSuspendedState.networkOfAgentsBlockId) &&
-        Objects.equals(this.conditions, networkOfAgentsSuspendedState.conditions);
+        Objects.equals(this.conditions, networkOfAgentsSuspendedState.conditions) &&
+        Objects.equals(this.answersOneByOne, networkOfAgentsSuspendedState.answersOneByOne);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(networkOfAgentsBlockId, conditions);
+    return Objects.hash(networkOfAgentsBlockId, conditions, answersOneByOne);
   }
 
 
@@ -102,6 +124,7 @@ public class NetworkOfAgentsSuspendedState {
     
     sb.append("    networkOfAgentsBlockId: ").append(toIndentedString(networkOfAgentsBlockId)).append("\n");
     sb.append("    conditions: ").append(toIndentedString(conditions)).append("\n");
+    sb.append("    answersOneByOne: ").append(toIndentedString(answersOneByOne)).append("\n");
     sb.append("}");
     return sb.toString();
   }

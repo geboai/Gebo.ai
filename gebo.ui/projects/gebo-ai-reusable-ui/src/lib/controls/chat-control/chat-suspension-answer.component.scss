@@ -61,6 +61,25 @@
   flex-direction: column;
 }
 
+.gebo-ai-reusable-chat__suspension-hint {
+  margin-bottom: 0.5rem;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+// a condition another source, or an earlier answer, already solved
+.gebo-ai-reusable-chat__suspension-solved {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.25rem 0 0.5rem;
+  color: var(--p-green-600, #16a34a);
+}
+
+.gebo-ai-reusable-chat__suspension-solved-by {
+  opacity: 0.8;
+}
+
 .gebo-ai-reusable-chat__suspension-option-description {
   font-size: 0.9em;
   opacity: 0.75;

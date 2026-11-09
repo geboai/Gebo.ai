@@ -3,6 +3,11 @@
     <i class="pi pi-question-circle" aria-hidden="true"></i>
     <span id="SuspensionTitle" gebo-ai-text>The agents need your answer before going on</span>
   </div>
+  @if (oneByOne && openConditions.length > 1) {
+    <div class="gebo-ai-reusable-chat__suspension-hint">
+      <span id="OneByOneHint" gebo-ai-text>You can answer some now and the others later.</span>
+    </div>
+  }
   @for (condition of conditions; track condition.conditionId) {
     <div class="gebo-ai-reusable-chat__suspension-condition">
       <div class="gebo-ai-reusable-chat__suspension-statement">
@@ -11,6 +16,15 @@
           <span id="OptionalCondition" class="gebo-ai-reusable-chat__suspension-optional" gebo-ai-text>(optional)</span>
         }
       </div>
+      @if (isSolved(condition)) {
+        <div class="gebo-ai-reusable-chat__suspension-solved">
+          <i class="pi pi-check-circle" aria-hidden="true"></i>
+          <span id="SolvedCondition" gebo-ai-text>Answered</span>
+          @if (solvedByOf(condition)) {
+            <span class="gebo-ai-reusable-chat__suspension-solved-by">({{solvedByOf(condition)}})</span>
+          }
+        </div>
+      } @else {
       @if (explanationOf(condition)) {
         <div class="gebo-ai-reusable-chat__suspension-explanation"><i>{{explanationOf(condition)}}</i></div>
       }
@@ -44,6 +58,7 @@
         <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
           [disabled]="disabled" [(ngModel)]="answerOf(condition).value"
           placeholder="Your answer" gebo-ai-label></textarea>
+      }
       }
     </div>
   }

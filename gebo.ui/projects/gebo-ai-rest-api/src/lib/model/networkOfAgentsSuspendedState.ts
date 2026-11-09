@@ -14,4 +14,5 @@ import { AgentSuspendedWaitingConditionDto } from './agentSuspendedWaitingCondit
 export interface NetworkOfAgentsSuspendedState { 
     networkOfAgentsBlockId: string;
     conditions: Array<AgentSuspendedWaitingConditionDto>;
+    answersOneByOne?: boolean;
 }

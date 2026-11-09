@@ -8,22 +8,39 @@ package ai.gebo.llms.chat.pipelines.service;
 
 import java.util.List;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedStateReaction;
+
 /**
  * What a chat reaction recorded one condition at a time did: each answer's
- * outcome, the mandatory conditions the block still waits for, and whether the
- * network resumes.
+ * outcome, the mandatory conditions the block still waits for, and what the
+ * request does next.
  *
  * @param answers    the outcome of each answer, in the reaction's order
  * @param waitingFor the statements of the mandatory conditions still unanswered
- * @param resumes    whether the block is solved and the network resumes
+ * @param next       what the request does next
+ * @param reaction   with {@link Next#RESPAWN}, the reaction the request respawns
+ *                   the network with: the answers of every source, the optional
+ *                   conditions none answered declined
  */
-public record RecordedConditionReaction(List<Answer> answers, List<String> waitingFor, boolean resumes) {
+public record RecordedConditionReaction(List<Answer> answers, List<String> waitingFor, Next next,
+		NetworkOfAgentsSuspendedStateReaction reaction) {
 	/** The outcome of an answer the condition did not take. */
 	public static final String REFUSED = "REFUSED";
+
+	/** What the chat request does once its answers are recorded. */
+	public enum Next {
+		/** The block still waits for some mandatory condition: nothing runs. */
+		WAIT,
+		/** The block is solved and its respawn claimed for the request, which runs it. */
+		RESPAWN,
+		/** The block is solved, but another already runs its respawn. */
+		RESPAWNING_APART
+	}
 
 	public RecordedConditionReaction {
 		answers = answers != null ? List.copyOf(answers) : List.of();
 		waitingFor = waitingFor != null ? List.copyOf(waitingFor) : List.of();
+		next = next != null ? next : Next.WAIT;
 	}
 
 	/**
@@ -38,6 +55,11 @@ public record RecordedConditionReaction(List<Answer> answers, List<String> waiti
 		public boolean isRefused() {
 			return REFUSED.equals(outcome);
 		}
+	}
+
+	/** Whether the request respawns the network itself. */
+	public boolean resumes() {
+		return next == Next.RESPAWN;
 	}
 
 	/** Whether some answer was refused: the reason of each says why. */

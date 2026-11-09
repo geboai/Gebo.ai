@@ -110,7 +110,7 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 	 * The thread manager is looked up on each evaluation, never at construction:
 	 * this service can be created while the thread manager itself is in creation.
 	 */
-	private static Executor lazyExecutorOf(ObjectProvider<IGeboThreadManager> threads) {
+	static Executor lazyExecutorOf(ObjectProvider<IGeboThreadManager> threads) {
 		return task -> {
 			final IGeboThreadManager manager = threads != null ? threads.getIfAvailable() : null;
 			final Executor executor = manager != null ? manager.getExecutorService() : null;
@@ -120,6 +120,15 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 
 	@Override
 	public ConditionEventAck deliver(ConditionEvent event, ConditionEventCaller caller) {
+		return deliver(event, caller, true);
+	}
+
+	@Override
+	public ConditionEventAck deliverHeld(ConditionEvent event, ConditionEventCaller caller) {
+		return deliver(event, caller, false);
+	}
+
+	private ConditionEventAck deliver(ConditionEvent event, ConditionEventCaller caller, boolean evaluate) {
 		if (event == null) {
 			return ConditionEventAck.refused(NO_EVENT);
 		}
@@ -201,7 +210,7 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		}
 		// what the delivery did, before the evaluation, apart, takes the event further
 		final ConditionEventAck delivered = ack(outcomeOf(kept.getStatus()), kept, kept.getReason());
-		if (kept.getStatus() == ConditionEventStatus.ACCEPTED) {
+		if (evaluate && kept.getStatus() == ConditionEventStatus.ACCEPTED) {
 			evaluateApart(id.sessionCode());
 		}
 		return delivered;

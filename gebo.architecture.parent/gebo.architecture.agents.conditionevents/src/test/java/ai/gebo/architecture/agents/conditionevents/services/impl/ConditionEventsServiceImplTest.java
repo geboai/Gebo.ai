@@ -2,6 +2,7 @@ package ai.gebo.architecture.agents.conditionevents.services.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -55,6 +56,8 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.pipelines.service.IAgentSuspendedWaitingConditionTransportTranslatorRepositoryPattern;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
 import ai.gebo.llms.chat.pipelines.service.RecordedConditionReaction;
+import ai.gebo.llms.chat.pipelines.service.SolvedCondition;
+import ai.gebo.llms.chat.pipelines.service.impl.GAbstractConditionTransportTranslator;
 import ai.gebo.llms.chat.pipelines.service.impl.ClarificationConditionTransportTranslator;
 import ai.gebo.llms.chat.pipelines.service.impl.DefaultConditionTransportTranslator;
 import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
@@ -78,6 +81,7 @@ class ConditionEventsServiceImplTest {
 	private InMemoryConditionEventsStore store;
 	private ConditionEventsServiceImpl service;
 	private ConditionEventsReactionRecorder recorder;
+	private NetworkOfAgentsSuspensionTransport transport;
 	/** What a respawn does to the block it respawns: by default it consumes it. */
 	private Consumer<GNetworkOfAgentsSuspension> respawn = block -> block.setRespawnedAt(new Date(clock.millis()));
 
@@ -102,7 +106,7 @@ class ConditionEventsServiceImplTest {
 				IAgentSuspendedWaitingConditionTransportTranslatorRepositoryPattern.class);
 		when(translators.findTranslator(any()))
 				.thenAnswer(i -> clarification.canTranslate(i.getArgument(0)) ? clarification : null);
-		final NetworkOfAgentsSuspensionTransport transport = new NetworkOfAgentsSuspensionTransport(translators);
+		transport = new NetworkOfAgentsSuspensionTransport(translators);
 
 		final IChatPipelineService pipelines = mock(IChatPipelineService.class);
 		when(pipelines.respawnAgenticChat(any(), any(GeboChatRequest.class), any())).thenAnswer(i -> {
@@ -126,7 +130,7 @@ class ConditionEventsServiceImplTest {
 				sessions, transport, texts, pipelines, accounts, config, clock);
 		service = new ConditionEventsServiceImpl(store, matcher, dispatcher, sessions, blocksRepository,
 				new ConditionEventsAuthorizationImpl(config), config, Runnable::run, clock);
-		recorder = new ConditionEventsReactionRecorder(service, store);
+		recorder = new ConditionEventsReactionRecorder(service, store, dispatcher, transport, Runnable::run);
 	}
 
 	@Test
@@ -400,12 +404,98 @@ class ConditionEventsServiceImplTest {
 
 		assertEquals(List.of(new RecordedConditionReaction.Answer("year", "ACCEPTED", null)), recorded.answers());
 		assertTrue(recorded.waitingFor().isEmpty());
-		assertTrue(recorded.resumes());
-		assertEquals(1, respawns.size(), "the dispatcher respawns the block, once");
-		assertEquals(List.of("year", "approval"), respawns.get(0).getNetworkOfAgentsSuspendedStateReaction().getReactions()
-				.stream().map(r -> r.getConditionId()).toList(), "both answers, in the order the block asked them");
+		assertTrue(recorded.resumes(), "the chat request runs the respawn itself");
+		assertEquals(List.of("year", "approval"), recorded.reaction().getReactions().stream()
+				.map(r -> r.getConditionId()).toList(), "both answers, in the order the block asked them");
+		assertEquals(block.getCode(), recorded.reaction().getNetworkOfAgentsBlockId());
+		assertEquals(ConditionEventStatus.DISPATCHED, store.events.get(SESSION + ":year").getStatus());
+		assertEquals("request-1", store.events.get(SESSION + ":approval").getDispatchedRequestId());
 		assertEquals(ConditionEventCaller.CHAT, store.events.get(SESSION + ":year").getChannel());
 		assertEquals(ConditionEventsReactionRecorder.SOURCE_SYSTEM, store.events.get(SESSION + ":year").getSourceSystem());
+
+		service.sweep();
+		assertTrue(respawns.isEmpty(), "the dispatcher stands off while the chat holds the respawn");
+
+		// the chat's run respawns the block, then says it ended
+		block.setRespawnedAt(new Date(clock.millis()));
+		recorder.concluded(block, "request-1");
+
+		assertEquals(ConditionEventStatus.APPLIED, store.events.get(SESSION + ":year").getStatus());
+		assertEquals(ConditionEventStatus.APPLIED, store.events.get(SESSION + ":approval").getStatus());
+		assertEquals(GConditionDispatch.State.DONE, store.dispatches.get(block.getCode()).getState());
+		assertTrue(respawns.isEmpty(), "respawned once, by the chat");
+	}
+
+	@Test
+	void theChatCompletingTheBlockDeclinesTheOptionalConditionsNoneAnswered() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"), approval("approval", false));
+
+		final RecordedConditionReaction recorded = recorder.record(block, chatChoosing(block, "year", "2024"), OWNER,
+				"request-1");
+
+		assertTrue(recorded.resumes());
+		final AgentSuspendedWaitingConditionReactionDto declined = recorded.reaction().getReactions().get(1);
+		assertEquals("approval", declined.getConditionId());
+		assertEquals(DefaultConditionTransportTranslator.ID, declined.getConditionType());
+		assertEquals(Boolean.TRUE, declined.getAttributes().get(GAbstractConditionTransportTranslator.DECLINED));
+		assertNull(store.events.get(SESSION + ":approval"), "a declined condition is no event of any source");
+	}
+
+	@Test
+	void aRespawnAnotherHoldsLeavesTheChatToTellTheUser() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"));
+		store.claim(block.getCode(), SESSION, new Date(clock.millis()), config.getDispatchLeaseMillis());
+
+		final RecordedConditionReaction recorded = recorder.record(block, chatChoosing(block, "year", "2024"), OWNER,
+				"request-1");
+
+		assertEquals(RecordedConditionReaction.Next.RESPAWNING_APART, recorded.next());
+		assertNull(recorded.reaction());
+		assertEquals(ConditionEventStatus.ACCEPTED, store.events.get(SESSION + ":year").getStatus(),
+				"kept for whoever holds the respawn");
+	}
+
+	@Test
+	void aChatRespawnLeavingTheBlockOpenIsTriedAgainByTheDispatcherAfterItsBackoff() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"));
+		assertTrue(recorder.record(block, chatChoosing(block, "year", "2024"), OWNER, "request-1").resumes());
+
+		// the chat's run failed: the block is still open
+		recorder.concluded(block, "request-1");
+
+		assertEquals(GConditionDispatch.State.FAILED, store.dispatches.get(block.getCode()).getState());
+		assertEquals(ConditionEventStatus.ACCEPTED, store.events.get(SESSION + ":year").getStatus());
+		clock.advance(config.getRetryBackoffMillis());
+		service.sweep();
+		assertEquals(1, respawns.size(), "tried again unattended, as the session's owner");
+		assertEquals(ConditionEventStatus.APPLIED, store.events.get(SESSION + ":year").getStatus());
+	}
+
+	@Test
+	void aRequestThatNoLongerHoldsTheRespawnConcludesNothing() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"));
+		recorder.record(block, chatChoosing(block, "year", "2024"), OWNER, "request-1");
+
+		recorder.concluded(block, "another-request");
+
+		assertEquals(GConditionDispatch.State.RUNNING, store.dispatches.get(block.getCode()).getState());
+		assertEquals(ConditionEventStatus.DISPATCHED, store.events.get(SESSION + ":year").getStatus());
+	}
+
+	@Test
+	void theConditionsAnotherSourceSolvedAreMarkedWithItsSource() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"), approval("approval", true));
+		final ConditionEvent approved = value(SESSION + ":approval", "approved");
+		approved.setSourceSystem("WORKFLOW");
+		service.deliver(approved, application());
+
+		final List<SolvedCondition> solved = recorder.solvedConditionsOf(block);
+
+		assertEquals(1, solved.size());
+		assertEquals("approval", solved.get(0).conditionId());
+		assertEquals("WORKFLOW", solved.get(0).sourceSystem());
+		assertEquals("erp-integration", solved.get(0).actor());
+		assertNotNull(solved.get(0).solvedAt());
 	}
 
 	@Test

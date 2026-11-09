@@ -6,6 +6,8 @@
  */
 package ai.gebo.llms.chat.pipelines.service;
 
+import java.util.List;
+
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedStateReaction;
 
@@ -17,6 +19,12 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSusp
  * as it always did.
  */
 public interface IConditionReactionRecorder {
+	/**
+	 * The run origin of a respawn the recorder's own dispatcher starts: such a
+	 * request already carries the answers of every source and is never recorded
+	 * again.
+	 */
+	String RESPAWN_ORIGIN = "CONDITION_EVENT";
 
 	/**
 	 * Whether the block already holds answers other sources gave: a reaction from
@@ -25,16 +33,29 @@ public interface IConditionReactionRecorder {
 	boolean holdsAnswersFor(GNetworkOfAgentsSuspension block);
 
 	/**
-	 * Records each answer of the reaction as its condition's solution. The network
-	 * resumes, apart from the chat request, once the block is solved.
+	 * Records each answer of the reaction as its condition's solution. When the
+	 * block is solved with them, the respawn is claimed for the request, which runs
+	 * it with the reaction returned, holding the answers of every source; the
+	 * request then says it ended (see {@link #concluded}).
 	 *
 	 * @param block     the open block of the conversation
 	 * @param reaction  the chat's reaction to it
 	 * @param username  the conversation's user, who answers
 	 * @param requestId the chat request carrying it: the same request sent again
 	 *                  changes nothing
-	 * @return what became of each answer and what the block still waits for
+	 * @return what became of each answer, what the block still waits for and
+	 *         what the request does next
 	 */
 	RecordedConditionReaction record(GNetworkOfAgentsSuspension block, NetworkOfAgentsSuspendedStateReaction reaction,
 			String username, String requestId);
+
+	/**
+	 * The respawn a request claimed (see {@link #record}) ended, however it went:
+	 * the block tells, and its answers are marked used, or kept for another
+	 * attempt when it is still open. Taken further apart from the caller.
+	 */
+	void concluded(GNetworkOfAgentsSuspension block, String requestId);
+
+	/** The conditions of the block an answer already solves, from whichever source. */
+	List<SolvedCondition> solvedConditionsOf(GNetworkOfAgentsSuspension block);
 }

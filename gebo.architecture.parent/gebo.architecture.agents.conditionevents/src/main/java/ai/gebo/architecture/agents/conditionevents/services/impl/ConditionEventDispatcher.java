@@ -40,6 +40,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSusp
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.pipelines.service.IChatPipelineService;
+import ai.gebo.llms.chat.pipelines.service.IConditionReactionRecorder;
 import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
 import ai.gebo.security.services.IdentityUtil;
 
@@ -61,12 +62,15 @@ import ai.gebo.security.services.IdentityUtil;
  * doubling backoff, until it gives up.</li>
  * </ol>
  * The blocks are read, never written: the respawn writes them as it always does.
+ * A request that runs the respawn itself (the chat answering the last condition)
+ * claims it here instead (see {@link #claimForRequest}) and says when it ended
+ * (see {@link #concludeRequest}).
  */
 @Service
 public class ConditionEventDispatcher {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConditionEventDispatcher.class);
 	/** The run origin of a respawn started by events. */
-	public static final String RUN_ORIGIN = "CONDITION_EVENT";
+	public static final String RUN_ORIGIN = IConditionReactionRecorder.RESPAWN_ORIGIN;
 	static final String STILL_OPEN = "The block is still open after the respawn";
 	static final String BLOCK_GONE = "The block was dropped or removed before the respawn consumed it";
 	static final String NO_SESSION = "The session of the block no longer exists";
@@ -111,10 +115,96 @@ public class ConditionEventDispatcher {
 		this.clock = clock;
 	}
 
+	/**
+	 * What a request that runs the respawn itself got from its claim.
+	 *
+	 * @param kind  whether it was claimed
+	 * @param block the open block, when there is one
+	 * @param used  with {@link Kind#CLAIMED}, the events the request respawns it
+	 *              with, in the order the block asked their conditions
+	 */
+	public record RequestClaim(Kind kind, GNetworkOfAgentsSuspension block, List<GConditionEvent> used) {
+		public enum Kind {
+			/** The session has no open block, or no accepted event for it. */
+			NOTHING,
+			/** Another runs its respawn, it waits for its backoff, or it is over. */
+			HELD,
+			/** Claimed for the request, which runs the respawn. */
+			CLAIMED
+		}
+
+		public RequestClaim {
+			used = used != null ? List.copyOf(used) : List.of();
+		}
+	}
+
 	/** Matches the session's live events to its open block and respawns it once they solve it. */
 	public void evaluate(String sessionCode) {
 		final Date now = new Date(clock.millis());
 		final GNetworkOfAgentsSuspension open = blocks.findOpenByConversationCode(sessionCode).orElse(null);
+		final Map<String, GConditionEvent> accepted = acceptedFor(sessionCode, open, now);
+		if (open == null || !isSolved(open, accepted, now)) {
+			return;
+		}
+		dispatch(sessionCode, open, accepted, now);
+	}
+
+	/**
+	 * Claims the respawn of the session's open block for a request that runs it
+	 * itself, with the events accepted for the block: the request decided the
+	 * block is solved, so the optional ones do not wait to settle. The events are
+	 * marked dispatched to the request; nothing runs here.
+	 */
+	public RequestClaim claimForRequest(String sessionCode, String requestId) {
+		final Date now = new Date(clock.millis());
+		final GNetworkOfAgentsSuspension open = blocks.findOpenByConversationCode(sessionCode).orElse(null);
+		final Map<String, GConditionEvent> accepted = acceptedFor(sessionCode, open, now);
+		if (open == null || accepted.isEmpty()) {
+			return new RequestClaim(RequestClaim.Kind.NOTHING, open, null);
+		}
+		final Optional<GConditionDispatch> claimed = store.claim(open.getCode(), sessionCode, now,
+				config.getDispatchLeaseMillis());
+		if (claimed.isEmpty()) {
+			return new RequestClaim(RequestClaim.Kind.HELD, open, null);
+		}
+		final List<GConditionEvent> used = inBlockOrder(open, accepted);
+		if (claimed.get().getAttempts() > config.getMaxAttempts()) {
+			giveUp(claimed.get(), used, claimed.get().getLastFailure());
+			return new RequestClaim(RequestClaim.Kind.HELD, open, null);
+		}
+		markDispatched(claimed.get(), open, used, requestId, now);
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("Respawn of block:" + open.getCode() + " of session:" + sessionCode + " claimed by request:"
+					+ requestId + " with " + used.size() + " solved condition(s)");
+		}
+		return new RequestClaim(RequestClaim.Kind.CLAIMED, open, used);
+	}
+
+	/**
+	 * The respawn a request claimed (see {@link #claimForRequest}) ended, however
+	 * it went: read from the block as the dispatcher's own; nothing when the
+	 * request no longer holds it.
+	 */
+	public void concludeRequest(String sessionCode, String blockCode, String requestId) {
+		if (blockCode == null || requestId == null) {
+			return;
+		}
+		final GConditionDispatch dispatch = store.findDispatch(blockCode).orElse(null);
+		if (dispatch == null || !requestId.equals(dispatch.getRequestId())
+				|| dispatch.getState() != GConditionDispatch.State.RUNNING) {
+			return;
+		}
+		final List<GConditionEvent> used = new ArrayList<GConditionEvent>();
+		for (GConditionEvent event : store.eventsOfDispatch(blockCode)) {
+			if (event.getStatus() == ConditionEventStatus.DISPATCHED && requestId.equals(event.getDispatchedRequestId())) {
+				used.add(event);
+			}
+		}
+		conclude(sessionCode, dispatch, blockCode, used, null);
+	}
+
+	/** The session's live events matched again to its open block: those it accepted, by condition. */
+	private Map<String, GConditionEvent> acceptedFor(String sessionCode, GNetworkOfAgentsSuspension open, Date now) {
 		final Map<String, GConditionEvent> accepted = new LinkedHashMap<String, GConditionEvent>();
 		for (GConditionEvent event : store.liveEventsOf(sessionCode)) {
 			if (!isAcceptedFor(event, open)) {
@@ -132,10 +222,7 @@ public class ConditionEventDispatcher {
 				accepted.put(event.getConditionId(), event);
 			}
 		}
-		if (open == null || !isSolved(open, accepted, now)) {
-			return;
-		}
-		dispatch(sessionCode, open, accepted, now);
+		return accepted;
 	}
 
 	private static boolean isAcceptedFor(GConditionEvent event, GNetworkOfAgentsSuspension open) {
@@ -193,18 +280,7 @@ public class ConditionEventDispatcher {
 			return;
 		}
 		final GeboChatRequest request = new GeboChatRequest();
-		dispatch.setRequestId(request.getId());
-		dispatch.setConditionIds(used.stream().map(GConditionEvent::getConditionId).toList());
-		dispatch.setDateModified(now);
-		store.saveDispatch(dispatch);
-		for (GConditionEvent event : used) {
-			event.setStatus(ConditionEventStatus.DISPATCHED);
-			event.setDispatchCode(open.getCode());
-			event.setDispatchedRequestId(request.getId());
-			event.setReason(null);
-			event.setDateModified(now);
-			store.saveEvent(event);
-		}
+		markDispatched(dispatch, open, used, request.getId(), now);
 		final GUserChatSession session = sessions.findById(sessionCode).orElse(null);
 		if (session == null) {
 			giveUp(dispatch, used, NO_SESSION);
@@ -233,6 +309,23 @@ public class ConditionEventDispatcher {
 			LOGGER.warn("The respawn of block:" + open.getCode() + " by condition events failed: " + failure);
 		}
 		conclude(sessionCode, dispatch, open.getCode(), used, failure);
+	}
+
+	/** The claimed respawn runs the request with the events: they are dispatched to it. */
+	private void markDispatched(GConditionDispatch dispatch, GNetworkOfAgentsSuspension open,
+			List<GConditionEvent> used, String requestId, Date now) {
+		dispatch.setRequestId(requestId);
+		dispatch.setConditionIds(used.stream().map(GConditionEvent::getConditionId).toList());
+		dispatch.setDateModified(now);
+		store.saveDispatch(dispatch);
+		for (GConditionEvent event : used) {
+			event.setStatus(ConditionEventStatus.DISPATCHED);
+			event.setDispatchCode(open.getCode());
+			event.setDispatchedRequestId(requestId);
+			event.setReason(null);
+			event.setDateModified(now);
+			store.saveEvent(event);
+		}
 	}
 
 	/** The request of the respawn, as the chat sends it, the events being the reaction. */
