@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.ConditionSource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -26,7 +27,7 @@ import java.util.Map;
  * ConditionEvent
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T15:16:14.129564900+01:00[Europe/Rome]")
 
 public class ConditionEvent {
   @JsonProperty("correlationId")
@@ -49,6 +50,9 @@ public class ConditionEvent {
 
   @JsonProperty("sourceSystem")
   private String sourceSystem = null;
+
+  @JsonProperty("source")
+  private ConditionSource source = null;
 
   @JsonProperty("sourceEventId")
   private String sourceEventId = null;
@@ -187,6 +191,24 @@ public class ConditionEvent {
     this.sourceSystem = sourceSystem;
   }
 
+  public ConditionEvent source(ConditionSource source) {
+    this.source = source;
+    return this;
+  }
+
+   /**
+   * Get source
+   * @return source
+  **/
+  @Schema(description = "")
+  public ConditionSource getSource() {
+    return source;
+  }
+
+  public void setSource(ConditionSource source) {
+    this.source = source;
+  }
+
   public ConditionEvent sourceEventId(String sourceEventId) {
     this.sourceEventId = sourceEventId;
     return this;
@@ -240,13 +262,14 @@ public class ConditionEvent {
         Objects.equals(this.attributes, conditionEvent.attributes) &&
         Objects.equals(this.text, conditionEvent.text) &&
         Objects.equals(this.sourceSystem, conditionEvent.sourceSystem) &&
+        Objects.equals(this.source, conditionEvent.source) &&
         Objects.equals(this.sourceEventId, conditionEvent.sourceEventId) &&
         Objects.equals(this.sourceTimestamp, conditionEvent.sourceTimestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, attributes, text, sourceSystem, sourceEventId, sourceTimestamp);
+    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, attributes, text, sourceSystem, source, sourceEventId, sourceTimestamp);
   }
 
 
@@ -262,6 +285,7 @@ public class ConditionEvent {
     sb.append("    attributes: ").append(toIndentedString(attributes)).append("\n");
     sb.append("    text: ").append(toIndentedString(text)).append("\n");
     sb.append("    sourceSystem: ").append(toIndentedString(sourceSystem)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    sourceEventId: ").append(toIndentedString(sourceEventId)).append("\n");
     sb.append("    sourceTimestamp: ").append(toIndentedString(sourceTimestamp)).append("\n");
     sb.append("}");

@@ -58,25 +58,36 @@ public final class ResolvedConditionText {
 			text.append("\nWhy it was needed: ").append(why.strip());
 		}
 		if (condition.getInstanceValue() == null) {
-			text.append("\nThe user chose not to answer: go on without it, saying what you assumed.");
+			text.append("\n").append(declinedBy(condition));
 		} else {
 			final String answer = GAbstractAskUserChoiceQuestionTool.answerOf(condition);
-			text.append(answer != null ? answer : "\nIt came: " + condition.getInstanceValue());
+			text.append(answer != null ? answer : "\n" + cameOf(condition));
 		}
 		return text.toString();
 	}
 
 	private static String outcomeOf(AgentSuspendedWaitingCondition<?, ?> condition) {
 		if (condition.getInstanceValue() == null) {
-			return "You were waiting for: " + condition.getWaitingConditionStatement()
-					+ "\nThe user chose not to answer: go on without it, saying what you assumed.";
+			return "You were waiting for: " + condition.getWaitingConditionStatement() + "\n" + declinedBy(condition);
 		}
 		final String clarification = GAbstractAskUserChoiceQuestionTool.answered(condition);
 		if (clarification != null) {
 			return clarification;
 		}
-		return "You were waiting for: " + condition.getWaitingConditionStatement() + "\nIt came: "
-				+ condition.getInstanceValue();
+		return "You were waiting for: " + condition.getWaitingConditionStatement() + "\n" + cameOf(condition);
+	}
+
+	/** A condition left unanswered: by the user, or by the source that solved it. */
+	private static String declinedBy(AgentSuspendedWaitingCondition<?, ?> condition) {
+		return GAbstractAskUserChoiceQuestionTool.whoAnswered(condition)
+				+ " chose not to answer: go on without it, saying what you assumed.";
+	}
+
+	/** The value that came, and from which source when it is not the conversation's user. */
+	private static String cameOf(AgentSuspendedWaitingCondition<?, ?> condition) {
+		return GAbstractAskUserChoiceQuestionTool.answeredByOther(condition)
+				? "It came from " + condition.getSolvedBy().label() + ": " + condition.getInstanceValue()
+				: "It came: " + condition.getInstanceValue();
 	}
 
 	/** The message a respawned agent is re-executed on, the resolved conditions told first. */

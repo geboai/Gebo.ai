@@ -165,7 +165,37 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 	 */
 	public static String answered(AgentSuspendedWaitingCondition<?, ?> condition) {
 		final String answer = answerOf(condition);
-		return answer != null ? "You asked the user: " + condition.getWaitingConditionStatement() + answer : null;
+		if (answer == null) {
+			return null;
+		}
+		return (answeredByOther(condition) ? "You asked: " : "You asked the user: ")
+				+ condition.getWaitingConditionStatement() + answer;
+	}
+
+	/**
+	 * Whether a source other than the conversation's own user solved the
+	 * condition: it is then named instead of "the user".
+	 */
+	public static boolean answeredByOther(AgentSuspendedWaitingCondition<?, ?> condition) {
+		return condition != null && condition.getSolvedBy() != null && !condition.getSolvedBy().isConversationUser();
+	}
+
+	/**
+	 * Who answered, at the start of a sentence: "The user", or the source that
+	 * did, its name as it is (an id is never changed), only the words said of it
+	 * capitalised ("Agent ...", "An unknown source").
+	 */
+	public static String whoAnswered(AgentSuspendedWaitingCondition<?, ?> condition) {
+		if (!answeredByOther(condition)) {
+			return "The user";
+		}
+		final String label = condition.getSolvedBy().label();
+		for (String said : new String[] { "agent ", "an unknown source" }) {
+			if (label.startsWith(said)) {
+				return Character.toUpperCase(said.charAt(0)) + label.substring(1);
+			}
+		}
+		return label;
 	}
 
 	/**
@@ -186,16 +216,17 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 				}
 			}
 		}
+		final String who = whoAnswered(condition);
 		if (chosen.size() == 1) {
-			text.append("\nThe user chose: ").append(chosen.get(0));
+			text.append("\n").append(who).append(" chose: ").append(chosen.get(0));
 		} else if (!chosen.isEmpty()) {
-			text.append("\nThe user chose:");
+			text.append("\n").append(who).append(" chose:");
 			for (String option : chosen) {
 				text.append("\n- ").append(option);
 			}
 		}
 		if (answer.getCustomExplanation() != null && !answer.getCustomExplanation().isBlank()) {
-			text.append("\nThe user explained: ").append(answer.getCustomExplanation().strip());
+			text.append("\n").append(who).append(" explained: ").append(answer.getCustomExplanation().strip());
 		}
 		return text.toString();
 	}

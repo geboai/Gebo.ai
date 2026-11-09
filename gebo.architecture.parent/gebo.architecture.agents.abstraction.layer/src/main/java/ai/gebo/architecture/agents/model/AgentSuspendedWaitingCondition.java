@@ -41,6 +41,11 @@ public class AgentSuspendedWaitingCondition<T, O> {
 	 * resolved condition, never shown to whoever resolves it. Null when it wrote nothing.
 	 */
 	private String notesForLater = null;
+	/**
+	 * Who or what solved it, when the respawn was told: null when it was not, or
+	 * while it waits. The agent is told it, unless it is the conversation's own user.
+	 */
+	private ConditionSource solvedBy = null;
 
 	/** A condition on a value, with nothing chosen by the model. */
 	public AgentSuspendedWaitingCondition(Class<T> type, String waitingConditionStatement,

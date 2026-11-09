@@ -30,6 +30,7 @@ import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
@@ -242,5 +243,36 @@ class ChatNetworkRespawnStepTest {
 		other.setAttributes(new java.util.LinkedHashMap<String, Object>(Map.of("chosenOption", "2023")));
 		reaction.setReactions(List.of(answer, other));
 		assertEquals(2, planner.resolve(block, reaction).size());
+	}
+
+	@Test
+	void theRespawnTellsTheAgentWhoAnsweredWhenTheReactionSays() throws Exception {
+		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> first = clarification(true);
+		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> second = clarification(true);
+		GNetworkOfAgentsSuspension block = new GNetworkOfAgentsSuspension();
+		SuspendedAgentState entry = SuspendedAgentState.of(null, null, null, first);
+		entry.getWaitingConditions().add(GNetworkOfAgentsSuspension.WaitingCondition.of(second));
+		block.getSuspendedAgents().add(entry);
+		AgentSuspendedWaitingConditionReactionDto fromErp = new AgentSuspendedWaitingConditionReactionDto();
+		fromErp.setConditionType("clarification");
+		fromErp.setConditionId(first.getSuspendedConditionId());
+		fromErp.setAttributes(new java.util.LinkedHashMap<String, Object>(Map.of("chosenOption", "2024")));
+		ConditionSource anna = ConditionSource.of(ConditionSource.Kind.PERSON, "ERP", "arossi", "Anna Rossi");
+		anna.setVerified(true);
+		fromErp.setSource(anna);
+		AgentSuspendedWaitingConditionReactionDto untold = new AgentSuspendedWaitingConditionReactionDto();
+		untold.setConditionType("clarification");
+		untold.setConditionId(second.getSuspendedConditionId());
+		untold.setAttributes(new java.util.LinkedHashMap<String, Object>(Map.of("chosenOption", "2023")));
+		NetworkOfAgentsSuspendedStateReaction reaction = new NetworkOfAgentsSuspendedStateReaction();
+		reaction.setReactions(List.of(fromErp, untold));
+		NetworkRespawnPlanner planner = new NetworkRespawnPlanner(null, new NetworkOfAgentsSuspensionTransport(
+				new AgentSuspendedWaitingConditionTransportTranslatorRepositoryPatternImpl(
+						List.of(new DefaultConditionTransportTranslator(), new ClarificationConditionTransportTranslator()))));
+
+		List<AgentSuspendedWaitingCondition<?, ?>> resolved = planner.resolve(block, reaction);
+
+		assertEquals("arossi", resolved.get(0).getSolvedBy().getId());
+		assertNull(resolved.get(1).getSolvedBy(), "nobody said: told as the user's, as always");
 	}
 }

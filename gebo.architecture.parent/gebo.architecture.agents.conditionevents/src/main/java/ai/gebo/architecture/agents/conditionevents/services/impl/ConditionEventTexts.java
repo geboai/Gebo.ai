@@ -71,9 +71,8 @@ public class ConditionEventTexts {
 
 	private String lineOf(AgentSuspendedWaitingConditionDto condition, GConditionEvent event) {
 		if (event.getText() != null && !event.getText().isBlank()) {
-			return (event.getSourceSystem() != null && !event.getSourceSystem().isBlank()
-					? "[from " + event.getSourceSystem().strip() + "] "
-					: "") + event.getText().strip();
+			final String from = DefaultConditionEventTextRenderer.sourceLabelOf(event);
+			return (from != null ? "[from " + from + "] " : "") + event.getText().strip();
 		}
 		final String type = condition != null ? condition.getConditionType() : event.getConditionType();
 		return renderers.getOrDefault(type, fallback).render(condition, event);

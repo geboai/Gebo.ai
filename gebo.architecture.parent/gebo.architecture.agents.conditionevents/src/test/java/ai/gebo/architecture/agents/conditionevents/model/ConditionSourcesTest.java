@@ -38,7 +38,7 @@ class ConditionSourcesTest {
 		assertEquals(ConditionSources.CHAT_SYSTEM, source.getSystem());
 		assertEquals("conv-1", source.getSessionCode());
 		assertTrue(source.isConversationUser());
-		assertEquals("Paolo (GEBO-CHAT)", source.label());
+		assertEquals("Paolo (CHAT)", source.label());
 	}
 
 	@Test

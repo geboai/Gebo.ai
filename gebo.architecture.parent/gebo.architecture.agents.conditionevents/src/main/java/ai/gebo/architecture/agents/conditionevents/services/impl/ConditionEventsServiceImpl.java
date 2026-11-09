@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
 import ai.gebo.architecture.agents.conditionevents.config.ConditionEventsConfig;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionSources;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck.Outcome;
@@ -190,8 +191,9 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		kept.setAttributes(event.getAttributes() != null ? new LinkedHashMap<String, Object>(event.getAttributes())
 				: new LinkedHashMap<String, Object>());
 		kept.setText(event.getText());
-		kept.setSourceSystem(event.getSourceSystem() != null ? event.getSourceSystem()
-				: caller != null ? caller.getChannelSource() : null);
+		kept.setSource(ConditionSources.ofDelivered(event.getSource(), event.getSourceSystem(), caller,
+				config != null ? config.getApplicationAuthority() : null));
+		kept.setSourceSystem(kept.getSource().getSystem());
 		kept.setSourceEventId(event.getSourceEventId());
 		kept.setSourceTimestamp(event.getSourceTimestamp());
 		kept.setActor(caller != null ? caller.getName() : null);

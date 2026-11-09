@@ -11,6 +11,8 @@ package ai.gebo.architecture.agents.model;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -73,6 +75,7 @@ public class ConditionSource implements Serializable {
 	}
 
 	/** Whether it is the conversation's own user answering in the chat. */
+	@JsonIgnore
 	public boolean isConversationUser() {
 		return verified && kind == Kind.PERSON && CHAT_CHANNEL.equals(channel);
 	}

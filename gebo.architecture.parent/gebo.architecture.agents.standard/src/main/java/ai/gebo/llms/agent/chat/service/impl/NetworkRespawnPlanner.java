@@ -121,7 +121,12 @@ public class NetworkRespawnPlanner {
 						+ answer.getConditionType());
 			}
 			try {
-				resolved.add(translator.translateReaction(answer, saved));
+				final AgentSuspendedWaitingCondition<?, ?> translated = translator.translateReaction(answer, saved);
+				if (translated != null) {
+					// who answered, as the events layer kept it; none on a reaction a client sent
+					translated.setSolvedBy(answer.getSource());
+					resolved.add(translated);
+				}
 			} catch (IllegalArgumentException refused) {
 				throw new ChatPipelineException(REACTION_REFUSED + refused.getMessage(), refused);
 			}

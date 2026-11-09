@@ -22,7 +22,7 @@ import ai.gebo.architecture.agents.model.ConditionSource.Kind;
  */
 public final class ConditionSources {
 	/** The system the chat's answers come from. */
-	public static final String CHAT_SYSTEM = "GEBO-CHAT";
+	public static final String CHAT_SYSTEM = "CHAT";
 
 	private ConditionSources() {
 	}

@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ConditionSource } from './conditionSource';
 
 export interface ConditionEventView { 
     correlationId?: string;
@@ -19,6 +20,7 @@ export interface ConditionEventView {
     reason?: string;
     blockCode?: string;
     sourceSystem?: string;
+    source?: ConditionSource;
     sourceEventId?: string;
     sourceTimestamp?: Date;
     receivedAt?: Date;

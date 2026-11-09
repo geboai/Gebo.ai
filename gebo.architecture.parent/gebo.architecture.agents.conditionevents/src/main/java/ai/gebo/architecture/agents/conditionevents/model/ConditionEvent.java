@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import ai.gebo.architecture.agents.model.ConditionSource;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -45,6 +46,13 @@ public class ConditionEvent implements Serializable {
 	private String text = null;
 	/** The system the event comes from, as it names itself. */
 	private String sourceSystem = null;
+	/**
+	 * Who or what solved the condition: a person, an agent or a system, with the
+	 * details and the session of a person or an agent. Kept as told, and verified
+	 * only by who delivers it (see {@link ConditionSources}); with none, the event
+	 * is told by its deliverer.
+	 */
+	private ConditionSource source = null;
 	/** The source's own id of the event: the same id delivered again is a duplicate. */
 	private String sourceEventId = null;
 	/**
