@@ -66,4 +66,21 @@ class LexicalFilterTest {
 		// an empty knowledge base list would filter nothing: the leg is skipped
 		assertNull(GDocumentsSearchServiceImpl.lexicalFilter(caller, List.of("a"), null));
 	}
+
+	/**
+	 * A chat whose profile names no knowledge base, and lets the user choose none,
+	 * searches none: the full-text index drops an empty knowledge base term, so the
+	 * filter would reach every indexed chunk under the ACL alone. The semantic leg
+	 * already searches nothing then.
+	 */
+	@Test
+	void noKnowledgeBaseAtAllMeansNoLexicalSearch() {
+		final FullTextSearchMetaDataFilter none = new FullTextSearchMetaDataFilter();
+		none.setKnowledgebaseCodes(List.of());
+
+		assertNull(GDocumentsSearchServiceImpl.lexicalFilter(none, List.of(), List.of(1, 2)));
+		assertNull(GDocumentsSearchServiceImpl.lexicalFilter(new FullTextSearchMetaDataFilter(), List.of(), null));
+		assertNull(GDocumentsSearchServiceImpl.lexicalFilter(null, List.of(), null));
+		assertNull(GDocumentsSearchServiceImpl.lexicalFilter(null, null, null));
+	}
 }
