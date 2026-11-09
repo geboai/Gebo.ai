@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
 import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
@@ -41,6 +42,13 @@ public class GConditionEvent extends GBaseObject {
 	private String sourceSystem = null;
 	/** Who or what solved the condition, as kept on delivery; null on events kept before sources. */
 	private ConditionSource source = null;
+	/**
+	 * Why the condition is resolved with no value although it may be mandatory: the
+	 * platform's own, on the events it makes when a condition expires, and on the
+	 * chat's when the conversation's user, or an administrator from the panel,
+	 * chooses to go on without it. Never from a delivered event.
+	 */
+	private UnansweredBecause unanswered = null;
 	private String sourceEventId = null;
 	private Date sourceTimestamp = null;
 	/** Who delivered it and through which channel. */
@@ -80,6 +88,7 @@ public class GConditionEvent extends GBaseObject {
 		reaction.setAttributes(attributes != null ? new LinkedHashMap<String, Object>(attributes)
 				: new LinkedHashMap<String, Object>());
 		reaction.setSource(sourceOrKept());
+		reaction.setUnanswered(unanswered);
 		return reaction;
 	}
 }

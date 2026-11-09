@@ -12,7 +12,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationReactionAttributes;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DefaultReactionAttributes;
 import jakarta.validation.constraints.NotNull;
@@ -75,6 +78,13 @@ public class ConditionEvent implements Serializable {
 	 * condition the later one is kept. Null orders them by arrival.
 	 */
 	private Date sourceTimestamp = null;
+	/**
+	 * Why the condition is resolved with no value although it may be mandatory: set
+	 * by the chat's recorder for the conversation's own user, never read from a
+	 * delivered event, which may only decline a condition that is not mandatory.
+	 */
+	@JsonIgnore
+	private UnansweredBecause unanswered = null;
 
 	/**
 	 * A copy of the attributes, with the answer given typed in place of what they

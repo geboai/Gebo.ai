@@ -89,6 +89,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private volatile IAgentsCollaborationSessionContextFactory sessionContextFactory;
 	/** Tells the type of the conditions of a suspended run; null keeps none. */
 	private volatile IWaitingConditionTypeResolver conditionTypeResolver;
+	/** Tells when the conditions of a suspended run stop waiting; null gives them no expiry. */
+	private volatile IWaitingConditionExpiryPolicy conditionExpiryPolicy;
 
 	/**
 	 * A network service that owns the sessions of its runs: every run collaborates
@@ -138,7 +140,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	 * run does.
 	 */
 	protected IGNetworkOfAgentsSuspensionHandler createSuspensionHandler() {
-		return suspensions != null ? new GMongoNetworkOfAgentsSuspensionHandler(suspensions, conditionTypeResolver)
+		return suspensions != null
+				? new GMongoNetworkOfAgentsSuspensionHandler(suspensions, conditionTypeResolver, conditionExpiryPolicy)
 				: new NeverSuspendingHandler();
 	}
 
@@ -229,6 +232,14 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	 */
 	public void setConditionTypeResolver(IWaitingConditionTypeResolver conditionTypeResolver) {
 		this.conditionTypeResolver = conditionTypeResolver;
+	}
+
+	/**
+	 * Who tells when a condition an agent of a run waits for stops waiting, kept
+	 * with it when the run is suspended; null gives the conditions no expiry.
+	 */
+	public void setConditionExpiryPolicy(IWaitingConditionExpiryPolicy conditionExpiryPolicy) {
+		this.conditionExpiryPolicy = conditionExpiryPolicy;
 	}
 
 	@Override

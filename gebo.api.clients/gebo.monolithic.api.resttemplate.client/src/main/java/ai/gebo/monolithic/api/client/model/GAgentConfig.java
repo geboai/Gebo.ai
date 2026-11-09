@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.AgentConditionsExpiry;
 import ai.gebo.monolithic.api.client.model.GObjectRefGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T22:08:53.638937800+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -194,6 +195,9 @@ public class GAgentConfig {
 
   @JsonProperty("readOnly")
   private Boolean readOnly = null;
+
+  @JsonProperty("conditionsExpiry")
+  private AgentConditionsExpiry conditionsExpiry = null;
 
   @JsonProperty("accessibleGroups")
   private List<String> accessibleGroups = null;
@@ -638,6 +642,24 @@ public class GAgentConfig {
     this.readOnly = readOnly;
   }
 
+  public GAgentConfig conditionsExpiry(AgentConditionsExpiry conditionsExpiry) {
+    this.conditionsExpiry = conditionsExpiry;
+    return this;
+  }
+
+   /**
+   * Get conditionsExpiry
+   * @return conditionsExpiry
+  **/
+  @Schema(description = "")
+  public AgentConditionsExpiry getConditionsExpiry() {
+    return conditionsExpiry;
+  }
+
+  public void setConditionsExpiry(AgentConditionsExpiry conditionsExpiry) {
+    this.conditionsExpiry = conditionsExpiry;
+  }
+
   public GAgentConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
     return this;
@@ -845,6 +867,7 @@ public class GAgentConfig {
         Objects.equals(this.temperature, gagentConfig.temperature) &&
         Objects.equals(this.thinking, gagentConfig.thinking) &&
         Objects.equals(this.readOnly, gagentConfig.readOnly) &&
+        Objects.equals(this.conditionsExpiry, gagentConfig.conditionsExpiry) &&
         Objects.equals(this.accessibleGroups, gagentConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gagentConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gagentConfig.accessibleToAll) &&
@@ -856,7 +879,7 @@ public class GAgentConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds);
   }
 
 
@@ -888,6 +911,7 @@ public class GAgentConfig {
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
     sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
+    sb.append("    conditionsExpiry: ").append(toIndentedString(conditionsExpiry)).append("\n");
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");

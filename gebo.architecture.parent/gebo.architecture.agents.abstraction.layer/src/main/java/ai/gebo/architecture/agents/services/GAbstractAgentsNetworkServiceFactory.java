@@ -42,7 +42,24 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 	public IWaitingConditionTypeResolver getConditionTypeResolver() {
 		return conditionTypeResolver;
 	}
-	
+
+	/** Tells when the conditions of a suspended run stop waiting, for the services built; null gives none. */
+	private volatile IWaitingConditionExpiryPolicy conditionExpiryPolicy;
+
+	@Autowired(required = false)
+	public void setConditionExpiryPolicy(IWaitingConditionExpiryPolicy conditionExpiryPolicy) {
+		this.conditionExpiryPolicy = conditionExpiryPolicy;
+	}
+
+	public IWaitingConditionExpiryPolicy getConditionExpiryPolicy() {
+		return conditionExpiryPolicy;
+	}
+
+	/** Gives a built service what this factory was given for its suspended runs. */
+	protected void equipForSuspensions(GAbstractAgentsNetworkService<?, ?> built) {
+		built.setConditionTypeResolver(getConditionTypeResolver());
+		built.setConditionExpiryPolicy(getConditionExpiryPolicy());
+	}
 
 	@Override
 	public boolean canHandle(Class<IGAgentsNetworkService> agentNetworkService) {

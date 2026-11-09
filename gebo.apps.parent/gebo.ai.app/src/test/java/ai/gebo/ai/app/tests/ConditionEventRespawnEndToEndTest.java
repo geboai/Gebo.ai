@@ -48,9 +48,15 @@ import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionDispatchRepository;
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionEventRepository;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsPublisher;
+import ai.gebo.architecture.agents.conditionevents.services.IWaitingConditionsService;
+import ai.gebo.architecture.agents.conditionevents.services.impl.WaitingConditionsServiceImpl;
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
+import ai.gebo.architecture.agents.model.WaitingConditionDropReason;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationReactionAttributes;
+import ai.gebo.llms.chat.pipelines.service.impl.GAbstractConditionTransportTranslator;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
 import ai.gebo.llms.abstraction.layer.tests.TestChatModel;
@@ -85,6 +91,8 @@ import ai.gebo.security.services.impl.LocalJwtTokenProvider;
  */
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK",
+		// the platform's default expiry: every question waits five minutes, then the run goes on
+		"ai.gebo.agents.conditions.default-expiry-minutes=5", "ai.gebo.agents.conditions.default-expiry-unblocks=true",
 		// Test-only signing key: the test context configures none, and the tokens below must be verifiable.
 		"ai.gebo.security.auth.token-secret=dGVzdC1vbmx5LXNpZ25pbmcta2V5LWZvci10aGUtY29uZGl0aW9uLWV2ZW50cy10ZXN0LW5ldmVyLWEtcmVhbC1zZWNyZXQtMDEyMzQ1Njc4OQ==" })
 public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsIntegrationTests {
@@ -92,6 +100,10 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private static final String DELETE_KEY = "/api/users/GeneratedUserApiKeyController/deleteUserGeneratedApiKey";
 	private static final String DELIVER = "/api/users/NetworkOfAgentsConditionEventsController/deliverConditionEvent";
 	private static final String STATUS = "/api/users/NetworkOfAgentsConditionEventsController/conditionEventStatus";
+	private static final String WAITING = "/api/users/WaitingConditionsController/waitingConditions";
+	private static final String GO_ON_WITHOUT = "/api/users/WaitingConditionsController/goOnWithout";
+	private static final String ABANDON = "/api/users/WaitingConditionsController/abandon";
+	private static final String ALL_WAITING = "/api/admin/WaitingConditionsAdminController/allWaitingConditions";
 
 	private static final String ANSWER_MARKER = "GEBO_TEST_CONDITION_EVENT_ANSWER";
 	private static final String USER_QUESTION = "Please answer in English, write me a short holiday note about the country I prefer.";
@@ -104,6 +116,11 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private static final String TOLD_THE_ANSWER = "You asked the user:";
 	private static final String TOLD_BY_A_SOURCE = "You asked: ";
 	private static final String TOLD_THE_CHOICE = " chose: ";
+	/** How it is told of a condition the run went on without ({@code UnansweredConditionText}). */
+	private static final String TOLD_UNANSWERED = "You were waiting for:";
+	private static final String TOLD_GONE_ON_WITHOUT = " chose to go on without an answer: ";
+	private static final String TOLD_EXPIRED = "No answer came before ";
+	private static final String UNKNOWN_COUNTRY = "an unknown country";
 	/** The marker of the router's request understanding prompt (its system prompt's first line). */
 	private static final String REWRITE_PROMPT_MARKER = "Minimal Question Rewriter";
 	private static final String TITLE_PROMPT_MARKER = "summarization assistant";
@@ -138,6 +155,8 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private FilterChainProxy securityFilters;
 	@Autowired
 	private LocalJwtTokenProvider tokens;
+	@Autowired
+	private IWaitingConditionsService waitingConditions;
 	/** The line of each answer the respawned agents were told, as they read it. */
 	private final List<String> toldAnswers = new CopyOnWriteArrayList<String>();
 	/** A mapper of its own: the test context has no ObjectMapper bean (dates go as epoch millis). */
@@ -166,8 +185,9 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			}
 			if (told(prompt)) {
 				final String chosen = prompt.contains(TOLD_THE_CHOICE + "Italy") ? "Italy"
-						: prompt.contains(TOLD_THE_CHOICE + "France") ? "France" : "an unknown country";
-				prompt.lines().filter(line -> line.contains(TOLD_THE_CHOICE)).findFirst().ifPresent(toldAnswers::add);
+						: prompt.contains(TOLD_THE_CHOICE + "France") ? "France" : UNKNOWN_COUNTRY;
+				prompt.lines().filter(line -> line.contains(TOLD_THE_CHOICE) || line.contains(TOLD_GONE_ON_WITHOUT)
+						|| line.contains(TOLD_EXPIRED)).findFirst().ifPresent(toldAnswers::add);
 				return ANSWER_MARKER + ": a short holiday note about " + chosen + ".";
 			}
 			return "";
@@ -175,7 +195,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	}
 
 	private static boolean told(String prompt) {
-		return prompt.contains(TOLD_THE_ANSWER) || prompt.contains(TOLD_BY_A_SOURCE);
+		return prompt.contains(TOLD_THE_ANSWER) || prompt.contains(TOLD_BY_A_SOURCE) || prompt.contains(TOLD_UNANSWERED);
 	}
 
 	@Override
@@ -396,6 +416,134 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 					.filter(e -> e.getDeliveries() >= 2).orElse(null));
 			assertEquals(ConditionEventStatus.APPLIED, events.findById(correlationId).orElseThrow().getStatus(),
 					"a redelivery changes nothing");
+		} finally {
+			if (suspended != null) {
+				lifeCycleService.removeChatSession(suspended.sessionCode());
+			}
+		}
+	}
+
+	/** The block as the panel lists it to the caller, null when it does not. */
+	private JsonNode listed(MockMvc mvc, String path, String token, String blockCode) throws Exception {
+		final MockHttpServletResponse response = mvc.perform(get(path).header("Authorization", "Bearer " + token))
+				.andReturn().getResponse();
+		assertEquals(200, response.getStatus(), path + ": " + response.getContentAsString());
+		for (JsonNode block : objectMapper.readTree(response.getContentAsString())) {
+			if (blockCode.equals(block.path("blockCode").asText())) {
+				return block;
+			}
+		}
+		return null;
+	}
+
+	@Test
+	public void theOwnerGoesOnWithoutTheQuestionFromTheWaitingConditionsPanel() throws Exception {
+		final MockMvc mvc = mvc();
+		final String token = tokens.createToken(DEFAULT_ALL_ROLES_USER, new Date(System.currentTimeMillis() + 600_000));
+		Suspended suspended = null;
+		try {
+			suspended = aSuspendedChat();
+			// the panel lists the run, to its owner and to the administrators
+			final JsonNode mine = listed(mvc, WAITING, token, suspended.blockCode());
+			assertNotNull(mine, "the owner's panel lists the suspended run");
+			assertEquals(DEFAULT_ALL_ROLES_USER, mine.path("owner").asText());
+			assertTrue(mine.path("mandatory").asBoolean());
+			assertFalse(mine.path("unwatched").asBoolean(), "the chat was watching");
+			final JsonNode condition = mine.path("conditions").get(0);
+			assertEquals(suspended.conditionId(), condition.path("conditionId").asText());
+			assertEquals("clarification", condition.path("conditionType").asText());
+			assertEquals(THE_QUESTION, condition.path("statement").asText());
+			assertFalse(condition.path("solved").asBoolean());
+			assertFalse(condition.path("expired").asBoolean());
+			assertTrue(condition.path("expiryUnblocks").asBoolean(), "the platform's default expiry: " + condition);
+			assertFalse(condition.path("expiresAt").isMissingNode() || condition.path("expiresAt").isNull(),
+					"the platform's default gives the question its expiry: " + condition);
+			assertNotNull(listed(mvc, ALL_WAITING, token, suspended.blockCode()), "the administrators see every run");
+
+			// no delivered event may ask to go on without a condition
+			final ConditionEvent asking = answer(suspended, "France", "condition-events-rest-test", "evt-go-on-1");
+			asking.getAttributes().put(GAbstractConditionTransportTranslator.GO_ON_WITHOUT, Boolean.TRUE);
+			final JsonNode refused = objectMapper.readTree(mvc.perform(post(DELIVER).header("Authorization", "Bearer " + token)
+					.contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(asking))).andReturn()
+					.getResponse().getContentAsString());
+			assertEquals("REFUSED", refused.path("outcome").asText(), refused.toString());
+			assertTrue(refused.path("reason").asText().startsWith(GAbstractConditionTransportTranslator.GO_ON_WITHOUT_NOT_HERE),
+					refused.toString());
+
+			// the owner goes on without it, from the panel
+			final JsonNode ack = objectMapper.readTree(mvc.perform(post(GO_ON_WITHOUT).param("blockCode", suspended.blockCode())
+					.header("Authorization", "Bearer " + token)).andReturn().getResponse().getContentAsString());
+			assertEquals("DONE", ack.path("outcome").asText(), ack.toString());
+
+			final GConditionEvent applied = verifyApplied(suspended, UNKNOWN_COUNTRY);
+			assertEquals(UnansweredBecause.GONE_ON_WITHOUT, applied.getUnanswered());
+			assertEquals(WaitingConditionsServiceImpl.PANEL_CHANNEL, applied.getChannel());
+			assertEquals(DEFAULT_ALL_ROLES_USER, applied.getActor());
+			assertTrue(applied.getSource().isConversationUser(), "the owner chose: " + applied.getSource());
+			assertEquals("The user" + TOLD_GONE_ON_WITHOUT + "go on without it, saying what you assumed.", toldAnswers.get(0),
+					"the agent is told who chose to go on: " + toldAnswers);
+			assertEquals(null, listed(mvc, WAITING, token, suspended.blockCode()), "the run no longer waits");
+		} finally {
+			if (suspended != null) {
+				lifeCycleService.removeChatSession(suspended.sessionCode());
+			}
+		}
+	}
+
+	@Test
+	public void anExpiryThatUnblocksResolvesTheQuestionAndTheRunGoesOn() throws Exception {
+		Suspended suspended = null;
+		try {
+			suspended = aSuspendedChat();
+			final GNetworkOfAgentsSuspension block = blocks.findById(suspended.blockCode()).orElseThrow();
+			final WaitingCondition question = block.conditions().get(0);
+			assertNotNull(question.getExpiresAt(), "the platform's default gives the question its expiry");
+			assertTrue(question.isExpiryUnblocks());
+			final long waits = question.getExpiresAt().getTime() - block.getSuspendedAt().getTime();
+			assertTrue(waits >= 4 * 60_000L && waits <= 6 * 60_000L, "five minutes from the suspension: " + waits);
+			assertEquals(question.getExpiresAt(), block.getEarliestExpiryAt(), "the block carries the earliest expiry");
+
+			// the test moves the expiry into the past, where the sweep's step finds it due
+			question.setExpiresAt(new Date(System.currentTimeMillis() - 1_000));
+			block.setEarliestExpiryAt(question.getExpiresAt());
+			blocks.save(block);
+			waitingConditions.applyExpiries();
+
+			final GConditionEvent applied = verifyApplied(suspended, UNKNOWN_COUNTRY);
+			assertEquals(UnansweredBecause.EXPIRED, applied.getUnanswered());
+			assertEquals(WaitingConditionsServiceImpl.PLATFORM, applied.getSourceSystem());
+			assertTrue(toldAnswers.get(0).startsWith(TOLD_EXPIRED), "the agent is told the question expired: " + toldAnswers);
+			assertTrue(toldAnswers.get(0).endsWith("go on without it, saying what you assumed."), toldAnswers.toString());
+		} finally {
+			if (suspended != null) {
+				lifeCycleService.removeChatSession(suspended.sessionCode());
+			}
+		}
+	}
+
+	@Test
+	public void abandoningTheRunFreesTheConversation() throws Exception {
+		final MockMvc mvc = mvc();
+		final String token = tokens.createToken(DEFAULT_ALL_ROLES_USER, new Date(System.currentTimeMillis() + 600_000));
+		Suspended suspended = null;
+		try {
+			suspended = aSuspendedChat();
+
+			final JsonNode ack = objectMapper.readTree(mvc.perform(post(ABANDON).param("blockCode", suspended.blockCode())
+					.header("Authorization", "Bearer " + token)).andReturn().getResponse().getContentAsString());
+
+			assertEquals("DONE", ack.path("outcome").asText(), ack.toString());
+			final GNetworkOfAgentsSuspension block = blocks.findById(suspended.blockCode()).orElseThrow();
+			assertNotNull(block.getDroppedAt(), "the block is dropped");
+			assertEquals(WaitingConditionDropReason.ABANDONED, block.getDroppedReason());
+			assertEquals(DEFAULT_ALL_ROLES_USER, block.getDroppedBy());
+			assertFalse(chatPipelineService.pendingNetworkOfAgentsSuspension(suspended.sessionCode()).isPresent(),
+					"the conversation is free");
+			assertEquals(null, listed(mvc, WAITING, token, suspended.blockCode()), "the run no longer waits");
+			assertEquals("NOT_FOUND", objectMapper.readTree(mvc.perform(post(ABANDON).param("blockCode", suspended.blockCode())
+					.header("Authorization", "Bearer " + token)).andReturn().getResponse().getContentAsString())
+					.path("outcome").asText(), "abandoned once");
+			assertTrue(toldAnswers.isEmpty(), "nothing was respawned");
 		} finally {
 			if (suspended != null) {
 				lifeCycleService.removeChatSession(suspended.sessionCode());

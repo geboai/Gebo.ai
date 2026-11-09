@@ -17,6 +17,7 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
 import ai.gebo.llms.chat.pipelines.service.IAgentSuspendedWaitingConditionTransportTranslator;
@@ -225,5 +226,34 @@ class ConditionTransportTranslatorsTest {
 				.translateReaction(reaction("clarification", id, Map.of("chosenOption", "2024")), saved).getNotesForLater());
 		assertEquals("my own reasoning", clarification
 				.translateReaction(reaction("clarification", id, Map.of("declined", true)), saved).getNotesForLater());
+	}
+
+	@Test
+	void onlyThePlatformsOwnMarkGoesOnWithoutAMandatoryConditionNeverAnAttribute() {
+		final AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> mandatory = clarificationCondition(
+				false, true);
+		final String id = mandatory.getSuspendedConditionId();
+
+		final IllegalArgumentException refused = assertThrows(IllegalArgumentException.class,
+				() -> clarification.translateReaction(reaction("clarification", id,
+						Map.of(GAbstractConditionTransportTranslator.GO_ON_WITHOUT, true)), mandatory));
+		assertTrue(refused.getMessage().startsWith(GAbstractConditionTransportTranslator.GO_ON_WITHOUT_NOT_HERE));
+		assertThrows(IllegalArgumentException.class, () -> clarification
+				.translateReaction(reaction("clarification", id, Map.of("declined", true)), mandatory), "as before");
+
+		final AgentSuspendedWaitingConditionReactionDto goneOnWithout = reaction("clarification", id, Map.of());
+		goneOnWithout.setUnanswered(UnansweredBecause.GONE_ON_WITHOUT);
+		final AgentSuspendedWaitingCondition resolved = clarification.translateReaction(goneOnWithout, mandatory);
+		assertNull(resolved.getInstanceValue());
+		assertEquals(UnansweredBecause.GONE_ON_WITHOUT, resolved.getUnansweredBecause());
+
+		final AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> optional = clarificationCondition(
+				false, false);
+		assertEquals(UnansweredBecause.DECLINED, clarification.translateReaction(
+				reaction("clarification", optional.getSuspendedConditionId(), Map.of("declined", true)), optional)
+				.getUnansweredBecause());
+		assertNull(clarification.translateReaction(
+				reaction("clarification", optional.getSuspendedConditionId(), Map.of("chosenOption", "2024")), optional)
+				.getUnansweredBecause(), "a value came");
 	}
 }

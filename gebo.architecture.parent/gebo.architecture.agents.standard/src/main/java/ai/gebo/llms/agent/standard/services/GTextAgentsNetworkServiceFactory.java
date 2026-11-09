@@ -60,7 +60,7 @@ public class GTextAgentsNetworkServiceFactory
 		final GTextAgentsNetworkService service = new GTextAgentsNetworkService(agentServiceRuntimeDao, agentRoleDao,
 				threadManager, network, notificationSink, inputType, outputType, runAs,
 				IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions, adapter);
-		service.setConditionTypeResolver(getConditionTypeResolver());
+		equipForSuspensions(service);
 		return service;
 	}
 

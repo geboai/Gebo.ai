@@ -134,6 +134,22 @@ class ChatPipelineServiceOneByOneTest {
 	}
 
 	@Test
+	void anAnswerAskingToGoOnWithoutAConditionIsAlwaysRecorded() throws Exception {
+		when(recorder.record(eq(block), any(), any(), anyString())).thenReturn(new RecordedConditionReaction(
+				List.of(new Answer("year", "ACCEPTED", null), new Answer("approval", "ACCEPTED", null)), List.of(),
+				Next.WAIT, null));
+		final GeboChatRequest request = answering("year", "approval");
+		request.getNetworkOfAgentsSuspendedStateReaction().getReactions().get(1).getAttributes()
+				.put(GAbstractConditionTransportTranslator.GO_ON_WITHOUT, Boolean.TRUE);
+
+		service.streamingRespawnAgenticChat(null, request, new LinkedHashMap<String, Object>()).collectList().block();
+
+		verify(recorder).record(eq(block), any(), any(), anyString());
+		assertTrue(ran.isEmpty(), "the recorder reads the request to go on without, as the conversation's own user;"
+				+ " the respawner would refuse it");
+	}
+
+	@Test
 	void anAnswerLeavingAMandatoryConditionIsRecordedAndAnsweredWithoutRunning() throws Exception {
 		when(recorder.record(eq(block), any(), any(), anyString())).thenReturn(new RecordedConditionReaction(
 				List.of(new Answer("year", "ACCEPTED", null)), List.of("Manager approval"), Next.WAIT, null));

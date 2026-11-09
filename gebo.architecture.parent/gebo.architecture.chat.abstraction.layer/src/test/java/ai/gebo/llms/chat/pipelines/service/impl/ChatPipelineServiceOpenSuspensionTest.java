@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
+import ai.gebo.architecture.agents.model.WaitingConditionDropReason;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
@@ -86,6 +87,7 @@ class ChatPipelineServiceOpenSuspensionTest {
 		service.streamingChat(null, request(), new LinkedHashMap<String, Object>());
 
 		assertNotNull(block.getDroppedAt(), "the user chose to go on without answering");
+		assertEquals(WaitingConditionDropReason.NEW_INTERACTION, block.getDroppedReason());
 		verify(suspensions).save(block);
 		verify(executor).streamingExecute(any(), any(), any(), any(), any());
 	}

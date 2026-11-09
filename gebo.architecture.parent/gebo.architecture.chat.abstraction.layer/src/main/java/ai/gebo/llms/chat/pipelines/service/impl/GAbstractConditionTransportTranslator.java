@@ -12,6 +12,7 @@ package ai.gebo.llms.chat.pipelines.service.impl;
 import java.util.LinkedHashMap;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
 import ai.gebo.llms.chat.pipelines.service.IAgentSuspendedWaitingConditionTransportTranslator;
@@ -31,7 +32,15 @@ public abstract class GAbstractConditionTransportTranslator
 	public static final String MANDATORY = "mandatory";
 	/** The attribute of a reaction declining a condition that is not mandatory. */
 	public static final String DECLINED = "declined";
+	/**
+	 * The attribute of a chat answer asking to go on without the condition, even a
+	 * mandatory one: read by the chat for the conversation's own user only, and
+	 * refused anywhere else it turns up.
+	 */
+	public static final String GO_ON_WITHOUT = "goOnWithout";
 	static final String DECLINED_MANDATORY = "The condition is mandatory and cannot be declined: ";
+	public static final String GO_ON_WITHOUT_NOT_HERE = "Only the owner of the conversation, from the chat, or an administrator,"
+			+ " from the waiting conditions panel, may go on without a condition: ";
 	static final String NOT_THE_SAVED_CONDITION = "The reaction is to another condition: ";
 
 	@Override
@@ -77,14 +86,25 @@ public abstract class GAbstractConditionTransportTranslator
 			throw new IllegalArgumentException(NOT_THE_SAVED_CONDITION + reaction.getConditionId() + " is not "
 					+ savedCondition.getSuspendedConditionId());
 		}
+		if (isTrue(attribute(reaction, GO_ON_WITHOUT))) {
+			throw new IllegalArgumentException(GO_ON_WITHOUT_NOT_HERE + savedCondition.getWaitingConditionStatement());
+		}
+		if (reaction.getUnanswered() != null && reaction.getUnanswered() != UnansweredBecause.DECLINED) {
+			// the platform's own: the run goes on without the condition, mandatory or not
+			savedCondition.setInstanceValue(null);
+			savedCondition.setUnansweredBecause(reaction.getUnanswered());
+			return savedCondition;
+		}
 		if (isDeclined(reaction)) {
 			if (savedCondition.isMandatory()) {
 				throw new IllegalArgumentException(DECLINED_MANDATORY + savedCondition.getWaitingConditionStatement());
 			}
 			savedCondition.setInstanceValue(null);
+			savedCondition.setUnansweredBecause(UnansweredBecause.DECLINED);
 			return savedCondition;
 		}
 		resolve(reaction, savedCondition);
+		savedCondition.setUnansweredBecause(null);
 		return savedCondition;
 	}
 
@@ -93,8 +113,12 @@ public abstract class GAbstractConditionTransportTranslator
 			AgentSuspendedWaitingCondition savedCondition);
 
 	protected static boolean isDeclined(AgentSuspendedWaitingConditionReactionDto reaction) {
-		final Object declined = attribute(reaction, DECLINED);
-		return declined instanceof Boolean b ? b : declined != null && Boolean.parseBoolean(String.valueOf(declined));
+		return isTrue(attribute(reaction, DECLINED));
+	}
+
+	/** Whether an attribute says yes: a boolean, or a text that reads as one. */
+	public static boolean isTrue(Object attribute) {
+		return attribute instanceof Boolean b ? b : attribute != null && Boolean.parseBoolean(String.valueOf(attribute));
 	}
 
 	protected static Object attribute(AgentSuspendedWaitingConditionReactionDto reaction, String name) {

@@ -66,7 +66,7 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 		final GReactiveChatAgentsNetworkService built = new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao,
 				agentRoleDao, threadManager, network, notificationSink, inputType, outputType, runAs,
 				IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions, adapter);
-		built.setConditionTypeResolver(getConditionTypeResolver());
+		equipForSuspensions(built);
 		IGReactiveChatAgentsNetworkService service = built;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End createAgentsNetworkService(...) built service id:" + service.getId());
