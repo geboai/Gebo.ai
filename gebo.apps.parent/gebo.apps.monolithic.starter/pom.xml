@@ -208,6 +208,18 @@
 			<artifactId>gebo.architecture.agents.standard</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The events solving the conditions of suspended networks of agents, from
+		     any source (REST, the message broker), and their REST entry. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.conditionevents</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.conditionevents.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.open-chat-pipeline</artifactId>

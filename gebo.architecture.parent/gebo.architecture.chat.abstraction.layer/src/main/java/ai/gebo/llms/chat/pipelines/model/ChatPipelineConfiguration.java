@@ -15,4 +15,6 @@ public class ChatPipelineConfiguration {
 	@NotNull
 	private String stepRouterId = null;
 	private boolean defaultPipeline = false;
+	/** The output step that respawns a suspended network of agents of a conversation; null for none. */
+	private String respawnStepId = null;
 }

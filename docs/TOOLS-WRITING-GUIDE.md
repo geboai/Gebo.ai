@@ -97,9 +97,13 @@ Java `toString()`. Size results on that (section 6).
 
 A tool is **never mounted by being a bean**: something has to enable it by name.
 
-1. **A chat model's own tools.** A model configuration lists its tools in
-   `enabledFunctions` (`GBaseChatModelConfig`). `prepareCall` declares them on
-   every call of that model whose prompt requires tools.
+1. **A step of a chat pipeline.** The admin sets, in the "Chat pipeline
+   configurations" setup section, the tools of the chat model and of the service
+   model of each step, per pipeline (`GPipelineStepToolingConfig`). The executor
+   runs the step on clones of the models carrying them
+   (`IPipelineStepModelsService`); a step with none runs on the models as they are.
+   A configured chat model has no tools of its own, so a direct chat with a model
+   calls none. A call that must not use tools runs on `withoutTools()`.
 2. **An agent's tools.** An agent declares its tools by name; an agent with
    `subscribeAllTools` mounts every registered tool, except the ones in
    `ai.gebo.agents.tools.auto-mounting.excluded-tools` /
@@ -372,8 +376,9 @@ The software that makes a model call (an agent, a network, the harness, a
 service) can hand the call a **`GeboToolCalling`**: a per-call container built
 with `GeboToolCallingManagerFactory.builder()` and passed to the overloads of
 `IGConfigurableChatModel` that take it (`textResponse(..., toolCalling)`,
-`response`, `answer`, `structuredResponse`, `streamAnswer`, ...). Without it the
-call is the plain one described above. It carries:
+`response`, `answer`, `structuredResponse`, `streamAnswer`, ...). Inside a run
+of agents it is required at every layer (see below); the model's plain methods
+remain for a caller outside any run. It carries:
 
 - **Mandatory tools** (`mandatoryTool(...)`): declared on the call whatever the
   model configuration says, wrapped in `RunAsToolCallback` like every other
@@ -406,10 +411,11 @@ the one read.
 
 ### How it travels through a network of agents
 
-The container is an **explicit parameter** at every layer between the
-controlling software and the model, each with an overload taking a trailing
-`GeboToolCalling` (null is the plain run, and the old signatures delegate with
-null): `GChatEnvironmentRunRequest.toolCallingOfThisRun` and the runners
+The container is an **explicit, required parameter** at every layer between
+the controlling software and the model, the trailing `GeboToolCalling` of one
+signature with no form without it: a network given none refuses the run with an
+`AgentException`, and so do the runners. The entry point of a run is the one
+place that builds it: `GChatEnvironmentRunRequest.toolCallingOfThisRun` and the runners
 (`GChatEnvironmentNetworkRunner.run`, `GTextAgentsNetworkRunner.runNetwork` and
 `runAgent`), `IGAgentsNetworkService.executeNetwork`,
 `IGNetworkAgentService.onMessage`, `IGReactiveAgentService.execute` and the
@@ -442,8 +448,8 @@ each name themselves as the caller and carry the platform's loop limits
 (`gebo.tools.calling.*`, Spring's own when unset) and no listener. A pipeline
 step passes the request's container to its helper calls
 (`callLLMRepeatableFieldEntryOutput(..., toolCalling)`, `callLLMReactiveAnswer(...,
-toolCalling)`), branching on null so that a request made without one is the
-plain call. The services behind a request pass it on the same way: the LLM
+toolCalling)`); every request has one, built by its entry point. The services
+behind a request pass it on the same way: the LLM
 assisted retrieval and the ranker's irrelevance filter, the deep search data
 sources' query extraction, the documents search agents' planners, queries and
 rankings.
@@ -457,51 +463,70 @@ their entry: every model call of the platform is then made by someone who says
 who it is.
 
 **A tool that calls a model of its own** (a deep search's analysis) has no
-parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext)`
-gives it the container it runs in (null outside a governed call), to pass to the
-model it calls, so what the controlling software loaded reaches the nested call.
+parameter, only its tool context: `GeboToolCallingManagerFactory.nestedFrom(toolContext, toolName)`
+gives it the container it runs in, or one of its own (`tool:<tool name>`) when it
+runs outside a governed call, never null, to pass to the model it calls, so what
+the controlling software loaded reaches the nested call.
 The deep search tools do so: `AbstractDeepSearchTool` reads it and hands it through
 `DeepSearchToolAnalysis` to `DeepSearchAnalysis`, whose every model call (the partial
 analyses, the folds, the final one) is made with it; the deep search answering a
 chat hands the request's to the same analysis. The search tools that only rank what
 they found call no chat model: there is nothing to pass.
 
-A call made with a null container is the plain call, literally the old method of
-the model, so whatever stubs or overrides the plain one still answers.
+Below the agents layer the model keeps its plain methods for a caller outside
+any run (and whatever stubs or overrides them still answers); inside a run
+nothing reaches them, every call carrying the run's container. A test running a
+network or an agent builds one for it: `GeboToolCalling.builder().caller("test:<name>").build()`.
 
-A tool that must **end the call** (it asked the user something and the work
-waits for the answer; it waits for an external event) is declared with
-`ToolCallbackDeclarationUtil.returningDirect()` as its metadata
+A tool that must **end the call** because the work waits for something from
+outside the run (the user's answer to a question, an external event) is declared
+with `ToolCallbackDeclarationUtil.returningDirect()` as its metadata
 (`declare(function, name, description, paramType, returnType, returningDirect())`):
-the loop stops at it, its result is the call's answer, and
-`isStoppedByTool()` is `true`.
+the loop stops at it, its result is the call's answer, and `isStoppedByTool()`
+is `true`. It tells **what** the run waits for through `IGWaitExternalCondition`
+(`gebo.architecture.agents.abstraction.layer`), the contract every agent loads
+in the tool calling of each of its model calls (`GWaitExternalConditionSink`,
+one per call): the tool declares an `AgentSuspendedWaitingCondition` (the type
+of the value waited for, the statement, the model's explanation, whether it is
+mandatory, and what the model chose), and the agent, once the call ended, asks
+the network to suspend the run for each condition declared
+(`IGNetworkOfAgentsSuspensionHandler.enterSuspensionState`). The run is saved
+as a block and respawned when the conditions are resolved; the agent is then
+re-executed on the same message, told the answer first (see
+`ResolvedConditionText`). Every agent calling a model does this already
+(`AgentSuspensionTurn`): a waiting tool only needs mounting on the agent. A
+structured model call a waiting tool ended answers null: there is no result to parse.
+
+`AskUserSingleChoiceQuestionTool` and `AskUserMultipleChoiceQuestionTool` (library
+type `user-questions-and-clarifications`, mounted only on the agents naming it among
+their `libraryTypeIds`) are the tools of the common case: a question the user answers with one of the
+options the model chose, or with all those that apply. Each option has a label
+and a description, and the user may explain in their own words when the model
+allows it.
+A tool ending the call is not read by the model, so their descriptions tell it
+beforehand that its work stops and starts again from the same message with the
+answer; what it wants to keep it writes in the optional `notesForLater`, saved on
+the condition, given back with the answer and never shown to the user: the called
+functions of a response leave it out. Tell the model to write the values themselves:
+told only "write what you need", it notes that it has them.
 
 ```java
-// the controlling software
-AskUserSink sink = new AskUserSink();                 // its own implementation
-GeboToolCalling toolCalling = factory.builder()
-        .provide(IAskUser.class, sink)
-        .mandatoryTool(ToolCallbackDeclarationUtil.declare(this::askUser, "askUser",
-                "Ask the user a question the work cannot go on without",
-                AskUserParam.class, String.class, ToolCallbackDeclarationUtil.returningDirect()))
-        .caller("agent:" + agentId)
-        .build();
-String answer = model.textResponse(prompt, params, chatContext, toolCalling);
-if (toolCalling.isStoppedByTool()) {
-    String question = sink.question();                // what the tool stored
-    ...                                               // suspend, wait for the person
-}
-
 // the tool
-private String askUser(AskUserParam param, ToolContext toolContext) {
-    IAskUser askUser = GeboToolCallingManagerFactory.control(toolContext, IAskUser.class);
-    if (askUser == null) {
-        return "Asking the user is not available here: decide by yourself.";
+private String waitForApproval(ApprovalParam param, ToolContext toolContext) {
+    IGWaitExternalCondition wait = GeboToolCallingManagerFactory.control(toolContext,
+            IGWaitExternalCondition.class);
+    if (wait == null) {
+        return "Waiting is not available here: decide by yourself, and say what you assumed.";
     }
-    askUser.ask(param.getQuestion());
-    return "Question sent to the user: the work waits for the answer.";
+    wait.waitFor(new AgentSuspendedWaitingCondition<Approval, ApprovalRequest>(Approval.class,
+            param.getWhatToApprove(), param.getWhyNeeded(), null, true, ApprovalRequest.class,
+            param.toRequest()));
+    return "The approval was requested: the work stops here and goes on when it comes.";
 }
 ```
+
+Where nothing is loaded (a model call outside an agent), the tool answers the
+model that waiting is not available and the loop goes on as the model decides.
 
 The test `GeboToolCallingTest` (`gebo.architecture.llms.abstraction.layer`) shows
 every piece through a real `ChatClient` loop.

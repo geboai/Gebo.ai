@@ -1,9 +1,9 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolCollision, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map, Observable, of, take, tap } from "rxjs";
+import { catchError, debounceTime, forkJoin, map, merge, Observable, of, Subject, switchMap, take, tap } from "rxjs";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
@@ -62,6 +62,9 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     protected toolSources: ToolSourceInfo[] = [];
     /** The library types of tools and resources this installation manages: the ones an agent works with, whole. */
     protected libraryTypes: AIToolsAndResourcesLibraryType[] = [];
+    /** The tools of the libraries having the name of another tool this agent mounts, as the form stands. */
+    protected toolCollisions: LibraryToolCollision[] = [];
+    private readonly collisionsCheck = new Subject<void>();
     protected promptLoadingObservable: Observable<GPromptTemplateConfig[]> = of([]);
     protected defaultChatModel?: ConfigurationEntryGBaseChatModelConfig;
     protected isChooseChatModel: boolean = false;
@@ -117,6 +120,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 error: (error) => console.error("Cannot read the adapted network " + code, error)
             });
         });
+        // a library's tool takes the place of a mounted tool of its name: the administrator
+        // is told while editing what would be lost
+        merge(this.collisionsCheck, ...["agentServiceId", "libraryTypeIds", "enabledFunctions", "subscribeAllTools", "excludedToolSources"]
+            .map(name => this.formGroup.controls[name].valueChanges))
+            .pipe(debounceTime(300), switchMap(() => this.checkToolCollisions()))
+            .subscribe(collisions => this.toolCollisions = collisions);
         // the custom prompt is edited only while the agent has one: otherwise the editor
         // is disabled and the standard template is chosen
         this.formGroup.controls["customLoopPrompt"].valueChanges.subscribe(() => this.syncPromptControls());
@@ -136,6 +145,21 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
             this.userMessages=[systemAgentService];
         }
         super.onLoadedPersistentData(actualValue);
+        this.collisionsCheck.next();
+    }
+    /** The collisions of the agent as the form stands, saved or not; none with no library. */
+    private checkToolCollisions(): Observable<LibraryToolCollision[]> {
+        const agent: GAgentConfig = { ...this.entity, ...this.formGroup.getRawValue() };
+        if (!agent.libraryTypeIds?.length || !agent.agentServiceId) {
+            return of([]);
+        }
+        return this.agentsAdminService.checkAgentToolCollisions(agent).pipe(
+            tap(collisions => console.debug("[agents-admin] " + (collisions?.length || 0) + " tool collision(s)")),
+            map(collisions => collisions || []),
+            catchError(error => {
+                console.error("Cannot check the tool collisions of the agent", error);
+                return of([]);
+            }));
     }
     /**
      * Adds or removes the required validator for a form control

@@ -24,7 +24,7 @@ import java.util.List;
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class LLMCreateModelData {
   /**
@@ -73,9 +73,6 @@ public class LLMCreateModelData {
 
   @JsonProperty("setAsDefaultModel")
   private Boolean setAsDefaultModel = null;
-
-  @JsonProperty("enableAllFunctions")
-  private Boolean enableAllFunctions = null;
 
   @JsonProperty("secretId")
   private String secretId = null;
@@ -236,24 +233,6 @@ public class LLMCreateModelData {
 
   public void setSetAsDefaultModel(Boolean setAsDefaultModel) {
     this.setAsDefaultModel = setAsDefaultModel;
-  }
-
-  public LLMCreateModelData enableAllFunctions(Boolean enableAllFunctions) {
-    this.enableAllFunctions = enableAllFunctions;
-    return this;
-  }
-
-   /**
-   * Get enableAllFunctions
-   * @return enableAllFunctions
-  **/
-  @Schema(description = "")
-  public Boolean isEnableAllFunctions() {
-    return enableAllFunctions;
-  }
-
-  public void setEnableAllFunctions(Boolean enableAllFunctions) {
-    this.enableAllFunctions = enableAllFunctions;
   }
 
   public LLMCreateModelData secretId(String secretId) {
@@ -422,7 +401,6 @@ public class LLMCreateModelData {
         Objects.equals(this.doModelsLookup, llMCreateModelData.doModelsLookup) &&
         Objects.equals(this.serviceHandler, llMCreateModelData.serviceHandler) &&
         Objects.equals(this.setAsDefaultModel, llMCreateModelData.setAsDefaultModel) &&
-        Objects.equals(this.enableAllFunctions, llMCreateModelData.enableAllFunctions) &&
         Objects.equals(this.secretId, llMCreateModelData.secretId) &&
         Objects.equals(this.modelCode, llMCreateModelData.modelCode) &&
         Objects.equals(this.baseUrl, llMCreateModelData.baseUrl) &&
@@ -435,7 +413,7 @@ public class LLMCreateModelData {
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, enableAllFunctions, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking, temperature);
+    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking, temperature);
   }
 
 
@@ -448,7 +426,6 @@ public class LLMCreateModelData {
     sb.append("    doModelsLookup: ").append(toIndentedString(doModelsLookup)).append("\n");
     sb.append("    serviceHandler: ").append(toIndentedString(serviceHandler)).append("\n");
     sb.append("    setAsDefaultModel: ").append(toIndentedString(setAsDefaultModel)).append("\n");
-    sb.append("    enableAllFunctions: ").append(toIndentedString(enableAllFunctions)).append("\n");
     sb.append("    secretId: ").append(toIndentedString(secretId)).append("\n");
     sb.append("    modelCode: ").append(toIndentedString(modelCode)).append("\n");
     sb.append("    baseUrl: ").append(toIndentedString(baseUrl)).append("\n");

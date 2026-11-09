@@ -30,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.tests.TestChatModel;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
 import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * A network of agents, or a single agent, is served outside a chat as text in,
@@ -44,6 +45,8 @@ import io.modelcontextprotocol.server.McpServerFeatures.SyncToolSpecification;
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=DEFAULT_AGENTS_NETWORK" })
 public class AgentsNetworkAsMcpToolTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgentsNetworkAsMcpToolTest").build();
 
 	private static final String DEFAULT_NETWORK = "DEFAULT_AGENTS_NETWORK";
 	private static final String ANSWER_MARKER = "GEBO_TEST_TEXT_NETWORK_ANSWER";
@@ -90,7 +93,7 @@ public class AgentsNetworkAsMcpToolTest extends AbstractBaseTestLLmsIntegrationT
 		GAgentsNetwork network = networkDao.findByCode(DEFAULT_NETWORK);
 		assertNotNull(network, "The standard default network is installed");
 
-		String answer = runner.runNetwork(DEFAULT_NETWORK, "What is the capital of France?", null);
+		String answer = runner.runNetwork(DEFAULT_NETWORK, "What is the capital of France?", null, TOOL_CALLING);
 
 		assertNotNull(answer, "The network answers");
 		assertTrue(answer.contains(ANSWER_MARKER), "The answer is the text the network's writer produced: " + answer);
@@ -105,7 +108,8 @@ public class AgentsNetworkAsMcpToolTest extends AbstractBaseTestLLmsIntegrationT
 		assertNotNull(writerAgent, "The default network has a writer agent, found among " + network.getAgents().stream()
 				.map(participant -> participant.getAgentConfigCode()).toList());
 
-		String answer = runner.runAgent(writerAgent, "test-single-", "What is the capital of France?", null);
+		String answer = runner.runAgent(writerAgent, "test-single-", "What is the capital of France?", null,
+				TOOL_CALLING);
 
 		assertNotNull(answer, "The agent answers");
 		assertTrue(answer.contains(ANSWER_MARKER), "The answer is the text the writer produced: " + answer);

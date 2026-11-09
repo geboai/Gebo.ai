@@ -28,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class GeboChatControllerApi {
     private ApiClient apiClient;
@@ -144,11 +144,12 @@ public class GeboChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelCode  (required)
+     * @param pipelineCode  (optional)
      * @return GeboChatUserInfo
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws RestClientException {
-        return getChatModelUserInfoWithHttpInfo(modelCode).getBody();
+    public GeboChatUserInfo getChatModelUserInfo(String modelCode, String pipelineCode) throws RestClientException {
+        return getChatModelUserInfoWithHttpInfo(modelCode, pipelineCode).getBody();
     }
 
     /**
@@ -156,10 +157,11 @@ public class GeboChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelCode  (required)
+     * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;GeboChatUserInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<GeboChatUserInfo> getChatModelUserInfoWithHttpInfo(String modelCode) throws RestClientException {
+    public ResponseEntity<GeboChatUserInfo> getChatModelUserInfoWithHttpInfo(String modelCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
@@ -171,6 +173,7 @@ public class GeboChatControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "modelCode", modelCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"
@@ -189,11 +192,12 @@ public class GeboChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelCode  (required)
+     * @param pipelineCode  (optional)
      * @return ModelProviderCapabilities
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ModelProviderCapabilities getProviderCapabilities(String modelCode) throws RestClientException {
-        return getProviderCapabilitiesWithHttpInfo(modelCode).getBody();
+    public ModelProviderCapabilities getProviderCapabilities(String modelCode, String pipelineCode) throws RestClientException {
+        return getProviderCapabilitiesWithHttpInfo(modelCode, pipelineCode).getBody();
     }
 
     /**
@@ -201,10 +205,11 @@ public class GeboChatControllerApi {
      * 
      * <p><b>200</b> - OK
      * @param modelCode  (required)
+     * @param pipelineCode  (optional)
      * @return ResponseEntity&lt;ModelProviderCapabilities&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<ModelProviderCapabilities> getProviderCapabilitiesWithHttpInfo(String modelCode) throws RestClientException {
+    public ResponseEntity<ModelProviderCapabilities> getProviderCapabilitiesWithHttpInfo(String modelCode, String pipelineCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'modelCode' is set
         if (modelCode == null) {
@@ -216,6 +221,7 @@ public class GeboChatControllerApi {
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
         queryParams.putAll(apiClient.parameterToMultiValueMap(null, "modelCode", modelCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "application/json"

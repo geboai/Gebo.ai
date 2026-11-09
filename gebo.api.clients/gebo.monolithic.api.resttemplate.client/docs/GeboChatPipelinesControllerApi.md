@@ -1,16 +1,21 @@
 # GeboChatPipelinesControllerApi
 
-All URIs are relative to *http://localhost:12999*
+All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**executeChatPipeline**](GeboChatPipelinesControllerApi.md#executeChatPipeline) | **POST** /api/users/GeboChatPipelinesController/executeChatPipeline | 
 [**executeDefaultChatPipeline**](GeboChatPipelinesControllerApi.md#executeDefaultChatPipeline) | **POST** /api/users/GeboChatPipelinesController/executeDefaultChatPipeline | 
+[**executeDefaultRespawnAgenticChat**](GeboChatPipelinesControllerApi.md#executeDefaultRespawnAgenticChat) | **POST** /api/users/GeboChatPipelinesController/executeDefaultRespawnAgenticChat | 
+[**executeRespawnAgenticChat**](GeboChatPipelinesControllerApi.md#executeRespawnAgenticChat) | **POST** /api/users/GeboChatPipelinesController/executeRespawnAgenticChat | 
 [**getDefaultPersonalPipelinesChatMenu**](GeboChatPipelinesControllerApi.md#getDefaultPersonalPipelinesChatMenu) | **GET** /api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu | 
 [**getPersonalPipelinesChatMenu**](GeboChatPipelinesControllerApi.md#getPersonalPipelinesChatMenu) | **GET** /api/users/GeboChatPipelinesController/personalPipelinesChatMenu | 
+[**pendingNetworkOfAgentsSuspension**](GeboChatPipelinesControllerApi.md#pendingNetworkOfAgentsSuspension) | **GET** /api/users/GeboChatPipelinesController/pendingNetworkOfAgentsSuspension | 
 [**stopChatPipeline**](GeboChatPipelinesControllerApi.md#stopChatPipeline) | **GET** /api/users/GeboChatPipelinesController/stopChatPipeline | 
 [**streamChatPipeline**](GeboChatPipelinesControllerApi.md#streamChatPipeline) | **POST** /api/users/GeboChatPipelinesController/streamChatPipeline | 
 [**streamDefaultChatPipeline**](GeboChatPipelinesControllerApi.md#streamDefaultChatPipeline) | **POST** /api/users/GeboChatPipelinesController/streamDefaultChatPipeline | 
+[**streamDefaultRespawnAgenticChat**](GeboChatPipelinesControllerApi.md#streamDefaultRespawnAgenticChat) | **POST** /api/users/GeboChatPipelinesController/streamDefaultRespawnAgenticChat | 
+[**streamRespawnAgenticChat**](GeboChatPipelinesControllerApi.md#streamRespawnAgenticChat) | **POST** /api/users/GeboChatPipelinesController/streamRespawnAgenticChat | 
 
 <a name="executeChatPipeline"></a>
 # **executeChatPipeline**
@@ -86,6 +91,94 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
+
+### Return type
+
+[**GeboChatResponse**](GeboChatResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="executeDefaultRespawnAgenticChat"></a>
+# **executeDefaultRespawnAgenticChat**
+> GeboChatResponse executeDefaultRespawnAgenticChat(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
+try {
+    GeboChatResponse result = apiInstance.executeDefaultRespawnAgenticChat(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#executeDefaultRespawnAgenticChat");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
+
+### Return type
+
+[**GeboChatResponse**](GeboChatResponse.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="executeRespawnAgenticChat"></a>
+# **executeRespawnAgenticChat**
+> GeboChatResponse executeRespawnAgenticChat(body, pipelineCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
+String pipelineCode = "pipelineCode_example"; // String | 
+try {
+    GeboChatResponse result = apiInstance.executeRespawnAgenticChat(body, pipelineCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#executeRespawnAgenticChat");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 
@@ -178,6 +271,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;PipelineChatMenu&gt;**](PipelineChatMenu.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="pendingNetworkOfAgentsSuspension"></a>
+# **pendingNetworkOfAgentsSuspension**
+> NetworkOfAgentsSuspendedState pendingNetworkOfAgentsSuspension(userChatContextCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+String userChatContextCode = "userChatContextCode_example"; // String | 
+try {
+    NetworkOfAgentsSuspendedState result = apiInstance.pendingNetworkOfAgentsSuspension(userChatContextCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#pendingNetworkOfAgentsSuspension");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userChatContextCode** | **String**|  |
+
+### Return type
+
+[**NetworkOfAgentsSuspendedState**](NetworkOfAgentsSuspendedState.md)
 
 ### Authorization
 
@@ -304,6 +440,94 @@ try {
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
+
+### Return type
+
+[**List&lt;GeboChatMessageEnvelope&gt;**](GeboChatMessageEnvelope.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/event-stream
+
+<a name="streamDefaultRespawnAgenticChat"></a>
+# **streamDefaultRespawnAgenticChat**
+> List&lt;GeboChatMessageEnvelope&gt; streamDefaultRespawnAgenticChat(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
+try {
+    List<GeboChatMessageEnvelope> result = apiInstance.streamDefaultRespawnAgenticChat(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#streamDefaultRespawnAgenticChat");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
+
+### Return type
+
+[**List&lt;GeboChatMessageEnvelope&gt;**](GeboChatMessageEnvelope.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: text/event-stream
+
+<a name="streamRespawnAgenticChat"></a>
+# **streamRespawnAgenticChat**
+> List&lt;GeboChatMessageEnvelope&gt; streamRespawnAgenticChat(body, pipelineCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatPipelinesControllerApi;
+
+
+GeboChatPipelinesControllerApi apiInstance = new GeboChatPipelinesControllerApi();
+PipelineRequestBody body = new PipelineRequestBody(); // PipelineRequestBody | 
+String pipelineCode = "pipelineCode_example"; // String | 
+try {
+    List<GeboChatMessageEnvelope> result = apiInstance.streamRespawnAgenticChat(body, pipelineCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatPipelinesControllerApi#streamRespawnAgenticChat");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**PipelineRequestBody**](PipelineRequestBody.md)|  |
+ **pipelineCode** | **String**|  | [optional]
 
 ### Return type
 

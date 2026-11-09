@@ -44,15 +44,13 @@ class A2AChatEnvironmentRunnerTest {
 		ArgumentCaptor<ChatRunAttachments> attachments = ArgumentCaptor.forClass(ChatRunAttachments.class);
 		verify(runner).run(eq("the-network"), same(request), attachments.capture(), same(toolCalling), isNull());
 		assertTrue(attachments.getValue().isEmpty(), "nothing was sent along, nothing is attached");
-		verify(runner, never()).run(any(String.class), any(), any(ChatRunAttachments.class), any());
 	}
 
 	@Test
-	void aRunWithoutOneIsThePlainRun() throws Exception {
-		a2a.run("the-network", request, null, null);
+	void aRunWithoutOneIsHandedToTheRunnerWhichRefusesIt() throws Exception {
+		a2a.run("the-network", request, null, null, null);
 
-		verify(runner).run(eq("the-network"), same(request), any(ChatRunAttachments.class), isNull());
-		verify(runner, never()).run(any(String.class), any(), any(ChatRunAttachments.class), any(GeboToolCalling.class),
-				any());
+		// the runner is the one refusing a run without a container; the bridge always builds one
+		verify(runner).run(eq("the-network"), same(request), any(ChatRunAttachments.class), isNull(), isNull());
 	}
 }

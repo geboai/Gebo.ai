@@ -151,4 +151,27 @@ class ToolCallsListenerTest {
 		assertEquals(Map.of("p", "i"), agentContext.getPipelineInfos());
 		assertEquals(1, agentContext.getDocuments().size(), "documents are read live, not frozen");
 	}
+
+	private static List<String> shownInput(String toolInput) {
+		return ToolCallsListener
+				.toCalledFunction(new ToolCallsListener.ToolCallExecuted("ask", "asks", toolInput, "result"))
+				.getParamsDescription();
+	}
+
+	@Test
+	void theNotesTheModelWroteToItselfAreNotPartOfTheCallAsTheUserSeesIt() {
+		assertEquals(List.of("{\"question\":\"Which year?\",\"mandatory\":true}"),
+				shownInput("{\"question\":\"Which year?\",\"notesForLater\":\"the word is ZEBRA\",\"mandatory\":true}"));
+		assertEquals(List.of("{\"question\":\"Which year?\"}"),
+				shownInput("{\"question\":\"Which year?\",\"notesForLater\":null}"));
+	}
+
+	@Test
+	void anInputWithNoNotesIsShownAsItIs() {
+		assertEquals(List.of("{ \"question\" : \"Which year?\" }"), shownInput("{ \"question\" : \"Which year?\" }"));
+		assertEquals(List.of("{\"question\":\"what are notesForLater?\" }"),
+				shownInput("{\"question\":\"what are notesForLater?\" }"));
+		assertEquals(List.of("not json with notesForLater"), shownInput("not json with notesForLater"));
+		assertEquals(List.of(), shownInput(null));
+	}
 }

@@ -20,6 +20,7 @@ import ai.gebo.monolithic.api.client.model.GResponseDocumentRef;
 import ai.gebo.monolithic.api.client.model.GUserMessage;
 import ai.gebo.monolithic.api.client.model.GeboWorkingMemoryWindowOccupation;
 import ai.gebo.monolithic.api.client.model.LLMGeneratedResource;
+import ai.gebo.monolithic.api.client.model.NetworkOfAgentsSuspendedState;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -32,7 +33,7 @@ import java.util.Map;
  * GeboTemplatedChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class GeboTemplatedChatResponse {
   @JsonProperty("id")
@@ -88,6 +89,9 @@ public class GeboTemplatedChatResponse {
 
   @JsonProperty("deepSearchRequestId")
   private String deepSearchRequestId = null;
+
+  @JsonProperty("networkOfAgentsSuspendedState")
+  private NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState = null;
 
   public GeboTemplatedChatResponse id(String id) {
     this.id = id;
@@ -477,6 +481,24 @@ public class GeboTemplatedChatResponse {
     this.deepSearchRequestId = deepSearchRequestId;
   }
 
+  public GeboTemplatedChatResponse networkOfAgentsSuspendedState(NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState) {
+    this.networkOfAgentsSuspendedState = networkOfAgentsSuspendedState;
+    return this;
+  }
+
+   /**
+   * Get networkOfAgentsSuspendedState
+   * @return networkOfAgentsSuspendedState
+  **/
+  @Schema(description = "")
+  public NetworkOfAgentsSuspendedState getNetworkOfAgentsSuspendedState() {
+    return networkOfAgentsSuspendedState;
+  }
+
+  public void setNetworkOfAgentsSuspendedState(NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState) {
+    this.networkOfAgentsSuspendedState = networkOfAgentsSuspendedState;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -504,12 +526,13 @@ public class GeboTemplatedChatResponse {
         Objects.equals(this.generatedResources, geboTemplatedChatResponse.generatedResources) &&
         Objects.equals(this.pipelineRouterDecisionCode, geboTemplatedChatResponse.pipelineRouterDecisionCode) &&
         Objects.equals(this.pipelineParams, geboTemplatedChatResponse.pipelineParams) &&
-        Objects.equals(this.deepSearchRequestId, geboTemplatedChatResponse.deepSearchRequestId);
+        Objects.equals(this.deepSearchRequestId, geboTemplatedChatResponse.deepSearchRequestId) &&
+        Objects.equals(this.networkOfAgentsSuspendedState, geboTemplatedChatResponse.networkOfAgentsSuspendedState);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, networkOfAgentsSuspendedState);
   }
 
 
@@ -536,6 +559,7 @@ public class GeboTemplatedChatResponse {
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
     sb.append("    pipelineParams: ").append(toIndentedString(pipelineParams)).append("\n");
     sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
+    sb.append("    networkOfAgentsSuspendedState: ").append(toIndentedString(networkOfAgentsSuspendedState)).append("\n");
     sb.append("}");
     return sb.toString();
   }

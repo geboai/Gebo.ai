@@ -42,6 +42,7 @@ import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import ai.gebo.model.DocumentMetaInfos;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Verifies that the single agent of the agentic loop receives the chat history in
@@ -52,6 +53,8 @@ import ai.gebo.model.DocumentMetaInfos;
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=AGENTIC_LOOP_AGENTS_NETWORK" })
 public class AgenticLoopChatHistoryTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgenticLoopChatHistoryTest").build();
 	private static final String USER_QUESTION = "And which of those is the oldest one?";
 	private static final String PREVIOUS_QUESTION = "PREVIOUS_QUESTION_MARKER which cities did the Romans found?";
 	private static final String PREVIOUS_ANSWER = "PREVIOUS_ANSWER_MARKER London, Cologne and Vienna.";
@@ -106,7 +109,7 @@ public class AgenticLoopChatHistoryTest extends AbstractBaseTestLLmsIntegrationT
 	private List<String> runLoop(CSSConsolidatedChatHistory history, AIDocumentsSet chosenDocuments)
 			throws Exception {
 		IStreamingOutputChatPipelineService agentsPipeline = pipelineServices.stream()
-				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
+				.filter(s -> ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID.equals(s.getStepId())).findFirst()
 				.orElseThrow();
 		GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(USER_QUESTION);
@@ -125,7 +128,7 @@ public class AgenticLoopChatHistoryTest extends AbstractBaseTestLLmsIntegrationT
 		resources.setChathistory(history);
 		resources.setChatWithDocuments(chosenDocuments);
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192, resources,
-				new GeboChatResponse(), minimalChatContext, true);
+				new GeboChatResponse(), minimalChatContext, true, TOOL_CALLING);
 		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
 		ISinkUIEmitter emitter = new ISinkUIEmitter() {
 			@Override

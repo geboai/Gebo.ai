@@ -38,6 +38,7 @@ import { FileUploadControllerService } from './api/fileUploadController.service'
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
+import { GeboAdminChatPipelinesToolingControllerService } from './api/geboAdminChatPipelinesToolingController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
@@ -109,6 +110,7 @@ import { McpClientConfigControllerService } from './api/mcpClientConfigControlle
 import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
+import { NetworkOfAgentsConditionEventsControllerService } from './api/networkOfAgentsConditionEventsController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
@@ -191,6 +193,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FileUploadsControllerService,
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
+    GeboAdminChatPipelinesToolingControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,
@@ -262,6 +265,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     McpClientSystemsControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
+    NetworkOfAgentsConditionEventsControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,

@@ -223,7 +223,6 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
                 modifying: false,
                 chosenCode: preselect,
                 choices: this.libraryChoices(descriptor),
-                enableAllFunctions: false,
                 providers: this.providersFor(descriptor)
             };
             return decision;
@@ -372,8 +371,7 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
             // the default of its kind, which also overrides a previous default when modifying.
             setAsDefaultModel: isService ? false : true,
             secretId: this.secretId,
-            baseUrl: this.baseUrl,
-            enableAllFunctions: decision.descriptor.id === "CHAT" ? decision.enableAllFunctions === true : false
+            baseUrl: this.baseUrl
         };
     }
 

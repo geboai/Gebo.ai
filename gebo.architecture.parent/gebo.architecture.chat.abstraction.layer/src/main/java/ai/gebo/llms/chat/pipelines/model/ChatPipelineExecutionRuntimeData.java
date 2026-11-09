@@ -16,22 +16,21 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ChatPipelineExecutionRuntimeData {
-	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
-			LLMChatRequestResources requestResources, GeboChatResponse chatResponse,
-			MinimalChatContext minimalChatContext, boolean streamingOutput) {
-		this(configuration, contextWindowSize, requestResources, chatResponse, minimalChatContext, streamingOutput,
-				null);
-	}
-
 	/**
-	 * The same, with what the controlling software adds to every model call made for
-	 * the request (see {@link #getToolCalling()}).
+	 * The runtime data of a request, with what the controlling software adds to
+	 * every model call made for it (see {@link #getToolCalling()}): the entry point
+	 * of the request builds it, and a run without one is refused by the networks.
 	 */
 	public ChatPipelineExecutionRuntimeData(ChatPipelineConfiguration configuration, int contextWindowSize,
 			LLMChatRequestResources requestResources, GeboChatResponse chatResponse,
 			MinimalChatContext minimalChatContext, boolean streamingOutput, GeboToolCalling toolCalling) {
 		this(configuration, contextWindowSize, contextWindowSize, new ArrayList(), chatResponse, new ArrayList(),
 				streamingOutput, requestResources, minimalChatContext, toolCalling);
+	}
+
+	/** The code of the pipeline of this run; null for a run outside a pipeline. */
+	public String getPipelineCode() {
+		return configuration != null ? configuration.getCode() : null;
 	}
 
 	private final ChatPipelineConfiguration configuration;

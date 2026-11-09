@@ -60,7 +60,8 @@ export class GeboAIChatLibrariesPanelComponent implements OnChanges {
         this.loading = true;
         this.service.getChatLibraryInstance(this.userChatContextCode).subscribe({
             next: (held) => {
-                this.instances = held || [];
+                // a library with no resources has nothing to show: its tools are the agents' business
+                this.instances = (held || []).filter((instance) => (instance.resources?.length ?? 0) > 0);
                 console.debug("[chat-libraries] conversation " + this.userChatContextCode + " holds " + this.instances.length + " library instance(s)");
             },
             error: (e) => {

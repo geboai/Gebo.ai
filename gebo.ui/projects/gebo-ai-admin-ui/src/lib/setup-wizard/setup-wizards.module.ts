@@ -71,6 +71,9 @@ import { GeboAIGoogleSearchWizardComponent, GoogleSearcStatusService } from "./g
 import { GeboAIWebSearchWizardComponent, WebSearchStatusService } from "./web-search-wizard.component";
 import { GeboAIDeepSearchWizardComponent } from "./deep-search-wizard.component";
 import { GeboAIRagAutotuneWizardComponent, RagAutotuneStatusService } from "./rag-autotune-wizard.component";
+import { GeboAIChatPipelinesToolingWizardComponent } from "./chat-pipelines-tooling-wizard.component";
+import { TreeModule } from "primeng/tree";
+import { GeboAIChooseLLMFunctionsModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIEasyVendorConfigurationComponent } from "./llms-setup-components/easy-vendor-configuration.component";
 import { AgentsNetworksSetupWizardComponent, AgentsNetworksStatusService } from "./agents-networks-setup-wizard.component";
 import { McpServerWizardComponent, McpServerWizardStatusService } from "./mcp-server-wizard.component";
@@ -355,6 +358,20 @@ const ragAutotuneSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+/** The tools of the steps of the chat pipelines: optional, a step with none calls none. */
+const chatPipelinesToolingSetupSection: SetupWizardsSection = {
+    orderEntry: 15.5,
+    requredStepsIds: [],
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: AlwaysTrueStatusService,
+    label: "Chat pipeline configurations",
+    description: "The tools the models of each step of the chat pipelines can call",
+    wizardComponent: GeboAIChatPipelinesToolingWizardComponent,
+    wizardSectionId: "chatPipelinesToolingSetupSection",
+    groupId: KNOWLEDGE_CHAT_SETUP_GROUP_ID,
+    mandatory: false
+};
+
 const webSearchApiSetupSection: SetupWizardsSection = {
     orderEntry: 16,
     requredStepsIds: [],
@@ -488,8 +505,8 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  * Each wizard section is registered with the WIZARD_SECTION injection token.
  */
 @NgModule({
-    imports: [PopoverModule, CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule, MultiSelectModule, InputNumberModule, ChipModule, MessageModule],
-    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIEasyVendorConfigurationComponent, AgentsNetworksSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
+    imports: [TreeModule, GeboAIChooseLLMFunctionsModule, PopoverModule, CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule, MultiSelectModule, InputNumberModule, ChipModule, MessageModule],
+    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIChatPipelinesToolingWizardComponent, GeboAIEasyVendorConfigurationComponent, AgentsNetworksSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -542,6 +559,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: chatPipelinesToolingSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: webSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: deepSearchApiSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: agentsNetworksSetupSection, multi: true },

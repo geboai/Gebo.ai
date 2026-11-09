@@ -17,7 +17,6 @@ public class LLMCreateModelData {
 	@NotNull
 	private String serviceHandler = null;
 	private Boolean setAsDefaultModel = null;
-	private Boolean enableAllFunctions = null;
 	private String secretId = null;
 	@NotNull
 	private String modelCode = null;

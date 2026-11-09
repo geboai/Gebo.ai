@@ -25,6 +25,7 @@ mvn -f integration-tests/pom.xml test  # then this suite
 | Module | What it proves | Needs |
 | --- | --- | --- |
 | `full-setup-and-use-integration-tests` | The whole monolith end to end: installation setup → LLM setup → knowledge base → publication job → embedding → RAG threshold autotune → chatting through the default pipeline. **This is the CI smoke test.** | `FullSetupSecret` |
+| `condition-events-integration-tests` | A real model's question solved from outside: the agentic loop agent calls its question tool, the network suspends, the answer arrives through REST (generated Java client) and through the message broker (a test emitter of `ConditionEventPayload`), the network is respawned and the event ends APPLIED. Whether the model asks is its own decision: a model that never asks skips the test unless `ai.gebo.tests.conditionevents.strictModelBehaviour=true` | `FullSetupSecret` |
 | `vectorstores-integration-tests` | Advanced vector-store queries against Qdrant with real OpenAI embeddings | `OPENAI_API_KEY`, `OPENAI_USER` |
 | `atlassian-confluence-integration-tests` | Confluence cloud + on-premise ingestion and search | `CONFLUENCE_CLOUD_*`, `CONFLUENCE_ONPREMISE_*` |
 | `atlassian-jira-integration-tests` | Jira cloud ingestion | `JIRA_CLOUD_SPACE_URL`, `JIRA_CLOUD_USER`, `JIRA_CLOUD_API_KEY` |

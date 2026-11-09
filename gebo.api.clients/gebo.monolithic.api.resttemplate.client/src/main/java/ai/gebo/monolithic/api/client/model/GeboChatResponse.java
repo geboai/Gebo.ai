@@ -21,6 +21,7 @@ import ai.gebo.monolithic.api.client.model.GResponseDocumentRef;
 import ai.gebo.monolithic.api.client.model.GUserMessage;
 import ai.gebo.monolithic.api.client.model.GeboWorkingMemoryWindowOccupation;
 import ai.gebo.monolithic.api.client.model.LLMGeneratedResource;
+import ai.gebo.monolithic.api.client.model.NetworkOfAgentsSuspendedState;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -33,7 +34,7 @@ import java.util.Map;
  * GeboChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class GeboChatResponse {
   @JsonProperty("id")
@@ -89,6 +90,9 @@ public class GeboChatResponse {
 
   @JsonProperty("deepSearchRequestId")
   private String deepSearchRequestId = null;
+
+  @JsonProperty("networkOfAgentsSuspendedState")
+  private NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState = null;
 
   @JsonProperty("additionalContents")
   private List<AdditionalContent> additionalContents = null;
@@ -481,6 +485,24 @@ public class GeboChatResponse {
     this.deepSearchRequestId = deepSearchRequestId;
   }
 
+  public GeboChatResponse networkOfAgentsSuspendedState(NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState) {
+    this.networkOfAgentsSuspendedState = networkOfAgentsSuspendedState;
+    return this;
+  }
+
+   /**
+   * Get networkOfAgentsSuspendedState
+   * @return networkOfAgentsSuspendedState
+  **/
+  @Schema(description = "")
+  public NetworkOfAgentsSuspendedState getNetworkOfAgentsSuspendedState() {
+    return networkOfAgentsSuspendedState;
+  }
+
+  public void setNetworkOfAgentsSuspendedState(NetworkOfAgentsSuspendedState networkOfAgentsSuspendedState) {
+    this.networkOfAgentsSuspendedState = networkOfAgentsSuspendedState;
+  }
+
   public GeboChatResponse additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
     return this;
@@ -535,12 +557,13 @@ public class GeboChatResponse {
         Objects.equals(this.pipelineRouterDecisionCode, geboChatResponse.pipelineRouterDecisionCode) &&
         Objects.equals(this.pipelineParams, geboChatResponse.pipelineParams) &&
         Objects.equals(this.deepSearchRequestId, geboChatResponse.deepSearchRequestId) &&
+        Objects.equals(this.networkOfAgentsSuspendedState, geboChatResponse.networkOfAgentsSuspendedState) &&
         Objects.equals(this.additionalContents, geboChatResponse.additionalContents);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, additionalContents);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, networkOfAgentsSuspendedState, additionalContents);
   }
 
 
@@ -567,6 +590,7 @@ public class GeboChatResponse {
     sb.append("    pipelineRouterDecisionCode: ").append(toIndentedString(pipelineRouterDecisionCode)).append("\n");
     sb.append("    pipelineParams: ").append(toIndentedString(pipelineParams)).append("\n");
     sb.append("    deepSearchRequestId: ").append(toIndentedString(deepSearchRequestId)).append("\n");
+    sb.append("    networkOfAgentsSuspendedState: ").append(toIndentedString(networkOfAgentsSuspendedState)).append("\n");
     sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("}");
     return sb.toString();

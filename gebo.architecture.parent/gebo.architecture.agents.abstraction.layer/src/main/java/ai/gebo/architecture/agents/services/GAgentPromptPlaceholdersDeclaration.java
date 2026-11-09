@@ -30,6 +30,7 @@ public class GAgentPromptPlaceholdersDeclaration implements IGPromptPlaceholders
 				AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
 				AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
 				AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
-				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM);
+				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM);
 	}
 }

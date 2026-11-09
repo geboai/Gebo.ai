@@ -32,7 +32,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboChatControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -159,21 +159,26 @@ export class GeboChatControllerService {
      * 
      * 
      * @param modelCode 
+     * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChatModelUserInfo(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
-    public getChatModelUserInfo(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
-    public getChatModelUserInfo(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
-    public getChatModelUserInfo(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getChatModelUserInfo(modelCode: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatUserInfo>;
+    public getChatModelUserInfo(modelCode: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatUserInfo>>;
+    public getChatModelUserInfo(modelCode: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatUserInfo>>;
+    public getChatModelUserInfo(modelCode: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (modelCode === null || modelCode === undefined) {
             throw new Error('Required parameter modelCode was null or undefined when calling getChatModelUserInfo.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (modelCode !== undefined && modelCode !== null) {
             queryParameters = queryParameters.set('modelCode', <any>modelCode);
+        }
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
         }
 
         let headers = this.defaultHeaders;
@@ -206,21 +211,26 @@ export class GeboChatControllerService {
      * 
      * 
      * @param modelCode 
+     * @param pipelineCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getProviderCapabilities(modelCode: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
-    public getProviderCapabilities(modelCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
-    public getProviderCapabilities(modelCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
-    public getProviderCapabilities(modelCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public getProviderCapabilities(modelCode: string, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<ModelProviderCapabilities>;
+    public getProviderCapabilities(modelCode: string, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<ModelProviderCapabilities>>;
+    public getProviderCapabilities(modelCode: string, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<ModelProviderCapabilities>>;
+    public getProviderCapabilities(modelCode: string, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (modelCode === null || modelCode === undefined) {
             throw new Error('Required parameter modelCode was null or undefined when calling getProviderCapabilities.');
         }
 
+
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (modelCode !== undefined && modelCode !== null) {
             queryParameters = queryParameters.set('modelCode', <any>modelCode);
+        }
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
         }
 
         let headers = this.defaultHeaders;

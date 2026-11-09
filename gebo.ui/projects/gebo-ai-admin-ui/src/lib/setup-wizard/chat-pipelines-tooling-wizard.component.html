@@ -1,0 +1,59 @@
+<!--
+/**
+* This Source Code is subject to the terms of the
+* Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+* If a copy of the LICENCE was not distributed with this file, You can obtain one at
+* https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+* and https://mozilla.org/MPL/2.0/.
+* Copyright (c) 2025+ Gebo.ai
+*/
+-->
+
+<p-blockUI id="BlockUIButton" [target]="toolingPanel" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #toolingPanel header="Chat pipeline configurations">
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <p id="IntroText" gebo-ai-text>Choose a step of a chat pipeline and the tools its models can call in that pipeline. A step with no tools chosen calls none. The sidebar Chat runs in the open chat pipeline: its agents use the tools of their own configuration. A model's test chat runs outside the pipelines and calls no tools.</p>
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <p-tree id="PipelinesTree" [value]="nodes" selectionMode="single" [(selection)]="selectedNode"
+        (onNodeSelect)="onStepSelected()" styleClass="w-full"></p-tree>
+    </div>
+    <div class="col-12 md:col-8">
+      @if (selected; as current) {
+        <h4 class="mt-0">{{current.step.stepId}}</h4>
+        <form [formGroup]="formGroup">
+          <div class="mb-4">
+            @if (current.step.chatModelUseInfos?.modelUsed) {
+              <gebo-ai-field id="chatModelFunctions" label="Chat model tools" help="The tools the chat model of this step can call">
+                <div class="text-sm text-muted-color mb-2">{{current.step.chatModelUseInfos?.modelUseDescription}}</div>
+                <gebo-ai-choose-llm-functions-component formControlName="chatModelFunctions" [knowledgeBaseContext]="true"
+                  class="block w-full" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+              </gebo-ai-field>
+            } @else {
+              <small id="ChatModelNotUsed" gebo-ai-text>This step does not use the chat model</small>
+            }
+          </div>
+          <div class="mb-4">
+            @if (current.step.serviceModelUseInfos?.modelUsed) {
+              <gebo-ai-field id="serviceModelFunctions" label="Service model tools" help="The tools the service model of this step can call">
+                <div class="text-sm text-muted-color mb-2">{{current.step.serviceModelUseInfos?.modelUseDescription}}</div>
+                <gebo-ai-choose-llm-functions-component formControlName="serviceModelFunctions" [knowledgeBaseContext]="true"
+                  class="block w-full" gebo-ai-field-element></gebo-ai-choose-llm-functions-component>
+              </gebo-ai-field>
+            } @else {
+              <small id="ServiceModelNotUsed" gebo-ai-text>This step does not use the service model</small>
+            }
+          </div>
+          @if (current.step.chatModelUseInfos?.modelUsed || current.step.serviceModelUseInfos?.modelUsed) {
+            <p-button id="SaveStepToolingBtn" gebo-ai-label icon="pi pi-save" label="Save" [outlined]="true"
+              [disabled]="formGroup.pristine" (onClick)="save()"></p-button>
+          }
+        </form>
+      } @else {
+        <p id="ChooseAStepText" gebo-ai-text>Choose a step of a pipeline to set its tools</p>
+      }
+    </div>
+  </div>
+</p-panel>

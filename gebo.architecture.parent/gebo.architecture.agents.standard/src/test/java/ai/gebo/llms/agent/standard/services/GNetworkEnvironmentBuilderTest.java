@@ -20,14 +20,17 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResources;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 class GNetworkEnvironmentBuilderTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:GNetworkEnvironmentBuilderTest").build();
 
 	private static ChatPipelineExecutionRuntimeData runtimeData(GeboChatRequest request) {
 		LLMChatRequestResources resources = new LLMChatRequestResources();
 		resources.setCurrentRequest(request);
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192, resources, null,
-				null, true);
+				null, true, TOOL_CALLING);
 		runtimeData.getSharedEnvironment().put("OF_THE_PIPELINE", "kept");
 		return runtimeData;
 	}

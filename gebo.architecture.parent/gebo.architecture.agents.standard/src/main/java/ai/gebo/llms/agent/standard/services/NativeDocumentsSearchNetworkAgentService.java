@@ -92,32 +92,7 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		return capabilities;
 	}
 
-	@Override
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>());
-	}
-
-	@Override
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink, List<String> unavailableSources) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, unavailableSources,
-				null);
-	}
-
-	/** The same, the query's model call and the ranking made with the container when given. */
+	/** The query's model call and the ranking are made with the run's container. */
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
 			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
@@ -151,10 +126,13 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 				Map<String, Object> callParams = new HashMap<>(params);
 				callParams.putAll(nativeSearchWrapper.createCustomTemplateParamsMap(system,
 						catalogues != null ? catalogues : List.of()));
-				NativeSearchDataStructure queryObject = toolCalling != null
-						? callLLMStructuredReturn(agentModel, prompt, chatRequestContext, callParams, queryType,
-								toolCalling)
-						: callLLMStructuredReturn(agentModel, prompt, chatRequestContext, callParams, queryType);
+				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt, chatRequestContext,
+						callParams, queryType,
+								toolCalling);
+				if (toolCalling != null && toolCalling.isStoppedByTool()) {
+					// a tool ended the call: there is no query, and the agent waits
+					return List.of();
+				}
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<NATIVE_QUERY system=" + system.getCode() + ">");
 					LOGGER.trace(String.valueOf(queryObject));
@@ -188,8 +166,7 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		// they carry nestedSearchResult) so the report writer can expose them as chat-with-able.
 		publishChatWithDocumentRefs(results, session);
 		final List<Document> chunked = chunkToDocuments(results, notificationSink, agentModel, command, keywords);
-		return toolCalling != null ? maybeRank(chunked, command, notificationSink, toolCalling)
-				: maybeRank(chunked, command, notificationSink);
+		return maybeRank(chunked, command, notificationSink, toolCalling);
 	}
 
 }

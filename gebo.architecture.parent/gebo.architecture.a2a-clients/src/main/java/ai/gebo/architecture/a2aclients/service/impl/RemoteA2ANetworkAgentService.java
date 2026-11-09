@@ -23,6 +23,7 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGNetworkOfAgentsSuspensionHandler;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -125,17 +126,7 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<String, String> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<String>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<String, String> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 
 		String inputText = msg.getPayload() != null ? msg.getPayload() : "";
 		if (contextAgentPersona.isAllowedToNotifyUser() && notificationSink != null) {

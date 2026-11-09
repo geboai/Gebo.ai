@@ -28,7 +28,6 @@ export interface GOpenAIChatModelConfig {
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
-    enabledFunctions?: Array<string>;
     temperature?: number;
     forUses?: Array<GOpenAIChatModelConfig.ForUsesEnum>;
     features?: Array<GOpenAIChatModelConfig.FeaturesEnum>;

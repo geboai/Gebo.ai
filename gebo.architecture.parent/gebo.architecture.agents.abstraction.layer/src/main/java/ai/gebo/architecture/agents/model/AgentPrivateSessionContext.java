@@ -23,6 +23,18 @@ public final class AgentPrivateSessionContext<InputType, OutputType> {
 	@NotNull
 	String collaborationContextId;
 	private final Vector<AgentInteraction> interactions = new Vector<>();
+	/**
+	 * The conditions this agent waited for and that were solved, with its notes: they
+	 * are not turns, a turn being what counts the cycles of a coordinator, but they
+	 * stay known in every turn after the one they were told in.
+	 */
+	private final Vector<AgentSuspendedWaitingCondition<?, ?>> solvedConditions = new Vector<>();
+	/**
+	 * What the libraries held in the agent's present turn add to its prompt: set as
+	 * the turn begins, it is not memory and no suspension keeps it, a respawned agent
+	 * reclaims its libraries and gets it again.
+	 */
+	private volatile String additionalRules = "";
 
 	@AllArgsConstructor
 	@Getter
@@ -48,6 +60,31 @@ public final class AgentPrivateSessionContext<InputType, OutputType> {
 			LOGGER.trace("<PRIVATE_TURN_OUTPUT contributionCounter=" + contributionCounter + ">");
 			LOGGER.trace(String.valueOf(payload));
 			LOGGER.trace("</PRIVATE_TURN_OUTPUT>");
+		}
+	}
+
+	public String getAdditionalRules() {
+		return additionalRules;
+	}
+
+	public void setAdditionalRules(String additionalRules) {
+		this.additionalRules = additionalRules != null ? additionalRules : "";
+	}
+
+	/** Keeps the conditions given as solved; none given changes nothing. */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public synchronized void addSolvedConditions(Collection<? extends AgentSuspendedWaitingCondition> conditions) {
+		if (conditions == null) {
+			return;
+		}
+		for (AgentSuspendedWaitingCondition condition : conditions) {
+			if (condition != null) {
+				solvedConditions.add(condition);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("addSolvedConditions(...) privateContext:" + id + " now holds " + solvedConditions.size()
+					+ " solved condition(s)");
 		}
 	}
 

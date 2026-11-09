@@ -44,6 +44,7 @@ import ai.gebo.llms.chat.abstraction.layer.model.GShortModelInfo;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -75,11 +76,11 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
 			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber,
-			GeboToolCallingManagerFactory toolCallingFactory) {
+			GeboToolCallingManagerFactory toolCallingFactory, IPipelineStepModelsService stepModels) {
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
-				securityAuditLoggerService, agentsToolsDescriber, toolCallingFactory);
+				securityAuditLoggerService, agentsToolsDescriber, toolCallingFactory, stepModels);
 
 	}
 
@@ -196,16 +197,14 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 	 * @return the capabilities of the model provider
 	 */
 	@Override
-	public ModelProviderCapabilities getProviderCapabilities(String modelCode) {
+	public ModelProviderCapabilities getProviderCapabilities(String modelCode, String pipelineCode) {
 		IGConfigurableChatModel model = chatModelConfigurations.findByCode(modelCode);
 		if (model != null) {
-			GBaseChatModelConfig c = (GBaseChatModelConfig) model.getConfig();
-			List<String> functions = c.getEnabledFunctions();
 			boolean supportsTranscript = transcriptModelsDao.defaultHandler() != null;
 			boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
 			ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 					supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
-					callbacksRepoPattern.getEnabledToolsTree(functions));
+					pipelineCode != null ? pipelineToolsTree(pipelineCode) : List.of());
 			return cap;
 		}
 		return null;

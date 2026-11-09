@@ -43,6 +43,7 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManage
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -71,7 +72,7 @@ class CalledAnswerTest {
 						mock(IGKnowledgebaseVisibilityService.class), mock(IGChatSessionLifeCycleService.class),
 						mock(IGTextToSpeechModelRuntimeConfigurationDao.class),
 						mock(IGTranscriptModelRuntimeConfigurationDao.class), audit, null,
-						new GeboToolCallingManagerFactory())
+						new GeboToolCallingManagerFactory(), mock(IPipelineStepModelsService.class))
 						.defaultAnswer(Answers.CALLS_REAL_METHODS));
 	}
 

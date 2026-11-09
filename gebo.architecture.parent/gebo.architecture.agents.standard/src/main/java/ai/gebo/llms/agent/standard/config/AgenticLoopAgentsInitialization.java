@@ -28,6 +28,7 @@ import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServ
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
+import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
 
 /**
  * The single agent with tools working in a loop, as two networks the chats can be
@@ -83,6 +84,9 @@ public class AgenticLoopAgentsInitialization {
 		config.setAccessibleToAll(true);
 		config.setUseDefaultChatModel(true);
 		config.setSubscribeAllTools(true);
+		// the agent answering the user may ask the user a question the work waits for:
+		// the tools are mounted only on the agents that name their library
+		config.setLibraryTypeIds(List.of(UserQuestionsLibrarySource.TYPE_ID));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring the agentic loop agent config code:" + code + " service:" + serviceId
 					+ " on prompt use:" + config.getMainLoopPromptUseCode());

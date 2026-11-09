@@ -34,7 +34,6 @@ class ToolsResultsPromptLoadingTest {
 		reference.setDescription(use);
 		reference.setChatHistory(ContextContentRequired.REQUIRED);
 		reference.setContextDocuments(ContextContentRequired.REQUIRED);
-		reference.setToolsCalling(ContextContentRequired.REQUIRED);
 		reference.setSystemReference("/prompts-closing-test/system.txt");
 		reference.setUserReference("/prompts-closing-test/user.txt");
 		reference.setToolsResultsReference(toolsResults);

@@ -52,6 +52,9 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.chat.service.impl.GReactiveChatAgentsNetworkServiceFactoryImpl;
 import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkStreamingOutputChatPipelineService;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
+import ai.gebo.llms.agent.chat.service.impl.ReactiveChatAgentsNetworkRespawnStreamingOutputChatPipelineService;
+import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
 import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
 import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
@@ -144,6 +147,27 @@ public class StandardAgentsInitialization {
 		LOGGER.info(START_ROW);
 	}
 
+	/**
+	 * The step that respawns the suspended network of agents of a conversation with
+	 * the user's reaction: the default pipeline's respawner.
+	 */
+	@Bean
+	@Qualifier(IStreamingOutputChatPipelineService.DEFAULT_RESPAWN_PIPELINE_SERVICE)
+	public IStreamingOutputChatPipelineService defaultRespawnStreamingOutputPipelineService(
+			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
+			IGChatSessionLifeCycleService lifeCycleService, GNetworkOfAgentsSuspensionRepository suspensions,
+			NetworkOfAgentsSuspensionTransport suspensionTransport, GNetworkEnvironmentBuilder environmentBuilder,
+			GConversationAgentsSessionFactory conversationMemory) {
+		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+				.getFactory(IGReactiveChatAgentsNetworkService.class);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Wiring the respawn streaming output pipeline step on network service factory:"
+					+ (factory != null ? factory.getId() : null));
+		}
+		return new ReactiveChatAgentsNetworkRespawnStreamingOutputChatPipelineService(factory, lifeCycleService,
+				suspensions, suspensionTransport, environmentBuilder, conversationMemory);
+	}
+
 	@Bean
 	@Qualifier(IStreamingOutputChatPipelineService.DEFAULT_PIPELINE_SERVICE)
 	public IStreamingOutputChatPipelineService defaultStreamingOutputPipelineService(
@@ -199,6 +223,10 @@ public class StandardAgentsInitialization {
 		// external searchers).
 		internalKnowledgeBaseAgentConfig.setCustomLoopPrompt(SearchAgentPromptPatcher.withAgentPlaceholders(promptsDao
 				.findByPromptUse(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE)));
+		// the patched prompt is the one that runs; the code it comes from lets a copy of
+		// this configuration be saved by the agent editor, which requires it
+		internalKnowledgeBaseAgentConfig
+				.setMainLoopPromptUseCode(InternalKnowledgeBaseSearchNetworkAgentService.SEARCH_PLANNER_PROMPT_USE_CODE);
 		internalKnowledgeBaseAgentConfig.setUseChatModelWithUse(ChatModelsUses.INTERNAL_SERVICES);
 		internalKnowledgeBaseAgentConfig.setEnabledFunctions(List.of());
 		internalKnowledgeBaseAgentConfig.setSubscribeAllTools(false);
@@ -423,6 +451,8 @@ public class StandardAgentsInitialization {
 								? nativeSearch.getNativePromptTemplateUseCode()
 								: search.getQueriesGenerationPromptUseCode();
 						agentConfig.setCustomLoopPrompt(processSearchPrompt(searchPromptUseCode));
+						// the code it comes from: a copy is saved by the agent editor, which requires it
+						agentConfig.setMainLoopPromptUseCode(searchPromptUseCode);
 						agentConfig.setAccessibleToAll(true);
 						agentConfig.setAgentRoleCode(EVIDENCES_SEARCHER_AGENT);
 						agentConfig.setAgentServiceId(serviceId);

@@ -40,6 +40,7 @@ import org.mockito.InOrder;
 import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.architecture.agents.services.AgentException;
@@ -66,6 +67,8 @@ import reactor.core.publisher.Flux;
  * released - and a run that fails leaves the conversation free.
  */
 class GChatEnvironmentNetworkRunnerTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:GChatEnvironmentNetworkRunnerTest").build();
 	private IGChatSessionLifeCycleService lifeCycle;
 	private IGReactiveChatAgentsNetworkService service;
 	private IGConfigurableChatModel chatModel;
@@ -119,9 +122,11 @@ class GChatEnvironmentNetworkRunnerTest {
 		GeboChatResponse answered = new GeboChatResponse();
 		answered.setQueryResponse("Nothing new since yesterday.");
 		answered.setListedDocumentNames(List.of("the-report.pdf"));
-		when(service.executeNetwork(any(), any(), any())).thenReturn(new GeboChatMessageEnvelope(answered));
+		when(service.executeNetwork(any(), any(), any(), any()))
+				.thenReturn(NetworkOfAgentsExecutionResult.of(new GeboChatMessageEnvelope(answered)));
 
-		ChatEnvironmentRun run = runner.run(network, request, ChatRunAttachments.none(), null, null, null);
+		ChatEnvironmentRun run = runner.run(network, request, ChatRunAttachments.none(), null, null, TOOL_CALLING,
+				null);
 
 		assertSame(answered, run.getResponse(), "the caller gets the network's answer, as before");
 		assertEquals("Nothing new since yesterday.", response.getQueryResponse(),
@@ -136,9 +141,10 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void theConversationIsOpenedOrSharedBeforeAnythingReadsIt() throws Exception {
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
-		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).origin("HARNESS")
+		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.toolCallingOfThisRun(TOOL_CALLING).origin("HARNESS")
 				.sharedWithUsers(List.of("the-harness-account", "the-admin")).build());
 
 		ArgumentCaptor<GChatSessionOpeningOptions> options = ArgumentCaptor.forClass(GChatSessionOpeningOptions.class);
@@ -160,9 +166,10 @@ class GChatEnvironmentNetworkRunnerTest {
 					"the request carries the stored files when it is started, as a chat's does");
 			return resources;
 		});
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.toolCallingOfThisRun(TOOL_CALLING)
 				.attachments(new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(), List.of())).build());
 
 		verify(lifeCycle).startRequest(eq(request), eq(chatModel), any());
@@ -175,40 +182,41 @@ class GChatEnvironmentNetworkRunnerTest {
 		when(networks.findByCode("the-network")).thenReturn(network);
 		when(binder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networks);
 		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("a2a:server/skill").build();
-		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run("the-network", request, ChatRunAttachments.none(), toolCalling, null);
 
 		verify(service).executeNetwork(any(), eq("What is new?"), isNull(), same(toolCalling));
-		verify(service, never()).executeNetwork(any(), any(), any());
 		verify(lifeCycle).ensureChatSessionExists(request);
 		verify(resources, never()).setRunEnvironment(any());
 	}
 
 	@Test
-	void anExportedNetworkRunWithoutAToolCallingIsThePlainRun() throws Exception {
+	void anExportedNetworkRunWithoutAToolCallingIsRefused() throws Exception {
 		IAgentsNetworkDao networks = mock(IAgentsNetworkDao.class);
 		when(networks.findByCode("the-network")).thenReturn(network);
 		when(binder.getImplementationOf(IAgentsNetworkDao.class)).thenReturn(networks);
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
 
-		runner.run("the-network", request, ChatRunAttachments.none(), null, null);
+		assertThrows(AgentException.class,
+				() -> runner.run("the-network", request, ChatRunAttachments.none(), null, null));
+		assertThrows(AgentException.class,
+				() -> runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).build()));
 
-		verify(service).executeNetwork(any(), eq("What is new?"), isNull());
+		verify(service, never()).executeNetwork(any(), any(), any(), any());
 	}
 
 	@Test
 	void anExportedNetworkRunsAsItAlwaysHas() throws Exception {
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
-		runner.run(network, request, ChatRunAttachments.none(), null);
+		runner.run(network, request, ChatRunAttachments.none(), List.of(), Map.of(), TOOL_CALLING, null);
 
 		verify(lifeCycle).ensureChatSessionExists(request);
 		verify(lifeCycle, never()).ensureChatSessionExists(any(), any());
 		verify(lifeCycle, never()).getSessionAvailableKnowledgeBases(any());
 		verify(resources, never()).setAvailableKnowledgeBaseCodes(any());
 		verify(resources, never()).setRunEnvironment(any());
-		verify(service).executeNetwork(any(), eq("What is new?"), isNull());
+		verify(service).executeNetwork(any(), eq("What is new?"), isNull(), any());
 		assertNull(request.getRunOrigin(), "an exported network's request does not say where it comes from");
 		assertNull(request.getUserLanguage(), "nor is its language detected");
 	}
@@ -218,10 +226,11 @@ class GChatEnvironmentNetworkRunnerTest {
 		UserUploadedContent stored = new UserUploadedContent();
 		stored.setFileName("notes.txt");
 		when(uploadHandler.chatSessionUpload(eq("conversation-1"), anyList())).thenReturn(OperationStatus.of(List.of(stored)));
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(network, request,
-				new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(), List.of()), null);
+				new ChatRunAttachments(List.of(mock(MultipartFile.class)), List.of(),
+						List.of()), List.of(), Map.of(), TOOL_CALLING, null);
 
 		InOrder adding = inOrder(lifeCycle);
 		adding.verify(lifeCycle).addUploadedDocument(eq(request), eq(stored), eq(chatModel), any());
@@ -233,14 +242,15 @@ class GChatEnvironmentNetworkRunnerTest {
 		GKnowledgeBase kb = new GKnowledgeBase();
 		kb.setCode("kb-1");
 		when(lifeCycle.getSessionAvailableKnowledgeBases(request)).thenReturn(List.of(kb));
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
 		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.toolCallingOfThisRun(TOOL_CALLING)
 				.environmentOfThisRun(Map.of("OF_THE_CALLER", "yes")).build());
 
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<Map<String, Object>> environment = ArgumentCaptor.forClass(Map.class);
-		verify(service).executeNetwork(any(), eq("What is new?"), environment.capture());
+		verify(service).executeNetwork(any(), eq("What is new?"), environment.capture(), any());
 		assertEquals(List.of("kb-1"), environment.getValue().get(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE));
 		assertTrue(environment.getValue()
 				.get(StandardAgentsNetworkEnvironmentEntries.CHAT_RUNTIME_DATA) instanceof ChatPipelineExecutionRuntimeData,
@@ -252,9 +262,10 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void aTransientConversationIsDroppedWhenTheRunIsOverAndNothingOfItIsKept() throws Exception {
-		when(service.executeNetwork(any(), any(), any())).thenReturn(null);
+		when(service.executeNetwork(any(), any(), any(), any())).thenReturn(NetworkOfAgentsExecutionResult.of(null));
 
-		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).transientConversation(true)
+		runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.toolCallingOfThisRun(TOOL_CALLING).transientConversation(true)
 				.origin("MCP").build());
 
 		verify(lifeCycle).releaseRequest(request);
@@ -265,10 +276,11 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void aRunThatFailedReleasesItsRequestSavesNothingAndNamesItsConversation() throws Exception {
-		when(service.executeNetwork(any(), any(), any())).thenThrow(new AgentException("The model is down"));
+		when(service.executeNetwork(any(), any(), any(), any())).thenThrow(new AgentException("The model is down"));
 
 		GChatEnvironmentRunException failure = assertThrows(GChatEnvironmentRunException.class,
-				() -> runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request).build()));
+				() -> runner.run(GChatEnvironmentRunRequest.builder().network(network).request(request)
+				.toolCallingOfThisRun(TOOL_CALLING).build()));
 
 		assertEquals("conversation-1", failure.getChatContextCode());
 		verify(lifeCycle).releaseRequest(request);
@@ -279,10 +291,10 @@ class GChatEnvironmentNetworkRunnerTest {
 
 	@Test
 	void aRunOfAnExportedNetworkThatFailedReleasesItsRequestAndSavesNothing() throws Exception {
-		when(service.executeNetwork(any(), any(), any())).thenThrow(new AgentException("The model is down"));
+		when(service.executeNetwork(any(), any(), any(), any())).thenThrow(new AgentException("The model is down"));
 
 		assertThrows(AgentException.class,
-				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, null));
+				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, TOOL_CALLING, null));
 
 		verify(lifeCycle).releaseRequest(request);
 		verify(lifeCycle, never()).endRequest(any(), any());
@@ -297,9 +309,27 @@ class GChatEnvironmentNetworkRunnerTest {
 						"Another request is still running in the chat conversation-1"));
 
 		assertThrows(AgentException.class,
-				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, null));
+				() -> runner.run(network, request, ChatRunAttachments.none(), null, null, TOOL_CALLING, null));
 
 		verify(lifeCycle, never()).releaseRequest(any());
 		verify(lifeCycle, never()).endRequest(any(), any());
 	}
+	@Test
+	void aRunThatSuspendedTellsItOnTheResponseWithTheQuestionAsTheAnswer() throws Exception {
+		ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object> waiting = new ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "Which year?", "the report differs by year", null, true);
+		when(service.executeNetwork(any(), any(), any(), any()))
+				.thenReturn(NetworkOfAgentsExecutionResult.suspended("block-1", List.of(waiting)));
+
+		ChatEnvironmentRun run = runner.run(network, request, ChatRunAttachments.none(), null, null, TOOL_CALLING,
+				null);
+
+		assertTrue(run.isSuspended(), "the caller is told the network waits");
+		assertEquals("block-1", run.getSuspendedState().getNetworkOfAgentsBlockId());
+		assertEquals(1, run.getSuspendedState().getConditions().size());
+		assertEquals(waiting.getSuspendedConditionId(), run.getSuspendedState().getConditions().get(0).getConditionId());
+		assertTrue(run.getResponse().getQueryResponse().startsWith("Which year?"),
+				"a caller that only reads the answer reads the question");
+	}
+
 }

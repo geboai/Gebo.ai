@@ -113,20 +113,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 		return capabilities;
 	}
 
-	@Override
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>(),
-				null);
-	}
-
-	/** The same, the search planner's call and the ranking made with the container when given. */
+	/** The search planner's call and the ranking are made with the run's container. */
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
 			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
@@ -162,11 +149,13 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			// `prompt` is the runtime-patched planner prompt (agent network placeholders
 			// injected at config time), so it is used directly instead of re-fetching the
 			// raw planner template.
-			Map<String, List<String>> fields = toolCalling != null
-					? callLLMRepeatableFieldEntryOutput(agentModel, prompt, chatRequestContext, params,
-							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD), toolCalling)
-					: callLLMRepeatableFieldEntryOutput(agentModel, prompt, chatRequestContext, params,
-							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
+			Map<String, List<String>> fields = callLLMRepeatableFieldEntryOutput(agentModel, prompt,
+					chatRequestContext, params,
+							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD), toolCalling);
+			if (toolCalling != null && toolCalling.isStoppedByTool()) {
+				// a tool ended the planner's call: there are no queries, and the agent waits
+				return List.of();
+			}
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
 			if (semanticQueries.isEmpty() && fullTextQueries.isEmpty()) {
@@ -246,8 +235,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					index++;
 				}
 			}
-			return toolCalling != null ? maybeRank(documents, command, notificationSink, toolCalling)
-					: maybeRank(documents, command, notificationSink);
+			return maybeRank(documents, command, notificationSink, toolCalling);
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);
 		}

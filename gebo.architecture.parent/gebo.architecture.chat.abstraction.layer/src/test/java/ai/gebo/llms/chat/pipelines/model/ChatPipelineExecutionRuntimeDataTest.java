@@ -22,7 +22,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 
 /**
  * The runtime data of a request carries what the controlling software adds to
- * its model calls, when it was given one; made without, it is what it always was.
+ * its model calls, built by the entry point of the request.
  */
 class ChatPipelineExecutionRuntimeDataTest {
 
@@ -41,17 +41,5 @@ class ChatPipelineExecutionRuntimeDataTest {
 		assertEquals(8192, runtimeData.getContextWindowSize());
 		assertEquals(8192, runtimeData.getRemainingTokens());
 		assertTrue(runtimeData.isStreamingOutput());
-	}
-
-	@Test
-	void aRequestMadeWithoutOneIsWhatItAlwaysWas() {
-		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192,
-				new LLMChatRequestResources(), null, null, false);
-
-		assertNull(runtimeData.getToolCalling());
-		assertEquals(8192, runtimeData.getRemainingTokens());
-		assertTrue(runtimeData.getExecutedSteps().isEmpty());
-		assertTrue(runtimeData.getRoutingDecisions().isEmpty());
-		assertTrue(runtimeData.getSharedEnvironment().isEmpty());
 	}
 }

@@ -55,6 +55,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -95,12 +96,12 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
 			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber,
-			GeboToolCallingManagerFactory toolCallingFactory) {
+			GeboToolCallingManagerFactory toolCallingFactory, IPipelineStepModelsService stepModels) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
-				securityAuditLoggerService, agentsToolsDescriber, toolCallingFactory);
+				securityAuditLoggerService, agentsToolsDescriber, toolCallingFactory, stepModels);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -234,7 +235,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @throws LLMConfigException Thrown if an issue arises with LLM Configuration
 	 */
 	@Override
-	public ModelProviderCapabilities getProfileProviderModelCapabilities(String chatProfileCode)
+	public ModelProviderCapabilities getProfileProviderModelCapabilities(String chatProfileCode, String pipelineCode)
 			throws LLMConfigException {
 		// Find the chat profile by its code
 		Optional<GChatProfileConfiguration> profile = chatProfilesRepository.findById(chatProfileCode);
@@ -242,13 +243,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGChatProfileChatModel chatProfileModel = chatProfileModelsDao.getChatModel(profile.get());
 			if (chatProfileModel != null) {
 				IGConfigurableChatModel model = chatProfileModel.getChatModel();
-				GBaseChatModelConfig c = (GBaseChatModelConfig) model.getConfig();
-				List<String> functions = c.getEnabledFunctions();
 				boolean supportsTranscript = transcriptModelsDao.defaultHandler() != null;
 				boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
 				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 						supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
-						callbacksRepoPattern.getEnabledToolsTree(functions));
+						pipelineToolsTree(pipelineCode));
 				return cap;
 			}
 		}
@@ -266,7 +265,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @throws LLMConfigException       If there's a configuration error
 	 */
 	@Override
-	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode)
+	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode, String pipelineCode)
 			throws GeboPersistenceException, LLMConfigException {
 		// Retrieve chat profile based on code
 		Optional<GChatProfileConfiguration> profile = chatProfilesRepository.findById(chatProfileCode);
@@ -275,9 +274,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGConfigurableChatModel chatModel = runtime.getChatModel();
 			GBaseChatModelConfig config = (GBaseChatModelConfig) chatModel.getConfig();
 			GBaseChatModelChoice modelChoice = (GBaseChatModelChoice) config.getChoosedModel();
-			// the tools the chat model can call are its own: a profile chooses none
-			List<ToolCategoriesTree> functionsTree = callbacksRepoPattern
-					.getEnabledToolsTree(config.getEnabledFunctions());
+			// the tools are those of the steps of the pipeline: a profile chooses none
+			List<ToolCategoriesTree> functionsTree = pipelineToolsTree(pipelineCode);
 			List<String> kbCodes = runtime.getChatProfile().getKnowledgeBaseCodes();
 			List<GKnowledgeBase> list = knowledgeBaseVisibilityService.visiblesAndChildKnowledgebases(kbCodes);
 			// Builds a list of GBaseObject from visible knowledge bases

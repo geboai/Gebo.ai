@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -132,6 +134,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * ones when the configuration enables them.
 	 */
 	protected List<ToolCallback> additionalTools = List.of();
+	/**
+	 * The names of the tools this model declares: none on a configured model, those given
+	 * to a clone by {@link #cloneWithOptions(String, ChatModelConfigOptions)}.
+	 */
+	protected List<String> toolNames = List.of();
+	/** This model with no tools (see {@link #withoutTools()}), made the first time it is asked. */
+	private volatile IGConfigurableChatModel<ModelConfig> withoutToolsModel = null;
 	/**
 	 * The share of what a model call's messages and tools' definitions leave of the
 	 * context that its tools' results may take.
@@ -424,14 +433,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected List<ToolCallback> wrapToolsClosingResults(ReactiveIdentityUtil runAs,
 			ToolCallsListener toolCallListener, String toolsResultsClosing) {
-		List<String> toolNames = config.getEnabledFunctions();
-		if (toolNames == null)
-			toolNames = List.of();
 		List<ToolCallback> tools = this.toolCallbacksRepository.getTools(toolNames);
-
+		// a tool made for this use of the model - a library's, bound to the resources of
+		// this run - takes the place of a registered tool of its name
+		final Set<String> madeForThisUse = new HashSet<>();
+		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			madeForThisUse.add(toolCallback.getToolDefinition().name());
+		}
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+			if (!madeForThisUse.contains(toolCallback.getToolDefinition().name())) {
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+			}
 		}
 		// the tools made for this use of the model are not in the repository: without this
 		// they would be executable but never declared to the model
@@ -517,9 +530,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("Begin testCall() model code=" + getCode() + " model=" + safeGetModelCode() + " type="
 					+ (type != null ? type.getCode() : null) + " temperature="
 					+ (config != null ? config.getTemperature() : null) + " thinking="
-					+ (config != null ? config.getThinking() : null) + " tools="
-					+ (config != null && config.getEnabledFunctions() != null ? config.getEnabledFunctions().size()
-							: 0));
+					+ (config != null ? config.getThinking() : null) + " tools=" + toolNames.size());
 		}
 		final ChatResponse response;
 		try {
@@ -762,7 +773,6 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ (toolCalling != null ? " with " + toolCalling : ""));
 		}
 		long tokens = 0;
-		ChatClient client = getChatClient();
 		// the caller's parameters, plus what the providers fill of the placeholders the
 		// template names and the caller did not
 		final Map<String, Object> completed = promptContextProviders != null
@@ -794,19 +804,15 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			}
 		}
 
-		ChatClientRequestSpec reqObject = client.prompt();
+		ChatClientRequestSpec reqObject = getChatClient().prompt();
 
-		final boolean toolsCalling = prompt.getToolsCalling() == null
-				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
 		// the controlling software's recorder, when it gave one, records beside the
 		// request's: neither takes the place of the other
 		final ToolCallsListener toolCallListener = toolCalling != null && toolCalling.getListener() != null
 				? ToolCallsListener.both(toolCalling.getListener(), chatContext.getToolCallListener())
 				: chatContext.getToolCallListener();
-		final String toolsResultsClosing = toolsCalling ? createToolsResultsClosing(prompt, completed, chatContext)
-				: null;
-		List<ToolCallback> tools = toolsCalling ? wrapToolsClosingResults(runAs, toolCallListener, toolsResultsClosing)
-				: List.of();
+		final String toolsResultsClosing = createToolsResultsClosing(prompt, completed, chatContext);
+		List<ToolCallback> tools = wrapToolsClosingResults(runAs, toolCallListener, toolsResultsClosing);
 		if (toolCalling != null && !toolCalling.getMandatoryTools().isEmpty()) {
 			tools = withMandatoryTools(tools, toolCalling.getMandatoryTools(), runAs, toolCallListener,
 					toolsResultsClosing);
@@ -835,6 +841,74 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	@Override
+	public List<String> getToolNames() {
+		return toolNames;
+	}
+
+	@Override
+	public IGConfigurableChatModel<ModelConfig> withoutTools() throws LLMConfigException {
+		if (!hasTools()) {
+			return this;
+		}
+		if (withoutToolsModel == null) {
+			withoutToolsModel = cloneWithOptions("", new ChatModelConfigOptions(null, null, null, List.of(), List.of()));
+		}
+		return withoutToolsModel;
+	}
+
+	/** Whether this model declares any tool: from the repository or made for this use of it. */
+	private boolean hasTools() {
+		if (toolNames.isEmpty()) {
+			return false;
+		}
+		return !toolCallbacksRepository.getTools(toolNames).isEmpty() || (additionalTools != null
+				&& additionalTools.stream().anyMatch(tool -> toolNames.contains(tool.getToolDefinition().name())));
+	}
+
+	/**
+	 * The enabled tool names found neither among {@code resolved}, the tools the
+	 * repository gave for them, nor among the tools made for this use of the model. A
+	 * tool made for this use - a library's, bound to the resources of the run, or one
+	 * made for the execution, such as notifyUser - is not in the repository by design:
+	 * it is declared to every call (see {@link #wrapToolsClosingResults}), so it is not
+	 * missing.
+	 */
+	protected List<String> unresolvedToolNames(Collection<ToolCallback> resolved) {
+		final Set<String> found = new HashSet<String>();
+		for (ToolCallback tool : resolved != null ? resolved : List.<ToolCallback>of()) {
+			found.add(tool.getToolDefinition().name());
+		}
+		for (ToolCallback tool : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			found.add(tool.getToolDefinition().name());
+		}
+		final List<String> unresolved = new ArrayList<String>();
+		for (String name : toolNames) {
+			if (!found.contains(name)) {
+				unresolved.add(name);
+			}
+		}
+		return unresolved;
+	}
+
+	/**
+	 * What a provider tells when the repository resolved none of the enabled tools, so
+	 * that the model is configured with no tools of its own: a warning naming the tools
+	 * found nowhere, the ones the model will never declare; when every one is made for
+	 * this use of the model, only a debug line, since each call declares them.
+	 */
+	protected void logToolsNotRegistered(Logger logger, String modelCode, Collection<ToolCallback> resolved) {
+		final List<String> unresolved = unresolvedToolNames(resolved);
+		if (!unresolved.isEmpty()) {
+			logger.warn("Chat model " + modelCode + " enables " + toolNames.size() + " tool(s) but "
+					+ unresolved.size() + " of them resolved to no callback, neither registered nor made for this"
+					+ " use of it, so it is configured without them: " + unresolved);
+		} else if (logger.isDebugEnabled()) {
+			logger.debug("Chat model " + modelCode + " declares its " + toolNames.size()
+					+ " tool(s) on each call: none is registered, all of them are made for this use of it");
+		}
 	}
 
 	/**
@@ -1266,8 +1340,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
-		CallResponseSpec res = reqObject.getRequestSpec().call();
-		ResponseType data = res.entity(rt);
+		ResponseType data = toolCalling != null
+				? toolCalling.parsedUnlessStopped(() -> reqObject.getRequestSpec().call().entity(rt))
+				: reqObject.getRequestSpec().call().entity(rt);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ") " + "[session:" + chatContext.getSessionID()
@@ -1302,8 +1377,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ "]");
 		}
 		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
-		CallResponseSpec res = reqObject.getRequestSpec().call();
-		ResponseType data = res.entity(outputConverter);
+		ResponseType data = toolCalling != null
+				? toolCalling.parsedUnlessStopped(() -> reqObject.getRequestSpec().call().entity(outputConverter))
+				: reqObject.getRequestSpec().call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ",..) " + "[session:" + chatContext.getSessionID()
@@ -1367,8 +1443,6 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			String asString = mapper.writeValueAsString(config);
 			ModelConfig modelConfigClone = (ModelConfig) mapper.readValue(asString.getBytes(), config.getClass());
 			modelConfigClone.setCode(codePrefix + modelConfigClone.getCode());
-			modelConfigClone.setEnabledFunctions(
-					configOptions.getToolsName() != null ? configOptions.getToolsName() : List.of());
 			if (configOptions.getTemperature() != null) {
 				modelConfigClone.setTemperature(configOptions.getTemperature());
 			}
@@ -1382,6 +1456,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			if (handler instanceof GAbstractConfigurableChatModel clone) {
 				// the clone fills its prompts as this model does
 				clone.promptContextProviders = this.promptContextProviders;
+				clone.toolNames = configOptions.getToolsName() != null ? List.copyOf(configOptions.getToolsName())
+						: List.of();
 				if (configOptions.getAdditionalTools() != null) {
 					clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
 				}

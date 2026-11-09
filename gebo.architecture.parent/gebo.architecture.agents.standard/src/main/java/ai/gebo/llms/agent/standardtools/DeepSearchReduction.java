@@ -22,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
@@ -113,29 +114,10 @@ public final class DeepSearchReduction {
 	}
 
 	/**
-	 * Analyses the fragments against the question batch by batch and reduces the
-	 * partial analyses into one, as the deep search tools do.
-	 *
-	 * @param support   the deep search tools' collaborators (the analysis, the models)
-	 * @param label     names the caller in the logs
-	 * @param question  what the fragments are analysed against: the agent's command
-	 * @param depth     sizes the analysis; BROAD when null
-	 * @param fragments the fragments found by the agent's searches
-	 * @param context   the request the agent runs for: its id and the user's language
-	 * @param chatModel writes the final analysis; the default chat model when null
-	 * @param runAs     the identity the analysis runs with; a new one when null
-	 * @param notifier  tells the user the progress of the analysis; none when null
-	 */
-	public static Outcome reduce(DeepSearchToolsSupport support, String label, String question, Depth depth,
-			List<Document> fragments, IChatRequestContext context, IGConfigurableChatModel chatModel,
-			ReactiveIdentityUtil runAs, IGProgressNotifier notifier) {
-		return reduce(support, label, question, depth, fragments, context, chatModel, runAs, notifier, null);
-	}
-
-	/**
-	 * The same, the analysis made with what the controlling software adds to the model
-	 * calls of the agent (see {@link GeboToolCalling}); null for nothing, which is the
-	 * analysis as it always has been.
+	 * Reduces the fragments found by a search agent to one analysis at the depth
+	 * asked, telling what was read and what the analysis could not cover; the
+	 * analysis is made with what the controlling software adds to the model calls of
+	 * the agent (see {@link GeboToolCalling}).
 	 */
 	public static Outcome reduce(DeepSearchToolsSupport support, String label, String question, Depth depth,
 			List<Document> fragments, IChatRequestContext context, IGConfigurableChatModel chatModel,
@@ -148,7 +130,14 @@ public final class DeepSearchReduction {
 			return Outcome.none(0);
 		}
 		final IGChatModelRuntimeConfigurationDao chatModelsDao = support.chatModelsDao();
-		final IGConfigurableChatModel finalModel = chatModel != null ? chatModel : chatModelsDao.defaultHandler();
+		final IGConfigurableChatModel finalModel;
+		try {
+			// the analysis reads the fragments given: tools have nothing to add
+			finalModel = chatModel != null ? chatModel.withoutTools() : chatModelsDao.defaultHandler();
+		} catch (LLMConfigException e) {
+			LOGGER.error(label + " deep search reduce: the model cannot run without its tools", e);
+			return Outcome.none(found);
+		}
 		final IGConfigurableChatModel serviceModel = chatModelsDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		if (finalModel == null || serviceModel == null) {
@@ -176,12 +165,10 @@ public final class DeepSearchReduction {
 		final DeepSearchAnalysisOutcome analysisOutcome = new DeepSearchAnalysisOutcome();
 		final ReactiveIdentityUtil identity = runAs != null ? runAs : ReactiveIdentityUtil.create();
 		final IGProgressNotifier progress = notifier != null ? notifier : IGProgressNotifier.NONE;
-		final Flux<String> analysed = toolCalling != null
-				? support.analysis().analyze(Flux.fromIterable(fragments), analysisContext, identity, deliverable,
+		final Flux<String> analysed = support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
+				identity, deliverable,
 						completenessNote, finalModel, serviceModel, discardedFragmentIds, progress, analysisOutcome,
-						toolCalling)
-				: support.analysis().analyze(Flux.fromIterable(fragments), analysisContext, identity, deliverable,
-						completenessNote, finalModel, serviceModel, discardedFragmentIds, progress, analysisOutcome);
+						toolCalling);
 		final String analysis = analysed.reduce(new StringBuilder(), StringBuilder::append)
 				.map(StringBuilder::toString).block(AbstractDeepSearchTool.DEEP_SEARCH_TIMEOUT);
 		// the fragments the analysis stopped before were never read: not its sources

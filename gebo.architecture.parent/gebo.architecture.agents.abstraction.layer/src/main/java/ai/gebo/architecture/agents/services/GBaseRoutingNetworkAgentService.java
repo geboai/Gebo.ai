@@ -196,18 +196,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) routing agent id:" + getId() + " persona:"
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
@@ -215,12 +204,15 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		}
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callsListener = agentToolCallsListener(chatRequestContext);
-		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callsListener);
+		// the libraries the agent works with are reclaimed from the conversation as it enters
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, config);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(libraries.context(), callsListener);
 		final IGConfigurableChatModel agentModel = getAgentModel(config, callsListener,
-				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
-		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
-				false);
+		GPromptTemplateConfig prompt = promptOfTheTurn(
+				resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(), false), libraries,
+				mySessionContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing agent id:" + getId() + " resolved model:"
 					+ (agentModel != null ? agentModel.getCode() : null) + " role:"
@@ -247,8 +239,13 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</ROUTING_AGENT_INPUT>");
 		}
+		// What a tool of this call declares the run must wait for: read once the call
+		// ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Routing agent " + getId(), toolCalling, suspensionHandler,
+				contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, turn.toldInput(msg.getPayload()), agentsDao, actualContributionNr, tokenBudget);
 		final boolean formatDeclared = isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Routing prompt declares the " + AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM
@@ -283,8 +280,12 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Requesting the routing plan from the agent model, routable peers:" + typesMap.size());
 		}
-		Map<String, Object> populated = (Map) (toolCalling != null ? agentModel.structuredResponse(prompt, params, agentContext, LinkedHashMap.class, toolCalling)
-				: agentModel.structuredResponse(prompt, params, agentContext, LinkedHashMap.class));
+		Map<String, Object> populated = (Map) agentModel.structuredResponse(prompt, params, agentContext,
+				LinkedHashMap.class, callToolCalling);
+		// no plan to read: the agent routes when it is re-executed on this message
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
+			return List.of();
+		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<ROUTING_PLAN agent=" + getId() + ">");
 			LOGGER.trace(String.valueOf(populated));
@@ -352,6 +353,11 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 				}
 
 			}
+		}
+		if (toBeScheduled.isEmpty()) {
+			LOGGER.warn("Routing agent id:" + getId() + " session:" + session.getId() + " gave no usable command: its plan"
+					+ " has the entries " + (populated != null ? populated.keySet() : null) + " and it can route to "
+					+ toCoordinate + ", so nothing it planned is dispatched on this cycle");
 		}
 		List<AgentsExchangeMessage<?>> out = new ArrayList<>();
 		TreeMap<Integer, List<TargetAgentEnvelope<?>>> scheduled = ScheduleTargetAgentEnvelope

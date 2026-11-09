@@ -10,15 +10,23 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
+import jakarta.validation.constraints.NotNull;
 import reactor.core.publisher.Flux;
 
 public interface IChatPipelinesExecutor {
 
-	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request, LinkedHashMap<String, Object> environment,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException, GeboChatException;
+	public Flux<GeboChatMessageEnvelope> streamingExecute(GeboChatRequest request,
+			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String pipelineCode) throws ChatPipelineException, IOException,
+			LLMConfigException, GeboChatSessionLifecycleException, GeboChatException;
 
 	public GeboChatResponse execute(GeboChatRequest request, LinkedHashMap<String, Object> environment,
 			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String pipelineCode)
-			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException, GeboChatException;
+			throws ChatPipelineException, IOException, LLMConfigException, GeboChatSessionLifecycleException,
+			GeboChatException;
+
+	public Flux<GeboChatMessageEnvelope> streamingRespawnAgenticChat(@NotNull GeboChatRequest request,
+			LinkedHashMap<String, Object> environment, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, String pipelineCode) throws ChatPipelineException, IOException,
+			LLMConfigException, GeboChatSessionLifecycleException, GeboChatException;
 }

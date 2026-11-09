@@ -100,10 +100,15 @@ public class GeboAdminChatProfilesConfigurationController {
 	}
 
 	/**
-	 * Deletes a chat profile configuration from the database
+	 * Deletes a chat profile configuration from the database, refused while a
+	 * conversation runs with it (its {@code chatProfileCode} refers to the profile):
+	 * the same check the admin UI asks before offering the delete, so a caller
+	 * going straight to the endpoint cannot leave conversations on a missing
+	 * profile.
 	 * 
 	 * @param configuration The chat profile configuration to delete
-	 * @throws GeboPersistenceException If there's an error during persistence
+	 * @throws GeboPersistenceException If a conversation refers to the profile, or
+	 *                                  there's an error during persistence
 	 */
 	@PostMapping(value = "deleteChatProfile", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteChatProfile(@RequestBody GChatProfileConfiguration configuration)
@@ -112,7 +117,7 @@ public class GeboAdminChatProfilesConfigurationController {
 		ConfigurationAuditSupport.auditedVoid(securityAuditLoggerService, event,
 				SecurityAuditTaxonomy.EventType.KNOWLEDGE_CONFIGURATION, SecurityAuditTaxonomy.Action.CHAT_PROFILE_DELETE,
 				SecurityAuditTaxonomy.ResourceType.CHAT_PROFILE, configuration != null ? configuration.getCode() : null,
-				null, () -> persistenceManager.delete(configuration));
+				null, () -> persistenceManager.delete(configuration, true));
 	}
 
 	/**

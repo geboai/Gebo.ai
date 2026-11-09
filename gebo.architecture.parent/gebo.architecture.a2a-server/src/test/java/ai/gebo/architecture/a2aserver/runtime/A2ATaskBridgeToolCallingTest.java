@@ -65,7 +65,6 @@ class A2ATaskBridgeToolCallingTest {
 
 		ArgumentCaptor<GeboToolCalling> toolCalling = ArgumentCaptor.forClass(GeboToolCalling.class);
 		verify(runner).runNetwork(eq("the-network"), eq("hi"), isNull(), toolCalling.capture());
-		verify(runner, never()).runNetwork(any(String.class), any(), any());
 		assertEquals("a2a:sales/ask", toolCalling.getValue().getCaller());
 		assertNull(toolCalling.getValue().getListener());
 	}

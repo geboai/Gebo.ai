@@ -1,11 +1,16 @@
 package ai.gebo.architecture.agents.services;
 
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory.AdapterWithFlux;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -26,15 +31,15 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 			IAgentRoleDao rolesDao, IGeboThreadManager threadManager, GAgentsNetwork network,
 			INotificationSink notificationSink, Class<InputType> inputType, Class<OutputType> outputType,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
-			AdapterWithFlux<?, OutputType> adapterWithFlux) {
+			GNetworkOfAgentsSuspensionRepository suspensions, AdapterWithFlux<?, OutputType> adapterWithFlux) {
 		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
-				runAs, agentsDao);
+				runAs, agentsDao, suspensions);
 		this.adapterWithFlux = adapterWithFlux;
 
 	}
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
+	public NetworkOfAgentsExecutionResult<OutputType> executeNetwork(IChatRequestContext chatRequestContext, InputType input,
 			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) reactive output agents network service, inputType:"
@@ -45,6 +50,26 @@ public abstract class GAbstractReactiveOutputAgentsNetworkService<InputType, Out
 		} finally {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Completing reactive output sink after executeNetwork(...)");
+			}
+			this.adapterWithFlux.getSink().tryEmitComplete();
+		}
+	}
+
+	/** The respawn completes the output flux as a run does, whatever its outcome. */
+	@Override
+	public NetworkOfAgentsExecutionResult<OutputType> respawnNetworkExecution(IChatRequestContext chatRequestContext,
+			GNetworkOfAgentsSuspension suspension, List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions,
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin respawnNetworkExecution(...) reactive output agents network service, suspension:"
+					+ (suspension != null ? suspension.getCode() : null));
+		}
+		try {
+			return super.respawnNetworkExecution(chatRequestContext, suspension, resolvedConditions, environment,
+					toolCalling);
+		} finally {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Completing reactive output sink after respawnNetworkExecution(...)");
 			}
 			this.adapterWithFlux.getSink().tryEmitComplete();
 		}

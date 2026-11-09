@@ -263,6 +263,11 @@
         <ng-container *ngTemplateOutlet="aboveInputArea; context: areaContext"></ng-container>
       </div>
     }
+    <!-- The questions of a suspended network of agents, answered to respawn it -->
+    @if (pendingSuspension) {
+      <gebo-ai-chat-suspension-answer [state]="pendingSuspension" [disabled]="chatStreaming"
+        (answer)="answerSuspension($event)" (skip)="skipSuspension()"></gebo-ai-chat-suspension-answer>
+    }
     <gebo-ai-chat-input-shell [interactions]="interactions" [formGroup]="formGroup" [ragsystem]="ragsystem"
       [disableFilesBrowsers]="disableFilesBrowsers"
       [hasExternalChatWithDocs]="chosenExternalRefs.length > 0"

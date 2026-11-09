@@ -112,8 +112,8 @@ public class BedrockChatModelConfigurationSupportService
 			if (maxGeneratedTokens != null) {
 				builder.maxTokens(maxGeneratedTokens);
 			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				List<ToolCallback> functions = functionsRepo.getTools(config.getEnabledFunctions());
+			if (!toolNames.isEmpty()) {
+				List<ToolCallback> functions = functionsRepo.getTools(toolNames);
 				// The condition above tests the tool names that were REQUESTED. getTools filters
 				// the callbacks actually available by those names, so it can return fewer - or
 				// none at all, when the source that exports them failed. Configuring the model
@@ -122,10 +122,7 @@ public class BedrockChatModelConfigurationSupportService
 				if (functions != null && !functions.isEmpty()) {
 					builder.toolCallbacks(functions);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ config.getEnabledFunctions().size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + config.getEnabledFunctions());
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 			BedrockChatOptions options = builder.build();

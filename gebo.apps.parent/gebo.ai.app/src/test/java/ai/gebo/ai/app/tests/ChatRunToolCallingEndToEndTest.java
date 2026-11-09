@@ -12,7 +12,6 @@ package ai.gebo.ai.app.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
@@ -51,7 +50,7 @@ import reactor.core.publisher.Flux;
  * The whole chain at once: a chat request's tool calling, built as the pipelines
  * executor builds it, reaches every model call a real network of agents makes for
  * it - the coordinator's and the writer's - through the network step, the network
- * service, the agents and the model, and a request made without one runs plain.
+ * service, the agents and the model.
  */
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=DEFAULT_AGENTS_NETWORK" })
@@ -122,7 +121,7 @@ public class ChatRunToolCallingEndToEndTest extends AbstractBaseTestLLmsIntegrat
 
 	private IStreamingOutputChatPipelineService agentsPipeline() {
 		return pipelineServices.stream()
-				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
+				.filter(s -> ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID.equals(s.getStepId())).findFirst()
 				.orElseThrow(() -> new IllegalStateException(
 						"Agents-network pipeline service not present; is ai.gebo.agents.standard.enabled=true?"));
 	}
@@ -205,24 +204,5 @@ public class ChatRunToolCallingEndToEndTest extends AbstractBaseTestLLmsIntegrat
 					"model call " + (call + 1) + " names the chat as its caller");
 		}
 		assertTrue(toolCalling.getCalls() >= 1, "the container records the calls made with it");
-	}
-
-	@Test
-	public void aRequestWithoutAToolCallingRunsTheNetworkPlain() throws Exception {
-		try {
-			aRequestWithoutAToolCallingRunsPlain();
-		} finally {
-			removeSession();
-		}
-	}
-
-	private void aRequestWithoutAToolCallingRunsPlain() throws Exception {
-		final List<GeboChatMessageEnvelope> all = run(runtimeOf(null));
-
-		assertFalse(all.isEmpty(), "the network emits its answer");
-		assertTrue(seenByTheModel.size() >= 2, "the coordinator and the writer both called the model");
-		for (GeboToolCalling seen : seenByTheModel) {
-			assertNull(seen, "a plain request puts no tool calling in the model's tool context");
-		}
 	}
 }

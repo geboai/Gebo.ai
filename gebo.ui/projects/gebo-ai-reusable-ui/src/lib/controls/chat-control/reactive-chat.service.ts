@@ -81,5 +81,16 @@ export class ReactiveRagChatService extends GeboAIBaseStreamingService{
         this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
     }
 
-    
+    /**
+     * Respawns the suspended network of agents of the request's conversation with the
+     * reaction the request carries, streaming the run as the agentic chat does.
+     */
+    streamRespawnAgenticChat(request: AgenticChatRequestBody, pipelineCode: string | undefined, onMessage: (msg: IGeboChatMessage | string) => void, onError?: (err: any) => void, onComplete?: () => void): void {
+        let apiUrl: string = this.basePath + "/api/users/GeboChatPipelinesController/streamRespawnAgenticChat";
+        if (pipelineCode !== undefined && pipelineCode !== null && ("" + pipelineCode).trim() !== "") {
+            apiUrl += "?pipelineCode=" + encodeURIComponent(pipelineCode);
+        }
+        this.internalStreamChat(apiUrl, request, onMessage, onError, onComplete);
+    }
+
 }

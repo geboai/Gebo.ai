@@ -46,6 +46,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * A network that asks to remember across the turns of a conversation
@@ -63,6 +64,8 @@ import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 @TestPropertySource(properties = { "ai.gebo.agents.standard.enabled=true",
 		"ai.gebo.agents.standard.default-chat-network-of-agents=DEFAULT_AGENTS_NETWORK" })
 public class NetworkMemoryAcrossTurnsTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:NetworkMemoryAcrossTurnsTest").build();
 	private static final String SHIPPED_NETWORK = "DEFAULT_AGENTS_NETWORK";
 	private static final String REMEMBERING_NETWORK = "NETWORK_MEMORY_TEST_NETWORK";
 	private static final String FIRST_QUESTION = "What is the capital of France?";
@@ -122,7 +125,7 @@ public class NetworkMemoryAcrossTurnsTest extends AbstractBaseTestLLmsIntegratio
 	private List<String> runTurn(String sessionCode, String question) throws Exception {
 		controllerPrompts.clear();
 		IStreamingOutputChatPipelineService agentsPipeline = pipelineServices.stream()
-				.filter(s -> s instanceof ReactiveChatAgentsNetworkStreamingOutputChatPipelineService).findFirst()
+				.filter(s -> ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.SERVICE_ID.equals(s.getStepId())).findFirst()
 				.orElseThrow();
 		GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(question);
@@ -133,7 +136,7 @@ public class NetworkMemoryAcrossTurnsTest extends AbstractBaseTestLLmsIntegratio
 		resources.setCurrentRequest(request);
 		resources.setChathistory(new CSSConsolidatedChatHistory());
 		ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null, 8192, resources,
-				new GeboChatResponse(), minimalChatContext, true);
+				new GeboChatResponse(), minimalChatContext, true, TOOL_CALLING);
 		IGConfigurableChatModel model = chatModelRuntimeDao.findByCode(DEFAULT_TEST_CHAT_MODEL_CODE);
 		ISinkUIEmitter emitter = new ISinkUIEmitter() {
 			@Override

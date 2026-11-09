@@ -15,7 +15,6 @@ public class SystemInitializationLLMConfiguration {
 	@Data
 	public static class ChatModelConfiguration {
 		private String modelCode = null;
-		private boolean toolsEnabled = true;
 		private boolean defaultModel = true;
 		private Integer contextLength = null;
 		private Double temperature = null;

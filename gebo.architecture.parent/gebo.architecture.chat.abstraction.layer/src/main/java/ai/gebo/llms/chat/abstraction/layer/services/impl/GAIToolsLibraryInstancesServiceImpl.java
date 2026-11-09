@@ -12,11 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.AIResource;
@@ -202,6 +204,69 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 			LOGGER.trace("</LIBRARIES>");
 		}
 		return described;
+	}
+
+	@Override
+	public List<ToolCallback> toolsOf(Map<String, AIToolsAndResourcesLibraryInstance> instances) {
+		final List<ToolCallback> tools = new ArrayList<>();
+		if (instances == null || instances.isEmpty()) {
+			return tools;
+		}
+		final Map<String, Managed> managed = managed();
+		final Map<String, String> libraryOfTool = new LinkedHashMap<>();
+		for (Map.Entry<String, AIToolsAndResourcesLibraryInstance> entry : instances.entrySet()) {
+			final Managed library = managed.get(entry.getKey());
+			if (library == null || entry.getValue() == null) {
+				LOGGER.warn("No tools from library type:" + entry.getKey() + ": "
+						+ (library == null ? "this installation does not have it" : "there is no instance of it"));
+				continue;
+			}
+			List<ToolCallback> callbacks = null;
+			try {
+				callbacks = library.source().getToolCallbacks(entry.getValue());
+			} catch (RuntimeException unreadable) {
+				LOGGER.error("The tools of instance:" + entry.getValue().getId() + " of library type:" + entry.getKey()
+						+ " could not be read: they are left out", unreadable);
+			}
+			for (ToolCallback callback : callbacks != null ? callbacks : List.<ToolCallback>of()) {
+				if (callback == null || callback.getToolDefinition() == null) {
+					continue;
+				}
+				final String name = callback.getToolDefinition().name();
+				final String first = libraryOfTool.putIfAbsent(name, entry.getKey());
+				if (first == null) {
+					tools.add(callback);
+				} else if (!first.equals(entry.getKey())) {
+					LOGGER.error("Tool name collision: library type:" + entry.getKey() + " declares the tool:" + name
+							+ " that library type:" + first + " declares too: the one of " + first + " is used");
+				}
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("toolsOf(...) " + instances.size() + " instance(s) -> tools:" + libraryOfTool.keySet());
+		}
+		return tools;
+	}
+
+	@Override
+	public List<AIToolsAndResourcesLibraryType> typesOf(Collection<String> libraryTypeIds) {
+		final List<AIToolsAndResourcesLibraryType> types = new ArrayList<>();
+		if (libraryTypeIds == null || libraryTypeIds.isEmpty()) {
+			return types;
+		}
+		final Map<String, Managed> managed = managed();
+		for (String typeId : new LinkedHashSet<>(libraryTypeIds)) {
+			if (typeId == null || typeId.isBlank()) {
+				continue;
+			}
+			final Managed library = managed.get(typeId);
+			if (library == null) {
+				LOGGER.warn("Library type:" + typeId + " is named but this installation does not have it");
+				continue;
+			}
+			types.add(library.type());
+		}
+		return types;
 	}
 
 	@Override

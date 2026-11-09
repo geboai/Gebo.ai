@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkServiceFactory;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
@@ -50,6 +51,9 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 				.getImplementationOf(IGAgentServiceRuntimeDao.class);
 		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		IAgentRoleDao agentRoleDao = runtimeBinder.getImplementationOf(IAgentRoleDao.class);
+		// where the suspended runs of the network are kept
+		GNetworkOfAgentsSuspensionRepository suspensions = runtimeBinder
+				.getImplementationOf(GNetworkOfAgentsSuspensionRepository.class);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin createAgentsNetworkService(...) factory:" + REACTIVE_CHAT_AGENTS_NETWORK + " network:"
 					+ (network != null ? network.getCode() : null) + " runtime agents:"
@@ -61,7 +65,7 @@ public class GReactiveChatAgentsNetworkServiceFactoryImpl extends
 		}
 		IGReactiveChatAgentsNetworkService service = new GReactiveChatAgentsNetworkService(agentServiceRuntimeDao,
 				agentRoleDao, threadManager, network, notificationSink, inputType, outputType, runAs,
-				IGAgentsNetworkRuntimeDao.of(agentsCache), adapter);
+				IGAgentsNetworkRuntimeDao.of(agentsCache), suspensions, adapter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End createAgentsNetworkService(...) built service id:" + service.getId());
 		}

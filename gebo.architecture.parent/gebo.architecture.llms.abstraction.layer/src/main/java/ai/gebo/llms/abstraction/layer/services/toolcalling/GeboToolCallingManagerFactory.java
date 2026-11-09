@@ -98,13 +98,17 @@ public class GeboToolCallingManagerFactory {
 		return IToolCallingControlsProvider.from(toolContext).get(contract);
 	}
 
+	/** The caller of a tool that runs outside a governed call: {@code tool:<tool name>}. */
+	public static final String TOOL_CALLER_PREFIX = "tool:";
+
 	/**
-	 * The container of the call a tool runs in, for the tool to pass on to a model it
-	 * calls of its own (a deep search's analysis, a service's call): what the
-	 * controlling software loaded reaches the nested call too. Null outside a call
-	 * made with a {@link GeboToolCalling}: the nested call is then the plain one.
+	 * The container a tool makes its own model calls with: the one of the call it
+	 * runs in, found in its tool context, so that what the controlling software
+	 * loaded reaches the nested calls too; or, when the tool runs outside a governed
+	 * call, one of its own naming the tool as the caller. Never null.
 	 */
-	public static GeboToolCalling nestedFrom(ToolContext toolContext) {
-		return GeboToolCalling.from(toolContext);
+	public static GeboToolCalling nestedFrom(ToolContext toolContext, String toolName) {
+		final GeboToolCalling nested = GeboToolCalling.from(toolContext);
+		return nested != null ? nested : GeboToolCalling.builder().caller(TOOL_CALLER_PREFIX + toolName).build();
 	}
 }

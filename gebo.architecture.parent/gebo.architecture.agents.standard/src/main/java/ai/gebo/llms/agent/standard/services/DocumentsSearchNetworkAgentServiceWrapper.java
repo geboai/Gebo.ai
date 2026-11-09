@@ -88,32 +88,7 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 		return capabilities;
 	}
 
-	@Override
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>());
-	}
-
-	@Override
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink, List<String> unavailableSources) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, unavailableSources,
-				null);
-	}
-
-	/** The same, the query's model call and the ranking made with the container when given. */
+	/** The query's model call and the ranking are made with the run's container. */
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
 			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
@@ -135,11 +110,9 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 			// LLM-assisted query extraction using the wrapped service's queries-generation
 			// prompt, runtime-patched with the agent network placeholders at config time
 			// and passed in as `prompt`, fed with the agent placeholder params.
-			DeepSearchDataSourceExtractedSearchQueries extracted = toolCalling != null
-					? callLLMStructuredReturn(agentModel, prompt, chatRequestContext, params,
-							DeepSearchDataSourceExtractedSearchQueries.class, toolCalling)
-					: callLLMStructuredReturn(agentModel, prompt, chatRequestContext, params,
-							DeepSearchDataSourceExtractedSearchQueries.class);
+			DeepSearchDataSourceExtractedSearchQueries extracted = callLLMStructuredReturn(agentModel, prompt,
+					chatRequestContext, params,
+							DeepSearchDataSourceExtractedSearchQueries.class, toolCalling);
 			if (extracted != null && extracted.getSearchQuery() != null) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Query extraction produced " + extracted.getSearchQuery().size() + " quer(ies)");
@@ -190,8 +163,7 @@ public class DocumentsSearchNetworkAgentServiceWrapper extends GAbstractExternal
 		publishChatWithDocumentRefs(results, session);
 		final List<Document> chunked = chunkToDocuments(results, notificationSink, agentModel, command,
 				matchingKeywords);
-		return toolCalling != null ? maybeRank(chunked, command, notificationSink, toolCalling)
-				: maybeRank(chunked, command, notificationSink);
+		return maybeRank(chunked, command, notificationSink, toolCalling);
 	}
 
 }

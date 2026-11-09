@@ -32,6 +32,7 @@ import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.chat.abstraction.layer.model.AgentToolsInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -93,6 +94,39 @@ class ChatAgentsToolsDescriberImplTest {
 		assertEquals("searcherService", info.getAgentServiceId());
 		assertEquals("SELECTED", info.getMountMode());
 		assertEquals(List.of(tree), info.getTools());
+	}
+
+	@Test
+	void theToolsOfALibraryAreShownUnderTheirCategoryAndNotAskedToTheRegistry() {
+		when(defaults.isAgenticChatNetworksEnabled()).thenReturn(true);
+		GAgentsNetwork network = new GAgentsNetwork();
+		network.setCode("MY_NETWORK");
+		AgentNetworkParticipant participant = new AgentNetworkParticipant();
+		participant.setAgentConfigCode("coderAgent");
+		network.setAgents(List.of(participant));
+		when(defaults.resolveChatNetwork(PipelineType.PURE_CHAT_PIPELINE, null)).thenReturn(network);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("coderAgent");
+		config.setAgentServiceId("coderService");
+		when(configs.findByCode("coderAgent")).thenReturn(config);
+		IGGenericAgentService service = mock(IGGenericAgentService.class);
+		when(services.findByCode("coderService")).thenReturn(service);
+		AgentMountedTools mounted = new AgentMountedTools();
+		mounted.getTools().add(new AgentMountedTools.MountedTool("actualDateTime", "...", "time", "Time"));
+		mounted.getTools().add(new AgentMountedTools.MountedTool("readFile", "Reads a file",
+				IGAIToolsLibraryInstancesService.LIBRARY_CATEGORY.getCode(), "Libraries"));
+		when(service.getMountedTools(config)).thenReturn(mounted);
+		ToolCategoriesTree tree = new ToolCategoriesTree();
+		when(tools.getEnabledToolsTree(eq(List.of("actualDateTime")))).thenReturn(List.of(tree));
+
+		List<AgentToolsInfo> infos = describer.describeAgentsTools(null);
+
+		assertEquals(2, infos.get(0).getTools().size());
+		assertEquals(tree, infos.get(0).getTools().get(0));
+		ToolCategoriesTree libraries = infos.get(0).getTools().get(1);
+		assertEquals(IGAIToolsLibraryInstancesService.LIBRARY_CATEGORY, libraries.getCategory());
+		assertEquals("readFile", libraries.getToolsReference().get(0).getName());
+		assertEquals("Reads a file", libraries.getToolsReference().get(0).getDescription());
 	}
 
 	@Test

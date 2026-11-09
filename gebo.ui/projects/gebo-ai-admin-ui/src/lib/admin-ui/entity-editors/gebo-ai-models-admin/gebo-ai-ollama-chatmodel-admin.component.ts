@@ -72,7 +72,6 @@ export class GeboAIOllamaChatModelAdminComponent extends BaseEntityEditingCompon
         accessibleGroups: new FormControl(), 
         accessibleUsers: new FormControl(), 
         accessibleToAll: new FormControl(),
-        enabledFunctions: new FormControl(),
         defaultModelPrompt:new FormControl(),
         forUses:new FormControl(),
         thinking: new FormControl(),

@@ -15,6 +15,6 @@ import { MCPClientConfig } from './mCPClientConfig';
 export interface OperationStatusMCPClientConfig { 
     result?: MCPClientConfig;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

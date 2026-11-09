@@ -15,10 +15,12 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
+import ai.gebo.architecture.agents.services.AgentSuspensionTurn;
 import ai.gebo.architecture.agents.services.GAbstractGenericalNetworkAgentService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGNetworkOfAgentsSuspensionHandler;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -100,18 +102,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
-			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) tool-calling agent id:" + getId() + " persona:"
 					+ (contextAgentPersona != null ? contextAgentPersona.getAgentContextualName() : null)
@@ -125,13 +116,16 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = notifyingToolCallsListener(contextAgentPersona, notificationSink,
 				chatRequestContext != null ? chatRequestContext.getToolCallListener() : null);
-		final IChatRequestContext agentContext = IChatRequestContext.forAgent(chatRequestContext, callBacksListener);
+		// the libraries the agent works with are reclaimed from the conversation as it enters
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, config);
+		final IChatRequestContext agentContext = IChatRequestContext.forAgent(libraries.context(), callBacksListener);
 		IGConfigurableChatModel agentModel = getAgentModel(config, callBacksListener,
-				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs);
+				contextAgentPersona.isAllowedToNotifyUser() ? notificationSink : null, runAs, libraries.tools());
 
 		GAgentRole agentRole = this.agentRoleDao.findByCode(config.getAgentRoleCode());
-		GPromptTemplateConfig prompt = resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(),
-				false);
+		GPromptTemplateConfig prompt = promptOfTheTurn(
+				resolvePrompt(config.getCustomLoopPrompt(), config.getMainLoopPromptUseCode(), false), libraries,
+				mySessionContext);
 		int tokenBudget = agentTokenBudget(agentModel, prompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Tool-calling agent id:" + getId() + " agentRole:"
@@ -144,8 +138,14 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</TOOL_CALLING_AGENT_INPUT>");
 		}
+		// What a tool of this call declares the run must wait for: read once the call
+		// ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Tool-calling agent " + getId(), toolCalling,
+				suspensionHandler, contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
+		final Object input = turn.toldInput(msg.getPayload());
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
-				mySessionContext, msg.getPayload(), agentsDao, actualContributionNr, tokenBudget);
+				mySessionContext, input, agentsDao, actualContributionNr, tokenBudget);
 
 		// the tools' results pile up in this model call: they may take what the agent's
 		// budget leaves after its placeholders
@@ -157,8 +157,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Requesting textResponse from tool-calling agent model id:" + getId());
 			}
-			output = (OutputType) (toolCalling != null ? agentModel.textResponse(prompt, params, callContext, toolCalling)
-				: agentModel.textResponse(prompt, params, callContext));
+			output = (OutputType) agentModel.textResponse(prompt, params, callContext, callToolCalling);
 		} else {
 			if (isPlaceholderDeclared(prompt, AgentPromptTemplateParams.FORMAT_TEMPLATE_PARAM)) {
 				BeanOutputConverter<OutputType> converter = new BeanOutputConverter<>(outputType);
@@ -168,10 +167,14 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 				LOGGER.debug("Requesting structuredResponse from tool-calling agent model id:" + getId()
 						+ " targetType:" + outputType.getName());
 			}
-			output = (OutputType) (toolCalling != null ? agentModel.structuredResponse(prompt, params, callContext, outputType, toolCalling)
-				: agentModel.structuredResponse(prompt, params, callContext, outputType));
+			output = (OutputType) agentModel.structuredResponse(prompt, params, callContext, outputType,
+					callToolCalling);
 		}
 
+		// the model's output, if any, is the tool's word that the work waits
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
+			return List.of();
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End onMessage(...) tool-calling agent id:" + getId() + " produced output:" + (output != null)
 					+ " toolCallsExecuted:"

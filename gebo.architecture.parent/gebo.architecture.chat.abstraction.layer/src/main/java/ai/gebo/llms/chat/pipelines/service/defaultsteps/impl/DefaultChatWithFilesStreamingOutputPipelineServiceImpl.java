@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.io.IOException;
 import java.util.List;
@@ -46,6 +47,16 @@ public class DefaultChatWithFilesStreamingOutputPipelineServiceImpl implements I
 	@Override
 	public StepExecutorType getExecutorType() {
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.usedFor("Answers from the files given to the chat.");
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Analyses, batch by batch, files too large for a single call.");
 	}
 
 	@Override

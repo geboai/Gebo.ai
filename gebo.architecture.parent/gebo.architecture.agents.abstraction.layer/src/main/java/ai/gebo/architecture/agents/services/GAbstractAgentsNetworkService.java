@@ -1,8 +1,13 @@
 package ai.gebo.architecture.agents.services;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
@@ -14,12 +19,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentProducedSessionContribution;
+import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
 import ai.gebo.architecture.agents.model.AgentsSessionCreationContext;
+import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.AgentPrivateState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.AgentRuntimeState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.ExchangeMessageRecord;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.FrozenDeliveries;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.PrivateInteraction;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedContribution;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -37,7 +57,16 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private static final String NETWORK_INPUT_NODE_DOES_NOT_SUPPORT_A_MATCHING_TYPE = "Network input node does not support a matching type ";
 	private static final String NO_INPUT_NODE_CONFIGURED_IN_AGENTS_NETWORK = "No input node configured in agents network";
 	private static final String NO_AGENTS_CONFIGURED = "No agents configured";
+	private static final String NO_TOOL_CALLING_FOR_THE_RUN = "The run has no tool calling:"
+			+ " the entry point of a run builds one for every call of it";
 	private static final String NO_RUNTIME_ALLOCATED_FOR_INPUT_NODE = "No runtime agent allocated for input node: ";
+	private static final String NO_RUNTIME_ALLOCATED_FOR_AGENT = "No runtime agent allocated for agent: ";
+	private static final String NO_SUSPENSION_TO_RESPAWN = "There is no suspension to respawn the network from";
+	private static final String SUSPENSION_OF_ANOTHER_NETWORK = "The suspension is of another network: ";
+	private static final String SUSPENSION_WITHOUT_SHARED_STATE = "The suspension has no shared state to respawn from: ";
+	private static final String SUSPENDED_AGENT_WITHOUT_TURN = "The suspension does not say which message the agent was executing: ";
+	private static final String SERVICE_ALREADY_RUN = "A respawn needs a network service created for the block,"
+			+ " this one already ran: ";
 	private final IGAgentServiceRuntimeDao agentsServicesRepository;
 	private final IAgentRoleDao rolesDao;
 	private final IGeboThreadManager threadManager;
@@ -48,6 +77,12 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	private final ReactiveIdentityUtil runAs;
 	private final IGAgentsNetworkRuntimeDao agentsDao;
 	/**
+	 * Where the suspended runs are kept: the handler of a run keeps the cut there
+	 * and a respawned block is marked there. Null means the runs of this service
+	 * cannot be suspended.
+	 */
+	private final GNetworkOfAgentsSuspensionRepository suspensions;
+	/**
 	 * Who builds the session of a run, when someone outside owns it; null means
 	 * this service builds its own, which is what a plain run does.
 	 */
@@ -55,25 +90,28 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 
 	/**
 	 * A network service that owns the sessions of its runs: every run collaborates
-	 * in a session of its own, with a fresh identity and no past.
+	 * in a session of its own, with a fresh identity and no past. The repository is
+	 * where its suspended runs are kept; null when they cannot be suspended.
 	 */
 	public GAbstractAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
 			Class<InputType> inputType, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) {
+			IGAgentsNetworkRuntimeDao agentsDao, GNetworkOfAgentsSuspensionRepository suspensions) {
 		this(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType, runAs,
-				agentsDao, null);
+				agentsDao, suspensions, null);
 	}
 
 	/**
 	 * A network service whose sessions are built by the given factory (see
 	 * {@link IAgentsCollaborationSessionContextFactory}); a null factory is the
-	 * same as not having one.
+	 * same as not having one. The repository is where its suspended runs are kept;
+	 * null when they cannot be suspended.
 	 */
 	public GAbstractAgentsNetworkService(IGAgentServiceRuntimeDao agentsServicesRepository, IAgentRoleDao rolesDao,
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
 			Class<InputType> inputType, Class<OutputType> outputType, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, IAgentsCollaborationSessionContextFactory sessionContextFactory) {
+			IGAgentsNetworkRuntimeDao agentsDao, GNetworkOfAgentsSuspensionRepository suspensions,
+			IAgentsCollaborationSessionContextFactory sessionContextFactory) {
 		this.agentsServicesRepository = agentsServicesRepository;
 		this.rolesDao = rolesDao;
 		this.threadManager = threadManager;
@@ -83,7 +121,104 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		this.outputType = outputType;
 		this.runAs = runAs;
 		this.agentsDao = agentsDao;
+		this.suspensions = suspensions;
 		this.sessionContextFactory = sessionContextFactory;
+	}
+
+	/**
+	 * The handler of a run's suspension (see {@link IGNetworkOfAgentsSuspensionHandler}):
+	 * the agents of the run ask it to suspend the run, in their own control code, and
+	 * this service asks it whether one did, to freeze what the run has not delivered
+	 * yet. One per run, since the suspension state is the run's: one that keeps the
+	 * cut in the repository of suspended runs (see
+	 * {@link GMongoNetworkOfAgentsSuspensionHandler}), or, for a service without
+	 * one, whose runs cannot be suspended, one that refuses, which is what a plain
+	 * run does.
+	 */
+	protected IGNetworkOfAgentsSuspensionHandler createSuspensionHandler() {
+		return suspensions != null ? new GMongoNetworkOfAgentsSuspensionHandler(suspensions)
+				: new NeverSuspendingHandler();
+	}
+
+	/**
+	 * The handler of a run that cannot be suspended: it is never in suspension state,
+	 * has nothing to freeze, and refuses an agent asking to suspend the run, so that
+	 * the agent is told instead of waiting for a respawn that never comes.
+	 */
+	static final class NeverSuspendingHandler implements IGNetworkOfAgentsSuspensionHandler {
+		private static final String CANNOT_BE_SUSPENDED = "The run of this network cannot be suspended";
+		private volatile GAgentsNetwork network;
+
+		@Override
+		public void initialize(GAgentsNetwork agentsNetwork, Object networkInput,
+				IChatRequestContext chatRequestContext) throws AgentException {
+			this.network = agentsNetwork;
+		}
+
+		@Override
+		public void enterSuspensionState(GAgentsNetwork agentsNetwork, GAgentConfig agentConfig,
+				AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
+				AgentSuspendedWaitingCondition waitForCondition) throws AgentException {
+			final GAgentsNetwork of = agentsNetwork != null ? agentsNetwork : network;
+			throw new AgentException(CANNOT_BE_SUSPENDED + (of != null ? ": " + of.getCode() : "")
+					+ (participant != null ? ", asked by agent: " + participant.getNetworkAgentName() : ""));
+		}
+
+		@Override
+		public void setSuspendingMessagesNotYetDelivered(GAgentsNetwork agentsNetwork, GAgentConfig agentConfig,
+				AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
+				List<AgentsExchangeMessage> messages) throws AgentException {
+			// never in suspension state: nothing is ever frozen
+		}
+
+		@Override
+		public boolean isSuspensionState() {
+			return false;
+		}
+
+		@Override
+		public void setSuspendingNetworkOfAgentsSharedState(AgentsCollaborationSessionContext sharedContext)
+				throws AgentException {
+			// never in suspension state: no shared state to save
+		}
+
+		@Override
+		public void networkExecutionFinished() {
+			// nothing was kept for the run
+		}
+
+		@Override
+		public List<AgentSuspendedWaitingCondition> suspensionConditions() {
+			return List.of();
+		}
+
+		@Override
+		public void setSuspendedAgentTurn(AgentNetworkParticipant participant, AgentsExchangeMessage inputMessage,
+				int contributionNr) throws AgentException {
+			// never in suspension state: no turn to keep
+		}
+
+		@Override
+		public void setSuspendingAgentsRuntimeState(List<RuntimeAgentInfos> agentsRuntime) throws AgentException {
+			// never in suspension state: no runtime to keep
+		}
+
+		@Override
+		public void respawnFrom(GNetworkOfAgentsSuspension suspension,
+				Map<String, List<AgentSuspendedWaitingCondition>> resolvedConditionsByAgent) throws AgentException {
+			throw new AgentException(CANNOT_BE_SUSPENDED + (network != null ? ": " + network.getCode() : "")
+					+ ", so it cannot be respawned");
+		}
+
+		@Override
+		public List<AgentSuspendedWaitingCondition> takeResolvedConditionsOf(AgentNetworkParticipant participant) {
+			return List.of();
+		}
+
+		@Override
+		public String suspensionId() {
+			return null;
+		}
 	}
 
 	@Override
@@ -168,21 +303,17 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	}
 
 	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			Map<String, Object> environment) throws AgentException, LLMConfigException {
-		return executeNetwork(chatRequestContext, input, environment, null);
-	}
-
-	@Override
-	public OutputType executeNetwork(IChatRequestContext chatRequestContext, InputType input,
-			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+	public NetworkOfAgentsExecutionResult<OutputType> executeNetwork(IChatRequestContext chatRequestContext,
+			InputType input, Map<String, Object> environment, GeboToolCalling toolCalling)
+			throws AgentException, LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
 					+ " inputType:" + (input != null ? input.getClass().getName() : null) + " maxLoopIteration:"
-					+ (network != null ? network.getMaxLoopIteration() : null)
-					+ (toolCalling != null ? " with " + toolCalling : ""));
+					+ (network != null ? network.getMaxLoopIteration() : null) + " with " + toolCalling);
 		}
-		if (toolCalling != null && toolCalling.getListener() != null && LOGGER.isDebugEnabled()) {
+		if (toolCalling == null)
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
+		if (toolCalling.getListener() != null && LOGGER.isDebugEnabled()) {
 			// each agent records its own tool calls, forwarded to the request's recorder; a
 			// listener on the run's container records beside them, every call of the run
 			LOGGER.debug("The tool calling of network:" + (network != null ? network.getCode() : null)
@@ -214,25 +345,421 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		}
 		OutputType producedOutput = null;
 		Throwable failure = null;
+		// The handler of this run's suspension, given to every agent of the run: an
+		// agent asks it to suspend the run, this service asks it whether one did.
+		final IGNetworkOfAgentsSuspensionHandler suspensionHandler = createSuspensionHandler();
 		try {
-			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName, toolCalling);
-			return producedOutput;
+			suspensionHandler.initialize(network, input, chatRequestContext);
+			producedOutput = executeNetworkInSession(chatRequestContext, input, session, inputNodeName, toolCalling,
+					suspensionHandler);
+			if (suspensionHandler.isSuspensionState()) {
+				// The cut is complete: the agents that were running have ended, what they did
+				// not deliver is frozen (see executeNetworkInSession), and the runtime of every
+				// agent and the shared state of the run, with every contribution made so far,
+				// are saved last.
+				return suspendedResult(session, suspensionHandler);
+			}
+			return NetworkOfAgentsExecutionResult.of(producedOutput);
 		} catch (AgentException | LLMConfigException | RuntimeException | Error runFailure) {
 			failure = runFailure;
 			throw runFailure;
 		} finally {
-			// Whoever built this session is told the run is over in every case: with what
-			// it produced, or with what made it fail.
-			sessionCompleted(session, sessionCreation, producedOutput, failure);
+			runOver(suspensionHandler, session, sessionCreation, producedOutput, failure);
 		}
 	}
 
 	/**
-	 * The run itself, in the session it collaborates in.
+	 * The result of a run suspended in the given session: the runtime of every agent
+	 * and the shared state of the run are kept by the handler, last, and the result
+	 * names the block the run is saved as, with the conditions it waits for.
+	 */
+	private NetworkOfAgentsExecutionResult<OutputType> suspendedResult(AgentsCollaborationSessionContext session,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws AgentException {
+		suspensionHandler.setSuspendingAgentsRuntimeState(agentsRuntime());
+		suspensionHandler.setSuspendingNetworkOfAgentsSharedState(session);
+		final List<AgentSuspendedWaitingCondition> conditions = suspensionHandler.suspensionConditions();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Network:" + (network != null ? network.getCode() : null) + " suspended in session:"
+					+ session.getId() + " waiting for " + (conditions != null ? conditions.size() : 0)
+					+ " condition(s), suspension:" + suspensionHandler.suspensionId());
+		}
+		return NetworkOfAgentsExecutionResult.suspended(suspensionHandler.suspensionId(), conditions);
+	}
+
+	/**
+	 * The handler is told the run is over in every case, executed, suspended or
+	 * failed: a suspended run is written then, and a cut that cannot be written is
+	 * the failure of the run. Whoever built this session is told the same in every
+	 * case: with what the run produced, or with what made it fail.
+	 */
+	private void runOver(IGNetworkOfAgentsSuspensionHandler suspensionHandler,
+			AgentsCollaborationSessionContext session, AgentsSessionCreationContext sessionCreation,
+			OutputType producedOutput, Throwable failure) {
+		try {
+			suspensionHandler.networkExecutionFinished();
+		} catch (RuntimeException | Error finishFailure) {
+			sessionCompleted(session, sessionCreation, null, failure != null ? failure : finishFailure);
+			throw finishFailure;
+		}
+		sessionCompleted(session, sessionCreation, producedOutput, failure);
+	}
+
+	/** The runtime of every agent of the network that has one. */
+	private List<RuntimeAgentInfos> agentsRuntime() throws AgentException {
+		final List<RuntimeAgentInfos> runtimes = new ArrayList<RuntimeAgentInfos>();
+		if (network != null && network.getAgents() != null) {
+			for (AgentNetworkParticipant participant : network.getAgents()) {
+				final RuntimeAgentInfos runtime = agentsDao.findAgentByCode(participant.getNetworkAgentName());
+				if (runtime != null) {
+					runtimes.add(runtime);
+				}
+			}
+		}
+		return runtimes;
+	}
+
+	@Override
+	public NetworkOfAgentsExecutionResult<OutputType> respawnNetworkExecution(IChatRequestContext chatRequestContext,
+			GNetworkOfAgentsSuspension suspension, List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions,
+			Map<String, Object> environment, GeboToolCalling toolCalling) throws AgentException, LLMConfigException {
+		if (toolCalling == null)
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
+		if (suspension == null)
+			throw new AgentException(NO_SUSPENSION_TO_RESPAWN);
+		if (network == null || network.getCode() == null || !network.getCode().equals(suspension.getNetworkCode()))
+			throw new AgentException(SUSPENSION_OF_ANOTHER_NETWORK + suspension.getNetworkCode()
+					+ ", this service runs: " + (network != null ? network.getCode() : null));
+		if (suspension.getSharedState() == null)
+			throw new AgentException(SUSPENSION_WITHOUT_SHARED_STATE + suspension.getCode());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Begin respawnNetworkExecution(...) network code:" + network.getCode() + " suspension:"
+					+ suspension.getCode() + " suspended agents:" + suspension.getSuspendedAgents().size()
+					+ " frozen deliveries:" + suspension.getFrozenDeliveries().size() + " resolved conditions:"
+					+ (resolvedConditions != null ? resolvedConditions.size() : 0) + " with " + toolCalling);
+		}
+		// The collaboration goes on in the session of the cut, with every contribution
+		// made so far and what the block kept of the environment, the caller's entries
+		// on top; whoever builds sessions is not asked for this one, since it exists,
+		// but is told when the run is over.
+		final AgentsCollaborationSessionContext session = sessionOf(suspension.getSharedState());
+		if (environment != null) {
+			session.getEnvironment().putAll(environment);
+		}
+		final AgentsSessionCreationContext sessionCreation = sessionCreationContext(chatRequestContext,
+				session.getEnvironment());
+		restoreAgentsRuntime(suspension);
+		final Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent = resolvedByAgent(suspension,
+				resolvedConditions);
+		OutputType producedOutput = null;
+		Throwable failure = null;
+		final IGNetworkOfAgentsSuspensionHandler suspensionHandler = createSuspensionHandler();
+		try {
+			suspensionHandler.initialize(network, suspension.getNetworkInput(), chatRequestContext);
+			suspensionHandler.respawnFrom(suspension, resolvedByAgent);
+			producedOutput = respawnInSession(chatRequestContext, session, suspension, resolvedByAgent, toolCalling,
+					suspensionHandler);
+			if (suspensionHandler.isSuspensionState()) {
+				return suspendedResult(session, suspensionHandler);
+			}
+			return NetworkOfAgentsExecutionResult.of(producedOutput);
+		} catch (AgentException | LLMConfigException | RuntimeException | Error runFailure) {
+			failure = runFailure;
+			throw runFailure;
+		} finally {
+			runOver(suspensionHandler, session, sessionCreation, producedOutput, failure);
+			if (failure == null) {
+				// the block is consumed by a respawn that ended or suspended again; one that
+				// failed leaves it as it was, to be respawned again
+				markRespawned(suspension, suspensionHandler.suspensionId());
+			}
+		}
+	}
+
+	/**
+	 * The respawned run itself, in the session of the cut. The suspended agents
+	 * whose conditions are resolved are re-executed first, each once, with the message it
+	 * was executing when it asked (the re-execution is the same act of the agent,
+	 * not one more of its count); what they produce joins what the run had not
+	 * delivered, in its delivery order, and the delivery goes on as in a run. The
+	 * suspended agents whose conditions are not resolved are then suspended again in
+	 * this run's handler, with the turn each was executing, so the run suspends
+	 * again for them, however far the others went.
+	 */
+	private OutputType respawnInSession(IChatRequestContext chatRequestContext,
+			AgentsCollaborationSessionContext session, GNetworkOfAgentsSuspension suspension,
+			Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws AgentException, LLMConfigException {
+		final List<AgentsExchangeMessage<?>> reExecuted = new ArrayList<AgentsExchangeMessage<?>>();
+		final List<SuspendedAgentState> stillWaiting = new ArrayList<SuspendedAgentState>();
+		for (SuspendedAgentState suspended : suspension.getSuspendedAgents()) {
+			final String name = nameOf(suspended);
+			if (name != null && resolvedByAgent.containsKey(name)) {
+				if (suspended.getInputMessage() == null)
+					throw new AgentException(SUSPENDED_AGENT_WITHOUT_TURN + name);
+				final RuntimeAgentInfos runtime = agentsDao.findAgentByCode(name);
+				if (runtime == null)
+					throw new AgentException(NO_RUNTIME_ALLOCATED_FOR_AGENT + name);
+				if (runtime.getInvocations().get() > 0)
+					runtime.getInvocations().decrementAndGet();
+				keepSolvedConditions(session, runtime, name, resolvedByAgent.get(name));
+				reExecuted.add(suspended.getInputMessage().toMessage());
+			} else {
+				stillWaiting.add(suspended);
+			}
+		}
+		final TreeMap<Integer, List<AgentsExchangeMessage<?>>> frozenOrder = new TreeMap<Integer, List<AgentsExchangeMessage<?>>>();
+		int frozen = 0;
+		for (FrozenDeliveries deliveries : suspension.getFrozenDeliveries()) {
+			for (ExchangeMessageRecord record : deliveries.getMessages()) {
+				final AgentsExchangeMessage<Object> message = record.toMessage();
+				frozenOrder.computeIfAbsent(message.getExecutionOrder(), k -> new ArrayList<>()).add(message);
+				frozen++;
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Respawning network:" + network.getCode() + " in session:" + session.getId() + ": "
+					+ reExecuted.size() + " agent(s) re-executed, " + frozen + " frozen message(s) delivered, "
+					+ stillWaiting.size() + " agent(s) still waiting");
+		}
+		CallsResult<OutputType> iterationResult = new CallsResult<OutputType>(frozenOrder, null);
+		try {
+			if (!reExecuted.isEmpty()) {
+				final CallsResult<OutputType> reExecution = executeNetworkLoopsGroup(chatRequestContext,
+						notificationSink, agentsDao, session, reExecuted, outputType, runAs, toolCalling,
+						suspensionHandler);
+				iterationResult = join(iterationResult, reExecution);
+			}
+			iterationResult = deliver(chatRequestContext, session, iterationResult, toolCalling, suspensionHandler);
+		} catch (LLMConfigException | AgentException | InterruptedException | ExecutionException e) {
+			LOGGER.error(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
+			throw new AgentException(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
+		}
+		for (SuspendedAgentState waiting : stillWaiting) {
+			final String name = nameOf(waiting);
+			final RuntimeAgentInfos runtime = name != null ? agentsDao.findAgentByCode(name) : null;
+			final AgentNetworkParticipant participant = runtime != null ? runtime.getNetworkParticipantConfig()
+					: waiting.getParticipant();
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent:" + name + " is still waiting: the respawned run suspends again for it");
+			}
+			// an agent can ask with no condition: it suspends again all the same
+			final List<AgentSuspendedWaitingCondition<?, ?>> waitedFor = new ArrayList<AgentSuspendedWaitingCondition<?, ?>>();
+			for (WaitingCondition condition : waiting.getWaitingConditions()) {
+				waitedFor.add(condition.toCondition());
+			}
+			if (waitedFor.isEmpty()) {
+				waitedFor.add(null);
+			}
+			for (AgentSuspendedWaitingCondition<?, ?> condition : waitedFor) {
+				suspensionHandler.enterSuspensionState(network,
+						runtime != null ? runtime.getConfig() : waiting.getAgentConfig(), participant,
+						runtime != null ? runtime.getAgentContext() : null, condition);
+			}
+			if (waiting.getInputMessage() != null) {
+				suspensionHandler.setSuspendedAgentTurn(participant, waiting.getInputMessage().toMessage(),
+						waiting.getContributionNr() != null ? waiting.getContributionNr() : 0);
+			}
+		}
+		final boolean suspended = suspensionHandler.isSuspensionState();
+		final OutputType producedOutput = !suspended && iterationResult != null ? iterationResult.getOutput()
+				: null;
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("<NETWORK_OUTPUT network=" + network.getCode() + " respawned=true>");
+			LOGGER.trace(String.valueOf(producedOutput));
+			LOGGER.trace("</NETWORK_OUTPUT>");
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("End respawnNetworkExecution(...) network code:" + network.getCode() + " produced output:"
+					+ (producedOutput != null) + " suspended:" + suspended);
+		}
+		return producedOutput;
+	}
+
+	/**
+	 * What an agent waited for outlives the turn it is told in: the agent keeps it in
+	 * its private session, notes included, for its next turns, and the other agents
+	 * read it in the shared session, without the notes, so that none asks for it again.
+	 * The session of a respawn is rebuilt from the block, so one that fails adds
+	 * nothing to the block it is tried again from.
+	 */
+	@SuppressWarnings("rawtypes")
+	private void keepSolvedConditions(AgentsCollaborationSessionContext session, RuntimeAgentInfos runtime, String name,
+			List<AgentSuspendedWaitingCondition> solved) {
+		if (runtime.getAgentContext() != null) {
+			runtime.getAgentContext().addSolvedConditions(solved);
+		}
+		for (AgentSuspendedWaitingCondition<?, ?> condition : solved) {
+			final String told = ResolvedConditionText.renderForPeers(name, condition);
+			if (told != null) {
+				session.addContribution(AgentsExchangeMessage.of(session, name, null, told, MessageSemantic.RESPONSE),
+						session.getAndIncrementContributionNr());
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent:" + name + " keeps " + solved.size()
+					+ " solved condition(s) in its private session, shared with the other agents");
+		}
+	}
+
+	private static String nameOf(SuspendedAgentState suspended) {
+		return suspended != null && suspended.getParticipant() != null
+				? suspended.getParticipant().getNetworkAgentName()
+				: null;
+	}
+
+	/**
+	 * The resolved conditions by the name of the agent that waited for them, for the
+	 * agents to re-execute: a resolved condition is matched to a saved one by its id,
+	 * and one matching no saved condition is ignored, with a warning. An agent is
+	 * re-executed once, so it goes on when at least one of its conditions is resolved
+	 * and no mandatory one is left: those left without a value count as declined. With
+	 * a mandatory one left it keeps waiting for all of them.
+	 */
+	private Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent(GNetworkOfAgentsSuspension suspension,
+			List<AgentSuspendedWaitingCondition<?, ?>> resolvedConditions) {
+		final Map<String, AgentSuspendedWaitingCondition> resolvedById = new HashMap<String, AgentSuspendedWaitingCondition>();
+		final Set<String> savedIds = new HashSet<String>();
+		for (WaitingCondition saved : suspension.conditions()) {
+			savedIds.add(saved.getSuspendedConditionId());
+		}
+		if (resolvedConditions != null) {
+			for (AgentSuspendedWaitingCondition<?, ?> resolved : resolvedConditions) {
+				if (resolved == null || !savedIds.contains(resolved.getSuspendedConditionId())) {
+					LOGGER.warn("A resolved condition matches none the suspension:" + suspension.getCode()
+							+ " waits for, ignored: " + (resolved != null ? resolved.getSuspendedConditionId() : null));
+					continue;
+				}
+				resolvedById.put(resolved.getSuspendedConditionId(), resolved);
+			}
+		}
+		final Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent = new HashMap<String, List<AgentSuspendedWaitingCondition>>();
+		for (SuspendedAgentState suspended : suspension.getSuspendedAgents()) {
+			final List<AgentSuspendedWaitingCondition> ofTheAgent = new ArrayList<AgentSuspendedWaitingCondition>();
+			boolean anyResolved = false;
+			boolean mandatoryLeft = false;
+			for (WaitingCondition saved : suspended.getWaitingConditions()) {
+				final AgentSuspendedWaitingCondition resolved = resolvedById.get(saved.getSuspendedConditionId());
+				anyResolved |= resolved != null;
+				mandatoryLeft |= resolved == null && saved.isMandatory();
+				ofTheAgent.add(resolved != null ? resolved : saved.toCondition());
+			}
+			if (nameOf(suspended) != null && anyResolved && !mandatoryLeft) {
+				resolvedByAgent.put(nameOf(suspended), ofTheAgent);
+			} else if (anyResolved && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent:" + nameOf(suspended) + " keeps waiting: a mandatory condition of its is not resolved");
+			}
+		}
+		return resolvedByAgent;
+	}
+
+	/** The session of the cut: its identity, every contribution made so far, its counter and its environment. */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private AgentsCollaborationSessionContext sessionOf(SharedState sharedState) {
+		final List<AgentProducedSessionContribution> prior = new ArrayList<AgentProducedSessionContribution>();
+		for (SharedContribution contribution : sharedState.getContributions()) {
+			prior.add(new AgentProducedSessionContribution(contribution.getContributionUniqueNr(),
+					contribution.getAgentName(), contribution.getData(), contribution.getStatusNotices()));
+		}
+		final AgentsCollaborationSessionContext session = new AgentsCollaborationSessionContext(
+				sharedState.getSessionId(), prior, sharedState.getContributionCounter());
+		if (sharedState.getEnvironment() != null) {
+			session.getEnvironment().putAll(sharedState.getEnvironment());
+		}
+		return session;
+	}
+
+	/**
+	 * Restores the runtime of every agent of the cut into the agents of this
+	 * service: its counters, and its private state replayed turn by turn. The service
+	 * must be created for the block, by the factory of its network: one whose agents
+	 * already ran is refused, since restoring over their state would mix two runs,
+	 * and a service streaming its output completed its sink with its run anyway.
+	 * An agent of the cut this service has no runtime for is skipped, with a warning.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private void restoreAgentsRuntime(GNetworkOfAgentsSuspension suspension) throws AgentException {
+		for (RuntimeAgentInfos runtime : agentsRuntime()) {
+			final boolean ran = runtime.getInvocations().get() > 0 || runtime.getTurnOfExecution() > 0
+					|| (runtime.getAgentContext() != null && !runtime.getAgentContext().getInteractions().isEmpty());
+			if (ran)
+				throw new AgentException(
+						SERVICE_ALREADY_RUN + runtime.getNetworkParticipantConfig().getNetworkAgentName());
+		}
+		for (AgentRuntimeState state : suspension.getAgentsRuntime()) {
+			final RuntimeAgentInfos runtime = state.getNetworkAgentName() != null
+					? agentsDao.findAgentByCode(state.getNetworkAgentName())
+					: null;
+			if (runtime == null) {
+				LOGGER.warn("The suspension:" + suspension.getCode() + " keeps the runtime of agent:"
+						+ state.getNetworkAgentName() + " which network:" + network.getCode() + " has no runtime for");
+				continue;
+			}
+			runtime.getInvocations().set(state.getInvocations());
+			runtime.setTurnOfExecution(state.getTurnOfExecution());
+			runtime.setSessionSharedContributionsReadIndex(state.getSessionSharedContributionsReadIndex());
+			final AgentPrivateState privateState = state.getPrivateState();
+			final AgentPrivateSessionContext privateContext = runtime.getAgentContext();
+			if (privateState != null && privateContext != null) {
+				if (privateState.getPrivateContextId() != null) {
+					privateContext.setId(privateState.getPrivateContextId());
+				}
+				privateContext.setCollaborationContextId(privateState.getCollaborationContextId());
+				for (PrivateInteraction turn : privateState.getInteractions()) {
+					privateContext.addInteraction(turn.getInputMessage() != null ? turn.getInputMessage().toMessage() : null,
+							turn.getContributionCounter(), turn.getOutput());
+				}
+				final List<AgentSuspendedWaitingCondition> solved = new ArrayList<AgentSuspendedWaitingCondition>();
+				for (WaitingCondition condition : privateState.getSolvedConditions()) {
+					solved.add(condition.toCondition());
+				}
+				privateContext.addSolvedConditions(solved);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Restored agent:" + state.getNetworkAgentName() + " invocations:" + state.getInvocations()
+						+ " turnOfExecution:" + state.getTurnOfExecution() + " private turns:"
+						+ (privateState != null ? privateState.getInteractions().size() : 0));
+			}
+		}
+	}
+
+	/**
+	 * Marks the block consumed by a respawn that ended or suspended again, with the
+	 * block it suspended into when it did; what the repository throws is logged and
+	 * leaves the outcome of the run unchanged.
+	 */
+	private void markRespawned(GNetworkOfAgentsSuspension suspension, String respawnedToSuspensionCode) {
+		if (suspensions == null) {
+			return;
+		}
+		suspension.setRespawnedAt(new Date());
+		suspension.setRespawnedToSuspensionCode(respawnedToSuspensionCode);
+		suspension.setDateModified(suspension.getRespawnedAt());
+		try {
+			suspensions.save(suspension);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Suspension:" + suspension.getCode() + " marked respawned"
+						+ (respawnedToSuspensionCode != null ? " into suspension:" + respawnedToSuspensionCode : ""));
+			}
+		} catch (RuntimeException e) {
+			LOGGER.error("The suspension:" + suspension.getCode() + " could not be marked respawned; the outcome of"
+					+ " the run is unchanged", e);
+		}
+	}
+
+	/**
+	 * The run itself, in the session it collaborates in. The messages of the run are
+	 * delivered by this loop alone, a level of the exchange at a time and a group of
+	 * a level at a time: when an agent asked the handler to suspend the run, the loop
+	 * sees it before the next delivery. The agents that were running have ended by
+	 * then (a group is waited for whole) and their contributions are in the shared
+	 * state; what they produced for other agents, and whatever else was still to be
+	 * delivered, is frozen with the handler instead of delivered, and the run ends
+	 * with no output. That is the cut of the Chandy-Lamport algorithm the handler
+	 * describes, taken on the one thread that delivers.
 	 */
 	private OutputType executeNetworkInSession(IChatRequestContext chatRequestContext, InputType input,
-			AgentsCollaborationSessionContext session, String inputNodeName, GeboToolCalling toolCalling)
-			throws AgentException, LLMConfigException {
+			AgentsCollaborationSessionContext session, String inputNodeName, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws AgentException, LLMConfigException {
 		final AgentsExchangeMessage<InputType> inputMessage = AgentsExchangeMessage.of(session, inputNodeName, input,
 				MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 		final RuntimeAgentInfos inputRuntime = agentsDao.findAgentByCode(inputNodeName);
@@ -250,34 +777,22 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		boolean dynamicExchange = false;
 		try {
 			iterationResult = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
-					inputRuntime, inputMessage, outputType, runAs, toolCalling);
+					inputRuntime, inputMessage, outputType, runAs, toolCalling, suspensionHandler);
 			// A "dynamic exchange" means the input node actually dispatched at least one
 			// message onward into the network. Captured before the delivery loop consumes
 			// iterationResult, so a network that seeds but never propagates can be flagged.
 			dynamicExchange = iterationResult != null && iterationResult.getDeliveryOrder() != null
 					&& !iterationResult.getDeliveryOrder().isEmpty();
-			int level = 0;
-			while (iterationResult != null && iterationResult.getDeliveryOrder() != null
-					&& !iterationResult.getDeliveryOrder().isEmpty()) {
-				level++;
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Processing delivery level " + level + " with "
-							+ iterationResult.getDeliveryOrder().size() + " group(s)");
-				}
-				CallsResult<OutputType> levelResult = new CallsResult<OutputType>(new TreeMap<>(),
-						iterationResult.getOutput());
-				for (List<AgentsExchangeMessage<?>> group : iterationResult.getDeliveryOrder().values()) {
-					CallsResult<OutputType> rowResult = executeNetworkLoopsGroup(chatRequestContext, notificationSink,
-							agentsDao, session, group, outputType, runAs, toolCalling);
-					levelResult = join(levelResult, rowResult);
-				}
-				iterationResult = levelResult;
-			}
+			iterationResult = deliver(chatRequestContext, session, iterationResult, toolCalling, suspensionHandler);
 		} catch (LLMConfigException | AgentException | InterruptedException | ExecutionException e) {
 			LOGGER.error(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
 			throw new AgentException(EXCEPTION_IN_AGENTS_NETWORK_EXECUTION, e);
 		}
-		final OutputType producedOutput = iterationResult != null ? iterationResult.getOutput() : null;
+		final boolean suspended = suspensionHandler.isSuspensionState();
+		// A suspended run has no output: what its output node produced so far, if
+		// anything, is in the shared state the handler saves, and the respawn completes it.
+		final OutputType producedOutput = !suspended && iterationResult != null ? iterationResult.getOutput()
+				: null;
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("<NETWORK_OUTPUT network=" + (network != null ? network.getCode() : null) + ">");
 			LOGGER.trace(String.valueOf(producedOutput));
@@ -287,15 +802,79 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		// and
 		// produced no output, surface it with ERROR severity: the run terminated dead
 		// (e.g. the input node emitted nothing to route), which the user must be told.
-		if (!dynamicExchange && producedOutput == null) {
+		if (!dynamicExchange && producedOutput == null && !suspended) {
 			notificationSink.next("Agents network '" + (network != null ? network.getCode() : null)
 					+ "' stopped without any dynamic message exchange between agents", NotificationType.ERROR);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End executeNetwork(...) network code:" + (network != null ? network.getCode() : null)
-					+ " produced output:" + (producedOutput != null) + " dynamicExchange:" + dynamicExchange);
+					+ " produced output:" + (producedOutput != null) + " dynamicExchange:" + dynamicExchange
+					+ " suspended:" + suspended);
 		}
 		return producedOutput;
+	}
+
+	/**
+	 * Freezes the messages the run was still to deliver when it was suspended, each
+	 * with the agent that produced it, for the respawn to deliver them.
+	 */
+	private void freezeUndelivered(List<List<AgentsExchangeMessage<?>>> groups,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws AgentException {
+		final Map<String, List<AgentsExchangeMessage>> byProducer = new LinkedHashMap<>();
+		for (List<AgentsExchangeMessage<?>> group : groups) {
+			for (AgentsExchangeMessage<?> msg : group) {
+				byProducer.computeIfAbsent(msg.getFromAgent(), k -> new ArrayList<>()).add(msg);
+			}
+		}
+		for (Map.Entry<String, List<AgentsExchangeMessage>> entry : byProducer.entrySet()) {
+			final RuntimeAgentInfos producer = agentsDao.findAgentByCode(entry.getKey());
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Freezing " + entry.getValue().size() + " undelivered message(s) produced by agent:"
+						+ entry.getKey() + " of the suspended network:" + (network != null ? network.getCode() : null));
+			}
+			suspensionHandler.setSuspendingMessagesNotYetDelivered(network, producer != null ? producer.getConfig() : null,
+					producer != null ? producer.getNetworkParticipantConfig() : null,
+					producer != null ? producer.getAgentContext() : null, entry.getValue());
+		}
+	}
+
+	/**
+	 * Delivers what the agents produce, a level of the exchange at a time and a
+	 * group of a level at a time, from the given result until nothing is left to
+	 * deliver or an agent asked to suspend the run, in which case what is left is
+	 * frozen with the handler (see {@link #executeNetworkInSession}).
+	 */
+	private CallsResult<OutputType> deliver(IChatRequestContext chatRequestContext,
+			AgentsCollaborationSessionContext session, CallsResult<OutputType> iterationResult,
+			GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler)
+			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
+		int level = 0;
+		while (iterationResult != null && iterationResult.getDeliveryOrder() != null
+				&& !iterationResult.getDeliveryOrder().isEmpty()) {
+			level++;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Processing delivery level " + level + " with " + iterationResult.getDeliveryOrder().size()
+						+ " group(s)");
+			}
+			CallsResult<OutputType> levelResult = new CallsResult<OutputType>(new TreeMap<>(),
+					iterationResult.getOutput());
+			final List<List<AgentsExchangeMessage<?>>> groups = new ArrayList<>(
+					iterationResult.getDeliveryOrder().values());
+			for (int g = 0; g < groups.size(); g++) {
+				if (suspensionHandler.isSuspensionState()) {
+					// An agent asked to suspend the run: this group and the ones after it are
+					// frozen undelivered. What the groups already run in this level produced
+					// is in levelResult, the next level: the next turn of this loop freezes it.
+					freezeUndelivered(groups.subList(g, groups.size()), suspensionHandler);
+					break;
+				}
+				CallsResult<OutputType> rowResult = executeNetworkLoopsGroup(chatRequestContext, notificationSink,
+						agentsDao, session, groups.get(g), outputType, runAs, toolCalling, suspensionHandler);
+				levelResult = join(levelResult, rowResult);
+			}
+			iterationResult = levelResult;
+		}
+		return iterationResult;
 	}
 
 	protected <OutputType> CallsResult<OutputType> join(CallsResult<OutputType> levelResult,
@@ -343,7 +922,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			IChatRequestContext chatRequestContext, INotificationSink notificationSink,
 			IGAgentsNetworkRuntimeDao agentsDao, AgentsCollaborationSessionContext session,
 			RuntimeAgentInfos inputRuntime, AgentsExchangeMessage<?> inputMessage, Class<OutputType> outputType,
-			ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
+			ReactiveIdentityUtil runAs, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler)
 			throws LLMConfigException, AgentException, InterruptedException, ExecutionException {
 		OutputType output = null;
 		if (LOGGER.isDebugEnabled()) {
@@ -375,14 +955,10 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			notificationSink.next("Agent: " + participantName + " is working...", NotificationType.DEBUG);
 			List<AgentsExchangeMessage<?>> messages;
 			try {
-				// no container: the plain message, literally the agent's old method
-				messages = toolCalling != null
-						? inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
-								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
-								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao, toolCalling)
-						: inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
-								inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
-								notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao);
+				messages = inputRuntime.getService().onMessage(chatRequestContext, inputRuntime.getConfig(),
+						inputMessage, contributionNr, network, inputRuntime.getNetworkParticipantConfig(),
+						notificationSink, session, inputRuntime.getAgentContext(), runAs, agentsDao, toolCalling,
+						suspensionHandler);
 			} catch (Throwable failure) {
 				if (isInputNode) {
 					// The input node seeds the whole network: if it fails there is nothing
@@ -413,6 +989,12 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 				return new CallsResult<OutputType>(new TreeMap<>(), output);
 			}
 			notificationSink.next("Agent: " + participantName + " has finished", NotificationType.DEBUG);
+			if (suspensionHandler.isSuspensionState()) {
+				// the handler keeps the turn of the agents that asked to suspend the run, to
+				// re-execute them with it; a turn of any other agent is ignored
+				suspensionHandler.setSuspendedAgentTurn(inputRuntime.getNetworkParticipantConfig(), inputMessage,
+						contributionNr);
+			}
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Agent:" + inputRuntime.getService().getId() + " returned "
 						+ (messages != null ? messages.size() : 0) + " message(s)");
@@ -498,7 +1080,8 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	protected <OutputType> CallsResult<OutputType> executeNetworkLoopsGroup(IChatRequestContext chatRequestContext,
 			INotificationSink notificationSink, IGAgentsNetworkRuntimeDao agentsDao,
 			AgentsCollaborationSessionContext session, List<AgentsExchangeMessage<?>> executionGroup,
-			Class<OutputType> outputType, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
+			Class<OutputType> outputType, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler)
 			throws AgentException, LLMConfigException, InterruptedException, ExecutionException {
 		CallsResult<OutputType> out = null;
 		if (executionGroup.isEmpty()) {
@@ -515,7 +1098,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 			AgentsExchangeMessage<?> msg = executionGroup.get(0);
 			RuntimeAgentInfos agentRuntime = agentsDao.findAgentByCode(msg.getToAgent());
 			out = executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agentRuntime, msg,
-					outputType, runAs, toolCalling);
+					outputType, runAs, toolCalling, suspensionHandler);
 		} else {
 			List<CompletableFuture<CallsResult<OutputType>>> completables = new ArrayList<>();
 			for (AgentsExchangeMessage<?> msg : executionGroup) {
@@ -525,11 +1108,11 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 						if (runAs != null)
 							return runAs.doRunAsWithReturnAndException(() -> {
 								return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session,
-										agent, msg, outputType, runAs, toolCalling);
+										agent, msg, outputType, runAs, toolCalling, suspensionHandler);
 							});
 						else
 							return executeNetworkLoops(chatRequestContext, notificationSink, agentsDao, session, agent,
-									msg, outputType, runAs, toolCalling);
+									msg, outputType, runAs, toolCalling, suspensionHandler);
 					} catch (Throwable e) {
 						LOGGER.error("Exception executing network loop for agent:" + msg.getToAgent(), e);
 						return null;

@@ -4,6 +4,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import ai.gebo.monolithic.api.client.model.GeboChatMessageEnvelope;
 import ai.gebo.monolithic.api.client.model.GeboChatResponse;
+import ai.gebo.monolithic.api.client.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.monolithic.api.client.model.PipelineChatMenu;
 import ai.gebo.monolithic.api.client.model.PipelineRequestBody;
 
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class GeboChatPipelinesControllerApi {
     private ApiClient apiClient;
@@ -144,6 +145,101 @@ public class GeboChatPipelinesControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return GeboChatResponse
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GeboChatResponse executeDefaultRespawnAgenticChat(PipelineRequestBody body) throws RestClientException {
+        return executeDefaultRespawnAgenticChatWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;GeboChatResponse&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GeboChatResponse> executeDefaultRespawnAgenticChatWithHttpInfo(PipelineRequestBody body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling executeDefaultRespawnAgenticChat");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/executeDefaultRespawnAgenticChat").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GeboChatResponse> returnType = new ParameterizedTypeReference<GeboChatResponse>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param pipelineCode  (optional)
+     * @return GeboChatResponse
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GeboChatResponse executeRespawnAgenticChat(PipelineRequestBody body, String pipelineCode) throws RestClientException {
+        return executeRespawnAgenticChatWithHttpInfo(body, pipelineCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param pipelineCode  (optional)
+     * @return ResponseEntity&lt;GeboChatResponse&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GeboChatResponse> executeRespawnAgenticChatWithHttpInfo(PipelineRequestBody body, String pipelineCode) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling executeRespawnAgenticChat");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/executeRespawnAgenticChat").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GeboChatResponse> returnType = new ParameterizedTypeReference<GeboChatResponse>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
      * @param chatProfileCode  (required)
      * @return List&lt;PipelineChatMenu&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -227,6 +323,51 @@ public class GeboChatPipelinesControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<PipelineChatMenu>> returnType = new ParameterizedTypeReference<List<PipelineChatMenu>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param userChatContextCode  (required)
+     * @return NetworkOfAgentsSuspendedState
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public NetworkOfAgentsSuspendedState pendingNetworkOfAgentsSuspension(String userChatContextCode) throws RestClientException {
+        return pendingNetworkOfAgentsSuspensionWithHttpInfo(userChatContextCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param userChatContextCode  (required)
+     * @return ResponseEntity&lt;NetworkOfAgentsSuspendedState&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<NetworkOfAgentsSuspendedState> pendingNetworkOfAgentsSuspensionWithHttpInfo(String userChatContextCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'userChatContextCode' is set
+        if (userChatContextCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'userChatContextCode' when calling pendingNetworkOfAgentsSuspension");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/pendingNetworkOfAgentsSuspension").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "userChatContextCode", userChatContextCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<NetworkOfAgentsSuspendedState> returnType = new ParameterizedTypeReference<NetworkOfAgentsSuspendedState>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -351,6 +492,101 @@ public class GeboChatPipelinesControllerApi {
         final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
         final HttpHeaders headerParams = new HttpHeaders();
         final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "text/event-stream"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GeboChatMessageEnvelope>> returnType = new ParameterizedTypeReference<List<GeboChatMessageEnvelope>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return List&lt;GeboChatMessageEnvelope&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GeboChatMessageEnvelope> streamDefaultRespawnAgenticChat(PipelineRequestBody body) throws RestClientException {
+        return streamDefaultRespawnAgenticChatWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;List&lt;GeboChatMessageEnvelope&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GeboChatMessageEnvelope>> streamDefaultRespawnAgenticChatWithHttpInfo(PipelineRequestBody body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling streamDefaultRespawnAgenticChat");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/streamDefaultRespawnAgenticChat").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "text/event-stream"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GeboChatMessageEnvelope>> returnType = new ParameterizedTypeReference<List<GeboChatMessageEnvelope>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param pipelineCode  (optional)
+     * @return List&lt;GeboChatMessageEnvelope&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GeboChatMessageEnvelope> streamRespawnAgenticChat(PipelineRequestBody body, String pipelineCode) throws RestClientException {
+        return streamRespawnAgenticChatWithHttpInfo(body, pipelineCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @param pipelineCode  (optional)
+     * @return ResponseEntity&lt;List&lt;GeboChatMessageEnvelope&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GeboChatMessageEnvelope>> streamRespawnAgenticChatWithHttpInfo(PipelineRequestBody body, String pipelineCode) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling streamRespawnAgenticChat");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboChatPipelinesController/streamRespawnAgenticChat").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "pipelineCode", pipelineCode));
 
         final String[] accepts = { 
             "text/event-stream"

@@ -80,18 +80,7 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
-		return onMessage(chatRequestContext, config, msg, actualContributionNr, network, contextAgentPersona,
-				notificationSink, session, mySessionContext, runAs, agentsDao, null);
-	}
-
-	@Override
-	public List<AgentsExchangeMessage<ResponseType>> onMessage(IChatRequestContext chatRequestContext,
-			GAgentConfig config, AgentsExchangeMessage<RequestType> msg, int actualContributionNr,
-			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, ReactiveIdentityUtil runAs,
-			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling) throws LLMConfigException, AgentException {
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin onMessage(...) reactive agent network adapter id:" + getId() + " fromAgent:"
 					+ msg.getFromAgent());
@@ -101,19 +90,40 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.trace(String.valueOf(msg.getPayload()));
 			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_INPUT>");
 		}
-		Flux<IGPartialOperation<ResponseType>> flux = toolCalling != null
-				? service.execute(chatRequestContext, config, msg.getPayload(), network, contextAgentPersona,
-						notificationSink, session, mySessionContext, runAs, toolCalling)
-				: service.execute(chatRequestContext, config, msg.getPayload(), network, contextAgentPersona,
-						notificationSink, session, mySessionContext, runAs);
+		// What a tool of the agent's calls declares the run must wait for: read once its
+		// stream ended. A respawned agent is told first what it waited for.
+		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Reactive agent " + getId(), toolCalling,
+				suspensionHandler, contextAgentPersona);
+		final GeboToolCalling callToolCalling = turn.toolCalling();
+		final RequestType request = turn.toldInput(msg.getPayload());
+		Flux<IGPartialOperation<ResponseType>> flux = service.execute(turn.toldContext(chatRequestContext, request),
+				config, request, network,
+				contextAgentPersona, notificationSink, session, mySessionContext, runAs, callToolCalling);
+		// Once a tool of the call declared what the run waits for, the agent says nothing:
+		// what the call answers from then on is the waiting tool's own result (a tool
+		// returning directly ends the call with it), written for the model, not for the
+		// user, who is asked the question by the suspension.
+		final int[] keptFromTheUser = { 0 };
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
-			sink.emitNext(x, null);
+			if (turn.isWaiting()) {
+				keptFromTheUser[0]++;
+			} else {
+				sink.emitNext(x, null);
+			}
 			return x;
 		});
 		List<IGPartialOperation<ResponseType>> buffered = duplicatedFlux.collectList().block();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Reactive agent adapter id:" + getId() + " buffered "
 					+ (buffered != null ? buffered.size() : 0) + " partial operation(s)");
+		}
+		// what the agent streamed before its tool declared the wait reached the user
+		if (turn.suspendIfWaiting(network, config, mySessionContext)) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Reactive agent adapter id:" + getId() + " waits: " + keptFromTheUser[0]
+						+ " partial operation(s) streamed after the wait was declared kept from the user");
+			}
+			return List.of();
 		}
 		ResponseType response = extractResponse(buffered);
 		if (LOGGER.isDebugEnabled()) {

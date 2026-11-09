@@ -56,11 +56,6 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	protected Boolean accessibleToAll = null;
 
 	/**
-	 * A list of functions that are enabled for direct chat interaction.
-	 */
-	protected List<String> enabledFunctions = null;
-
-	/**
 	 * The temperature setting of the model, which affects randomness in responses.
 	 * Null by default.
 	 */

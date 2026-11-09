@@ -366,9 +366,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/** The tools of the search sources (see {@link #EVIDENCE_TOOL_SOURCES}) the agent model mounts. */
 	protected MountedSearchTools searchTools(IGConfigurableChatModel<?> agentModel) {
-		final List<String> enabled = agentModel != null && agentModel.getConfig() != null
-				? agentModel.getConfig().getEnabledFunctions()
-				: null;
+		final List<String> enabled = agentModel != null ? agentModel.getToolNames() : null;
 		if (enabled == null || enabled.isEmpty() || toolsRepositoryPattern == null) {
 			return new MountedSearchTools(Set.of(), Set.of());
 		}
@@ -517,7 +515,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
 				AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
 				AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
-				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM)) {
+				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
 			if (prompt.getPlaceholders().containsKey(placeholder)) {
 				return true;
 			}
@@ -549,7 +548,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		deliverableParams.put(USER_LANGUAGE_PARAM, sessionUserLanguage(session));
 		// the network's own placeholders, when the loop's prompt names them: what the
 		// network routed to the loop, its identity, the scenario, the shared context (a
-		// custom loop prompt may; the shipped one names none)
+		// custom loop prompt may; the shipped ones name only the additional rules slot)
 		if (namesAnAgentPlaceholder(agentPrompt)) {
 			deliverableParams.putAll(createAgentTemplateParams(agentPrompt, network, agentRole, contextAgentPersona,
 					session, mySessionContext, request, null, 0, budget));
@@ -1539,67 +1538,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/**
 	 * The iterations of the loop, from the given one: the model's streamed text
 	 * without the control markers, followed by the next iteration when the model
-	 * asked for one and the limit is not reached.
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener,
-				deliverableTemplateParams(DeliverableIntent.SUMMARY));
-	}
-
-	/**
-	 * The iterations of the loop, from the given one, with the prompt parameters
-	 * shaping the deliverable the user asked for (see
-	 * {@link #deliverableTemplateParams(DeliverableIntent)}).
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, false);
-	}
-
-	/**
-	 * The iterations of the loop, from the given one. When {@code evidenceRequired},
-	 * the iteration's text is held back until it uses a tool (models call their tools
-	 * before writing, so it then streams as usual); an iteration that ends without
-	 * using any tool is discarded unseen and the next one is told why, once: the
-	 * iteration after a discarded one streams whatever it does.
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams, boolean evidenceRequired) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams,
-				evidenceRequired ? new SourceGate(ANY_SEARCH, true, List.of()) : SourceGate.NONE, null);
-	}
-
-	/**
-	 * The iterations of the loop, from the given one, each further iteration running
-	 * as the user ({@code runAs}): it starts on the thread the previous one's model
-	 * stream ended on, which carries no identity, and its model call samples the
-	 * identity its tools run with.
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs, null);
-	}
-
-	/**
-	 * The same iterations, with what the controlling software adds to every model call
-	 * of the run (see {@link GeboToolCalling}), passed to each iteration's model call;
-	 * null for nothing.
+	 * asked for one and the limit is not reached. The prompt parameters shape the
+	 * deliverable the user asked for (see
+	 * {@link #deliverableTemplateParams(DeliverableIntent)}); the gate says whether
+	 * an iteration's text waits for a search of the sources (an iteration ending
+	 * without one is discarded unseen and the next told why, once); each further
+	 * iteration runs as the user ({@code runAs}), since it starts on the thread the
+	 * previous one's model stream ended on, which carries no identity; and what the
+	 * controlling software adds to every model call of the run (see
+	 * {@link GeboToolCalling}) is passed to each iteration's model call.
 	 */
 	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
 			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
@@ -1917,7 +1864,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				// its place (see CycleRenderer)
 				return releasedText.concatWith(Flux.just(CYCLE_END_MARK)).concatWith(asUser(runAs, iteration(
 						number + 1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, nextGate, runAs)));
+						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, nextGate, runAs,
+						toolCalling)));
 			});
 			return visible.concatWith(next);
 		});

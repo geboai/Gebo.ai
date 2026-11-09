@@ -26,7 +26,7 @@ import java.util.List;
  * GenericOpenAIAPIChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-30T08:34:14.361614361+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class GenericOpenAIAPIChatModelConfig {
   @JsonProperty("code")
@@ -76,9 +76,6 @@ public class GenericOpenAIAPIChatModelConfig {
 
   @JsonProperty("accessibleToAll")
   private Boolean accessibleToAll = null;
-
-  @JsonProperty("enabledFunctions")
-  private List<String> enabledFunctions = null;
 
   @JsonProperty("temperature")
   private Double temperature = null;
@@ -498,32 +495,6 @@ public class GenericOpenAIAPIChatModelConfig {
     this.accessibleToAll = accessibleToAll;
   }
 
-  public GenericOpenAIAPIChatModelConfig enabledFunctions(List<String> enabledFunctions) {
-    this.enabledFunctions = enabledFunctions;
-    return this;
-  }
-
-  public GenericOpenAIAPIChatModelConfig addEnabledFunctionsItem(String enabledFunctionsItem) {
-    if (this.enabledFunctions == null) {
-      this.enabledFunctions = new ArrayList<>();
-    }
-    this.enabledFunctions.add(enabledFunctionsItem);
-    return this;
-  }
-
-   /**
-   * Get enabledFunctions
-   * @return enabledFunctions
-  **/
-  @Schema(description = "")
-  public List<String> getEnabledFunctions() {
-    return enabledFunctions;
-  }
-
-  public void setEnabledFunctions(List<String> enabledFunctions) {
-    this.enabledFunctions = enabledFunctions;
-  }
-
   public GenericOpenAIAPIChatModelConfig temperature(Double temperature) {
     this.temperature = temperature;
     return this;
@@ -656,7 +627,6 @@ public class GenericOpenAIAPIChatModelConfig {
         Objects.equals(this.accessibleGroups, genericOpenAIAPIChatModelConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, genericOpenAIAPIChatModelConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, genericOpenAIAPIChatModelConfig.accessibleToAll) &&
-        Objects.equals(this.enabledFunctions, genericOpenAIAPIChatModelConfig.enabledFunctions) &&
         Objects.equals(this.temperature, genericOpenAIAPIChatModelConfig.temperature) &&
         Objects.equals(this.forUses, genericOpenAIAPIChatModelConfig.forUses) &&
         Objects.equals(this.features, genericOpenAIAPIChatModelConfig.features) &&
@@ -666,7 +636,7 @@ public class GenericOpenAIAPIChatModelConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, temperature, forUses, features, thinking, maxGeneratedTokens);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, temperature, forUses, features, thinking, maxGeneratedTokens);
   }
 
 
@@ -691,7 +661,6 @@ public class GenericOpenAIAPIChatModelConfig {
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
-    sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    forUses: ").append(toIndentedString(forUses)).append("\n");
     sb.append("    features: ").append(toIndentedString(features)).append("\n");

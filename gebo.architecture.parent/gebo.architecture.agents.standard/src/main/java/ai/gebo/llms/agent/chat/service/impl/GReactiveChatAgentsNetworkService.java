@@ -1,6 +1,7 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.services.GAbstractReactiveOutputAgentsNetworkService;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
@@ -27,9 +28,10 @@ public class GReactiveChatAgentsNetworkService
 			IGeboThreadManager threadManager, GAgentsNetwork network, INotificationSink notificationSink,
 			Class<String> inputType, Class<GeboChatMessageEnvelope> outputType,
 			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao,
+			GNetworkOfAgentsSuspensionRepository suspensions,
 			AdapterWithFlux<?, GeboChatMessageEnvelope> adapterWithFlux) {
 		super(agentsServicesRepository, rolesDao, threadManager, network, notificationSink, inputType, outputType,
-				runAs, agentsDao, adapterWithFlux);
+				runAs, agentsDao, suspensions, adapterWithFlux);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Allocated " + REACTIVE_CHAT_AGENTS_NETWORK_SERVICE + " over network code:"
 					+ (network != null ? network.getCode() : null) + " participants:"

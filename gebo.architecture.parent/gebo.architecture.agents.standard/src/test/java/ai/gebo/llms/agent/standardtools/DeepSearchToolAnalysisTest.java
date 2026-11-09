@@ -46,19 +46,21 @@ class DeepSearchToolAnalysisTest {
 	void theToolsAnalyseWithThePipelinesAnalysisHandingTheirOutcome() {
 		final DeepSearchAnalysis shared = mock(DeepSearchAnalysis.class);
 		when(shared.analyze(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(),
-				anyString())).thenReturn(Flux.just("The ", "analysis."));
+				anyString(), any(), any())).thenReturn(Flux.just("The ", "analysis."));
 		final DeepSearchToolAnalysis tool = new DeepSearchToolAnalysis(shared);
 		final DeepSearchAnalysisOutcome outcome = new DeepSearchAnalysisOutcome();
+		final GeboToolCalling toolCalling = GeboToolCalling.builder().caller("tool:deepSearch").build();
 
 		final String text = String.join("",
 				tool.analyze(Flux.empty(), null, ReactiveIdentityUtil.create(), DeliverableIntent.ANALISYS, "note", null,
-						null, new Vector<>(), IGProgressNotifier.NONE, outcome).collectList().block());
+						null, new Vector<>(), IGProgressNotifier.NONE, outcome, toolCalling).collectList().block());
 
 		assertEquals("The analysis.", text);
 		final ArgumentCaptor<DeepSearchQuotations> quotations = ArgumentCaptor.forClass(DeepSearchQuotations.class);
 		final ArgumentCaptor<Runnable> onFailure = ArgumentCaptor.forClass(Runnable.class);
 		verify(shared).analyze(any(), any(), any(), eq(DeliverableIntent.ANALISYS), eq("note"), any(), any(), any(),
-				any(), quotations.capture(), any(), eq(outcome), onFailure.capture(), eq("Deep search tool"));
+				any(), quotations.capture(), any(), eq(outcome), onFailure.capture(), eq("Deep search tool"),
+				eq(DeepSearchOutputThinking.NONE), same(toolCalling));
 		assertSame(outcome.getQuotations(), quotations.getValue(), "the tool lists the quotations of its outcome");
 		assertNull(onFailure.getValue(), "a tool has no pipeline to notify");
 	}

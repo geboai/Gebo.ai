@@ -21,6 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import org.springframework.beans.factory.annotation.Autowired;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
+import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentsNetworkDao;
 import ai.gebo.architecture.agents.services.INotificationSink;
@@ -83,6 +87,8 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 @Service
 public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GChatEnvironmentNetworkRunner.class);
+	static final String NO_TOOL_CALLING_FOR_THE_RUN = "The run has no tool calling:"
+			+ " the entry point of a run builds one for every call of it";
 
 	private final IGRuntimeBinder runtimeBinder;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
@@ -95,6 +101,12 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	private final IGRequestUnderstandingService requestUnderstanding;
 	/** Gives a network that asks for it a memory of the conversation; null for none. */
 	private final GConversationAgentsSessionFactory conversationMemory;
+	/**
+	 * Carries a suspended run to the caller (see {@link NetworkOfAgentsSuspensionTransport}):
+	 * the one Spring gives, with every translator deployed; the plain one otherwise.
+	 */
+	private volatile NetworkOfAgentsSuspensionTransport suspensionTransport = NetworkOfAgentsSuspensionTransport
+			.plain();
 
 	public GChatEnvironmentNetworkRunner(IGRuntimeBinder runtimeBinder,
 			IGChatSessionLifeCycleService chatSessionLifecycleService, IGChatModelRuntimeConfigurationDao chatModelsDao,
@@ -111,6 +123,13 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/** What a caller sends along with its question. */
+	@Autowired(required = false)
+	public void setSuspensionTransport(NetworkOfAgentsSuspensionTransport suspensionTransport) {
+		if (suspensionTransport != null) {
+			this.suspensionTransport = suspensionTransport;
+		}
+	}
+
 	@Getter
 	@AllArgsConstructor
 	public static class ChatRunAttachments {
@@ -157,6 +176,19 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			return response;
 		}
 
+		/**
+		 * The network of agents suspended by this run, waiting for the caller's reaction
+		 * (see {@link NetworkOfAgentsSuspendedState}); null when the run ended with an
+		 * answer. A caller that cannot react gets the question as the answer's text.
+		 */
+		public NetworkOfAgentsSuspendedState getSuspendedState() {
+			return response != null ? response.getNetworkOfAgentsSuspendedState() : null;
+		}
+
+		public boolean isSuspended() {
+			return getSuspendedState() != null;
+		}
+
 		/** Releases the network service of the run. */
 		public void dispose() {
 			if (service != null) {
@@ -190,34 +222,15 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/**
-	 * Runs the named network on the environment of the given request, as the
-	 * identity in the current security context - which a caller with nobody behind
-	 * it must have taken on before calling.
-	 *
-	 * @throws AgentException when the network does not exist or the run cannot be
-	 *                        prepared
-	 */
-	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, ChatRunAttachments attachments,
-			INotificationSink sink) throws AgentException {
-		final GAgentsNetwork network = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)
-				.findByCode(networkCode);
-		if (network == null) {
-			throw new AgentException("The network of agents does not exist: " + networkCode);
-		}
-		return run(network, request, attachments, sink);
-	}
-
-	/**
-	 * The same, with what the caller adds to every model call of the run (see
-	 * {@link GeboToolCalling}): a caller outside a chat that wants its runs to say who
-	 * made them, to keep within limits of its own or to provide its tools with
-	 * something passes it here. Null for nothing, which is the run as it always has
-	 * been.
+	 * Runs the network of the code in the conversation of the request, with what
+	 * the caller adds to every model call of the run (see {@link GeboToolCalling}):
+	 * who made it, the limits it keeps within, what its tools are given. Required:
+	 * the entry point of a run builds one, and a run without one is refused.
 	 */
 	public ChatEnvironmentRun run(String networkCode, GeboChatRequest request, ChatRunAttachments attachments,
 			GeboToolCalling toolCallingOfThisRun, INotificationSink sink) throws AgentException {
 		if (toolCallingOfThisRun == null) {
-			return run(networkCode, request, attachments, sink);
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
 		}
 		final GAgentsNetwork network = runtimeBinder.getImplementationOf(IAgentsNetworkDao.class)
 				.findByCode(networkCode);
@@ -228,34 +241,11 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	}
 
 	/**
-	 * The same, on a network the caller has already resolved and may have adjusted
-	 * for this run - how many times its controller may act, above all.
-	 * <p>
-	 * A chat is bounded because somebody is waiting for the answer. A caller that
-	 * nobody is waiting for can let the network work for as long as the work takes,
-	 * and says so by handing in a network whose loop limit is its own. Adjust a
-	 * copy ({@link GAgentsNetwork#jsonClone()}), never the stored configuration.
-	 */
-	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
-			INotificationSink sink) throws AgentException {
-		return run(network, request, attachments, List.of(), sink);
-	}
-
-	/**
-	 * The same, with rules this run is to follow on top of the conversation's own -
-	 * the way the rules of a chat reach every model call, since that is what they
-	 * are for.
-	 */
-	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
-			List<String> rulesOfThisRun, INotificationSink sink) throws AgentException {
-		return run(network, request, attachments, rulesOfThisRun, Map.of(), sink);
-	}
-
-	/**
-	 * The same, with values the tools of this run can read from their own tool
-	 * context - how anything a tool needs to know about the run it is serving
-	 * reaches it (see {@code ToolCallbackDeclarationUtil}). A caller whose tools
-	 * must know which of its runs they are in puts that here.
+	 * Runs the network in the conversation of the request, with rules this run is
+	 * to follow on top of the conversation's own, values the tools of this run read
+	 * from their tool context (see {@code ToolCallbackDeclarationUtil}), and what
+	 * the caller adds to every model call of the run (see {@link GeboToolCalling}),
+	 * passed to the network and by the network to its agents; required.
 	 * <p>
 	 * This is the run an exported A2A network makes, and it runs as it always has:
 	 * the request is neither understood nor told where it comes from, the network
@@ -264,21 +254,13 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 	 * the run that does those things.
 	 */
 	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
-			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, INotificationSink sink)
-			throws AgentException {
-		return run(network, request, attachments, rulesOfThisRun, toolsContextOfThisRun, null, sink);
-	}
-
-	/**
-	 * The same, with what the caller adds to every model call of the run (see
-	 * {@link GeboToolCalling}), passed to the network and by the network to its
-	 * agents; null for nothing.
-	 */
-	public ChatEnvironmentRun run(GAgentsNetwork network, GeboChatRequest request, ChatRunAttachments attachments,
 			List<String> rulesOfThisRun, Map<String, Object> toolsContextOfThisRun, GeboToolCalling toolCallingOfThisRun,
 			INotificationSink sink) throws AgentException {
 		if (network == null) {
 			throw new AgentException("There is no network of agents to run");
+		}
+		if (toolCallingOfThisRun == null) {
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
 		}
 		final String networkCode = network.getCode();
 		final IGReactiveChatAgentsNetworkServiceFactory factory = runtimeBinder
@@ -342,14 +324,14 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			// the network is asked the question its input adapter used to read from the
 			// minimal chat context's current request, which is this request
 			final String question = GeboChatRequest.actualQuery(request);
-			final GeboChatMessageEnvelope last = toolCallingOfThisRun != null
-					? service.executeNetwork(context, question != null ? question : "", null, toolCallingOfThisRun)
-					: service.executeNetwork(context, question != null ? question : "", null);
+			final NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result = service.executeNetwork(context,
+					question != null ? question : "", null, toolCallingOfThisRun);
+			final GeboChatMessageEnvelope last = result.getResult();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
 			}
-			final GeboChatResponse answered = responseOf(last, response);
+			final GeboChatResponse answered = carrySuspension(result, responseOf(last, response));
 			// The run ends as a chat's request ends (see ChatRequestEnding): the answer is
 			// saved as an interaction of the conversation, the session is maintained and
 			// the request is released - so the next run goes on in the same conversation,
@@ -437,6 +419,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 		}
 		if (run.getRequest() == null) {
 			throw new AgentException("There is no request to run the network of agents on");
+		}
+		if (run.getToolCallingOfThisRun() == null) {
+			throw new AgentException(NO_TOOL_CALLING_FOR_THE_RUN);
 		}
 		final GAgentsNetwork network = run.getNetwork();
 		final GeboChatRequest request = run.getRequest();
@@ -526,15 +511,14 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 				}
 			}
 			// the network is asked the caller's question; the request is in its environment
-			final GeboChatMessageEnvelope last = run.getToolCallingOfThisRun() != null
-					? service.executeNetwork(context, GeboChatRequest.actualQuery(request), environment,
-							run.getToolCallingOfThisRun())
-					: service.executeNetwork(context, GeboChatRequest.actualQuery(request), environment);
+			final NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result = service.executeNetwork(context,
+					GeboChatRequest.actualQuery(request), environment, run.getToolCallingOfThisRun());
+			final GeboChatMessageEnvelope last = result.getResult();
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Network:" + network.getCode() + " answered in conversation:"
 						+ request.getUserChatContextCode() + ", last frame present:" + (last != null));
 			}
-			final GeboChatResponse answered = responseOf(last, response);
+			final GeboChatResponse answered = carrySuspension(result, responseOf(last, response));
 			if (run.isTransientConversation()) {
 				// Nothing of a transient conversation is kept: the request is released and
 				// the conversation dropped, with whatever it stored.
@@ -749,6 +733,30 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 				LOGGER.debug("The file " + content.getFileName() + " the caller sent is part of the run");
 			}
 		}
+	}
+
+	/**
+	 * What a run that suspended leaves on its response: the state the caller reacts
+	 * to and, as the answer's text, the conditions rendered for a caller that only
+	 * reads the answer (an A2A client, an MCP caller, a harness). A run that ended
+	 * leaves the response as it is.
+	 */
+	private GeboChatResponse carrySuspension(NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result,
+			GeboChatResponse response) {
+		final NetworkOfAgentsSuspendedState state = suspensionTransport.stateOf(result);
+		if (state == null || response == null) {
+			return response;
+		}
+		response.setNetworkOfAgentsSuspendedState(state);
+		final String rendered = NetworkOfAgentsSuspensionTransport.render(state);
+		final String streamed = response.getQueryResponse();
+		response.setQueryResponse(streamed == null || streamed.isBlank() ? rendered : streamed + "\n\n" + rendered);
+		if (LOGGER.isInfoEnabled()) {
+			LOGGER.info("The run suspended into suspension:" + state.getNetworkOfAgentsBlockId() + " waiting for "
+					+ (state.getConditions() != null ? state.getConditions().size() : 0)
+					+ " condition(s): carried to the caller on the response");
+		}
+		return response;
 	}
 
 	private GeboChatResponse responseOf(GeboChatMessageEnvelope last, GeboChatResponse filledIn) {

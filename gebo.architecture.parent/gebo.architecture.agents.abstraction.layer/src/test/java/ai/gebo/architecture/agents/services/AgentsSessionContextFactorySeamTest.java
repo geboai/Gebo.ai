@@ -36,15 +36,18 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Pins the seam that lets a caller living longer than a single run own the
- * session that run collaborates in: that the session the agents are given is the
- * one that caller built, that the caller is told when the run is over and with
- * what, and — above all — that a run with nobody owning its session behaves
- * exactly as it always did.
+ * session that run collaborates in: that the session the agents are given is
+ * the one that caller built, that the caller is told when the run is over and
+ * with what, and — above all — that a run with nobody owning its session
+ * behaves exactly as it always did.
  */
 class AgentsSessionContextFactorySeamTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgentsSessionContextFactorySeamTest").build();
 
 	private static final String INPUT = "the request";
 
@@ -80,11 +83,14 @@ class AgentsSessionContextFactorySeamTest {
 		}
 	}
 
-	/** A network service of no behaviour: it exists to run the base's executeNetwork. */
+	/**
+	 * A network service of no behaviour: it exists to run the base's
+	 * executeNetwork.
+	 */
 	private static final class TestNetworkService extends GAbstractAgentsNetworkService<String, String> {
 		private TestNetworkService(IGAgentsNetworkRuntimeDao agentsDao, GAgentsNetwork network,
 				INotificationSink notificationSink, IAgentsCollaborationSessionContextFactory sessionFactory) {
-			super(null, null, null, network, notificationSink, String.class, String.class, null, agentsDao,
+			super(null, null, null, network, notificationSink, String.class, String.class, null, agentsDao, null,
 					sessionFactory);
 		}
 
@@ -132,7 +138,7 @@ class AgentsSessionContextFactorySeamTest {
 		when(agent.getInputType()).thenReturn((Class) String.class);
 		try {
 			when(agent.onMessage(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(), any(), any(), any(), any(),
-					any(), any(), any())).thenAnswer(invocation -> {
+					any(), any(), any(), any(), any())).thenAnswer(invocation -> {
 						seenByTheAgent.add(invocation.getArgument(7, AgentsCollaborationSessionContext.class));
 						return List.of();
 					});
@@ -167,8 +173,8 @@ class AgentsSessionContextFactorySeamTest {
 		GAgentsNetwork network = network();
 		TestNetworkService service = new TestNetworkService(daoOf(seen), network, sink(), null);
 
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of("KEY", "value"));
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of("KEY", "value"));
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of("KEY", "value"), TOOL_CALLING);
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of("KEY", "value"), TOOL_CALLING);
 
 		assertEquals(2, seen.size(), "the agent ran once per run");
 		assertNotNull(seen.get(0).getId());
@@ -187,7 +193,7 @@ class AgentsSessionContextFactorySeamTest {
 		List<AgentsCollaborationSessionContext> seen = new ArrayList<>();
 		TestNetworkService service = new TestNetworkService(daoOf(seen), network(), sink(), factory);
 
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of());
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING);
 
 		assertSame(owned, seen.get(0), "the agents were given the very session the owner built");
 		assertEquals(1, seen.get(0).getSampledContributions().size(), "with the past that was replayed into it");
@@ -203,7 +209,7 @@ class AgentsSessionContextFactorySeamTest {
 		RecordingSessionFactory factory = new RecordingSessionFactory(owned, null);
 		TestNetworkService service = new TestNetworkService(daoOf(new ArrayList<>()), network(), sink(), factory);
 
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of());
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING);
 
 		assertEquals(1, factory.closed.size(), "told exactly once");
 		assertSame(owned, factory.closed.get(0));
@@ -217,7 +223,7 @@ class AgentsSessionContextFactorySeamTest {
 		TestNetworkService service = new TestNetworkService(daoWithNoRuntime(), network(), sink(), factory);
 
 		assertThrows(AgentException.class,
-				() -> service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of()));
+				() -> service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING));
 
 		assertEquals(1, factory.closed.size(), "a failed run closes its session too");
 		assertSame(owned, factory.closed.get(0));
@@ -232,7 +238,7 @@ class AgentsSessionContextFactorySeamTest {
 		List<AgentsCollaborationSessionContext> seen = new ArrayList<>();
 		TestNetworkService service = new TestNetworkService(daoOf(seen), network(), sink(), factory);
 
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of());
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING);
 
 		assertEquals(1, seen.size(), "the run went ahead");
 		assertNotNull(seen.get(0).getId(), "in a session of its own");
@@ -245,7 +251,7 @@ class AgentsSessionContextFactorySeamTest {
 		List<AgentsCollaborationSessionContext> seen = new ArrayList<>();
 		TestNetworkService service = new TestNetworkService(daoOf(seen), network(), sink(), factory);
 
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of());
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING);
 
 		assertEquals(1, seen.size(), "a run is never lost because its session could not be built");
 		assertNotNull(seen.get(0).getId());
@@ -259,7 +265,7 @@ class AgentsSessionContextFactorySeamTest {
 		TestNetworkService service = new TestNetworkService(daoOf(seen), network(), sink(), null);
 
 		service.setSessionContextFactory(factory);
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of());
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING);
 
 		assertSame(owned, seen.get(0), "which is what the factory overload of the service factories relies on");
 	}
@@ -307,7 +313,7 @@ class AgentsSessionContextFactorySeamTest {
 
 		TestNetworkService service = serviceFactory.create(network(), sink(), String.class, String.class, null,
 				sessionFactory);
-		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of());
+		service.executeNetwork(IChatRequestContext.of(INPUT), INPUT, Map.of(), TOOL_CALLING);
 
 		assertSame(built, service, "the service is the one the factory builds, untouched otherwise");
 		assertSame(owned, seen.get(0), "and its runs collaborate in the sessions that were asked for");
