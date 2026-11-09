@@ -9,9 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ClarificationConditionAttributes } from './clarificationConditionAttributes';
+import { DefaultConditionAttributes } from './defaultConditionAttributes';
 
 export interface AgentSuspendedWaitingConditionDto { 
     conditionType: string;
     conditionId: string;
     attributes: { [key: string]: any; };
+    clarificationAttributes?: ClarificationConditionAttributes;
+    defaultAttributes?: DefaultConditionAttributes;
 }

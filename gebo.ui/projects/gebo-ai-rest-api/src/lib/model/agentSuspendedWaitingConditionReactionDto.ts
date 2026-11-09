@@ -9,9 +9,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ClarificationReactionAttributes } from './clarificationReactionAttributes';
+import { DefaultReactionAttributes } from './defaultReactionAttributes';
 
 export interface AgentSuspendedWaitingConditionReactionDto { 
     conditionType: string;
     conditionId: string;
-    attributes: { [key: string]: any; };
+    attributes?: { [key: string]: any; };
+    clarificationAttributes?: ClarificationReactionAttributes;
+    defaultAttributes?: DefaultReactionAttributes;
 }

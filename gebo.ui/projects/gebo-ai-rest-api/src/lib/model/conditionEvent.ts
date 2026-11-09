@@ -9,14 +9,18 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ClarificationReactionAttributes } from './clarificationReactionAttributes';
 import { ConditionSource } from './conditionSource';
+import { DefaultReactionAttributes } from './defaultReactionAttributes';
 
 export interface ConditionEvent { 
     correlationId?: string;
     sessionCode?: string;
     conditionId?: string;
     conditionType: string;
-    attributes: { [key: string]: any; };
+    attributes?: { [key: string]: any; };
+    clarificationAttributes?: ClarificationReactionAttributes;
+    defaultAttributes?: DefaultReactionAttributes;
     text?: string;
     sourceSystem?: string;
     source?: ConditionSource;

@@ -14,6 +14,8 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.ClarificationConditionAttributes;
+import ai.gebo.monolithic.api.client.model.DefaultConditionAttributes;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +27,7 @@ import java.util.Map;
  * AgentSuspendedWaitingConditionDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T19:03:18.605928900+01:00[Europe/Rome]")
 
 public class AgentSuspendedWaitingConditionDto {
   @JsonProperty("conditionType")
@@ -36,6 +38,12 @@ public class AgentSuspendedWaitingConditionDto {
 
   @JsonProperty("attributes")
   private Map<String, Object> attributes = new HashMap<>();
+
+  @JsonProperty("clarificationAttributes")
+  private ClarificationConditionAttributes clarificationAttributes = null;
+
+  @JsonProperty("defaultAttributes")
+  private DefaultConditionAttributes defaultAttributes = null;
 
   public AgentSuspendedWaitingConditionDto conditionType(String conditionType) {
     this.conditionType = conditionType;
@@ -96,6 +104,42 @@ public class AgentSuspendedWaitingConditionDto {
     this.attributes = attributes;
   }
 
+  public AgentSuspendedWaitingConditionDto clarificationAttributes(ClarificationConditionAttributes clarificationAttributes) {
+    this.clarificationAttributes = clarificationAttributes;
+    return this;
+  }
+
+   /**
+   * Get clarificationAttributes
+   * @return clarificationAttributes
+  **/
+  @Schema(description = "")
+  public ClarificationConditionAttributes getClarificationAttributes() {
+    return clarificationAttributes;
+  }
+
+  public void setClarificationAttributes(ClarificationConditionAttributes clarificationAttributes) {
+    this.clarificationAttributes = clarificationAttributes;
+  }
+
+  public AgentSuspendedWaitingConditionDto defaultAttributes(DefaultConditionAttributes defaultAttributes) {
+    this.defaultAttributes = defaultAttributes;
+    return this;
+  }
+
+   /**
+   * Get defaultAttributes
+   * @return defaultAttributes
+  **/
+  @Schema(description = "")
+  public DefaultConditionAttributes getDefaultAttributes() {
+    return defaultAttributes;
+  }
+
+  public void setDefaultAttributes(DefaultConditionAttributes defaultAttributes) {
+    this.defaultAttributes = defaultAttributes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -108,12 +152,14 @@ public class AgentSuspendedWaitingConditionDto {
     AgentSuspendedWaitingConditionDto agentSuspendedWaitingConditionDto = (AgentSuspendedWaitingConditionDto) o;
     return Objects.equals(this.conditionType, agentSuspendedWaitingConditionDto.conditionType) &&
         Objects.equals(this.conditionId, agentSuspendedWaitingConditionDto.conditionId) &&
-        Objects.equals(this.attributes, agentSuspendedWaitingConditionDto.attributes);
+        Objects.equals(this.attributes, agentSuspendedWaitingConditionDto.attributes) &&
+        Objects.equals(this.clarificationAttributes, agentSuspendedWaitingConditionDto.clarificationAttributes) &&
+        Objects.equals(this.defaultAttributes, agentSuspendedWaitingConditionDto.defaultAttributes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conditionType, conditionId, attributes);
+    return Objects.hash(conditionType, conditionId, attributes, clarificationAttributes, defaultAttributes);
   }
 
 
@@ -125,6 +171,8 @@ public class AgentSuspendedWaitingConditionDto {
     sb.append("    conditionType: ").append(toIndentedString(conditionType)).append("\n");
     sb.append("    conditionId: ").append(toIndentedString(conditionId)).append("\n");
     sb.append("    attributes: ").append(toIndentedString(attributes)).append("\n");
+    sb.append("    clarificationAttributes: ").append(toIndentedString(clarificationAttributes)).append("\n");
+    sb.append("    defaultAttributes: ").append(toIndentedString(defaultAttributes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

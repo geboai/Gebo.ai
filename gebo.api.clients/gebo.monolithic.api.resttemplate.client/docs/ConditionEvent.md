@@ -7,7 +7,9 @@ Name | Type | Description | Notes
 **sessionCode** | **String** |  |  [optional]
 **conditionId** | **String** |  |  [optional]
 **conditionType** | **String** |  | 
-**attributes** | **Map&lt;String, Object&gt;** |  | 
+**attributes** | **Map&lt;String, Object&gt;** |  |  [optional]
+**clarificationAttributes** | [**ClarificationReactionAttributes**](ClarificationReactionAttributes.md) |  |  [optional]
+**defaultAttributes** | [**DefaultReactionAttributes**](DefaultReactionAttributes.md) |  |  [optional]
 **text** | **String** |  |  [optional]
 **sourceSystem** | **String** |  |  [optional]
 **source** | [**ConditionSource**](ConditionSource.md) |  |  [optional]

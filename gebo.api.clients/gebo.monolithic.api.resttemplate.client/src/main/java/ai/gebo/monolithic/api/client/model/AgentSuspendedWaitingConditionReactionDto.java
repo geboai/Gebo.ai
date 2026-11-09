@@ -14,6 +14,8 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.ClarificationReactionAttributes;
+import ai.gebo.monolithic.api.client.model.DefaultReactionAttributes;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -25,7 +27,7 @@ import java.util.Map;
  * AgentSuspendedWaitingConditionReactionDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T19:03:18.605928900+01:00[Europe/Rome]")
 
 public class AgentSuspendedWaitingConditionReactionDto {
   @JsonProperty("conditionType")
@@ -35,7 +37,13 @@ public class AgentSuspendedWaitingConditionReactionDto {
   private String conditionId = null;
 
   @JsonProperty("attributes")
-  private Map<String, Object> attributes = new HashMap<>();
+  private Map<String, Object> attributes = null;
+
+  @JsonProperty("clarificationAttributes")
+  private ClarificationReactionAttributes clarificationAttributes = null;
+
+  @JsonProperty("defaultAttributes")
+  private DefaultReactionAttributes defaultAttributes = null;
 
   public AgentSuspendedWaitingConditionReactionDto conditionType(String conditionType) {
     this.conditionType = conditionType;
@@ -79,6 +87,9 @@ public class AgentSuspendedWaitingConditionReactionDto {
   }
 
   public AgentSuspendedWaitingConditionReactionDto putAttributesItem(String key, Object attributesItem) {
+    if (this.attributes == null) {
+      this.attributes = new HashMap<>();
+    }
     this.attributes.put(key, attributesItem);
     return this;
   }
@@ -87,13 +98,49 @@ public class AgentSuspendedWaitingConditionReactionDto {
    * Get attributes
    * @return attributes
   **/
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   public Map<String, Object> getAttributes() {
     return attributes;
   }
 
   public void setAttributes(Map<String, Object> attributes) {
     this.attributes = attributes;
+  }
+
+  public AgentSuspendedWaitingConditionReactionDto clarificationAttributes(ClarificationReactionAttributes clarificationAttributes) {
+    this.clarificationAttributes = clarificationAttributes;
+    return this;
+  }
+
+   /**
+   * Get clarificationAttributes
+   * @return clarificationAttributes
+  **/
+  @Schema(description = "")
+  public ClarificationReactionAttributes getClarificationAttributes() {
+    return clarificationAttributes;
+  }
+
+  public void setClarificationAttributes(ClarificationReactionAttributes clarificationAttributes) {
+    this.clarificationAttributes = clarificationAttributes;
+  }
+
+  public AgentSuspendedWaitingConditionReactionDto defaultAttributes(DefaultReactionAttributes defaultAttributes) {
+    this.defaultAttributes = defaultAttributes;
+    return this;
+  }
+
+   /**
+   * Get defaultAttributes
+   * @return defaultAttributes
+  **/
+  @Schema(description = "")
+  public DefaultReactionAttributes getDefaultAttributes() {
+    return defaultAttributes;
+  }
+
+  public void setDefaultAttributes(DefaultReactionAttributes defaultAttributes) {
+    this.defaultAttributes = defaultAttributes;
   }
 
 
@@ -108,12 +155,14 @@ public class AgentSuspendedWaitingConditionReactionDto {
     AgentSuspendedWaitingConditionReactionDto agentSuspendedWaitingConditionReactionDto = (AgentSuspendedWaitingConditionReactionDto) o;
     return Objects.equals(this.conditionType, agentSuspendedWaitingConditionReactionDto.conditionType) &&
         Objects.equals(this.conditionId, agentSuspendedWaitingConditionReactionDto.conditionId) &&
-        Objects.equals(this.attributes, agentSuspendedWaitingConditionReactionDto.attributes);
+        Objects.equals(this.attributes, agentSuspendedWaitingConditionReactionDto.attributes) &&
+        Objects.equals(this.clarificationAttributes, agentSuspendedWaitingConditionReactionDto.clarificationAttributes) &&
+        Objects.equals(this.defaultAttributes, agentSuspendedWaitingConditionReactionDto.defaultAttributes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conditionType, conditionId, attributes);
+    return Objects.hash(conditionType, conditionId, attributes, clarificationAttributes, defaultAttributes);
   }
 
 
@@ -125,6 +174,8 @@ public class AgentSuspendedWaitingConditionReactionDto {
     sb.append("    conditionType: ").append(toIndentedString(conditionType)).append("\n");
     sb.append("    conditionId: ").append(toIndentedString(conditionId)).append("\n");
     sb.append("    attributes: ").append(toIndentedString(attributes)).append("\n");
+    sb.append("    clarificationAttributes: ").append(toIndentedString(clarificationAttributes)).append("\n");
+    sb.append("    defaultAttributes: ").append(toIndentedString(defaultAttributes)).append("\n");
     sb.append("}");
     return sb.toString();
   }
