@@ -27,6 +27,7 @@ import ai.gebo.architecture.agents.conditionevents.model.ConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionSources;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsService;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStore;
@@ -59,7 +60,7 @@ import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTranspo
 public class ConditionEventsReactionRecorder implements IConditionReactionRecorder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConditionEventsReactionRecorder.class);
 	/** The system the chat's answers come from. */
-	public static final String SOURCE_SYSTEM = "CHAT";
+	public static final String SOURCE_SYSTEM = ConditionSources.CHAT_SYSTEM;
 	static final String NOT_NAMED = "The answer names no condition";
 	static final String ANSWERED_TWICE = "The reaction answers this condition more than once: the first answer counts";
 	/** The states of an event that solves its condition in the block it was matched to. */
@@ -112,7 +113,8 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 					answers.add(new Answer(conditionId, RecordedConditionReaction.REFUSED, ANSWERED_TWICE));
 				} else {
 					// held: the request takes the block further itself, below
-					final ConditionEventAck ack = events.deliverHeld(eventOf(block, answer, requestId), caller);
+					final ConditionEventAck ack = events.deliverHeld(eventOf(block, answer, username, requestId),
+							caller);
 					answers.add(new Answer(conditionId,
 							ack.getOutcome() != null ? ack.getOutcome().name() : RecordedConditionReaction.REFUSED,
 							ack.getReason()));
@@ -152,14 +154,15 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 			final GConditionEvent event = solvingEventIn(block, condition.getSuspendedConditionId());
 			if (event != null) {
 				solved.add(new SolvedCondition(event.getConditionId(), event.getSourceSystem(), event.getActor(),
-						event.getAcceptedAt() != null ? event.getAcceptedAt() : event.getLastReceivedAt()));
+						event.getAcceptedAt() != null ? event.getAcceptedAt() : event.getLastReceivedAt(),
+						event.sourceOrKept()));
 			}
 		}
 		return solved;
 	}
 
 	private static ConditionEvent eventOf(GNetworkOfAgentsSuspension block, AgentSuspendedWaitingConditionReactionDto answer,
-			String requestId) {
+			String username, String requestId) {
 		final ConditionEvent event = new ConditionEvent();
 		event.setSessionCode(block.getConversationCode());
 		event.setConditionId(answer.getConditionId());
@@ -167,6 +170,8 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 		event.setAttributes(answer.getAttributes() != null ? new LinkedHashMap<String, Object>(answer.getAttributes())
 				: new LinkedHashMap<String, Object>());
 		event.setSourceSystem(SOURCE_SYSTEM);
+		// the conversation's own user, verified on delivery as the account answering
+		event.setSource(ConditionSources.forChatUser(username, null, block.getConversationCode()));
 		// the same chat request sent again is the same event of its source
 		event.setSourceEventId(requestId != null ? requestId + ":" + answer.getConditionId() : null);
 		return event;

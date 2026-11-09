@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
+import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
 import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
@@ -38,6 +39,8 @@ public class GConditionEvent extends GBaseObject {
 	/** What the source said of it, for the history. */
 	private String text = null;
 	private String sourceSystem = null;
+	/** Who or what solved the condition, as kept on delivery; null on events kept before sources. */
+	private ConditionSource source = null;
 	private String sourceEventId = null;
 	private Date sourceTimestamp = null;
 	/** Who delivered it and through which channel. */
@@ -64,13 +67,19 @@ public class GConditionEvent extends GBaseObject {
 		return new ConditionCorrelationId(sessionCode, conditionId);
 	}
 
-	/** The reaction this event stands for. */
+	/** Its source, or for an event kept before sources the one told by what it kept. */
+	public ConditionSource sourceOrKept() {
+		return source != null ? source : ConditionSources.ofKept(this);
+	}
+
+	/** The reaction this event stands for, with its source. */
 	public AgentSuspendedWaitingConditionReactionDto toReaction() {
 		final AgentSuspendedWaitingConditionReactionDto reaction = new AgentSuspendedWaitingConditionReactionDto();
 		reaction.setConditionType(conditionType);
 		reaction.setConditionId(conditionId);
 		reaction.setAttributes(attributes != null ? new LinkedHashMap<String, Object>(attributes)
 				: new LinkedHashMap<String, Object>());
+		reaction.setSource(sourceOrKept());
 		return reaction;
 	}
 }

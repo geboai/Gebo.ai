@@ -122,7 +122,7 @@ public class NetworkOfAgentsSuspensionTransport {
 					final LinkedHashMap<String, Object> attributes = dto.getAttributes() != null ? dto.getAttributes()
 							: new LinkedHashMap<String, Object>();
 					attributes.put(SOLVED, Boolean.TRUE);
-					attributes.put(SOLVED_BY, answer.sourceSystem());
+					attributes.put(SOLVED_BY, answer.solvedByLabel());
 					attributes.put(SOLVED_AT, answer.solvedAt());
 					dto.setAttributes(attributes);
 				}

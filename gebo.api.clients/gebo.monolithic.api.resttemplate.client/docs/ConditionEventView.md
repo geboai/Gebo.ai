@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **reason** | **String** |  |  [optional]
 **blockCode** | **String** |  |  [optional]
 **sourceSystem** | **String** |  |  [optional]
+**source** | [**ConditionSource**](ConditionSource.md) |  |  [optional]
 **sourceEventId** | **String** |  |  [optional]
 **sourceTimestamp** | [**Date**](Date.md) |  |  [optional]
 **receivedAt** | [**Date**](Date.md) |  |  [optional]

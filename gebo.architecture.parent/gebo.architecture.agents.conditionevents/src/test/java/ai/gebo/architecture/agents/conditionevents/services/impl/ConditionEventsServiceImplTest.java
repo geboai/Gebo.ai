@@ -38,12 +38,14 @@ import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck.Outcome;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionEventView;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionDispatch;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
@@ -607,6 +609,100 @@ class ConditionEventsServiceImplTest {
 				"Manager approval of the offer", "the offer cannot go out without it", null, mandatory);
 		condition.setSuspendedConditionId(id);
 		return condition;
+	}
+
+	@Test
+	void aSourceSayingWhoItIsIsKeptAndTheRespawnTellsIt() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"));
+		final ConditionEvent event = choice(SESSION + ":year", "2024");
+		event.setSource(anna());
+
+		assertEquals(Outcome.ACCEPTED, service.deliver(event, application()).getOutcome());
+
+		final GConditionEvent kept = store.events.get(SESSION + ":year");
+		assertEquals("arossi", kept.getSource().getId());
+		assertEquals("erp-session-7", kept.getSource().getSessionCode());
+		assertTrue(kept.getSource().isVerified(), "an application account delivers for others");
+		assertEquals(ConditionEventCaller.REST, kept.getSource().getChannel());
+		assertEquals("ERP", kept.getSourceSystem());
+		assertEquals("erp-integration", kept.getActor(), "who delivered it is kept apart");
+		assertEquals("arossi", ConditionEventView.of(kept).getSource().getId());
+		assertEquals(1, respawns.size());
+		final ConditionSource told = respawns.get(0).getNetworkOfAgentsSuspendedStateReaction().getReactions().get(0)
+				.getSource();
+		assertEquals("Anna Rossi (ERP)", told.label(), "the respawn says who answered");
+		assertEquals("Which year?\n→ 2024 (from Anna Rossi (ERP))", respawns.get(0).getQuery());
+		assertEquals(block.getCode(), kept.getDispatchCode());
+	}
+
+	@Test
+	void aSourceClaimedByAnotherAccountIsKeptUnverified() {
+		block(question("year", true, "2023", "2024"));
+		final ConditionEvent event = choice(SESSION + ":year", "2024");
+		final ConditionSource claimed = anna();
+		claimed.setVerified(true);
+		event.setSource(claimed);
+
+		service.deliver(event, owner());
+
+		final ConditionSource kept = store.events.get(SESSION + ":year").getSource();
+		assertFalse(kept.isVerified(), "the owner is not Anna");
+		assertEquals("Anna Rossi (ERP), unverified", kept.label());
+		assertEquals("Anna Rossi (ERP), unverified", respawns.get(0).getNetworkOfAgentsSuspendedStateReaction()
+				.getReactions().get(0).getSource().label());
+	}
+
+	@Test
+	void anEventClaimingNoSourceIsToldByItsDelivererAndTheHistoryAsAlways() {
+		block(question("year", true, "2023", "2024"));
+
+		service.deliver(choice(SESSION + ":year", "2024"), application());
+
+		final ConditionSource source = respawns.get(0).getNetworkOfAgentsSuspendedStateReaction().getReactions().get(0)
+				.getSource();
+		assertEquals("erp-integration (ERP)", source.label());
+		assertEquals("Which year?\n→ 2024 (from ERP)", respawns.get(0).getQuery());
+	}
+
+	@Test
+	void theChatsAnswersAreTheConversationsUserTheOthersKeepTheirSource() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"), approval("approval", true));
+		final ConditionEvent approved = value(SESSION + ":approval", "approved");
+		approved.setSourceSystem("WORKFLOW");
+		service.deliver(approved, application());
+
+		final RecordedConditionReaction recorded = recorder.record(block, chatChoosing(block, "year", "2024"), OWNER,
+				"request-1");
+
+		final ConditionSource year = recorded.reaction().getReactions().get(0).getSource();
+		assertTrue(year.isConversationUser(), "the chat's answer is the conversation's user");
+		assertEquals(OWNER, year.getId());
+		assertEquals(SESSION, year.getSessionCode());
+		final ConditionSource approval = recorded.reaction().getReactions().get(1).getSource();
+		assertFalse(approval.isConversationUser());
+		assertEquals("erp-integration (WORKFLOW)", approval.label());
+	}
+
+	@Test
+	void theFormShowsYouForTheChatsAnswersAndTheSourceForOthers() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"), approval("approval", true),
+				approval("budget", true));
+		final ConditionEvent approved = value(SESSION + ":approval", "approved");
+		approved.setSource(anna());
+		service.deliver(approved, application());
+		recorder.record(block, chatChoosing(block, "year", "2024"), OWNER, "request-1");
+
+		final List<SolvedCondition> solved = recorder.solvedConditionsOf(block);
+
+		assertEquals(List.of("year", "approval"), solved.stream().map(SolvedCondition::conditionId).toList());
+		assertEquals(SolvedCondition.YOU, solved.get(0).solvedByLabel());
+		assertEquals("Anna Rossi (ERP)", solved.get(1).solvedByLabel());
+	}
+
+	private static ConditionSource anna() {
+		final ConditionSource source = ConditionSource.of(ConditionSource.Kind.PERSON, "ERP", "arossi", "Anna Rossi");
+		source.setSessionCode("erp-session-7");
+		return source;
 	}
 
 	private static ConditionEvent choice(String correlationId, String option) {

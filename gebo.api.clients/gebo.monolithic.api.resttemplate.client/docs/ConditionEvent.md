@@ -10,5 +10,6 @@ Name | Type | Description | Notes
 **attributes** | **Map&lt;String, Object&gt;** |  | 
 **text** | **String** |  |  [optional]
 **sourceSystem** | **String** |  |  [optional]
+**source** | [**ConditionSource**](ConditionSource.md) |  |  [optional]
 **sourceEventId** | **String** |  |  [optional]
 **sourceTimestamp** | [**Date**](Date.md) |  |  [optional]

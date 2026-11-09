@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,7 @@ import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionDispatchRepository;
 import ai.gebo.architecture.agents.conditionevents.repository.GConditionEventRepository;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsPublisher;
+import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
@@ -93,9 +95,14 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private static final String ANSWER_MARKER = "GEBO_TEST_CONDITION_EVENT_ANSWER";
 	private static final String USER_QUESTION = "Please answer in English, write me a short holiday note about the country I prefer.";
 	private static final String THE_QUESTION = "Which country do you prefer for your holiday note: Italy or France?";
-	/** How the respawned agent is told the answer to its question ({@code ResolvedConditionText}). */
+	/**
+	 * How the respawned agent is told the answer to its question
+	 * ({@code ResolvedConditionText}): as the user's, or naming the source that
+	 * gave it when it is another.
+	 */
 	private static final String TOLD_THE_ANSWER = "You asked the user:";
-	private static final String TOLD_THE_CHOICE = "The user chose: ";
+	private static final String TOLD_BY_A_SOURCE = "You asked: ";
+	private static final String TOLD_THE_CHOICE = " chose: ";
 	/** The marker of the router's request understanding prompt (its system prompt's first line). */
 	private static final String REWRITE_PROMPT_MARKER = "Minimal Question Rewriter";
 	private static final String TITLE_PROMPT_MARKER = "summarization assistant";
@@ -130,6 +137,8 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	private FilterChainProxy securityFilters;
 	@Autowired
 	private LocalJwtTokenProvider tokens;
+	/** The line of each answer the respawned agents were told, as they read it. */
+	private final List<String> toldAnswers = new CopyOnWriteArrayList<String>();
 	/** A mapper of its own: the test context has no ObjectMapper bean (dates go as epoch millis). */
 	private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -137,7 +146,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	protected void beforeEachCallback() throws Exception {
 		// the agent, not yet told the answer, asks the question through its tool
 		TestChatModel.setGlobalToolCallLogic(prompt -> {
-			if (prompt == null || !prompt.contains(USER_QUESTION) || prompt.contains(TOLD_THE_ANSWER)
+			if (prompt == null || !prompt.contains(USER_QUESTION) || told(prompt)
 					|| prompt.contains(REWRITE_PROMPT_MARKER) || prompt.contains(TITLE_PROMPT_MARKER)) {
 				return null;
 			}
@@ -154,13 +163,18 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			if (prompt.contains(REWRITE_PROMPT_MARKER)) {
 				return "deliverable=QA\nrewrittenQuery=" + USER_QUESTION + "\nuserRequiredLanguage=English";
 			}
-			if (prompt.contains(TOLD_THE_ANSWER)) {
+			if (told(prompt)) {
 				final String chosen = prompt.contains(TOLD_THE_CHOICE + "Italy") ? "Italy"
 						: prompt.contains(TOLD_THE_CHOICE + "France") ? "France" : "an unknown country";
+				prompt.lines().filter(line -> line.contains(TOLD_THE_CHOICE)).findFirst().ifPresent(toldAnswers::add);
 				return ANSWER_MARKER + ": a short holiday note about " + chosen + ".";
 			}
 			return "";
 		});
+	}
+
+	private static boolean told(String prompt) {
+		return prompt.contains(TOLD_THE_ANSWER) || prompt.contains(TOLD_BY_A_SOURCE);
 	}
 
 	@Override
@@ -292,8 +306,11 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 		Suspended suspended = null;
 		try {
 			suspended = aSuspendedChat();
-			final String body = objectMapper
-					.writeValueAsString(answer(suspended, "Italy", "condition-events-rest-test", "evt-rest-1"));
+			final ConditionEvent fromAnna = answer(suspended, "Italy", "condition-events-rest-test", "evt-rest-1");
+			final ConditionSource anna = ConditionSource.of(ConditionSource.Kind.PERSON, "ERP", "arossi", "Anna Rossi");
+			anna.setSessionCode("erp-session-7");
+			fromAnna.setSource(anna);
+			final String body = objectMapper.writeValueAsString(fromAnna);
 			final MockHttpServletResponse delivered = mvc.perform(post(DELIVER)
 					.header("Authorization", "Bearer " + apiKey).contentType(MediaType.APPLICATION_JSON).content(body))
 					.andReturn().getResponse();
@@ -307,6 +324,13 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			final GConditionEvent applied = verifyApplied(suspended, "Italy");
 			assertEquals(ConditionEventCaller.REST, applied.getChannel(), "it came through REST");
 			assertEquals(DEFAULT_ALL_ROLES_USER, applied.getActor(), "sent by the key's user");
+			assertEquals("arossi", applied.getSource().getId(), "the source the event says it comes from");
+			assertEquals("erp-session-7", applied.getSource().getSessionCode());
+			assertEquals("ERP", applied.getSourceSystem());
+			assertEquals(
+					"Anna Rossi (ERP)" + (applied.getSource().isVerified() ? "" : ", unverified") + " chose: Italy",
+					toldAnswers.get(0), "the agent is told who answered, verified only by the key's account: "
+							+ toldAnswers);
 
 			// the status is readable through REST
 			final JsonNode view = objectMapper.readTree(mvc
@@ -315,6 +339,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 					.andReturn().getResponse().getContentAsString());
 			assertEquals("APPLIED", view.path("status").asText(), "the status reads APPLIED: " + view);
 			assertEquals(suspended.correlationId(), view.path("correlationId").asText());
+			assertEquals("arossi", view.path("source").path("id").asText(), "the status shows the source: " + view);
 
 			// the same event sent again changes nothing
 			final JsonNode again = objectMapper.readTree(mvc.perform(post(DELIVER)
@@ -347,6 +372,9 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			assertEquals(DEFAULT_ALL_ROLES_USER, applied.getActor(), "sent on behalf of the envelope's user");
 			assertEquals(ConditionEventsReceiverFactory.MODULE_ID + "." + ConditionEventsPublisher.SYSTEM_ID,
 					applied.getSourceSystem(), "with no source of its own, the sending component is the source");
+			assertTrue(applied.getSource().isVerified(), "the broker is a trusted channel");
+			assertEquals(DEFAULT_ALL_ROLES_USER + " (" + applied.getSourceSystem() + ") chose: France",
+					toldAnswers.get(0), "the agent is told who answered: " + toldAnswers);
 
 			// the same event sent again changes nothing
 			publisher.publish(event, DEFAULT_ALL_ROLES_USER);

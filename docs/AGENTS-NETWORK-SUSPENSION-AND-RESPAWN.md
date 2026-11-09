@@ -188,6 +188,31 @@ respawn runs as the session's owner**. The event keeps the actor and the channel
 broker's log. The delivery is asynchronous on both channels: the outcome is read with the
 status.
 
+### The source
+
+An event may say who or what solved the condition with `source` (`ConditionSource`): its
+`kind` (`PERSON`, `AGENT`, `SYSTEM`), `system`, `id`, `displayName`, the `sessionCode` of a
+person or an agent in its own system, an agent's `agentCode` and `networkCode`, and any
+other `details`. What it says is kept as told; `ConditionSources` decides whether it is
+`verified`:
+
+- the chat's own answers are built on the server, as the conversation's user: verified;
+- a claimed source is verified when it is the delivering account itself, when it came
+  through the broker, or when the caller holds the application authority; otherwise it is
+  kept, marked unverified;
+- an event claiming none is told by its deliverer (its account, with `sourceSystem` or the
+  sending component as the system).
+
+The `channel` is always the one it came through, and `actor` still records the delivering
+account. The source travels with the reaction to the respawn (on
+`AgentSuspendedWaitingConditionReactionDto.source`, never read from or written to a client)
+and is saved on the condition (`solvedBy`, in the block and in an agent's solved conditions).
+The agents are told who answered when it is not the conversation's user ("You asked: Which
+year?\nAnna Rossi (ERP) chose: 2024", "It came from Anna Rossi (ERP), unverified: yes"); the
+user's own answers, and those saved before sources, read as before. The history line of an
+event names a source that says what it is, and the answer form shows "Answered (you)" or the
+source.
+
 ### From the event to the respawn
 
 1. `deliver` keeps the event (`GConditionEvent`) and matches it to the session's open block.

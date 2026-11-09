@@ -10,6 +10,7 @@ package ai.gebo.architecture.agents.conditionevents.model;
 
 import java.util.Date;
 
+import ai.gebo.architecture.agents.model.ConditionSource;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -25,6 +26,8 @@ public class ConditionEventView {
 	private String reason = null;
 	private String blockCode = null;
 	private String sourceSystem = null;
+	/** Who or what solved the condition. */
+	private ConditionSource source = null;
 	private String sourceEventId = null;
 	private Date sourceTimestamp = null;
 	private Date receivedAt = null;
@@ -47,6 +50,7 @@ public class ConditionEventView {
 		view.setReason(event.getReason());
 		view.setBlockCode(event.getBlockCode());
 		view.setSourceSystem(event.getSourceSystem());
+		view.setSource(event.sourceOrKept());
 		view.setSourceEventId(event.getSourceEventId());
 		view.setSourceTimestamp(event.getSourceTimestamp());
 		view.setReceivedAt(event.getReceivedAt());

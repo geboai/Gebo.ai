@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventTextRenderer;
+import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.pipelines.service.impl.DefaultConditionTransportTranslator;
 import ai.gebo.llms.chat.pipelines.service.impl.GAbstractConditionTransportTranslator;
@@ -57,9 +58,22 @@ public class DefaultConditionEventTextRenderer implements IConditionEventTextRen
 	}
 
 	static String fromOf(GConditionEvent event) {
-		return event.getSourceSystem() != null && !event.getSourceSystem().isBlank()
-				? " (from " + event.getSourceSystem().strip() + ")"
-				: "";
+		final String from = sourceLabelOf(event);
+		return from != null ? " (from " + from + ")" : "";
+	}
+
+	/**
+	 * How the history names the source of an event: the label of a source that
+	 * says what it is (claimed, or the chat's user); otherwise the system the
+	 * event names, as it always did. Null for none.
+	 */
+	static String sourceLabelOf(GConditionEvent event) {
+		if (event.getSource() != null && event.getSource().getKind() != null
+				&& event.getSource().getKind() != ConditionSource.Kind.UNKNOWN) {
+			return event.getSource().label();
+		}
+		return event.getSourceSystem() != null && !event.getSourceSystem().isBlank() ? event.getSourceSystem().strip()
+				: null;
 	}
 
 	static boolean isBlank(Object value) {

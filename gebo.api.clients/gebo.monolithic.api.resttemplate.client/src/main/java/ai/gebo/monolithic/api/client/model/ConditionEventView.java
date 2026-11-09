@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.ConditionSource;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -23,7 +24,7 @@ import java.util.Date;
  * ConditionEventView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T15:16:14.129564900+01:00[Europe/Rome]")
 
 public class ConditionEventView {
   @JsonProperty("correlationId")
@@ -86,6 +87,9 @@ public class ConditionEventView {
 
   @JsonProperty("sourceSystem")
   private String sourceSystem = null;
+
+  @JsonProperty("source")
+  private ConditionSource source = null;
 
   @JsonProperty("sourceEventId")
   private String sourceEventId = null;
@@ -255,6 +259,24 @@ public class ConditionEventView {
     this.sourceSystem = sourceSystem;
   }
 
+  public ConditionEventView source(ConditionSource source) {
+    this.source = source;
+    return this;
+  }
+
+   /**
+   * Get source
+   * @return source
+  **/
+  @Schema(description = "")
+  public ConditionSource getSource() {
+    return source;
+  }
+
+  public void setSource(ConditionSource source) {
+    this.source = source;
+  }
+
   public ConditionEventView sourceEventId(String sourceEventId) {
     this.sourceEventId = sourceEventId;
     return this;
@@ -417,6 +439,7 @@ public class ConditionEventView {
         Objects.equals(this.reason, conditionEventView.reason) &&
         Objects.equals(this.blockCode, conditionEventView.blockCode) &&
         Objects.equals(this.sourceSystem, conditionEventView.sourceSystem) &&
+        Objects.equals(this.source, conditionEventView.source) &&
         Objects.equals(this.sourceEventId, conditionEventView.sourceEventId) &&
         Objects.equals(this.sourceTimestamp, conditionEventView.sourceTimestamp) &&
         Objects.equals(this.receivedAt, conditionEventView.receivedAt) &&
@@ -429,7 +452,7 @@ public class ConditionEventView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, status, reason, blockCode, sourceSystem, sourceEventId, sourceTimestamp, receivedAt, lastReceivedAt, deliveries, acceptedAt, appliedAt, respawnedToBlockCode);
+    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, status, reason, blockCode, sourceSystem, source, sourceEventId, sourceTimestamp, receivedAt, lastReceivedAt, deliveries, acceptedAt, appliedAt, respawnedToBlockCode);
   }
 
 
@@ -446,6 +469,7 @@ public class ConditionEventView {
     sb.append("    reason: ").append(toIndentedString(reason)).append("\n");
     sb.append("    blockCode: ").append(toIndentedString(blockCode)).append("\n");
     sb.append("    sourceSystem: ").append(toIndentedString(sourceSystem)).append("\n");
+    sb.append("    source: ").append(toIndentedString(source)).append("\n");
     sb.append("    sourceEventId: ").append(toIndentedString(sourceEventId)).append("\n");
     sb.append("    sourceTimestamp: ").append(toIndentedString(sourceTimestamp)).append("\n");
     sb.append("    receivedAt: ").append(toIndentedString(receivedAt)).append("\n");
