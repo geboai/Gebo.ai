@@ -139,6 +139,64 @@ respawn, before the recorder; the events' `deliver`, before the event is kept; a
 translators, again, which changes nothing), so whatever reads the attributes reads it. A
 custom type answers with the map only.
 
+## Expiry, the waiting conditions panel, going on without and abandoning
+
+A condition may stop waiting. Its **expiry** (`ConditionExpiry`: when, and whether the run
+goes on then) is software's, never the model's: the waiting tool's own code may set it
+(`GAbstractAskUserChoiceQuestionTool.expiryOf`, null by default), else the agent's
+configuration decides (`GAgentConfig.conditionsExpiry`: `expiryMinutes`, `expiryUnblocks`),
+else the platform's default (`ai.gebo.agents.conditions.defaultExpiryMinutes`, `0` and off
+unless configured, and `defaultExpiryUnblocks`, `false`). The suspension handler asks the
+`IWaitingConditionExpiryPolicy` the network service factories hand it, as it does for the
+type, and keeps the expiry with the condition (`WaitingCondition.expiresAt`,
+`expiryUnblocks`) and the earliest one on the block (`earliestExpiryAt`, indexed). The block
+also says whether the run suspended **unwatched** (`unwatched`: its request said nobody
+attends it, as a respawn by events, an A2A or MCP call), and why it was dropped
+(`droppedReason`: `NEW_INTERACTION`, `SUSPENDED_AGAIN`, `ABANDONED`, and `droppedBy` when a
+person chose it).
+
+The sweep of the condition events tends the waiting conditions first
+(`IWaitingConditionsService`, `WaitingConditionsServiceImpl`):
+
+- an expired condition whose expiry **unblocks** is resolved with no value by an event of
+  the platform's own (source system `GEBO`, `unanswered = EXPIRED`), accepted for the block
+  as any event is: the dispatcher respawns the block as the owner once nothing mandatory is
+  left, and the agent reads `No answer came before <moment>: go on without it, saying what
+  you assumed.` (`UnansweredConditionText`);
+- an expired condition whose expiry does **not** unblock keeps waiting, and the owner is told
+  once, a personal system message (`WaitingConditionsNotifier`, source
+  `AGENTS-WAITING-CONDITIONS`, key `expired:<block>`, warning);
+- the owner of an **unwatched** run is told once it suspended (key `unwatched:<block>`,
+  info); both messages are taken back when the block closes.
+
+The **waiting conditions panel** lists the open blocks (`WaitingBlockView`, with every
+condition as `WaitingConditionView`: solved and by whom, expired, its expiry) and offers two
+actions, to the owner on `api/users/WaitingConditionsController` (`waitingConditions`,
+`goOnWithout`, `abandon`) and to the administrators on
+`api/admin/WaitingConditionsAdminController` (`allWaitingConditions`, and the same actions on
+any block):
+
+- **go on without**: the named conditions, or every one still waiting, are resolved with no
+  value, mandatory or not, by events marked `unanswered = GONE_ON_WITHOUT` whose source is
+  the person who chose: the agent reads `The user chose to go on without an answer` for the
+  owner, `The administrator <name> (GEBO) chose ...` for an administrator; the respawn still
+  runs as the owner;
+- **abandon**: the block is dropped where it stands (`ABANDONED`, `droppedBy`), the
+  conversation is free; refused while a respawn of the block is running.
+
+From the chat, the owner asks to go on without a condition with the attribute
+`goOnWithout: true` on its answer: the chat's recorder reads it for the conversation's own
+user and marks the event, so a reaction asking it is always recorded. Nothing else may ask
+it: a delivered event or a reaction carrying the attribute is refused by the translators
+(`GO_ON_WITHOUT_NOT_HERE`), and `unanswered` is the platform's own mark, `@JsonIgnore` on the
+DTOs and taken from a delivered event only on the `CHAT` channel.
+
+A block is written whole by the run that respawns it, so the marks the sweep sets on an open
+block (`expiryNotifiedAt`, `unwatchedNotifiedAt`) may be lost: every step does nothing when
+done again (an event already solving the condition is kept, a message republished unchanged
+keeps its revision and its dismissals), the marks only spare the repeat, and the retraction
+is keyed on `unwatched` and `earliestExpiryAt`, which are written with the block.
+
 ## The additional rules slot
 
 A prompt can forbid what a tool needs: a coordinator told that its only output is the
@@ -274,7 +332,8 @@ way, default `true`), `pendingTimeToLiveMillis` (24 h), `retryBackoffMillis` (30
 `applicationAuthority` (`APPLICATION`), `sweepPeriodMillis` (30 s),
 `sweepInitialDelayMillis` (60 s). The modules `gebo.architecture.agents.conditionevents`
 and `gebo.architecture.agents.conditionevents.controllers` are in the monolithic starter and
-in the brain.
+in the brain. The expiry of the conditions: `ai.gebo.agents.conditions.defaultExpiryMinutes`
+(`0`, off) and `defaultExpiryUnblocks` (`false`).
 
 ## Tests
 
@@ -289,8 +348,10 @@ mocked agents and a parallel group), `GMongoNetworkOfAgentsSuspensionHandlerTest
 `GChatEnvironmentNetworkRunnerTest`.
 
 Condition events: `ConditionCorrelationIdTest`, `ConditionEventsServiceImplTest`,
-`ConditionEventsPublisherTest`; end to end in gebo.ai.app with the scripted model,
-`ConditionEventRespawnEndToEndTest` (REST with a personal API key, and the broker through
-the publisher); with real models, `ConditionEventsWithRealLlmsIntegrationTest` in
+`ConditionEventsPublisherTest`; the expiry and the panel: `ConditionExpiryTest`,
+`ConditionExpiryKeptTest`, `WaitingConditionsNotifierTest`, `WaitingConditionsServiceImplTest`;
+end to end in gebo.ai.app with the scripted model,
+`ConditionEventRespawnEndToEndTest` (REST with a personal API key, the broker through
+the publisher, the panel going on without and abandoning, an expiry that unblocks); with real models, `ConditionEventsWithRealLlmsIntegrationTest` in
 `integration-tests/condition-events-integration-tests` (needs `FullSetupSecret`; skips when
 the model never asks, unless `ai.gebo.tests.conditionevents.strictModelBehaviour=true`).

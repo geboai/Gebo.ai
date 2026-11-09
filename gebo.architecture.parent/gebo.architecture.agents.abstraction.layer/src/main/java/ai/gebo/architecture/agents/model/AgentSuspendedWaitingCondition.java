@@ -53,6 +53,18 @@ public class AgentSuspendedWaitingCondition<T, O> {
 	 * and in the blocks kept before it was, which find their translator by kind.
 	 */
 	private String conditionType = null;
+	/**
+	 * When the condition stops waiting, and whether the run goes on then: set by the
+	 * code of the tool that asked, never by the model; null leaves it to the agent's
+	 * configuration and the platform's default (see
+	 * {@code IWaitingConditionExpiryPolicy}).
+	 */
+	private ConditionExpiry expiry = null;
+	/**
+	 * Why it was resolved with no value, once it was: null while it waits, and for a
+	 * value that came.
+	 */
+	private UnansweredBecause unansweredBecause = null;
 
 	/** A condition on a value, with nothing chosen by the model. */
 	public AgentSuspendedWaitingCondition(Class<T> type, String waitingConditionStatement,

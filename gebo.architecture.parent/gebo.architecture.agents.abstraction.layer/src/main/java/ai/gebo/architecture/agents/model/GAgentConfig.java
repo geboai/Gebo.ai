@@ -53,6 +53,12 @@ public class GAgentConfig extends GBaseObject
 	private ChatModelThinkingOption thinking = null;
 	private Boolean readOnly = null;
 	/**
+	 * How long the conditions this agent waits for keep waiting, and whether the run
+	 * goes on when they stop; null, or none set, leaves it to the platform's default.
+	 * A tool that sets its own expiry is not overridden by it.
+	 */
+	private AgentConditionsExpiry conditionsExpiry = null;
+	/**
 	 * A list of group identifiers that have access to the model configuration.
 	 */
 	protected List<String> accessibleGroups = null;

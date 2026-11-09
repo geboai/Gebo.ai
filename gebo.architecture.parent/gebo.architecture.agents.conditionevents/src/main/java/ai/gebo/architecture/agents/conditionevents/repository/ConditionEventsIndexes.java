@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.agents.conditionevents.model.GConditionDispatch;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import jakarta.annotation.PostConstruct;
 
 /**
@@ -55,8 +56,11 @@ public class ConditionEventsIndexes {
 			operations.indexOps(GConditionEvent.class).createIndex(new Index().on("dispatchCode", Direction.ASC));
 			operations.indexOps(GConditionDispatch.class)
 					.createIndex(new Index().on("state", Direction.ASC).on("nextAttemptAt", Direction.ASC));
+			// the blocks due by the earliest expiry of their conditions, for the sweep
+			operations.indexOps(GNetworkOfAgentsSuspension.class)
+					.createIndex(new Index().on("earliestExpiryAt", Direction.ASC).sparse());
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Condition events indexed by status, by dispatch, respawns by state");
+				LOGGER.debug("Condition events indexed by status, by dispatch, respawns by state, blocks by expiry");
 			}
 		} catch (RuntimeException e) {
 			LOGGER.warn("Cannot index the condition events: " + e.getMessage());

@@ -19,6 +19,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
@@ -101,6 +102,28 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 	 * suspended, a conversation holding one open block at most.
 	 */
 	private Date droppedAt = null;
+	/** Why it was dropped, and by whom when a person chose it; null for a drop before these were kept. */
+	private WaitingConditionDropReason droppedReason = null;
+	private String droppedBy = null;
+	/**
+	 * Whether the run suspended with nobody watching it: a respawn by events, an
+	 * A2A or MCP call, any run its request says is not attended. Its owner is told.
+	 */
+	private boolean unwatched = false;
+	/**
+	 * The earliest expiry among its conditions, written with the block and never
+	 * moved: the sweep reads the blocks due by it. Null when no condition expires.
+	 */
+	@Indexed
+	private Date earliestExpiryAt = null;
+	/**
+	 * When the owner was told, and when the messages were taken back once the block
+	 * closed. Set apart from the block's own writes, which may overwrite them: they
+	 * spare a message that was already told or taken back, nothing depends on them.
+	 */
+	private Date unwatchedNotifiedAt = null;
+	private Date expiryNotifiedAt = null;
+	private Date messagesRetractedAt = null;
 
 	/** Whether the block is still to be answered: neither respawned nor dropped. */
 	public boolean isOpen() {
@@ -115,6 +138,17 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			}
 		}
 		return false;
+	}
+
+	/** The earliest expiry among the conditions; null when none expires. */
+	public Date earliestExpiryOfConditions() {
+		Date earliest = null;
+		for (WaitingCondition condition : conditions()) {
+			if (condition.getExpiresAt() != null && (earliest == null || condition.getExpiresAt().before(earliest))) {
+				earliest = condition.getExpiresAt();
+			}
+		}
+		return earliest;
 	}
 
 	/** Every condition of the block, agent by agent, in the order they were asked. */
@@ -341,6 +375,16 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		private ConditionSource solvedBy = null;
 		/** The type of the condition: the id of the translator that shows it and reads its answers. */
 		private String conditionType = null;
+		/** When it stops waiting, and whether the run goes on then; null for a condition that does not expire. */
+		private Date expiresAt = null;
+		private boolean expiryUnblocks = false;
+		/** Why it was resolved with no value, once it was. */
+		private UnansweredBecause unansweredBecause = null;
+
+		/** Whether its expiry came and it still waits. */
+		public boolean isExpiredAt(Date now) {
+			return expiresAt != null && now != null && !now.before(expiresAt);
+		}
 
 		public static WaitingCondition of(AgentSuspendedWaitingCondition<?, ?> condition) {
 			if (condition == null) {
@@ -358,6 +402,11 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			waiting.setNotesForLater(condition.getNotesForLater());
 			waiting.setSolvedBy(condition.getSolvedBy());
 			waiting.setConditionType(condition.getConditionType());
+			if (condition.getExpiry() != null) {
+				waiting.setExpiresAt(condition.getExpiry().getExpiresAt());
+				waiting.setExpiryUnblocks(condition.getExpiry().isExpiryUnblocks());
+			}
+			waiting.setUnansweredBecause(condition.getUnansweredBecause());
 			return waiting;
 		}
 
@@ -374,6 +423,10 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 			condition.setNotesForLater(notesForLater);
 			condition.setSolvedBy(solvedBy);
 			condition.setConditionType(conditionType);
+			if (expiresAt != null) {
+				condition.setExpiry(new ConditionExpiry(expiresAt, expiryUnblocks));
+			}
+			condition.setUnansweredBecause(unansweredBecause);
 			if (suspendedConditionId != null) {
 				condition.setSuspendedConditionId(suspendedConditionId);
 			}

@@ -36,6 +36,7 @@ import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsAuthorization;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsService;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStore;
+import ai.gebo.architecture.agents.conditionevents.services.IWaitingConditionsService;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
@@ -82,20 +83,32 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 	private final ConditionEventsConfig config;
 	private final Executor evaluations;
 	private final Clock clock;
+	/** The waiting conditions, whose expiries and owners' messages the sweep tends; may be absent. */
+	private final ObjectProvider<IWaitingConditionsService> waiting;
 
 	@Autowired
 	public ConditionEventsServiceImpl(IConditionEventsStore store, ConditionEventMatcher matcher,
 			ConditionEventDispatcher dispatcher, GUserChatSessionRepository sessions,
 			GNetworkOfAgentsSuspensionRepository blocks, IConditionEventsAuthorization authorization,
-			ConditionEventsConfig config, ObjectProvider<IGeboThreadManager> threads) {
+			ConditionEventsConfig config, ObjectProvider<IGeboThreadManager> threads,
+			ObjectProvider<IWaitingConditionsService> waiting) {
 		this(store, matcher, dispatcher, sessions, blocks, authorization, config, lazyExecutorOf(threads),
-				Clock.systemUTC());
+				Clock.systemUTC(), waiting);
 	}
 
 	ConditionEventsServiceImpl(IConditionEventsStore store, ConditionEventMatcher matcher,
 			ConditionEventDispatcher dispatcher, GUserChatSessionRepository sessions,
 			GNetworkOfAgentsSuspensionRepository blocks, IConditionEventsAuthorization authorization,
 			ConditionEventsConfig config, Executor evaluations, Clock clock) {
+		this(store, matcher, dispatcher, sessions, blocks, authorization, config, evaluations, clock, null);
+	}
+
+	ConditionEventsServiceImpl(IConditionEventsStore store, ConditionEventMatcher matcher,
+			ConditionEventDispatcher dispatcher, GUserChatSessionRepository sessions,
+			GNetworkOfAgentsSuspensionRepository blocks, IConditionEventsAuthorization authorization,
+			ConditionEventsConfig config, Executor evaluations, Clock clock,
+			ObjectProvider<IWaitingConditionsService> waiting) {
+		this.waiting = waiting;
 		this.store = store;
 		this.matcher = matcher;
 		this.dispatcher = dispatcher;
@@ -195,6 +208,10 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		kept.setSourceSystem(kept.getSource().getSystem());
 		kept.setSourceEventId(event.getSourceEventId());
 		kept.setSourceTimestamp(event.getSourceTimestamp());
+		// the platform's own, as the chat's recorder sets it; a delivered event cannot say it
+		kept.setUnanswered(caller != null && ConditionEventCaller.CHAT.equals(caller.getChannel())
+				? event.getUnanswered()
+				: null);
 		kept.setActor(caller != null ? caller.getName() : null);
 		kept.setChannel(caller != null ? caller.getChannel() : null);
 		kept.setUserModified(caller != null ? caller.getName() : null);
@@ -231,6 +248,7 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 
 	@Override
 	public void sweep() {
+		tendWaitingConditions();
 		final Date now = new Date(clock.millis());
 		for (GConditionEvent pending : store
 				.pendingLastReceivedBefore(new Date(now.getTime() - config.getPendingTimeToLiveMillis()))) {
@@ -266,6 +284,27 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 			} catch (RuntimeException e) {
 				LOGGER.warn("Cannot evaluate the condition events of session:" + session + ": " + e.getMessage(), e);
 			}
+		}
+	}
+
+	/**
+	 * The expiries due and the owners' messages, first: the events an expiry makes
+	 * are evaluated by this same sweep, and a failure there leaves the rest to run.
+	 */
+	private void tendWaitingConditions() {
+		final IWaitingConditionsService service = waiting != null ? waiting.getIfAvailable() : null;
+		if (service == null) {
+			return;
+		}
+		try {
+			service.applyExpiries();
+		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot apply the expiries of the waiting conditions: " + e.getMessage(), e);
+		}
+		try {
+			service.tellOwners();
+		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot tell the owners of the waiting conditions: " + e.getMessage(), e);
 		}
 	}
 

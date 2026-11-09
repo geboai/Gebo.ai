@@ -34,6 +34,7 @@ import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStor
 import ai.gebo.architecture.agents.conditionevents.services.impl.ConditionEventDispatcher.RequestClaim;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
@@ -167,8 +168,15 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 		event.setSessionCode(block.getConversationCode());
 		event.setConditionId(answer.getConditionId());
 		event.setConditionType(answer.getConditionType());
-		event.setAttributes(answer.getAttributes() != null ? new LinkedHashMap<String, Object>(answer.getAttributes())
-				: new LinkedHashMap<String, Object>());
+		final LinkedHashMap<String, Object> attributes = answer.getAttributes() != null
+				? new LinkedHashMap<String, Object>(answer.getAttributes())
+				: new LinkedHashMap<String, Object>();
+		// the conversation's own user may go on without the condition, mandatory or not:
+		// asked as an attribute, kept as the platform's own mark, which no attribute may set
+		if (GAbstractConditionTransportTranslator.isTrue(attributes.remove(GAbstractConditionTransportTranslator.GO_ON_WITHOUT))) {
+			event.setUnanswered(UnansweredBecause.GONE_ON_WITHOUT);
+		}
+		event.setAttributes(attributes);
 		event.setSourceSystem(SOURCE_SYSTEM);
 		// the conversation's own user, verified on delivery as the account answering
 		event.setSource(ConditionSources.forChatUser(username, null, block.getConversationCode()));

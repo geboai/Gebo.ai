@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import lombok.Data;
 
 @Data
@@ -36,6 +37,14 @@ public class AgentSuspendedWaitingConditionReactionDto {
 	 */
 	@JsonIgnore
 	private ConditionSource source = null;
+	/**
+	 * Why the condition is resolved with no value although it may be mandatory: it
+	 * expired, or its owner or an administrator chose to go on without it. Set only
+	 * by the platform, on reactions built from stored events; never read from a
+	 * client, which may only decline a condition that is not mandatory.
+	 */
+	@JsonIgnore
+	private UnansweredBecause unanswered = null;
 
 	/**
 	 * Puts the answer given typed in the attributes, in place of what they said of

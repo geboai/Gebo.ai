@@ -9,6 +9,7 @@
 
 package ai.gebo.architecture.agents.repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,19 @@ public interface GNetworkOfAgentsSuspensionRepository extends IGBaseMongoDBRepos
 	/** The blocks of a conversation still to be answered: neither respawned nor dropped. */
 	List<GNetworkOfAgentsSuspension> findByConversationCodeAndRespawnedAtIsNullAndDroppedAtIsNull(
 			String conversationCode);
+
+	/** Every block still to be answered, of every conversation: what the waiting conditions panel lists. */
+	List<GNetworkOfAgentsSuspension> findByRespawnedAtIsNullAndDroppedAtIsNull();
+
+	/** The open blocks with a condition past its expiry at the moment given. */
+	List<GNetworkOfAgentsSuspension> findByEarliestExpiryAtLessThanEqualAndRespawnedAtIsNullAndDroppedAtIsNull(
+			Date dueAt);
+
+	/** The blocks that suspended unwatched, whose owner's message was not taken back yet: the open and the closed. */
+	List<GNetworkOfAgentsSuspension> findByUnwatchedTrueAndMessagesRetractedAtIsNull();
+
+	/** The blocks with an expiry, whose owner's message was not taken back yet: the open and the closed. */
+	List<GNetworkOfAgentsSuspension> findByEarliestExpiryAtIsNotNullAndMessagesRetractedAtIsNull();
 
 	/** The open block of a conversation, which holds one at most; the newest when it holds more. */
 	default Optional<GNetworkOfAgentsSuspension> findOpenByConversationCode(String conversationCode) {

@@ -25,6 +25,7 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ConditionExpiry;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
@@ -147,6 +148,7 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 		if (param.getNotesForLater() != null && !param.getNotesForLater().isBlank()) {
 			condition.setNotesForLater(param.getNotesForLater().strip());
 		}
+		condition.setExpiry(expiryOf(options, mandatory));
 		wait.waitFor(condition);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(toolName() + " asked: " + options.getQuestion() + " among " + options.getOptions().size()
@@ -156,6 +158,16 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 					+ condition.getSuspendedConditionId() + ")");
 		}
 		return WAITING;
+	}
+
+	/**
+	 * The expiry of the question this tool asks: how long it waits and whether the
+	 * run goes on without the answer. Decided by the tool's code, never by the
+	 * model, which has no parameter for it; null, the default, leaves it to the
+	 * agent's configuration and the platform's default.
+	 */
+	protected ConditionExpiry expiryOf(ClarificationOptions question, boolean mandatory) {
+		return null;
 	}
 
 	/**

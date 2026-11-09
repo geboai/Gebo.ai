@@ -36,7 +36,9 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SharedState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
+import ai.gebo.architecture.agents.model.WaitingConditionDropReason;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
+import ai.gebo.llms.abstraction.layer.model.GChatRunInfo;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 
 /**
@@ -68,7 +70,11 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 	private final GNetworkOfAgentsSuspensionRepository repository;
 	/** Tells the type of a condition, kept with it; null keeps none, as before. */
 	private final IWaitingConditionTypeResolver conditionTypeResolver;
+	/** Tells when a condition stops waiting, kept with it; null gives it no expiry. */
+	private final IWaitingConditionExpiryPolicy expiryPolicy;
 	private volatile GAgentsNetwork network = null;
+	/** Whether the run is watched by nobody, from its request; a watched run otherwise. */
+	private volatile boolean unwatched = false;
 	/** The input the network was given, part of the cut. */
 	private volatile Object networkInput = null;
 	/** The conversation and the request of the run, from its request context; null outside a chat. */
@@ -94,8 +100,32 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 
 	public GMongoNetworkOfAgentsSuspensionHandler(GNetworkOfAgentsSuspensionRepository repository,
 			IWaitingConditionTypeResolver conditionTypeResolver) {
+		this(repository, conditionTypeResolver, null);
+	}
+
+	public GMongoNetworkOfAgentsSuspensionHandler(GNetworkOfAgentsSuspensionRepository repository,
+			IWaitingConditionTypeResolver conditionTypeResolver, IWaitingConditionExpiryPolicy expiryPolicy) {
 		this.repository = repository;
 		this.conditionTypeResolver = conditionTypeResolver;
+		this.expiryPolicy = expiryPolicy;
+	}
+
+	/**
+	 * Gives the condition its expiry, when the policy has one for it: the tool's
+	 * own stays, else the agent's configuration or the platform's default decides.
+	 * An expiry that cannot be told leaves the condition waiting for good.
+	 */
+	private void expiryOf(GAgentConfig agentConfig, AgentSuspendedWaitingCondition condition) {
+		if (condition == null || expiryPolicy == null) {
+			return;
+		}
+		try {
+			condition.setExpiry(expiryPolicy.expiryOf(condition.getExpiry(),
+					agentConfig != null ? agentConfig.getConditionsExpiry() : null, new Date()));
+		} catch (RuntimeException notTold) {
+			LOGGER.warn("The expiry of condition:" + condition.getSuspendedConditionId()
+					+ " could not be told: it waits for good", notTold);
+		}
 	}
 
 	/**
@@ -125,6 +155,8 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 		this.networkInput = networkInput;
 		this.conversationCode = chatRequestContext != null ? chatRequestContext.getSessionID() : null;
 		this.requestId = chatRequestContext != null ? chatRequestContext.getRequestID() : null;
+		final GChatRunInfo run = chatRequestContext != null ? chatRequestContext.getRunInfo() : null;
+		this.unwatched = run != null && !run.isAttended();
 		this.suspensionState = false;
 		this.suspension = null;
 		this.conditions.clear();
@@ -170,6 +202,7 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 			AgentNetworkParticipant participant, AgentPrivateSessionContext privateContext,
 			AgentSuspendedWaitingCondition waitForCondition) throws AgentException {
 		typeOf(waitForCondition);
+		expiryOf(agentConfig, waitForCondition);
 		final GNetworkOfAgentsSuspension cut = cutOf(agentsNetwork, privateContext);
 		if (!suspensionState) {
 			cut.setSuspendedAt(new Date());
@@ -347,6 +380,8 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 		}
 		suspension.setFinishedAt(new Date());
 		suspension.setDateModified(suspension.getFinishedAt());
+		suspension.setUnwatched(unwatched);
+		suspension.setEarliestExpiryAt(suspension.earliestExpiryOfConditions());
 		try {
 			dropOpenBlocksOf(suspension.getConversationCode(), suspension.getCode());
 			repository.save(suspension);
@@ -379,6 +414,7 @@ public class GMongoNetworkOfAgentsSuspensionHandler implements IGNetworkOfAgents
 				continue;
 			}
 			open.setDroppedAt(new Date());
+			open.setDroppedReason(WaitingConditionDropReason.SUSPENDED_AGAIN);
 			open.setDateModified(open.getDroppedAt());
 			repository.save(open);
 			if (LOGGER.isInfoEnabled()) {

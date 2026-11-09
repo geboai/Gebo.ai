@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
+import ai.gebo.architecture.agents.model.WaitingConditionDropReason;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
@@ -171,6 +172,8 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 							: NetworkOfAgentsSuspensionTransport.plain().stateOf(block));
 		}
 		block.setDroppedAt(new Date());
+		block.setDroppedReason(WaitingConditionDropReason.NEW_INTERACTION);
+		block.setDroppedBy(currentUsername());
 		block.setDateModified(block.getDroppedAt());
 		suspensions.save(block);
 		if (LOGGER.isInfoEnabled()) {
@@ -211,7 +214,8 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			// the respawner refuses it, saying why
 			return null;
 		}
-		if (!recorder.holdsAnswersFor(block) && !leavesMandatoryUnanswered(block, reaction)) {
+		if (!recorder.holdsAnswersFor(block) && !leavesMandatoryUnanswered(block, reaction)
+				&& !asksToGoOnWithout(reaction)) {
 			return null;
 		}
 		final RecordedConditionReaction recorded = recorder.record(block, reaction, currentUsername(), request.getId());
@@ -230,6 +234,23 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			NetworkOfAgentsSuspendedStateReaction reaction) {
 		for (WaitingCondition condition : block.conditions()) {
 			if (condition.isMandatory() && !answers(reaction, condition.getSuspendedConditionId())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Whether an answer asks to go on without its condition: only the recorder reads
+	 * it, as the conversation's own user; the respawner would refuse it.
+	 */
+	private static boolean asksToGoOnWithout(NetworkOfAgentsSuspendedStateReaction reaction) {
+		if (reaction == null || reaction.getReactions() == null) {
+			return false;
+		}
+		for (AgentSuspendedWaitingConditionReactionDto answer : reaction.getReactions()) {
+			if (answer != null && answer.getAttributes() != null && GAbstractConditionTransportTranslator
+					.isTrue(answer.getAttributes().get(GAbstractConditionTransportTranslator.GO_ON_WITHOUT))) {
 				return true;
 			}
 		}

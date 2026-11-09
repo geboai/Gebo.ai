@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.architecture.agents.model.UnansweredBecause;
 import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool;
 
 /**
@@ -77,10 +78,19 @@ public final class ResolvedConditionText {
 		return "You were waiting for: " + condition.getWaitingConditionStatement() + "\n" + cameOf(condition);
 	}
 
-	/** A condition left unanswered: by the user, or by the source that solved it. */
+	/**
+	 * A condition left unanswered: declined by the user or by the source that solved
+	 * it, expired, or gone on without by whoever chose so.
+	 */
 	private static String declinedBy(AgentSuspendedWaitingCondition<?, ?> condition) {
-		return GAbstractAskUserChoiceQuestionTool.whoAnswered(condition)
-				+ " chose not to answer: go on without it, saying what you assumed.";
+		if (condition.getUnansweredBecause() == UnansweredBecause.EXPIRED) {
+			return UnansweredConditionText.expiredLine(condition);
+		}
+		if (condition.getUnansweredBecause() == UnansweredBecause.GONE_ON_WITHOUT) {
+			return UnansweredConditionText.goneOnWithoutLine(condition);
+		}
+		return GAbstractAskUserChoiceQuestionTool.whoAnswered(condition) + " chose not to answer: "
+				+ UnansweredConditionText.GO_ON;
 	}
 
 	/** The value that came, and from which source when it is not the conversation's user. */
