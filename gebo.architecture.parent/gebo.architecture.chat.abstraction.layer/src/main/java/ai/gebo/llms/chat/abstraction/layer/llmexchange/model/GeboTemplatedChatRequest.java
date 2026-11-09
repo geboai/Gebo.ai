@@ -109,6 +109,15 @@ public class GeboTemplatedChatRequest<RequestType> implements Serializable {
 	private String runOrigin = null;
 	/** Whether a person is waiting for the answer; null until the run says. */
 	private Boolean attended = null;
+	/**
+	 * The caller's own name of the conversation, when it has a dialogue of its own
+	 * (see {@code ExternalSessionRef}): the system as it names itself and its key.
+	 * With no conversation code, or one that names no conversation, the
+	 * conversation opened by that key is used, and opened when there is none; the
+	 * key is kept on it. Gebo's own code wins when it names a conversation.
+	 */
+	private String externalSystem = null;
+	private String externalSessionKey = null;
 	private NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction = null;
 
 	public static <RequestType> RequestType actualQuery(GeboTemplatedChatRequest<RequestType> request) {

@@ -36,6 +36,14 @@ public class ConditionEvent implements Serializable {
 	private String correlationId = null;
 	/** The chat session the suspended network serves. */
 	private String sessionCode = null;
+	/**
+	 * The session named by the key another system gave it when it opened the
+	 * conversation, in place of the session code: the system as it names itself and
+	 * its own key of the dialogue (see {@code ExternalSessionRef}). Read only when
+	 * neither the correlation id nor the session code is given.
+	 */
+	private String externalSystem = null;
+	private String externalSessionKey = null;
 	/** The id of the condition solved. */
 	private String conditionId = null;
 	/** The type of the condition, as the pending state names it ({@code clarification}, {@code default}...). */

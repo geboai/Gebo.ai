@@ -40,6 +40,12 @@ public interface IConditionEventsService {
 	Optional<ConditionEventView> status(ConditionCorrelationId correlation, ConditionEventCaller caller);
 
 	/**
+	 * The session another system opened by its own key (see
+	 * {@code ExternalSessionRef}); empty when none was, or the key is not whole.
+	 */
+	Optional<String> sessionCodeOf(String externalSystem, String externalSessionKey);
+
+	/**
 	 * Expires the pending events past their time to live, and evaluates again the
 	 * sessions holding events not used yet or respawns due again.
 	 */

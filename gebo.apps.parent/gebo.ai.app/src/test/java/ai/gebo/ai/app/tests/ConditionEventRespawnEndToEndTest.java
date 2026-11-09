@@ -19,6 +19,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Supplier;
 
@@ -240,8 +241,15 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 
 	/** The chat: the agent asks its question and the network suspends. */
 	private Suspended aSuspendedChat() throws Exception {
+		return aSuspendedChat(null, null);
+	}
+
+	/** The chat, opened by another system's own key of its dialogue when one is given. */
+	private Suspended aSuspendedChat(String externalSystem, String externalSessionKey) throws Exception {
 		final GeboChatRequest request = new GeboChatRequest();
 		request.setQuery(USER_QUESTION);
+		request.setExternalSystem(externalSystem);
+		request.setExternalSessionKey(externalSessionKey);
 		lifeCycleService.createChatSession(request);
 		final String sessionCode = request.getUserChatContextCode();
 		assertNotNull(sessionCode, "the lifecycle service assigns the session");
@@ -514,6 +522,44 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			assertEquals(WaitingConditionsServiceImpl.PLATFORM, applied.getSourceSystem());
 			assertTrue(toldAnswers.get(0).startsWith(TOLD_EXPIRED), "the agent is told the question expired: " + toldAnswers);
 			assertTrue(toldAnswers.get(0).endsWith("go on without it, saying what you assumed."), toldAnswers.toString());
+		} finally {
+			if (suspended != null) {
+				lifeCycleService.removeChatSession(suspended.sessionCode());
+			}
+		}
+	}
+
+	@Test
+	public void aConversationOpenedByAnotherSystemsKeyIsFoundAgainByIt() throws Exception {
+		final String key = "order-" + UUID.randomUUID();
+		Suspended suspended = null;
+		try {
+			suspended = aSuspendedChat("ERP", key);
+			final GUserChatSession opened = sessionsRepo.findById(suspended.sessionCode()).orElseThrow();
+			assertEquals("ERP", opened.getExternalSystem(), "the conversation keeps the key it was opened by");
+			assertEquals(key, opened.getExternalSessionKey());
+			assertEquals(suspended.sessionCode(), sessionsRepo.findByExternalSystemAndExternalSessionKey("ERP", key)
+					.map(GUserChatSession::getCode).orElse(null), "found again by it");
+
+			// a request naming the dialogue by its key, with a code that names nothing, goes on in it
+			final GeboChatRequest again = new GeboChatRequest();
+			again.setQuery("again");
+			again.setUserChatContextCode("no-such-conversation");
+			again.setExternalSystem("ERP");
+			again.setExternalSessionKey(key);
+			lifeCycleService.ensureChatSessionExists(again);
+			assertEquals(suspended.sessionCode(), again.getUserChatContextCode(), "the same conversation");
+
+			// the ERP answers by its own key, not by Gebo's session code
+			final ConditionEvent byKey = answer(suspended, "France", "ERP", "evt-key-1");
+			byKey.setSessionCode(null);
+			byKey.setExternalSystem("ERP");
+			byKey.setExternalSessionKey(key);
+			assertNotNull(publisher.publish(byKey, DEFAULT_ALL_ROLES_USER));
+
+			final GConditionEvent applied = verifyApplied(suspended, "France");
+			assertEquals("ERP", applied.getExternalSystem(), "the event keeps the name it gave the session");
+			assertEquals(key, applied.getExternalSessionKey());
 		} finally {
 			if (suspended != null) {
 				lifeCycleService.removeChatSession(suspended.sessionCode());

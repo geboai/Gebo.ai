@@ -11,6 +11,7 @@ package ai.gebo.llms.chat.abstraction.layer.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -113,5 +114,9 @@ public interface GUserChatSessionRepository extends IGBaseMongoDBRepository<GUse
 	 * never came back to drop them.
 	 */
 	public List<GUserChatSession> findByTransientRunTrueAndDateCreatedBefore(Date before);
+
+	/** The conversation another system opened by its own key (see {@code ExternalSessionRef}), unique together. */
+	public Optional<GUserChatSession> findByExternalSystemAndExternalSessionKey(String externalSystem,
+			String externalSessionKey);
 
 }

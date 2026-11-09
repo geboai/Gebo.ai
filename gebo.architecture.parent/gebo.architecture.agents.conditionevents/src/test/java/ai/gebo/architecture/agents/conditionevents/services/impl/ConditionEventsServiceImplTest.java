@@ -103,6 +103,12 @@ class ConditionEventsServiceImplTest {
 		final GUserChatSessionRepository sessions = mock(GUserChatSessionRepository.class);
 		when(sessions.findById(anyString()))
 				.thenAnswer(i -> SESSION.equals(i.getArgument(0)) ? Optional.of(session) : Optional.empty());
+		// the conversation was opened by the ERP with its own key of the dialogue
+		session.setExternalSystem("ERP");
+		session.setExternalSessionKey("order-7");
+		when(sessions.findByExternalSystemAndExternalSessionKey(anyString(), anyString())).thenAnswer(
+				i -> "ERP".equals(i.getArgument(0)) && "order-7".equals(i.getArgument(1)) ? Optional.of(session)
+						: Optional.empty());
 
 		final ClarificationConditionTransportTranslator clarification = new ClarificationConditionTransportTranslator();
 		final IAgentSuspendedWaitingConditionTransportTranslatorRepositoryPattern translators = mock(
@@ -612,6 +618,43 @@ class ConditionEventsServiceImplTest {
 		assertEquals("T-12", store.events.get(SESSION + ":year").getAttributes().get("ticket"),
 				"the other attributes are kept");
 		assertTrue(respawns.isEmpty());
+	}
+
+	@Test
+	void anEventMayNameTheSessionByTheKeyTheOtherSystemOpenedItWith() {
+		block(question("year", true, "2023", "2024"));
+		final ConditionEvent byKey = choice(null, "2024");
+		byKey.setExternalSystem(" ERP ");
+		byKey.setExternalSessionKey("order-7");
+		byKey.setConditionId("year");
+
+		final ConditionEventAck ack = service.deliver(byKey, application());
+
+		assertEquals(Outcome.ACCEPTED, ack.getOutcome(), ack.getReason());
+		assertEquals(SESSION + ":year", ack.getCorrelationId(), "resolved to Gebo's own session");
+		final GConditionEvent kept = store.events.get(SESSION + ":year");
+		assertEquals("ERP", kept.getExternalSystem());
+		assertEquals("order-7", kept.getExternalSessionKey());
+		final ConditionEventView view = service.status(new ConditionCorrelationId(SESSION, "year"), owner()).orElseThrow();
+		assertEquals("ERP", view.getExternalSystem());
+		assertEquals("order-7", view.getExternalSessionKey());
+		assertEquals(1, respawns.size());
+		assertEquals(Optional.of(SESSION), service.sessionCodeOf("ERP", "order-7"));
+		assertEquals(Optional.empty(), service.sessionCodeOf("ERP", null), "half a key names nothing");
+
+		final ConditionEvent unknown = choice(null, "2024");
+		unknown.setExternalSystem("ERP");
+		unknown.setExternalSessionKey("order-8");
+		unknown.setConditionId("year");
+		final ConditionEventAck refused = service.deliver(unknown, application());
+		assertEquals(Outcome.REFUSED, refused.getOutcome());
+		assertTrue(refused.getReason().startsWith(ConditionEventsServiceImpl.NO_SUCH_EXTERNAL_SESSION), refused.getReason());
+
+		final ConditionEvent both = choice(SESSION + ":year", "2024");
+		both.setExternalSystem("ERP");
+		both.setExternalSessionKey("order-8");
+		assertEquals(Outcome.STALE, service.deliver(both, application()).getOutcome(),
+				"Gebo's own name wins over the key: the condition is the one already applied");
 	}
 
 	private GNetworkOfAgentsSuspension block(AgentSuspendedWaitingCondition<?, ?>... conditions) {

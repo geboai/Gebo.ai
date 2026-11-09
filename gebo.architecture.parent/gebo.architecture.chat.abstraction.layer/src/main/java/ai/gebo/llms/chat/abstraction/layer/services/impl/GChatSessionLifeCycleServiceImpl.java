@@ -89,6 +89,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ExternalSessionRef;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GChatSessionOpeningOptions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
@@ -195,6 +196,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			s.setUsername(user.getUsername());
 			s.setChatProfileCode(request.getChatProfileCode());
 			s.setChatModelCode(request.getChatModelCode());
+			keepExternalSession(s, request);
 			if (options != null) {
 				// a run from outside a chat: what it is, and who else works in it
 				s.setTransientRun(options.isTransientRun() ? Boolean.TRUE : null);
@@ -1116,13 +1118,51 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void ensureChatSessionExists(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		resolveExternalSession(request);
 		if (!isSessionExisting(request))
 			createChatSession(request);
+	}
+
+	/**
+	 * A request naming the conversation by another system's own key (see
+	 * {@link ExternalSessionRef}) goes on in the conversation opened by that key:
+	 * the request is given its code; with none opened yet, no code, so that one is
+	 * opened and given the key. Gebo's own code wins when it names a conversation.
+	 */
+	private void resolveExternalSession(GeboChatRequest request) {
+		final ExternalSessionRef ref = request != null
+				? ExternalSessionRef.of(request.getExternalSystem(), request.getExternalSessionKey())
+				: null;
+		if (ref == null) {
+			return;
+		}
+		final String code = request.getUserChatContextCode();
+		if (code != null && !code.isBlank() && this.sessionRepository.existsById(code)) {
+			return;
+		}
+		final Optional<GUserChatSession> byKey = this.sessionRepository
+				.findByExternalSystemAndExternalSessionKey(ref.getExternalSystem(), ref.getExternalSessionKey());
+		request.setUserChatContextCode(byKey.map(GUserChatSession::getCode).orElse(null));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The conversation named by " + ref.label() + " is "
+					+ (byKey.isPresent() ? byKey.get().getCode() : "not opened yet")
+					+ (code != null && !code.isBlank() ? " (the code given, " + code + ", names none)" : ""));
+		}
+	}
+
+	/** The conversation keeps the key another system opened it by, if the request gave one. */
+	private static void keepExternalSession(GUserChatSession session, GeboChatRequest request) {
+		final ExternalSessionRef ref = ExternalSessionRef.of(request.getExternalSystem(), request.getExternalSessionKey());
+		if (ref != null) {
+			session.setExternalSystem(ref.getExternalSystem());
+			session.setExternalSessionKey(ref.getExternalSessionKey());
+		}
 	}
 
 	@Override
 	public void ensureChatSessionExists(GeboChatRequest request, GChatSessionOpeningOptions options)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		resolveExternalSession(request);
 		if (!isSessionExisting(request)) {
 			createChatSession(request, options);
 		} else if (options != null && options.isShared()) {
