@@ -14,4 +14,5 @@ Name | Type | Description | Notes
 **expired** | **Boolean** |  |  [optional]
 **humanInTheLoopProcessTreatment** | **Boolean** |  |  [optional]
 **conversationAccessible** | **Boolean** |  |  [optional]
+**otherConditionsWaiting** | **Integer** |  |  [optional]
 **conditions** | [**List&lt;WaitingConditionView&gt;**](WaitingConditionView.md) |  |  [optional]

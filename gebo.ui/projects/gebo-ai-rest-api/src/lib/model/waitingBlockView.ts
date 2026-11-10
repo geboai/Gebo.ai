@@ -23,5 +23,6 @@ export interface WaitingBlockView {
     expired?: boolean;
     humanInTheLoopProcessTreatment?: boolean;
     conversationAccessible?: boolean;
+    otherConditionsWaiting?: number;
     conditions?: Array<WaitingConditionView>;
 }

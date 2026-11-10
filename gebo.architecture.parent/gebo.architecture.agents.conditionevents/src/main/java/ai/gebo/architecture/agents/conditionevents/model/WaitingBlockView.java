@@ -47,5 +47,11 @@ public class WaitingBlockView {
 	 * is shared with, an administrator. A user a request is waited from may not.
 	 */
 	private boolean conversationAccessible = true;
+	/**
+	 * How many conditions the run still waits for that the listing does not show:
+	 * the ones not handled as a human in the loop process, such as a clarification
+	 * answered in the conversation. Zero where every condition is shown.
+	 */
+	private int otherConditionsWaiting = 0;
 	private List<WaitingConditionView> conditions = new ArrayList<WaitingConditionView>();
 }

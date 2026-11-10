@@ -62,6 +62,9 @@ public class WaitingBlockView {
   @JsonProperty("conversationAccessible")
   private Boolean conversationAccessible = null;
 
+  @JsonProperty("otherConditionsWaiting")
+  private Integer otherConditionsWaiting = null;
+
   @JsonProperty("conditions")
   private List<WaitingConditionView> conditions = null;
 
@@ -263,6 +266,24 @@ public class WaitingBlockView {
     this.conversationAccessible = conversationAccessible;
   }
 
+  public WaitingBlockView otherConditionsWaiting(Integer otherConditionsWaiting) {
+    this.otherConditionsWaiting = otherConditionsWaiting;
+    return this;
+  }
+
+   /**
+   * Get otherConditionsWaiting
+   * @return otherConditionsWaiting
+  **/
+  @Schema(description = "")
+  public Integer getOtherConditionsWaiting() {
+    return otherConditionsWaiting;
+  }
+
+  public void setOtherConditionsWaiting(Integer otherConditionsWaiting) {
+    this.otherConditionsWaiting = otherConditionsWaiting;
+  }
+
   public WaitingBlockView conditions(List<WaitingConditionView> conditions) {
     this.conditions = conditions;
     return this;
@@ -310,12 +331,13 @@ public class WaitingBlockView {
         Objects.equals(this.expired, waitingBlockView.expired) &&
         Objects.equals(this.humanInTheLoopProcessTreatment, waitingBlockView.humanInTheLoopProcessTreatment) &&
         Objects.equals(this.conversationAccessible, waitingBlockView.conversationAccessible) &&
+        Objects.equals(this.otherConditionsWaiting, waitingBlockView.otherConditionsWaiting) &&
         Objects.equals(this.conditions, waitingBlockView.conditions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(blockCode, conversationCode, owner, networkCode, suspendedAt, mandatory, unwatched, earliestExpiryAt, expired, humanInTheLoopProcessTreatment, conversationAccessible, conditions);
+    return Objects.hash(blockCode, conversationCode, owner, networkCode, suspendedAt, mandatory, unwatched, earliestExpiryAt, expired, humanInTheLoopProcessTreatment, conversationAccessible, otherConditionsWaiting, conditions);
   }
 
 
@@ -335,6 +357,7 @@ public class WaitingBlockView {
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
     sb.append("    humanInTheLoopProcessTreatment: ").append(toIndentedString(humanInTheLoopProcessTreatment)).append("\n");
     sb.append("    conversationAccessible: ").append(toIndentedString(conversationAccessible)).append("\n");
+    sb.append("    otherConditionsWaiting: ").append(toIndentedString(otherConditionsWaiting)).append("\n");
     sb.append("    conditions: ").append(toIndentedString(conditions)).append("\n");
     sb.append("}");
     return sb.toString();
