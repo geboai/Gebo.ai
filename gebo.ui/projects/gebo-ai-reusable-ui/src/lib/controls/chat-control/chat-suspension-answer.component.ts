@@ -104,8 +104,12 @@ export class GeboAIChatSuspensionAnswerComponent {
         return this.conditions.filter(c => !this.isSolved(c));
     }
 
+    /**
+     * A condition answered as a question with options: a clarification, or a
+     * human in the loop request, whose translator carries the same attributes.
+     */
     isClarification(condition: AgentSuspendedWaitingConditionDto): boolean {
-        return condition.conditionType === "clarification";
+        return condition.conditionType === "clarification" || !!condition.clarificationAttributes;
     }
 
     isMandatory(condition: AgentSuspendedWaitingConditionDto): boolean {

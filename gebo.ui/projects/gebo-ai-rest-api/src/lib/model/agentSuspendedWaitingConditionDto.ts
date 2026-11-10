@@ -15,6 +15,7 @@ import { DefaultConditionAttributes } from './defaultConditionAttributes';
 export interface AgentSuspendedWaitingConditionDto { 
     conditionType: string;
     conditionId: string;
+    humanInTheLoopProcessTreatment?: boolean;
     attributes: { [key: string]: any; };
     clarificationAttributes?: ClarificationConditionAttributes;
     defaultAttributes?: DefaultConditionAttributes;

@@ -183,12 +183,20 @@ The sweep of the condition events tends the waiting conditions first
 - the owner of an **unwatched** run is told once it suspended (key `unwatched:<block>`,
   info); both messages are taken back when the block closes.
 
-The **waiting conditions panel** lists the open blocks (`WaitingBlockView`, with every
+The **waiting conditions API** lists the open blocks (`WaitingBlockView`, with every
 condition as `WaitingConditionView`: solved and by whom, expired, its expiry) and offers two
 actions, to the owner on `api/users/WaitingConditionsController` (`waitingConditions`,
 `goOnWithout`, `abandon`) and to the administrators on
 `api/admin/WaitingConditionsAdminController` (`allWaitingConditions`, and the same actions on
-any block):
+any block). A condition says whether it is a **human in the loop request handled as a
+process** (`AgentSuspendedWaitingCondition.humanInTheLoopProcessTreatment`, kept with the
+block, carried by the condition's DTO and by both views): the owner's listing keeps only the
+runs with at least one such request, a clarification being the conversation's alone, while
+the administrators' listing keeps every run. The flag is set by the code of the tool that
+asked, never by the model: the platform's clarification tools leave it false
+(`GAbstractAskUserChoiceQuestionTool.humanInTheLoopProcessTreatment()`, with
+`conditionType()` to pin the translator of a tool of another kind); the Pro human in the
+loop tools set it. The two actions:
 
 - **go on without**: the named conditions, or every one still waiting, are resolved with no
   value, mandatory or not, by events marked `unanswered = GONE_ON_WITHOUT` whose source is
@@ -198,14 +206,13 @@ any block):
 - **abandon**: the block is dropped where it stands (`ABANDONED`, `droppedBy`), the
   conversation is free; refused while a respawn of the block is running.
 
-In the UI (`gebo.ui`): the panel is `GeboAIWaitingConditionsPanelComponent`
-(`gebo-ai-waiting-conditions-panel`, reusable-ui, `GeboAIWaitingConditionsPanelModule`), with
-`administrator` for the administrators' view; the user's page is `GeboAIWaitingConditionsModule`,
-routed by the applications at `ui/waiting-conditions` (menu entry "Agents waiting"), and the
-administrators' view sits under the "Agents/Networks of agents" admin tab. The chat's suspension
-form offers, per condition, "No answer: let the agents go on without it", and for the block "Go on
-without the missing answers" and "Abandon the run". The agent editor sets `conditionsExpiry` in the
-"Large language model & usable tools settings" tab.
+In the UI: the community edition has no panel, the conversation alone answers its
+clarifications; the panel is Pro's `GeboAIHumanInTheLoopMonitoringPanelModule`, with the
+administrators' and the personal pages of the "AI agents processes" section. The chat's suspension
+form (`gebo.ui`, reusable-ui) answers any condition carrying clarification attributes, a human in
+the loop request included, and offers, per condition, "No answer: let the agents go on without it",
+and for the block "Go on without the missing answers" and "Abandon the run". The agent editor sets
+`conditionsExpiry` in the "Large language model & usable tools settings" tab.
 
 From the chat, the owner asks to go on without a condition with the attribute
 `goOnWithout: true` on its answer: the chat's recorder reads it for the conversation's own

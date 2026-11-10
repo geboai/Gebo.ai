@@ -23,7 +23,7 @@ import java.util.Date;
  * WaitingConditionView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T22:08:53.638937800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-10T16:38:55.503568700+01:00[Europe/Rome]")
 
 public class WaitingConditionView {
   @JsonProperty("conditionId")
@@ -52,6 +52,9 @@ public class WaitingConditionView {
 
   @JsonProperty("expired")
   private Boolean expired = null;
+
+  @JsonProperty("humanInTheLoopProcessTreatment")
+  private Boolean humanInTheLoopProcessTreatment = null;
 
   public WaitingConditionView conditionId(String conditionId) {
     this.conditionId = conditionId;
@@ -215,6 +218,24 @@ public class WaitingConditionView {
     this.expired = expired;
   }
 
+  public WaitingConditionView humanInTheLoopProcessTreatment(Boolean humanInTheLoopProcessTreatment) {
+    this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
+    return this;
+  }
+
+   /**
+   * Get humanInTheLoopProcessTreatment
+   * @return humanInTheLoopProcessTreatment
+  **/
+  @Schema(description = "")
+  public Boolean isHumanInTheLoopProcessTreatment() {
+    return humanInTheLoopProcessTreatment;
+  }
+
+  public void setHumanInTheLoopProcessTreatment(Boolean humanInTheLoopProcessTreatment) {
+    this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -233,12 +254,13 @@ public class WaitingConditionView {
         Objects.equals(this.solvedBy, waitingConditionView.solvedBy) &&
         Objects.equals(this.expiresAt, waitingConditionView.expiresAt) &&
         Objects.equals(this.expiryUnblocks, waitingConditionView.expiryUnblocks) &&
-        Objects.equals(this.expired, waitingConditionView.expired);
+        Objects.equals(this.expired, waitingConditionView.expired) &&
+        Objects.equals(this.humanInTheLoopProcessTreatment, waitingConditionView.humanInTheLoopProcessTreatment);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conditionId, conditionType, statement, mandatory, solved, solvedBy, expiresAt, expiryUnblocks, expired);
+    return Objects.hash(conditionId, conditionType, statement, mandatory, solved, solvedBy, expiresAt, expiryUnblocks, expired, humanInTheLoopProcessTreatment);
   }
 
 
@@ -256,6 +278,7 @@ public class WaitingConditionView {
     sb.append("    expiresAt: ").append(toIndentedString(expiresAt)).append("\n");
     sb.append("    expiryUnblocks: ").append(toIndentedString(expiryUnblocks)).append("\n");
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
+    sb.append("    humanInTheLoopProcessTreatment: ").append(toIndentedString(humanInTheLoopProcessTreatment)).append("\n");
     sb.append("}");
     return sb.toString();
   }

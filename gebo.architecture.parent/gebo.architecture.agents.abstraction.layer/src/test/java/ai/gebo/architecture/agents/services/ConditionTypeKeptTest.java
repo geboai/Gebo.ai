@@ -9,7 +9,9 @@
 package ai.gebo.architecture.agents.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -134,5 +136,16 @@ class ConditionTypeKeptTest {
 		assertEquals("clarification", WaitingCondition.of(typed).toCondition().getConditionType());
 		assertNull(WaitingCondition.of(condition("old")).toCondition().getConditionType(),
 				"a block kept before has none");
+	}
+
+	@Test
+	void theHumanInTheLoopProcessTreatmentIsKeptWithTheConditionOfTheBlock() {
+		final AgentSuspendedWaitingCondition<String, Object> request = condition("which year?");
+		request.setHumanInTheLoopProcessTreatment(true);
+
+		assertTrue(WaitingCondition.of(request).isHumanInTheLoopProcessTreatment());
+		assertTrue(WaitingCondition.of(request).toCondition().isHumanInTheLoopProcessTreatment());
+		assertFalse(WaitingCondition.of(condition("old")).toCondition().isHumanInTheLoopProcessTreatment(),
+				"a clarification, and a block kept before, is the conversation's alone");
 	}
 }

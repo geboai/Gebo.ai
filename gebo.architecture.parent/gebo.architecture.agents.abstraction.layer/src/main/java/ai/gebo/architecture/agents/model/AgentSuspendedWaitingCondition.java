@@ -65,6 +65,14 @@ public class AgentSuspendedWaitingCondition<T, O> {
 	 * value that came.
 	 */
 	private UnansweredBecause unansweredBecause = null;
+	/**
+	 * Whether this is a human in the loop request handled as a process: shown to its
+	 * owner outside the conversation, in the agents processes area, where it may be
+	 * answered when the conversation is not open; false for a clarification the
+	 * conversation alone answers. Set by the code of the tool that asked, never by
+	 * the model: the platform's clarification tools leave it false.
+	 */
+	private boolean humanInTheLoopProcessTreatment = false;
 
 	/** A condition on a value, with nothing chosen by the model. */
 	public AgentSuspendedWaitingCondition(Class<T> type, String waitingConditionStatement,

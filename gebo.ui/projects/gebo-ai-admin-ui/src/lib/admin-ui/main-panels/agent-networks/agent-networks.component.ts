@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { GBaseObject, GeboAgentsNetworkAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAIWaitingConditionsPanelComponent, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
 @Component({
     selector: "agent-networks-component",
@@ -13,7 +13,6 @@ export class AgentNetworksComponent extends AncestorPanelComponent implements On
     protected agentsNetworks: GBaseObject[] = [];
     protected loading:boolean=false;
     /** The runs waiting for a human in the loop or an external condition, reloaded with the tab. */
-    @ViewChild("waitingConditions") waitingConditions?: GeboAIWaitingConditionsPanelComponent;
     constructor(
         private agentNetworkService: GeboAgentsNetworkAdminControllerService,
         private geboUIActionEventService: GeboUIActionRoutingService
@@ -25,7 +24,6 @@ export class AgentNetworksComponent extends AncestorPanelComponent implements On
     }
     public override reloadViewedData(): void {
         this.loading=true;
-        this.waitingConditions?.reload();
         this.agentNetworkService.getAgentsNetwork().subscribe({
             next: (value) => {
                 this.agentsNetworks = value;

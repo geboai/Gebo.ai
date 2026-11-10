@@ -27,7 +27,7 @@ import java.util.Map;
  * AgentSuspendedWaitingConditionDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T19:03:18.605928900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-10T16:38:55.503568700+01:00[Europe/Rome]")
 
 public class AgentSuspendedWaitingConditionDto {
   @JsonProperty("conditionType")
@@ -35,6 +35,9 @@ public class AgentSuspendedWaitingConditionDto {
 
   @JsonProperty("conditionId")
   private String conditionId = null;
+
+  @JsonProperty("humanInTheLoopProcessTreatment")
+  private Boolean humanInTheLoopProcessTreatment = null;
 
   @JsonProperty("attributes")
   private Map<String, Object> attributes = new HashMap<>();
@@ -79,6 +82,24 @@ public class AgentSuspendedWaitingConditionDto {
 
   public void setConditionId(String conditionId) {
     this.conditionId = conditionId;
+  }
+
+  public AgentSuspendedWaitingConditionDto humanInTheLoopProcessTreatment(Boolean humanInTheLoopProcessTreatment) {
+    this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
+    return this;
+  }
+
+   /**
+   * Get humanInTheLoopProcessTreatment
+   * @return humanInTheLoopProcessTreatment
+  **/
+  @Schema(description = "")
+  public Boolean isHumanInTheLoopProcessTreatment() {
+    return humanInTheLoopProcessTreatment;
+  }
+
+  public void setHumanInTheLoopProcessTreatment(Boolean humanInTheLoopProcessTreatment) {
+    this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
   }
 
   public AgentSuspendedWaitingConditionDto attributes(Map<String, Object> attributes) {
@@ -152,6 +173,7 @@ public class AgentSuspendedWaitingConditionDto {
     AgentSuspendedWaitingConditionDto agentSuspendedWaitingConditionDto = (AgentSuspendedWaitingConditionDto) o;
     return Objects.equals(this.conditionType, agentSuspendedWaitingConditionDto.conditionType) &&
         Objects.equals(this.conditionId, agentSuspendedWaitingConditionDto.conditionId) &&
+        Objects.equals(this.humanInTheLoopProcessTreatment, agentSuspendedWaitingConditionDto.humanInTheLoopProcessTreatment) &&
         Objects.equals(this.attributes, agentSuspendedWaitingConditionDto.attributes) &&
         Objects.equals(this.clarificationAttributes, agentSuspendedWaitingConditionDto.clarificationAttributes) &&
         Objects.equals(this.defaultAttributes, agentSuspendedWaitingConditionDto.defaultAttributes);
@@ -159,7 +181,7 @@ public class AgentSuspendedWaitingConditionDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(conditionType, conditionId, attributes, clarificationAttributes, defaultAttributes);
+    return Objects.hash(conditionType, conditionId, humanInTheLoopProcessTreatment, attributes, clarificationAttributes, defaultAttributes);
   }
 
 
@@ -170,6 +192,7 @@ public class AgentSuspendedWaitingConditionDto {
     
     sb.append("    conditionType: ").append(toIndentedString(conditionType)).append("\n");
     sb.append("    conditionId: ").append(toIndentedString(conditionId)).append("\n");
+    sb.append("    humanInTheLoopProcessTreatment: ").append(toIndentedString(humanInTheLoopProcessTreatment)).append("\n");
     sb.append("    attributes: ").append(toIndentedString(attributes)).append("\n");
     sb.append("    clarificationAttributes: ").append(toIndentedString(clarificationAttributes)).append("\n");
     sb.append("    defaultAttributes: ").append(toIndentedString(defaultAttributes)).append("\n");

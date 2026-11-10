@@ -380,6 +380,8 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 		private boolean expiryUnblocks = false;
 		/** Why it was resolved with no value, once it was. */
 		private UnansweredBecause unansweredBecause = null;
+		/** Whether it is a human in the loop request handled as a process, shown in the agents processes area. */
+		private boolean humanInTheLoopProcessTreatment = false;
 
 		/** Whether its expiry came and it still waits. */
 		public boolean isExpiredAt(Date now) {
@@ -407,6 +409,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 				waiting.setExpiryUnblocks(condition.getExpiry().isExpiryUnblocks());
 			}
 			waiting.setUnansweredBecause(condition.getUnansweredBecause());
+			waiting.setHumanInTheLoopProcessTreatment(condition.isHumanInTheLoopProcessTreatment());
 			return waiting;
 		}
 
@@ -427,6 +430,7 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 				condition.setExpiry(new ConditionExpiry(expiresAt, expiryUnblocks));
 			}
 			condition.setUnansweredBecause(unansweredBecause);
+			condition.setHumanInTheLoopProcessTreatment(humanInTheLoopProcessTreatment);
 			if (suspendedConditionId != null) {
 				condition.setSuspendedConditionId(suspendedConditionId);
 			}

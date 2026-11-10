@@ -31,4 +31,6 @@ public class WaitingConditionView {
 	private boolean expiryUnblocks = false;
 	/** Whether it is past its expiry and still waits: someone has to go on without it or abandon the run. */
 	private boolean expired = false;
+	/** Whether this is a human in the loop request handled as a process, shown in the agents processes area. */
+	private boolean humanInTheLoopProcessTreatment = false;
 }

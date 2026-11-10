@@ -279,4 +279,50 @@ class AskUserSingleChoiceQuestionToolTest {
 			assertTrue(description.contains("the very values and results"), description);
 		}
 	}
+
+	@Test
+	void aClarificationIsTheConversationsAloneAndLeavesItsTranslatorToItsKind() {
+		tool.ask(param("Which year?", List.of("2023", "2024"), true), inACallWith(wait));
+
+		AgentSuspendedWaitingCondition<?, ?> condition = wait.waited().get(0);
+		assertFalse(condition.isHumanInTheLoopProcessTreatment(), "not a process: the chat alone answers it");
+		assertNull(condition.getConditionType(), "the translator taking a clarification reads it");
+	}
+
+	@Test
+	void aToolAskingForAHumanInTheLoopMarksItsConditionAndPinsItsTranslator() {
+		GAbstractAskUserChoiceQuestionTool humanInTheLoop = new GAbstractAskUserChoiceQuestionTool() {
+			@Override
+			protected String toolName() {
+				return "askForHumanInTheLoopSingleChoice";
+			}
+
+			@Override
+			protected String toolDescription() {
+				return "Ask a human";
+			}
+
+			@Override
+			protected boolean multipleChoice() {
+				return false;
+			}
+
+			@Override
+			protected boolean humanInTheLoopProcessTreatment() {
+				return true;
+			}
+
+			@Override
+			protected String conditionType() {
+				return "human-in-the-loop";
+			}
+		};
+
+		humanInTheLoop.ask(param("Which year?", List.of("2023", "2024"), true), inACallWith(wait));
+
+		AgentSuspendedWaitingCondition<?, ?> condition = wait.waited().get(0);
+		assertTrue(condition.isHumanInTheLoopProcessTreatment(), "handled as a process: the area shows it too");
+		assertEquals("human-in-the-loop", condition.getConditionType());
+		assertSame(ClarificationAnswer.class, condition.getType(), "answered as a question all the same");
+	}
 }
