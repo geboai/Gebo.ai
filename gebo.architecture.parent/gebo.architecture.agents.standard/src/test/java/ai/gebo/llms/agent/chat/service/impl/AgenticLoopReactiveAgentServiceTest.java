@@ -17,15 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.ToolCallback;
+import org.mockito.ArgumentCaptor;
 
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -56,6 +60,12 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import reactor.core.publisher.Flux;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.SourceGate;
+import ai.gebo.architecture.agents.model.AgentMountedTools;
+import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
 
 /**
  * Pins the loop of the single agent with tools: the control markers never reach the
@@ -1301,5 +1311,106 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals("", run(agent, 1));
 		assertEquals(1, agent.receivedParams.size());
+	}
+
+	// ---- the user questions library the service implies
+
+	@Test
+	void theLoopServiceImpliesTheUserQuestionsLibraryForEveryAgentRunningOnIt() {
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID),
+				new AgenticLoopReactiveAgentServiceImpl(null, null, null, null, null, null, NO_RENDERER)
+						.getImpliedLibraryTypeIds());
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID),
+				new AgenticLoopPureChatReactiveAgentServiceImpl(null, null, null, null, null, null, NO_RENDERER)
+						.getImpliedLibraryTypeIds(),
+				"the pure chat loop too");
+	}
+
+	/** An installation keeping the user questions library, and nothing else. */
+	@SuppressWarnings("unchecked")
+	private static IGAIToolsLibraryInstancesService keepingTheQuestionsLibrary() {
+		final AIToolsAndResourcesLibraryType questions = new UserQuestionsLibrarySource().getManagedTypes().get(0);
+		IGAIToolsLibraryInstancesService instances = mock(IGAIToolsLibraryInstancesService.class);
+		when(instances.typesOf(any())).thenAnswer(x -> ((Collection<String>) x.getArgument(0))
+				.contains(UserQuestionsLibrarySource.TYPE_ID) ? List.of(questions) : List.of());
+		return instances;
+	}
+
+	/** The loop service with what a run reclaims of its libraries reachable from the test. */
+	static class ReclaimingLoopAgent extends AgenticLoopReactiveAgentServiceImpl {
+		ReclaimingLoopAgent(IGToolCallbackSourceRepositoryPattern repository, IGRuntimeBinder binder) {
+			super(null, repository, null, binder, null, null, NO_RENDERER);
+		}
+
+		void reclaim(IChatRequestContext context, GAgentConfig config) {
+			reclaimTheLibrariesOfTheConversation(context, config);
+		}
+	}
+
+	private static ReclaimingLoopAgent loopAgentIn(IGAIToolsLibraryInstancesService instances) {
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		when(repository.getImplementations()).thenReturn(List.of());
+		IGRuntimeBinder binder = mock(IGRuntimeBinder.class);
+		when(binder.getImplementationOf(IGAIToolsLibraryInstancesService.class)).thenReturn(instances);
+		return new ReclaimingLoopAgent(repository, binder);
+	}
+
+	private static List<String> namesOf(AgentMountedTools mounted) {
+		return mounted.getTools().stream().map(AgentMountedTools.MountedTool::getName).toList();
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void anAgentNamingNoLibraryMountsTheQuestionToolsTheServiceImplies() {
+		IGAIToolsLibraryInstancesService instances = keepingTheQuestionsLibrary();
+		AgenticLoopReactiveAgentServiceImpl agent = loopAgentIn(instances);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("a-products-loop-agent");
+		config.setSubscribeAllTools(false);
+
+		AgentMountedTools mounted = agent.getMountedTools(config);
+
+		assertTrue(namesOf(mounted).contains("askUserSingleChoiceQuestion"), String.valueOf(namesOf(mounted)));
+		assertTrue(namesOf(mounted).contains("askUserMultipleChoiceQuestion"), String.valueOf(namesOf(mounted)));
+		ArgumentCaptor<Collection<String>> asked = ArgumentCaptor.forClass(Collection.class);
+		verify(instances).typesOf(asked.capture());
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
+				"the implied library, and nothing the configuration did not name");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void anAgentNamingTheImpliedLibraryMountsItOnce() {
+		IGAIToolsLibraryInstancesService instances = keepingTheQuestionsLibrary();
+		AgenticLoopReactiveAgentServiceImpl agent = loopAgentIn(instances);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("the-platforms-loop-agent");
+		config.setSubscribeAllTools(false);
+		config.setLibraryTypeIds(List.of("another-library", UserQuestionsLibrarySource.TYPE_ID));
+
+		AgentMountedTools mounted = agent.getMountedTools(config);
+
+		assertEquals(2, namesOf(mounted).stream().filter(n -> n.startsWith("askUser")).count(), "each tool once");
+		ArgumentCaptor<Collection<String>> asked = ArgumentCaptor.forClass(Collection.class);
+		verify(instances).typesOf(asked.capture());
+		assertEquals(List.of("another-library", UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
+				"the named ones first, the implied one once");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void aRunReclaimsTheImpliedLibraryOfTheConversation() {
+		IGAIToolsLibraryInstancesService instances = keepingTheQuestionsLibrary();
+		when(instances.reclaim(any(), any())).thenReturn(Map.of());
+		ReclaimingLoopAgent agent = loopAgentIn(instances);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("a-products-loop-agent");
+
+		agent.reclaim(IChatRequestContext.of("What is new?"), config);
+
+		ArgumentCaptor<Collection<String>> asked = ArgumentCaptor.forClass(Collection.class);
+		verify(instances).reclaim(any(), asked.capture());
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
+				"the conversation's instance of the implied library is reclaimed as a named one's");
 	}
 }

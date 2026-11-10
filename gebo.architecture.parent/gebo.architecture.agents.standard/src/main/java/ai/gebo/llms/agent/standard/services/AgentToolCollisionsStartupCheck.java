@@ -70,7 +70,10 @@ public class AgentToolCollisionsStartupCheck {
 		}
 	}
 
-	/** Logs the collisions of every agent naming a library; how many there are. */
+	/**
+	 * Logs the collisions of every agent naming a library, or whose service implies
+	 * one for every agent running on it; how many there are.
+	 */
 	int check() {
 		final IAgentConfigDao configs = agentConfigsProvider.getIfAvailable();
 		final IGAgentServiceRuntimeDao services = agentServicesProvider.getIfAvailable();
@@ -79,12 +82,17 @@ public class AgentToolCollisionsStartupCheck {
 		}
 		int found = 0;
 		for (GAgentConfig config : configs.getConfigurations()) {
-			if (config == null || config.getLibraryTypeIds() == null || config.getLibraryTypeIds().isEmpty()
-					|| config.getAgentServiceId() == null) {
+			if (config == null || config.getAgentServiceId() == null) {
 				continue;
 			}
 			final IGGenericAgentService service = services.findByCode(config.getAgentServiceId());
-			final AgentMountedTools mounted = service != null ? service.getMountedTools(config) : null;
+			final boolean namesALibrary = config.getLibraryTypeIds() != null && !config.getLibraryTypeIds().isEmpty();
+			final boolean serviceImpliesOne = service != null && service.getImpliedLibraryTypeIds() != null
+					&& !service.getImpliedLibraryTypeIds().isEmpty();
+			if (service == null || (!namesALibrary && !serviceImpliesOne)) {
+				continue;
+			}
+			final AgentMountedTools mounted = service.getMountedTools(config);
 			for (LibraryToolCollision collision : mounted != null ? mounted.getCollisions()
 					: List.<LibraryToolCollision>of()) {
 				LOGGER.error("Tool name collision on agent config code:" + config.getCode() + ": " + collision.written());

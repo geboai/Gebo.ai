@@ -505,7 +505,9 @@ structured model call a waiting tool ended answers null: there is no result to p
 
 `AskUserSingleChoiceQuestionTool` and `AskUserMultipleChoiceQuestionTool` (library
 type `user-questions-and-clarifications`, mounted only on the agents naming it among
-their `libraryTypeIds`) are the tools of the common case: a question the user answers with one of the
+their `libraryTypeIds` and on every agent running on the agentic loop service, which
+implies it through `IGGenericAgentService.getImpliedLibraryTypeIds`) are the tools of the
+common case: a question the user answers with one of the
 options the model chose, or with all those that apply. Each option has a label
 and a description, and the user may explain in their own words when the model
 allows it.
