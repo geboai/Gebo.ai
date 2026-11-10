@@ -78,6 +78,19 @@ class AgentToolCollisionsStartupCheckTest {
 	}
 
 	@Test
+	void anAgentNamingNoLibraryOnAServiceImplyingOneIsRead() {
+		GAgentConfig loop = anAgent("a-loop-agent", List.of());
+		when(configs.getConfigurations()).thenReturn(List.of(loop));
+		when(service.getImpliedLibraryTypeIds()).thenReturn(List.of("user-questions-and-clarifications"));
+		AgentMountedTools mounted = new AgentMountedTools();
+		mounted.getCollisions().add(new LibraryToolCollision("askUserSingleChoiceQuestion",
+				"user-questions-and-clarifications", "User questions", "a-source", null, "A source"));
+		when(service.getMountedTools(loop)).thenReturn(mounted);
+
+		assertEquals(1, check.check(), "the library the service implies is mounted as a named one");
+	}
+
+	@Test
 	void anAgentNamingNoLibraryIsNotReadAtAll() {
 		when(configs.getConfigurations()).thenReturn(List.of(anAgent("a-plain-agent", null)));
 

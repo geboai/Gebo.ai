@@ -90,6 +90,7 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
 
 /**
  * A single agent with tools, working in the classic agentic loop over the network
@@ -145,6 +146,16 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	@Override
 	public String getDescription() {
 		return DESCRIPTION;
+	}
+
+	/**
+	 * The single agent answering the user may ask them a question the work waits
+	 * for: the user questions library is implied by running on this service, whatever
+	 * the configuration names, so a product's own loop agent asks as the platform's do.
+	 */
+	@Override
+	public List<String> getImpliedLibraryTypeIds() {
+		return List.of(UserQuestionsLibrarySource.TYPE_ID);
 	}
 
 	@Override

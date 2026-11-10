@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -425,28 +426,29 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * none yet. Their tools, bound to the resources of the instances, are the only
 	 * way a tool of a library reaches a model; what each instance holds is added to
 	 * the rules the agent follows. No tools and the same context when the agent names
-	 * no library, when there is no conversation to hold them or when this installation
-	 * keeps no library instances.
+	 * no library and its service implies none ({@link #libraryTypeIdsOf(GAgentConfig)}),
+	 * when there is no conversation to hold them or when this installation keeps no
+	 * library instances.
 	 */
 	protected AgentLibraries reclaimTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig) {
 		final AgentLibraries none = new AgentLibraries(chatRequestContext, List.of());
-		if (chatRequestContext == null || agentConfig == null || agentConfig.getLibraryTypeIds() == null
-				|| agentConfig.getLibraryTypeIds().isEmpty()) {
+		final List<String> libraryTypeIds = libraryTypeIdsOf(agentConfig);
+		if (chatRequestContext == null || agentConfig == null || libraryTypeIds.isEmpty()) {
 			return none;
 		}
 		final IGAIToolsLibraryInstancesService instances = libraryInstances();
 		if (instances == null) {
-			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " names the library types "
-					+ agentConfig.getLibraryTypeIds() + " but this installation keeps no library instances: it works"
+			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " mounts the library types "
+					+ libraryTypeIds + " but this installation keeps no library instances: it works"
 					+ " without their tools");
 			return none;
 		}
 		final Map<String, AIToolsAndResourcesLibraryInstance> held = instances.reclaim(chatRequestContext.getSessionID(),
-				agentConfig.getLibraryTypeIds());
+				libraryTypeIds);
 		if (held == null || held.isEmpty()) {
-			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " names the library types "
-					+ agentConfig.getLibraryTypeIds() + " but conversation:" + chatRequestContext.getSessionID()
+			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " mounts the library types " + libraryTypeIds
+					+ " but conversation:" + chatRequestContext.getSessionID()
 					+ " holds no instance of them: it works without their tools");
 			return none;
 		}
@@ -461,17 +463,42 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
-	 * The library types the configuration names that this installation has, for
-	 * whoever shows what an agent mounts with no run: a library comes in block, so
-	 * what its type declares is what the agent gets.
+	 * The library types the agent mounts that this installation has, for whoever
+	 * shows what an agent mounts with no run: a library comes in block, so what its
+	 * type declares is what the agent gets.
 	 */
 	protected List<AIToolsAndResourcesLibraryType> configuredLibraryTypes(GAgentConfig agentConfig) {
-		if (agentConfig == null || agentConfig.getLibraryTypeIds() == null
-				|| agentConfig.getLibraryTypeIds().isEmpty()) {
+		final List<String> libraryTypeIds = libraryTypeIdsOf(agentConfig);
+		if (agentConfig == null || libraryTypeIds.isEmpty()) {
 			return List.of();
 		}
 		final IGAIToolsLibraryInstancesService instances = libraryInstances();
-		return instances != null ? instances.typesOf(agentConfig.getLibraryTypeIds()) : List.of();
+		return instances != null ? instances.typesOf(libraryTypeIds) : List.of();
+	}
+
+	/**
+	 * The library types an agent mounts: the ones its configuration names, then the
+	 * ones this service implies for every agent running on it
+	 * ({@link #getImpliedLibraryTypeIds()}), each once; empty when there are none.
+	 */
+	protected List<String> libraryTypeIdsOf(GAgentConfig agentConfig) {
+		final Set<String> ids = new LinkedHashSet<>();
+		if (agentConfig != null && agentConfig.getLibraryTypeIds() != null) {
+			for (String id : agentConfig.getLibraryTypeIds()) {
+				if (id != null && !id.isBlank()) {
+					ids.add(id);
+				}
+			}
+		}
+		final List<String> implied = getImpliedLibraryTypeIds();
+		if (implied != null) {
+			for (String id : implied) {
+				if (id != null && !id.isBlank()) {
+					ids.add(id);
+				}
+			}
+		}
+		return List.copyOf(ids);
 	}
 
 	/**
