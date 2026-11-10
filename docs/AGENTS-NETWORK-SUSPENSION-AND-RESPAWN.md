@@ -92,8 +92,16 @@ waited for whole, and everything not yet delivered is frozen in its place.
    given a context asking the same told text (`AgentSuspensionTurn.toldContext`): what
    the user wrote last is only the answer. An agent goes on when at least one of its conditions is
    resolved and no mandatory one is left, those left counting as declined; with a
-   mandatory one left it keeps waiting for all of them. The frozen deliveries follow in
-   their order, then the normal loop.
+   mandatory one left it keeps waiting for all of them. The turn the agent asked on,
+   saying nothing, was recorded in its private memory as a turn with an empty output and
+   saved so in the block: before the re-execution that empty record is forgotten
+   (`AgentPrivateSessionContext.dropEmptyTurn`), since the agent makes that turn now, so a
+   coordinator plans the cycle it asked on again (`CURRENT_CONTROLLER_CYCLE` counts its
+   private turns), consistent with its invocation count, and no agent reads an empty turn
+   of its own; without this a coordinator respawned on its first cycle was told it was on
+   cycle 2, finalized at once or echoed the schema, and the writer was forced with no
+   search. A turn the agent also produced something in is kept. The frozen deliveries
+   follow in their order, then the normal loop.
 4. The run ends with an answer, or suspends again into a new block linked to the first;
    the consumed block is marked respawned.
 
