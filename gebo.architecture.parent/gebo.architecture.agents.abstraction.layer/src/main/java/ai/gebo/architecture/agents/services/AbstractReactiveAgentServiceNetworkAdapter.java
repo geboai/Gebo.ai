@@ -100,9 +100,9 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 				config, request, network,
 				contextAgentPersona, notificationSink, session, mySessionContext, runAs, callToolCalling);
 		// Once a tool of the call declared what the run waits for, the agent says nothing:
-		// what the call answers from then on is the waiting tool's own result (a tool
-		// returning directly ends the call with it), written for the model, not for the
-		// user, who is asked the question by the suspension.
+		// what the call answers from then on is the waiting tool's own result (the
+		// declaration ends the call with it), written for the model, not for the user,
+		// who is asked the question by the suspension.
 		final int[] keptFromTheUser = { 0 };
 		Flux<IGPartialOperation<ResponseType>> duplicatedFlux = flux.map(x -> {
 			if (turn.isWaiting()) {

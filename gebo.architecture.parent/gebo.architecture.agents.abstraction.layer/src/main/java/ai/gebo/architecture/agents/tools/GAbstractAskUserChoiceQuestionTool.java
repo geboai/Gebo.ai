@@ -43,17 +43,21 @@ import lombok.NoArgsConstructor;
  * model call ({@code GeboToolCalling.Builder#mandatoryTool(callback())}) with an
  * {@link IGWaitExternalCondition} loaded; the tool declares the condition to it,
  * as an {@link AgentSuspendedWaitingCondition} of a {@link ClarificationAnswer}
- * with the {@link ClarificationOptions} the model chose, and ends the call (it
- * returns directly), so that the agent suspends the run for the answer. Where
- * nothing is loaded the tool tells the model to decide by itself.
+ * with the {@link ClarificationOptions} the model chose, and the declaration ends
+ * the call (the loaded implementation is the control ending it), so that the agent
+ * suspends the run for the answer. The tool is not declared as returning directly:
+ * what it returns without declaring a condition, a refusal written for the model,
+ * "give at least two options", "say what you need", or, where nothing is loaded,
+ * "decide by yourself", goes back to the model as any tool result, and the model
+ * corrects itself or goes on by itself as the text asks.
  * <p>
  * On a respawn the agent gives the model the answer (see
  * {@link #answered(AgentSuspendedWaitingCondition)}) rather than letting the
- * tool answer it, since the tool ends every call it is part of. The model never
- * reads what the tool returns, so what it needs to know of this comes with the
- * tool's description ({@link #STOPS_THE_WORK}), and what it wants to keep for the
- * respawn it writes in {@link Param#getNotesForLater()}: saved on the condition,
- * it comes back with the answer and the user does not see it.
+ * tool answer it, since asking ends the call the tool is part of. The model never
+ * reads what the tool returns once it asked, so what it needs to know of this
+ * comes with the tool's description ({@link #STOPS_THE_WORK}), and what it wants
+ * to keep for the respawn it writes in {@link Param#getNotesForLater()}: saved on
+ * the condition, it comes back with the answer and the user does not see it.
  */
 public abstract class GAbstractAskUserChoiceQuestionTool {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GAbstractAskUserChoiceQuestionTool.class);
@@ -100,10 +104,13 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 	/** Whether the user may choose more than one option. */
 	protected abstract boolean multipleChoice();
 
-	/** The tool, declared as returning directly: the call ends at it. */
+	/**
+	 * The tool: the call ends at it once it asked, by the wait it declared the
+	 * question to, and goes on with what it returns otherwise.
+	 */
 	public ToolCallback callback() {
 		return ToolCallbackDeclarationUtil.declare(this::ask, toolName(), toolDescription(), Param.class, String.class,
-				ToolCallbackDeclarationUtil.returningDirect());
+				null);
 	}
 
 	/**

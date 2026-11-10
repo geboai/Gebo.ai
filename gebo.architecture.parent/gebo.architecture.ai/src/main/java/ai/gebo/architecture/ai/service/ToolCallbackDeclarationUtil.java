@@ -96,10 +96,12 @@ public class ToolCallbackDeclarationUtil {
 	}
 
 	/**
-	 * The metadata of a tool whose result ends the model call: the tool calling loop
-	 * stops at it and its result is the call's answer (Spring AI's {@code returnDirect}).
-	 * What a tool that suspends the work - waiting for a person's answer, for an
-	 * external event - declares: the model is not called again after it.
+	 * The metadata of a tool whose result always ends the model call: the tool calling
+	 * loop stops at it and its result is the call's answer (Spring AI's
+	 * {@code returnDirect}), the model is not called again after it. A tool whose stop
+	 * depends on what happened in the call - a question tool, ending the call when it
+	 * asked and not when it refused to - is not declared with this: the control it
+	 * tells ends the call (see {@code IToolCallEndingControl} in the LLM layer).
 	 */
 	public static ToolMetadata returningDirect() {
 		return ToolMetadata.builder().returnDirect(true).build();

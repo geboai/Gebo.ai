@@ -478,15 +478,21 @@ any run (and whatever stubs or overrides them still answers); inside a run
 nothing reaches them, every call carrying the run's container. A test running a
 network or an agent builds one for it: `GeboToolCalling.builder().caller("test:<name>").build()`.
 
-A tool that must **end the call** because the work waits for something from
-outside the run (the user's answer to a question, an external event) is declared
-with `ToolCallbackDeclarationUtil.returningDirect()` as its metadata
+A tool whose result **always ends the call** is declared with
+`ToolCallbackDeclarationUtil.returningDirect()` as its metadata
 (`declare(function, name, description, paramType, returnType, returningDirect())`):
 the loop stops at it, its result is the call's answer, and `isStoppedByTool()`
-is `true`. It tells **what** the run waits for through `IGWaitExternalCondition`
+is `true`. A tool that ends the call **only when something happened** in it, the
+work waiting for something from outside the run (the user's answer to a question,
+an external event), is not declared so: the control it tells decides. A control
+loaded in the container that implements `IToolCallEndingControl` is read by the
+container's `GeboToolCallingManager` after each round of tool calls, and when its
+`endsTheCall()` says so the round is returned directly, with the same effect. A
+refusal the tool returns without telling the control anything goes back to the
+model as any tool result. The waiting tool tells **what** the run waits for through `IGWaitExternalCondition`
 (`gebo.architecture.agents.abstraction.layer`), the contract every agent loads
 in the tool calling of each of its model calls (`GWaitExternalConditionSink`,
-one per call): the tool declares an `AgentSuspendedWaitingCondition` (the type
+one per call, the ending control of the call): the tool declares an `AgentSuspendedWaitingCondition` (the type
 of the value waited for, the statement, the model's explanation, whether it is
 mandatory, and what the model chose), and the agent, once the call ended, asks
 the network to suspend the run for each condition declared

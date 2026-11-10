@@ -24,7 +24,7 @@ public class AskUserMultipleChoiceQuestionTool extends GAbstractAskUserChoiceQue
 			+ " allow an explanation of their own when the options may not cover their case."
 			+ STOPS_THE_WORK;
 
-	/** The tool, declared as returning directly: the call ends at it. */
+	/** The tool: the call ends at it once it asked, and goes on with its answer otherwise. */
 	public static ToolCallback declare() {
 		return new AskUserMultipleChoiceQuestionTool().callback();
 	}

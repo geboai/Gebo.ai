@@ -18,8 +18,9 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
  * something from outside the run: a person's answer, an external event. The
  * agent loads its own implementation in the tool calling of its model call
  * (see {@code GeboToolCalling.Builder#provide}); a tool that must wait finds it
- * in its tool context, declares the condition and ends the call (it is declared
- * as returning directly); the agent, seeing the call stopped by the tool, reads
+ * in its tool context and declares the condition, which ends the call: the
+ * implementation loaded is the control ending it (see
+ * {@code GWaitExternalConditionSink}); the agent, seeing the call stopped, reads
  * the conditions declared and asks the network to suspend the run for them (see
  * {@link IGNetworkOfAgentsSuspensionHandler#enterSuspensionState}). A tool that
  * finds nothing loaded is running where nothing can wait, and decides by itself.

@@ -8,9 +8,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.IntFunction;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.model.ToolContext;
+import org.springframework.ai.chat.prompt.ChatOptions;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.util.json.JsonParser;
 
@@ -23,11 +33,14 @@ import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool.Param;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import io.micrometer.observation.ObservationRegistry;
+import reactor.core.publisher.Flux;
 
 /**
- * Pins the single choice question tool: it ends the call it is part of, declares to the
- * loaded wait what the user is asked and among which options, and where nothing
- * is loaded it tells the model to decide by itself.
+ * Pins the single choice question tool: it ends the call it is part of once it asked,
+ * declares to the loaded wait what the user is asked and among which options, sends
+ * a refusal back to the model, and where nothing is loaded it tells the model to
+ * decide by itself.
  */
 class AskUserSingleChoiceQuestionToolTest {
 	private final AskUserSingleChoiceQuestionTool tool = new AskUserSingleChoiceQuestionTool();
@@ -57,7 +70,8 @@ class AskUserSingleChoiceQuestionToolTest {
 		ToolCallback callback = AskUserSingleChoiceQuestionTool.declare();
 
 		assertEquals(AskUserSingleChoiceQuestionTool.TOOL_NAME, callback.getToolDefinition().name());
-		assertTrue(callback.getToolMetadata().returnDirect(), "the loop stops at it: the work waits");
+		assertFalse(callback.getToolMetadata().returnDirect(),
+				"the call ends when the question is asked, by the wait declared to, not at the tool: a refusal reaches the model");
 		assertTrue(callback.getToolDefinition().inputSchema().contains("customAnswerAllowed"));
 		assertTrue(callback.getToolDefinition().inputSchema().contains("mandatory"));
 		assertTrue(callback.getToolDefinition().inputSchema().contains("label"));
@@ -175,6 +189,84 @@ class AskUserSingleChoiceQuestionToolTest {
 				"the parameter is the one kept out of the call as the user sees it");
 		assertFalse(((List<String>) schema.get("required")).contains("notesForLater"));
 		assertTrue(((List<String>) schema.get("required")).contains("question"));
+	}
+
+	// ---- through the tool calling loop of a call made with the container
+
+	private static final String ONE_OPTION = "{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[{\"label\":\"2024\"}]}";
+	private static final String TWO_OPTIONS = "{\"question\":\"Which year?\",\"whyNeeded\":\"it matters\",\"options\":[{\"label\":\"2023\"},{\"label\":\"2024\"}]}";
+
+	/** A model answering each round as told: a tool call, or text. */
+	private static ChatModel modelAnswering(IntFunction<ChatResponse> rounds) {
+		final AtomicInteger round = new AtomicInteger();
+		return new ChatModel() {
+			@Override
+			public ChatResponse call(Prompt prompt) {
+				return rounds.apply(round.incrementAndGet());
+			}
+
+			@Override
+			public Flux<ChatResponse> stream(Prompt prompt) {
+				return Flux.just(call(prompt));
+			}
+
+			@Override
+			public ChatOptions getOptions() {
+				return ToolCallingChatOptions.builder().build();
+			}
+		};
+	}
+
+	private static ChatResponse asking(String arguments) {
+		return new ChatResponse(List.of(new Generation(AssistantMessage.builder().content("")
+				.toolCalls(List.of(new AssistantMessage.ToolCall("call-1", "function",
+						AskUserSingleChoiceQuestionTool.TOOL_NAME, arguments)))
+				.build())));
+	}
+
+	private static ChatResponse text(String text) {
+		return new ChatResponse(List.of(new Generation(AssistantMessage.builder().content(text).build())));
+	}
+
+	/** The call as an agent makes it: the tool mounted, the sink loaded, the container's loop. */
+	private static ChatResponse callWith(GeboToolCalling toolCalling, ChatModel model) {
+		return ChatClient.builder(model).build().prompt().user("q").tools(AskUserSingleChoiceQuestionTool.declare())
+				.toolContext(toolCalling.toolsContext(Map.of())).advisors(toolCalling.advisor(ObservationRegistry.NOOP))
+				.call().chatResponse();
+	}
+
+	@Test
+	void throughTheLoopARefusalReachesTheModelAndTheQuestionAskedEndsTheCall() {
+		GeboToolCalling toolCalling = GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build();
+		ChatModel model = modelAnswering(round -> switch (round) {
+		case 1 -> asking(ONE_OPTION);
+		case 2 -> asking(TWO_OPTIONS);
+		default -> text("never reached");
+		});
+
+		ChatResponse response = callWith(toolCalling, model);
+
+		assertTrue(wait.isWaiting(), "asked, the second time");
+		assertEquals(List.of("2023", "2024"), ((ClarificationOptions) wait.waited().get(0).getLlmChosenOptions()).labels());
+		assertTrue(toolCalling.isStoppedByTool(), "the question asked ended the call");
+		assertEquals(2, toolCalling.getRounds(), "the refusal went back to the model, which asked again properly");
+		assertEquals(List.of(AskUserSingleChoiceQuestionTool.TOOL_NAME), toolCalling.getStoppingTools());
+		assertTrue(response.getResult().getOutput().getText().contains("the work stops here"),
+				"the call's answer is the tool's word, which the agent does not use: it suspends");
+	}
+
+	@Test
+	void throughTheLoopWhereNothingCanWaitTheModelReadsItAndAnswersByItself() {
+		GeboToolCalling toolCalling = GeboToolCalling.builder().caller("test").build();
+		ChatModel model = modelAnswering(
+				round -> round == 1 ? asking(TWO_OPTIONS) : text("Assuming 2024, the report says..."));
+
+		ChatResponse response = callWith(toolCalling, model);
+
+		assertEquals("Assuming 2024, the report says...", response.getResult().getOutput().getText());
+		assertFalse(toolCalling.isStoppedByTool(), "no wait declared: the model answered by itself");
+		assertEquals(2, toolCalling.getRounds());
+		assertFalse(wait.isWaiting());
 	}
 
 	@Test
