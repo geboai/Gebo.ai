@@ -44,7 +44,9 @@ public class NetworkOfAgentsConditionEventsControllerApiTest {
         String correlationId = null;
         String sessionCode = null;
         String conditionId = null;
-        ConditionEventView response = api.conditionEventStatus(correlationId, sessionCode, conditionId);
+        String externalSystem = null;
+        String externalSessionKey = null;
+        ConditionEventView response = api.conditionEventStatus(correlationId, sessionCode, conditionId, externalSystem, externalSessionKey);
 
         // TODO: test validations
     }
