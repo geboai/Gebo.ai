@@ -1,6 +1,7 @@
 package ai.gebo.architecture.agents.tools;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -42,7 +43,8 @@ class AskUserMultipleChoiceQuestionToolTest {
 		ToolCallback callback = AskUserMultipleChoiceQuestionTool.declare();
 
 		assertEquals(AskUserMultipleChoiceQuestionTool.TOOL_NAME, callback.getToolDefinition().name());
-		assertTrue(callback.getToolMetadata().returnDirect(), "the loop stops at it: the work waits");
+		assertFalse(callback.getToolMetadata().returnDirect(),
+				"the call ends when the question is asked, by the wait declared to, not at the tool");
 	}
 
 	@Test

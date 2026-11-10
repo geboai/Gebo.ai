@@ -817,7 +817,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			tools = withMandatoryTools(tools, toolCalling.getMandatoryTools(), runAs, toolCallListener,
 					toolsResultsClosing);
 		}
-		reqObject = reqObject.toolCallbacks(tools);
+		reqObject = reqObject.tools(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment

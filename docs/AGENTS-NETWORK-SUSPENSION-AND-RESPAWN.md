@@ -39,8 +39,13 @@ waited for whole, and everything not yet delivered is frozen in its place.
    (`GeboToolCalling.merged(own, received)`), beside what the run carries. Both the
    tool-calling agent (`GBaseToolCallingNetworkAgent`) and the adapter of the reactive
    agents (`AbstractReactiveAgentServiceNetworkAdapter`) do it for every call.
-2. A mounted waiting tool, declared with `returningDirect()`, finds the contract in its
-   tool context and declares the condition (`waitFor`). The loop stops at it.
+2. A mounted waiting tool finds the contract in its tool context and declares the
+   condition (`waitFor`). The declaration ends the call: the sink is the call's
+   `IToolCallEndingControl`, read by the container's `GeboToolCallingManager` after each
+   round of tool calls, so the loop stops at that round and the model is not called
+   again. The tool is not declared as returning directly: what it returns without
+   declaring a condition, a refusal written for the model (no sink loaded, no question,
+   too few options), goes back to the model as any tool result.
 3. The agent, seeing the sink filled, calls `enterSuspensionState` for each condition
    and returns no messages. The agent never calls the handler otherwise. An agent has
    one entry in the block, however many conditions it declared, for example a model
@@ -107,10 +112,11 @@ waited for whole, and everything not yet delivered is frozen in its place.
 
 ## Writing a waiting tool
 
-See the tools guide, section on a tool that must end the call. In short: declare the
-tool with `returningDirect()`, read `IGWaitExternalCondition` from the tool context, call
-`waitFor` with an `AgentSuspendedWaitingCondition`, answer the model that the work
-waits. Where nothing is loaded, tell the model to decide by itself. Mount the tool
+See the tools guide, section on a tool that must end the call. In short: do not declare
+the tool with `returningDirect()`, read `IGWaitExternalCondition` from the tool context,
+call `waitFor` with an `AgentSuspendedWaitingCondition`, answer the model that the work
+waits: declaring the condition is what ends the call. Where nothing is loaded, tell the
+model to decide by itself: it reads that as a tool result and goes on. Mount the tool
 through a source that is `isMountedOnlyWhenAsked()`, and name the source on the agents
 that may wait. Add a translator when the client should see the condition in a form of
 its own; the default translator carries any condition by its types.

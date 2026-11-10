@@ -63,9 +63,10 @@ import io.micrometer.observation.ObservationRegistry;
  * <p>
  * What the last call made with it left behind is readable afterwards
  * ({@link #getLastCall()}): how many rounds the model took, whether a tool ended the
- * call ({@link #isStoppedByTool()}: a tool declared as returning directly, what a tool
- * that suspends the work declares, see {@code ToolCallbackDeclarationUtil#returningDirect()}),
- * the turn's messages. Each call records on its own, so calls made at the same time
+ * call ({@link #isStoppedByTool()}: a tool declared as returning directly was called,
+ * see {@code ToolCallbackDeclarationUtil#returningDirect()}, or a tool told a loaded
+ * {@link IToolCallEndingControl} something ending the call, what a tool that suspends
+ * the work does), the turn's messages. Each call records on its own, so calls made at the same time
  * with the same instance do not disturb each other; the last one to end is the one read.
  */
 public final class GeboToolCalling {
@@ -113,7 +114,8 @@ public final class GeboToolCalling {
 
 		/**
 		 * Whether a tool ended the call: a tool declared as returning directly was
-		 * called, the loop stopped at it and its result is the call's answer.
+		 * called, or a tool told a loaded {@link IToolCallEndingControl} something ending
+		 * the call; the loop stopped at that round and its results are the call's answer.
 		 */
 		public boolean isStoppedByTool() {
 			return stoppedByTool;
@@ -313,7 +315,8 @@ public final class GeboToolCalling {
 
 	/**
 	 * The manager executing the tool calls of a call made with this, within its
-	 * limits, observed through the given registry.
+	 * limits, observed through the given registry, ending the call when a loaded
+	 * control says what the tools told it ends it ({@link GeboToolCallingManager}).
 	 */
 	public ToolCallingManager manager(ObservationRegistry observationRegistry) {
 		final DefaultToolCallingManager.Builder builder = ToolCallingManager.builder()
@@ -343,7 +346,7 @@ public final class GeboToolCalling {
 		if (limits.onLimitExceeded() != null) {
 			builder.onLimitExceeded(limits.onLimitExceeded());
 		}
-		return builder.build();
+		return new GeboToolCallingManager(builder.build(), controls.values());
 	}
 
 	/** The advisor running the tool calling loop of one call made with this. */
@@ -398,7 +401,8 @@ public final class GeboToolCalling {
 
 	/**
 	 * Whether a tool ended the last call: a tool declared as returning directly was
-	 * called, the loop stopped at it and its result is the call's answer.
+	 * called, or a tool told a loaded {@link IToolCallEndingControl} something ending
+	 * the call; the loop stopped at that round and its results are the call's answer.
 	 */
 	public boolean isStoppedByTool() {
 		return lastCall.isStoppedByTool();

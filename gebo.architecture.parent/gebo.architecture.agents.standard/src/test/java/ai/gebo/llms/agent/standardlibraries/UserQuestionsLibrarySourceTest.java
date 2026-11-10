@@ -76,13 +76,14 @@ class UserQuestionsLibrarySourceTest {
 	}
 
 	@Test
-	void theToolsOfAnInstanceEndTheCallTheyArePartOf() {
+	void theToolsOfAnInstanceEndTheCallOnlyWhenTheyAsked() {
 		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("a-conversation"));
 
 		List<ToolCallback> tools = source.getToolCallbacks(instance);
 
 		assertEquals(2, tools.size());
-		assertTrue(tools.stream().allMatch(tool -> tool.getToolMetadata().returnDirect()));
+		assertTrue(tools.stream().noneMatch(tool -> tool.getToolMetadata().returnDirect()),
+				"the wait declared ends the call, a refusal reaches the model");
 	}
 
 	@Test
@@ -147,12 +148,12 @@ class UserQuestionsLibrarySourceTest {
 	}
 
 	@Test
-	void theToolsOfAnInstanceEndTheCall() {
+	void theToolsOfAnInstanceAreNotDeclaredDirect() {
 		List<ToolCallback> tools = source.getToolCallbacks(source.createInstance(type, List.of("a-conversation")));
 
 		assertEquals(2, tools.size());
-		assertTrue(tools.stream().allMatch(tool -> tool.getToolMetadata().returnDirect()),
-				"the loop stops at the question: the work waits");
+		assertTrue(tools.stream().noneMatch(tool -> tool.getToolMetadata().returnDirect()),
+				"the loop stops at the question asked, by the wait it was declared to");
 	}
 
 	@Test
@@ -170,7 +171,7 @@ class UserQuestionsLibrarySourceTest {
 	void whetherAToolEndsTheCallStaysOutOfTheJson() throws Exception {
 		String json = new ObjectMapper().writeValueAsString(type.getTools().get(0));
 
-		assertTrue(type.getTools().get(0).isReturnDirect());
+		assertFalse(type.getTools().get(0).isReturnDirect(), "whether the call ends is decided per call, not declared");
 		assertFalse(json.contains("returnDirect"), json);
 	}
 
