@@ -105,6 +105,25 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 	protected abstract boolean multipleChoice();
 
 	/**
+	 * Whether the question is a human in the loop request handled as a process,
+	 * answerable in the agents processes area as well as in the chat: false for the
+	 * platform's clarification tools, which the conversation alone answers. Decided
+	 * by the tool's code, never by the model.
+	 */
+	protected boolean humanInTheLoopProcessTreatment() {
+		return false;
+	}
+
+	/**
+	 * The type of the condition this tool declares, the id of the translator that
+	 * shows it to the client and reads the answers to it; null, the default, leaves
+	 * the condition to the translator that takes a clarification.
+	 */
+	protected String conditionType() {
+		return null;
+	}
+
+	/**
 	 * The tool: the call ends at it once it asked, by the wait it declared the
 	 * question to, and goes on with what it returns otherwise.
 	 */
@@ -156,6 +175,10 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 			condition.setNotesForLater(param.getNotesForLater().strip());
 		}
 		condition.setExpiry(expiryOf(options, mandatory));
+		condition.setHumanInTheLoopProcessTreatment(humanInTheLoopProcessTreatment());
+		if (conditionType() != null) {
+			condition.setConditionType(conditionType());
+		}
 		wait.waitFor(condition);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug(toolName() + " asked: " + options.getQuestion() + " among " + options.getOptions().size()

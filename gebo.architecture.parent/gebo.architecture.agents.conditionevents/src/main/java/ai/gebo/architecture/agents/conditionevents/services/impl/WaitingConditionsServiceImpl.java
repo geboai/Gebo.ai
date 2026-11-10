@@ -131,8 +131,10 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		if (username == null || username.isBlank()) {
 			return waiting;
 		}
+		// the owner's own runs, and only the ones waiting for a human in the loop
+		// request handled as a process: a clarification is the conversation's alone
 		for (WaitingBlockView view : allWaiting()) {
-			if (username.equals(view.getOwner())) {
+			if (username.equals(view.getOwner()) && view.isHumanInTheLoopProcessTreatment()) {
 				waiting.add(view);
 			}
 		}
@@ -178,6 +180,9 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 			shown.setSolved(solved != null);
 			shown.setSolvedBy(solved != null ? solved.sourceOrKept().label() : null);
 			shown.setExpired(solved == null && condition.isExpiredAt(now));
+			shown.setHumanInTheLoopProcessTreatment(condition.isHumanInTheLoopProcessTreatment());
+			view.setHumanInTheLoopProcessTreatment(
+					view.isHumanInTheLoopProcessTreatment() || shown.isHumanInTheLoopProcessTreatment());
 			view.setExpired(view.isExpired() || shown.isExpired());
 			view.getConditions().add(shown);
 		}

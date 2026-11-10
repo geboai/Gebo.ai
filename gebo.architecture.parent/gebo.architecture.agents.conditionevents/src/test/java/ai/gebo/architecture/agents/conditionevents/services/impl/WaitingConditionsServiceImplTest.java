@@ -49,6 +49,7 @@ import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionDispatch;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.model.WaitingBlockView;
+import ai.gebo.architecture.agents.conditionevents.model.WaitingConditionView;
 import ai.gebo.architecture.agents.conditionevents.model.WaitingConditionsActionAck;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
@@ -160,6 +161,27 @@ class WaitingConditionsServiceImplTest {
 	}
 
 	// ---- going on without -------------------------------------------------------
+
+	@Test
+	void aClarificationIsTheConversationsAloneTheAdministratorSeesItTheOwnersPanelDoesNot() {
+		block(clarification("c1", true));
+
+		assertTrue(waiting.waitingFor(OWNER).isEmpty(), "nothing handled as a process: the chat alone answers it");
+		assertEquals(1, waiting.allWaiting().size(), "administrators oversee every run");
+		assertFalse(waiting.allWaiting().get(0).isHumanInTheLoopProcessTreatment());
+		assertFalse(waiting.allWaiting().get(0).getConditions().get(0).isHumanInTheLoopProcessTreatment());
+	}
+
+	@Test
+	void aRunWaitingForAHumanInTheLoopRequestIsInItsOwnersPanelWithEachConditionSaidForWhatItIs() {
+		block(clarification("c1", true), question("h1", false));
+
+		final List<WaitingBlockView> own = waiting.waitingFor(OWNER);
+		assertEquals(1, own.size());
+		assertTrue(own.get(0).isHumanInTheLoopProcessTreatment(), "one request handled as a process is enough");
+		assertEquals(List.of(false, true),
+				own.get(0).getConditions().stream().map(WaitingConditionView::isHumanInTheLoopProcessTreatment).toList());
+	}
 
 	@Test
 	void theOwnerGoesOnWithoutAMandatoryConditionAndTheRunResumesToldSo() {
@@ -410,7 +432,18 @@ class WaitingConditionsServiceImplTest {
 		return block;
 	}
 
+	/**
+	 * A human in the loop request handled as a process: what the owner's panel
+	 * shows. The tests of the panel are about these.
+	 */
 	private static AgentSuspendedWaitingCondition<?, ?> question(String id, boolean mandatory) {
+		final AgentSuspendedWaitingCondition<?, ?> condition = clarification(id, mandatory);
+		condition.setHumanInTheLoopProcessTreatment(true);
+		return condition;
+	}
+
+	/** A clarification the conversation alone answers: never in the owner's panel. */
+	private static AgentSuspendedWaitingCondition<?, ?> clarification(String id, boolean mandatory) {
 		final ClarificationOptions options = new ClarificationOptions();
 		options.setQuestion("Which year?");
 		options.getOptions().add(ClarificationOption.of("2023"));

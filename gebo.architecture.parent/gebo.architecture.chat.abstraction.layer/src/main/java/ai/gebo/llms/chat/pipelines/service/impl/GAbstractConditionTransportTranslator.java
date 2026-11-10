@@ -48,6 +48,7 @@ public abstract class GAbstractConditionTransportTranslator
 		final AgentSuspendedWaitingConditionDto dto = new AgentSuspendedWaitingConditionDto();
 		dto.setConditionType(getId());
 		dto.setConditionId(condition.getSuspendedConditionId());
+		dto.setHumanInTheLoopProcessTreatment(condition.isHumanInTheLoopProcessTreatment());
 		final LinkedHashMap<String, Object> attributes = new LinkedHashMap<String, Object>();
 		attributes.put(STATEMENT, condition.getWaitingConditionStatement());
 		attributes.put(EXPLANATION, condition.getWaitedConditionInstanceLLMExplanation());

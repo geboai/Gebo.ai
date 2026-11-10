@@ -13,6 +13,11 @@ public class AgentSuspendedWaitingConditionDto {
 	private String conditionType = null;
 	@NotNull
 	private String conditionId = null;
+	/**
+	 * Whether the condition is a human in the loop request handled as a process,
+	 * shown and answerable in the agents processes area as well as in the chat.
+	 */
+	private boolean humanInTheLoopProcessTreatment = false;
 	@NotEmpty
 	@NotNull
 	private LinkedHashMap<String, Object> attributes = null;

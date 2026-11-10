@@ -256,4 +256,17 @@ class ConditionTransportTranslatorsTest {
 				reaction("clarification", optional.getSuspendedConditionId(), Map.of("chosenOption", "2024")), optional)
 				.getUnansweredBecause(), "a value came");
 	}
+
+	@Test
+	void theHumanInTheLoopProcessTreatmentTravelsWithTheConditionWhateverItsTranslator() {
+		AgentSuspendedWaitingCondition request = clarificationCondition(true, true);
+		request.setHumanInTheLoopProcessTreatment(true);
+		AgentSuspendedWaitingCondition<String, Object> plain = new AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "the invoice number", "needed to look it up", null, true);
+
+		assertTrue(clarification.translate(request).isHumanInTheLoopProcessTreatment());
+		assertFalse(clarification.translate(clarificationCondition(true, true)).isHumanInTheLoopProcessTreatment(),
+				"a clarification is the conversation's alone");
+		assertFalse(fallback.translate(plain).isHumanInTheLoopProcessTreatment());
+	}
 }

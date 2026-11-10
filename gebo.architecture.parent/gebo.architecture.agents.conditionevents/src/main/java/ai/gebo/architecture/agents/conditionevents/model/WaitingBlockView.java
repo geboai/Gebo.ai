@@ -37,5 +37,10 @@ public class WaitingBlockView {
 	private Date earliestExpiryAt = null;
 	/** Whether one of its conditions is past its expiry and still waits. */
 	private boolean expired = false;
+	/**
+	 * Whether at least one of the conditions is a human in the loop request handled
+	 * as a process: the block is shown to its owner in the agents processes area.
+	 */
+	private boolean humanInTheLoopProcessTreatment = false;
 	private List<WaitingConditionView> conditions = new ArrayList<WaitingConditionView>();
 }
