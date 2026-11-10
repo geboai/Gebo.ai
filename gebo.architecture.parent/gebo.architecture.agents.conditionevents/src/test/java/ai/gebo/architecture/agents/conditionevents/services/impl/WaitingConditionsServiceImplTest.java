@@ -174,14 +174,49 @@ class WaitingConditionsServiceImplTest {
 	}
 
 	@Test
-	void aRunWaitingForAHumanInTheLoopRequestIsInItsOwnersPanelWithEachConditionSaidForWhatItIs() {
+	void aRunWaitingForAHumanInTheLoopRequestShowsItsOwnerTheRequestsOnlyAndCountsTheOthers() {
 		block(clarification("c1", true), question("h1", false));
 
 		final List<WaitingBlockView> own = waiting.waitingFor(OWNER);
 		assertEquals(1, own.size());
 		assertTrue(own.get(0).isHumanInTheLoopProcessTreatment(), "one request handled as a process is enough");
+		assertEquals(List.of("h1"), idsOf(own.get(0)), "the clarification is the conversation's alone");
+		assertEquals(1, own.get(0).getOtherConditionsWaiting(), "but the run waits for it too");
+
+		final WaitingBlockView all = waiting.allWaiting().get(0);
 		assertEquals(List.of(false, true),
-				own.get(0).getConditions().stream().map(WaitingConditionView::isHumanInTheLoopProcessTreatment).toList());
+				all.getConditions().stream().map(WaitingConditionView::isHumanInTheLoopProcessTreatment).toList(),
+				"administrators see every condition, each said for what it is");
+		assertEquals(0, all.getOtherConditionsWaiting());
+	}
+
+	@Test
+	void anAnsweredClarificationIsNoLongerCounted() {
+		final GNetworkOfAgentsSuspension block = block(clarification("c1", false), question("h1", true));
+
+		assertEquals(WaitingConditionsActionAck.Outcome.DONE,
+				waiting.goOnWithout(block.getCode(), List.of("c1"), OWNER, false).getOutcome());
+
+		assertTrue(respawns.isEmpty(), "the request is still mandatory and waiting");
+		assertEquals(0, waiting.waitingFor(OWNER).get(0).getOtherConditionsWaiting());
+	}
+
+	@Test
+	void theExpiryShownIsTheRequestsTheAdministratorsTheEarliestOfAll() {
+		final AgentSuspendedWaitingCondition<?, ?> clarification = clarification("c1", true);
+		clarification.setExpiry(ConditionExpiry.afterMinutes(new Date(clock.millis()), 10L, false));
+		final AgentSuspendedWaitingCondition<?, ?> request = question("h1", true);
+		request.setExpiry(ConditionExpiry.afterMinutes(new Date(clock.millis()), 30L, false));
+		block(clarification, request);
+
+		clock.advance(20 * MINUTE);
+
+		final WaitingBlockView own = waiting.waitingFor(OWNER).get(0);
+		assertEquals(new Date(clock.millis() + 10 * MINUTE), own.getEarliestExpiryAt(), "the request's");
+		assertFalse(own.isExpired(), "the clarification past its expiry is not the panel's");
+		final WaitingBlockView all = waiting.allWaiting().get(0);
+		assertEquals(new Date(clock.millis() - 10 * MINUTE), all.getEarliestExpiryAt());
+		assertTrue(all.isExpired());
 	}
 
 	@Test
@@ -446,6 +481,21 @@ class WaitingConditionsServiceImplTest {
 		assertEquals(1, shared.size());
 		assertTrue(shared.get(0).isConversationAccessible());
 		assertTrue(waiting.waitingFor(OWNER).get(0).isConversationAccessible());
+	}
+
+	@Test
+	void whomARequestIsWaitedFromNeverReadsTheConversationsClarifications() {
+		final AgentSuspendedWaitingCondition<?, ?> request = question("approval", true);
+		request.setTarget(ConditionTarget.of(List.of("manager"), null, null));
+		block(clarification("c1", true), request);
+
+		final WaitingBlockView theirs = waiting.waitingFor("manager").get(0);
+		assertEquals(List.of("approval"), idsOf(theirs));
+		assertEquals(1, theirs.getOtherConditionsWaiting(), "counted, never said");
+	}
+
+	private static List<String> idsOf(WaitingBlockView view) {
+		return view.getConditions().stream().map(WaitingConditionView::getConditionId).toList();
 	}
 
 	private GNetworkOfAgentsSuspension block(AgentSuspendedWaitingCondition<?, ?>... conditions) {

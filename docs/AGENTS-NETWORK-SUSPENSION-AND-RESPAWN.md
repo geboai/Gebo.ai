@@ -201,7 +201,12 @@ handled as a process they follow: their own, whoever the request is waited from 
 still go on without it or abandon the run), and those they may answer, shared with them or
 whose target names them; each block says whether the person may open its conversation
 (`WaitingBlockView.conversationAccessible`), and each condition whom it is waited from
-(`target`). The two actions:
+(`target`). A person's listing shows the requests handled as a process only, to the owner
+too: the other conditions of the run, a clarification answered in the conversation or a
+condition of another system, are counted, never said (`WaitingBlockView.otherConditionsWaiting`,
+the open ones), and the block's expiry and `expired` are the requests'. So whom a request is
+waited from never reads the conversation's clarifications. The administrators' listing shows
+every condition, `otherConditionsWaiting` being zero there. The two actions:
 
 - **go on without**: the named conditions, or every one still waiting, are resolved with no
   value, mandatory or not, by events marked `unanswered = GONE_ON_WITHOUT` whose source is

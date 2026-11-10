@@ -150,7 +150,8 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		final ConditionResponder user = ConditionResponder.person(username.strip(), false);
 		// the runs waiting for a human in the loop request handled as a process: the
 		// user's own, whoever it is waited from, and the ones they may answer, shared
-		// with them or waited from them; a clarification is the conversation's alone
+		// with them or waited from them; each shows its requests only, a clarification
+		// being the conversation's alone, and counts what else the run waits for
 		for (GNetworkOfAgentsSuspension block : blocks.findByRespawnedAtIsNullAndDroppedAtIsNull()) {
 			if (block == null || !block.isOpen()) {
 				continue;
@@ -159,7 +160,7 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 			if (!waitsFor(block, session, user)) {
 				continue;
 			}
-			final WaitingBlockView view = viewOf(block, session != null ? session.getUsername() : null, now);
+			final WaitingBlockView view = viewOf(block, session != null ? session.getUsername() : null, now, true);
 			view.setConversationAccessible(responders.mayAnswer(null, session, user));
 			waiting.add(view);
 		}
@@ -190,7 +191,7 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		final List<WaitingBlockView> waiting = new ArrayList<WaitingBlockView>();
 		for (GNetworkOfAgentsSuspension block : blocks.findByRespawnedAtIsNullAndDroppedAtIsNull()) {
 			if (block != null && block.isOpen()) {
-				waiting.add(viewOf(block, ownerOf(block), now));
+				waiting.add(viewOf(block, ownerOf(block), now, false));
 			}
 		}
 		waiting.sort(Comparator.comparing(WaitingBlockView::getSuspendedAt,
@@ -198,8 +199,12 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		return waiting;
 	}
 
-	/** The block as the panel shows it. */
-	WaitingBlockView viewOf(GNetworkOfAgentsSuspension block, String owner, Date now) {
+	/**
+	 * The block as the panel shows it: every condition, or, in a person's listing,
+	 * the human in the loop requests handled as a process only, the other
+	 * conditions still waiting counted, never said, and the expiry the requests'.
+	 */
+	WaitingBlockView viewOf(GNetworkOfAgentsSuspension block, String owner, Date now, boolean requestsOnly) {
 		final WaitingBlockView view = new WaitingBlockView();
 		view.setBlockCode(block.getCode());
 		view.setConversationCode(block.getConversationCode());
@@ -211,7 +216,19 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		view.setEarliestExpiryAt(
 				block.getEarliestExpiryAt() != null ? block.getEarliestExpiryAt() : block.earliestExpiryOfConditions());
 		final Map<String, GConditionEvent> solving = solvingEventsOf(block);
+		Date earliestOfRequests = null;
 		for (WaitingCondition condition : block.conditions()) {
+			final GConditionEvent solved = solving.get(condition.getSuspendedConditionId());
+			if (requestsOnly && !condition.isHumanInTheLoopProcessTreatment()) {
+				if (solved == null) {
+					view.setOtherConditionsWaiting(view.getOtherConditionsWaiting() + 1);
+				}
+				continue;
+			}
+			if (solved == null && condition.getExpiresAt() != null
+					&& (earliestOfRequests == null || condition.getExpiresAt().before(earliestOfRequests))) {
+				earliestOfRequests = condition.getExpiresAt();
+			}
 			final WaitingConditionView shown = new WaitingConditionView();
 			shown.setConditionId(condition.getSuspendedConditionId());
 			shown.setConditionType(condition.getConditionType());
@@ -219,7 +236,6 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 			shown.setMandatory(condition.isMandatory());
 			shown.setExpiresAt(condition.getExpiresAt());
 			shown.setExpiryUnblocks(condition.isExpiryUnblocks());
-			final GConditionEvent solved = solving.get(condition.getSuspendedConditionId());
 			shown.setSolved(solved != null);
 			shown.setSolvedBy(solved != null ? solved.sourceOrKept().label() : null);
 			shown.setExpired(solved == null && condition.isExpiredAt(now));
@@ -229,6 +245,9 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 					view.isHumanInTheLoopProcessTreatment() || shown.isHumanInTheLoopProcessTreatment());
 			view.setExpired(view.isExpired() || shown.isExpired());
 			view.getConditions().add(shown);
+		}
+		if (requestsOnly) {
+			view.setEarliestExpiryAt(earliestOfRequests);
 		}
 		return view;
 	}
