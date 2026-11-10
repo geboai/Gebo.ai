@@ -235,6 +235,23 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
     public chatStreaming: boolean = false;
 
     /**
+     * The model named in the header of an interaction: the one its response says it
+     * used, else the one its run announced while streaming; the component's model
+     * name only while the last interaction is still streaming and no run announced
+     * one yet. A completed reply no model ran for (answers recorded on a suspended
+     * network, for example) names none, rather than the last model seen.
+     */
+    public headerModelNameOf(interaction: GeboChatInteraction, last: boolean): string {
+        if (interaction?.response?.usedChatModelCode) {
+            return interaction.response.usedChatModelCode;
+        }
+        if (interaction?.streamingModelName) {
+            return interaction.streamingModelName;
+        }
+        return last && this.chatStreaming && !interaction?.response?.queryResponse ? this.modelName : "";
+    }
+
+    /**
      * Timestamp of the last update received during chat streaming
      */
     private chatStreamingUpdatedTime?: number;
@@ -1734,7 +1751,6 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                             this.currentPipelineRouterDecisionCode = pipelineRouterDecisionCode;
                             if (recvd.content?.chatModel) {
                                 interaction.streamingModelName = recvd.content?.chatModel;
-                                this.modelName = recvd.content?.chatModel;
                             }
                             console.log("current chat pipeline type: " + pipelineRouterDecisionCode);
                         } break;
