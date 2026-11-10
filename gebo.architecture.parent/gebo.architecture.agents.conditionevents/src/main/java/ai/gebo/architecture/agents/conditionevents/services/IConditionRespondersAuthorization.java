@@ -27,6 +27,9 @@ public interface IConditionRespondersAuthorization {
 	 */
 	String refusal(ConditionTarget target, GUserChatSession session, ConditionResponder responder);
 
+	/** Whether the user is an administrator, as the directory of the users says; false when it cannot tell. */
+	boolean isAdministrator(String username);
+
 	/** Whether the responder may answer. */
 	default boolean mayAnswer(ConditionTarget target, GUserChatSession session, ConditionResponder responder) {
 		return refusal(target, session, responder) == null;

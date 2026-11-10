@@ -56,6 +56,7 @@ import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.model.ConditionExpiry;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
@@ -415,6 +416,33 @@ class WaitingConditionsServiceImplTest {
 	}
 
 	// -----------------------------------------------------------------------------
+
+	@Test
+	void aRequestWaitedFromSomeoneIsInTheirPanelNotInTheOwnersAndWithoutTheConversation() {
+		final AgentSuspendedWaitingCondition<?, ?> request = question("approval", true);
+		request.setTarget(ConditionTarget.of(List.of("manager"), null, null));
+		block(request);
+
+		assertTrue(waiting.waitingFor(OWNER).isEmpty(), "the owner may not answer it");
+		final List<WaitingBlockView> theirs = waiting.waitingFor("manager");
+		assertEquals(1, theirs.size());
+		assertFalse(theirs.get(0).isConversationAccessible(), "the conversation is not shared with them");
+		assertEquals(List.of("manager"), theirs.get(0).getConditions().get(0).getTarget().getUsers());
+		assertTrue(waiting.allWaiting().get(0).isConversationAccessible(), "the administrators open any");
+	}
+
+	@Test
+	void aRequestWaitedFromNobodyInParticularIsInThePanelOfAnyoneTheConversationIsSharedWith() {
+		block(question("approval", true));
+		assertTrue(waiting.waitingFor("colleague").isEmpty());
+
+		session.setAccessibleUsers(List.of("colleague"));
+
+		final List<WaitingBlockView> shared = waiting.waitingFor("colleague");
+		assertEquals(1, shared.size());
+		assertTrue(shared.get(0).isConversationAccessible());
+		assertTrue(waiting.waitingFor(OWNER).get(0).isConversationAccessible());
+	}
 
 	private GNetworkOfAgentsSuspension block(AgentSuspendedWaitingCondition<?, ?>... conditions) {
 		final GNetworkOfAgentsSuspension block = new GNetworkOfAgentsSuspension();

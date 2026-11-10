@@ -14,6 +14,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
@@ -268,5 +269,18 @@ class ConditionTransportTranslatorsTest {
 		assertFalse(clarification.translate(clarificationCondition(true, true)).isHumanInTheLoopProcessTreatment(),
 				"a clarification is the conversation's alone");
 		assertFalse(fallback.translate(plain).isHumanInTheLoopProcessTreatment());
+	}
+
+	@Test
+	void whoTheConditionIsWaitedFromTravelsWithItWhateverItsTranslator() {
+		AgentSuspendedWaitingCondition request = clarificationCondition(true, true);
+		request.setTarget(ConditionTarget.of(List.of("manager"), null, null));
+		AgentSuspendedWaitingCondition<String, Object> plain = new AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "the invoice number", "needed to look it up", null, true);
+		plain.setTarget(ConditionTarget.of(null, null, List.of("ERP")));
+
+		assertEquals(List.of("manager"), clarification.translate(request).getTarget().getUsers());
+		assertEquals(List.of("ERP"), fallback.translate(plain).getTarget().getSystems());
+		assertNull(clarification.translate(clarificationCondition(true, true)).getTarget());
 	}
 }

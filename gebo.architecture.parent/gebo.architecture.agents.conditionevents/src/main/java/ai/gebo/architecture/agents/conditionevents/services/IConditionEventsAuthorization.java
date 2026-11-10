@@ -9,6 +9,8 @@
 package ai.gebo.architecture.agents.conditionevents.services;
 
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
+import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /** Who may deliver events to a session, and read what became of them. */
@@ -17,4 +19,20 @@ public interface IConditionEventsAuthorization {
 	 * @return null when the caller may; why not otherwise
 	 */
 	String refusal(ConditionEventCaller caller, GUserChatSession session);
+
+	/**
+	 * Who may answer a condition with an event: by the condition's target, when
+	 * the condition is known and has one (see {@link ConditionTarget}); as
+	 * {@link #refusal(ConditionEventCaller, GUserChatSession)} otherwise.
+	 *
+	 * @param target the target of the condition the event answers; null when the
+	 *               condition is not known yet, or has none
+	 * @param source the source of the event, as it is kept
+	 * @return null when the caller may; why not otherwise
+	 */
+	default String refusal(ConditionEventCaller caller, GUserChatSession session, ConditionTarget target,
+			ConditionSource source) {
+		return target != null && target.isSet() ? "The condition is waited from " + target.label() + " only"
+				: refusal(caller, session);
+	}
 }

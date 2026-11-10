@@ -59,6 +59,12 @@ public record ConditionResponder(String account, boolean administrator, boolean 
 				caller.isTrustedChannel() || caller.holds(applicationAuthority), source);
 	}
 
+	/** The one who delivered a kept event, as the event kept them, for a check made once it is matched. */
+	public static ConditionResponder ofKept(GConditionEvent event) {
+		return new ConditionResponder(event.getActor(), event.isDeliveredByAdministrator(),
+				event.isDeliveredForOthers(), event.sourceOrKept());
+	}
+
 	/** Whether the authorities are an administrator's. */
 	public static boolean isAdministrator(Set<String> authorities) {
 		if (authorities == null) {

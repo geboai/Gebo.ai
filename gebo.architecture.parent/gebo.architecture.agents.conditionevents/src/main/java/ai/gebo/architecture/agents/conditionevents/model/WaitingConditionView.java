@@ -10,6 +10,8 @@ package ai.gebo.architecture.agents.conditionevents.model;
 
 import java.util.Date;
 
+import ai.gebo.architecture.agents.model.ConditionTarget;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +35,6 @@ public class WaitingConditionView {
 	private boolean expired = false;
 	/** Whether this is a human in the loop request handled as a process, shown in the agents processes area. */
 	private boolean humanInTheLoopProcessTreatment = false;
+	/** Who or what it is waited from: only they may answer it, or an administrator; null for the usual answerers. */
+	private ConditionTarget target = null;
 }

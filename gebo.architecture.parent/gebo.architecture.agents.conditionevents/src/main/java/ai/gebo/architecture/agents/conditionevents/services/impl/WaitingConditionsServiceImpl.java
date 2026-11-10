@@ -34,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionResponder;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionSources;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionDispatch;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
@@ -42,6 +43,7 @@ import ai.gebo.architecture.agents.conditionevents.model.WaitingConditionView;
 import ai.gebo.architecture.agents.conditionevents.model.WaitingConditionsActionAck;
 import ai.gebo.architecture.agents.conditionevents.model.WaitingConditionsActionAck.Outcome;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStore;
+import ai.gebo.architecture.agents.conditionevents.services.IConditionRespondersAuthorization;
 import ai.gebo.architecture.agents.conditionevents.services.IWaitingConditionsService;
 import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.architecture.agents.model.ConditionSource.Kind;
@@ -99,20 +101,33 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 	private final ObjectProvider<MongoOperations> mongo;
 	private final Executor evaluations;
 	private final Clock clock;
+	private final IConditionRespondersAuthorization responders;
 
 	@Autowired
 	public WaitingConditionsServiceImpl(GNetworkOfAgentsSuspensionRepository blocks, GUserChatSessionRepository sessions,
 			IConditionEventsStore store, ConditionEventMatcher matcher, ConditionEventDispatcher dispatcher,
 			NetworkOfAgentsSuspensionTransport transport, WaitingConditionsNotifier notifier,
-			ObjectProvider<MongoOperations> mongo, ObjectProvider<IGeboThreadManager> threads) {
+			ObjectProvider<MongoOperations> mongo, ObjectProvider<IGeboThreadManager> threads,
+			IConditionRespondersAuthorization responders) {
 		this(blocks, sessions, store, matcher, dispatcher, transport, notifier, mongo,
-				ConditionEventsServiceImpl.lazyExecutorOf(threads), Clock.systemUTC());
+				ConditionEventsServiceImpl.lazyExecutorOf(threads), Clock.systemUTC(), responders);
+	}
+
+	/** Groups not taken into account: the responders' check has no directory of the users. */
+	WaitingConditionsServiceImpl(GNetworkOfAgentsSuspensionRepository blocks, GUserChatSessionRepository sessions,
+			IConditionEventsStore store, ConditionEventMatcher matcher, ConditionEventDispatcher dispatcher,
+			NetworkOfAgentsSuspensionTransport transport, WaitingConditionsNotifier notifier,
+			ObjectProvider<MongoOperations> mongo, Executor evaluations, Clock clock) {
+		this(blocks, sessions, store, matcher, dispatcher, transport, notifier, mongo, evaluations, clock,
+				new ConditionRespondersAuthorizationImpl(null));
 	}
 
 	WaitingConditionsServiceImpl(GNetworkOfAgentsSuspensionRepository blocks, GUserChatSessionRepository sessions,
 			IConditionEventsStore store, ConditionEventMatcher matcher, ConditionEventDispatcher dispatcher,
 			NetworkOfAgentsSuspensionTransport transport, WaitingConditionsNotifier notifier,
-			ObjectProvider<MongoOperations> mongo, Executor evaluations, Clock clock) {
+			ObjectProvider<MongoOperations> mongo, Executor evaluations, Clock clock,
+			IConditionRespondersAuthorization responders) {
+		this.responders = responders;
 		this.blocks = blocks;
 		this.sessions = sessions;
 		this.store = store;
@@ -131,14 +146,37 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		if (username == null || username.isBlank()) {
 			return waiting;
 		}
-		// the owner's own runs, and only the ones waiting for a human in the loop
-		// request handled as a process: a clarification is the conversation's alone
-		for (WaitingBlockView view : allWaiting()) {
-			if (username.equals(view.getOwner()) && view.isHumanInTheLoopProcessTreatment()) {
-				waiting.add(view);
+		final Date now = new Date(clock.millis());
+		final ConditionResponder user = ConditionResponder.person(username.strip(), false);
+		// the runs waiting for a human in the loop request handled as a process the
+		// user may answer: their own, the ones shared with them, the ones waited from
+		// them; a clarification is the conversation's alone
+		for (GNetworkOfAgentsSuspension block : blocks.findByRespawnedAtIsNullAndDroppedAtIsNull()) {
+			if (block == null || !block.isOpen()) {
+				continue;
+			}
+			final GUserChatSession session = sessionOf(block);
+			if (!waitsFor(block, session, user)) {
+				continue;
+			}
+			final WaitingBlockView view = viewOf(block, session != null ? session.getUsername() : null, now);
+			view.setConversationAccessible(responders.mayAnswer(null, session, user));
+			waiting.add(view);
+		}
+		waiting.sort(Comparator.comparing(WaitingBlockView::getSuspendedAt,
+				Comparator.nullsLast(Comparator.<Date>naturalOrder())).reversed());
+		return waiting;
+	}
+
+	/** Whether the block waits for a human in the loop request handled as a process the user may answer. */
+	private boolean waitsFor(GNetworkOfAgentsSuspension block, GUserChatSession session, ConditionResponder user) {
+		for (WaitingCondition condition : block.conditions()) {
+			if (condition.isHumanInTheLoopProcessTreatment()
+					&& responders.mayAnswer(condition.getTarget(), session, user)) {
+				return true;
 			}
 		}
-		return waiting;
+		return false;
 	}
 
 	@Override
@@ -181,6 +219,7 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 			shown.setSolvedBy(solved != null ? solved.sourceOrKept().label() : null);
 			shown.setExpired(solved == null && condition.isExpiredAt(now));
 			shown.setHumanInTheLoopProcessTreatment(condition.isHumanInTheLoopProcessTreatment());
+			shown.setTarget(condition.getTarget() != null ? condition.getTarget().copy() : null);
 			view.setHumanInTheLoopProcessTreatment(
 					view.isHumanInTheLoopProcessTreatment() || shown.isHumanInTheLoopProcessTreatment());
 			view.setExpired(view.isExpired() || shown.isExpired());
@@ -416,11 +455,13 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 
 	/** The owner of the block's conversation: the account its respawn runs as. */
 	private String ownerOf(GNetworkOfAgentsSuspension block) {
-		if (block.getConversationCode() == null) {
-			return null;
-		}
-		final GUserChatSession session = sessions.findById(block.getConversationCode()).orElse(null);
+		final GUserChatSession session = sessionOf(block);
 		return session != null ? session.getUsername() : null;
+	}
+
+	private GUserChatSession sessionOf(GNetworkOfAgentsSuspension block) {
+		return block.getConversationCode() != null ? sessions.findById(block.getConversationCode()).orElse(null)
+				: null;
 	}
 
 	private void retractMessagesOf(GNetworkOfAgentsSuspension block, Date now) {

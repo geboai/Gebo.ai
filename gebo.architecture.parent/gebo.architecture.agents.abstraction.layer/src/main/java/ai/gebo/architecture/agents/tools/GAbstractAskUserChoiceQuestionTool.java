@@ -26,6 +26,7 @@ import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.model.ConditionExpiry;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
@@ -124,6 +125,18 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 	}
 
 	/**
+	 * Who or what the question is waited from, for an advanced process: only who
+	 * or what it lists may answer, or an administrator. Null, the default of the
+	 * standard tools, leaves it to the owner of the conversation and to anyone
+	 * with access to it. Decided by the tool's code, never by the model.
+	 *
+	 * @param toolContext the context of the call asking
+	 */
+	protected ConditionTarget conditionTarget(ToolContext toolContext) {
+		return null;
+	}
+
+	/**
 	 * The tool: the call ends at it once it asked, by the wait it declared the
 	 * question to, and goes on with what it returns otherwise.
 	 */
@@ -176,6 +189,10 @@ public abstract class GAbstractAskUserChoiceQuestionTool {
 		}
 		condition.setExpiry(expiryOf(options, mandatory));
 		condition.setHumanInTheLoopProcessTreatment(humanInTheLoopProcessTreatment());
+		final ConditionTarget target = conditionTarget(toolContext);
+		if (target != null && target.isSet()) {
+			condition.setTarget(target.copy());
+		}
 		if (conditionType() != null) {
 			condition.setConditionType(conditionType());
 		}

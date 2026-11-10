@@ -31,13 +31,16 @@ import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck.Outco
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventView;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionResponder;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionDispatch;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsAuthorization;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsService;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStore;
 import ai.gebo.architecture.agents.conditionevents.services.IWaitingConditionsService;
+import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
+import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
@@ -175,7 +178,14 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		if (session == null) {
 			return refused(id, NO_SUCH_SESSION + id.sessionCode());
 		}
-		final String refusal = authorization.refusal(caller, session);
+		// who may answer: by the target of the condition when the open block waits for
+		// it, by the usual rule otherwise (an event coming before its condition is
+		// checked by its target once it is matched)
+		final GNetworkOfAgentsSuspension open = blocks.findOpenByConversationCode(id.sessionCode()).orElse(null);
+		final WaitingCondition waited = open != null ? ConditionEventMatcher.waitingFor(open, id.conditionId()) : null;
+		final ConditionSource source = sourceOf(event, caller, session);
+		final String refusal = authorization.refusal(caller, session, waited != null ? waited.getTarget() : null,
+				source);
 		if (refusal != null) {
 			LOGGER.warn("Condition event:" + id + " refused to " + caller + ": " + refusal);
 			return refused(id, refusal);
@@ -220,23 +230,25 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		kept.setConditionType(event.getConditionType().strip());
 		kept.setAttributes(event.mergedAttributes());
 		kept.setText(event.getText());
-		kept.setSource(ConditionSources.ofDelivered(event.getSource(), event.getSourceSystem(), caller,
-				config != null ? config.getApplicationAuthority() : null));
+		kept.setSource(source);
 		kept.setSourceSystem(kept.getSource().getSystem());
 		kept.setSourceEventId(event.getSourceEventId());
 		kept.setSourceTimestamp(event.getSourceTimestamp());
 		// the platform's own, as the chat's recorder sets it; a delivered event cannot say it
+		// going on without a condition: its owner's or an administrator's, from the chat
 		kept.setUnanswered(caller != null && ConditionEventCaller.CHAT.equals(caller.getChannel())
+				&& (isOwner(caller, session) || ConditionResponder.isAdministrator(caller.getAuthorities()))
 				? event.getUnanswered()
 				: null);
 		kept.setActor(caller != null ? caller.getName() : null);
+		kept.setDeliveredByAdministrator(caller != null && ConditionResponder.isAdministrator(caller.getAuthorities()));
+		kept.setDeliveredForOthers(caller != null && (caller.isTrustedChannel() || caller.holds(applicationAuthority())));
 		kept.setChannel(caller != null ? caller.getChannel() : null);
 		kept.setUserModified(caller != null ? caller.getName() : null);
 		// a new value is matched afresh: accepted from now on, if it fits
 		kept.setStatus(ConditionEventStatus.PENDING);
 		kept.setAcceptedAt(null);
 		kept.setReason(null);
-		final GNetworkOfAgentsSuspension open = blocks.findOpenByConversationCode(id.sessionCode()).orElse(null);
 		matcher.match(kept, open, now);
 		store.saveEvent(kept);
 		if (LOGGER.isInfoEnabled()) {
@@ -261,6 +273,28 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 				.map(GUserChatSession::getCode);
 	}
 
+	/**
+	 * The source of a delivered event. The conversation's user is its owner: anyone
+	 * else answering in the chat is named to the agents, not told as the user.
+	 */
+	private ConditionSource sourceOf(ConditionEvent event, ConditionEventCaller caller, GUserChatSession session) {
+		final ConditionSource source = ConditionSources.ofDelivered(event.getSource(), event.getSourceSystem(), caller,
+				applicationAuthority());
+		if (source.isConversationUser() && !isOwner(caller, session)) {
+			source.setChannel(ConditionSource.SHARED_CHAT_CHANNEL);
+		}
+		return source;
+	}
+
+	private static boolean isOwner(ConditionEventCaller caller, GUserChatSession session) {
+		return caller != null && caller.getName() != null && session != null
+				&& caller.getName().equals(session.getUsername());
+	}
+
+	private String applicationAuthority() {
+		return config != null ? config.getApplicationAuthority() : null;
+	}
+
 	private static boolean isBlank(String value) {
 		return value == null || value.isBlank();
 	}
@@ -271,10 +305,17 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 			return Optional.empty();
 		}
 		final GUserChatSession session = sessions.findById(correlation.sessionCode()).orElse(null);
-		if (session == null || authorization.refusal(caller, session) != null) {
+		if (session == null) {
 			return Optional.empty();
 		}
-		return store.findEvent(correlation.composed()).map(ConditionEventView::of);
+		final Optional<GConditionEvent> kept = store.findEvent(correlation.composed());
+		if (authorization.refusal(caller, session) == null) {
+			return kept.map(ConditionEventView::of);
+		}
+		// who delivered the event reads what became of it, a user it was waited from
+		// with no access to the conversation as well
+		return kept.filter(event -> caller != null && caller.getName() != null && caller.getName().equals(event.getActor()))
+				.map(ConditionEventView::of);
 	}
 
 	@Override

@@ -46,6 +46,7 @@ import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.SuspendedAgentState;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
@@ -85,6 +86,7 @@ class ConditionEventsServiceImplTest {
 	private ConditionEventsServiceImpl service;
 	private ConditionEventsReactionRecorder recorder;
 	private NetworkOfAgentsSuspensionTransport transport;
+	private GUserChatSession session;
 	/** What a respawn does to the block it respawns: by default it consumes it. */
 	private Consumer<GNetworkOfAgentsSuspension> respawn = block -> block.setRespawnedAt(new Date(clock.millis()));
 
@@ -96,7 +98,7 @@ class ConditionEventsServiceImplTest {
 				.max((a, b) -> a.getSuspendedAt().compareTo(b.getSuspendedAt())));
 		when(blocksRepository.findById(anyString())).thenAnswer(i -> Optional.ofNullable(blocks.get(i.getArgument(0))));
 
-		final GUserChatSession session = new GUserChatSession();
+		session = new GUserChatSession();
 		session.setCode(SESSION);
 		session.setUsername(OWNER);
 		session.setChatProfileCode("profile-1");
@@ -812,6 +814,114 @@ class ConditionEventsServiceImplTest {
 
 	private static ConditionEventCaller owner() {
 		return ConditionEventCaller.of(OWNER, Set.of("USER"), ConditionEventCaller.REST);
+	}
+
+	// ---- who a condition is waited from
+
+	@Test
+	void aConditionWaitedFromSomeoneIsAnsweredByThemOnlyNotEvenByTheOwner() {
+		block(waitedFrom(question("year", true, "2023", "2024"), "manager"));
+
+		final ConditionEventAck refused = service.deliver(choice(SESSION + ":year", "2024"), owner());
+		assertEquals(Outcome.REFUSED, refused.getOutcome());
+		assertEquals("The condition is waited from users manager only", refused.getReason());
+		assertTrue(store.events.isEmpty(), "a refused event is not kept");
+
+		final ConditionEventAck accepted = service.deliver(choice(SESSION + ":year", "2024"), user("manager"));
+		assertEquals(Outcome.ACCEPTED, accepted.getOutcome());
+		assertEquals(List.of(OWNER), respawnedAs, "the run resumes as its owner, whoever answered");
+		assertTrue(service.status(new ConditionCorrelationId(SESSION, "year"), user("manager")).isPresent(),
+				"who delivered it reads what became of it, with no access to the conversation");
+	}
+
+	@Test
+	void anApplicationAccountAnswersOnlyForWhoTheConditionIsWaitedFrom() {
+		block(waitedFrom(question("year", true, "2023", "2024"), "manager"));
+
+		assertEquals(Outcome.REFUSED, service.deliver(choice(SESSION + ":year", "2024"), application()).getOutcome(),
+				"for nobody listed");
+		final ConditionEvent forTheManager = choice(SESSION + ":year", "2024");
+		forTheManager.setSource(ConditionSource.of(ConditionSource.Kind.PERSON, "ERP", "manager", "The manager"));
+		assertEquals(Outcome.ACCEPTED, service.deliver(forTheManager, application()).getOutcome());
+	}
+
+	@Test
+	void aSystemTheConditionIsWaitedFromAnswersThroughAnApplicationAccount() {
+		final AgentSuspendedWaitingCondition<?, ?> condition = question("year", true, "2023", "2024");
+		condition.setTarget(ConditionTarget.of(null, null, List.of("ERP")));
+		block(condition);
+
+		final ConditionEvent fromTheCrm = choice(SESSION + ":year", "2024");
+		fromTheCrm.setSourceSystem("CRM");
+		assertEquals(Outcome.REFUSED, service.deliver(fromTheCrm, application()).getOutcome());
+		assertEquals(Outcome.ACCEPTED, service.deliver(choice(SESSION + ":year", "2024"), application()).getOutcome());
+	}
+
+	@Test
+	void anAdministratorAnswersAConditionWaitedFromSomeoneElse() {
+		block(waitedFrom(question("year", true, "2023", "2024"), "manager"));
+
+		final ConditionEventAck ack = service.deliver(choice(SESSION + ":year", "2024"),
+				ConditionEventCaller.of("admin", Set.of("ROLE_USER", "ROLE_ADMIN"), ConditionEventCaller.REST));
+
+		assertEquals(Outcome.ACCEPTED, ack.getOutcome());
+	}
+
+	@Test
+	void anEventComingBeforeItsConditionIsCheckedByWhoItIsWaitedFromOnceMatched() {
+		assertEquals(Outcome.PENDING, service.deliver(choice(SESSION + ":year", "2024"), owner()).getOutcome(),
+				"no condition yet: the usual rule");
+
+		block(waitedFrom(question("year", true, "2023", "2024"), "manager"));
+		clock.advance(30_000L);
+		service.sweep();
+
+		final GConditionEvent kept = store.events.get(SESSION + ":year");
+		assertEquals(ConditionEventStatus.REFUSED, kept.getStatus());
+		assertEquals("The condition is waited from users manager only", kept.getReason());
+		assertTrue(respawns.isEmpty());
+	}
+
+	@Test
+	void anyoneTheConversationIsSharedWithAnswersAConditionWaitedFromNobodyInParticular() {
+		block(question("year", true, "2023", "2024"));
+		assertEquals(Outcome.REFUSED, service.deliver(choice(SESSION + ":year", "2024"), user("colleague")).getOutcome());
+
+		session.setAccessibleUsers(List.of("colleague"));
+
+		assertEquals(Outcome.ACCEPTED, service.deliver(choice(SESSION + ":year", "2024"), user("colleague")).getOutcome());
+	}
+
+	@Test
+	void someoneElseAnsweringInTheChatIsNamedAndCannotGoOnWithout() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"),
+				question("month", false, "May", "June"));
+		session.setAccessibleUsers(List.of("colleague"));
+		final NetworkOfAgentsSuspendedStateReaction reaction = chatChoosing(block, "year", "2024");
+		final AgentSuspendedWaitingConditionReactionDto goOn = new AgentSuspendedWaitingConditionReactionDto();
+		goOn.setConditionId("month");
+		goOn.setConditionType(ClarificationConditionTransportTranslator.ID);
+		goOn.setAttributes(new LinkedHashMap<String, Object>(Map.of(GAbstractConditionTransportTranslator.GO_ON_WITHOUT, true)));
+		reaction.getReactions().add(goOn);
+
+		recorder.record(block, reaction, "colleague", "request-1");
+
+		final ConditionSource source = store.events.get(SESSION + ":year").getSource();
+		assertEquals(ConditionSource.SHARED_CHAT_CHANNEL, source.getChannel());
+		assertFalse(source.isConversationUser(), "named to the agents, not told as the user");
+		assertEquals("colleague", source.getId());
+		final GConditionEvent goneOn = store.events.get(SESSION + ":month");
+		assertTrue(goneOn == null || goneOn.getUnanswered() == null, "going on without is the owner's or an administrator's");
+	}
+
+	private static AgentSuspendedWaitingCondition<?, ?> waitedFrom(AgentSuspendedWaitingCondition<?, ?> condition,
+			String... users) {
+		condition.setTarget(ConditionTarget.of(List.of(users), null, null));
+		return condition;
+	}
+
+	private static ConditionEventCaller user(String username) {
+		return ConditionEventCaller.of(username, Set.of("ROLE_USER"), ConditionEventCaller.REST);
 	}
 
 	private static final class MutableClock extends Clock {

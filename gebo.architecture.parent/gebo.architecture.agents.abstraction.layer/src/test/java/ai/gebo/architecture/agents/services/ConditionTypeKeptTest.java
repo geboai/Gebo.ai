@@ -10,6 +10,7 @@ package ai.gebo.architecture.agents.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +26,7 @@ import org.mockito.ArgumentCaptor;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -147,5 +149,17 @@ class ConditionTypeKeptTest {
 		assertTrue(WaitingCondition.of(request).toCondition().isHumanInTheLoopProcessTreatment());
 		assertFalse(WaitingCondition.of(condition("old")).toCondition().isHumanInTheLoopProcessTreatment(),
 				"a clarification, and a block kept before, is the conversation's alone");
+	}
+
+	@Test
+	void whoTheConditionIsWaitedFromIsKeptWithTheConditionOfTheBlock() {
+		final AgentSuspendedWaitingCondition<String, Object> request = condition("which year?");
+		request.setTarget(ConditionTarget.of(List.of("manager"), List.of("finance"), List.of("ERP")));
+
+		final ConditionTarget kept = WaitingCondition.of(request).toCondition().getTarget();
+		assertEquals(request.getTarget(), kept);
+		assertNotSame(request.getTarget(), kept, "a copy of its own");
+		assertNull(WaitingCondition.of(condition("old")).toCondition().getTarget(),
+				"a condition waited from nobody in particular, and a block kept before");
 	}
 }

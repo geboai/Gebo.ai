@@ -73,6 +73,12 @@ public class AgentSuspendedWaitingCondition<T, O> {
 	 * the model: the platform's clarification tools leave it false.
 	 */
 	private boolean humanInTheLoopProcessTreatment = false;
+	/**
+	 * Who or what the condition is waited from (see {@link ConditionTarget}): set
+	 * by the tool or the system that makes it, for an advanced process, never by
+	 * the model; null, as the standard tools leave it, for the usual answerers.
+	 */
+	private ConditionTarget target = null;
 
 	/** A condition on a value, with nothing chosen by the model. */
 	public AgentSuspendedWaitingCondition(Class<T> type, String waitingConditionStatement,

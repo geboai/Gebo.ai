@@ -13,12 +13,15 @@ import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.conditionevents.config.ConditionEventsConfig;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionResponder;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStore;
+import ai.gebo.architecture.agents.conditionevents.services.IConditionRespondersAuthorization;
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
@@ -51,12 +54,21 @@ public class ConditionEventMatcher {
 	private final IConditionEventsStore store;
 	private final NetworkOfAgentsSuspensionTransport transport;
 	private final ConditionEventsConfig config;
+	private final IConditionRespondersAuthorization responders;
 
+	/** Groups not taken into account: the responders' check has no directory of the users. */
 	public ConditionEventMatcher(IConditionEventsStore store, NetworkOfAgentsSuspensionTransport transport,
 			ConditionEventsConfig config) {
+		this(store, transport, config, new ConditionRespondersAuthorizationImpl(null));
+	}
+
+	@Autowired
+	public ConditionEventMatcher(IConditionEventsStore store, NetworkOfAgentsSuspensionTransport transport,
+			ConditionEventsConfig config, IConditionRespondersAuthorization responders) {
 		this.store = store;
 		this.transport = transport;
 		this.config = config;
+		this.responders = responders;
 	}
 
 	/**
@@ -117,6 +129,15 @@ public class ConditionEventMatcher {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void check(GConditionEvent event, GNetworkOfAgentsSuspension open, WaitingCondition waiting, Date now) {
 		event.setBlockCode(open.getCode());
+		// a condition waited from someone in particular: an event delivered before it
+		// was asked is answered by who or what it lists only, or an administrator
+		if (waiting.getTarget() != null && waiting.getTarget().isSet()) {
+			final String refusal = responders.refusal(waiting.getTarget(), null, ConditionResponder.ofKept(event));
+			if (refusal != null) {
+				refuse(event, refusal);
+				return;
+			}
+		}
 		final AgentSuspendedWaitingCondition saved = waiting.toCondition();
 		final IAgentSuspendedWaitingConditionTransportTranslator translator = transport.translatorOf(saved);
 		final AgentSuspendedWaitingConditionReactionDto reaction = event.toReaction();

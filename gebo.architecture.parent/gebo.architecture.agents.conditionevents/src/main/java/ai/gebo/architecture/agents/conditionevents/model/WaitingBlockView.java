@@ -42,5 +42,10 @@ public class WaitingBlockView {
 	 * as a process: the block is shown to its owner in the agents processes area.
 	 */
 	private boolean humanInTheLoopProcessTreatment = false;
+	/**
+	 * Whether the user listing it may open the conversation: its owner, anyone it
+	 * is shared with, an administrator. A user a request is waited from may not.
+	 */
+	private boolean conversationAccessible = true;
 	private List<WaitingConditionView> conditions = new ArrayList<WaitingConditionView>();
 }

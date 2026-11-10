@@ -22,6 +22,7 @@ import ai.gebo.architecture.agents.model.ConditionSource;
 import ai.gebo.architecture.agents.model.ConditionSource.Kind;
 import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
+import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.model.UsersGroup;
 import ai.gebo.security.services.IGSecurityDirectory;
 
@@ -119,6 +120,22 @@ public class ConditionRespondersAuthorizationImpl implements IConditionResponder
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public boolean isAdministrator(String username) {
+		final IGSecurityDirectory users = directory != null ? directory.getIfAvailable() : null;
+		if (users == null || isBlank(username)) {
+			return false;
+		}
+		try {
+			final UserInfos user = users.findUserByUsername(username.strip());
+			return user != null && !Boolean.TRUE.equals(user.getDisabled()) && user.getRoles() != null
+					&& user.getRoles().contains("ADMIN");
+		} catch (RuntimeException e) {
+			LOGGER.warn("Cannot read the roles of " + username + ": not taken as an administrator", e);
+			return false;
+		}
 	}
 
 	/** The codes of the user's groups; none when the directory cannot tell. */
