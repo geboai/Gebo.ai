@@ -522,6 +522,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 					throw new AgentException(NO_RUNTIME_ALLOCATED_FOR_AGENT + name);
 				if (runtime.getInvocations().get() > 0)
 					runtime.getInvocations().decrementAndGet();
+				forgetTheTurnItAskedOn(runtime, name, suspended);
 				keepSolvedConditions(session, runtime, name, resolvedByAgent.get(name));
 				reExecuted.add(suspended.getInputMessage().toMessage());
 			} else {
@@ -604,6 +605,26 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 	 * nothing to the block it is tried again from.
 	 */
 	@SuppressWarnings("rawtypes")
+	/**
+	 * The turn an agent asked to suspend the run on, saying nothing, was recorded in
+	 * its private memory as a turn with an empty output and saved so in the block;
+	 * re-executed on that same message, the agent makes that turn now, once, so the
+	 * empty record goes: a coordinator is on the cycle it asked on again, as its
+	 * invocation count already says, and no agent reads an empty turn of its own.
+	 * A turn the agent also produced something in is kept as it is.
+	 */
+	private static void forgetTheTurnItAskedOn(RuntimeAgentInfos runtime, String name, SuspendedAgentState suspended) {
+		if (runtime.getAgentContext() == null || suspended.getContributionNr() == null) {
+			return;
+		}
+		final int dropped = runtime.getAgentContext().dropEmptyTurn(suspended.getContributionNr());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent:" + name + " is re-executed on the turn " + suspended.getContributionNr()
+					+ " it asked on: " + dropped + " empty record(s) of it forgotten, private turns now:"
+					+ runtime.getAgentContext().getInteractions().size());
+		}
+	}
+
 	private void keepSolvedConditions(AgentsCollaborationSessionContext session, RuntimeAgentInfos runtime, String name,
 			List<AgentSuspendedWaitingCondition> solved) {
 		if (runtime.getAgentContext() != null) {

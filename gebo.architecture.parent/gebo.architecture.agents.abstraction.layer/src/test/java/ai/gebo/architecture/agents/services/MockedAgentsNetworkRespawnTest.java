@@ -70,6 +70,8 @@ class MockedAgentsNetworkRespawnTest {
 	private boolean askerAsksTwice = false;
 	private boolean secondQuestionMandatory = false;
 	private boolean askerAsksAgainWhenRespawned = false;
+	/** The asker says nothing in the turn it asks, as an agent calling a question tool does. */
+	private boolean askerSaysNothingWhenAsking = false;
 	private final List<List<String>> solvedKnownToTheAsker = Collections.synchronizedList(new ArrayList<List<String>>());
 	private final List<String> sharedByTheAskerSeenByTheWriter = Collections.synchronizedList(new ArrayList<String>());
 	private final List<Integer> askerPriorTurnsWhenRespawned = Collections.synchronizedList(new ArrayList<Integer>());
@@ -212,6 +214,9 @@ class MockedAgentsNetworkRespawnTest {
 				}
 			} catch (AgentException e) {
 				throw new IllegalStateException(e);
+			}
+			if (askerSaysNothingWhenAsking) {
+				return List.of();
 			}
 			return List.of(to(session, ASKER, WRITER, "asker: found this on " + msg.getPayload(), 1));
 		});
@@ -513,5 +518,27 @@ class MockedAgentsNetworkRespawnTest {
 		assertEquals(1, again.getSuspendedAgents().size());
 		assertTrue(again.getSuspendedAgents().get(0).getWaitingConditions().isEmpty());
 		assertNotNull(again.getSuspendedAgents().get(0).getInputMessage());
+	}
+
+	@Test
+	void anAgentThatSaidNothingWhenItAskedFindsNoTurnOfItsOwnForItWhenRespawned() throws Exception {
+		askerSaysNothingWhenAsking = true;
+		run();
+		GNetworkOfAgentsSuspension block = saved.get(0);
+		assertTrue(payloadsOf(block.getFrozenDeliveries(), ASKER).isEmpty(), "it said nothing");
+		assertEquals(1, block.getAgentsRuntime().stream()
+				.filter(state -> ASKER.equals(state.getNetworkAgentName())).findFirst().get().getPrivateState()
+				.getInteractions().size(), "the block keeps the empty record of the turn it asked on");
+		service = newService();
+
+		NetworkOfAgentsExecutionResult<String> respawned = service.respawnNetworkExecution(
+				IChatRequestContext.of("resume"), block, List.<AgentSuspendedWaitingCondition<?, ?>>of(answered(block, 0, "2024")),
+				null, TOOL_CALLING);
+
+		assertEquals(NStatus.EXECUTED, respawned.getExecutedStatus());
+		assertEquals(List.of(0), askerPriorTurnsWhenRespawned,
+				"the turn it asked on is the one it makes now: a coordinator is on the cycle it asked on again");
+		assertEquals(List.of("searcher: results of search about What is new?", "asker: the year is 2024"),
+				messagesSeenByTheWriter);
 	}
 }

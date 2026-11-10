@@ -63,6 +63,32 @@ public final class AgentPrivateSessionContext<InputType, OutputType> {
 		}
 	}
 
+	/**
+	 * Forgets the turn of the given number when the agent said nothing in it: the
+	 * record of a turn the agent asked to suspend the run on instead of answering,
+	 * which is re-executed on the same message and recorded then. A turn in which
+	 * the agent also produced something stays. Returns how many records went.
+	 */
+	public synchronized int dropEmptyTurn(int contributionCounter) {
+		int dropped = 0;
+		for (int index = interactions.size() - 1; index >= 0; index--) {
+			final AgentInteraction interaction = interactions.get(index);
+			if (interaction.getContributionCounter() == contributionCounter && isEmpty(interaction.getOutput())) {
+				interactions.remove(index);
+				dropped++;
+			}
+		}
+		if (dropped > 0 && LOGGER.isDebugEnabled()) {
+			LOGGER.debug("dropEmptyTurn(...) privateContext:" + id + " contributionCounter:" + contributionCounter
+					+ " dropped:" + dropped + " empty record(s), total turns:" + interactions.size());
+		}
+		return dropped;
+	}
+
+	private static boolean isEmpty(Object output) {
+		return output == null || (output instanceof CharSequence text && text.toString().isBlank());
+	}
+
 	public String getAdditionalRules() {
 		return additionalRules;
 	}
