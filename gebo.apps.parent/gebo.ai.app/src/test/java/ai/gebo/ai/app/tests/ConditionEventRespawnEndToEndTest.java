@@ -9,6 +9,7 @@ package ai.gebo.ai.app.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -445,15 +446,19 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 	}
 
 	@Test
-	public void theOwnerGoesOnWithoutTheQuestionFromTheWaitingConditionsPanel() throws Exception {
+	public void theOwnerGoesOnWithoutTheQuestionThroughTheWaitingConditionsApi() throws Exception {
 		final MockMvc mvc = mvc();
 		final String token = tokens.createToken(DEFAULT_ALL_ROLES_USER, new Date(System.currentTimeMillis() + 600_000));
 		Suspended suspended = null;
 		try {
 			suspended = aSuspendedChat();
-			// the panel lists the run, to its owner and to the administrators
-			final JsonNode mine = listed(mvc, WAITING, token, suspended.blockCode());
-			assertNotNull(mine, "the owner's panel lists the suspended run");
+			// a clarification is the conversation's alone: the owner's listing keeps only the runs
+			// waiting for a human in the loop request handled as a process, the administrators' every run
+			assertNull(listed(mvc, WAITING, token, suspended.blockCode()),
+					"the owner's listing leaves out a run waiting for a clarification only");
+			final JsonNode mine = listed(mvc, ALL_WAITING, token, suspended.blockCode());
+			assertNotNull(mine, "the administrators see every run");
+			assertFalse(mine.path("humanInTheLoopProcessTreatment").asBoolean(), "not handled as a process: " + mine);
 			assertEquals(DEFAULT_ALL_ROLES_USER, mine.path("owner").asText());
 			assertTrue(mine.path("mandatory").asBoolean());
 			assertFalse(mine.path("unwatched").asBoolean(), "the chat was watching");
@@ -463,10 +468,10 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			assertEquals(THE_QUESTION, condition.path("statement").asText());
 			assertFalse(condition.path("solved").asBoolean());
 			assertFalse(condition.path("expired").asBoolean());
+			assertFalse(condition.path("humanInTheLoopProcessTreatment").asBoolean());
 			assertTrue(condition.path("expiryUnblocks").asBoolean(), "the platform's default expiry: " + condition);
 			assertFalse(condition.path("expiresAt").isMissingNode() || condition.path("expiresAt").isNull(),
 					"the platform's default gives the question its expiry: " + condition);
-			assertNotNull(listed(mvc, ALL_WAITING, token, suspended.blockCode()), "the administrators see every run");
 
 			// no delivered event may ask to go on without a condition
 			final ConditionEvent asking = answer(suspended, "France", "condition-events-rest-test", "evt-go-on-1");
@@ -478,7 +483,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			assertTrue(refused.path("reason").asText().startsWith(GAbstractConditionTransportTranslator.GO_ON_WITHOUT_NOT_HERE),
 					refused.toString());
 
-			// the owner goes on without it, from the panel
+			// the owner goes on without it, through the waiting conditions API
 			final JsonNode ack = objectMapper.readTree(mvc.perform(post(GO_ON_WITHOUT).param("blockCode", suspended.blockCode())
 					.header("Authorization", "Bearer " + token)).andReturn().getResponse().getContentAsString());
 			assertEquals("DONE", ack.path("outcome").asText(), ack.toString());
@@ -490,7 +495,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			assertTrue(applied.getSource().isConversationUser(), "the owner chose: " + applied.getSource());
 			assertEquals("The user" + TOLD_GONE_ON_WITHOUT + "go on without it, saying what you assumed.", toldAnswers.get(0),
 					"the agent is told who chose to go on: " + toldAnswers);
-			assertEquals(null, listed(mvc, WAITING, token, suspended.blockCode()), "the run no longer waits");
+			assertEquals(null, listed(mvc, ALL_WAITING, token, suspended.blockCode()), "the run no longer waits");
 		} finally {
 			if (suspended != null) {
 				lifeCycleService.removeChatSession(suspended.sessionCode());
@@ -585,7 +590,7 @@ public class ConditionEventRespawnEndToEndTest extends AbstractBaseTestLLmsInteg
 			assertEquals(DEFAULT_ALL_ROLES_USER, block.getDroppedBy());
 			assertFalse(chatPipelineService.pendingNetworkOfAgentsSuspension(suspended.sessionCode()).isPresent(),
 					"the conversation is free");
-			assertEquals(null, listed(mvc, WAITING, token, suspended.blockCode()), "the run no longer waits");
+			assertEquals(null, listed(mvc, ALL_WAITING, token, suspended.blockCode()), "the run no longer waits");
 			assertEquals("NOT_FOUND", objectMapper.readTree(mvc.perform(post(ABANDON).param("blockCode", suspended.blockCode())
 					.header("Authorization", "Bearer " + token)).andReturn().getResponse().getContentAsString())
 					.path("outcome").asText(), "abandoned once");
