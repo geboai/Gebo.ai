@@ -62,6 +62,7 @@ export * from './conditionEvent';
 export * from './conditionEventAck';
 export * from './conditionEventView';
 export * from './conditionSource';
+export * from './conditionTarget';
 export * from './configurationEntryGBaseChatModelConfig';
 export * from './configurationEntryGBaseEmbeddingModelConfig';
 export * from './configurationEntryGBaseImageModelConfig';

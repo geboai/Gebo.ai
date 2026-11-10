@@ -29,6 +29,15 @@
   opacity: 0.7;
 }
 
+.gebo-ai-reusable-chat__suspension-waited-from {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.25rem 0;
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
 .gebo-ai-reusable-chat__suspension-explanation {
   margin: 0.25rem 0 0.5rem;
   opacity: 0.8;

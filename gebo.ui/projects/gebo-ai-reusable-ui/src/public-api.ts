@@ -38,6 +38,9 @@ export * from "./lib/controls/relation-list-component/relation-list.component";
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.module';
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.component';
 export * from './lib/controls/chat-control/chat-libraries-panel.component';
+// the form answering a suspended run's conditions, reused away from the conversation
+export * from './lib/controls/chat-control/chat-suspension-answer.component';
+export * from './lib/controls/chat-control/chat-suspension-answer.module';
 export * from './lib/controls/chat-control/company-files-selection.token';
 
 

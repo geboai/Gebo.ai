@@ -62,7 +62,7 @@ import { ProgressBarModule } from "primeng/progressbar";
 import { ChipModule } from "primeng/chip";
 import { RadioButtonModule } from "primeng/radiobutton";
 import { CheckboxModule } from "primeng/checkbox";
-import { GeboAIChatSuspensionAnswerComponent } from "./chat-suspension-answer.component";
+import { GeboAIChatSuspensionAnswerModule } from "./chat-suspension-answer.module";
 @NgModule({
   imports: [CommonModule,
     ReactiveFormsModule,
@@ -96,6 +96,7 @@ import { GeboAIChatSuspensionAnswerComponent } from "./chat-suspension-answer.co
     ChipModule,
     RadioButtonModule,
     CheckboxModule,
+    GeboAIChatSuspensionAnswerModule,
     GeboAINotificationsModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
@@ -108,7 +109,7 @@ import { GeboAIChatSuspensionAnswerComponent } from "./chat-suspension-answer.co
       }
     }
   }), ReactiveRagChatService],
-  declarations: [GeboAIChatLibrariesPanelComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent, GeboAIChatSuspensionAnswerComponent],
+  declarations: [GeboAIChatLibrariesPanelComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
   exports: [GeboAIChatLibrariesPanelComponent, GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

@@ -196,7 +196,12 @@ the administrators' listing keeps every run. The flag is set by the code of the 
 asked, never by the model: the platform's clarification tools leave it false
 (`GAbstractAskUserChoiceQuestionTool.humanInTheLoopProcessTreatment()`, with
 `conditionType()` to pin the translator of a tool of another kind); the Pro human in the
-loop tools set it. The two actions:
+loop tools set it. A person's listing (`waitingConditions`) holds the runs with a request
+handled as a process they follow: their own, whoever the request is waited from (they may
+still go on without it or abandon the run), and those they may answer, shared with them or
+whose target names them; each block says whether the person may open its conversation
+(`WaitingBlockView.conversationAccessible`), and each condition whom it is waited from
+(`target`). The two actions:
 
 - **go on without**: the named conditions, or every one still waiting, are resolved with no
   value, mandatory or not, by events marked `unanswered = GONE_ON_WITHOUT` whose source is
@@ -211,7 +216,10 @@ clarifications; the panel is Pro's `GeboAIHumanInTheLoopMonitoringPanelModule`, 
 administrators' and the personal pages of the "AI agents processes" section. The chat's suspension
 form (`gebo.ui`, reusable-ui) answers any condition carrying clarification attributes, a human in
 the loop request included, and offers, per condition, "No answer: let the agents go on without it",
-and for the block "Go on without the missing answers" and "Abandon the run". The agent editor sets
+and for the block "Go on without the missing answers" and "Abandon the run". It says whom a
+condition is waited from when it has a target; its module (`GeboAIChatSuspensionAnswerModule`) is
+exported, and `[conversationActions]="false"` keeps it to the answers, for a page outside the
+conversation. The agent editor sets
 `conditionsExpiry` in the "Large language model & usable tools settings" tab.
 
 From the chat, the owner asks to go on without a condition with the attribute
@@ -325,7 +333,9 @@ the block is written), `DUPLICATE`, `SUPERSEDED`, `REFUSED` (the reason says why
 The session's owner may deliver to its own sessions, an account with the application
 authority (`APPLICATION` by default) to any, and the broker to any: it is reached only by
 code running in the platform (a workflow step, a harness, a robot), never exposed as is to
-the outside, where REST with the caller's credentials is the way in. Whoever delivers, **the
+the outside, where REST with the caller's credentials is the way in. Anyone the conversation
+is shared with, and an administrator, may deliver too; a condition waited from someone in
+particular is answered only by them (see the target, below). Whoever delivers, **the
 respawn runs as the session's owner**. The event keeps the actor and the channel; with no
 `sourceSystem` of its own, a broker event takes the sending component's
 (`AGENTS-CONDITION-EVENTS.CONDITION-EVENTS-PUBLISHER`). The publisher refuses with an
@@ -356,7 +366,37 @@ The agents are told who answered when it is not the conversation's user ("You as
 year?\nAnna Rossi (ERP) chose: 2024", "It came from Anna Rossi (ERP), unverified: yes"); the
 user's own answers, and those saved before sources, read as before. The history line of an
 event names a source that says what it is, and the answer form shows "Answered (you)" or the
-source.
+source. Someone other than the owner answering in the conversation (shared with them, or an
+administrator) is kept on the channel `CHAT_SHARED` (`ConditionSource.SHARED_CHAT_CHANNEL`),
+so the agents are told their name and not that "the user" chose.
+
+### The target: whom a condition is waited from
+
+A condition may say whom it is waited from with `target` (`ConditionTarget`: lists of ids of
+`users`, `groups` by their code, `systems`), kept with the block (`WaitingCondition.target`)
+and carried by the condition's DTO and by the panel's views. It is set by the code of the
+tool that asks, never by the model, for advanced processes:
+`GAbstractAskUserChoiceQuestionTool.conditionTarget(ToolContext)` returns null, and the
+platform's tools leave it so. Who may answer (`IConditionRespondersAuthorization`,
+`ConditionRespondersAuthorizationImpl`):
+
+- an **administrator** always may (the authority `ROLE_ADMIN`, or the role `ADMIN` in the
+  directory of the users for the chat's own answers);
+- with a **target**, only who or what it lists: a user it lists, or a member of a group it
+  lists, the answer's source being that user, verified (their own account, or an account
+  delivering for others naming them); a system it lists, the answer delivered for it by an
+  account that delivers for others (a trusted channel or the application authority). Not
+  even the owner, and access to the conversation is not enough; the refusal says
+  `The condition is waited from users bverdi only`;
+- with **no target**, as before the owner and the accounts delivering for others, and now
+  also anyone the conversation is shared with (`accessibleToAll`, `accessibleUsers`,
+  `accessibleGroups`).
+
+The check is made on delivery, for the condition waiting under the event's id; an event
+arriving before its condition is asked is checked once it is matched
+(`ConditionEventMatcher`, with who delivered it as the event kept them:
+`deliveredByAdministrator`, `deliveredForOthers`), and refused then. Going on without and
+abandoning stay the owner's and the administrators'.
 
 ### From the event to the respawn
 
@@ -419,6 +459,9 @@ mocked agents and a parallel group), `GMongoNetworkOfAgentsSuspensionHandlerTest
 Condition events: `ConditionCorrelationIdTest`, `ConditionEventsServiceImplTest`,
 `ConditionEventsPublisherTest`; the expiry and the panel: `ConditionExpiryTest`,
 `ConditionExpiryKeptTest`, `WaitingConditionsNotifierTest`, `WaitingConditionsServiceImplTest`;
+the targets: `ConditionTargetTest`, `ConditionRespondersAuthorizationImplTest`, and the cases in
+`ConditionEventsServiceImplTest`, `WaitingConditionsServiceImplTest`,
+`AskUserSingleChoiceQuestionToolTest`, `ConditionTransportTranslatorsTest`;
 end to end in gebo.ai.app with the scripted model,
 `ConditionEventRespawnEndToEndTest` (REST with a personal API key, the broker through
 the publisher, the panel going on without and abandoning, an expiry that unblocks); with real models, `ConditionEventsWithRealLlmsIntegrationTest` in

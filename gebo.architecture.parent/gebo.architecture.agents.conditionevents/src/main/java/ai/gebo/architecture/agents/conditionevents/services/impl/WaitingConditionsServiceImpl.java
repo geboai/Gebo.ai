@@ -148,9 +148,9 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		}
 		final Date now = new Date(clock.millis());
 		final ConditionResponder user = ConditionResponder.person(username.strip(), false);
-		// the runs waiting for a human in the loop request handled as a process the
-		// user may answer: their own, the ones shared with them, the ones waited from
-		// them; a clarification is the conversation's alone
+		// the runs waiting for a human in the loop request handled as a process: the
+		// user's own, whoever it is waited from, and the ones they may answer, shared
+		// with them or waited from them; a clarification is the conversation's alone
 		for (GNetworkOfAgentsSuspension block : blocks.findByRespawnedAtIsNullAndDroppedAtIsNull()) {
 			if (block == null || !block.isOpen()) {
 				continue;
@@ -168,11 +168,16 @@ public class WaitingConditionsServiceImpl implements IWaitingConditionsService {
 		return waiting;
 	}
 
-	/** Whether the block waits for a human in the loop request handled as a process the user may answer. */
+	/**
+	 * Whether the block waits for a human in the loop request handled as a process
+	 * the user follows: any, in a run of their own, which they may still go on
+	 * without or abandon; otherwise one they may answer.
+	 */
 	private boolean waitsFor(GNetworkOfAgentsSuspension block, GUserChatSession session, ConditionResponder user) {
+		final boolean owner = session != null && user.account().equals(session.getUsername());
 		for (WaitingCondition condition : block.conditions()) {
 			if (condition.isHumanInTheLoopProcessTreatment()
-					&& responders.mayAnswer(condition.getTarget(), session, user)) {
+					&& (owner || responders.mayAnswer(condition.getTarget(), session, user))) {
 				return true;
 			}
 		}

@@ -418,12 +418,16 @@ class WaitingConditionsServiceImplTest {
 	// -----------------------------------------------------------------------------
 
 	@Test
-	void aRequestWaitedFromSomeoneIsInTheirPanelNotInTheOwnersAndWithoutTheConversation() {
+	void aRequestWaitedFromSomeoneIsInTheirPanelWithoutTheConversationAndStillInTheOwners() {
 		final AgentSuspendedWaitingCondition<?, ?> request = question("approval", true);
 		request.setTarget(ConditionTarget.of(List.of("manager"), null, null));
 		block(request);
 
-		assertTrue(waiting.waitingFor(OWNER).isEmpty(), "the owner may not answer it");
+		final List<WaitingBlockView> owners = waiting.waitingFor(OWNER);
+		assertEquals(1, owners.size(), "the owner follows the run, may go on without it or abandon it");
+		assertEquals(List.of("manager"), owners.get(0).getConditions().get(0).getTarget().getUsers(),
+				"told whom it is waited from");
+		assertTrue(waiting.waitingFor("colleague").isEmpty(), "neither the owner nor listed");
 		final List<WaitingBlockView> theirs = waiting.waitingFor("manager");
 		assertEquals(1, theirs.size());
 		assertFalse(theirs.get(0).isConversationAccessible(), "the conversation is not shared with them");

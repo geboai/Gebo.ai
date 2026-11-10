@@ -13,4 +13,5 @@ Name | Type | Description | Notes
 **earliestExpiryAt** | [**Date**](Date.md) |  |  [optional]
 **expired** | **Boolean** |  |  [optional]
 **humanInTheLoopProcessTreatment** | **Boolean** |  |  [optional]
+**conversationAccessible** | **Boolean** |  |  [optional]
 **conditions** | [**List&lt;WaitingConditionView&gt;**](WaitingConditionView.md) |  |  [optional]
