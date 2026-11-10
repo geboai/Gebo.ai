@@ -400,7 +400,8 @@ class ConditionEventsServiceImplTest {
 		final ConditionEvent approved = value(SESSION + ":approval", "approved");
 		approved.setSourceSystem("WORKFLOW");
 		assertEquals(Outcome.ACCEPTED, service.deliver(approved, application()).getOutcome());
-		assertTrue(recorder.holdsAnswersFor(block), "another source already answered the block");
+		assertEquals(block.getCode(), store.events.get(SESSION + ":approval").getBlockCode(),
+				"another source already answered the block");
 
 		final RecordedConditionReaction recorded = recorder.record(block, chatChoosing(block, "year", "2024"), OWNER,
 				"request-1");
@@ -504,7 +505,7 @@ class ConditionEventsServiceImplTest {
 	@Test
 	void aChatAnswerLeavingAMandatoryConditionIsKeptAndTheBlockWaitsForIt() {
 		final GNetworkOfAgentsSuspension block = block(question("year", true, "2023", "2024"), approval("approval", true));
-		assertFalse(recorder.holdsAnswersFor(block));
+		assertTrue(store.liveEventsOf(SESSION).isEmpty(), "no source answered the block yet");
 
 		final RecordedConditionReaction recorded = recorder.record(block, chatChoosing(block, "year", "2024"), OWNER,
 				"request-1");
@@ -512,7 +513,8 @@ class ConditionEventsServiceImplTest {
 		assertEquals(List.of("Manager approval of the offer"), recorded.waitingFor());
 		assertFalse(recorded.resumes());
 		assertTrue(respawns.isEmpty(), "no run before the approval");
-		assertTrue(recorder.holdsAnswersFor(block), "the chat's answer is kept");
+		assertEquals(ConditionEventStatus.ACCEPTED, store.events.get(SESSION + ":year").getStatus(),
+				"the chat's answer is kept");
 
 		assertEquals(Outcome.ACCEPTED, service.deliver(value(SESSION + ":approval", "approved"), application()).getOutcome());
 		assertEquals(1, respawns.size(), "the approval completes the block");

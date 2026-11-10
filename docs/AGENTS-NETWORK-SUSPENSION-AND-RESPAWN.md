@@ -316,14 +316,28 @@ source.
 ### From the event to the respawn
 
 1. `deliver` keeps the event (`GConditionEvent`) and matches it to the session's open block.
-2. The block is respawned when its events solve it: every mandatory condition solved, as the
-   respawn of the chat requires them all in one reaction. A block with no mandatory
-   condition waits `optionalSettleMillis` after its first event for the others, then goes
-   with what it has.
+2. The block is respawned when its events solve it: every mandatory condition solved, from
+   whichever source. A block with no mandatory condition waits `optionalSettleMillis` after
+   its first event for the others, then goes with what it has.
 3. A respawn is claimed by inserting a `GConditionDispatch` keyed by the block code, so one
    instance runs it; the claim lapses after `dispatchLeaseMillis`. It runs
    `streamingRespawnAgenticChat` on the session's pipeline, as the owner, with the reaction
    built from the events and the text as the request.
+
+   The chat contends for the same claim. With the events module present, a respawn request
+   from the chat (the UI, A2A, MCP, the harness) is not run as it comes: each of its answers
+   is delivered as an event of the conversation's user on the `CHAT` channel
+   (`ConditionEventsReactionRecorder`), checked by the condition's translator and kept next
+   to the other sources' answers, whether the reaction answers the block whole or one
+   condition at a time. Once every mandatory condition is solved the chat request claims the
+   respawn and runs it with the reaction rebuilt from the events (every source's answer, the
+   optional conditions none answered declined); the dispatcher stands off, and the panel's
+   abandon is refused, while the request holds the claim, and the request tells how the run
+   went when it ends. A reaction leaving a mandatory condition unanswered, or whose answers
+   are refused, is answered with what was kept and what the block still waits for, and
+   nothing runs; a block another request already respawns is said so. One block, one
+   claim, one run, whoever starts it. Only a reaction answering nothing, and every request
+   where the module is absent, go straight to the respawner.
 4. The events become `DISPATCHED`, then `APPLIED` when the run ends or suspends again (a new
    block, answered by new events). A failed respawn is tried again after
    `retryBackoffMillis`, doubling, up to `maxAttempts`, then `FAILED`. An event whose block
@@ -353,6 +367,7 @@ mocked agents and a parallel group), `GMongoNetworkOfAgentsSuspensionHandlerTest
 `ToolCallingAgentSuspensionTest`,
 `ReactiveAgentAdapterSuspensionTest`, `ConditionTransportTranslatorsTest`,
 `NetworkOfAgentsSuspensionTransportTest`, `ChatPipelineServiceOpenSuspensionTest`,
+`ChatPipelineServiceOneByOneTest` (the chat's reactions through the recorder and its claim),
 `ChatNetworkStepSuspensionTest`, `ChatNetworkRespawnStepTest`,
 `GChatEnvironmentNetworkRunnerTest`.
 

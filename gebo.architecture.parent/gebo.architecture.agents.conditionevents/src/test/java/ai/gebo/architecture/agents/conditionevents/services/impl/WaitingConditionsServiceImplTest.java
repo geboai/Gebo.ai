@@ -269,6 +269,35 @@ class WaitingConditionsServiceImplTest {
 	}
 
 	@Test
+	void aChatAnsweringItsBlockWholeHoldsTheOneClaimTheDispatcherAndThePanelContendFor() {
+		final GNetworkOfAgentsSuspension block = block(question("year", true), question("country", true));
+
+		final RecordedConditionReaction recorded = recorder.record(block,
+				chatChoosing(block, "year", "2024", "country", "2023"), OWNER, "req-1");
+
+		assertTrue(recorded.resumes(), recorded.toString());
+		assertEquals(List.of("year", "country"), recorded.reaction().getReactions().stream()
+				.map(AgentSuspendedWaitingConditionReactionDto::getConditionId).toList());
+		assertEquals(GConditionDispatch.State.RUNNING, store.dispatches.get(block.getCode()).getState());
+		events.sweep();
+		assertTrue(respawns.isEmpty(), "the dispatcher stands off while the chat's request holds the respawn");
+		final WaitingConditionsActionAck abandoned = waiting.abandon(block.getCode(), "admin", true);
+		assertEquals(WaitingConditionsActionAck.Outcome.REFUSED, abandoned.getOutcome());
+		assertEquals(WaitingConditionsServiceImpl.RESPAWNING, abandoned.getReason());
+		assertTrue(block.isOpen());
+
+		// the chat's run respawned the block, then says it ended
+		block.setRespawnedAt(new Date(clock.millis()));
+		recorder.concluded(block, "req-1");
+
+		assertEquals(GConditionDispatch.State.DONE, store.dispatches.get(block.getCode()).getState());
+		assertEquals(ConditionEventStatus.APPLIED, store.events.get(SESSION + ":year").getStatus());
+		assertEquals(ConditionEventStatus.APPLIED, store.events.get(SESSION + ":country").getStatus());
+		events.sweep();
+		assertTrue(respawns.isEmpty(), "respawned once, by the chat");
+	}
+
+	@Test
 	void aBlockBeingRespawnedCannotBeAbandonedNorCanAnotherUsers() {
 		final GNetworkOfAgentsSuspension block = block(question("year", true));
 		assertEquals(WaitingConditionsActionAck.Outcome.REFUSED, waiting.abandon(block.getCode(), "someone", false).getOutcome());
@@ -401,6 +430,24 @@ class WaitingConditionsServiceImplTest {
 				Map.of(ClarificationConditionTransportTranslator.CHOSEN_OPTION, option)));
 		event.setSourceSystem("ERP");
 		return event;
+	}
+
+	/** The chat choosing an option per condition: {@code conditionId, option, conditionId, option...}. */
+	private static NetworkOfAgentsSuspendedStateReaction chatChoosing(GNetworkOfAgentsSuspension block,
+			String... conditionIdsAndOptions) {
+		final List<AgentSuspendedWaitingConditionReactionDto> answers = new ArrayList<AgentSuspendedWaitingConditionReactionDto>();
+		for (int i = 0; i + 1 < conditionIdsAndOptions.length; i += 2) {
+			final AgentSuspendedWaitingConditionReactionDto answer = new AgentSuspendedWaitingConditionReactionDto();
+			answer.setConditionId(conditionIdsAndOptions[i]);
+			answer.setConditionType(ClarificationConditionTransportTranslator.ID);
+			answer.setAttributes(new LinkedHashMap<String, Object>(
+					Map.of(ClarificationConditionTransportTranslator.CHOSEN_OPTION, conditionIdsAndOptions[i + 1])));
+			answers.add(answer);
+		}
+		final NetworkOfAgentsSuspendedStateReaction reaction = new NetworkOfAgentsSuspendedStateReaction();
+		reaction.setNetworkOfAgentsBlockId(block.getCode());
+		reaction.setReactions(answers);
+		return reaction;
 	}
 
 	private static NetworkOfAgentsSuspendedStateReaction chatGoingOnWithout(GNetworkOfAgentsSuspension block,

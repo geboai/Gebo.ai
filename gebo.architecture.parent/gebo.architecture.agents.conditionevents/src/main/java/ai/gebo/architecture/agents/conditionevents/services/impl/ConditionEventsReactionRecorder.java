@@ -55,7 +55,9 @@ import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTranspo
  * the other sources. Once every mandatory condition of the block has an answer
  * the chat request claims the respawn and runs it, with the answers of every
  * source and the optional conditions none answered declined; the dispatcher
- * stands off while it holds the claim, and reads how it went once it ends.
+ * stands off while it holds the claim, as the panel's abandon does, and reads
+ * how it went once it ends. A chat answering its block whole takes the same
+ * road, so every respawn of a block is claimed the same way, whoever starts it.
  */
 @Service
 public class ConditionEventsReactionRecorder implements IConditionReactionRecorder {
@@ -87,16 +89,6 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 		this.dispatcher = dispatcher;
 		this.transport = transport;
 		this.conclusions = conclusions;
-	}
-
-	@Override
-	public boolean holdsAnswersFor(GNetworkOfAgentsSuspension block) {
-		if (block == null || block.getConversationCode() == null) {
-			return false;
-		}
-		return store.liveEventsOf(block.getConversationCode()).stream()
-				.anyMatch(event -> event.getStatus() == ConditionEventStatus.ACCEPTED
-						&& Objects.equals(block.getCode(), event.getBlockCode()));
 	}
 
 	@Override

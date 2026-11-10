@@ -14,7 +14,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
-import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
 import ai.gebo.architecture.agents.model.WaitingConditionDropReason;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -66,8 +65,9 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	protected final GNetworkOfAgentsSuspensionRepository suspensions;
 	protected final NetworkOfAgentsSuspensionTransport suspensionTransport;
 	/**
-	 * Where present, the answers to a suspended network are kept one condition at a
-	 * time, next to those other sources give (see {@link IConditionReactionRecorder}).
+	 * Where present, the answers to a suspended network are kept next to those other
+	 * sources give, and the respawn is claimed through it, once for every source (see
+	 * {@link IConditionReactionRecorder}).
 	 */
 	protected final ObjectProvider<IConditionReactionRecorder> reactionRecorders;
 
@@ -193,11 +193,14 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 	}
 
 	/**
-	 * A respawn request answering a block one condition at a time: its answers are
-	 * recorded next to those other sources gave when the block already holds some,
-	 * or when the reaction leaves a mandatory condition unanswered. Any other
-	 * request, and every one where no recorder is present, respawns as it always
-	 * did; null then.
+	 * A respawn request answering the conversation's open block: where a recorder
+	 * is present its answers are recorded, whether they answer the block whole or
+	 * one condition at a time, so the respawn is the one the recorder claims for
+	 * the request, the same claim the events and the panel contend for; a block
+	 * another already respawns is said so without running. A request answering
+	 * nothing, one the respawner refuses anyway, the recorder's own dispatcher's,
+	 * and every one where no recorder is present, respawn as they always did; null
+	 * then.
 	 */
 	protected OneByOne recordOneByOne(GeboChatRequest request) {
 		final IConditionReactionRecorder recorder = reactionRecorders != null ? reactionRecorders.getIfAvailable()
@@ -214,8 +217,9 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			// the respawner refuses it, saying why
 			return null;
 		}
-		if (!recorder.holdsAnswersFor(block) && !leavesMandatoryUnanswered(block, reaction)
-				&& !asksToGoOnWithout(reaction)) {
+		if (reaction == null || reaction.getReactions() == null || reaction.getReactions().isEmpty()) {
+			// nothing to record, so nothing to claim the respawn with: the respawner
+			// refuses it when a condition is mandatory, else runs with none answered
 			return null;
 		}
 		final RecordedConditionReaction recorded = recorder.record(block, reaction, currentUsername(), request.getId());
@@ -228,45 +232,6 @@ public class ChatPipelineServiceImpl implements IChatPipelineService {
 			request.setNetworkOfAgentsSuspendedStateReaction(recorded.reaction());
 		}
 		return new OneByOne(recorder, block, recorded);
-	}
-
-	private static boolean leavesMandatoryUnanswered(GNetworkOfAgentsSuspension block,
-			NetworkOfAgentsSuspendedStateReaction reaction) {
-		for (WaitingCondition condition : block.conditions()) {
-			if (condition.isMandatory() && !answers(reaction, condition.getSuspendedConditionId())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Whether an answer asks to go on without its condition: only the recorder reads
-	 * it, as the conversation's own user; the respawner would refuse it.
-	 */
-	private static boolean asksToGoOnWithout(NetworkOfAgentsSuspendedStateReaction reaction) {
-		if (reaction == null || reaction.getReactions() == null) {
-			return false;
-		}
-		for (AgentSuspendedWaitingConditionReactionDto answer : reaction.getReactions()) {
-			if (answer != null && answer.getAttributes() != null && GAbstractConditionTransportTranslator
-					.isTrue(answer.getAttributes().get(GAbstractConditionTransportTranslator.GO_ON_WITHOUT))) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static boolean answers(NetworkOfAgentsSuspendedStateReaction reaction, String conditionId) {
-		if (reaction == null || reaction.getReactions() == null || conditionId == null) {
-			return false;
-		}
-		for (AgentSuspendedWaitingConditionReactionDto answer : reaction.getReactions()) {
-			if (answer != null && conditionId.equals(answer.getConditionId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private String currentUsername() {

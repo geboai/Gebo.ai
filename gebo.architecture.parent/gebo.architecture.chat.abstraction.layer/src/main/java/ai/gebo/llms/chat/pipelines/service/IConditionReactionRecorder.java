@@ -12,11 +12,13 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedStateReaction;
 
 /**
- * Records the answers a chat gives to a suspended network one condition at a
- * time, next to those other sources give: the network resumes once every
- * mandatory condition of its block has an answer, from whichever source. Where
- * no implementation is present a chat reaction answers the block as a whole,
- * as it always did.
+ * Records the answers a chat gives to a suspended network, whole or one
+ * condition at a time, next to those other sources give: the network resumes
+ * once every mandatory condition of its block has an answer, from whichever
+ * source, and the respawn is claimed once, whoever runs it (the chat request,
+ * the recorder's own dispatcher), so no two runs of one block overlap and
+ * nothing drops a block being respawned. Where no implementation is present a
+ * chat reaction answers the block as a whole, unclaimed, as it always did.
  */
 public interface IConditionReactionRecorder {
 	/**
@@ -25,12 +27,6 @@ public interface IConditionReactionRecorder {
 	 * again.
 	 */
 	String RESPAWN_ORIGIN = "CONDITION_EVENT";
-
-	/**
-	 * Whether the block already holds answers other sources gave: a reaction from
-	 * the chat then joins them instead of answering the block on its own.
-	 */
-	boolean holdsAnswersFor(GNetworkOfAgentsSuspension block);
 
 	/**
 	 * Records each answer of the reaction as its condition's solution. When the
