@@ -30,6 +30,8 @@ import ai.gebo.llms.agent.chat.service.impl.AgenticLoopPureChatReactiveAgentServ
 import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.standard.config.StandardAgentsInitialization;
 import ai.gebo.llms.agent.standard.services.StringToStringToolCallingNetworkAgent;
+import ai.gebo.architecture.agents.tools.AskUserMultipleChoiceQuestionTool;
+import ai.gebo.architecture.agents.tools.AskUserSingleChoiceQuestionTool;
 
 /**
  * The tools the network of agents editor shows on each agent are the ones the
@@ -193,8 +195,13 @@ public class AgentsMountedToolsTest extends AbstractBaseTestLLmsIntegrationTests
 				"A free chat leaves out the knowledge base tools, and nothing else");
 		Set<String> expectedMounted = new HashSet<>(registered);
 		expectedMounted.removeAll(knowledgeBaseTools);
+		// the loop service implies the user questions library for every agent running on
+		// it: this admin-created agent named no library and may ask the user all the same
+		expectedMounted.addAll(Set.of(AskUserSingleChoiceQuestionTool.TOOL_NAME,
+				AskUserMultipleChoiceQuestionTool.TOOL_NAME));
 		assertEquals(expectedMounted, names(mounted.getTools()),
-				"A free chat mounts the configured exclusions too, the web and deep search included");
+				"A free chat mounts the configured exclusions too, the web and deep search included,"
+						+ " and the question tools the loop service implies");
 
 		IGGenericAgentService service = agentServicesDao.findByCode(config.getAgentServiceId());
 		Set<String> advertised = service.getAgentCapabilities(config).getTools().stream()
