@@ -45,12 +45,14 @@ import ai.gebo.security.services.IGSecurityService;
 import reactor.core.publisher.Flux;
 
 /**
- * Pins how a respawn request reaches the recorder of the answers given one
- * condition at a time: only where one is present, only when the block already
- * holds answers of other sources or the reaction leaves a mandatory condition;
- * an answer that solves nothing yet is answered and kept without running, one
- * that solves the block runs the respawn with the answers of every source and
- * says when it ended.
+ * Pins how a respawn request reaches the recorder of the answers: every reaction
+ * answering something is recorded where a recorder is present, whole or one
+ * condition at a time, so the respawn is the one claim the chat, the events and
+ * the panel contend for; an answer that solves nothing yet is answered and kept
+ * without running, one that solves the block runs the respawn with the answers
+ * of every source and says when it ended. A reaction answering nothing, the
+ * dispatcher's own respawn and every request where no recorder is present go to
+ * the respawner as they always did.
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
 class ChatPipelineServiceOneByOneTest {
@@ -113,14 +115,32 @@ class ChatPipelineServiceOneByOneTest {
 	}
 
 	@Test
-	void aReactionAnsweringTheWholeBlockRespawnsAsItAlwaysDid() throws Exception {
+	void aReactionAnsweringTheWholeBlockIsRecordedAndRunsTheRespawnItClaimed() throws Exception {
 		final GeboChatRequest request = answering("year", "approval");
+		final NetworkOfAgentsSuspendedStateReaction sent = request.getNetworkOfAgentsSuspendedStateReaction();
+		final NetworkOfAgentsSuspendedStateReaction claimed = answering("year", "approval")
+				.getNetworkOfAgentsSuspendedStateReaction();
+		when(recorder.record(eq(block), eq(sent), any(), anyString())).thenReturn(new RecordedConditionReaction(
+				List.of(new Answer("year", "ACCEPTED", null), new Answer("approval", "ACCEPTED", null)), List.of(),
+				Next.RESPAWN, claimed));
+
+		service.streamingRespawnAgenticChat(null, request, new LinkedHashMap<String, Object>()).blockLast();
+
+		assertEquals(1, ran.size());
+		assertSame(claimed, ran.get(0).getNetworkOfAgentsSuspendedStateReaction(),
+				"the reaction the recorder built of the answers it kept");
+		verify(recorder).concluded(block, request.getId());
+	}
+
+	@Test
+	void aReactionAnsweringNothingGoesToTheRespawnerAsItAlwaysDid() throws Exception {
+		final GeboChatRequest request = answering();
 		final NetworkOfAgentsSuspendedStateReaction sent = request.getNetworkOfAgentsSuspendedStateReaction();
 
 		service.streamingRespawnAgenticChat(null, request, new LinkedHashMap<String, Object>()).blockLast();
 
 		verify(recorder, never()).record(any(), any(), any(), any());
-		assertEquals(1, ran.size());
+		assertEquals(1, ran.size(), "nothing to record: the respawner refuses it, saying which condition is mandatory");
 		assertSame(sent, ran.get(0).getNetworkOfAgentsSuspendedStateReaction());
 	}
 
@@ -173,7 +193,6 @@ class ChatPipelineServiceOneByOneTest {
 
 	@Test
 	void anAnswerJoiningThoseOfOtherSourcesRespawnsWithAllOfThemAndSaysWhenItEnded() throws Exception {
-		when(recorder.holdsAnswersFor(block)).thenReturn(true);
 		final NetworkOfAgentsSuspendedStateReaction merged = answering("year", "approval")
 				.getNetworkOfAgentsSuspendedStateReaction();
 		when(recorder.record(eq(block), any(), any(), anyString()))
