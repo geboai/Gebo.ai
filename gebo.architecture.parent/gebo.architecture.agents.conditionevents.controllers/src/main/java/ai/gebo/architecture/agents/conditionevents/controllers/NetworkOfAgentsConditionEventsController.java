@@ -51,10 +51,17 @@ public class NetworkOfAgentsConditionEventsController {
 	/** What became of the event kept for a condition; nothing when none is, or the caller may not know. */
 	@GetMapping(value = "conditionEventStatus", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ConditionEventView conditionEventStatus(@RequestParam(required = false) String correlationId,
-			@RequestParam(required = false) String sessionCode, @RequestParam(required = false) String conditionId) {
+			@RequestParam(required = false) String sessionCode, @RequestParam(required = false) String conditionId,
+			@RequestParam(required = false) String externalSystem,
+			@RequestParam(required = false) String externalSessionKey) {
 		final ConditionCorrelationId correlation;
 		try {
-			correlation = ConditionCorrelationId.of(correlationId, sessionCode, conditionId);
+			// the session named by another system's own key, when neither of Gebo's names is given
+			final String session = (correlationId == null || correlationId.isBlank())
+					&& (sessionCode == null || sessionCode.isBlank())
+							? service.sessionCodeOf(externalSystem, externalSessionKey).orElse(null)
+							: sessionCode;
+			correlation = ConditionCorrelationId.of(correlationId, session, conditionId);
 		} catch (IllegalArgumentException notNamed) {
 			return null;
 		}

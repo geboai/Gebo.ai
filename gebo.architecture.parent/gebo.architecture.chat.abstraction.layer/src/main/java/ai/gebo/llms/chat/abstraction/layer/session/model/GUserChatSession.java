@@ -93,6 +93,15 @@ public class GUserChatSession extends GBaseObject implements IGObjectWithSecurit
 	 * the caller ({@code HARNESS}, {@code A2A}, {@code MCP}...); null for a chat.
 	 */
 	private String runOrigin = null;
+	/**
+	 * The other system's own name of this conversation, when it opened it by a key
+	 * (see {@link ExternalSessionRef}): the system and its key of the dialogue,
+	 * unique together, written when the conversation is opened and never changed.
+	 * The dialogue of the external side is found again by them. Null for a
+	 * conversation opened by Gebo's own means.
+	 */
+	private String externalSystem = null;
+	private String externalSessionKey = null;
 	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	private String chatProfileCode = null; // Chat profile configuration code
 	private GObjectRef<GBaseChatModelConfig> modelReference = null; // Reference to the chat model configuration

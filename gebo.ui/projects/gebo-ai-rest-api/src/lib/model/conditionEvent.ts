@@ -16,6 +16,8 @@ import { DefaultReactionAttributes } from './defaultReactionAttributes';
 export interface ConditionEvent { 
     correlationId?: string;
     sessionCode?: string;
+    externalSystem?: string;
+    externalSessionKey?: string;
     conditionId?: string;
     conditionType: string;
     attributes?: { [key: string]: any; };

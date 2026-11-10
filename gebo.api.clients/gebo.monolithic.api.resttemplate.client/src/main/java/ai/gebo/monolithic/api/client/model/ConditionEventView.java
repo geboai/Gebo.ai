@@ -24,7 +24,7 @@ import java.util.Date;
  * ConditionEventView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T15:16:14.129564900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T23:11:35.051684500+01:00[Europe/Rome]")
 
 public class ConditionEventView {
   @JsonProperty("correlationId")
@@ -32,6 +32,12 @@ public class ConditionEventView {
 
   @JsonProperty("sessionCode")
   private String sessionCode = null;
+
+  @JsonProperty("externalSystem")
+  private String externalSystem = null;
+
+  @JsonProperty("externalSessionKey")
+  private String externalSessionKey = null;
 
   @JsonProperty("conditionId")
   private String conditionId = null;
@@ -149,6 +155,42 @@ public class ConditionEventView {
 
   public void setSessionCode(String sessionCode) {
     this.sessionCode = sessionCode;
+  }
+
+  public ConditionEventView externalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+    return this;
+  }
+
+   /**
+   * Get externalSystem
+   * @return externalSystem
+  **/
+  @Schema(description = "")
+  public String getExternalSystem() {
+    return externalSystem;
+  }
+
+  public void setExternalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+  }
+
+  public ConditionEventView externalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
+    return this;
+  }
+
+   /**
+   * Get externalSessionKey
+   * @return externalSessionKey
+  **/
+  @Schema(description = "")
+  public String getExternalSessionKey() {
+    return externalSessionKey;
+  }
+
+  public void setExternalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
   }
 
   public ConditionEventView conditionId(String conditionId) {
@@ -433,6 +475,8 @@ public class ConditionEventView {
     ConditionEventView conditionEventView = (ConditionEventView) o;
     return Objects.equals(this.correlationId, conditionEventView.correlationId) &&
         Objects.equals(this.sessionCode, conditionEventView.sessionCode) &&
+        Objects.equals(this.externalSystem, conditionEventView.externalSystem) &&
+        Objects.equals(this.externalSessionKey, conditionEventView.externalSessionKey) &&
         Objects.equals(this.conditionId, conditionEventView.conditionId) &&
         Objects.equals(this.conditionType, conditionEventView.conditionType) &&
         Objects.equals(this.status, conditionEventView.status) &&
@@ -452,7 +496,7 @@ public class ConditionEventView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(correlationId, sessionCode, conditionId, conditionType, status, reason, blockCode, sourceSystem, source, sourceEventId, sourceTimestamp, receivedAt, lastReceivedAt, deliveries, acceptedAt, appliedAt, respawnedToBlockCode);
+    return Objects.hash(correlationId, sessionCode, externalSystem, externalSessionKey, conditionId, conditionType, status, reason, blockCode, sourceSystem, source, sourceEventId, sourceTimestamp, receivedAt, lastReceivedAt, deliveries, acceptedAt, appliedAt, respawnedToBlockCode);
   }
 
 
@@ -463,6 +507,8 @@ public class ConditionEventView {
     
     sb.append("    correlationId: ").append(toIndentedString(correlationId)).append("\n");
     sb.append("    sessionCode: ").append(toIndentedString(sessionCode)).append("\n");
+    sb.append("    externalSystem: ").append(toIndentedString(externalSystem)).append("\n");
+    sb.append("    externalSessionKey: ").append(toIndentedString(externalSessionKey)).append("\n");
     sb.append("    conditionId: ").append(toIndentedString(conditionId)).append("\n");
     sb.append("    conditionType: ").append(toIndentedString(conditionType)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");

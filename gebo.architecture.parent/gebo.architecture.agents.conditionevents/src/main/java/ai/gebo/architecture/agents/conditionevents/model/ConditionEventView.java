@@ -20,6 +20,9 @@ import lombok.NoArgsConstructor;
 public class ConditionEventView {
 	private String correlationId = null;
 	private String sessionCode = null;
+	/** The other system's own name of the session, when the event named it so. */
+	private String externalSystem = null;
+	private String externalSessionKey = null;
 	private String conditionId = null;
 	private String conditionType = null;
 	private ConditionEventStatus status = null;
@@ -44,6 +47,8 @@ public class ConditionEventView {
 		final ConditionEventView view = new ConditionEventView();
 		view.setCorrelationId(event.getCode());
 		view.setSessionCode(event.getSessionCode());
+		view.setExternalSystem(event.getExternalSystem());
+		view.setExternalSessionKey(event.getExternalSessionKey());
 		view.setConditionId(event.getConditionId());
 		view.setConditionType(event.getConditionType());
 		view.setStatus(event.getStatus());

@@ -36,6 +36,8 @@ export interface GeboChatRequest {
     userLanguage?: string;
     runOrigin?: string;
     attended?: boolean;
+    externalSystem?: string;
+    externalSessionKey?: string;
     networkOfAgentsSuspendedStateReaction?: NetworkOfAgentsSuspendedStateReaction;
     additionalContents?: Array<AdditionalContent>;
     tokensSize?: number;

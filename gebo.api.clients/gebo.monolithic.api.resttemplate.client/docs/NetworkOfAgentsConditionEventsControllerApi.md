@@ -9,7 +9,7 @@ Method | HTTP request | Description
 
 <a name="conditionEventStatus"></a>
 # **conditionEventStatus**
-> ConditionEventView conditionEventStatus(correlationId, sessionCode, conditionId)
+> ConditionEventView conditionEventStatus(correlationId, sessionCode, conditionId, externalSystem, externalSessionKey)
 
 
 
@@ -24,8 +24,10 @@ NetworkOfAgentsConditionEventsControllerApi apiInstance = new NetworkOfAgentsCon
 String correlationId = "correlationId_example"; // String | 
 String sessionCode = "sessionCode_example"; // String | 
 String conditionId = "conditionId_example"; // String | 
+String externalSystem = "externalSystem_example"; // String | 
+String externalSessionKey = "externalSessionKey_example"; // String | 
 try {
-    ConditionEventView result = apiInstance.conditionEventStatus(correlationId, sessionCode, conditionId);
+    ConditionEventView result = apiInstance.conditionEventStatus(correlationId, sessionCode, conditionId, externalSystem, externalSessionKey);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling NetworkOfAgentsConditionEventsControllerApi#conditionEventStatus");
@@ -40,6 +42,8 @@ Name | Type | Description  | Notes
  **correlationId** | **String**|  | [optional]
  **sessionCode** | **String**|  | [optional]
  **conditionId** | **String**|  | [optional]
+ **externalSystem** | **String**|  | [optional]
+ **externalSessionKey** | **String**|  | [optional]
 
 ### Return type
 

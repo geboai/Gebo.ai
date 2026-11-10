@@ -14,6 +14,8 @@ import { ConditionSource } from './conditionSource';
 export interface ConditionEventView { 
     correlationId?: string;
     sessionCode?: string;
+    externalSystem?: string;
+    externalSessionKey?: string;
     conditionId?: string;
     conditionType?: string;
     status?: ConditionEventView.StatusEnum;

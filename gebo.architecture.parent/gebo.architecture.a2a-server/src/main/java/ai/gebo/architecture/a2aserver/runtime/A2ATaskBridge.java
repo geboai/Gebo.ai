@@ -12,6 +12,8 @@ import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ExternalSessionRef;
 import lombok.AllArgsConstructor;
 
 /**
@@ -102,9 +104,16 @@ public class A2ATaskBridge {
 					+ " in the environment of chat profile:" + exported.getChatProfileCode() + " conversation:"
 					+ chatContextCode);
 		}
-		return chatEnvironmentRunner.run(exported.getNetworkCode(),
-				chatEnvironmentRunner.requestOf(inbound.getText(), exported.getChatProfileCode(), chatContextCode),
-				inbound, toolCallingOf(serverConfig, skillId), sink);
+		final GeboChatRequest request = chatEnvironmentRunner.requestOf(inbound.getText(),
+				exported.getChatProfileCode(), chatContextCode);
+		if (chatContextCode != null && !chatContextCode.isBlank()) {
+			// the caller's context id: a Gebo conversation code, or the caller's own key of its
+			// dialogue, by which the conversation is opened and found again (see ExternalSessionRef)
+			request.setExternalSystem(ExternalSessionRef.A2A_SYSTEM);
+			request.setExternalSessionKey(chatContextCode);
+		}
+		return chatEnvironmentRunner.run(exported.getNetworkCode(), request, inbound, toolCallingOf(serverConfig, skillId),
+				sink);
 	}
 
 	private A2AExportedAgent resolveExport(A2AServerConfig serverConfig, String skillId) {

@@ -41,6 +41,7 @@ import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.repository.GNetworkOfAgentsSuspensionRepository;
 import ai.gebo.architecture.multithreading.IGeboThreadManager;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ExternalSessionRef;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /**
@@ -71,6 +72,7 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 	static final String NOT_A_SESSION = "The session code names no session: ";
 	static final String NO_TYPE = "The event does not say the type of the condition it solves";
 	static final String NO_SUCH_SESSION = "No such session: ";
+	static final String NO_SUCH_EXTERNAL_SESSION = "No conversation was opened by that system with that key: ";
 	static final String ALREADY_USED = "The condition was already solved by an event the respawn used, or its block closed";
 	static final String OLDER = "Older than the value kept for the condition";
 	static final String SAME_EVENT = "The same event of the source was delivered before";
@@ -146,9 +148,20 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 		if (event == null) {
 			return ConditionEventAck.refused(NO_EVENT);
 		}
+		// the session named by another system's own key, when neither of Gebo's names is given
+		final ExternalSessionRef external = isBlank(event.getCorrelationId()) && isBlank(event.getSessionCode())
+				? ExternalSessionRef.of(event.getExternalSystem(), event.getExternalSessionKey())
+				: null;
+		String sessionCode = event.getSessionCode();
+		if (external != null) {
+			sessionCode = sessionCodeOf(external.getExternalSystem(), external.getExternalSessionKey()).orElse(null);
+			if (sessionCode == null) {
+				return ConditionEventAck.refused(NO_SUCH_EXTERNAL_SESSION + external.label());
+			}
+		}
 		final ConditionCorrelationId id;
 		try {
-			id = ConditionCorrelationId.of(event.getCorrelationId(), event.getSessionCode(), event.getConditionId());
+			id = ConditionCorrelationId.of(event.getCorrelationId(), sessionCode, event.getConditionId());
 		} catch (IllegalArgumentException notNamed) {
 			return ConditionEventAck.refused(notNamed.getMessage());
 		}
@@ -200,6 +213,10 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 			kept.setDateModified(now);
 			kept.setUserCreated(caller != null ? caller.getName() : null);
 		}
+		if (external != null) {
+			kept.setExternalSystem(external.getExternalSystem());
+			kept.setExternalSessionKey(external.getExternalSessionKey());
+		}
 		kept.setConditionType(event.getConditionType().strip());
 		kept.setAttributes(event.mergedAttributes());
 		kept.setText(event.getText());
@@ -232,6 +249,20 @@ public class ConditionEventsServiceImpl implements IConditionEventsService {
 			evaluateApart(id.sessionCode());
 		}
 		return delivered;
+	}
+
+	@Override
+	public Optional<String> sessionCodeOf(String externalSystem, String externalSessionKey) {
+		final ExternalSessionRef ref = ExternalSessionRef.of(externalSystem, externalSessionKey);
+		if (ref == null) {
+			return Optional.empty();
+		}
+		return sessions.findByExternalSystemAndExternalSessionKey(ref.getExternalSystem(), ref.getExternalSessionKey())
+				.map(GUserChatSession::getCode);
+	}
+
+	private static boolean isBlank(String value) {
+		return value == null || value.isBlank();
 	}
 
 	@Override

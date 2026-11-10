@@ -5,6 +5,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **correlationId** | **String** |  |  [optional]
 **sessionCode** | **String** |  |  [optional]
+**externalSystem** | **String** |  |  [optional]
+**externalSessionKey** | **String** |  |  [optional]
 **conditionId** | **String** |  |  [optional]
 **conditionType** | **String** |  | 
 **attributes** | **Map&lt;String, Object&gt;** |  |  [optional]

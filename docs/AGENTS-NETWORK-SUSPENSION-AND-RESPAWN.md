@@ -206,6 +206,30 @@ done again (an event already solving the condition is kept, a message republishe
 keeps its revision and its dismissals), the marks only spare the repeat, and the retraction
 is keyed on `unwatched` and `earliestExpiryAt`, which are written with the block.
 
+## Conversations named by another system's own key
+
+A caller with a dialogue of its own (an ERP order, a workflow instance, an A2A client with its own
+context id) names Gebo's conversation by it: `externalSystem` (the system as it names itself) and
+`externalSessionKey` (its key of the dialogue), together `ExternalSessionRef`; either part missing
+names nothing. The pair is kept on `GUserChatSession` (`externalSystem`, `externalSessionKey`,
+unique together over the conversations that carry a key, `ExternalSessionsIndexes`), written when
+the conversation is opened and never changed.
+
+A chat request (`GeboChatRequest.externalSystem` / `externalSessionKey`, from REST or from a run
+from outside) goes on in the conversation opened by that key, and opens it when there is none:
+`GChatSessionLifeCycleServiceImpl.ensureChatSessionExists` resolves the key before anything reads
+the conversation. Gebo's own code wins when it names a conversation; a code that names none, next
+to a key, is ignored. So the dialogue of the external side maps to one Gebo conversation however
+many times it comes back; a caller with no dialogue of its own keeps today's transient
+one-interaction conversation. The A2A server takes the caller's `contextId` as such a key (system
+`A2A`): a Gebo conversation code is found as before, a caller's own id opens the conversation at
+the first message and finds it again after; the answer returns the caller's own id.
+
+A condition event may name the session by the key too (`ConditionEvent.externalSystem` /
+`externalSessionKey`, read when neither the correlation id nor the session code is given; refused
+when no conversation was opened by it); the event and its status keep both names
+(`ConditionEventView`). The status query takes the same two parameters.
+
 ## The additional rules slot
 
 A prompt can forbid what a tool needs: a coordinator told that its only output is the

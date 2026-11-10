@@ -18,6 +18,8 @@ Name | Type | Description | Notes
 **contextCode** | **String** |  |  [optional]
 **transientRun** | **Boolean** |  |  [optional]
 **runOrigin** | **String** |  |  [optional]
+**externalSystem** | **String** |  |  [optional]
+**externalSessionKey** | **String** |  |  [optional]
 **chatProfileCode** | **String** |  |  [optional]
 **modelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
 **ragChat** | **Boolean** |  |  [optional]

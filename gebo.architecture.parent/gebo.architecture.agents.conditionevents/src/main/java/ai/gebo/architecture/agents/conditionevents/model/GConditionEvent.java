@@ -34,6 +34,9 @@ import lombok.EqualsAndHashCode;
 public class GConditionEvent extends GBaseObject {
 	private static final long serialVersionUID = 1L;
 	private String sessionCode = null;
+	/** The other system's own name of the session, when the event named it so. */
+	private String externalSystem = null;
+	private String externalSessionKey = null;
 	private String conditionId = null;
 	private String conditionType = null;
 	private LinkedHashMap<String, Object> attributes = null;
