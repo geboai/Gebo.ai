@@ -26,7 +26,7 @@ import java.util.List;
  * WaitingBlockView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T22:08:53.638937800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-10T16:38:55.503568700+01:00[Europe/Rome]")
 
 public class WaitingBlockView {
   @JsonProperty("blockCode")
@@ -55,6 +55,9 @@ public class WaitingBlockView {
 
   @JsonProperty("expired")
   private Boolean expired = null;
+
+  @JsonProperty("humanInTheLoopProcessTreatment")
+  private Boolean humanInTheLoopProcessTreatment = null;
 
   @JsonProperty("conditions")
   private List<WaitingConditionView> conditions = null;
@@ -221,6 +224,24 @@ public class WaitingBlockView {
     this.expired = expired;
   }
 
+  public WaitingBlockView humanInTheLoopProcessTreatment(Boolean humanInTheLoopProcessTreatment) {
+    this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
+    return this;
+  }
+
+   /**
+   * Get humanInTheLoopProcessTreatment
+   * @return humanInTheLoopProcessTreatment
+  **/
+  @Schema(description = "")
+  public Boolean isHumanInTheLoopProcessTreatment() {
+    return humanInTheLoopProcessTreatment;
+  }
+
+  public void setHumanInTheLoopProcessTreatment(Boolean humanInTheLoopProcessTreatment) {
+    this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
+  }
+
   public WaitingBlockView conditions(List<WaitingConditionView> conditions) {
     this.conditions = conditions;
     return this;
@@ -266,12 +287,13 @@ public class WaitingBlockView {
         Objects.equals(this.unwatched, waitingBlockView.unwatched) &&
         Objects.equals(this.earliestExpiryAt, waitingBlockView.earliestExpiryAt) &&
         Objects.equals(this.expired, waitingBlockView.expired) &&
+        Objects.equals(this.humanInTheLoopProcessTreatment, waitingBlockView.humanInTheLoopProcessTreatment) &&
         Objects.equals(this.conditions, waitingBlockView.conditions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(blockCode, conversationCode, owner, networkCode, suspendedAt, mandatory, unwatched, earliestExpiryAt, expired, conditions);
+    return Objects.hash(blockCode, conversationCode, owner, networkCode, suspendedAt, mandatory, unwatched, earliestExpiryAt, expired, humanInTheLoopProcessTreatment, conditions);
   }
 
 
@@ -289,6 +311,7 @@ public class WaitingBlockView {
     sb.append("    unwatched: ").append(toIndentedString(unwatched)).append("\n");
     sb.append("    earliestExpiryAt: ").append(toIndentedString(earliestExpiryAt)).append("\n");
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
+    sb.append("    humanInTheLoopProcessTreatment: ").append(toIndentedString(humanInTheLoopProcessTreatment)).append("\n");
     sb.append("    conditions: ").append(toIndentedString(conditions)).append("\n");
     sb.append("}");
     return sb.toString();

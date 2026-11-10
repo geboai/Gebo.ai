@@ -12,3 +12,4 @@ Name | Type | Description | Notes
 **expiresAt** | [**Date**](Date.md) |  |  [optional]
 **expiryUnblocks** | **Boolean** |  |  [optional]
 **expired** | **Boolean** |  |  [optional]
+**humanInTheLoopProcessTreatment** | **Boolean** |  |  [optional]

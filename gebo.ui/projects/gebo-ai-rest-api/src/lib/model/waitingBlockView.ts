@@ -21,5 +21,6 @@ export interface WaitingBlockView {
     unwatched?: boolean;
     earliestExpiryAt?: Date;
     expired?: boolean;
+    humanInTheLoopProcessTreatment?: boolean;
     conditions?: Array<WaitingConditionView>;
 }

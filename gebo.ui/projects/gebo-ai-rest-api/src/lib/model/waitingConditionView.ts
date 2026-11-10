@@ -20,4 +20,5 @@ export interface WaitingConditionView {
     expiresAt?: Date;
     expiryUnblocks?: boolean;
     expired?: boolean;
+    humanInTheLoopProcessTreatment?: boolean;
 }

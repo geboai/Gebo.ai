@@ -12,4 +12,5 @@ Name | Type | Description | Notes
 **unwatched** | **Boolean** |  |  [optional]
 **earliestExpiryAt** | [**Date**](Date.md) |  |  [optional]
 **expired** | **Boolean** |  |  [optional]
+**humanInTheLoopProcessTreatment** | **Boolean** |  |  [optional]
 **conditions** | [**List&lt;WaitingConditionView&gt;**](WaitingConditionView.md) |  |  [optional]
