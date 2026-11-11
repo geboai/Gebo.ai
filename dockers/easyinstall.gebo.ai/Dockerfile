@@ -140,8 +140,13 @@ RUN mkdir -p /opt/
 RUN mkdir -p /opt/java/
 WORKDIR /opt/java/
 # Multiplatform: Oracle JDK uses x64 for amd64 and aarch64 for arm64.
+# JDK 21 is no longer served under /java/21/latest/ (that path 404s now that 25 is
+# the current latest) - it lives only under /archive/ with a pinned version. curl -f
+# makes an HTTP error fail the build at download instead of silently saving the 404
+# HTML page (which then breaks tar with "not in gzip format").
+ARG JDK_VERSION=21.0.9
 RUN JDK_ARCH=$(case "$TARGETARCH" in amd64) echo "x64" ;; arm64) echo "aarch64" ;; *) echo "x64" ;; esac) \
-    && curl -L -o jdk-21.tar.gz "https://download.oracle.com/java/21/latest/jdk-21_linux-${JDK_ARCH}_bin.tar.gz" \
+    && curl -fL -o jdk-21.tar.gz "https://download.oracle.com/java/21/archive/jdk-${JDK_VERSION}_linux-${JDK_ARCH}_bin.tar.gz" \
     && tar -xzf jdk-21.tar.gz \
     && rm jdk-21.tar.gz \
     && ln -sfn "$(ls -d jdk-21.* | head -n1)" jdk-21
