@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.ConditionTarget;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -23,7 +24,7 @@ import java.util.Date;
  * WaitingConditionView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-10T16:38:55.503568700+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-10T19:55:37.443344900+01:00[Europe/Rome]")
 
 public class WaitingConditionView {
   @JsonProperty("conditionId")
@@ -55,6 +56,9 @@ public class WaitingConditionView {
 
   @JsonProperty("humanInTheLoopProcessTreatment")
   private Boolean humanInTheLoopProcessTreatment = null;
+
+  @JsonProperty("target")
+  private ConditionTarget target = null;
 
   public WaitingConditionView conditionId(String conditionId) {
     this.conditionId = conditionId;
@@ -236,6 +240,24 @@ public class WaitingConditionView {
     this.humanInTheLoopProcessTreatment = humanInTheLoopProcessTreatment;
   }
 
+  public WaitingConditionView target(ConditionTarget target) {
+    this.target = target;
+    return this;
+  }
+
+   /**
+   * Get target
+   * @return target
+  **/
+  @Schema(description = "")
+  public ConditionTarget getTarget() {
+    return target;
+  }
+
+  public void setTarget(ConditionTarget target) {
+    this.target = target;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -255,12 +277,13 @@ public class WaitingConditionView {
         Objects.equals(this.expiresAt, waitingConditionView.expiresAt) &&
         Objects.equals(this.expiryUnblocks, waitingConditionView.expiryUnblocks) &&
         Objects.equals(this.expired, waitingConditionView.expired) &&
-        Objects.equals(this.humanInTheLoopProcessTreatment, waitingConditionView.humanInTheLoopProcessTreatment);
+        Objects.equals(this.humanInTheLoopProcessTreatment, waitingConditionView.humanInTheLoopProcessTreatment) &&
+        Objects.equals(this.target, waitingConditionView.target);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(conditionId, conditionType, statement, mandatory, solved, solvedBy, expiresAt, expiryUnblocks, expired, humanInTheLoopProcessTreatment);
+    return Objects.hash(conditionId, conditionType, statement, mandatory, solved, solvedBy, expiresAt, expiryUnblocks, expired, humanInTheLoopProcessTreatment, target);
   }
 
 
@@ -279,6 +302,7 @@ public class WaitingConditionView {
     sb.append("    expiryUnblocks: ").append(toIndentedString(expiryUnblocks)).append("\n");
     sb.append("    expired: ").append(toIndentedString(expired)).append("\n");
     sb.append("    humanInTheLoopProcessTreatment: ").append(toIndentedString(humanInTheLoopProcessTreatment)).append("\n");
+    sb.append("    target: ").append(toIndentedString(target)).append("\n");
     sb.append("}");
     return sb.toString();
   }

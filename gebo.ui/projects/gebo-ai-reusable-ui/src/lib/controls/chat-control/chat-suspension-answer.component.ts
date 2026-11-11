@@ -58,6 +58,12 @@ const GONE_ON_WITHOUT_TEXT = "(no answer: go on without it)";
 export class GeboAIChatSuspensionAnswerComponent {
     private _state?: NetworkOfAgentsSuspendedState;
     @Input() disabled: boolean = false;
+    /**
+     * Whether the actions of the conversation are offered: skipping the block, going on
+     * without a condition, abandoning the run. Off where the form answers away from the
+     * conversation, in the agents processes area, which has actions of its own.
+     */
+    @Input() conversationActions: boolean = true;
     @Output() answer: EventEmitter<SuspensionAnswer> = new EventEmitter<SuspensionAnswer>();
     @Output() skip: EventEmitter<void> = new EventEmitter<void>();
     /** The user abandons the run of the block whose id is given. */
@@ -118,6 +124,20 @@ export class GeboAIChatSuspensionAnswerComponent {
 
     statementOf(condition: AgentSuspendedWaitingConditionDto): string {
         return condition.attributes?.["question"] ?? condition.attributes?.["statement"] ?? "";
+    }
+
+    /**
+     * Who or what the condition is waited from, when only they may answer it (or an
+     * administrator); undefined for the usual answerers.
+     */
+    waitedFromOf(condition: AgentSuspendedWaitingConditionDto): string | undefined {
+        const target = condition.target;
+        if (!target) {
+            return undefined;
+        }
+        const named: string[] = [...(target.users ?? []), ...(target.groups ?? []).map(g => "group " + g),
+            ...(target.systems ?? []).map(s => "system " + s)];
+        return named.length > 0 ? named.join(", ") : undefined;
     }
 
     explanationOf(condition: AgentSuspendedWaitingConditionDto): string | undefined {

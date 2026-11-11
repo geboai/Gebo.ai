@@ -26,11 +26,13 @@ import ai.gebo.architecture.agents.conditionevents.ConditionCorrelationId;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventAck;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionResponder;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventStatus;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionSources;
 import ai.gebo.architecture.agents.conditionevents.model.GConditionEvent;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsService;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsStore;
+import ai.gebo.architecture.agents.conditionevents.services.IConditionRespondersAuthorization;
 import ai.gebo.architecture.agents.conditionevents.services.impl.ConditionEventDispatcher.RequestClaim;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension;
 import ai.gebo.architecture.agents.model.GNetworkOfAgentsSuspension.WaitingCondition;
@@ -74,21 +76,30 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 	private final ConditionEventDispatcher dispatcher;
 	private final NetworkOfAgentsSuspensionTransport transport;
 	private final Executor conclusions;
+	/** Tells whether the user answering is an administrator; may be null, nobody is then. */
+	private final IConditionRespondersAuthorization responders;
 
 	@Autowired
 	public ConditionEventsReactionRecorder(IConditionEventsService events, IConditionEventsStore store,
 			ConditionEventDispatcher dispatcher, NetworkOfAgentsSuspensionTransport transport,
-			ObjectProvider<IGeboThreadManager> threads) {
-		this(events, store, dispatcher, transport, ConditionEventsServiceImpl.lazyExecutorOf(threads));
+			ObjectProvider<IGeboThreadManager> threads, IConditionRespondersAuthorization responders) {
+		this(events, store, dispatcher, transport, ConditionEventsServiceImpl.lazyExecutorOf(threads), responders);
 	}
 
 	ConditionEventsReactionRecorder(IConditionEventsService events, IConditionEventsStore store,
 			ConditionEventDispatcher dispatcher, NetworkOfAgentsSuspensionTransport transport, Executor conclusions) {
+		this(events, store, dispatcher, transport, conclusions, null);
+	}
+
+	ConditionEventsReactionRecorder(IConditionEventsService events, IConditionEventsStore store,
+			ConditionEventDispatcher dispatcher, NetworkOfAgentsSuspensionTransport transport, Executor conclusions,
+			IConditionRespondersAuthorization responders) {
 		this.events = events;
 		this.store = store;
 		this.dispatcher = dispatcher;
 		this.transport = transport;
 		this.conclusions = conclusions;
+		this.responders = responders;
 	}
 
 	@Override
@@ -96,7 +107,11 @@ public class ConditionEventsReactionRecorder implements IConditionReactionRecord
 			NetworkOfAgentsSuspendedStateReaction reaction, String username, String requestId) {
 		final List<Answer> answers = new ArrayList<Answer>();
 		final Set<String> answered = new HashSet<String>();
-		final ConditionEventCaller caller = ConditionEventCaller.of(username, Set.of(), ConditionEventCaller.CHAT);
+		// an administrator answers any condition, whoever it is waited from
+		final ConditionEventCaller caller = ConditionEventCaller.of(username,
+				responders != null && responders.isAdministrator(username) ? Set.of(ConditionResponder.ADMIN_AUTHORITY)
+						: Set.of(),
+				ConditionEventCaller.CHAT);
 		if (reaction != null && reaction.getReactions() != null) {
 			for (AgentSuspendedWaitingConditionReactionDto answer : reaction.getReactions()) {
 				final String conditionId = answer != null ? answer.getConditionId() : null;

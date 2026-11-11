@@ -30,6 +30,11 @@ public class ConditionSource implements Serializable {
 
 	/** The channel of the chat, where the conversation's own user answers. */
 	public static final String CHAT_CHANNEL = "CHAT";
+	/**
+	 * The channel of an answer given in the chat by someone other than its owner,
+	 * someone it is shared with: they are named, not told as the conversation's user.
+	 */
+	public static final String SHARED_CHAT_CHANNEL = "CHAT_SHARED";
 
 	public enum Kind {
 		/** A human being: a user of the platform or of another system. */

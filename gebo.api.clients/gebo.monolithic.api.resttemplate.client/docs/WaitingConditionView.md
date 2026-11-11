@@ -13,3 +13,4 @@ Name | Type | Description | Notes
 **expiryUnblocks** | **Boolean** |  |  [optional]
 **expired** | **Boolean** |  |  [optional]
 **humanInTheLoopProcessTreatment** | **Boolean** |  |  [optional]
+**target** | [**ConditionTarget**](ConditionTarget.md) |  |  [optional]

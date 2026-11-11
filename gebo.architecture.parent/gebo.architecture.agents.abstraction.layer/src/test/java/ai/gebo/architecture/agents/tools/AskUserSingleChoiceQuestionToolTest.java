@@ -28,6 +28,7 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.services.GWaitExternalConditionSink;
 import ai.gebo.architecture.agents.services.IGWaitExternalCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
 import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool.Param;
@@ -324,5 +325,43 @@ class AskUserSingleChoiceQuestionToolTest {
 		assertTrue(condition.isHumanInTheLoopProcessTreatment(), "handled as a process: the area shows it too");
 		assertEquals("human-in-the-loop", condition.getConditionType());
 		assertSame(ClarificationAnswer.class, condition.getType(), "answered as a question all the same");
+	}
+
+	@Test
+	void theStandardToolsWaitFromNobodyInParticular() {
+		tool.ask(param("Which year?", List.of("2023", "2024"), true), inACallWith(wait));
+
+		assertNull(wait.waited().get(0).getTarget(), "the owner, or anyone with access to the conversation, answers");
+	}
+
+	@Test
+	void aToolOfAnAdvancedProcessSaysWhoItsQuestionIsWaitedFrom() {
+		GAbstractAskUserChoiceQuestionTool approval = new GAbstractAskUserChoiceQuestionTool() {
+			@Override
+			protected String toolName() {
+				return "askTheManager";
+			}
+
+			@Override
+			protected String toolDescription() {
+				return "Ask the manager";
+			}
+
+			@Override
+			protected boolean multipleChoice() {
+				return false;
+			}
+
+			@Override
+			protected ConditionTarget conditionTarget(ToolContext toolContext) {
+				return ConditionTarget.of(List.of("manager"), List.of("finance"), null);
+			}
+		};
+
+		approval.ask(param("Approve the refund?", List.of("Approve", "Reject"), false), inACallWith(wait));
+
+		final ConditionTarget target = wait.waited().get(0).getTarget();
+		assertEquals(List.of("manager"), target.getUsers());
+		assertEquals(List.of("finance"), target.getGroups());
 	}
 }

@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { ConditionTarget } from './conditionTarget';
 
 export interface WaitingConditionView { 
     conditionId?: string;
@@ -21,4 +22,5 @@ export interface WaitingConditionView {
     expiryUnblocks?: boolean;
     expired?: boolean;
     humanInTheLoopProcessTreatment?: boolean;
+    target?: ConditionTarget;
 }

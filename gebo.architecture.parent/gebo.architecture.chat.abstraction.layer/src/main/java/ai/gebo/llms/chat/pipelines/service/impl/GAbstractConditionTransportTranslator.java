@@ -49,6 +49,7 @@ public abstract class GAbstractConditionTransportTranslator
 		dto.setConditionType(getId());
 		dto.setConditionId(condition.getSuspendedConditionId());
 		dto.setHumanInTheLoopProcessTreatment(condition.isHumanInTheLoopProcessTreatment());
+		dto.setTarget(condition.getTarget() != null ? condition.getTarget().copy() : null);
 		final LinkedHashMap<String, Object> attributes = new LinkedHashMap<String, Object>();
 		attributes.put(STATEMENT, condition.getWaitingConditionStatement());
 		attributes.put(EXPLANATION, condition.getWaitedConditionInstanceLLMExplanation());

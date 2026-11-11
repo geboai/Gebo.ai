@@ -8,11 +8,16 @@
  */
 package ai.gebo.architecture.agents.conditionevents.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.conditionevents.config.ConditionEventsConfig;
 import ai.gebo.architecture.agents.conditionevents.model.ConditionEventCaller;
+import ai.gebo.architecture.agents.conditionevents.model.ConditionResponder;
 import ai.gebo.architecture.agents.conditionevents.services.IConditionEventsAuthorization;
+import ai.gebo.architecture.agents.conditionevents.services.IConditionRespondersAuthorization;
+import ai.gebo.architecture.agents.model.ConditionSource;
+import ai.gebo.architecture.agents.model.ConditionTarget;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 
 /**
@@ -24,26 +29,45 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 @Service
 public class ConditionEventsAuthorizationImpl implements IConditionEventsAuthorization {
 	static final String NO_CALLER = "Nobody is behind the event";
-	static final String NOT_ALLOWED = "The caller may not deliver events to this session: it is neither its owner nor an application account";
+	static final String NOT_ALLOWED = "The caller may not deliver events to this session: it is not its owner, has no access to it,"
+			+ " and is neither an administrator nor an application account";
 	private final ConditionEventsConfig config;
+	private final IConditionRespondersAuthorization responders;
 
+	/** Groups not taken into account: the responders' check has no directory of the users. */
 	public ConditionEventsAuthorizationImpl(ConditionEventsConfig config) {
+		this(config, new ConditionRespondersAuthorizationImpl(null));
+	}
+
+	@Autowired
+	public ConditionEventsAuthorizationImpl(ConditionEventsConfig config, IConditionRespondersAuthorization responders) {
 		this.config = config;
+		this.responders = responders;
+	}
+
+	/**
+	 * The usual rule, for an event whose condition is not known, or has no
+	 * target: its owner, anyone with access to the conversation, an
+	 * administrator, a trusted channel, an application account.
+	 */
+	@Override
+	public String refusal(ConditionEventCaller caller, GUserChatSession session) {
+		return refusal(caller, session, null, null);
 	}
 
 	@Override
-	public String refusal(ConditionEventCaller caller, GUserChatSession session) {
+	public String refusal(ConditionEventCaller caller, GUserChatSession session, ConditionTarget target,
+			ConditionSource source) {
 		if (caller == null) {
 			return NO_CALLER;
 		}
-		if (caller.isTrustedChannel()) {
+		final String refusal = responders.refusal(target, session,
+				ConditionResponder.of(caller, source, config != null ? config.getApplicationAuthority() : null));
+		if (refusal == null) {
 			return null;
 		}
-		if (caller.getName() != null && session != null && caller.getName().equals(session.getUsername())) {
-			return null;
-		}
-		if (caller.holds(config.getApplicationAuthority())) {
-			return null;
+		if (target != null && target.isSet()) {
+			return refusal;
 		}
 		return caller.getName() == null ? NO_CALLER : NOT_ALLOWED;
 	}

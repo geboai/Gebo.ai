@@ -2,6 +2,8 @@ package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
 import java.util.LinkedHashMap;
 
+import ai.gebo.architecture.agents.model.ConditionTarget;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,6 +20,8 @@ public class AgentSuspendedWaitingConditionDto {
 	 * shown and answerable in the agents processes area as well as in the chat.
 	 */
 	private boolean humanInTheLoopProcessTreatment = false;
+	/** Who or what the condition is waited from: only they may answer it, or an administrator; null for the usual answerers. */
+	private ConditionTarget target = null;
 	@NotEmpty
 	@NotNull
 	private LinkedHashMap<String, Object> attributes = null;

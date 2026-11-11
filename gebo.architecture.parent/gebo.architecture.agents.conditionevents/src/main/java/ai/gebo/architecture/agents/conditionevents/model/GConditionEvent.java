@@ -56,6 +56,10 @@ public class GConditionEvent extends GBaseObject {
 	private Date sourceTimestamp = null;
 	/** Who delivered it and through which channel. */
 	private String actor = null;
+	/** Whether the account that delivered it is an administrator, as the later check of who may answer reads it. */
+	private boolean deliveredByAdministrator = false;
+	/** Whether it was delivered by an account delivering for others: a trusted channel, an application account. */
+	private boolean deliveredForOthers = false;
 	private String channel = null;
 	private ConditionEventStatus status = ConditionEventStatus.PENDING;
 	/** Why it is refused, stale, expired or failed; or the last failure of the respawn it waits for. */

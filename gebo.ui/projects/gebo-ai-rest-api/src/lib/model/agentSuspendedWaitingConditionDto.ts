@@ -10,12 +10,14 @@
  * Do not edit the class manually.
  */
 import { ClarificationConditionAttributes } from './clarificationConditionAttributes';
+import { ConditionTarget } from './conditionTarget';
 import { DefaultConditionAttributes } from './defaultConditionAttributes';
 
 export interface AgentSuspendedWaitingConditionDto { 
     conditionType: string;
     conditionId: string;
     humanInTheLoopProcessTreatment?: boolean;
+    target?: ConditionTarget;
     attributes: { [key: string]: any; };
     clarificationAttributes?: ClarificationConditionAttributes;
     defaultAttributes?: DefaultConditionAttributes;
