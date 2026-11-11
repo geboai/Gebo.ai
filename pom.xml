@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.1.2</version>
+		<version>4.2.0-RC2</version>
 	</parent>
 	<properties>
 		<java.version>21</java.version>
@@ -20,7 +20,7 @@
 		<org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
 		<apache-poi.version>5.5.1</apache-poi.version>
-		<spring.ai.version>2.0.2</spring.ai.version>
+		<spring.ai.version>2.1.0-RC2</spring.ai.version>
 		<springdoc.version>3.0.3</springdoc.version>
 		<!-- Official Agent2Agent (A2A) Java SDK (org.a2aproject.sdk, the current group;
 		     the old io.github.a2asdk group is frozen at 0.3.x). gebo.architecture.a2a-*
@@ -45,33 +45,11 @@
 		     11.0.27 managed), netty (4.2.18.Final pinned, 4.2.19.Final managed) and
 		     jackson (3.1.7 / 2.21.7, now managed) pins, which are gone. The pins
 		     below are the exceptions, each with the condition under which it must go.
-		     MongoDB Java driver: Boot 4.1.2 still manages 5.8.1, affected by
-		     CVE-2026-18710 (a credential could be written to log output, fixed in
-		     5.9.2) and by CVE-2026-88032 / CVE-2026-88033 (use-after-free in reactive
-		     client-side encryption, GridFS query injection), fixed only from 5.11.1 -
-		     there is no backport to an older minor.
-		     DROP this property as soon as the parent manages 5.11.1 or later. -->
-		<mongodb.version>5.11.1</mongodb.version>
-		<!-- Hazelcast: Boot 4.1.2 manages 5.5.0, affected by CVE-2026-107726
-		     (critical, arbitrary member memory access by a low-privileged client) and
-		     CVE-2026-107725 (authorization bypass in the IMap predicates API), both
-		     fixed only in 5.7.0 (GA, same 5.x API, still Apache 2.0).
-		     DROP this property as soon as the parent manages 5.7.0 or later. -->
-		<hazelcast.version>5.7.0</hazelcast.version>
-		<!-- OpenTelemetry: Boot 4.1.2 manages 1.62.0, affected by CVE-2026-118259
-		     (quadratic CPU in W3C tracestate parsing, reachable from any inbound
-		     request header), fixed in 1.67.0. The API is the stable 1.x line, so
-		     the jump stays compatible with the micrometer tracing bridge.
-		     DROP this property as soon as the parent manages 1.67.0 or later. -->
-		<opentelemetry.version>1.67.0</opentelemetry.version>
-		<!-- RabbitMQ Java client (microservices, via spring-boot-starter-amqp): Boot
-		     4.1.2 manages 5.30.0, affected by CVE-2026-69219, -69220, -63337, -75516
-		     (high) and six moderate/low advisories published 2026-08..10; the last
-		     of them (CVE-2026-106121) is fixed after 5.36.0, and 5.37.0 is the first
-		     release past it. Same 5.x line spring-amqp is built against.
-		     DROP this property as soon as the parent manages 5.37.0 or later. -->
-		<rabbit-amqp-client.version>5.37.0</rabbit-amqp-client.version>
-		<!-- Derby: Boot 4.1.2 manages 10.16.1.1, affected by CVE-2022-46337
+		     Boot 4.2.0-RC2 made the former mongodb (5.11.1 pinned, 5.13.0 managed),
+		     hazelcast (5.7.0, now managed), opentelemetry (1.67.0, now managed) and
+		     rabbit-amqp-client (5.37.0: Boot 4.2 manages it as rabbitmq-client.version,
+		     so the old property no longer pinned anything) pins obsolete; all are gone.
+		     Derby: Boot 4.2.0-RC2 still manages 10.16.1.1, affected by CVE-2022-46337
 		     (critical, LDAP injection in the authenticator). The 10.16.1.2 fix was
 		     never published to Maven Central; 10.17.1.0 carries it, needs Java 21
 		     (the build already targets it) and is still Derby's latest release. Kept

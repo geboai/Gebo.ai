@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<spring-cloud.version>2025.1.2</spring-cloud.version>
+		<spring-cloud.version>2026.0.0-RC2</spring-cloud.version>
 		<jib.version>3.4.4</jib.version>
 		<!-- Base image for the per-microservice Jib images (docker profile). The
 		     docker:// prefix makes Jib read it from the LOCAL Docker daemon (that is
