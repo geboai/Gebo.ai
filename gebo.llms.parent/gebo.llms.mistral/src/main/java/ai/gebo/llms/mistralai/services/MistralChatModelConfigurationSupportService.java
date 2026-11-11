@@ -32,7 +32,6 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportSe
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
-import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
@@ -247,12 +246,6 @@ public class MistralChatModelConfigurationSupportService
 			return true;
 		}
 
-		/** Mistral's reasoning, as its chunks give it ({@link #REASONING}). */
-		@Override
-		protected IGReasoningExtractor reasoningExtractor() {
-			return REASONING;
-		}
-
 		@Override
 		protected IGConfigurableChatModel cloneMeWithInjection() {
 
@@ -260,15 +253,6 @@ public class MistralChatModelConfigurationSupportService
 					observationRegistry, modelsLibrary);
 		}
 	};
-
-	/**
-	 * Mistral's reasoning (Magistral's thinking): Spring AI's MistralAiChatModel keeps it in
-	 * the {@value MistralAiChatModel#THINKING_CONTENT_METADATA} metadata, the piece each
-	 * streamed chunk adds (the whole of it on a blocking call's answer), the text holding
-	 * the answer only.
-	 */
-	static final IGReasoningExtractor REASONING = IGReasoningExtractor
-			.metadataPieces(MistralAiChatModel.THINKING_CONTENT_METADATA);
 
 	/**
 	 * Returns the type of this chat model service.

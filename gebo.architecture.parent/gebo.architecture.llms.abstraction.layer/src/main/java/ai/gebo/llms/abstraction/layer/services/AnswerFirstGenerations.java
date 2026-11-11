@@ -31,10 +31,12 @@ import reactor.core.publisher.Flux;
  * Spring AI reads the answer of a call from the first generation:
  * {@code ChatResponse.getResult()} is {@code generations.get(0)}, and the ChatClient's
  * {@code content()} and {@code entity()} as well as {@code ChatModel.call(String)} read
- * it. Some providers return the model's reasoning as generations of their own before
- * the answer — Spring AI's Anthropic model adds one generation per thinking block first
- * and the answer last — so those calls read the reasoning (empty when the provider
- * omits it) instead of the answer. Which generations are reasoning is the provider's to
+ * it. A provider may return the model's reasoning as generations of their own before
+ * the answer — Spring AI 2.0's Anthropic model added one generation per thinking block
+ * first and the answer last; since 2.1 every model of Spring AI's gives one generation
+ * with the reasoning as parts of its message, and no provider needs this — so those
+ * calls read the reasoning (empty when the provider omits it) instead of the answer.
+ * Which generations are reasoning is the provider's to
  * say ({@link GAbstractConfigurableChatModel#isReasoningGeneration(Generation)}); here
  * the last generation that is not reasoning is moved to the first place, the others
  * keeping their order. Nothing is dropped or changed.

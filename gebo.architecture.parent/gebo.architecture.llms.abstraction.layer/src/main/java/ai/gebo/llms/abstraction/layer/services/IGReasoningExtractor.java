@@ -9,16 +9,19 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.ai.chat.client.ChatClientRequest;
+import org.springframework.ai.chat.messages.part.ReasoningPart;
 import org.springframework.ai.chat.model.Generation;
 
 /**
- * Reads the reasoning a provider's Spring AI model gives with its answer: each provider
- * keeps it its own way (a metadata of the answer, a field of its own message class, a
- * generation of its own, a signal with no text). A provider handler gives its reading
- * ({@link GAbstractConfigurableChatModel#reasoningExtractor()}); the
+ * Reads the reasoning a provider's Spring AI model gives with its answer. Since Spring AI
+ * 2.1 every provider's model keeps it the same way, as the {@link ReasoningPart}s of the
+ * assistant message ({@link #PARTS}, the reading by default); a provider keeping it its
+ * own way (a metadata of the answer, a signal with no text) gives its reading
+ * ({@link GAbstractConfigurableChatModel#reasoningExtractor()}). The
  * {@link ThinkingNormalizationAdvisor} reads every generation of a model round with it.
  */
 @FunctionalInterface
@@ -72,10 +75,18 @@ public interface IGReasoningExtractor {
 	/** No reasoning apart from the answer: the generation's text is the answer. */
 	IGReasoningExtractor NONE = () -> Reasoning::answerOnly;
 
+	/** The reasoning parts of a generation's message, none when it has none. */
+	static List<ReasoningPart> reasoningPartsOf(Generation generation) {
+		final List<ReasoningPart> parts = generation != null && generation.getOutput() != null
+				? generation.getOutput().getReasoning()
+				: null;
+		return parts != null ? parts : List.of();
+	}
+
 	/**
-	 * The metadata Spring AI's OpenAI model keeps the reasoning under (the reasoning_content
-	 * or reasoning field of the OpenAI compatible APIs), all of it so far on each streamed
-	 * chunk of a round.
+	 * The metadata Spring AI's OpenAI model kept the reasoning under before the parts (the
+	 * reasoning_content or reasoning field of the OpenAI compatible APIs), all of it so far
+	 * on each streamed chunk of a round; a model of its own may still keep it there.
 	 */
 	String REASONING_CONTENT_METADATA = "reasoningContent";
 
@@ -93,8 +104,36 @@ public interface IGReasoningExtractor {
 		};
 	}
 
-	/** The reasoning of the OpenAI compatible APIs, as Spring AI's OpenAI model keeps it. */
+	/**
+	 * The reasoning of the OpenAI compatible APIs in the {@link #REASONING_CONTENT_METADATA}
+	 * metadata: the legacy reading, which {@link #PARTS} falls back to.
+	 */
 	IGReasoningExtractor OPENAI = metadata(REASONING_CONTENT_METADATA);
+
+	/**
+	 * The reasoning as Spring AI (2.1 and later) keeps it, whichever the provider: the
+	 * {@link ReasoningPart}s of the assistant message, each streamed chunk's parts the
+	 * pieces it adds (a part with no text, a signature or a redacted block, says the model
+	 * is reasoning), the whole of it on a blocking call's answer. A message with no
+	 * reasoning part is read the legacy way ({@link #OPENAI}): the reasoning_content
+	 * metadata a model written before the parts still keeps, all of it so far on each chunk.
+	 */
+	IGReasoningExtractor PARTS = () -> {
+		final Round legacy = OPENAI.round();
+		return generation -> {
+			final List<ReasoningPart> parts = reasoningPartsOf(generation);
+			if (parts.isEmpty()) {
+				return legacy.of(generation);
+			}
+			final StringBuilder thinking = new StringBuilder();
+			for (ReasoningPart part : parts) {
+				if (part.text() != null) {
+					thinking.append(part.text());
+				}
+			}
+			return new Reasoning(thinking.toString(), textOf(generation), true);
+		};
+	};
 
 	/**
 	 * The reasoning each chunk gives as the piece it adds, as the function reads it (null

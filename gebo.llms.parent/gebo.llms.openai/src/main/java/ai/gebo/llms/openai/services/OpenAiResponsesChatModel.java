@@ -98,7 +98,11 @@ import reactor.core.scheduler.Schedulers;
 public class OpenAiResponsesChatModel implements ChatModel {
 	/** The metadata the output items of a round travel back in, as json. */
 	public static final String OUTPUT_ITEMS_METADATA = "openai.responses.output_items";
-	/** Where Gebo reads the reasoning of the OpenAI models (IGReasoningExtractor.OPENAI). */
+	/**
+	 * Where Gebo reads the reasoning of a message with no reasoning part
+	 * (IGReasoningExtractor.OPENAI, the legacy reading IGReasoningExtractor.PARTS falls back
+	 * to).
+	 */
 	static final String REASONING_CONTENT_METADATA = "reasoningContent";
 	/** The first version of the models on this api. */
 	static final double FIRST_RESPONSES_VERSION = 6.0;
