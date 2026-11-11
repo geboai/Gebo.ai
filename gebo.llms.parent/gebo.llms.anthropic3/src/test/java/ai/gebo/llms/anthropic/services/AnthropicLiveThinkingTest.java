@@ -10,7 +10,6 @@
 package ai.gebo.llms.anthropic.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
-import org.springframework.ai.anthropic.http.okhttp.AnthropicHttpClientBuilderCustomizer;
 import org.springframework.ai.chat.client.ChatClient;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -33,14 +31,15 @@ import com.sun.net.httpserver.HttpServer;
 
 import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
 import ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk;
-import ai.gebo.llms.abstraction.layer.services.AnswerFirstGenerations;
+import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 import ai.gebo.llms.abstraction.layer.services.ThinkingNormalizationAdvisor;
-import ai.gebo.llms.anthropic.http.AnthropicThinkingTap;
 
 /**
  * Claude's thinking reaches the user before the answer, through Spring AI's
- * AnthropicChatModel and the Anthropic SDK over a local server streaming a recorded
- * Messages API stream: Spring AI alone gives its text only after the answer.
+ * AnthropicChatModel (2.1) and the Anthropic SDK over a local server streaming a recorded
+ * Messages API stream: each thinking_delta a reasoning part of its chunk, read by the
+ * reading of every provider. A call's thinking is the reasoning parts of its one
+ * generation, apart from the answer.
  */
 class AnthropicLiveThinkingTest {
 
@@ -88,7 +87,7 @@ class AnthropicLiveThinkingTest {
 			+ "\"usage\":{\"input_tokens\":10,\"output_tokens\":20}}";
 
 	private HttpServer server;
-	private final List<String> tapHeadersReceived = new CopyOnWriteArrayList<>();
+	private final List<String> authorizations = new CopyOnWriteArrayList<>();
 
 	@BeforeEach
 	void serve() throws IOException {
@@ -103,9 +102,9 @@ class AnthropicLiveThinkingTest {
 	}
 
 	private void answer(HttpExchange exchange) throws IOException {
-		final String tap = exchange.getRequestHeaders().getFirst(AnthropicThinkingTap.HEADER);
-		if (tap != null) {
-			tapHeadersReceived.add(tap);
+		final String authorization = exchange.getRequestHeaders().getFirst("Authorization");
+		if (authorization != null) {
+			authorizations.add(authorization);
 		}
 		final String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 		final boolean stream = body.contains("\"stream\":true");
@@ -124,17 +123,15 @@ class AnthropicLiveThinkingTest {
 		}
 	}
 
-	private ChatClient client(AnthropicHttpClientBuilderCustomizer customizer) {
+	private ChatClient client() {
 		final AnthropicChatModel model = AnthropicChatModel.builder()
 				.options(AnthropicChatOptions.builder().apiKey("test-key")
 						.baseUrl("http://127.0.0.1:" + server.getAddress().getPort()).model("claude-test").maxTokens(1000)
 						.build())
-				.httpClientBuilderCustomizer(customizer).build();
-		// the advisors GAbstractConfigurableChatModel gives a Claude model's ChatClient
+				.build();
+		// the advisor GAbstractConfigurableChatModel gives a Claude model's ChatClient
 		return ChatClient.builder(model)
-				.defaultAdvisors(new AnswerFirstGenerations.Advisor(AnthropicChatModelConfigurationSupportService::isThinkingBlock),
-						new ThinkingNormalizationAdvisor(new AnthropicReasoningExtractor(), () -> false,
-								AnthropicChatModelConfigurationSupportService::isThinkingBlock))
+				.defaultAdvisors(new ThinkingNormalizationAdvisor(IGReasoningExtractor.PARTS, () -> false, g -> false))
 				.build();
 	}
 
@@ -156,33 +153,22 @@ class AnthropicLiveThinkingTest {
 	}
 
 	@Test
-	void theThinkingStreamsBeforeTheAnswerOnceAndTheMarkStaysHome() {
-		final List<GChatAnswerChunk> chunks = client(b -> b.interceptor(AnthropicThinkingTap.INSTANCE)).prompt("2+2?")
-				.stream().chatResponse().map(GChatAnswerChunk::of).collectList().block();
+	void theThinkingStreamsBeforeTheAnswerOnce() {
+		final List<GChatAnswerChunk> chunks = client().prompt("2+2?").stream().chatResponse()
+				.map(GChatAnswerChunk::of).collectList().block();
 
 		assertEquals("The user asks for a sum: 2+2 è 4.", thinkingBeforeTheAnswer(chunks),
-				"all the thinking, read off the stream, before the first piece of answer");
+				"all the thinking, as its deltas stream, before the first piece of answer");
 		assertEquals("The user asks for a sum: 2+2 è 4.", all(chunks, true), "once: not again at the turn's end");
 		assertEquals("The answer is 4.", all(chunks, false));
 		assertTrue(chunks.get(0).thinkingActive());
-		assertTrue(tapHeadersReceived.isEmpty(), "the request's mark is taken off before it is sent");
-	}
-
-	@Test
-	void withoutTheTapTheThinkingComesOnceAtTheTurnsEnd() {
-		final List<GChatAnswerChunk> chunks = client(b -> {
-		}).prompt("2+2?").stream().chatResponse().map(GChatAnswerChunk::of).collectList().block();
-
-		assertEquals("", thinkingBeforeTheAnswer(chunks), "Spring AI keeps it until the turn ends");
-		assertEquals("The user asks for a sum: 2+2 è 4.", all(chunks, true));
-		assertEquals("The answer is 4.", all(chunks, false));
-		assertFalse(tapHeadersReceived.isEmpty(), "with no tap the mark reaches the server: it is harmless");
+		assertEquals(List.of("Bearer test-key"), authorizations,
+				"Spring AI 2.1 sends the api key as a bearer token (no X-Api-Key any more)");
 	}
 
 	@Test
 	void aCallAnswersWithItsAnswerItsThinkingApart() {
-		final GChatAnswer answer = GChatAnswer.of(
-				client(b -> b.interceptor(AnthropicThinkingTap.INSTANCE)).prompt("2+2?").call().chatResponse());
+		final GChatAnswer answer = GChatAnswer.of(client().prompt("2+2?").call().chatResponse());
 
 		assertEquals("The answer is 4.", answer.answer());
 		assertEquals("The user asks for a sum.", answer.thinking(), "once, from its thinking block");

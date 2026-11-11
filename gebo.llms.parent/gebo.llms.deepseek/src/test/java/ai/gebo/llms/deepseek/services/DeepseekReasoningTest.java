@@ -13,28 +13,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.part.ReasoningPart;
+import org.springframework.ai.chat.messages.part.TextPart;
 import org.springframework.ai.chat.model.Generation;
-import org.springframework.ai.deepseek.DeepSeekAssistantMessage;
 
 import ai.gebo.llms.abstraction.layer.services.IGReasoningExtractor;
 
 /**
- * DeepSeek's reasoning as Spring AI's DeepSeekChatModel (2.0.1) streams it: the piece
- * each chunk adds, in the reasoning field of its DeepSeekAssistantMessage.
+ * DeepSeek's reasoning as Spring AI's DeepSeekChatModel (2.1) gives it: the reasoning_content
+ * of each streamed chunk as a reasoning part of its message, the piece the chunk adds, the
+ * content as its text part. The reading by default of every provider reads it.
  */
 class DeepseekReasoningTest {
 
 	private static Generation chunk(String reasoning, String text) {
-		return new Generation(new DeepSeekAssistantMessage.Builder().content(text).reasoningContent(reasoning).build());
+		final AssistantMessage.Builder<?> builder = AssistantMessage.builder();
+		if (reasoning != null) {
+			builder.part(ReasoningPart.of(reasoning));
+		}
+		if (text != null) {
+			builder.part(TextPart.of(text));
+		}
+		return new Generation(builder.build());
 	}
 
 	@Test
 	void eachChunksPieceOfReasoningApartFromItsText() {
-		final IGReasoningExtractor.Round round = DeepseekChatModelConfigurationSupportService.REASONING.round();
-
-		assertEquals(new IGReasoningExtractor.Reasoning("We need ", "", false), round.of(chunk("We need ", "")));
-		assertEquals(new IGReasoningExtractor.Reasoning("We need the sum.", "", false),
-				round.of(chunk("We need the sum.", "")), "a piece, even one starting as the reasoning so far");
+		final IGReasoningExtractor.Round round = IGReasoningExtractor.PARTS.round();
+		assertEquals(new IGReasoningExtractor.Reasoning("We need ", "", true), round.of(chunk("We need ", null)));
+		assertEquals(new IGReasoningExtractor.Reasoning("We need the sum.", "", true),
+				round.of(chunk("We need the sum.", null)), "a piece, even one starting as the reasoning so far");
 		assertEquals(new IGReasoningExtractor.Reasoning("", "It is 4.", false), round.of(chunk(null, "It is 4.")));
 		assertEquals(new IGReasoningExtractor.Reasoning("", "plain", false),
 				round.of(new Generation(new AssistantMessage("plain"))));

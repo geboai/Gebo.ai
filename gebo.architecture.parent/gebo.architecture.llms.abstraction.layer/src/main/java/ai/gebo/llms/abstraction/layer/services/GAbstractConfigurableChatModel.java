@@ -737,11 +737,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	/**
 	 * How the provider's Spring AI model gives the reasoning apart from the answer. The
-	 * OpenAI reading by default (the reasoning_content of the OpenAI compatible APIs, as
-	 * Spring AI's OpenAI model keeps it): a provider keeping it otherwise gives its own.
+	 * reasoning parts of the assistant message by default, as every Spring AI model keeps
+	 * it since 2.1 (a model keeping it in the reasoning_content metadata, the way before
+	 * the parts, is read there): a provider keeping it otherwise gives its own.
 	 */
 	protected IGReasoningExtractor reasoningExtractor() {
-		return IGReasoningExtractor.OPENAI;
+		return IGReasoningExtractor.PARTS;
 	}
 
 	/** The advisor giving every model round's answer and reasoning the same shape. */
