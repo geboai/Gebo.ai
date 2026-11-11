@@ -22,7 +22,7 @@
 		A service depends on this OR on gebo.knowledgebase.hierarchy.local, never both.
 	-->
 	<properties>
-		<spring-cloud.version>2025.1.2</spring-cloud.version>
+		<spring-cloud.version>2026.0.0-RC2</spring-cloud.version>
 	</properties>
 
 	<dependencyManagement>
