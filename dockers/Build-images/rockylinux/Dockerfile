@@ -18,10 +18,19 @@ RUN dnf -y install systemd-rpm-macros
 #RUN dnf -y install java-21-openjdk java-21-openjdk-devel
 #RUN dnf -y install maven
 RUN dnf -y install rpm-build
-RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.rpm https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.rpm
+# JDK 21 is no longer served under /java/21/latest/ (that path 404s now that 25
+# is the current latest) - it lives only under /archive/ with a pinned version.
+# Keep JDK_VERSION in sync with dockers/gebo.ai.platform + dockers/easyinstall.gebo.ai.
+# curl -f fails the build on an HTTP error instead of saving the 404 HTML page as
+# the .rpm (which then breaks rpm -i).
+ARG JDK_VERSION=21.0.9
+RUN curl -fL -o /opt/java/jdk-21_linux-x64_bin.rpm https://download.oracle.com/java/21/archive/jdk-${JDK_VERSION}_linux-x64_bin.rpm
 RUN rpm -i /opt/java/jdk-21_linux-x64_bin.rpm
 RUN rm -rf /opt/java/jdk-21_linux-x64_bin.rpm
-RUN curl -L -o /opt/java/apache-maven-3.9.11-bin.tar.gz https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
+# dlcdn.apache.org only mirrors the CURRENT Maven (3.9.16 now), so 3.9.11 404s
+# there - same silent-404-then-tar-failure trap as the JDK above. archive.apache.org
+# keeps every released version permanently; curl -f fails loudly on an HTTP error.
+RUN curl -fL -o /opt/java/apache-maven-3.9.11-bin.tar.gz https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
 WORKDIR /opt/java/
 RUN tar zxvfs apache-maven-3.9.11-bin.tar.gz 
 RUN rm -rf  apache-maven-3.9.11-bin.tar.gz 
