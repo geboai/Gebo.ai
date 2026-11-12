@@ -464,7 +464,7 @@ Counted from the compile logs of the branch (occurrences, not call sites):
 | `ChatClient...toolCallbacks(...)` | tests in `gebo.architecture.llms.abstraction.layer`, `gebo.llms.tests.services` | 18 | `.tools(...)` / `ToolCallbackProvider` on the advisor |
 | `ChatModel.getDefaultOptions()` | `gebo.architecture.llms.abstraction.layer` (`AnswerFirstGenerations.Model`, the usage wrappers) | 8 | `getOptions()`; drop the override when the interface loses it |
 | `new Integer(int)`, `new Long(long)` | `gebo.llms.generic-openai-compatible`, `gebo.architecture.graphrag.persistence`, `gebo.architecture.compute.workflow` | 8 | `Integer.valueOf` |
-| `SpringOpaqueTokenIntrospector` constructor | `gebo.architecture.security` (`SingleOauth2ConfigOpaqueTokenAuthenticationManager`) | 1 | the builder / `withIntrospectionUri` |
+| `SpringOpaqueTokenIntrospector(uri, clientId, secret)` and the reactive one | `gebo.architecture.security` (`SingleOauth2ConfigOpaqueTokenAuthenticationManager`, `GReactiveHttpRequestAuthenticationManagerResolverImpl`), `gebo.architecture.security.controllers` (`SecurityHeaderDataCompletionController`) | 3 | see section 8b |
 
 Steps, in this order (lowest risk first):
 1. `JsonParser` → `JacksonUtils`/`JsonHelper`: mechanical, covered by the existing
@@ -489,6 +489,52 @@ Steps, in this order (lowest risk first):
    Framework removes the class). Tests: the integration tests module exercises the
    wrapper against the live services; `OllamaModelsLookupService` and the Jira/Google
    handlers have fakes to add for the error mapping (`toMessage`).
+
+## 8b. Spring Security 7.2 (Boot 4.2.0-RC2 manages 7.2.0-RC1)
+
+What the upgrade changed for the security modules (`gebo.architecture.security`,
+`.security.controllers`, `.security.apikey`, `.security.sessions`,
+`gebo.security.directory.mongo`, `gebo.webconfig`): the whole configuration DSL
+(`GeboAISecurityConfig`, `GeboSecurityConfig`, the JWT decoder caches, the dynamic
+client registration repositories, the OAuth2 login policy) compiles on 7.2.0-RC1
+without a warning; the only deprecated-for-removal API left is the three-argument
+constructor of the opaque token introspectors, in three places:
+
+| Site | Today | Replacement |
+|---|---|---|
+| `SingleOauth2ConfigOpaqueTokenAuthenticationManager:39` (servlet, the resource-server manager of one SSO configuration) | `new SpringOpaqueTokenIntrospector(introspectionUri, clientId, secret)` | `RestClientOpaqueTokenIntrospector.withIntrospectionUri(uri).clientId(..).clientSecret(..).build()`: `SpringOpaqueTokenIntrospector` rests on `RestTemplate`, deprecated for removal by Framework 7.1, so its builder (`SpringOpaqueTokenIntrospector.withIntrospectionUri`) is only a stop-gap |
+| `SecurityHeaderDataCompletionController:175` (introspects a raw token to say which SSO configuration it belongs to) | same constructor | same; build one introspector per configuration once and cache it next to `JwtDecoderCache`, instead of one per request |
+| `GReactiveHttpRequestAuthenticationManagerResolverImpl:155` (the reactive manager used by the microservices) | `new SpringReactiveOpaqueTokenIntrospector(uri, clientId, secret)` | `SpringReactiveOpaqueTokenIntrospector.withIntrospectionUri(uri).clientId(..).clientSecret(..).build()` (WebClient based, not deprecated) |
+
+Behaviour change to verify (7.2.0-RC1, gh-19850): both introspectors now send
+`Content-Type: application/x-www-form-urlencoded` on the introspection request, as RFC
+7662 requires. The providers Gebo introspects against are the `oauth2_generic` ones
+with an `introspectionUri` (`ai.gebo.security.oauth2configs[].providerConfig`,
+KeyCloak and the generic OIDC servers): a provider that accepted the previous request
+keeps working, one that rejected a wrong content type starts working. Nothing to
+change, one live login per configured provider to confirm.
+
+Not affected: no `SecurityJackson2Modules` (the Jackson 3 migration of 7.0 does not
+apply), no one-time-token login (7.2 made its account status checks opt-in), no
+Content-Security-Policy configured (7.2 adds nonce-based CSP; a hardening item of its
+own, see `GEBO-HARDENING-MANUAL.md`, not an upgrade item).
+
+Tests to write, in `gebo.architecture.security/src/test/.../authmanagers`:
+- `OpaqueTokenIntrospectionTest`: a local `HttpServer` introspection endpoint
+  recording the request; assert the `Content-Type`, the basic auth of the client, the
+  `token=` form body, and the principal mapped from `{"active":true,"sub":..}` through
+  the `GReactiveOpaqueTokenAuthenticationConverter` / the servlet converter; an
+  `{"active":false}` answer rejected; run for both the servlet manager and the reactive
+  one.
+- `SecurityHeaderDataCompletionControllerTest`: two configurations, the token accepted
+  by the second one only → `XAuthType.OAUTH2` with its registration id; the introspector
+  cache reused across calls.
+
+Boot 4.2's own security auto-configuration notes are not published yet ("full release
+notes when 4.2 is released"): re-read them at the GA bump (section 10) for the
+management endpoints security, the OAuth2 client properties and the CORS defaults.
+Spring Security's "preparing for 8.0" guide is empty as of 7.2.0-RC1; the deprecations
+above are the whole list for this code base.
 
 ## 9. Documentation
 
@@ -534,7 +580,8 @@ Steps, in this order (lowest risk first):
    they validate what is written and are cheap.
 2. 2 stubs regeneration (needs the running app of 1.1).
 3. 9.1 and 9.2 documentation.
-4. 8.1–8.4 deprecations (mechanical, keeps the warning noise down for the rest).
+4. 8.1–8.4 deprecations and 8b (the opaque token introspectors): mechanical, keeps
+   the warning noise down for the rest.
 5. 3 setup wizard.
 6. 6 native Responses model (live tests on a gpt-5 or later model needed).
 7. 4 tool-call confirmation, then 5 streamed tool parts (both need the chat UI and
