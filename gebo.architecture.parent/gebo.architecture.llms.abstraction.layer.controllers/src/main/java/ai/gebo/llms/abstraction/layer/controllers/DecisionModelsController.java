@@ -65,8 +65,10 @@ public class DecisionModelsController {
 				: this.runtimeDao.getConfigurations();
 		List<ConfigurationEntry<GBaseDecisionModelConfig>> configs = new ArrayList<>();
 		if (elements != null) {
-			for (IGConfigurableDecisionModel element : elements) {
-				configs.add(new ConfigurationEntry<GBaseDecisionModelConfig>(element.getConfig()));
+			for (IGConfigurableDecisionModel<?> element : elements) {
+				// the raw DAO interface hands the configuration out as the base model config
+				configs.add(new ConfigurationEntry<GBaseDecisionModelConfig>(
+						(GBaseDecisionModelConfig) element.getConfig()));
 			}
 		}
 		return configs;
