@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
+import ai.gebo.llms.ollama.model.GOllamaDecisionModelChoice;
+import ai.gebo.llms.ollama.model.GOllamaDecisionModelConfig;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaEmbeddingModelConfig;
 import ai.gebo.model.GUserMessage;
@@ -215,7 +217,66 @@ public class OllamaModelsLookupService {
 	 * @param m The map whose keys need to be encoded
 	 * @return A new map with encoded keys
 	 */
-	static final String CHAT_CAPABILITY = "completion", EMBEDDING_CAPABILITY = "embedding";
+	/**
+	 * The decision models the server serves: the ones whose capabilities say "decision"
+	 * (the d1-omni family). A server too old to report capabilities (before 0.40.4, which
+	 * added the System One endpoint) lists none, unlike the chat and embedding lookups
+	 * that fall back to the model names.
+	 */
+	public OperationStatus<List<GOllamaDecisionModelChoice>> getDecisionModels(GOllamaDecisionModelConfig config) {
+		OperationStatus<List<GOllamaDecisionModelChoice>> result = new OperationStatus<List<GOllamaDecisionModelChoice>>();
+		try {
+			String baseUrl = config.getBaseUrl();
+			if (baseUrl != null && !baseUrl.endsWith("/")) {
+				baseUrl = baseUrl + "/";
+			}
+			ResponseEntity<ModelsList> entity = restTemplateWrapper.getForEntity(new URI(baseUrl + "api/tags"),
+					ModelsList.class);
+			if (entity.hasBody()) {
+				ModelsList modelsList = entity.getBody();
+				List<GOllamaDecisionModelChoice> out = new ArrayList<GOllamaDecisionModelChoice>();
+				if (modelsList != null && modelsList.models != null) {
+					for (Model m : modelsList.models) {
+						Map<String, Object> show = show(baseUrl, m);
+						List<String> capabilities = capabilities(show);
+						if (capabilities == null || !capabilities.contains(DECISION_CAPABILITY))
+							continue;
+						GOllamaDecisionModelChoice choice = new GOllamaDecisionModelChoice();
+						choice.setCode(m.model);
+						choice.setDescription(describe(m));
+						choice.setModelDetails(encodeDotKeys(show));
+						choice.setMetaInfos(metaInfos(m, show));
+						choice.setContextLength(choice.getMetaInfos().getContextLength());
+						out.add(choice);
+					}
+				}
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Ollama server " + baseUrl + " serves " + out.size() + " decision model(s)");
+				}
+				result.setResult(out);
+			} else {
+				result.getMessages().add(GUserMessage.errorMessage("Error getting models list from ollama",
+						entity.getStatusCode().toString()));
+			}
+		} catch (GeboRestIntegrationException e) {
+			GUserMessage message = this.restTemplateWrapper.toMessage(e, " Ollama server ", " models list ");
+			OperationStatus<List<GOllamaDecisionModelChoice>> outValue = new OperationStatus<List<GOllamaDecisionModelChoice>>();
+			outValue.getMessages().add(message);
+			return outValue;
+		} catch (URISyntaxException e) {
+			LOGGER.error("Seems that the uri sintax is incorrect", e);
+			result.getMessages()
+					.add(GUserMessage.errorMessage("Seems that the url:" + config.getBaseUrl() + " is incorrect", e));
+		} catch (Throwable e) {
+			LOGGER.error("Exception while trying to get ollama models list", e);
+			result.getMessages().add(GUserMessage
+					.errorMessage("Seems that connecting to the url:" + config.getBaseUrl() + " does not work", e));
+		}
+		return result;
+	}
+
+	static final String CHAT_CAPABILITY = "completion", EMBEDDING_CAPABILITY = "embedding",
+			DECISION_CAPABILITY = "decision";
 	static final String INFORMATIVE_URL = "https://ollama.com/library";
 
 	/**

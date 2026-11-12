@@ -28,6 +28,7 @@ import { ConfluenceSystemsControllerService } from './api/confluenceSystemsContr
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DataFlowMetaInfoControllerService } from './api/dataFlowMetaInfoController.service';
+import { DecisionModelsControllerService } from './api/decisionModelsController.service';
 import { DeepseekChatModelsConfigurationControllerService } from './api/deepseekChatModelsConfigurationController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
@@ -114,9 +115,11 @@ import { NetworkOfAgentsConditionEventsControllerService } from './api/networkOf
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
+import { OllamaDecisionModelsConfigurationControllerService } from './api/ollamaDecisionModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
 import { OpenAiChatModelsConfigurationControllerService } from './api/openAiChatModelsConfigurationController.service';
+import { OpenAiDecisionModelsConfigurationControllerService } from './api/openAiDecisionModelsConfigurationController.service';
 import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openAiEmbeddingModelsConfigurationController.service';
 import { OpenAiImageModelsConfigurationControllerService } from './api/openAiImageModelsConfigurationController.service';
 import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
@@ -185,6 +188,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
     DataFlowMetaInfoControllerService,
+    DecisionModelsControllerService,
     DeepseekChatModelsConfigurationControllerService,
     DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
@@ -271,9 +275,11 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,
+    OllamaDecisionModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
     OpenAiChatModelsConfigurationControllerService,
+    OpenAiDecisionModelsConfigurationControllerService,
     OpenAiEmbeddingModelsConfigurationControllerService,
     OpenAiImageModelsConfigurationControllerService,
     OpenAiTextToSpeechModelsConfigurationControllerService,

@@ -1483,7 +1483,36 @@
       "CodeHeader4": { "label": "Code" },
       "ModelHeader4": { "label": "Model " },
       "TextToSpeechModelsZone": { "label": "Configured text to speech models" },
-      "ConfigureBtn4": { "label": "configure" }
+      "ConfigureBtn4": { "label": "configure" },
+        "decision": {
+          "label": "New decision model",
+          "help": "Select the supplier to add a new decision model: a small model answering yes/no, choice and score questions, used to judge the relevance of the retrieved fragments",
+          "placeholder": "Select the decision model provider"
+        },
+        "NewDecisionModelConfigurationBtn": {
+          "label": "New decision model configuration"
+        },
+        "DecisionModelsZone": {
+          "label": "Configured decision models"
+        },
+        "CodeHeader7": {
+          "label": "Code"
+        },
+        "DescriptionHeader7": {
+          "label": "Description"
+        },
+        "ModelProviderHeader7": {
+          "label": "Model provider"
+        },
+        "ModelHeader7": {
+          "label": "Model "
+        },
+        "RoleHeader7": {
+          "label": "Role"
+        },
+        "ConfigureBtn7": {
+          "label": "configure"
+        }
     }
   },
   "GeboAiLargeLanguageModelsModule": {
@@ -2507,7 +2536,89 @@
         "summary": "OK!",
         "detail": "Operation done successfully"
       }
-    }
+    },
+      "GOpenAIDecisionModelConfig": {
+        "MainPanel": {
+          "label": "Editing OpenAI decision model configuration"
+        },
+        "SaveBtn": {
+          "label": "Save"
+        },
+        "CancelBtn": {
+          "label": "Cancel"
+        },
+        "DeleteBtn": {
+          "label": "Delete"
+        },
+        "DecisionModelUseNote": {
+          "label": "A decision model answers yes/no, choice and score questions about a text. The default one judges the relevance of the retrieved fragments in place of the service chat model."
+        },
+        "description": {
+          "label": "Description",
+          "help": "Enter the description of the decision model configuration"
+        },
+        "code": {
+          "label": "Unique Code",
+          "help": "Automatically generated unique code of the decision model configuration"
+        },
+        "apiSecretCode": {
+          "label": "OpenAI token",
+          "help": "Choose the OpenAI token to be used for this model",
+          "placeholder": "Select a token"
+        },
+        "choosedModel": {
+          "label": "OpenAI decision model choice",
+          "help": "Choose the OpenAI decision model to work with.",
+          "placeholder": "Select a model"
+        },
+        "defaultModel": {
+          "label": "set this as default decision model",
+          "help": "If true this will be used as default decision model where decision model is not indicated"
+        }
+      },
+      "GOllamaDecisionModelConfig": {
+        "MainPanel": {
+          "label": "Editing Ollama local (or lan) decision model configuration"
+        },
+        "SaveBtn": {
+          "label": "Save"
+        },
+        "CancelBtn": {
+          "label": "Cancel"
+        },
+        "DeleteBtn": {
+          "label": "Delete"
+        },
+        "DecisionModelUseNote": {
+          "label": "A decision model answers yes/no, choice and score questions about a text. The default one judges the relevance of the retrieved fragments in place of the service chat model. Only the models the Ollama server reports with the decision capability (such as d1-omni) are offered."
+        },
+        "description": {
+          "label": "Description",
+          "help": "Enter the description of the decision model configuration"
+        },
+        "code": {
+          "label": "Unique Code",
+          "help": "Automatically generated unique code of the decision model configuration"
+        },
+        "baseUrl": {
+          "label": "Base ollama server address",
+          "help": "Base address (like http://servername:234/) the ollama local or lan server responds."
+        },
+        "apiSecretCode": {
+          "label": "Ollama token",
+          "help": "Choose the Ollama token to be used for this model",
+          "placeholder": "Select a token"
+        },
+        "choosedModel": {
+          "label": "Ollama decision model choice",
+          "help": "Choose the Ollama decision model to work with.",
+          "placeholder": "Select a model"
+        },
+        "defaultModel": {
+          "label": "set this as default decision model",
+          "help": "If true this will be used as default decision model where decision model is not indicated"
+        }
+      }
   },
   "GeboAIChatControlModule": {
     "GeboAIReusableChatComponent": {

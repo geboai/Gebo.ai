@@ -12,7 +12,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseDecisionModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, DecisionModelsControllerService, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GDecisionModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { ChatModelRole, chatModelRoleOf } from "../../entity-editors/controls/chat-model-role/chat-model-role.component";
@@ -53,6 +53,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
     textToSpeechModels: ConfigurationEntryGBaseTextToSpeachModelConfig[] = [];
     transcriptModels: ConfigurationEntryGBaseTranscriptModelConfig[] = [];
     imageModels: ConfigurationEntryGBaseImageModelConfig[] = [];
+    decisionModels: ConfigurationEntryGBaseDecisionModelConfig[] = [];
     chatModelsTypes: GChatModelType[] = [];
 
     embeddingModelsTypes: GEmbeddingModelType[] = [];
@@ -60,6 +61,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
     textToSpeechModelsTypes: GTextToSpeechModelType[] = [];
     transcriptModelsTypes: GTranscriptModelType[] = [];
     imageModelsTypes: GImageModelType[] = [];
+    decisionModelsTypes: GDecisionModelType[] = [];
     /**
      * Overrides the parent method to reload data when the panel needs to refresh
      */
@@ -81,7 +83,8 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
         rerank: new FormControl(),
         tts: new FormControl(),
         transcript: new FormControl(),
-        image: new FormControl()
+        image: new FormControl(),
+        decision: new FormControl()
     });
 
     /**
@@ -97,6 +100,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
         private textToSpeechModelsControllerService: TextToSpeechModelsControllerService,
         private transcriptModelsControllerService: TranscriptModelsControllerService,
         private imageModelsControllerService: ImageModelsControllerService,
+        private decisionModelsControllerService: DecisionModelsControllerService,
         private geboUIActionRouter: GeboUIActionRoutingService) {
         super()
     }
@@ -320,6 +324,42 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
             this.geboUIActionRouter.routeEvent(action);
         }
     }
+    /** A new decision model of the chosen provider: its editor opens on an empty configuration. */
+    protected configureDecisionModel() {
+        const formValue = this.createChoices.value;
+        const choosedType = this.decisionModelsTypes.find(x => x.code === formValue.decision);
+        if (choosedType) {
+            const config: any = { modelTypeCode: choosedType.code };
+            const entityName = choosedType.modelConfigurationClass;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.NEW,
+                context: {},
+                contextType: "LLMPage",
+                target: config,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
+    protected editDecisionModel(model: ConfigurationEntryGBaseDecisionModelConfig) {
+        if (model.configuration && model.objectReference) {
+            const entityName = model.objectReference?.className;
+            const action: GeboUIActionRequest = {
+                actionType: GeboActionType.OPEN,
+                context: {},
+                contextType: "LLMPage",
+                target: model.configuration,
+                targetType: entityName ? entityName : "",
+                onActionPerformed: (event: GeboActionPerformedEvent) => {
+                    this.loadData();
+                }
+            };
+            this.geboUIActionRouter.routeEvent(action);
+        }
+    }
     protected editImageModel(model: ConfigurationEntryGBaseImageModelConfig) {
         if (model.configuration && model.objectReference) {
             const entityName = model.objectReference?.className;
@@ -354,7 +394,9 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
             this.transcriptModelsControllerService.getTranscriptModelTypes(),
             this.transcriptModelsControllerService.getRuntimeConfiguredTranscriptModels(),
             this.imageModelsControllerService.getImageModelTypes(),
-            this.imageModelsControllerService.getRuntimeConfiguredImageModels()
+            this.imageModelsControllerService.getRuntimeConfiguredImageModels(),
+            this.decisionModelsControllerService.getDecisionModelTypes(),
+            this.decisionModelsControllerService.getRuntimeConfiguredDecisionModels()
         ]).subscribe({
             next: (cfgs) => {
                 this.chatModels = cfgs[0];
@@ -369,6 +411,8 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
                 this.transcriptModels = cfgs[9];
                 this.imageModelsTypes = cfgs[10];
                 this.imageModels = cfgs[11];
+                this.decisionModelsTypes = cfgs[12];
+                this.decisionModels = cfgs[13];
             },
             complete: () => {
                 this.loading = false;

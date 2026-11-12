@@ -43,6 +43,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
@@ -111,6 +112,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDaoProvider;
 	private final ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider;
 	private final ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider;
+	private final ObjectProvider<IGDecisionModelRuntimeConfigurationDao> decisionModelsDaoProvider;
 	private final ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider;
 	private final ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider;
 	private final ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider;
@@ -121,6 +123,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			@Autowired ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDaoProvider,
 			@Autowired ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider,
 			@Autowired ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider,
+			@Autowired ObjectProvider<IGDecisionModelRuntimeConfigurationDao> decisionModelsDaoProvider,
 			@Autowired ObjectProvider<ISearchServiceRepositoryPattern> searchServicesProvider,
 			@Autowired ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider,
 			@Autowired ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider) {
@@ -129,6 +132,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		this.chatModelsDaoProvider = chatModelsDaoProvider;
 		this.embeddingModelsDaoProvider = embeddingModelsDaoProvider;
 		this.rankerModelsDaoProvider = rankerModelsDaoProvider;
+		this.decisionModelsDaoProvider = decisionModelsDaoProvider;
 		this.searchServicesProvider = searchServicesProvider;
 		this.fullTextSearchProvider = fullTextSearchProvider;
 		this.knowledgeGraphSearchProvider = knowledgeGraphSearchProvider;
@@ -202,6 +206,12 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 		if (rankerModel != null) {
 			addUnique(flow, rankerModel);
 		}
+		// The decision model, when configured, judges the relevance of the ranked chunks
+		// (query and fragments) in place of the service model; shared across profiles.
+		DataEndpoint decisionModel = describeDecisionModel();
+		if (decisionModel != null) {
+			addUnique(flow, decisionModel);
+		}
 
 		// the responder models of the profiles: deep search writes its answer with the
 		// chat's own model, which is one of them
@@ -246,6 +256,11 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 				processed(flow, "rerank", profileCode, "Reranking retrieved chunks", MetaEndpointType.CHAT_SESSION,
 						MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
 						flow.qualifiedId(rankerModel.getId()));
+			}
+			if (decisionModel != null) {
+				processed(flow, "relevance", profileCode, "Relevance judgement of the ranked chunks (query + chunk)",
+						MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
+						flow.qualifiedId(decisionModel.getId()));
 			}
 
 			// Embedding model - vectorises the query for semantic retrieval.
@@ -430,6 +445,11 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 
 	private DataEndpoint describeRankerModel() {
 		return DataFlowEndpoints.rankerModel(rankerModelsDaoProvider.getIfAvailable());
+	}
+
+	private DataEndpoint describeDecisionModel() {
+		return DataFlowEndpoints.decisionModel(
+				decisionModelsDaoProvider != null ? decisionModelsDaoProvider.getIfAvailable() : null);
 	}
 
 	private IGConfigurableChatModel utilityModel(IGChatModelRuntimeConfigurationDao chatModelsDao) {

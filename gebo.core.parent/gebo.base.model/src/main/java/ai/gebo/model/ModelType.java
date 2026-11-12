@@ -10,5 +10,5 @@
 package ai.gebo.model;
 
 public enum ModelType {
-	CHAT, EMBEDDING, IMAGE, RANKER, TTS, TRANSCRIPT
+	CHAT, EMBEDDING, IMAGE, RANKER, TTS, TRANSCRIPT, DECISION
 }
