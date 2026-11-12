@@ -2618,6 +2618,52 @@
           "label": "set this as default decision model",
           "help": "If true this will be used as default decision model where decision model is not indicated"
         }
+      },
+      "GenericOpenAIAPIDecisionModelConfig": {
+        "MainPanel": {
+          "label": "Editing decision model configuration"
+        },
+        "SaveBtn": {
+          "label": "Save"
+        },
+        "CancelBtn": {
+          "label": "Cancel"
+        },
+        "DeleteBtn": {
+          "label": "Delete"
+        },
+        "TitleFragment": {
+          "label": "Editing decision model provider:"
+        },
+        "DecisionModelUseNote": {
+          "label": "A decision model answers yes/no, choice and score questions about a text through the provider's Decisions API. The default one judges the relevance of the retrieved fragments in place of the service chat model."
+        },
+        "description": {
+          "label": "Description",
+          "help": "Enter the description of the model configuration"
+        },
+        "code": {
+          "label": "Unique Code",
+          "help": "Automatically generated unique code of the model configuration"
+        },
+        "baseUrl": {
+          "label": "Decisions API base server address",
+          "help": "Base address of the server exposing the Decisions API."
+        },
+        "apiSecretCode": {
+          "label": "Decisions API token",
+          "help": "Choose the API token to be used for this model (optional when the server accepts anonymous calls)",
+          "placeholder": "Select a token"
+        },
+        "choosedModel": {
+          "label": "Decision model choice",
+          "help": "Choose the decision model to work with, among the ones the server lists.",
+          "placeholder": "Select a model"
+        },
+        "defaultModel": {
+          "label": "set this as default decision model",
+          "help": "If true this will be used as default decision model where decision model is not indicated"
+        }
       }
   },
   "GeboAIChatControlModule": {

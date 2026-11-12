@@ -85,6 +85,7 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama-embedmodel-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-openai-decision-model-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-ollama-decision-model-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-generic-openai-api-decision-model-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-chat-profile-admin/gebo-ai-chat-profile-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-prompt-admin/gebo-ai-prompt-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-user.component";
