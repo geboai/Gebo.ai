@@ -28,6 +28,7 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelConfigurationSupp
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFactory;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
@@ -38,6 +39,7 @@ import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIDecisionModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIChatModelConfigurationSupportService;
@@ -46,6 +48,7 @@ import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIImageModelConfigurati
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPITranscriptModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIRankerModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.services.GenericOpenAIAPIDecisionModelConfigurationSupportService;
 import ai.gebo.llms.openai_compat.services.ModelsListProviderProxyService;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
@@ -78,6 +81,7 @@ public class GenericOpenAIProvidersAssembler {
 	final IGImageModelConfigurationSupportServiceRepositoryPattern imagesProvidersRepo;
 
 	final IGRankerModelConfigurationSupportServiceRepositoryPattern rankerProvidersRepo;
+	final IGDecisionModelConfigurationSupportServiceRepositoryPattern decisionProvidersRepo;
 	/**
 	 * Service for accessing secrets required by model providers
 	 */
@@ -171,6 +175,14 @@ public class GenericOpenAIProvidersAssembler {
 						rm, secretService, configureHandler, serviceClientsProviderFactory, modelsListProxyService,
 						openaiApiUtil);
 				this.rankerProvidersRepo.addImplementation(service);
+			}
+		}
+		if (config.getDecisionModelProviders() != null) {
+			for (GenericOpenAIDecisionModelTypeConfig dm : config.getDecisionModelProviders()) {
+				GenericOpenAIAPIDecisionModelConfigurationSupportService service = new GenericOpenAIAPIDecisionModelConfigurationSupportService(
+						dm, secretService, openaiApiUtil, modelsListProxyService, serviceClientsProviderFactory,
+						configureHandler, observationRegistry);
+				this.decisionProvidersRepo.addImplementation(service);
 			}
 		}
 	}

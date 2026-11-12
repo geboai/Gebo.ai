@@ -21,6 +21,7 @@ import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIChatModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIEmbeddingModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIImageModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIRankerModelTypeConfig;
+import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAIDecisionModelTypeConfig;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITextToSpeechModelType;
 import ai.gebo.llms.openai_compat.modeltypes.GenericOpenAITranscriptModelType;
 
@@ -53,6 +54,7 @@ public class GenericOpenAICompatibleProvidersConfig {
 	private List<GenericOpenAITranscriptModelType> transcriptModelProviders = new ArrayList<GenericOpenAITranscriptModelType>();
 
 	private List<GenericOpenAIRankerModelTypeConfig> rankerModelProviders = new ArrayList<>();
+	private List<GenericOpenAIDecisionModelTypeConfig> decisionModelProviders = new ArrayList<>();
 
 	/**
 	 * Returns the list of configured chat model providers
@@ -121,6 +123,14 @@ public class GenericOpenAICompatibleProvidersConfig {
 
 	public void setRankerModelProviders(List<GenericOpenAIRankerModelTypeConfig> rankerModelProviders) {
 		this.rankerModelProviders = rankerModelProviders;
+	}
+
+	public List<GenericOpenAIDecisionModelTypeConfig> getDecisionModelProviders() {
+		return decisionModelProviders;
+	}
+
+	public void setDecisionModelProviders(List<GenericOpenAIDecisionModelTypeConfig> decisionModelProviders) {
+		this.decisionModelProviders = decisionModelProviders;
 	}
 
 }
