@@ -1,591 +1,676 @@
-# Spring Boot 4.2 / Spring AI 2.1 update — completion plan
+# Spring Boot 4.2 and Spring AI 2.1 update: how to complete it
 
-Branch: `feature/spring-platforms-upgrade`. Merge condition: the three GA releases
-(Spring Boot 4.2.0, Spring AI 2.1.0, Spring Cloud 2026.0.0, due November 2026) bumped on
-the branch and a green "Maven Compile & Test" run. Until then every adoption of the new
-platforms is done here, not on side branches.
+**Branch:** `feature/spring-platforms-upgrade`
+**Written against:** commit `7d2feef9e`, 12 November 2026
+**Audience:** whoever picks up the branch, with or without having followed the upgrade so far
 
-This document is the technical plan of what is left: for each point, where the code
-stands, the code to write, the tests to write, how it is verified, and what can go
-wrong. It is written against the code as of commit `8e038c902`.
+## 1. In short
 
-## 0. Where the branch stands
+Gebo.ai has been moved to the release candidates of Spring Boot 4.2, Spring AI 2.1 and
+Spring Cloud 2026.0. The branch compiles, its 2800 tests pass on the CI, and two
+features of the new Spring AI have been adopted: the reasoning of every model is read
+in the new uniform way (message parts), and a new kind of model, the **decision
+model**, has been added to the product with three providers and its admin screens.
 
-| Commit | Content | CI |
+The branch is **not to be merged** until the three final (GA) releases ship, expected
+in November 2026. Everything that concerns the new platforms is done on this branch;
+no side branches.
+
+This document lists what is still to do, in enough detail to start working without
+re-discovering the code. Each item says why it matters, where the code stands, what to
+build, how to test it and when it is done. The order of execution is suggested at the
+end (section 14).
+
+### Status at a glance
+
+| Item | State | Effort |
 |---|---|---|
-| `1886b3f38` | Boot 4.2.0-RC2, Spring AI 2.1.0-RC2, Cloud 2026.0.0-RC2; obsolete pins dropped; `spring-boot-starter-rabbitmq` | green (run 43112013486, 2782 tests) |
-| `6e0dbc8c4` | reasoning read as Spring AI 2.1 message parts (`IGReasoningExtractor.PARTS`), Anthropic thinking tap and generations reordering deleted | same run |
-| `f01ba77a7` | decision model kind (abstraction layer, OpenAI, Ollama, admin UI, ranker filter consumer, data-flow register) | failed on javac 22 inference, fixed next |
-| `8a9d11e83`, `b5b7197a6` | javac 22 cast; MCP Java SDK BOM 2.0.0 → 2.2.0-M2 | green (run 43160505090) |
-| `6a28e6081`, `8e038c902` | DECISION in the usage enum stubs; decision models of the OpenAI compatible providers | green (runs 43160728615, 43163859331) |
+| Version bumps, obsolete pins, RabbitMQ starter rename | done, CI green | — |
+| Reasoning read as message parts, Anthropic special-casing removed | done, CI green | — |
+| Decision model kind: abstraction, OpenAI, Ollama, generic OpenAI-compatible, admin UI, usage, compliance register | done, CI green, **not run live yet** | — |
+| MCP Java SDK aligned with Spring AI 2.1 (2.0.0 → 2.2.0-M2) | done, CI green, **not run live yet** | — |
+| 2. Boot smoke test of the application | to do | small |
+| 3. Live check of a decision model | to do | small |
+| 4. Unit tests of the decision model providers | to do | small |
+| 5. REST stubs regenerated from the live API | to do | small, needs 2 |
+| 6. Setup wizard support of the decision kind | to do | medium |
+| 7. Tool-call confirmation (human in the loop) | to design and build | large |
+| 8. Streamed tool-call arguments in the chat | to build | medium, after 7 |
+| 9. Spring AI's own OpenAI Responses model | to evaluate, then maybe switch | medium |
+| 10. Session memory | spike only | small |
+| 11. Deprecated APIs cleanup | to do | medium (large for `RestTemplate`) |
+| 12. Spring Security 7.2 | small change, one check | small |
+| 13. Documentation | to do | small |
+| 14. GA bump and merge | when the releases ship | small |
 
-What CI proves: the whole reactor compiles on JDK 22 and every unit and Testcontainers
-suite passes. What CI does not prove: the application boots, a decision model answers
-over the wire, the admin UI renders the new editors, the MCP server and clients work on
-SDK 2.2.0-M2 at runtime.
+## 2. The new concepts, in plain words
 
-## 1. Verify what is already written
+A few terms used throughout. Readers who know Spring AI 2.1 can skip this.
 
-### 1.1 Boot smoke test of the monolith
+- **Message parts.** Spring AI 2.1 represents what a model answers as an ordered list
+  of parts: text, reasoning (the model's "thinking"), tool calls, media. Before 2.1
+  every provider exposed its reasoning differently (Anthropic as separate generations,
+  OpenAI-compatible APIs as a metadata field). Gebo now reads the reasoning from the
+  parts for every provider, through `IGReasoningExtractor.PARTS`, and keeps the old
+  metadata reading as a fallback for its own OpenAI Responses model.
+- **Decision model.** A small, fast model that does not write text: it answers yes/no,
+  multiple-choice and score questions about an input, with probabilities. Spring AI 2.1
+  calls it `DecisionModel`. OpenAI serves one through its Decisions API; Ollama serves
+  the `d1-omni` family through a "System One" endpoint. Gebo uses it to judge whether a
+  retrieved fragment is relevant to the user's question, a job the chat model used to
+  do with a prompt.
+- **The ranker irrelevance filter.** After the reranker orders the retrieved fragments,
+  a second stage drops the ones useless for the question. With a decision model
+  configured as default, that stage asks the decision model one question per fragment;
+  without one, it asks the internal services chat model as before.
+- **Tool-call confirmation.** Spring AI 2.1 lets a tool be marked as needing a person's
+  approval before it runs. The model's reply then pauses, the person allows or denies,
+  and the tool loop resumes.
+- **The harness.** Gebo's networks of agents, which already know how to pause for a
+  person (a "waiting condition" persisted in Mongo) and resume later.
+- **REST stubs.** The Angular and Java clients generated from the backend's OpenAPI
+  description. The ones for the decision models were written by hand in the generator's
+  shape and must be regenerated.
+- **Opaque token introspection.** When a single sign-on provider issues tokens that are
+  not JWTs, the backend asks the provider whether a token is valid ("introspects" it).
+  Spring Security 7.2 deprecated the way Gebo creates that client.
+- **Data-flow register.** Gebo's compliance feature that lists where data goes (models,
+  stores, external services). Every model kind reports itself there; the decision model
+  does too.
 
-Nothing has booted since the Boot 4.2 and MCP SDK bumps. The autoconfiguration of
-Boot 4.2 (the AMQP starter split, the Micrometer changes, the `RestTemplate`
-deprecation) and the MCP SDK 2.2.0-M2 (binary mismatch risk on `McpSyncServer`,
-`McpServerFeatures.Sync*Specification`, `McpJsonDefaults`, `McpTransportContext`) can
-only fail at startup or at the first call.
+## 3. Where the branch stands, commit by commit
 
-Steps:
-1. Bring the infra up: `dockers/docker-compose-deploy/docker-compose.yml`, services
-   `mongo qdrant neo4j opensearch` (the stack was found exited; never recreate the data
-   services, only start them).
-2. Build the bootable jar from fresh `.m2` artifacts: full `mvn -o install -DskipTests`
-   first (a `-pl` build ships stale jars), then `mvn -o -Pswagger-on package -DskipTests`
-   in `gebo.apps.parent/gebo.ai.app`.
-3. Run it on port 13999 (12999 is the docker monolith's) with `-DGEBO_HOME=<scratch home>`
-   before `-jar`, every provider enabled; the real log is
-   `<home>/logs/ai.gebo.monolithic.app.log`, not the stdout redirect.
-4. Read the log for: `BeanCreationException`, `NoSuchMethodError`/`NoClassDefFoundError`
-   (MCP SDK), `ConfigurationProperties` binding errors (`ai.gebo.llms.generic.config`
-   now has `decisionModelProviders`), the three "Begin/End initializing ... models
-   dinamically" pairs plus the new "decision models" one from
-   `GDecisionModelRuntimeConfigurationDaoImpl`.
-5. With the `/gebo-backend-test` procedure: login, `GET /v3/api-docs` and check the four
-   new controllers are in the spec (`DecisionModelsController`,
-   `OpenAIDecisionModelsConfigurationController`,
+| Commit | What it did | CI run |
+|---|---|---|
+| `1886b3f38` | Boot 4.2.0-RC2, Spring AI 2.1.0-RC2, Cloud 2026.0.0-RC2. Dropped the pins Boot 4.2 made obsolete (mongodb, hazelcast, opentelemetry, rabbit client). The RabbitMQ module moved to `spring-boot-starter-rabbitmq`, the only compile break of Boot 4.2. | 43112013486, green, 2782 tests |
+| `6e0dbc8c4` | Reasoning read as message parts. The Anthropic HTTP "thinking tap", the thinking-generations reordering and the per-vendor reasoning readings were deleted. | same run |
+| `f01ba77a7` | The decision model kind: abstraction layer, OpenAI and Ollama providers, the ranker filter using it, the compliance register, the admin UI, hand-written stubs. | failed: javac 22 refused a type inference javac 27 accepted |
+| `8a9d11e83`, `b5b7197a6` | The javac 22 fix. The MCP Java SDK BOM raised from 2.0.0 to 2.2.0-M2, the version Spring AI 2.1 is built against (the old pin would have failed at the first MCP call, not at compile time). | 43160505090, green |
+| `6a28e6081`, `8e038c902` | DECISION in the usage enums of the stubs. Decision models of the OpenAI-compatible providers. | 43160728615 and 43163859331, green |
+| `35e1b7190`, `7d2feef9e` | This document. | — |
+
+What the CI proves: everything compiles on JDK 22 and every unit and Testcontainers
+suite passes. What it does not prove: that the application starts, that a decision
+model answers over the network, that the new admin screens render, that MCP works on
+the new SDK at runtime. Items 2 and 3 close those gaps.
+
+---
+
+## 4. Item 2: boot smoke test of the application
+
+### Why
+
+Nothing has started since the Boot 4.2 and MCP SDK changes. Boot's auto-configuration
+(the AMQP starter split, the Micrometer changes) and the MCP SDK jump (2.0.0 to
+2.2.0-M2, a binary API change) can only fail at startup or at the first call, which no
+unit test reaches.
+
+### Steps
+
+1. Start the infrastructure: `dockers/docker-compose-deploy/docker-compose.yml`,
+   services `mongo qdrant neo4j opensearch`. The stack was last seen stopped; start it,
+   never recreate the data services.
+2. Build the jar from fresh artifacts. A partial build (`-pl`) ships stale jars from
+   the local repository, so run the full `mvn -o install -DskipTests` first, then
+   `mvn -o -Pswagger-on package -DskipTests` in `gebo.apps.parent/gebo.ai.app`.
+3. Run it on port 13999 (12999 belongs to the docker monolith), with
+   `-DGEBO_HOME=<scratch home>` placed before `-jar`, every provider enabled. The real
+   log is `<home>/logs/ai.gebo.monolithic.app.log`; the console redirect is not it.
+4. Read the log for:
+   - `BeanCreationException` (wiring),
+   - `NoSuchMethodError` or `NoClassDefFoundError` (the MCP SDK),
+   - configuration binding errors (`ai.gebo.llms.generic.config` now has a
+     `decisionModelProviders` list),
+   - the "Begin/End initializing ... models dinamically" pairs, now four of them: the
+     decision models one comes from `GDecisionModelRuntimeConfigurationDaoImpl`.
+5. With the backend test procedure (`.claude/skills/gebo-backend-test`): log in, read
+   `/v3/api-docs` and check the four new controllers are there
+   (`DecisionModelsController`, `OpenAIDecisionModelsConfigurationController`,
    `OllamaDecisionModelsConfigurationController`,
-   `GenericOpenAIDecisionModelsConfigurationController`), then
-   `GET /api/admin/DecisionModelsController/getDecisionModelTypes` must list
+   `GenericOpenAIDecisionModelsConfigurationController`). Then call
+   `GET /api/admin/DecisionModelsController/getDecisionModelTypes`: it must list
    `decision-OpenAI`, `decision-ollama` and `decision-generic-openai`.
-6. MCP at runtime: with an MCP server configured in the admin, run one tools listing
-   through `GeboMcpServerUserController` and one client call through the MCP clients
-   browsing controller; both exercise the SDK classes that changed between 2.0.0 and
-   2.2.0-M2.
+6. MCP at runtime: with an MCP server configured in the admin, list its tools through
+   the MCP server user controller and make one client call through the MCP clients
+   browsing controller. Both go through the SDK classes that changed
+   (`McpSyncServer`, `McpServerFeatures.Sync*Specification`, `McpJsonDefaults`,
+   `McpTransportContext`).
 
-Acceptance: no startup error, the four controllers in the spec, one MCP round trip.
+### Done when
 
-### 1.2 Live check of the decision model path
+The application starts without an error, the four controllers are in the API
+description, one MCP round trip works.
 
-The unit tests (`GRankerServiceImplTest`, 8 tests) prove the filter logic on a fake
-`DecisionModel`; nothing has crossed the wire. Cheapest real target: Ollama.
+## 5. Item 3: live check of a decision model
 
-Steps:
-1. Ollama 0.40.4 or later, `ollama pull d1-omni:600m`. Check
-   `ollama show d1-omni:600m` lists `decision` among the capabilities: that is what
-   `OllamaModelsLookupService.getDecisionModels` filters on, a server not reporting
-   capabilities lists nothing (by design, unlike chat and embeddings).
-2. In the LLMs admin panel: "New decision model" → Ollama → base url → the model list
-   must show `d1-omni:600m` → save. The save goes through
-   `GAbstractClusteredModelRuntimeConfigurationDao.addRuntimeByConfigClustered`, which
-   runs `GAbstractConfigurableDecisionModel.testCall` (one `YesNoQuestion`): a failing
-   endpoint is refused here with the provider's message. Set it as default.
-3. Ask a question in a chat with knowledge bases and
-   `ai.gebo.ragsearch.config.rankerIrrelevanceFilterEnabled=true` (the default) and at
-   least 5 ranked fragments (`rankerIrrelevanceFilterMinDocuments`). With
-   `ai.gebo.llms.chat.abstraction.layer.services.impl.GRankerServiceImpl` at DEBUG the
-   log must say "Irrelevance filter judges N of M ranked fragment(s) with the decision
-   model code=...", at TRACE one line per fragment with its probability.
-4. Check the usage: `LlmsUsageAdminLevelController` aggregation must show rows with
-   model type `DECISION` (one call per judged fragment, the tokens the provider
-   reports in `DecisionResponseMetadata.getUsage()`).
-5. Check the compliance register: the data-flow of the standard chat pipeline must show
-   the `decision-model-<code>` endpoint and the "relevance" transformation per profile
-   (`GStandardChatPipelineDataFlowComponent`), the agents network one the
-   "search-relevance" transformation (`GAgentsNetworkDataFlowComponent.reportRanking`).
-6. Repeat 2 with the OpenAI provider if a key with Decisions API access is available
-   (`OpenAIDecisionModelConfigurationSupportService` lists the models endpoint ids
-   containing `luna`/`decision`, plus `gpt-6-luna`); and with the generic provider
-   against any server exposing `/v1/decisions`.
+### Why
 
-Things to watch and decide after seeing them (not to pre-empt):
-- latency: one call per fragment, sequential, in `discardedDocumentIndices(.., IGConfigurableDecisionModel)`.
-  The chat-model path batched fragments by context budget. If the per-fragment round
-  trip is too slow on a remote provider, the next step is a bounded parallel map
-  (`Flux.fromIterable(...).flatMapSequential(..., concurrency)`) keeping the order, not
-  a batch question (decision models answer one question set per input);
-- the threshold: `YesNoAnswer.isYes()` is the Spring AI default 0.5; the TRACE lines
-  give the probability distribution to judge whether the small model is too strict or
-  too lenient on the test knowledge bases before any threshold becomes configurable;
-- the question wording (`GRankerServiceImpl.RELEVANCE`): the Spring AI docs say the
-  600m model leans heavily on the option descriptions; the `whenYes`/`whenNo` texts are
-  the knobs.
+The eight tests of `GRankerServiceImplTest` prove the filter logic on a fake decision
+model. No request has reached a real one yet. The cheapest real target is Ollama.
 
-Acceptance: a chat answer whose log shows the decision model judging, discarded
-fragments consistent with their content, usage and data-flow rows present.
+### Steps
 
-### 1.3 CI
+1. Install Ollama 0.40.4 or later and pull the model: `ollama pull d1-omni:600m`.
+   Check that `ollama show d1-omni:600m` lists `decision` among the capabilities. The
+   Ollama lookup (`OllamaModelsLookupService.getDecisionModels`) offers only models with
+   that capability; a server too old to report capabilities lists nothing, on purpose
+   (the chat and embedding lookups fall back to the model names, this one does not).
+2. In the LLMs admin panel: "New decision model", provider Ollama, the server url; the
+   model list must show `d1-omni:600m`; save. Saving runs a test call (one yes/no
+   question, `GAbstractConfigurableDecisionModel.testCall`): an unreachable or wrong
+   endpoint is refused right there with the provider's message. Mark it as default.
+3. Ask a question in a chat that uses knowledge bases. The filter runs when it is
+   enabled (`ai.gebo.ragsearch.config.rankerIrrelevanceFilterEnabled`, default true)
+   and at least five fragments were ranked (`rankerIrrelevanceFilterMinDocuments`).
+   With the logger `ai.gebo.llms.chat.abstraction.layer.services.impl.GRankerServiceImpl`
+   at DEBUG, the log must say "Irrelevance filter judges N of M ranked fragment(s) with
+   the decision model code=..."; at TRACE it prints one line per fragment with the
+   probability and the verdict.
+4. Check the usage accounting: the admin usage view must show rows of model type
+   `DECISION`, one call per judged fragment, with the tokens the provider reports.
+5. Check the compliance register: the data flow of the standard chat pipeline must show
+   the `decision-model-<code>` endpoint and a "relevance" transformation per chat
+   profile; the agents network flow must show the "search-relevance" transformation.
+6. If an OpenAI key with Decisions API access is available, repeat step 2 with the
+   OpenAI provider (it offers the models endpoint ids that look like decision models
+   plus `gpt-6-luna`, Spring AI's default); and with the generic provider against any
+   server exposing `/v1/decisions`.
 
-Every commit of the branch after the javac 22 fix is green on "Maven Compile & Test".
-The generic provider module has no unit tests of its own yet (see 3.5).
+### What to look at before changing anything
 
-## 2. REST stubs regeneration
+- **Latency.** The filter asks one question per fragment, sequentially (in
+  `GRankerServiceImpl.discardedDocumentIndices` with the decision model). The old
+  chat-model path batched fragments. If a remote provider makes this too slow, the next
+  step is a bounded parallel map that keeps the order, not a batched question (decision
+  models answer one question set per input).
+- **The threshold.** A fragment is kept when the yes probability is at least 0.5
+  (Spring AI's `YesNoAnswer.isYes()` default). The TRACE lines show the distribution
+  on real knowledge bases; decide from them whether the small model is too strict or
+  too lenient before making any threshold configurable.
+- **The question wording.** Spring AI's documentation says the 600m model relies
+  heavily on the option descriptions. The texts live in `GRankerServiceImpl.RELEVANCE`
+  (`whenYes` / `whenNo`).
 
-The decision stubs in `gebo.ui/projects/gebo-ai-rest-api/src/lib` (16 model files, 4
-services, the `DECISION` enum values) are hand-written in the generator's shape. They
-must be replaced by the generated ones so that the next regeneration does not diverge
-from them silently.
+### Done when
 
-Steps (the `/regen-angular-stubs` skill, in order):
-1. Preconditions of 1.1 (infra, fresh `.m2`, bootable+swagger jar on 13999 with
-   `-Dswagger.file` and every provider enabled, `basePath` restored afterwards).
-2. Run the codegen (`gebo.ui` Maven profile `generate-rest-api`).
-3. `git diff --stat gebo.ui/projects/gebo-ai-rest-api`: the hand-written files must come
-   out byte-identical or with generator-only differences (comment headers, property
-   order). Any other difference is a backend/stub mismatch to understand, not to patch
-   by hand.
-4. `npx ng build gebo-ai-rest-api && npx ng build gebo-ai-admin-ui`, then the full
-   `ng build` of the app.
-5. The brain microservice exposes the same controllers (`brain.gebo.ai` depends on
+A chat answer whose log shows the decision model judging, the discarded fragments
+consistent with their content, the usage and the register rows present.
+
+## 6. Item 4: unit tests of the decision model providers
+
+The three provider modules have no tests of their decision support services yet.
+Write them before the live run, they are cheap and pin the lookup rules:
+
+- `OpenAIDecisionModelConfigurationSupportServiceTest`: the `isDecisionModel` naming
+  rule; `getModelChoices` with a mocked `IGOpenAIApiUtil`: a listed decision model is
+  kept, a chat model dropped, `gpt-6-luna` appended once, a lookup error becomes a user
+  message, a missing secret becomes an "api key" message.
+- `OllamaModelsLookupServiceTest`: `getDecisionModels` keeps only the models whose
+  `api/show` capabilities contain `decision`; a server not reporting capabilities lists
+  none.
+- `GenericOpenAIAPIDecisionModelConfigurationSupportServiceTest`: the configured base
+  url wins over the provider's; anonymous calls only when the provider declares
+  `optionalAuthentication`; the provider's declared default model is always offered;
+  the models-list-provider path versus the models endpoint path.
+- `GAbstractConfigurableDecisionModelTest`: `testCall` turns a provider
+  `RuntimeException` into an `LLMConfigException` naming the model.
+
+## 7. Item 5: REST stubs regenerated from the live API
+
+### Why
+
+The decision stubs under `gebo.ui/projects/gebo-ai-rest-api/src/lib` (16 model
+files, 4 services, the `DECISION` enum values) were written by hand in the shape the
+generator produces. They must be replaced by generated ones, otherwise the next
+regeneration can diverge from them silently.
+
+### Steps
+
+Follow `.claude/skills/regen-angular-stubs` in order:
+
+1. The preconditions of item 2: infrastructure up, fresh artifacts, the
+   bootable+swagger jar on port 13999 with `-Dswagger.file`, every provider enabled;
+   restore the `basePath` afterwards.
+2. Run the code generation (`gebo.ui` Maven profile `generate-rest-api`).
+3. Look at `git diff --stat gebo.ui/projects/gebo-ai-rest-api`. The hand-written files
+   must come out identical or differ only in what the generator always rewrites
+   (comment headers, property order). Any other difference reveals a mismatch between
+   backend and stubs: understand it, do not patch the stubs by hand.
+4. Build: `npx ng build gebo-ai-rest-api`, `npx ng build gebo-ai-admin-ui`, then the
+   whole application.
+5. The brain microservice exposes the same controllers (it depends on
    `gebo.architecture.llms.abstraction.layer.controllers` and
-   `gebo.llms.controllers.starter`): regenerate its Angular and Java clients under
+   `gebo.llms.controllers.starter`). Regenerate its Angular and Java clients under
    `gebo.api.clients/gebo.microservices.clients.parent` with the
-   `/document-microservices-controllers` procedure (full stack, `clean package` of the
-   images, specs read from each service), which also refreshes
+   `.claude/skills/document-microservices-controllers` procedure, which also refreshes
    `docs/MICROSERVICES-CONTROLLERS.md`.
-6. The monolithic Java client `gebo.api.clients/gebo.monolithic.api.resttemplate.client`
-   is generated from the same spec: regenerate it in the same pass.
+6. The monolithic Java client (`gebo.api.clients/gebo.monolithic.api.resttemplate.client`)
+   comes from the same description: regenerate it in the same pass.
 
-Acceptance: generated stubs committed, both UIs build, the hand-written files replaced.
+### Done when
 
-## 3. LLM setup wizard support for the decision kind
+Generated stubs committed, both UI libraries build, no hand-written stub left.
 
-Today the kind is configurable from the LLMs admin panel only. The fast-setup wizard
-knows CHAT, EMBEDDING, RANKING, IMAGESGEN, TTS, TRANSCRIPT. Adding DECISION is mechanical
-but touches every layer; it is optional for the users (like IMAGESGEN) and must stay
-optional in the wizard (never required, never auto-created unless a preset says so).
+## 8. Item 6: setup wizard support of the decision kind
 
-### 3.1 Backend (`gebo.llms.parent/gebo.llms.setup`)
+### Why
+
+Today a decision model is configured from the LLMs admin panel only. The fast-setup
+wizard knows six kinds (chat, embedding, ranking, images, text to speech,
+transcription) and should know the seventh. It is an optional kind, like image
+generation: the wizard must never require it and must create one only when a vendor
+preset says so.
+
+### Backend, module `gebo.llms.parent/gebo.llms.setup`
 
 1. `config/ModelType`: add `DECISION`.
-2. `model/ComponentLLMSStatus`: `decisionModelSetup`, `decisionModelCode`,
+2. `model/ComponentLLMSStatus`: add `decisionModelSetup`, `decisionModelCode`,
    `decisionModelProviderId`.
-3. `model/LLMSSetupConfigurationData`: `decisionModelExists`.
-4. `model/LLMAutoconfigureCreationData`: `decisionModel`.
-5. `services/GeboLLMSSetupService`: inject `IGDecisionModelRuntimeConfigurationDao` and
-   `IGDecisionModelConfigurationSupportServiceRepositoryPattern`; add the `decision`
-   fields to `ModelKindPresence` and the loop in `computeModelKindPresence`; map them in
-   `getLLMSSetupConfigurationData` and `getLLMSSetupStatus`; add the `case DECISION`
-   to the five switches (the existing configurations listing at ~line 340, the
-   credentials creation at ~570, the autoconfigure at ~730, the models lookup at ~890,
-   the models creation at ~1118), each a copy of the `RANKING` case on the decision
-   support service.
+3. `model/LLMSSetupConfigurationData`: add `decisionModelExists`.
+4. `model/LLMAutoconfigureCreationData`: add `decisionModel`.
+5. `services/GeboLLMSSetupService`: inject the decision runtime DAO and the decision
+   support services repository; add the decision fields to `ModelKindPresence` and the
+   loop that fills it; map them in the status and the configuration data; add a
+   `case DECISION` to the five `switch` blocks (the existing configurations listing,
+   the credentials creation, the autoconfigure, the models lookup, the models
+   creation), each a copy of the `RANKING` case using the decision support service.
 6. Presets in `src/main/resources/llms-fast-setup-library/library.yml`: a
-   `- type: DECISION` block under the vendors that serve one. As of today only OpenAI
+   `- type: DECISION` block under the vendors that serve one. Today that is OpenAI
    (`serviceHandler: decision-OpenAI`, `doModelsLookup: false` because the models
-   endpoint does not enumerate decision models reliably, choice `gpt-6-luna` as the
-   Spring AI default, `defaultChoice: true`) and Ollama (`serviceHandler:
-   decision-ollama`, `doModelsLookup: true`, choice `d1-omni:600m`). No OpenAI
-   compatible vendor documents a Decisions API yet: no preset for them.
-7. Tests: `GeboLLMSSetupService` has no unit test; add one for
-   `computeModelKindPresence` with mocked DAOs (one decision model marked default →
-   `decisionModelSetup=true`, code and provider id resolved through the library) and one
-   for the autoconfigure switch creating a decision model from a preset through
-   `configureModelValidating` (the model code present in the lookup → created, absent
-   → unresolved with the choices, as the other kinds).
+   endpoint does not enumerate decision models reliably, choice `gpt-6-luna`) and
+   Ollama (`serviceHandler: decision-ollama`, `doModelsLookup: true`, choice
+   `d1-omni:600m`). No OpenAI-compatible vendor documents a Decisions API yet.
+7. Tests. The setup service has none; add two: the presence computation with mocked
+   DAOs (a decision model marked default gives `decisionModelSetup=true` with its code
+   and provider resolved through the library), and the autoconfigure creating a
+   decision model from a preset (present in the lookup: created; absent: reported as
+   unresolved with the available choices, as for the other kinds).
 
-### 3.2 UI (`gebo.ui/projects/gebo-ai-admin-ui/src/lib/setup-wizard`)
+### UI, folder `gebo.ui/projects/gebo-ai-admin-ui/src/lib/setup-wizard`
 
-1. `llms-easy-wizard/model-classes.ts`: `ModelClassId` gets `"DECISION"`, a class entry
-   `{ id: "DECISION", type: "DECISION", required: false, fieldId: "ClassDecision",
-   statusSetup: s => s?.decisionModelSetup, ... }` and its texts.
+1. `llms-easy-wizard/model-classes.ts`: `"DECISION"` in `ModelClassId`, a class entry
+   (`required: false`, reading `decisionModelSetup`, `decisionModelCode`,
+   `decisionModelProviderId` from the status) and its texts.
 2. `llms-setup-components/easy-vendor-configuration.component.{ts,html}`: the
-   `decisionModel` form control, the preset block (`preset.type==='DECISION'`) and the
-   default choice resolution, copied from the `IMAGESGEN` block (optional kind).
-3. `llms-setup-components/llms-vendor-modeltype.component.{ts,html}`: `decisionPresets`,
-   `showDecision`, `lookedUpDecisionModels`, the expert-tab field.
-4. Stubs: `lLMCreateModelData.ts`, `lLMCredentialsCreationData.ts`,
-   `lLMExistingConfiguration.ts` enums get `DECISION` (hand-written until 2 runs again),
-   `componentLLMSStatus.ts`, `lLMSSetupConfigurationData.ts`,
-   `lLMAutoconfigureCreationData.ts` get the new fields.
-5. i18n: the new ids through `/i18n-component-resources` (module `SetupWizardPanelModule`
-   or whatever the two components declare; check `GEBO_AI_MODULE` on each).
-6. Test: the wizard has no spec files; verify live: Setup → LLMs easy wizard → OpenAI
-   and Ollama show the decision class as optional, creating one lands in the LLMs
+   `decisionModel` form control, the preset block and the default choice, copied from
+   the images block.
+3. `llms-setup-components/llms-vendor-modeltype.component.{ts,html}`: the decision
+   presets, the show flag, the looked-up models, the expert-tab field.
+4. Stubs: the `TypeEnum` of `lLMCreateModelData.ts`, `lLMCredentialsCreationData.ts`
+   and `lLMExistingConfiguration.ts` get `DECISION`; the status and configuration data
+   models get the new fields (by hand until item 5 runs again).
+5. Multilanguage keys through `.claude/skills/i18n-component-resources`, under the
+   module each component declares.
+6. Verification is live (the wizard has no spec files): Setup, LLMs easy wizard, OpenAI
+   and Ollama show the decision class as optional; creating one lands in the LLMs
    panel's "Configured decision models".
 
-### 3.3 Microservices
+### Done when
 
-`brain.gebo.ai` embeds `gebo.llms.setup`; the status DTO change propagates through the
-brain clients regenerated in 2.5.
+The wizard status shows the decision slot; autoconfigure with a decision preset
+creates the model and marks it default; installations without a preset see no change.
 
-### 3.4 Acceptance
+---
 
-Wizard status shows the decision slot; autoconfigure with a decision preset creates the
-model and marks it default; without a preset nothing changes for existing installations.
+## 9. Item 7: tool-call confirmation (human in the loop)
 
-### 3.5 Missing unit tests of the new support services
+### What Spring AI 2.1 offers
 
-Add before any live run, in the three vendor modules:
-- `OpenAIDecisionModelConfigurationSupportServiceTest`: `isDecisionModel` cases,
-  `getModelChoices` with a mocked `IGOpenAIApiUtil` (listed decision model kept, chat
-  model dropped, `gpt-6-luna` appended once, lookup error → messages, missing secret →
-  "api key" message).
-- `OllamaModelsLookupServiceTest` (exists for chat? check): `getDecisionModels` keeps
-  only models whose `api/show` capabilities contain `decision`, a server not reporting
-  capabilities lists none.
-- `GenericOpenAIAPIDecisionModelConfigurationSupportServiceTest`: base url precedence
-  (config over provider), anonymous allowed only when `optionalAuthentication`, the
-  declared `defaultModel` always offered, models list provider path vs models endpoint.
-- `GAbstractConfigurableDecisionModelTest`: `testCall` wraps a provider
-  `RuntimeException` into `LLMConfigException` with the model code.
+A tool can be marked as needing a person's approval, either with
+`@Tool(requiresConfirmation = true)` or with a `ToolCallConfirmationPolicy` given to
+the tool calling manager (`fromToolMetadata()` is the default, `forTools(names...)`
+exists, policies compose with `or`). When the model asks for such a tool, the manager
+throws `ToolCallConfirmationRequiredException` before any tool of that batch runs. The
+`ToolCallingAdvisor` catches it, stops the loop and returns the model's reply with a
+metadata entry (`ToolCallDecisions.AWAITING_DECISION_METADATA_KEY`) listing the calls
+that wait. The application later resumes with
+`executeToolCalls(prompt, response, ToolCallDecisions)`, each decision an allow or a
+deny with an optional message; a denied tool does not run and the model receives the
+message as the tool's result.
 
-## 4. Spring AI 2.1 tool-call confirmation in the harness
+### What Gebo already has
 
-### 4.1 What Spring AI 2.1 offers
+- `GeboToolCallingManager` wraps Spring AI's manager (which is final) and already
+  anticipates the decisions overload: it delegates it and must apply the "ending
+  controls" to its result as it does for the two-argument call.
+- The harness pauses for a person through tools. `GAbstractAskUserChoiceQuestionTool`
+  declares an `AgentSuspendedWaitingCondition` to the loaded `IGWaitExternalCondition`;
+  the condition ends the model call; the network persists a
+  `GNetworkOfAgentsSuspension` (Mongo handler) and resumes from it once the conditions
+  are answered (`IGNetworkOfAgentsSuspensionHandler.respawnFrom`). The conditions reach
+  the users through `WaitingConditionsController` and the chat UI.
 
-- `@Tool(requiresConfirmation = true)` or a `ToolCallConfirmationPolicy` on
-  `DefaultToolCallingManager.builder().toolCallConfirmationPolicy(...)`:
-  `fromToolMetadata()` (default), `forTools(names...)`, composable with `or`.
-- `DefaultToolCallingManager.executeToolCalls(prompt, response)` throws
-  `ToolCallConfirmationRequiredException(toolCallIds)` before any call of a batch runs
-  when one needs confirmation; `ToolCallingAdvisor` catches it and ends the loop
-  returning the model's reply with the metadata
-  `ToolCallDecisions.AWAITING_DECISION_METADATA_KEY` (the keys of the calls waiting).
-- The caller resumes with `executeToolCalls(prompt, response, ToolCallDecisions)`
-  (`ToolCallDecision.allow/deny(id, message)`); a denied call does not run and the
-  model receives the deny message as the tool result.
+### Design
 
-### 4.2 What Gebo has
+A confirmation is a waiting condition of a new type: "the model wants to run tool X
+with these arguments, allow or deny?". The person's answer resumes the batch through
+the decisions overload.
 
-- `GeboToolCallingManager` wraps the default manager (final in Spring AI) and already
-  documents the 2.1 decisions overload: it delegates it (interface default) and must read
-  the ending controls on its result the same way as the two-argument one.
-- The harness suspends on a person through tools: `GAbstractAskUserChoiceQuestionTool`
-  declares an `AgentSuspendedWaitingCondition` to the loaded `IGWaitExternalCondition`,
-  the condition ends the call (an `IToolCallEndingControl`), the network persists a
-  `GNetworkOfAgentsSuspension` (`GMongoNetworkOfAgentsSuspensionHandler`) and respawns
-  from it with the resolved conditions (`IGNetworkOfAgentsSuspensionHandler.respawnFrom`).
-  The waiting conditions reach the users through `WaitingConditionsController` and the
-  chat UI.
+1. **The policy.** `GToolCallbackRepositoryPatternImpl.createToolCallingManager()`
+   builds Spring AI's default manager; give it a confirmation policy that is
+   `fromToolMetadata()` or a Gebo policy reading the tool source's declaration. Add a
+   `requiresConfirmation` flag to Gebo's tool declaration model so an admin can mark a
+   tool of any source, MCP tools included, as needing a person.
+2. **The manager.** `GeboToolCallingManager` overrides the decisions overload to
+   delegate and apply its ending controls; the confirmation exception passes through.
+3. **The pause.** Where the agentic loop (`AgenticLoopReactiveAgentServiceImpl` and
+   every network agent calling a model with tools through `GeboToolCalling`) reads a
+   reply, detect `ToolCallDecisions.isAwaitingDecision(chatResponse)`. For each waiting
+   call build an `AgentSuspendedWaitingCondition` of a new answer type (call id, tool
+   name, arguments as JSON, the decision), marked as human in the loop, and enter the
+   suspension state as the ask-user tools do. The prompt and the paused reply must be
+   persisted with the suspension, verbatim, because the resume needs them exactly:
+   serialize them with Spring AI's message JSON into the agent's private context.
+4. **The resume.** On respawn, build the `ToolCallDecisions` from the answers and call
+   `executeToolCalls(prompt, pausedResponse, decisions)`; feed the resulting
+   conversation history back into the loop as the next prompt, the way
+   `ToolCallingAdvisor` does internally (read its `adviseCall`: the history replaces the
+   prompt messages and the model is called again unless the result is "return direct").
+5. **Streaming.** The paused reply is the last chunk of the stream, carrying the
+   metadata. The chat must show "waiting for your confirmation" instead of an answer:
+   a new envelope content type (a `ToolCallConfirmationRequest`) rendered by the UI as
+   the existing waiting-condition card.
+6. **UI.** The waiting conditions panel gets the new type: tool name, arguments shown
+   as formatted JSON, allow and deny buttons, an optional message to the model on deny.
 
-### 4.3 Design
-
-Confirmation is a waiting condition of a new type: "the model wants to run tool X with
-arguments Y, allow or deny". The person's answer resumes the batch through the
-decisions overload. The pieces:
-
-1. `IGToolCallbackSourceRepositoryPattern.createToolCallingManager()`
-   (`GToolCallbackRepositoryPatternImpl`): build the default manager with a
-   `ToolCallConfirmationPolicy` = `fromToolMetadata()` OR a Gebo policy reading the tool
-   source's declaration. Gebo tools are `ToolCallback`s produced by the sources (`IGToolCallbackSource`);
-   add a `requiresConfirmation` flag to the Gebo tool declaration model (the admin
-   descriptions in `ToolAdminDescriptionsTest` show where tools are described) so an
-   admin can mark a tool of any source, including MCP tools, as needing a person.
-2. `GeboToolCallingManager`: override `executeToolCalls(prompt, response, decisions)`
-   to delegate and apply `endedByAControl`; let `ToolCallConfirmationRequiredException`
-   pass through.
-3. The agentic loop (`AgenticLoopReactiveAgentServiceImpl`, and every network agent
-   calling a model with tools through `GeboToolCalling`): where the call result is read,
-   detect `ToolCallDecisions.isAwaitingDecision(chatResponse)`; for each key build an
-   `AgentSuspendedWaitingCondition<ToolCallDecisionAnswer, ToolCallDescription>` (new
-   small types: the call id, the tool name, the arguments JSON, the chosen decision)
-   with `humanInTheLoopProcessTreatment=true`, and enter the suspension state as the
-   ask-user tools do. The prompt and the paused `ChatResponse` must be persisted with
-   the suspension (`GNetworkOfAgentsSuspension` carries the agents' private contexts:
-   add the pending prompt messages and the reply there, serialized through the Spring AI
-   message JSON, since the resume needs them verbatim).
-4. On respawn: with the answers, build `ToolCallDecisions` and call
-   `toolCallingManager.executeToolCalls(prompt, pausedResponse, decisions)`; feed the
-   `ToolExecutionResult.conversationHistory()` back into the loop as the next prompt, as
-   `ToolCallingAdvisor` does internally (read `ToolCallingAdvisor.adviseCall` in the
-   2.1 sources for the exact continuation: the history replaces the prompt messages and
-   the loop calls the model again unless `returnDirect`).
-5. Streaming: the paused reply is the last chunk of the stream with the metadata; the
-   chat UI must show "waiting for your confirmation" instead of an answer. The chat
-   envelope needs a new content type (`GeboChatMessageEnvelope<ToolCallConfirmationRequest>`)
-   the UI renders as the existing waiting-condition card.
-6. UI: the waiting conditions panel gets the tool call type: tool name, arguments
-   (pretty JSON), allow/deny buttons, optional message to the model on deny.
-
-### 4.4 Tests
+### Tests
 
 - `GeboToolCallingManagerTest` (exists): the decisions overload applies the ending
   controls; the exception passes through.
-- A policy test: a tool marked by the admin is required, an unmarked one is not, an MCP
-  tool marked is required.
-- `ChatNetworkStepSuspensionTest` / `ToolCallingAgentSuspensionTest` (exist): a model
-  reply awaiting a decision suspends the network with one condition per call; respawn
-  with allow runs the tool and continues; with deny the model receives the deny message
-  (assert on the prompt of the next model call).
+- A policy test: a tool marked by the admin is required, an unmarked one is not, a
+  marked MCP tool is required.
+- `ChatNetworkStepSuspensionTest` and `ToolCallingAgentSuspensionTest` (exist): a reply
+  awaiting decisions suspends the network with one condition per call; resuming with
+  allow runs the tool and continues; with deny the model receives the deny message
+  (assert on the next prompt).
 - A streaming test on `AbstractChatService.composeFlux`: the paused reply produces the
-  confirmation envelope and the FINAL envelope, no empty answer.
-- Live: an agentic chat with one tool marked as needing confirmation, deny then allow.
+  confirmation envelope and the final envelope, never an empty answer.
+- Live: an agentic chat with one tool marked as needing confirmation; deny, then allow.
 
-### 4.5 Risks
+### Risks
 
-The 2.1 continuation of a paused batch is new code in Spring AI (RC); read
-`ToolCallingAdvisor` lines ~216 and ~419 (the two catch blocks) and ~523 (streaming
-pause) before relying on its metadata contract, and pin the behaviour with the tests
-above so a change at GA shows up.
+The continuation of a paused batch is new code in Spring AI, still a release
+candidate. Before relying on its metadata contract, read the two `catch` blocks of
+`ToolCallingAdvisor` (around lines 216 and 419 of the 2.1 sources) and the streaming
+pause (around line 523), and pin the behaviour with the tests above so that a change
+at GA is noticed.
 
-## 5. Streamed tool-call argument parts in the chat UI
+## 10. Item 8: streamed tool-call arguments in the chat
 
-### 5.1 What Spring AI 2.1 offers
+### What Spring AI 2.1 offers
 
-Anthropic, OpenAI (Chat Completions and Responses), Bedrock Converse and DeepSeek stream
-each tool-call argument delta as a partial `ToolCallPart` (`StreamingParts.partial`);
-the complete call arrives once as before. Partial parts are not tool calls
-(`getToolCalls()` skips them), `MessageAggregator` skips them, `ChatClient` passes the
-chunks through, `.stream().content()` is unaffected.
+Anthropic, OpenAI (Chat Completions and Responses), Bedrock Converse and DeepSeek
+stream each piece of a tool call's arguments as a partial `ToolCallPart`; the
+complete call still arrives once, as before. Partial parts are not tool calls:
+`getToolCalls()` skips them, the message aggregator skips them, the `ChatClient`
+passes the chunks through, and `.stream().content()` is unaffected. A UI can therefore
+show "the model is calling tool X with ..." while the arguments are being written.
 
-### 5.2 What Gebo has
+### What Gebo has
 
-`GChatAnswerChunk.of(ChatResponse)` reads text, media, finish reason and the thinking
-metadata the `ThinkingNormalizationAdvisor` sets; `AbstractChatService.composeFlux`
-turns chunks into `GeboChatMessageEnvelope<String>` (answer) and the thinking events
-(`ThinkingStream`), the chat UI renders them.
+`GChatAnswerChunk.of(ChatResponse)` reads the text, the media, the finish reason and
+the thinking metadata; `AbstractChatService.composeFlux` turns chunks into answer
+envelopes and thinking events, which the chat UI renders.
 
-### 5.3 Code
+### What to build
 
-1. `GChatAnswerChunk`: a `toolCallsInProgress` list (tool name, call id or index,
-   arguments so far) read from the partial `ToolCallPart`s of each generation's message
-   (`AssistantMessage.getParts()` filtered on `ToolCallPart` whose `StreamingParts`
-   index marks them partial; see `OpenAiChatModel.toolCallDelta` for how the index is
-   carried) and the complete parts (the call that is about to run).
-2. `AbstractChatService.composeFlux`: a new envelope content type
-   `ToolCallProgress { name, argumentsSoFar, complete }` emitted per chunk that carries
-   a delta; one `complete=true` when the complete part arrives. Keep the answer
-   envelopes untouched.
-3. Chat UI (`gebo-ai-chat-ui`): render the progress like the thinking block, a collapsed
-   "calling <tool>…" line that fills with the arguments, closed when complete; i18n
-   keys through the skill.
-4. The agents networks (`AgenticLoopReactiveAgentServiceImpl`,
-   `ReportWriterReactiveAgentServiceImpl`) consume `GChatAnswerChunk` too: they must
-   ignore the progress (they read the answer text) — verify they do not re-read parts.
+1. `GChatAnswerChunk`: a list of tool calls in progress (tool name, call id or index,
+   arguments so far), read from the partial `ToolCallPart`s of each generation's
+   message and from the complete parts (the call about to run). See
+   `OpenAiChatModel.toolCallDelta` in the Spring AI sources for how the part index is
+   carried.
+2. `AbstractChatService.composeFlux`: a new envelope content type, say
+   `ToolCallProgress { name, argumentsSoFar, complete }`, emitted for each chunk that
+   carries a delta, and once with `complete = true` when the complete part arrives.
+   The answer envelopes stay as they are.
+3. Chat UI (`gebo-ai-chat-ui`): render the progress like the thinking block, a
+   collapsed "calling <tool>..." line that fills with the arguments and closes when
+   complete. Multilanguage keys through the i18n skill.
+4. The networks of agents (`AgenticLoopReactiveAgentServiceImpl`,
+   `ReportWriterReactiveAgentServiceImpl`) read `GChatAnswerChunk` too: they must keep
+   reading only the answer text. Verify they do not re-read the parts.
 
-### 5.4 Tests
+### Tests
 
-- `GChatAnswerChunkTest` (new): a chunk with two partial `ToolCallPart`s at index 0 and a
-  text part → progress carries the concatenated arguments and the text; a complete part
-  → `complete=true`; a chunk with none → empty list.
-- `CutAnswerStreamingTest`/`ThinkingStreamTest` siblings: `composeFlux` emits the
+- `GChatAnswerChunkTest` (new): two partial parts at index 0 plus a text part give the
+  concatenated arguments and the text; a complete part gives `complete = true`; a chunk
+  with none gives an empty list.
+- Alongside `CutAnswerStreamingTest` and `ThinkingStreamTest`: `composeFlux` emits the
   progress envelopes in order with the answer ones and never an empty answer envelope
   for a delta-only chunk.
-- Live: an agentic chat on an OpenAI or Anthropic model with a tool that takes a long
-  argument (a search query): the UI shows the arguments filling.
+- Live: an agentic chat on an OpenAI or Anthropic model with a tool taking a long
+  argument (a search query): the UI shows the arguments filling in.
 
-Note: only the providers above stream deltas; Ollama, Mistral and Google GenAI send the
-call whole, the UI must cope with `complete` arriving without any delta.
+Note: Ollama, Mistral and Google GenAI send the call whole. The UI must cope with
+`complete` arriving without any delta.
 
-## 6. Spring AI's native OpenAI Responses chat model
+## 11. Item 9: Spring AI's own OpenAI Responses model
 
-### 6.1 Current state
+### Where things stand
 
-`gebo.llms.parent/gebo.llms.openai/.../services/OpenAiResponsesChatModel.java` (601
-lines, 5 tests in `OpenAiResponsesChatModelTest`): Gebo's own `ChatModel` over
-`/v1/responses` through the `openai-java` SDK, used by
-`OpenAIChatModelConfigurationSupportService.configureModel` for the models
-`OpenAiResponsesChatModel.usesResponsesApi(model)` (version 6 and later). Stateless, no
-tool loop, maps the conversation to items, carries tool calls, reasoning (as the legacy
-`reasoningContent` metadata `IGReasoningExtractor.PARTS` falls back to) and usage.
+Gebo has its own chat model over OpenAI's Responses API
+(`gebo.llms.parent/gebo.llms.openai/.../services/OpenAiResponsesChatModel.java`, 601
+lines, five tests). `OpenAIChatModelConfigurationSupportService` uses it for the
+models of version 6 and later (`usesResponsesApi`). It is stateless, runs no tool loop,
+maps the conversation to Responses items, and carries tool calls, reasoning and usage.
 
-Spring AI 2.1 ships `org.springframework.ai.openai.responses.OpenAiResponsesChatModel`
-with the same design (stateless, no loop, `ToolCallingAdvisor` owns the rounds) and
-`OpenAiResponsesChatOptions` (model, reasoningEffort, reasoningSummary, verbosity,
-maxOutputTokens, temperature/topP through the common options, responseFormat,
-toolChoice, parallelToolCalls, maxToolCalls, hostedTools, include, truncation,
-serviceTier, promptCacheKey, safetyIdentifier, metadata, extraBody, outputSchema).
-Known limits: no audio, `n`, stop sequences, penalties, seed, logit_bias.
+Spring AI 2.1 now ships `org.springframework.ai.openai.responses.OpenAiResponsesChatModel`
+with the same design, and `OpenAiResponsesChatOptions` (model, reasoning effort and
+summary, verbosity, max output tokens, temperature and top-p, response format, tool
+choice, parallel tool calls, hosted tools, service tier, prompt cache key, safety
+identifier, metadata, extra body, output schema). Its known limits: no audio, no `n`,
+no stop sequences, no penalties, no seed, no logit bias.
 
-### 6.2 Steps
+Replacing 601 tested lines with Spring AI's class is attractive, but only after
+proving the native model does everything Gebo's does on a real model.
 
-1. Feature comparison on the real path, before any code: list what
-   `OpenAIChatModelConfigurationSupportService.configureModel` sets on
-   `OpenAiChatOptions` (model, temperature, topP, tools + `parallelToolCalls`,
-   `maxCompletionTokens`, `reasoningEffort`, user, timeout, api key) and map each to
-   `OpenAiResponsesChatOptions`; list what Gebo's class does that Spring AI's does not
-   (read its javadoc and the five tests: the items mapping, the cut answer saying
-   `length`, the reasoning going back on the next turn, the usage).
-2. Build Spring AI's model in `configureModel` behind the same `usesResponsesApi`
-   branch: `OpenAiResponsesChatModel.builder().openAiClient(OpenAiSetup.setupSyncClient(...))
-   .options(...).toolCallingManager(toolCallingManager).observationRegistry(...)
-   .httpClientBuilderCustomizer(OpenAiClientCustomizer.from(...)).build()`.
-   (`toolCallingManager` on the Chat Completions builder is deprecated since 2.0; check
-   whether the Responses builder's one is, and if so where the manager goes: the
-   `ToolCallingAdvisor` of the ChatClient, which `GAbstractConfigurableChatModel` builds.)
-3. Reasoning: Spring AI's model emits `ReasoningPart`s, read by `PARTS`; Gebo's emits
-   the legacy metadata. The `ThinkingNormalizationAdvisor` tests
-   (`ThinkingNormalizationAdvisorTest`, `InlineThinkingStreamingTest`) run on fakes: add a
-   case with parts from a Responses-shaped stream (a `ReasoningPart` per summary delta,
-   then text) to prove the thinking reaches the UI before the answer once.
-4. Reasoning continuity across turns: Spring AI notes that no chat memory persists
-   message parts yet; Gebo rebuilds the prompt from its own session
-   (`GUserChatSession`), so the encrypted reasoning items of the previous turn are not
-   sent back. Gebo's class sends them back ("its reasoning goes back" test): confirm
-   with a two-turn tool-calling conversation on gpt-5 or later that Spring AI's model
-   does not fail without them (OpenAI requires the reasoning items only inside one
-   tool-calling turn, which the advisor loop keeps in memory).
-5. Switch with a live run on the same prompts as `OpenAiResponsesChatModelTest`
-   (`gebo.llms.tests.services` holds the live test harness) against a gpt-5 or later
-   model: a blocking call, a streamed answer with thinking, a tool-calling round, a cut
-   answer (`maxGeneratedTokens` small) reporting `length`, usage recorded.
-6. Only when 1–5 are green: delete Gebo's class and its test, keep
-   `usesResponsesApi` as the routing predicate.
+### Steps
 
-Keep Gebo's class otherwise; it is tested and in production shape.
+1. **Compare on the real path, before any code.** List what `configureModel` sets on
+   the Chat Completions options today (model, temperature, top-p, tools with parallel
+   calls, max completion tokens, reasoning effort, user, timeout, api key) and map each
+   to the Responses options. List what Gebo's class does that Spring AI's may not,
+   reading its documentation comment and its five tests: the items mapping, the cut
+   answer reporting `length`, the reasoning sent back on the next turn, the usage.
+2. **Build Spring AI's model** in `configureModel`, behind the same `usesResponsesApi`
+   branch, with the OpenAI client from `OpenAiSetup.setupSyncClient`, the options, the
+   tool calling manager, the observation registry and the HTTP client customizer.
+   Check whether the Responses builder's `toolCallingManager` is deprecated like the
+   Chat Completions one; if so the manager belongs to the `ToolCallingAdvisor` that
+   `GAbstractConfigurableChatModel` builds.
+3. **Reasoning.** Spring AI's model emits reasoning parts, which `PARTS` reads; Gebo's
+   emits the legacy metadata. Add to the thinking advisor tests a Responses-shaped
+   stream (one reasoning part per summary delta, then text) proving the thinking
+   reaches the UI once, before the answer.
+4. **Reasoning continuity across turns.** Spring AI notes that no chat memory persists
+   message parts yet. Gebo rebuilds the prompt from its own session, so the encrypted
+   reasoning items of a previous turn would not be sent back; Gebo's class sends them.
+   Confirm on a two-turn tool-calling conversation (gpt-5 or later) that Spring AI's
+   model does not fail without them. OpenAI requires those items only within one
+   tool-calling turn, which the advisor loop keeps in memory.
+5. **Live run** on the prompts of `OpenAiResponsesChatModelTest`, from the live test
+   harness in `gebo.llms.tests.services`, on a gpt-5 or later model: a blocking call, a
+   streamed answer with thinking, a tool-calling round, a cut answer reporting
+   `length`, the usage recorded.
+6. Only when 1 to 5 are green: delete Gebo's class and its test, keep
+   `usesResponsesApi` as the routing rule.
 
-## 7. Session memory and the ChatMemory deprecation
+Keep Gebo's class otherwise. It is tested and in production shape.
 
-Spring AI 2.1 deprecates `ChatMemory`, `MessageWindowChatMemory`,
-`MessageChatMemoryAdvisor` and the repositories for removal in 3.0, replaced by
-Session memory (`spring-ai-session`, `spring-ai-session-advisor`: `SessionService`,
-`SessionRepository`, `SessionMemoryAdvisor`/`SessionTurnAdvisor`, `EventFilter`, turn-aware
-compaction with triggers such as `TurnCountTrigger` and strategies such as
-`WindowCompactionStrategy` or `ChatModelSummarizer`).
+## 12. Item 10: session memory
 
-Gebo uses none of the deprecated classes (verified at the upgrade: no `ChatMemory`
-import in the reactor). Its conversation state is its own: `GUserChatSession`, the
-session shrink (`SessionShrinkIdentityTest`), the agents' private contexts and the
-network suspensions. So nothing breaks at 3.0.
+Spring AI 2.1 deprecates its chat memory classes (`ChatMemory`,
+`MessageWindowChatMemory`, `MessageChatMemoryAdvisor`, the repositories) for removal in
+3.0, replaced by **session memory**: an append-only log of events per session
+(`SessionService`, `SessionRepository`), advisors for the `ChatClient`, event filters,
+and "turn-aware compaction" that trims the history on turn boundaries, so the model
+never sees a tool call without its result or an answer without its question.
 
-What a spike would decide:
-1. whether the agentic loop's context management (the shrink, the cut answers, the
-   earlier-documents handling) would be simpler on a `SessionService` with
-   `WindowCompactionStrategy`, keeping Mongo as the store: there is no Mongo
-   `SessionRepository` in 2.1 (planned before 3.0); Gebo would write one over
-   `IGPersistentObjectManager`;
-2. whether the turn-aware window solves a real problem today (a tool call seen without
-   its result after a shrink): grep the shrink for how it cuts, write the failing test if
-   it can cut inside a turn, fix it locally first.
+Gebo uses none of the deprecated classes; its conversation state is its own
+(`GUserChatSession`, the session shrink, the agents' private contexts, the network
+suspensions). Nothing breaks at 3.0.
+
+What a short spike should answer:
+
+1. Would the agentic loop's context management (the shrink, the cut answers, the
+   earlier-documents handling) be simpler on a `SessionService` with a window
+   compaction, keeping Mongo as the store? There is no Mongo session repository in 2.1
+   (planned before 3.0); Gebo would write one over `IGPersistentObjectManager`.
+2. Does the turn-aware window fix a real problem today? Check whether the session
+   shrink can cut inside a turn (a tool call kept without its result). If it can,
+   write the failing test and fix it locally first.
 
 Recommendation: no adoption on this branch; a design note after the spike. The only
 code worth writing now is the test of point 2.
 
-## 8. Deprecations flagged by the build
+## 13. Item 11: deprecated APIs flagged by the build
 
-Counted from the compile logs of the branch (occurrences, not call sites):
+The compile logs of the branch flag these APIs as deprecated for removal. Counts are
+occurrences in the logs, not call sites.
 
 | Deprecated for removal | Where | Count | Replacement |
 |---|---|---|---|
-| `org.springframework.web.client.RestTemplate` (+ `RequestCallback`, `ResponseExtractor`) | `gebo.integrations.clients/gebo.atlassian.jira.cloud.client` (17), `gebo.api.clients/gebo.monolithic.api.resttemplate.client` (17, generated), `gebo.architecture.integration.tests` (16), `gebo.integrations.clients/gebo.openrouter.ai.client` (12), `gebo.architecture.parent/gebo.restintegration.abstraction.layer` (12+20), `gebo.webconfig` (7), `gebo.systems.parent/gebo.googlesearch.handler` (6), `gebo.atlassian.jira.handler` (6), `gebo.openai.integration.client` (4) | ~117 | `RestClient` (Framework 7.1 deprecates `RestTemplate` for removal) |
+| `RestTemplate` (with `RequestCallback`, `ResponseExtractor`) | `gebo.atlassian.jira.cloud.client` (17), `gebo.monolithic.api.resttemplate.client` (17, generated), `gebo.architecture.integration.tests` (16), `gebo.openrouter.ai.client` (12), `gebo.restintegration.abstraction.layer` (32), `gebo.webconfig` (7), `gebo.googlesearch.handler` (6), `gebo.atlassian.jira.handler` (6), `gebo.openai.integration.client` (4) | about 117 | `RestClient` (Spring Framework 7.1 deprecated `RestTemplate` for removal) |
 | `MappingJackson2HttpMessageConverter` | `gebo.architecture.integration.tests` | 6 | `JacksonJsonHttpMessageConverter` (Jackson 3) |
-| `HttpEntity(MultiValueMap)` | `gebo.llms.deepseek` | 2 | `HttpEntity(T, MultiValueMap)` / `HttpHeaders` |
-| Spring AI `JsonParser` (`toJson`, `fromJson`) | `gebo.architecture.agents.standard` (26), `gebo.architecture.llms.abstraction.layer` (12), `gebo.llms.standard.functions` (8 incl. tests) | ~46 | `org.springframework.ai.util.json.JacksonUtils` / Gebo's own `JsonHelper` |
-| `XxxChatModel.Builder.toolCallingManager(...)` | `gebo.llms.openai`, `gebo.llms.mistral`, `gebo.llms.generic-openai-compatible`, `gebo.llms.aws-bedrock`, `gebo.llms.anthropic3` | 10 | the manager belongs to the `ToolCallingAdvisor` of the ChatClient since 2.0 (`GAbstractConfigurableChatModel` builds the client) |
-| `ChatClient...toolCallbacks(...)` | tests in `gebo.architecture.llms.abstraction.layer`, `gebo.llms.tests.services` | 18 | `.tools(...)` / `ToolCallbackProvider` on the advisor |
-| `ChatModel.getDefaultOptions()` | `gebo.architecture.llms.abstraction.layer` (`AnswerFirstGenerations.Model`, the usage wrappers) | 8 | `getOptions()`; drop the override when the interface loses it |
-| `new Integer(int)`, `new Long(long)` | `gebo.llms.generic-openai-compatible`, `gebo.architecture.graphrag.persistence`, `gebo.architecture.compute.workflow` | 8 | `Integer.valueOf` |
-| `SpringOpaqueTokenIntrospector(uri, clientId, secret)` and the reactive one | `gebo.architecture.security` (`SingleOauth2ConfigOpaqueTokenAuthenticationManager`, `GReactiveHttpRequestAuthenticationManagerResolverImpl`), `gebo.architecture.security.controllers` (`SecurityHeaderDataCompletionController`) | 3 | see section 8b |
+| `HttpEntity(MultiValueMap)` | `gebo.llms.deepseek` | 2 | `HttpEntity(body, headers)` |
+| Spring AI `JsonParser` (`toJson`, `fromJson`) | `gebo.architecture.agents.standard` (26), `gebo.architecture.llms.abstraction.layer` (12), `gebo.llms.standard.functions` (8, tests included) | about 46 | Spring AI's `JacksonUtils` or Gebo's `JsonHelper` |
+| `toolCallingManager(...)` on the chat model builders | `gebo.llms.openai`, `gebo.llms.mistral`, `gebo.llms.generic-openai-compatible`, `gebo.llms.aws-bedrock`, `gebo.llms.anthropic3` | 10 | the manager belongs to the `ToolCallingAdvisor` of the `ChatClient` since 2.0 |
+| `toolCallbacks(...)` on the `ChatClient` request | tests of `gebo.architecture.llms.abstraction.layer` and `gebo.llms.tests.services` | 18 | `.tools(...)` or a `ToolCallbackProvider` |
+| `ChatModel.getDefaultOptions()` | `gebo.architecture.llms.abstraction.layer` (`AnswerFirstGenerations.Model`, the usage wrappers) | 8 | `getOptions()`; drop the override when the interface loses the method |
+| `new Integer(int)`, `new Long(long)` | `gebo.llms.generic-openai-compatible`, `gebo.architecture.graphrag.persistence`, `gebo.architecture.compute.workflow` | 8 | `Integer.valueOf`, `Long.valueOf` |
+| The opaque token introspector constructors | security modules | 3 | item 12 |
 
-Steps, in this order (lowest risk first):
-1. `JsonParser` → `JacksonUtils`/`JsonHelper`: mechanical, covered by the existing
-   tests of the agents standard module (the tool argument parsing tests) and
-   `ReadUrlRoomTest`.
-2. `toolCallingManager` on the model builders and `toolCallbacks` in tests: remove the
-   builder call (the ChatClient advisor already has the manager: verify in
-   `GAbstractConfigurableChatModel` where `ToolCallingAdvisor` is built with the
-   `GeboToolCallingManager`), move the tests to `.tools(...)`; run
+### Order, lowest risk first
+
+1. **`JsonParser`.** Mechanical replacement; covered by the tool argument parsing tests
+   of the agents module and by `ReadUrlRoomTest`.
+2. **`toolCallingManager` and `toolCallbacks`.** Remove the builder calls (the
+   `ChatClient` advisor already carries the manager: verify in
+   `GAbstractConfigurableChatModel` where the advisor is built with
+   `GeboToolCallingManager`); move the tests to `.tools(...)`. Run
    `GeboToolCallingTest`, `GeboToolCallingManagerTest`, `ThinkingNormalizationAdvisorTest`.
-3. `getDefaultOptions`: delete the override in `AnswerFirstGenerations.Model` and the
-   usage wrappers once the interface default is gone (at GA; until then the override is
-   harmless).
-4. `MappingJackson2HttpMessageConverter`, `HttpEntity`, boxed constructors: mechanical.
-5. `RestTemplate` → `RestClient`: not mechanical. `gebo.restintegration.abstraction.layer`
-   (`RestTemplateWrapperService`, used by `OllamaModelsLookupService` and the clients)
-   is the seam: give it a `RestClient`-backed implementation with the same signatures
-   (`getForEntity`, `postForEntity`, `toMessage`), keep the interceptors and the retry
-   (`IGLlmsServiceClientsProvider.getRestClientBuilder()` already exists), switch the
-   callers module by module, the generated `gebo.monolithic.api.resttemplate.client`
-   last (regenerate it with a `RestClient`/`WebClient` codegen library or keep it until
-   Framework removes the class). Tests: the integration tests module exercises the
-   wrapper against the live services; `OllamaModelsLookupService` and the Jira/Google
-   handlers have fakes to add for the error mapping (`toMessage`).
+3. **`getDefaultOptions`.** Delete the overrides when the interface default goes (at
+   GA at the earliest); until then they are harmless.
+4. **Converter, `HttpEntity`, boxed constructors.** Mechanical.
+5. **`RestTemplate` to `RestClient`.** Not mechanical. The seam is
+   `RestTemplateWrapperService` in `gebo.restintegration.abstraction.layer`, used by
+   the Ollama lookup and the integration clients: give it a `RestClient`-backed
+   implementation with the same methods (`getForEntity`, `postForEntity`, `toMessage`),
+   keeping the interceptors and the retry (`IGLlmsServiceClientsProvider.getRestClientBuilder()`
+   already exists), then switch the callers module by module. The generated
+   `gebo.monolithic.api.resttemplate.client` goes last: regenerate it with a
+   `RestClient` or `WebClient` code generation library, or keep it until the Framework
+   removes the class. Tests: the integration tests module exercises the wrapper against
+   live services; the Ollama lookup and the Jira and Google handlers need fakes for the
+   error mapping.
 
-## 8b. Spring Security 7.2 (Boot 4.2.0-RC2 manages 7.2.0-RC1)
+## 14. Item 12: Spring Security 7.2
 
-What the upgrade changed for the security modules (`gebo.architecture.security`,
-`.security.controllers`, `.security.apikey`, `.security.sessions`,
-`gebo.security.directory.mongo`, `gebo.webconfig`): the whole configuration DSL
-(`GeboAISecurityConfig`, `GeboSecurityConfig`, the JWT decoder caches, the dynamic
-client registration repositories, the OAuth2 login policy) compiles on 7.2.0-RC1
-without a warning; the only deprecated-for-removal API left is the three-argument
-constructor of the opaque token introspectors, in three places:
+Boot 4.2.0-RC2 manages Spring Security 7.2.0-RC1. The security modules
+(`gebo.architecture.security`, `.security.controllers`, `.security.apikey`,
+`.security.sessions`, `gebo.security.directory.mongo`, `gebo.webconfig`) compile on it
+without a warning in their configuration (`GeboAISecurityConfig`, `GeboSecurityConfig`,
+the JWT decoder caches, the dynamic client registrations, the login policy). One API is
+deprecated for removal: the three-argument constructor of the opaque token
+introspectors, used in three places.
 
-| Site | Today | Replacement |
+### What to change
+
+| Where | Today | Replacement |
 |---|---|---|
-| `SingleOauth2ConfigOpaqueTokenAuthenticationManager:39` (servlet, the resource-server manager of one SSO configuration) | `new SpringOpaqueTokenIntrospector(introspectionUri, clientId, secret)` | `RestClientOpaqueTokenIntrospector.withIntrospectionUri(uri).clientId(..).clientSecret(..).build()`: `SpringOpaqueTokenIntrospector` rests on `RestTemplate`, deprecated for removal by Framework 7.1, so its builder (`SpringOpaqueTokenIntrospector.withIntrospectionUri`) is only a stop-gap |
-| `SecurityHeaderDataCompletionController:175` (introspects a raw token to say which SSO configuration it belongs to) | same constructor | same; build one introspector per configuration once and cache it next to `JwtDecoderCache`, instead of one per request |
-| `GReactiveHttpRequestAuthenticationManagerResolverImpl:155` (the reactive manager used by the microservices) | `new SpringReactiveOpaqueTokenIntrospector(uri, clientId, secret)` | `SpringReactiveOpaqueTokenIntrospector.withIntrospectionUri(uri).clientId(..).clientSecret(..).build()` (WebClient based, not deprecated) |
+| `SingleOauth2ConfigOpaqueTokenAuthenticationManager` line 39, the servlet resource-server manager of one SSO configuration | `new SpringOpaqueTokenIntrospector(uri, clientId, secret)` | `RestClientOpaqueTokenIntrospector.withIntrospectionUri(uri).clientId(..).clientSecret(..).build()`. `SpringOpaqueTokenIntrospector` rests on `RestTemplate`, itself deprecated for removal, so its own builder is only a stop-gap. |
+| `SecurityHeaderDataCompletionController` line 175, which introspects a raw token to find which SSO configuration issued it | same constructor | same; build one introspector per configuration and cache it, next to `JwtDecoderCache`, instead of one per request |
+| `GReactiveHttpRequestAuthenticationManagerResolverImpl` line 155, the reactive manager of the microservices | `new SpringReactiveOpaqueTokenIntrospector(uri, clientId, secret)` | `SpringReactiveOpaqueTokenIntrospector.withIntrospectionUri(uri).clientId(..).clientSecret(..).build()`, WebClient based, not deprecated |
 
-Behaviour change to verify (7.2.0-RC1, gh-19850): both introspectors now send
-`Content-Type: application/x-www-form-urlencoded` on the introspection request, as RFC
-7662 requires. The providers Gebo introspects against are the `oauth2_generic` ones
-with an `introspectionUri` (`ai.gebo.security.oauth2configs[].providerConfig`,
-KeyCloak and the generic OIDC servers): a provider that accepted the previous request
-keeps working, one that rejected a wrong content type starts working. Nothing to
-change, one live login per configured provider to confirm.
+### What to verify
 
-Not affected: no `SecurityJackson2Modules` (the Jackson 3 migration of 7.0 does not
-apply), no one-time-token login (7.2 made its account status checks opt-in), no
-Content-Security-Policy configured (7.2 adds nonce-based CSP; a hardening item of its
-own, see `GEBO-HARDENING-MANUAL.md`, not an upgrade item).
+Spring Security 7.2 makes both introspectors send
+`Content-Type: application/x-www-form-urlencoded`, as RFC 7662 requires. The providers
+Gebo introspects against are the generic OIDC configurations with an `introspectionUri`
+(`ai.gebo.security.oauth2configs[].providerConfig`, KeyCloak for instance). A provider
+that accepted the previous request keeps working; one that rejected the old content
+type starts working. One live login per configured provider confirms it.
 
-Tests to write, in `gebo.architecture.security/src/test/.../authmanagers`:
-- `OpaqueTokenIntrospectionTest`: a local `HttpServer` introspection endpoint
-  recording the request; assert the `Content-Type`, the basic auth of the client, the
-  `token=` form body, and the principal mapped from `{"active":true,"sub":..}` through
-  the `GReactiveOpaqueTokenAuthenticationConverter` / the servlet converter; an
-  `{"active":false}` answer rejected; run for both the servlet manager and the reactive
-  one.
+### Not affected
+
+No `SecurityJackson2Modules` (the Jackson 3 migration of Security 7.0 does not apply),
+no one-time-token login (7.2 made its account status checks opt-in), no
+Content-Security-Policy configured (7.2 adds nonce-based CSP; a hardening item, see
+`GEBO-HARDENING-MANUAL.md`, not an upgrade one).
+
+### Tests to write
+
+In `gebo.architecture.security/src/test/.../authmanagers`:
+
+- `OpaqueTokenIntrospectionTest`: a local HTTP server playing the introspection
+  endpoint and recording the request; assert the content type, the client's basic
+  authentication, the `token=` form body, and the principal mapped from an active
+  answer through the servlet and the reactive converters; an inactive answer is
+  rejected. Run for both managers.
 - `SecurityHeaderDataCompletionControllerTest`: two configurations, the token accepted
-  by the second one only → `XAuthType.OAUTH2` with its registration id; the introspector
-  cache reused across calls.
+  by the second only gives the OAuth2 type with that registration id; the introspector
+  cache is reused across calls.
 
-Boot 4.2's own security auto-configuration notes are not published yet ("full release
-notes when 4.2 is released"): re-read them at the GA bump (section 10) for the
-management endpoints security, the OAuth2 client properties and the CORS defaults.
-Spring Security's "preparing for 8.0" guide is empty as of 7.2.0-RC1; the deprecations
-above are the whole list for this code base.
+### Open until the GA
 
-## 9. Documentation
+Boot 4.2's security auto-configuration notes are not published yet ("full release
+notes when 4.2 is released"): re-read them at the GA bump for the management
+endpoints security, the OAuth2 client properties and the CORS defaults. Spring
+Security's "preparing for 8.0" guide is still empty; the deprecation above is the
+whole list for this code base.
 
-1. `docs/APPLICATION-YML-ADMIN-MANUAL.md`: section 8 (LLM providers) gets a paragraph on
-   the decision model kind (what it is, which providers, the `decision-generic-openai`
-   entry and `decisionModelProviders` of `providers.yml`); section 18 gets the ranker
-   filter keys, none of which is documented today: `ai.gebo.ragsearch.config.`
-   `rankerIrrelevanceFilterEnabled`, `rankerIrrelevanceFilterContextFraction`,
-   `rankerIrrelevanceFilterMaxFragmentsPerBatch`, `rankerIrrelevanceFilterMinDocuments`,
-   `rankerIrrelevanceFilterWarnRate`, `rankerIrrelevanceFilterProtectedTopFragments`,
-   `rankerIrrelevanceFilterUsesDecisionModel`, `hybridSearchEnabled`,
-   `hybridFullTextShare`, with the defaults of `GeboRagSearchConfig`.
-2. `docs/LLM-ANSWER-THINKING-STREAMING-DESIGN.md`: a section on Spring AI 2.1 message
-   parts (`IGReasoningExtractor.PARTS`, the legacy fallback, the Anthropic tap removal).
-3. The user/admin manual (`/document-gebo-ai-ui-manual`): the "New decision model"
-   option of the LLMs panel and the three editors, with screenshots from a live
-   instance (after 1.2).
-4. `docs/MICROSERVICES-CONTROLLERS.md`: regenerated in 2.5.
-5. The pin comments in the root `pom.xml` are the record of why each version is
-   pinned; keep them current at the GA bump.
+## 15. Item 13: documentation
 
-## 10. GA bump and merge
+1. `docs/APPLICATION-YML-ADMIN-MANUAL.md`. Section 8 (LLM providers) gets a paragraph
+   on the decision model kind: what it is, which providers, the
+   `decision-generic-openai` entry and the `decisionModelProviders` list of
+   `providers.yml`. Section 18 gets the ranker filter keys, none of which is documented
+   today, with the defaults of `GeboRagSearchConfig`:
+   `ai.gebo.ragsearch.config.rankerIrrelevanceFilterEnabled`,
+   `rankerIrrelevanceFilterContextFraction`, `rankerIrrelevanceFilterMaxFragmentsPerBatch`,
+   `rankerIrrelevanceFilterMinDocuments`, `rankerIrrelevanceFilterWarnRate`,
+   `rankerIrrelevanceFilterProtectedTopFragments`, `rankerIrrelevanceFilterUsesDecisionModel`,
+   `hybridSearchEnabled`, `hybridFullTextShare`.
+2. `docs/LLM-ANSWER-THINKING-STREAMING-DESIGN.md`: a section on the message parts of
+   Spring AI 2.1, the `PARTS` reading, its legacy fallback, and why the Anthropic tap
+   is gone.
+3. The user and admin manual (`.claude/skills/document-gebo-ai-ui-manual`): the "New
+   decision model" option of the LLMs panel and the three editors, with screenshots
+   from a live instance, after item 3.
+4. `docs/MICROSERVICES-CONTROLLERS.md`: regenerated with the stubs (item 5).
+5. The pin comments of the root `pom.xml` record why each version is pinned; keep
+   them current at the GA bump.
+
+## 16. Item 14: GA bump and merge
 
 1. When Spring Boot 4.2.0, Spring AI 2.1.0 and Spring Cloud 2026.0.0 are on Maven
-   Central: `spring-boot-starter-parent` in the root and
-   `microservices-integration-tests/pom.xml`, `spring.ai.version` in the root,
+   Central: `spring-boot-starter-parent` in the root and in
+   `microservices-integration-tests/pom.xml`; `spring.ai.version` in the root;
    `spring-cloud.version` in the 16 poms (`gebo.apps.parent/gebo.microservices.apps.parent`
-   and the 15 under `gebo.microservices.architecture.parent`).
+   and the 15 modules under `gebo.microservices.architecture.parent`).
 2. Re-check the pins against the GA BOMs: `derby.version` (drop if Boot manages
-   10.17.1.0+), `spring-retry.version` (drop if Boot manages it), the MCP `mcp-bom` (set
-   to what `spring-ai-mcp` 2.1.0 declares, or drop if the Spring AI BOM manages it),
-   springdoc (move to the release that claims Boot 4.2).
-3. Full `mvn clean install` of OSS, then the downstream editions with clean builds
-   (`-pl` builds ship stale jars); fix what the GA changed from the RC (the upgrade
-   notes list the breaking changes between RC2 and GA).
-4. CI green, the boot smoke test (1.1) and the live decision check (1.2) repeated on the
-   GA jars.
-5. Merge into `develop` with a merge commit; the branch history stays.
+   10.17.1.0 or later), `spring-retry.version` (drop if Boot manages it), the MCP
+   `mcp-bom` (set to what `spring-ai-mcp` 2.1.0 declares, or drop if the Spring AI BOM
+   manages it), springdoc (move to the release that claims Boot 4.2).
+3. A full `mvn clean install` of this repository, then clean builds of the downstream
+   editions (partial builds ship stale jars). Fix what changed between the release
+   candidates and the GA, listed in the upgrade notes.
+4. CI green; repeat the boot smoke test (item 2) and the live decision check (item 3)
+   on the GA jars.
+5. Merge into `develop` with a merge commit, keeping the branch history.
 
-## 11. Suggested order
+## 17. Suggested order
 
-1. 1.1 boot smoke, 1.2 live decision check, 3.5 unit tests of the support services:
-   they validate what is written and are cheap.
-2. 2 stubs regeneration (needs the running app of 1.1).
-3. 9.1 and 9.2 documentation.
-4. 8.1–8.4 deprecations and 8b (the opaque token introspectors): mechanical, keeps
-   the warning noise down for the rest.
-5. 3 setup wizard.
-6. 6 native Responses model (live tests on a gpt-5 or later model needed).
-7. 4 tool-call confirmation, then 5 streamed tool parts (both need the chat UI and
-   the harness, and 5 is simpler once 4's envelope type exists).
-8. 8.5 `RestTemplate` migration.
-9. 7 session memory spike, design note only.
-10. 10 at the GAs.
+1. Items 2, 3 and 4: boot smoke test, live decision check, provider unit tests. They
+   validate what is already written and are cheap.
+2. Item 5, stubs regeneration (needs the running application of item 2).
+3. Item 13, points 1 and 2 (the manuals).
+4. Item 11, steps 1 to 4, and item 12: mechanical, and they keep the warning noise
+   down for the rest.
+5. Item 6, the setup wizard.
+6. Item 9, the native Responses model (needs live tests on a gpt-5 or later model).
+7. Item 7, tool-call confirmation, then item 8, streamed tool arguments (both touch the
+   chat UI and the harness; 8 is simpler once 7's envelope type exists).
+8. Item 11, step 5, the `RestTemplate` migration.
+9. Item 10, the session memory spike, design note only.
+10. Item 14, at the GA releases.
