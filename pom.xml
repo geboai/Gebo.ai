@@ -215,10 +215,17 @@
 	</distributionManagement>
 	<dependencyManagement>
 		<dependencies>
+			<!-- The MCP Java SDK version Spring AI's MCP modules are built against: Spring
+			     AI 2.1.0-RC2 compiles spring-ai-mcp against mcp 2.2.0-M2 (the SDK that
+			     speaks the 2026-07-28 "modern" protocol), while this BOM used to import
+			     2.0.0 and so pinned the SDK DOWN under those jars - a compile-clean
+			     NoSuchMethodError waiting for the first MCP call. Keep it on the version
+			     the spring-ai-mcp pom of ${spring.ai.version} declares; DROP once the
+			     Spring AI BOM manages the SDK itself. -->
 			<dependency>
 				<groupId>io.modelcontextprotocol.sdk</groupId>
 				<artifactId>mcp-bom</artifactId>
-				<version>2.0.0</version>
+				<version>2.2.0-M2</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
