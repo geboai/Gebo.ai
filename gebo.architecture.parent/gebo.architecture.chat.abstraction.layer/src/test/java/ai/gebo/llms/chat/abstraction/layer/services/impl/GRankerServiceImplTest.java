@@ -19,13 +19,19 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.decision.DecisionModel;
+import org.springframework.ai.decision.DecisionResponse;
+import org.springframework.ai.decision.answer.YesNoAnswer;
+import org.springframework.ai.decision.input.TextInput;
 import org.springframework.ai.document.Document;
 
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableDecisionModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -49,6 +55,7 @@ class GRankerServiceImplTest {
 
 	private IGRankerModelRuntimeConfigurationDao rankerModelDao;
 	private IGChatModelRuntimeConfigurationDao chatModelsDao;
+	private IGDecisionModelRuntimeConfigurationDao decisionModelDao;
 	private IGPromptConfigDao promptsDao;
 	private RankerModel rankerModel;
 	private GRankerServiceImpl service;
@@ -58,6 +65,8 @@ class GRankerServiceImplTest {
 	void rankerReversingTheFragments() {
 		rankerModelDao = mock(IGRankerModelRuntimeConfigurationDao.class);
 		chatModelsDao = mock(IGChatModelRuntimeConfigurationDao.class);
+		// no decision model configured unless a test sets one: the filter judges with the chat model
+		decisionModelDao = mock(IGDecisionModelRuntimeConfigurationDao.class);
 		promptsDao = mock(IGPromptConfigDao.class);
 		rankerModel = mock(RankerModel.class);
 		when(rankerModel.call(any(RankingInput.class))).thenAnswer(invocation -> {
@@ -83,7 +92,8 @@ class GRankerServiceImplTest {
 		// the irrelevance filter enabled, from 5 fragments on (the defaults)
 		GeboRagSearchConfig ragSearchConfig = new GeboRagSearchConfig(null, null, null, null, null, null, null, null,
 				null);
-		service = new GRankerServiceImpl(rankerModelDao, chatModelsDao, promptsDao, ragSearchConfig, audit);
+		service = new GRankerServiceImpl(rankerModelDao, chatModelsDao, decisionModelDao, promptsDao, ragSearchConfig,
+				audit);
 	}
 
 	private static List<Document> fragments(int count) {
@@ -165,5 +175,46 @@ class GRankerServiceImplTest {
 
 		assertThrows(LLMConfigException.class, () -> service.rank(fragments(2), "query", 2));
 		assertThrows(LLMConfigException.class, () -> service.rankAndRemoveIrrelevant(fragments(2), "query", 2));
+	}
+	@Test
+	void theIrrelevanceFilterJudgesWithTheDefaultDecisionModelWhenOneIsConfigured() throws Exception {
+		IGConfigurableDecisionModel decisionModel = mock(IGConfigurableDecisionModel.class);
+		when(decisionModel.getCode()).thenReturn("test-decision");
+		List<String> judged = new ArrayList<>();
+		// the fragments 1 and 3 are judged useless, the others useful
+		DecisionModel model = prompt -> {
+			String text = ((TextInput) prompt.getInstructions()).getText();
+			judged.add(text);
+			boolean useless = text.contains("fragment 1") || text.contains("fragment 3");
+			return DecisionResponse.builder(prompt).answer(GRankerServiceImpl.RELEVANCE_QUESTION,
+					YesNoAnswer.builder().probability(useless ? 0.1d : 0.9d).build()).build();
+		};
+		when(decisionModel.getDecisionModel()).thenReturn(model);
+		when(decisionModelDao.defaultHandler()).thenReturn(decisionModel);
+
+		// the ranker reverses the list: f5 f4 f3 f2 f1 f0; the top 2 are protected
+		List<Document> kept = service.rankAndRemoveIrrelevant(fragments(6), "query", 6);
+
+		assertEquals(List.of("f5", "f4", "f2", "f0"), ids(kept));
+		assertEquals(4, judged.size());
+		assertEquals(true, judged.get(0).startsWith("Question:\nquery"));
+		verify(chatModelsDao, never()).findByUsesOrGetDefault(any(ChatModelsUses[].class));
+		verify(promptsDao, never()).findByPromptUse(any());
+	}
+
+	@Test
+	void theDecisionModelFilterKeepsWhatItCannotJudge() throws Exception {
+		IGConfigurableDecisionModel decisionModel = mock(IGConfigurableDecisionModel.class);
+		when(decisionModel.getCode()).thenReturn("test-decision");
+		DecisionModel model = prompt -> {
+			throw new IllegalStateException("provider down");
+		};
+		when(decisionModel.getDecisionModel()).thenReturn(model);
+		when(decisionModelDao.defaultHandler()).thenReturn(decisionModel);
+
+		List<Document> kept = service.rankAndRemoveIrrelevant(fragments(6), "query", 6);
+
+		assertEquals(List.of("f5", "f4", "f3", "f2", "f1", "f0"), ids(kept));
+		verify(chatModelsDao, never()).findByUsesOrGetDefault(any(ChatModelsUses[].class));
 	}
 }

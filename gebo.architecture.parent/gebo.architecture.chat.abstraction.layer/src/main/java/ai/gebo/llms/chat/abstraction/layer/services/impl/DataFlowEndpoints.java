@@ -29,6 +29,8 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableDecisionModel;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
@@ -93,6 +95,28 @@ public final class DataFlowEndpoints {
 	}
 
 	/** The internal services chat model, the default one when none is set for that use. */
+	/**
+	 * The default decision model, when one is configured: it receives the query and the
+	 * retrieved fragments it judges the relevance of.
+	 */
+	public static DataEndpoint decisionModel(IGDecisionModelRuntimeConfigurationDao decisionModelsDao) {
+		if (decisionModelsDao == null) {
+			return null;
+		}
+		IGConfigurableDecisionModel model;
+		try {
+			model = decisionModelsDao.defaultHandler();
+		} catch (RuntimeException e) {
+			return null;
+		}
+		if (model == null || model.getConfig() == null) {
+			return null;
+		}
+		GBaseModelConfig config = model.getConfig();
+		return modelEndpoint("decision-model-" + model.getCode(),
+				describeModel("Decision model", model.getDescription(), config), config, "decision model");
+	}
+
 	public static IGConfigurableChatModel utilityModel(IGChatModelRuntimeConfigurationDao chatModelsDao) {
 		if (chatModelsDao == null) {
 			return null;

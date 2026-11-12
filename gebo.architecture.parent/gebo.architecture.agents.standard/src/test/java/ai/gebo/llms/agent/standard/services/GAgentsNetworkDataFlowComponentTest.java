@@ -66,6 +66,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints;
 import ai.gebo.model.base.GeboComponentInfo;
@@ -276,7 +277,8 @@ class GAgentsNetworkDataFlowComponentTest {
 	private GAgentsNetworkDataFlowComponent component() {
 		return new GAgentsNetworkDataFlowComponent(provider(networksDao), provider(searchServices),
 				provider((IGeboSystemUserService) null), provider(toolSources), provider(chatModelsDao),
-				provider(embeddingModelsDao), provider(rankerModelsDao), provider(fullTextSearch),
+				provider(embeddingModelsDao), provider(rankerModelsDao),
+				provider((IGDecisionModelRuntimeConfigurationDao) null), provider(fullTextSearch),
 				provider(knowledgeGraphSearch), provider(agentConfigs), provider(agentServices));
 	}
 

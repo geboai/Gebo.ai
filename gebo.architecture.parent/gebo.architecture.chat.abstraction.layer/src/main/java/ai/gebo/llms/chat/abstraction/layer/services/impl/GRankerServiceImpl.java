@@ -8,6 +8,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.springframework.ai.decision.DecisionModel;
+import org.springframework.ai.decision.DecisionPrompt;
+import org.springframework.ai.decision.DecisionResponse;
+import org.springframework.ai.decision.answer.YesNoAnswer;
+import org.springframework.ai.decision.question.YesNoQuestion;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
 import org.springframework.stereotype.Service;
@@ -22,6 +27,9 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableDecisionModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -61,6 +69,10 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 
 	private final IGRankerModelRuntimeConfigurationDao rankerModelDao;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
+	// The default decision model, when one is configured, judges the relevance of the
+	// ranked fragments in place of the internal services chat model: one yes/no
+	// question per fragment, no prompt to parse.
+	private final IGDecisionModelRuntimeConfigurationDao decisionModelDao;
 	private final IGPromptConfigDao promptsDao;
 	private final GeboRagSearchConfig ragSearchConfig;
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
@@ -88,14 +100,14 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	// drop the irrelevant fragments. Metadata-only as well: on top of the model
 	// coordinates it records how many fragments entered the filter and how many it
 	// discarded, never the fragments themselves nor the query.
-	private void logRankerFilterEvent(SecurityEvent event, IGConfigurableChatModel chatModel, long startMillis,
+	private void logRankerFilterEvent(SecurityEvent event, IGConfigurableModel<?, ?> judgingModel, long startMillis,
 			String outcome, int rankedFragments, int discardedFragments) {
 		event.setEventType(SecurityAuditTaxonomy.EventType.LLM_INVOCATION);
 		event.setCategory(SecurityAuditTaxonomy.Category.LLM_INVOCATION);
 		event.setAction(SecurityAuditTaxonomy.Action.LLM_INVOKE_RANK_FILTER);
-		event.setResourceId(chatModel != null ? chatModel.getCode() : null);
-		if (chatModel != null && chatModel.getType() != null) {
-			event.getDetails().put("provider", chatModel.getType().getCode());
+		event.setResourceId(judgingModel != null ? judgingModel.getCode() : null);
+		if (judgingModel != null && judgingModel.getType() != null) {
+			event.getDetails().put("provider", judgingModel.getType().getCode());
 		}
 		event.getDetails().put("latencyMs", System.currentTimeMillis() - startMillis);
 		event.getDetails().put("rankedFragments", rankedFragments);
@@ -241,23 +253,31 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 		}
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		final long startMillis = System.currentTimeMillis();
-		IGConfigurableChatModel serviceModel = null;
+		IGConfigurableModel<?, ?> serviceModel = null;
 		try {
-			serviceModel = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
-			if (serviceModel == null) {
-				LOGGER.warn(
-						"No INTERNAL_SERVICES or default chat model configured, the ranked fragments are kept as they are");
-				return ranked;
+			final Set<Integer> discardedIndices;
+			final IGConfigurableDecisionModel decisionModel = decisionModelOfTheFilter();
+			if (decisionModel != null) {
+				serviceModel = decisionModel;
+				discardedIndices = discardedDocumentIndices(ranked, query, decisionModel);
+			} else {
+				final IGConfigurableChatModel chatModel = chatModelsDao
+						.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
+				if (chatModel == null) {
+					LOGGER.warn(
+							"No INTERNAL_SERVICES or default chat model configured, the ranked fragments are kept as they are");
+					return ranked;
+				}
+				serviceModel = chatModel;
+				GPromptTemplateConfig prompt = promptsDao
+						.findByPromptUse(GeboPromptsLibrary.RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT);
+				if (prompt == null) {
+					LOGGER.warn("Prompt " + GeboPromptsLibrary.RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT
+							+ " not found, the ranked fragments are kept as they are");
+					return ranked;
+				}
+				discardedIndices = discardedDocumentIndices(ranked, query, chatModel, prompt, toolCalling);
 			}
-			GPromptTemplateConfig prompt = promptsDao
-					.findByPromptUse(GeboPromptsLibrary.RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT);
-			if (prompt == null) {
-				LOGGER.warn("Prompt " + GeboPromptsLibrary.RANKER_IRRELEVANT_FRAGMENTS_FILTER_PROMPT
-						+ " not found, the ranked fragments are kept as they are");
-				return ranked;
-			}
-			final Set<Integer> discardedIndices = discardedDocumentIndices(ranked, query, serviceModel, prompt,
-					toolCalling);
 			// Only documents the model judged useless in all of their pieces leave, and the
 			// best ranked fragment is in the output list in every situation: whatever the
 			// model thinks of it, returning nothing at all would leave the callers with no
@@ -315,6 +335,86 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	 * {@code rankerIrrelevanceFilterProtectedTopFragments} fragments are excluded from
 	 * the walk entirely and can never be discarded.
 	 */
+	/**
+	 * The decision model the irrelevance filter judges with: the default one, when the
+	 * filter is set to use it and one is configured; null leaves the judgement to the
+	 * internal services chat model and its prompt.
+	 */
+	private IGConfigurableDecisionModel decisionModelOfTheFilter() {
+		if (!ragSearchConfig.isRankerIrrelevanceFilterUsesDecisionModel() || decisionModelDao == null) {
+			return null;
+		}
+		final IGConfigurableDecisionModel decisionModel = decisionModelDao.defaultHandler();
+		if (decisionModel != null && decisionModel.getDecisionModel() == null) {
+			LOGGER.warn("The default decision model code=" + decisionModel.getCode()
+					+ " is not initialized, the irrelevance filter falls back to the chat model");
+			return null;
+		}
+		return decisionModel;
+	}
+
+	/** The question the decision model answers about each ranked fragment. */
+	static final String RELEVANCE_QUESTION = "relevant";
+	static final YesNoQuestion RELEVANCE = YesNoQuestion.builder()
+			.text("Does the fragment contain information useful to answer the question?")
+			.whenYes("The fragment states facts, data, definitions or steps the answer to the question can be built on,"
+					+ " even partially")
+			.whenNo("The fragment is about something else, or repeats the question without adding anything to answer it")
+			.build();
+
+	/**
+	 * The indices of the ranked fragments the decision model judges useless for the
+	 * query: each fragment below the protected top is submitted whole with the question,
+	 * and leaves when the model answers no. A fragment the model refuses or fails to
+	 * judge is kept.
+	 */
+	private Set<Integer> discardedDocumentIndices(List<Document> ranked, String query,
+			IGConfigurableDecisionModel decisionModel) {
+		final DecisionModel model = decisionModel.getDecisionModel();
+		final int protectedTop = Math.max(0,
+				Math.min(ragSearchConfig.getRankerIrrelevanceFilterProtectedTopFragments(), ranked.size()));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Irrelevance filter judges " + (ranked.size() - protectedTop) + " of " + ranked.size()
+					+ " ranked fragment(s) with the decision model code=" + decisionModel.getCode()
+					+ (protectedTop > 0 ? ", the top " + protectedTop + " protected from judgement" : ""));
+		}
+		final Set<Integer> discarded = new HashSet<>();
+		for (int index = protectedTop; index < ranked.size(); index++) {
+			final Document document = ranked.get(index);
+			final String text = document.getText() != null ? document.getText() : "";
+			if (text.isBlank()) {
+				continue;
+			}
+			try {
+				final DecisionResponse response = model.call(DecisionPrompt.builder()
+						.text("Question:\n" + (query != null ? query : "") + "\n\nFragment:\n" + text)
+						.question(RELEVANCE_QUESTION, RELEVANCE).build());
+				if (response.isRefused(RELEVANCE_QUESTION)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("The decision model refused to judge the fragment " + document.getId()
+								+ ", it is kept");
+					}
+					continue;
+				}
+				final YesNoAnswer answer = response.getYesNo(RELEVANCE_QUESTION);
+				if (LOGGER.isTraceEnabled()) {
+					LOGGER.trace("Fragment " + document.getId() + " relevance probability " + answer.getProbability()
+							+ (answer.isYes() ? " kept" : " discarded"));
+				}
+				if (!answer.isYes()) {
+					discarded.add(index);
+				}
+			} catch (RuntimeException e) {
+				LOGGER.warn("The decision model cannot judge the fragment " + document.getId() + ", it is kept: "
+						+ e.getMessage());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Decision model failure on fragment " + document.getId(), e);
+				}
+			}
+		}
+		return discarded;
+	}
+
 	private Set<Integer> discardedDocumentIndices(List<Document> ranked, String query,
 			IGConfigurableChatModel serviceModel, GPromptTemplateConfig prompt, GeboToolCalling toolCalling)
 			throws LLMConfigException {

@@ -17,5 +17,5 @@ package ai.gebo.llms.abstraction.layer.cluster;
  * implementation without having to resolve it from the serialized payload type.
  */
 public enum GLlmModelClusterCategory {
-	CHAT, EMBEDDING, RANKER, TEXT_TO_SPEECH, TRANSCRIPT, IMAGE;
+	CHAT, EMBEDDING, RANKER, TEXT_TO_SPEECH, TRANSCRIPT, IMAGE, DECISION;
 }

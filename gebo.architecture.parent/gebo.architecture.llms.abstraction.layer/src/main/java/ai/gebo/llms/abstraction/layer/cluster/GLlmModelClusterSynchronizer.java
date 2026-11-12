@@ -22,6 +22,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.cluster.GLlmModelClusterEvent.Operation;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
@@ -185,6 +186,8 @@ public class GLlmModelClusterSynchronizer {
 			return runtimeBinder.getImplementationOf(IGTranscriptModelRuntimeConfigurationDao.class);
 		case IMAGE:
 			return runtimeBinder.getImplementationOf(IGImageModelRuntimeConfigurationDao.class);
+		case DECISION:
+			return runtimeBinder.getImplementationOf(IGDecisionModelRuntimeConfigurationDao.class);
 		default:
 			return null;
 		}

@@ -2,6 +2,7 @@ package ai.gebo.llms.abstraction.layer.dto;
 
 import ai.gebo.core.messages.LLMCallOutcome;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
@@ -93,6 +94,8 @@ public class LLMUsageDetailDto {
 			detail.setModelType(ModelType.TTS);
 		} else if (config instanceof GBaseTranscriptModelConfig) {
 			detail.setModelType(ModelType.TRANSCRIPT);
+		} else if (config instanceof GBaseDecisionModelConfig) {
+			detail.setModelType(ModelType.DECISION);
 		}
 		return detail;
 	}

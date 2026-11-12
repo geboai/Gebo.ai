@@ -88,6 +88,17 @@
             [disabled]="createChoices.controls['image'].value?false:true"
           (onClick)="configureImageModel();"></p-button>
         </div>
+        <div class="gebo-llms-admin__create-option">
+          <gebo-ai-field id="decision"  label="New decision model" help="Select the supplier to add a new decision model: a small model answering yes/no, choice and score questions, used to judge the relevance of the retrieved fragments" placeholder="Select the decision model provider">
+            <geboai-editable-listbox-component formControlName="decision"
+              [data]="decisionModelsTypes" gebo-ai-field-element>
+            </geboai-editable-listbox-component>
+          </gebo-ai-field>
+          <p-button id="NewDecisionModelConfigurationBtn" gebo-ai-label
+            label="New decision model configuration" [outlined]="true" icon="pi pi-microchip-ai"
+            [disabled]="createChoices.controls['decision'].value?false:true"
+          (onClick)="configureDecisionModel();"></p-button>
+        </div>
       </div>
     </div>
     <div class="gebo-llms-admin__section">
@@ -308,6 +319,40 @@
                       </ng-template>
                     </p-table>
                   }</p-panel>
+                }
+              </div>
+              <div class="gebo-llms-admin__section">
+                @if (decisionModels && decisionModels.length) {
+                  <p-panel id="DecisionModelsZone" gebo-ai-label
+                    header="Configured decision models">
+                    <p-table [value]="decisionModels">
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th id="CodeHeader7" gebo-ai-text>Code</th>
+                          <th id="DescriptionHeader7" gebo-ai-text>Description</th>
+                          <th id="ModelProviderHeader7" gebo-ai-text>Model provider</th>
+                          <th id="ModelHeader7" gebo-ai-text>Model </th>
+                          <th id="RoleHeader7" gebo-ai-text>Role</th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-model>
+                        <tr>
+                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                          <td>{{ model.configuration?.description }}</td>
+                          <td>{{ model.configuration?.modelTypeCode }}</td>
+                          <td>{{ model.configuration?.choosedModel?.code }}</td>
+                          <td>
+                            @if (model.configuration?.defaultModel === true) { <span id="RoleDefault" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default model</span> }
+                          </td>
+                          <td></td>
+                          <td><p-button id="ConfigureBtn7" gebo-ai-label (onClick)="editDecisionModel(model)"
+                          [outlined]="true" label="configure" icon="pi pi-wrench"></p-button></td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </p-panel>
                 }
               </div>
             </div>

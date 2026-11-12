@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
@@ -129,7 +130,8 @@ class GStandardChatPipelineDataFlowComponentTest {
 
 	private GDataFlowMetaInfos flow() {
 		return new GStandardChatPipelineDataFlowComponent(provider(profiles), provider(profileModels),
-				provider(chatModels), provider(embeddingModels), provider(rankerModels), provider(searchServices),
+				provider(chatModels), provider(embeddingModels), provider(rankerModels),
+				provider((IGDecisionModelRuntimeConfigurationDao) null), provider(searchServices),
 				provider(fullTextSearch), provider(knowledgeGraphSearch)).getDataFlowMetaInfos();
 	}
 
