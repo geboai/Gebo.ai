@@ -1,6 +1,6 @@
 # @Gebo.ai/reusable-ui
 
-> Angular 21 (module-based, Optimus UI based) UI component library for Gebo.ai: chat widget,
+> Angular 22 (module-based, Optimus UI based) UI component library for Gebo.ai: chat widget,
 > knowledge-base browsing/ingestion controls, admin entity-editing forms, login/setup, and usage
 > dashboards. Consumed both internally (by `@Gebo.ai/gebo-ai-chat-ui` and `@Gebo.ai/gebo-ai-admin-ui`)
 > and by third-party apps embedding Gebo.ai UI. This file, and the docs it links to, are written for

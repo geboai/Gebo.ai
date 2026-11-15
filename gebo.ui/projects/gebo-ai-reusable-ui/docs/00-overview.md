@@ -1,6 +1,6 @@
 # @Gebo.ai/reusable-ui — Overview
 
-Angular 21 library of components/services powering the Gebo.ai web app (chat, knowledge-base
+Angular 22 library of components/services powering the Gebo.ai web app (chat, knowledge-base
 browsing/ingestion, admin entity forms, login/setup, usage dashboards). It is consumed by three
 sibling libraries in the same monorepo (`gebo-ai-chat-ui`, `gebo-ai-admin-ui`) and by the shell
 app (`gebo.ui/src/app`), and is also published as an installable npm package for third-party apps
