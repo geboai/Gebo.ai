@@ -28,12 +28,33 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * service packages either {@code gebo.microservices.acl.client} or
  * {@code gebo.acl.mongo}, never both.
  * </p>
+ *
+ * <p>
+ * The owner's address is resolved from the topology, unless the topology is switched
+ * off ({@code gebo.microservices.topology.enabled=false}): then it is
+ * {@link #getBaseUrl() base-url}.
+ * </p>
  */
-@ConfigurationProperties(prefix = "ai.gebo.acl.client")
+@ConfigurationProperties(prefix = GeboAclClientProperties.PREFIX)
 public class GeboAclClientProperties {
+
+	/** Prefix of the ACL client configuration. */
+	public static final String PREFIX = "ai.gebo.acl.client";
 
 	/** Id of the microservice that owns the ACL store. */
 	private String microserviceId = "heimdall_gebo_ai";
+
+	/**
+	 * The owner's base url, context path included (e.g. {@code http://gebo-ai:12999}
+	 * for a monolith), called with a plain WebClient - no discovery.
+	 *
+	 * <p>
+	 * Read only with the topology switched off, and then required: the service does
+	 * not start without it. With the topology on, the owner's address comes from the
+	 * topology and this is ignored, with a warning.
+	 * </p>
+	 */
+	private String baseUrl;
 
 	/** Base path of the ACL endpoints; must match {@code ai.gebo.acl.cluster.base-path}. */
 	private String basePath = "api/cluster/AclController";
@@ -68,6 +89,14 @@ public class GeboAclClientProperties {
 
 	public void setMicroserviceId(String microserviceId) {
 		this.microserviceId = microserviceId;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	public String getBasePath() {

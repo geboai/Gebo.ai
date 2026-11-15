@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.environment.ArchitectureType;
@@ -18,6 +19,7 @@ import ai.gebo.architecture.environment.IGClientsTopologyProvider;
 import ai.gebo.microservices.topology.GeboMicroservice;
 import ai.gebo.microservices.topology.GeboMicroservicesTopology;
 import ai.gebo.microservices.topology.GeboStandardMicroservices;
+import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyProperties;
 
 /**
  * The microservices-architecture counterpart of
@@ -74,9 +76,18 @@ import ai.gebo.microservices.topology.GeboStandardMicroservices;
  * is computed once at construction and shared; the instance is thread-safe.
  * </p>
  *
+ * <p>
+ * It is the topology's answer, so it does not exist with the topology switched off
+ * ({@code gebo.microservices.topology.enabled=false}): such a service serves no
+ * clients topology. The condition is on the switch rather than on the topology
+ * bean, because a component-scanned class is registered before the
+ * auto-configurations and a bean condition would never see the topology.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 @Service
+@ConditionalOnProperty(prefix = GeboMicroservicesTopologyProperties.PREFIX, name = GeboMicroservicesTopologyProperties.ENABLED, havingValue = "true", matchIfMissing = true)
 public class GClientsTopologyProviderImpl implements IGClientsTopologyProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GClientsTopologyProviderImpl.class);
