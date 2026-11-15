@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.bedrock.converse.BedrockChatOptions;
 import org.springframework.ai.bedrock.converse.BedrockProxyChatModel;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
@@ -127,7 +126,6 @@ public class BedrockChatModelConfigurationSupportService
 			}
 			BedrockChatOptions options = builder.build();
 
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
 			// connectionTimeout to 5s, which cut long streamed generations well before
@@ -145,7 +143,6 @@ public class BedrockChatModelConfigurationSupportService
 					.connectionTimeout(connectTimeout)
 					.connectionAcquisitionTimeout(connectTimeout)
 					.options(options)
-					.toolCallingManager(toolCallingManager)
 					.observationRegistry(observationRegistry);
 			// The thinking the configuration asks for, on the models whose efforts the
 			// parameter rules know (Claude): Spring AI's options cannot carry it, the

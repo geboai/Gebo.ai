@@ -164,7 +164,7 @@ class GeboToolCallingTest {
 		final ChatModel model = modelAnswering(
 				round -> round == 1 ? toolCall("askAPerson", "{\"question\":\"which one?\"}") : text("done"));
 		final ChatResponse response = ChatClient.builder(model).build().prompt().user("q")
-				.toolCallbacks(askingTool(false)).toolContext(toolCalling.toolsContext(null))
+				.tools(askingTool(false)).toolContext(toolCalling.toolsContext(null))
 				.advisors(toolCalling.advisor(ObservationRegistry.NOOP)).call().chatResponse();
 		assertEquals("done", response.getResult().getOutput().getText());
 		assertEquals(List.of("which one?"), asked.questions, "stored by the callback, read after the call");
@@ -180,7 +180,7 @@ class GeboToolCallingTest {
 		final ChatModel model = modelAnswering(
 				round -> round == 1 ? toolCall("askAPerson", "{\"question\":\"may I?\"}") : text("never asked"));
 		final ChatResponse response = ChatClient.builder(model).build().prompt().user("q")
-				.toolCallbacks(askingTool(true)).toolContext(toolCalling.toolsContext(null))
+				.tools(askingTool(true)).toolContext(toolCalling.toolsContext(null))
 				.advisors(toolCalling.advisor(ObservationRegistry.NOOP)).call().chatResponse();
 		// the tool's result, as Spring AI renders a tool's String result: JSON
 		assertEquals("\"Asked: may I?\"", response.getResult().getOutput().getText(),
@@ -197,7 +197,7 @@ class GeboToolCallingTest {
 				.maxTotalToolCalls(1).onLimitExceeded(ToolCallLimitBehavior.THROW).build();
 		final ChatModel model = modelAnswering(round -> toolCall("askAPerson", "{\"question\":\"again?\"}"));
 		final ChatResponse response = ChatClient.builder(model).build().prompt().user("q")
-				.toolCallbacks(askingTool(false)).toolContext(toolCalling.toolsContext(null))
+				.tools(askingTool(false)).toolContext(toolCalling.toolsContext(null))
 				.advisors(toolCalling.advisor(ObservationRegistry.NOOP)).call().chatResponse();
 		assertTrue(response.getResult().getOutput().getText().contains("limit"),
 				response.getResult().getOutput().getText());
@@ -446,7 +446,7 @@ class GeboToolCallingTest {
 
 		ChatClient stopping = ChatClient.builder(modelAnswering(round -> toolCall("askAPerson", "{\"question\":\"q?\"}")))
 				.build();
-		stopping.prompt("ask").toolCallbacks(askingTool(true)).toolContext(toolCalling.toolsContext(null))
+		stopping.prompt("ask").tools(askingTool(true)).toolContext(toolCalling.toolsContext(null))
 				.advisors(toolCalling.advisor(null)).call().content();
 		assertEquals(2, toolCalling.getCalls());
 		assertTrue(toolCalling.isStoppedByTool());
@@ -457,7 +457,7 @@ class GeboToolCallingTest {
 	/** A structured call: what its answer parses to, through the container. */
 	private static java.util.LinkedHashMap parsed(GeboToolCalling toolCalling, ChatModel model) {
 		return toolCalling.parsedUnlessStopped(() -> ChatClient.builder(model).build().prompt().user("q")
-				.toolCallbacks(askingTool(true)).toolContext(toolCalling.toolsContext(null))
+				.tools(askingTool(true)).toolContext(toolCalling.toolsContext(null))
 				.advisors(toolCalling.advisor(ObservationRegistry.NOOP)).call().entity(java.util.LinkedHashMap.class));
 	}
 

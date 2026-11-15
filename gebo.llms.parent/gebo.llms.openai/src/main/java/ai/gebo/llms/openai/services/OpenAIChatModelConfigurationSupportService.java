@@ -209,7 +209,6 @@ public class OpenAIChatModelConfigurationSupportService
 			}
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
-					.toolCallingManager(toolCallingManager)
 					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))
 					.build();

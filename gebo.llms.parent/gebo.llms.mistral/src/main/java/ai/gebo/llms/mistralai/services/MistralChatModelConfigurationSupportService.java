@@ -17,7 +17,6 @@ import org.springframework.ai.mistralai.MistralAiChatModel;
 import org.springframework.ai.mistralai.MistralAiChatOptions;
 import org.springframework.ai.mistralai.api.MistralAiApi;
 import org.springframework.ai.mistralai.api.MistralAiApi.Builder;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
@@ -217,8 +216,6 @@ public class MistralChatModelConfigurationSupportService
 			MistralAiChatModel model = MistralAiChatModel.builder()
 					.mistralAiApi(mistralApi)
 					.options(options)
-					.toolCallingManager(
-							functionsRepo.createToolCallingManager())
 					.retryTemplate(retryTemplate)
 					.observationRegistry(observationRegistry)
 					.build();

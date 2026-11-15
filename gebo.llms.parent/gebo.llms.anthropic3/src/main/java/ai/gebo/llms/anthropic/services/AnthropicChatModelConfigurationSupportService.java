@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.anthropic.AnthropicChatOptions;
 import org.springframework.ai.anthropic.AnthropicChatOptions.Builder;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.stereotype.Service;
 
@@ -227,12 +226,10 @@ public class AnthropicChatModelConfigurationSupportService
 				}
 			}
 			AnthropicChatOptions anthropicChatOptions = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			// Create the final AnthropicChatModel using the builder pattern (Spring AI 2.0)
 			AnthropicChatModel model = AnthropicChatModel.builder()
 					.options(anthropicChatOptions)
-					.toolCallingManager(toolCallingManager)
 					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(AnthropicClientCustomizer.from(clientsProvider))
 					.build();

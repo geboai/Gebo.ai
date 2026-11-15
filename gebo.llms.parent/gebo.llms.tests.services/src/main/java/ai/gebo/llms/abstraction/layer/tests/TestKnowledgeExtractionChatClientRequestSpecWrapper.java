@@ -96,16 +96,19 @@ public class TestKnowledgeExtractionChatClientRequestSpecWrapper implements Chat
 	}
 
 	@Override
+	@Deprecated
 	public ChatClientRequestSpec toolCallbacks(ToolCallback... toolCallbacks) {
 		return this;
 	}
 
 	@Override
+	@Deprecated
 	public ChatClientRequestSpec toolCallbacks(List<ToolCallback> toolCallbacks) {
 		return this;
 	}
 
 	@Override
+	@Deprecated
 	public ChatClientRequestSpec toolCallbacks(ToolCallbackProvider... toolCallbackProviders) {
 		return this;
 	}

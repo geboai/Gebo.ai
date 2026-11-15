@@ -182,7 +182,7 @@ class ThinkingNormalizationAdvisorTest {
 		});
 
 		final List<GChatAnswerChunk> chunks = client(model, IGReasoningExtractor.OPENAI, false).prompt("q")
-				.toolCallbacks(lookup).stream().chatResponse().map(GChatAnswerChunk::of).collectList().block();
+				.tools(lookup).stream().chatResponse().map(GChatAnswerChunk::of).collectList().block();
 
 		assertEquals(1, toolRuns.get());
 		assertEquals(2, prompts.size());
