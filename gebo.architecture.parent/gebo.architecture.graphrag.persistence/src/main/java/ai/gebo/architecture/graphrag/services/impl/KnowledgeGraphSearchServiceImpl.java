@@ -176,7 +176,7 @@ public class KnowledgeGraphSearchServiceImpl extends AbstractGraphPersistenceSer
 			Object value = entry.getValue();
 			if (value != null) {
 				if (value instanceof Number nr) {
-					newMap.put(entry.getKey(), new Integer(nr.intValue()));
+					newMap.put(entry.getKey(), Integer.valueOf(nr.intValue()));
 				} else if (value instanceof String string) {
 					newMap.put(entry.getKey(), value.toString());
 				} else {

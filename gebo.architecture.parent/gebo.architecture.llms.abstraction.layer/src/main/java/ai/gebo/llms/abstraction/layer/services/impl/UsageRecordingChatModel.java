@@ -99,11 +99,6 @@ public class UsageRecordingChatModel implements ChatModel {
 		return delegate.getOptions();
 	}
 
-	@Override
-	public ChatOptions getDefaultOptions() {
-		return delegate.getDefaultOptions();
-	}
-
 	private static Usage usageOf(ChatResponse response) {
 		return response != null && response.getMetadata() != null ? response.getMetadata().getUsage() : null;
 	}

@@ -161,13 +161,6 @@ public class OpenAiResponsesChatModel implements ChatModel {
 	}
 
 	@Override
-	@Deprecated
-	@SuppressWarnings("removal")
-	public ChatOptions getDefaultOptions() {
-		return options;
-	}
-
-	@Override
 	public ChatResponse call(Prompt prompt) {
 		final Prompt request = requestPrompt(prompt);
 		final OpenAiChatOptions requestOptions = (OpenAiChatOptions) request.getOptions();

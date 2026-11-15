@@ -141,10 +141,5 @@ public final class AnswerFirstGenerations {
 		public ChatOptions getOptions() {
 			return delegate.getOptions();
 		}
-
-		@Override
-		public ChatOptions getDefaultOptions() {
-			return delegate.getDefaultOptions();
-		}
 	}
 }
