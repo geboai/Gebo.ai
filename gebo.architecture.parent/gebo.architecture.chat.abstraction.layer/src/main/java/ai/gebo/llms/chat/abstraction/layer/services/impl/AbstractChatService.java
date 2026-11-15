@@ -59,6 +59,7 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManage
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GToolCallProgress;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
@@ -469,6 +470,11 @@ public abstract class AbstractChatService implements IGGenericalChatService {
 			buffer.append(chunk.answer());
 			reasoning.append(chunk.thinking());
 			thinkingEvents(out, thinking.delta(chunk.thinking()));
+			// the tool calls the model is writing: the pieces of their arguments, then each
+			// call complete (a chunk carrying only these adds no answer envelope)
+			for (GChatAnswerChunk.ToolCallProgress toolCall : chunk.toolCalls()) {
+				out.add(new GeboChatMessageEnvelope<GToolCallProgress>(GToolCallProgress.of(toolCall)));
+			}
 			if (!chunk.answer().isBlank()) {
 				// the answer starts: the reasoning ended
 				thinkingEvents(out, thinking.complete());

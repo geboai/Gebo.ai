@@ -22,6 +22,8 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.part.StreamingParts;
+import org.springframework.ai.chat.messages.part.ToolCallPart;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.ToolResponseMessage;
 import org.springframework.ai.chat.metadata.ChatGenerationMetadata;
@@ -193,6 +195,60 @@ class ThinkingNormalizationAdvisorTest {
 				.reduce((a, b) -> b).orElseThrow();
 		assertFalse(replayed.getMetadata().containsKey(GChatAnswerChunk.THINKING_DELTA_METADATA),
 				"the assistant message the tool round replays carries nothing of the normalization");
+	}
+
+	@Test
+	void theToolCallsAreSeenWhileWrittenAndOnceComplete() {
+		final AtomicInteger toolRuns = new AtomicInteger();
+		final ToolCallback lookup = new ToolCallback() {
+			@Override
+			public ToolDefinition getToolDefinition() {
+				return ToolDefinition.builder().name("lookup").description("lookup").inputSchema("{}").build();
+			}
+
+			@Override
+			public String call(String toolInput) {
+				toolRuns.incrementAndGet();
+				return "found";
+			}
+		};
+		final List<Prompt> prompts = new ArrayList<>();
+		final ChatModel model = streaming(prompt -> {
+			prompts.add(prompt);
+			if (prompt.getInstructions().stream().noneMatch(ToolResponseMessage.class::isInstance)) {
+				// the arguments in pieces, then the call complete, as Spring AI 2.1 streams it
+				return Flux.just(argumentsPiece("{\"q\":"), argumentsPiece("\"x\"}"),
+						chunk("", Map.of(), List.of(new AssistantMessage.ToolCall("1", "function", "lookup",
+								"{\"q\":\"x\"}")), "TOOL_CALLS"));
+			}
+			return Flux.just(chunk("It is 4.", Map.of(), List.of(), "STOP"));
+		});
+
+		final List<GChatAnswerChunk> chunks = client(model, IGReasoningExtractor.PARTS, false).prompt("q")
+				.tools(lookup).stream().chatResponse().map(GChatAnswerChunk::of).collectList().block();
+
+		final List<GChatAnswerChunk.ToolCallProgress> progress = chunks.stream()
+				.flatMap(chunk -> chunk.toolCalls().stream()).toList();
+		assertEquals(3, progress.size(), "two pieces and the call complete: " + progress);
+		assertEquals("{\"q\":", progress.get(0).arguments());
+		assertFalse(progress.get(0).complete());
+		assertEquals("\"x\"}", progress.get(1).arguments());
+		assertTrue(progress.get(2).complete());
+		assertEquals("lookup", progress.get(2).name());
+		assertEquals("{\"q\":\"x\"}", progress.get(2).arguments());
+		assertEquals(1, toolRuns.get(), "the announcement is not a call: the tool runs once");
+		assertEquals("It is 4.", answers(chunks));
+		final AssistantMessage replayed = (AssistantMessage) prompts.get(1).getInstructions().stream()
+				.filter(AssistantMessage.class::isInstance).reduce((a, b) -> b).orElseThrow();
+		assertEquals(1, replayed.getToolCalls().size(), "the model gets back its one call, whole");
+	}
+
+	/** A piece of the arguments of the call "1" to lookup, stamped partial as 2.1 streams it. */
+	private static ChatResponse argumentsPiece(String piece) {
+		return new ChatResponse(List.of(new Generation(AssistantMessage.builder()
+				.parts(List.of(StreamingParts.partial(
+						ToolCallPart.of(new AssistantMessage.ToolCall("1", "function", "lookup", piece)), 0)))
+				.build())));
 	}
 
 	@Test

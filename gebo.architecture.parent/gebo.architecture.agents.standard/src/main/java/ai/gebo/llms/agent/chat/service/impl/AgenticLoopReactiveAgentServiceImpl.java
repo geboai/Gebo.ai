@@ -1898,6 +1898,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			finishReason.set(chunk.finishReason());
 		}
 		thinkingTo(ui, thinking.delta(chunk.thinking()));
+		toolCallsTo(ui, chunk.toolCalls());
 		if (!chunk.answer().isBlank()) {
 			// the text starts: the reasoning ended
 			thinkingTo(ui, thinking.complete());
