@@ -12,6 +12,7 @@
 
 package ai.gebo.microsoft.sharepoint.cloud.client;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLEncoder;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -202,17 +204,15 @@ public class CloudSharePointBrowserService {
 		// Prepare headers
 		HttpHeaders headers = createHeaders(system);
 
-		// restTemplate.execute allows us to handle the raw stream
-
-		return restTemplate.execute(new URI(url), HttpMethod.GET, request -> request.getHeaders().addAll(headers),
-				clientHttpResponse -> {
-					// Grab the content type (may be null if server doesn't send one)
-					MediaType mediaType = clientHttpResponse.getHeaders().getContentType();
-					String contentType = (mediaType != null) ? mediaType.toString() : null;
-
-					// Return a custom wrapper with InputStream + metadata
-					return new CloudSharepointDownloadedAttachment(clientHttpResponse.getBody(), contentType);
-				});
+		// the response is closed once read: its content is taken whole before, a stream
+		// returned from inside it would be closed already
+		return restTemplate.read(new URI(url), HttpMethod.GET, headers, clientHttpResponse -> {
+			// Grab the content type (may be null if server doesn't send one)
+			MediaType mediaType = clientHttpResponse.getHeaders().getContentType();
+			String contentType = (mediaType != null) ? mediaType.toString() : null;
+			return new CloudSharepointDownloadedAttachment(
+					new ByteArrayInputStream(StreamUtils.copyToByteArray(clientHttpResponse.getBody())), contentType);
+		});
 
 	}
 

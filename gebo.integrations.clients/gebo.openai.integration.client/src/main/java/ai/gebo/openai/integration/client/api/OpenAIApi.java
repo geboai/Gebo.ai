@@ -33,9 +33,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestTemplate;
 
 import ai.gebo.openai.integration.client.model.OpenAIApiConfig;
 import ai.gebo.openai.integration.client.model.OpenAIBatchStatus;
@@ -238,14 +235,11 @@ public class OpenAIApi {
 	public File getOpenAIFileContent(OpenAIApiConfig config, String id)
 			throws OpenAIClientException, GeboRestIntegrationException, URISyntaxException {
 		String url = getUrl(config, FILES_PATH) + "/" + URLEncoder.encode(id) + "/content";
-		HttpEntity<String> request = new HttpEntity<String>(getHeaders(config));
-
-		RequestCallback callback = null;
-		ResponseExtractor<File> extractor = (r) -> {
+		// the request sends the api key: the RestTemplate execute this replaced sent no header
+		return restTemplateWrapper.read(url, HttpMethod.GET, getHeaders(config), response -> {
 			File ret = File.createTempFile("download", "tmp");
-			FileCopyUtils.copy(r.getBody(), new FileOutputStream(ret));
+			FileCopyUtils.copy(response.getBody(), new FileOutputStream(ret));
 			return ret;
-		};
-		return restTemplateWrapper.execute(url, HttpMethod.GET, callback, extractor);
+		});
 	}
 }

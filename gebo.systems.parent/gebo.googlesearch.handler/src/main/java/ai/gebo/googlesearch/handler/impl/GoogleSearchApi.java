@@ -30,7 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.architecture.search.model.SearchCallParameters;
@@ -48,7 +48,7 @@ class GoogleSearchApi {
 
 	// the Google API is called with an HTTP client of its own, whose connect and read
 	// timeouts are the search calls' ones: it does not hold a search forever
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 
 	@Autowired
 	GoogleSearchApi(SearchCallsConfig searchCalls) {
@@ -59,7 +59,7 @@ class GoogleSearchApi {
 		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 		requestFactory.setConnectTimeout(connectTimeout);
 		requestFactory.setReadTimeout(readTimeout);
-		this.restTemplate = new RestTemplate(requestFactory);
+		this.restClient = RestClient.builder().requestFactory(requestFactory).build();
 	}
 
 	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
@@ -108,7 +108,8 @@ class GoogleSearchApi {
 			LOGGER.debug("Google search url:" + url.toString().replace(URLEncoder.encode(apiKey, charset), "***"));
 		}
 		URI uri = url.toURI();
-		ResponseEntity<GoogleSearchResults> returned = restTemplate.getForEntity(uri, GoogleSearchResults.class);
+		ResponseEntity<GoogleSearchResults> returned = restClient.get().uri(uri).retrieve()
+				.toEntity(GoogleSearchResults.class);
 		if (returned.hasBody())
 			return returned.getBody();
 		return new GoogleSearchResults();

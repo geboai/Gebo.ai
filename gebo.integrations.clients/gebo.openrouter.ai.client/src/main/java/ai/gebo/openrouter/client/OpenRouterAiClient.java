@@ -17,11 +17,10 @@ import java.util.Locale;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import ai.gebo.openrouter.client.model.ModelArchitecture;
@@ -33,7 +32,7 @@ import ai.gebo.openrouter.client.model.OpenRouterKeyResponse;
 
 /**
  * Plain, instantiable client for the OpenRouter AI HTTP API, built on
- * {@link RestTemplate}.
+ * {@link RestClient}.
  *
  * <p>
  * This is deliberately <b>not</b> a Spring bean/service: create it directly with
@@ -48,8 +47,7 @@ import ai.gebo.openrouter.client.model.OpenRouterKeyResponse;
  * }</pre>
  *
  * <p>
- * Instances are immutable and thread-safe as long as the supplied
- * {@link RestTemplate} is (the default one is).
+ * Instances are immutable and thread-safe, as {@link RestClient} is.
  * </p>
  *
  * @see <a href=
@@ -118,32 +116,32 @@ public class OpenRouterAiClient {
 
 	private final String apiKey;
 	private final String baseUrl;
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
 
 	/**
 	 * Creates a client for the public OpenRouter API using a dedicated
-	 * {@link RestTemplate}.
+	 * {@link RestClient}.
 	 *
 	 * @param apiKey the OpenRouter API key (sent as a {@code Bearer} token); may be
 	 *               {@code null}/blank for endpoints that do not require auth
 	 */
 	public OpenRouterAiClient(String apiKey) {
-		this(apiKey, DEFAULT_BASE_URL, new RestTemplate());
+		this(apiKey, DEFAULT_BASE_URL, null);
 	}
 
 	/**
-	 * Creates a client with a custom base URL and/or {@link RestTemplate} (useful
+	 * Creates a client with a custom base URL and/or {@link RestClient} (useful
 	 * for testing, proxies or a self-hosted gateway).
 	 *
 	 * @param apiKey       the OpenRouter API key; may be {@code null}/blank
 	 * @param baseUrl      base URL of the API; falls back to {@link #DEFAULT_BASE_URL}
 	 *                     when {@code null}/blank
-	 * @param restTemplate the template to use; a new one is created when {@code null}
+	 * @param restClient   the client to use; a new one is created when {@code null}
 	 */
-	public OpenRouterAiClient(String apiKey, String baseUrl, RestTemplate restTemplate) {
+	public OpenRouterAiClient(String apiKey, String baseUrl, RestClient restClient) {
 		this.apiKey = apiKey;
 		this.baseUrl = normalizeBaseUrl(baseUrl);
-		this.restTemplate = restTemplate != null ? restTemplate : new RestTemplate();
+		this.restClient = restClient != null ? restClient : RestClient.create();
 	}
 
 	/**
@@ -204,8 +202,9 @@ public class OpenRouterAiClient {
 		URI uri = buildModelsUri(filter);
 		HttpEntity<Void> request = new HttpEntity<>(authHeaders());
 		try {
-			ResponseEntity<OpenRouterModelsResponse> response = restTemplate.exchange(uri, HttpMethod.GET, request,
-					OpenRouterModelsResponse.class);
+			ResponseEntity<OpenRouterModelsResponse> response = restClient.get().uri(uri)
+					.headers(headers -> headers.addAll(request.getHeaders())).retrieve()
+					.toEntity(OpenRouterModelsResponse.class);
 			return response.getBody();
 		} catch (RestClientException ex) {
 			throw new OpenRouterClientException("Failed to list OpenRouter models from " + uri, ex);
@@ -258,8 +257,9 @@ public class OpenRouterAiClient {
 		URI uri = UriComponentsBuilder.fromUriString(baseUrl + KEY_PATH).build().toUri();
 		HttpEntity<Void> request = new HttpEntity<>(authHeaders());
 		try {
-			ResponseEntity<OpenRouterKeyResponse> response = restTemplate.exchange(uri, HttpMethod.GET, request,
-					OpenRouterKeyResponse.class);
+			ResponseEntity<OpenRouterKeyResponse> response = restClient.get().uri(uri)
+					.headers(headers -> headers.addAll(request.getHeaders())).retrieve()
+					.toEntity(OpenRouterKeyResponse.class);
 			return response.getBody() != null ? response.getBody().getData() : null;
 		} catch (RestClientException ex) {
 			throw new OpenRouterClientException("Failed to read the OpenRouter API key from " + uri, ex);
