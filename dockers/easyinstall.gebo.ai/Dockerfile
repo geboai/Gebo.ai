@@ -12,7 +12,7 @@ RUN update-locale LANG=en_US.UTF-8
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="1.0.6.0-SNAPSHOT"
+LABEL org.opencontainers.image.version="1.0.6.0"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -159,7 +159,7 @@ ENV LC_ALL=en_US.UTF-8
 RUN useradd --uid 10001 --user-group --create-home --home-dir /home/gebo --shell /usr/sbin/nologin gebo \
  && mkdir -p /opt/gebo.ai/home /opt/gebo.ai/config /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai \
  && chown gebo:gebo /opt/gebo.ai/home /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai
-COPY gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.6.0-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 # Same flags as dockers/gebo.ai/Dockerfile (supervisord.conf sets them again for
