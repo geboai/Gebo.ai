@@ -36,7 +36,7 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
 | 4. Unit tests of the decision model providers | done | — |
 | 5. REST stubs regenerated from the live API | done for the Angular stubs and the monolithic Java client; the brain microservice clients still to regenerate | small |
 | 6. Setup wizard support of the decision kind | done, seen in the browser | — |
-| 7. Tool-call confirmation (human in the loop) | design choice open (see below) | large |
+| 7. Tool-call confirmation (human in the loop) | done the harness's way (option b), not yet run live | — |
 | 8. Streamed tool-call arguments in the chat | done | — |
 | 9. Spring AI's own OpenAI Responses model | evaluated: keep Gebo's class for now, blockers listed | medium |
 | 10. Session memory | spike done: nothing to adopt, one test | — |
@@ -76,7 +76,7 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
   `DecisionModelSetupTest`. In the browser (Italian UI): the classes step shows the decision
   class with its default, the models step offers it for Ollama, its lookup lists the pulled
   decision models only.
-- **Item 7, open choice.** Gebo's harness does not continue a paused model call: a respawned
+- **Item 7, built as option (b), chosen on 15 November.** Gebo's harness does not continue a paused model call: a respawned
   agent is executed again from the start, the answered conditions written in its message
   (`ResolvedConditionText`), and the ask-user tools are built on that. Two ways to build the
   confirmation:
@@ -88,6 +88,15 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
   respawn the model calling the same tool with the same arguments gets it run (allowed) or the
   person's message as its result (denied) - no new resume path, the waiting conditions UI and
   processes reused, the model redoing the work up to the call.
+  As built: an agent configuration lists its `toolsNeedingConfirmation` (agent editor, "Tools a
+  person confirms"); `AgentSuspensionTurn` loads an `IToolCallbacksDecorator` wrapping them in
+  `ConfirmingToolCallback`; the call is asked as a clarification question whose options are a
+  `ToolCallConfirmationOptions` (Allow / Deny, room for a message, human in the loop), so the
+  existing chat card, waiting conditions panel and condition events show and record it; on the
+  respawn `ToolCallConfirmations` reads the answers, an allowed call with the same arguments
+  (compared as JSON) runs, a refused one returns the person's message, and
+  `ResolvedConditionText` tells the model the outcome. Covered by unit tests and the agent
+  harness; not yet run on a live model. Section 9 below describes option (a), not built.
 - **Item 8.** Pieces of the arguments and the complete calls reach the chat as
   `GToolCallProgress` envelopes, from the standard pipelines and from the agents; the chat
   shows "Calling <tool>" lines filling with the arguments. Seen in the browser on an agentic

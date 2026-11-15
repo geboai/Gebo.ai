@@ -4952,6 +4952,10 @@
         "label": "Tools of this agent",
         "help": "Mount every registered tool, or pick the ones this agent may call: by category, by name, or one by one."
       },
+      "toolsNeedingConfirmation": {
+        "label": "Tools a person confirms",
+        "help": "The tools this agent runs only once a person allows each call: the call, with its arguments, is put to the user of the conversation (or answered in the processes area) and the work waits for the answer; a refused call does not run and the agent is given the person's message instead."
+      },
       "excludedToolSources": {
         "label": "Tool sources left out",
         "help": "With every registered tool mounted, the tools of these sources are never mounted on this agent: for instance the searches that other agents of the network already run. The system settings may keep other tools out as well; the network editor shows every tool left out and why."
