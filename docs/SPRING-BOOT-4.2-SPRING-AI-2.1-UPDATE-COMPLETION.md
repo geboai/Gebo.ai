@@ -36,7 +36,7 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
 | 4. Unit tests of the decision model providers | done | — |
 | 5. REST stubs regenerated from the live API | done for the Angular stubs and the monolithic Java client; the brain microservice clients still to regenerate | small |
 | 6. Setup wizard support of the decision kind | done, seen in the browser | — |
-| 7. Tool-call confirmation (human in the loop) | done the harness's way (option b), not yet run live | — |
+| 7. Tool-call confirmation (human in the loop) | done the harness's way (option b), run live on gpt-5.1 | — |
 | 8. Streamed tool-call arguments in the chat | done | — |
 | 9. Spring AI's own OpenAI Responses model | evaluated: keep Gebo's class for now, blockers listed | medium |
 | 10. Session memory | spike done: nothing to adopt, one test | — |
@@ -96,7 +96,28 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
   respawn `ToolCallConfirmations` reads the answers, an allowed call with the same arguments
   (compared as JSON) runs, a refused one returns the person's message, and
   `ResolvedConditionText` tells the model the outcome. Covered by unit tests and the agent
-  harness; not yet run on a live model. Section 9 below describes option (a), not built.
+  harness. Section 9 below describes option (a), not built.
+  Run live on 15 November (OpenAI gpt-5.1, the Sales assistant network, `actualDateTime` and
+  `readUrl` listed in the agent editor): the call suspended the run with the chat card; Allow
+  ran the tool with the same arguments on the respawn; a refusal left it unrun and the model
+  relayed the person's message. The run showed two things, fixed the same day:
+  - **Only the option decides.** The card took either an option or words of the person's own,
+    and words alone counted as a refusal ("yes, go ahead" refused the call). Now the card asks
+    Allow or Deny and offers a message for the agent going with either; on the backend a message
+    alone decides nothing (`ToolCallConfirmations.decisionOf` null): the model is told the
+    message, and calling the tool again puts the call to the person again.
+  - **In the user's language.** The question and options were English whatever the UI language.
+    The transport marks the condition (`toolCallConfirmation`, `toolName`, `toolArguments`) and
+    the chat shows it from the UI's language resources, in the card and in the answer
+    (`chat-suspension-texts.ts` writes the backend's appended English lines again, translated);
+    the card's own texts, wired for translation but missing from the resources, were added to
+    `en.json` and `it.json`. The backend's English text stays for clients that only show the
+    answer.
+  Both fixes run live the same evening (Italian UI, gpt-5.1): card and answer in Italian, also
+  after a reload; a message alone leaves "Rispondi" disabled; Consenti and Nega each sent with a
+  message (`chosenOption` Allow / Deny, `customExplanation` beside it), the tool run and not run;
+  a message alone sent through the REST respawn made the model call the tool again, put to the
+  person again.
 - **Item 8.** Pieces of the arguments and the complete calls reach the chat as
   `GToolCallProgress` envelopes, from the standard pipelines and from the agents; the chat
   shows "Calling <tool>" lines filling with the arguments. Seen in the browser on an agentic
