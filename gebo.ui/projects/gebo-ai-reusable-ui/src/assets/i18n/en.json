@@ -2853,6 +2853,7 @@
       },
       "CalledFunctionsListBtn": { "help": "Show the functions called" },
       "ThinkingLabel": { "label": "Reasoning:" },
+      "ToolCallLabel": { "label": "Calling" },
       "PreviewTitle": { "label": "Displaying external content" },
       "NoUrlSetYet": { "label": "No url set yet" },
       "PreviewGeboTitle": { "label": "Displaying content" },

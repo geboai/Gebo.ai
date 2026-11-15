@@ -106,6 +106,19 @@
               <div class="gebo-ai-reusable-chat__interaction-thinking-text"><i>{{interaction.streamingThinking}}</i></div>
             </div>
           }
+          @if (interaction?.streamingToolCalls?.length) {
+            <div class="gebo-ai-reusable-chat__interaction-toolcalls">
+              @for (call of interaction.streamingToolCalls; track call.key + $index) {
+                <details class="gebo-ai-reusable-chat__interaction-toolcall">
+                  <summary>
+                    <i class="pi" [ngClass]="call.complete ? 'pi-check' : 'pi-spin pi-spinner'"></i>
+                    <span id="ToolCallLabel" gebo-ai-text>Calling</span> <b>{{call.name}}</b>
+                  </summary>
+                  <pre class="gebo-ai-reusable-chat__interaction-toolcall-arguments">{{call.arguments}}</pre>
+                </details>
+              }
+            </div>
+          }
           @if ($last) {
             <gebo-ai-chat-stream-events-display [streaming]="chatStreaming"
               [routingChoiceSelector]="currentPipelineRouterDecisionCode"

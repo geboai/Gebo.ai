@@ -48,6 +48,13 @@ const fileExportLoaded: ToastMessageOptions = { id: "fileExportLoaded", summary:
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
  */
+/** A tool call the model is writing, as it streams: its arguments fill in until it is complete. */
+interface StreamingToolCall {
+    key: string;
+    name?: string;
+    arguments: string;
+    complete: boolean;
+};
 interface GeboChatInteraction {
     request: GeboChatRequest;
     response?: GeboChatTemplatedResponse;
@@ -57,6 +64,9 @@ interface GeboChatInteraction {
     // The reasoning the model writes before its answer, as it streams: accumulated and shown in
     // the answer's place until the answer starts, never part of the answer.
     streamingThinking?: string;
+    // The tool calls the model writes while answering, as they stream (GToolCallProgress): shown
+    // under the reasoning until the answer ends, never part of the answer.
+    streamingToolCalls?: StreamingToolCall[];
     // How many answers the stream of this answer delivered so far, as GeboChatResponse messages:
     // an agent working in cycles sends one per cycle, the final one included; the closing
     // envelope of the pipeline (lastMessage) repeats the final one and is not counted.
@@ -1586,6 +1596,34 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
     }
 
     /**
+     * A piece of a tool call's arguments, or the call complete: the pieces of a call are added
+     * to it, the complete call replaces them; a call is told apart by its id, else by its place
+     * in the model's message.
+     */
+    private onToolCallProgress(interaction: GeboChatInteraction, progress: any): void {
+        if (!progress) {
+            return;
+        }
+        const calls = [...(interaction.streamingToolCalls ?? [])];
+        const key: string = progress.id ?? ("#" + (progress.index ?? calls.length));
+        let call = [...calls].reverse().find(c => c.key === key && !c.complete);
+        if (!call) {
+            call = { key: key, name: progress.name, arguments: "", complete: false };
+            calls.push(call);
+        }
+        if (progress.name) {
+            call.name = progress.name;
+        }
+        if (progress.complete) {
+            call.arguments = progress.arguments ?? call.arguments;
+            call.complete = true;
+        } else {
+            call.arguments += progress.arguments ?? "";
+        }
+        interaction.streamingToolCalls = calls;
+    }
+
+    /**
      * Performs a chat request using reactive/streaming API
      * 
      * @param r Chat request to send
@@ -1794,6 +1832,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                             }
                             console.log("answer cycle " + recvd.content?.cycle + " of at most " + recvd.content?.maxCycles + " starts");
                         } break;
+                        case "GToolCallProgress": {
+                            this.onToolCallProgress(interaction, recvd.content);
+                        } break;
                         case "GThinkingEvent": {
                             if (recvd.content?.completed) {
                                 // the reasoning ended: the answer takes its place
@@ -1812,6 +1853,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                         interaction.response.networkOfAgentsSuspendedState = this.pendingSuspension;
                     }
                     interaction.streamingThinking = undefined;
+                    interaction.streamingToolCalls = undefined;
                     flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;
