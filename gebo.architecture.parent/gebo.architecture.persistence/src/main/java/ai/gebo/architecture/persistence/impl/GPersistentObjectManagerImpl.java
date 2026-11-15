@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -465,15 +466,31 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 		try {
 			GBaseObject example = dependantTypeClass.newInstance();
 			dependantEdge.setAccessor.invoke(example, objectReference);
-			ExampleMatcher onlyTheReference = ExampleMatcher.matching()
-					.withIgnorePaths(initializedPropertiesBut(example, dependantEdge.field));
-			return Example.of(example, onlyTheReference);
+			final String[] initialized = initializedPropertiesBut(example, dependantEdge.field);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Dependants of " + object.getClass().getSimpleName() + " code=" + object.getCode()
+						+ " in " + dependantTypeClass.getSimpleName() + "." + dependantEdge.field.getName()
+						+ ": matched by the reference alone, ignoring " + Arrays.toString(initialized));
+			}
+			return Example.of(example, matchingOnlyTheReference(initialized));
 		} catch (InstantiationException | IllegalAccessException e) {
 			throw new GeboPersistenceException("Cannot create entity=>" + dependantTypeClass.getName(), e);
 		} catch (IllegalArgumentException | InvocationTargetException e) {
 			throw new GeboPersistenceException("Cannot invokate method " + dependantEdge.setAccessor.getName()
 					+ " on entity=>" + dependantTypeClass.getName(), e);
 		}
+	}
+
+	/**
+	 * The matcher of an example holding the reference and, besides it, the values of
+	 * the given properties, ignored. Spring Data refuses an ignore list with no path
+	 * ("IgnoredPaths must not be empty"): a type whose fresh instance holds nothing but
+	 * the reference (a chat profile, dependant of a chat model) is matched as it is, its
+	 * null properties being ignored anyway.
+	 */
+	static ExampleMatcher matchingOnlyTheReference(String[] initializedProperties) {
+		return initializedProperties.length == 0 ? ExampleMatcher.matching()
+				: ExampleMatcher.matching().withIgnorePaths(initializedProperties);
 	}
 
 	/**
