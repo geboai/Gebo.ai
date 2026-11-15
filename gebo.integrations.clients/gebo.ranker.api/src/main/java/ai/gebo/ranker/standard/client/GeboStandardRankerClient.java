@@ -43,15 +43,17 @@ public class GeboStandardRankerClient implements RankerModel {
 
 			Integer modelContextWindowTokens, Integer maxDocumentsPerRequest, Integer maxDocumentTokens,
 			Integer responseReserveTokens) {
-		Objects.requireNonNull(apiKey, "apiKey is required");
-
 		this.serviceUrl = normalizeServiceUrl(Objects.requireNonNull(serviceUrl, "serviceUrl is required"));
 		this.model = Objects.requireNonNull(model, "model is required");
 
 		RestClient.Builder builder = restClientBuilder != null ? restClientBuilder : RestClient.builder();
-
-		this.restClient = builder.baseUrl(this.serviceUrl).defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey)
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+		builder = builder.baseUrl(this.serviceUrl);
+		// A provider declaring optional authentication is called without a key: no
+		// Authorization header at all rather than "Bearer null"
+		if (apiKey != null && !apiKey.isBlank()) {
+			builder = builder.defaultHeader(HttpHeaders.AUTHORIZATION, "Bearer " + apiKey);
+		}
+		this.restClient = builder.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.defaultHeader(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).build();
 
 		this.retryTemplate = Objects.requireNonNull(retryTemplate, "retryTemplate is required");
