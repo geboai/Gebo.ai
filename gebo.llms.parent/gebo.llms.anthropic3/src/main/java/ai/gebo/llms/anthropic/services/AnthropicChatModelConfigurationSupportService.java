@@ -127,8 +127,8 @@ public class AnthropicChatModelConfigurationSupportService
 		 * @throws LLMConfigException If configuration fails
 		 */
 		@Override
-		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected AnthropicChatModel configureModel(GAnthropicChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 			String apiKey = modelsService.resolveApiKey(config);
 
 			// Get the client providers for making API calls
@@ -215,8 +215,8 @@ public class AnthropicChatModelConfigurationSupportService
 
 			// Add any enabled functions/tools
 			List<ToolCallback> functions = new ArrayList<ToolCallback>();
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				functions = functionsRepo.getTools((config.getEnabledFunctions()));
+			if (!toolNames.isEmpty()) {
+				functions = functionsRepo.getTools((toolNames));
 				// The condition above tests the tool names that were REQUESTED. getTools filters
 				// the callbacks actually available by those names, so it can return fewer - or
 				// none at all, when the source that exports them failed. Configuring the model
@@ -225,15 +225,11 @@ public class AnthropicChatModelConfigurationSupportService
 				if (functions != null && !functions.isEmpty()) {
 					builder = builder.toolCallbacks(functions);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ config.getEnabledFunctions().size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + config.getEnabledFunctions());
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 			AnthropicChatOptions anthropicChatOptions = builder.build();
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			// Create the final AnthropicChatModel using the builder pattern (Spring AI 2.0)
 			AnthropicChatModel model = AnthropicChatModel.builder()

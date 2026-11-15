@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
@@ -35,6 +36,16 @@ public class DefaultStreamingOutputChatPipelineServiceImpl implements IStreaming
 	public StepExecutorType getExecutorType() {
 
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.usedFor("Writes the answer to the user.");
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.notUsed();
 	}
 
 	@Override

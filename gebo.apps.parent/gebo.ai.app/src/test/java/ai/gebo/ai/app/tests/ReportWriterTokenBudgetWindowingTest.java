@@ -45,6 +45,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Exercises the token-budget windowing the standard report writer performs over the
@@ -112,6 +113,8 @@ import reactor.core.publisher.Flux;
 		+ "SharedContextWindowingLoopTest, which are green.")
 @TestPropertySource(properties = "ai.gebo.agents.standard.enabled=true")
 public class ReportWriterTokenBudgetWindowingTest extends AbstractBaseTestLLmsIntegrationTests {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:ReportWriterTokenBudgetWindowingTest").build();
 
 	private static final String DEFAULT_AGENTS_NETWORK = "DEFAULT_AGENTS_NETWORK";
 	/** Marker the fake LLM returns for every per window call. */
@@ -203,7 +206,7 @@ public class ReportWriterTokenBudgetWindowingTest extends AbstractBaseTestLLmsIn
 		final long started = System.currentTimeMillis();
 		Flux<IGPartialOperation<GeboChatMessageEnvelope>> flux = reportWriter.execute(
 				resources.createChatRequestContext(), writerConfig, "Write the consolidated report", network, persona,
-				sink, session, privateMemory, ReactiveIdentityUtil.create());
+				sink, session, privateMemory, ReactiveIdentityUtil.create(), TOOL_CALLING);
 		List<IGPartialOperation<GeboChatMessageEnvelope>> emitted = flux.collectList().block(Duration.ofSeconds(120));
 		LOGGER.info("report writer produced {} envelope(s) over {} LLM call(s) in {} ms",
 				emitted != null ? emitted.size() : -1, seenPrompts.size(), System.currentTimeMillis() - started);

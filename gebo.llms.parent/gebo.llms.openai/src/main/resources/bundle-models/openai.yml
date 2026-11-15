@@ -154,6 +154,28 @@ ai.gebo.models.providers.openai:
       supportsReasoning: true
       description: GPT-5.5
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.5
+    # The OpenAI fast setup presets (fetched 2026-11-15): both on Chat Completions, below
+    # version 6; the gpt-5.4-mini page states 272,000 tokens of input in the window.
+    - providerId: openai
+      modelId: gpt-5.2
+      chatModel: true
+      embeddingModel: false
+      contextLength: 400000
+      maxOutputToken: 128000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      description: GPT-5.2
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2
+    - providerId: openai
+      modelId: gpt-5.4-mini
+      chatModel: true
+      embeddingModel: false
+      contextLength: 400000
+      maxOutputToken: 128000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      description: GPT-5.4 mini
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-mini
     - providerId: openai
       modelId: gpt-5
       chatModel: true
@@ -184,6 +206,21 @@ ai.gebo.models.providers.openai:
       sampling: REJECTED
       reasoningEfforts: [none, low, medium, high, xhigh]
       source: developers.openai.com/api/docs/models/gpt-5.5 (sampling at effort none not documented), 2026-10-11
+    # The GPT-5.4 guide: temperature, top_p and logprobs "only supported when using
+    # GPT-5.4 with reasoning effort set to none", and "Requests that include these fields
+    # will raise an error for GPT-5.4 or GPT-5.2 with any other reasoning effort setting".
+    - providerId: openai
+      models: ["gpt-5.2", "gpt-5.2-2025-12-11"]
+      sampling: WITHOUT_REASONING
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.2 and guides/gpt-5.4, 2026-11-15
+    # The same efforts; the guide's sampling rule does not name the mini, so it is kept
+    # refused until a request shows it takes them at effort none.
+    - providerId: openai
+      models: ["gpt-5.4-mini", "gpt-5.4-mini-2026-03-17"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.4-mini and guides/gpt-5.4, 2026-11-15
     - providerId: openai
       models: ["gpt-5"]
       sampling: REJECTED

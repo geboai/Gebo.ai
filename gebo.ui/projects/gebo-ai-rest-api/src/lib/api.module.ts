@@ -38,6 +38,7 @@ import { FileUploadControllerService } from './api/fileUploadController.service'
 import { FileUploadsControllerService } from './api/fileUploadsController.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
+import { GeboAdminChatPipelinesToolingControllerService } from './api/geboAdminChatPipelinesToolingController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
@@ -47,6 +48,7 @@ import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
+import { GeboChatLibrariesControllerService } from './api/geboChatLibrariesController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
 import { GeboChatRulesControllerService } from './api/geboChatRulesController.service';
@@ -108,6 +110,7 @@ import { McpClientConfigControllerService } from './api/mcpClientConfigControlle
 import { McpClientSystemsControllerService } from './api/mcpClientSystemsController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
+import { NetworkOfAgentsConditionEventsControllerService } from './api/networkOfAgentsConditionEventsController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
@@ -127,6 +130,8 @@ import { SearxngSearchConfigurationControllerService } from './api/searxngSearch
 import { SecretsControllerService } from './api/secretsController.service';
 import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
 import { SerpapiSearchConfigurationControllerService } from './api/serpapiSearchConfigurationController.service';
+import { SessionControllerService } from './api/sessionController.service';
+import { SessionsAdminControllerService } from './api/sessionsAdminController.service';
 import { SharePointSearchServiceControllerService } from './api/sharePointSearchServiceController.service';
 import { SharepointBrowsingControllerService } from './api/sharepointBrowsingController.service';
 import { SharepointSystemsControllerService } from './api/sharepointSystemsController.service';
@@ -144,6 +149,8 @@ import { UserWorkflowsControllerService } from './api/userWorkflowsController.se
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 import { UserspaceControllerService } from './api/userspaceController.service';
 import { UserspaceUploadControllerService } from './api/userspaceUploadController.service';
+import { WaitingConditionsAdminControllerService } from './api/waitingConditionsAdminController.service';
+import { WaitingConditionsControllerService } from './api/waitingConditionsController.service';
 import { WebdavBrowsingControllerService } from './api/webdavBrowsingController.service';
 import { WebdavSystemsControllerService } from './api/webdavSystemsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
@@ -188,6 +195,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     FileUploadsControllerService,
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
+    GeboAdminChatPipelinesToolingControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,
@@ -197,6 +205,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GeboAgentsNetworkAdminControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
+    GeboChatLibrariesControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
     GeboChatRulesControllerService,
@@ -258,6 +267,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     McpClientSystemsControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
+    NetworkOfAgentsConditionEventsControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
     OllamaChatModelsConfigurationControllerService,
@@ -277,6 +287,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     SecretsControllerService,
     SecurityHeaderDataCompletionControllerService,
     SerpapiSearchConfigurationControllerService,
+    SessionControllerService,
+    SessionsAdminControllerService,
     SharePointSearchServiceControllerService,
     SharepointBrowsingControllerService,
     SharepointSystemsControllerService,
@@ -294,6 +306,8 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     UsersAdminControllerService,
     UserspaceControllerService,
     UserspaceUploadControllerService,
+    WaitingConditionsAdminControllerService,
+    WaitingConditionsControllerService,
     WebdavBrowsingControllerService,
     WebdavSystemsControllerService,
     WorkflowStatsAdminLevelControllerService ]

@@ -48,26 +48,31 @@ public interface IGRagChatService extends IGGenericalChatService {
 	/**
 	 * Retrieves the model provider capabilities for a specific model code.
 	 *
-	 * @param modelCode Code identifying the model whose provider capabilities need
-	 *                  to be retrieved.
+	 * @param modelCode    Code identifying the model whose provider capabilities need
+	 *                     to be retrieved.
+	 * @param pipelineCode The pipeline the chat runs in, whose tools are told; null is
+	 *                     the default pipeline.
 	 * @return ModelProviderCapabilities describing the capabilities of the model
 	 *         provider.
 	 * @throws LLMConfigException if there is an issue with the model configuration.
 	 */
-	public ModelProviderCapabilities getProfileProviderModelCapabilities(String modelCode) throws LLMConfigException;
+	public ModelProviderCapabilities getProfileProviderModelCapabilities(String modelCode, String pipelineCode)
+			throws LLMConfigException;
 
 	/**
 	 * Retrieves user information for a chat model based on a given chat profile
 	 * code.
 	 *
 	 * @param chatProfileCode Code identifying the chat profile.
+	 * @param pipelineCode    The pipeline the chat runs in, whose tools are told; null
+	 *                        is the default pipeline.
 	 * @return GeboChatUserInfo containing user information related to the specific
 	 *         chat model.
 	 * @throws GeboPersistenceException if there is an issue with data persistence.
 	 * @throws LLMConfigException       if there is an issue with the model
 	 *                                  configuration.
 	 */
-	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode)
+	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode, String pipelineCode)
 			throws GeboPersistenceException, LLMConfigException;
 
 	

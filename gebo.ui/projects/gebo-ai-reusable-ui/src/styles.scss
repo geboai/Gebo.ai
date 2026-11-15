@@ -230,6 +230,18 @@ p-block-ui {
   background-image: url("assets/oauth2/ms-symbollockup_mssymbol_19.svg");
 }
 
+/* These names are PrimeIcons glyphs too: the font would draw its own dark icon over
+   the logo, as it did on the Microsoft accounts login button */
+.pi.pi-facebook::before,
+.pi.pi-github::before,
+.pi.pi-microsoft::before,
+.pi.pi-linkedin::before,
+.pi.pi-apple::before,
+.pi.pi-amazon::before,
+.pi.pi-slack::before {
+  content: none;
+}
+
 .pi.pi-aws_cognito {
   background-image: url("assets/oauth2/aws-svgrepo-com.svg");
 }

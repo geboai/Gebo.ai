@@ -49,8 +49,7 @@ public abstract class GAbstractReactiveOutputAgentsNetworkServiceFactory<InputTy
 			throws NetworkOfAgentsException {
 		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
 				.getImplementationOf(IGAgentServiceRuntimeDao.class);
-		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
-		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
+		GAgentConfig config = configurationOf(agent);
 		IGGenericAgentService service = agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin createRuntimeAgentInfos(...) participant:" + agent.getNetworkAgentName()

@@ -22,7 +22,8 @@
 # Usage, from dockers/gebo.microservices/:
 #
 #   export GEBO_SECURITY_LOG_BASE=/var/log/gebo-ai-microservices   # or put it in .env
-#   sudo mkdir -p $GEBO_SECURITY_LOG_BASE
+#   sudo mkdir -p "$GEBO_SECURITY_LOG_BASE"/{eureka,gateway,heimdall,tyr,brain,vectorizator,graphicator,chunker,fulltextor,git,filesystem,uploads,userspace,sharepoint,confluence,jira,aws-s3,googledrive,mcpclient,webdav,integration}
+#   sudo chown -R 10001:10001 "$GEBO_SECURITY_LOG_BASE"
 #   docker compose -f docker-compose.yml \
 #                  -f ../../deploy/wazuh/docker/docker-compose.security-logs.override.yml \
 #                  up -d
@@ -32,6 +33,14 @@
 #
 # GEBO_SECURITY_LOG_BASE defaults to ./security-logs (i.e. inside the compose
 # directory) so the file also works with no environment set up at all.
+#
+# Create EVERY per-service directory first and give the tree to uid 10001, as
+# above: the images run as that non-root user (geboai/platform:3.0). A bind
+# source that Docker has to create itself is root-owned, and the service then
+# cannot write its audit trail - logback reports it once and the service runs on
+# WITHOUT one. The base file's gebo-volumes-owner service only fixes named
+# volumes; it cannot see these host directories. The chown -R also hands over
+# files written by an older, root-running image.
 #
 # Each service gets its own subdirectory, which is what keeps the files apart -
 # but the events themselves are already self-identifying: every audit line

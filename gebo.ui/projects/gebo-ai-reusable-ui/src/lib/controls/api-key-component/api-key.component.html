@@ -52,9 +52,8 @@
           </div>
           <div class="col-6">
             <gebo-ai-field id="NewAwsRegion" label="AWS region"
-              help="Select the AWS region hosting the resources this connection is used for." [required]="true">
-              <p-select [options]="awsRegions" optionLabel="label" optionValue="value" [filter]="true"
-                placeholder="Select an AWS region" formControlName="awsRegion" gebo-ai-field-element
+              help="Select the AWS region hosting the resources this connection is used for." [required]="true" placeholder="Select an AWS region">
+              <p-select [options]="awsRegions" optionLabel="label" optionValue="value" [filter]="true" formControlName="awsRegion" gebo-ai-field-element
                 styleClass="w-full"></p-select>
             </gebo-ai-field>
           </div>

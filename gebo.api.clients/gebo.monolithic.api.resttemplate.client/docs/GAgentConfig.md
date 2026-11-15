@@ -26,11 +26,14 @@ Name | Type | Description | Notes
 **temperature** | **Double** |  |  [optional]
 **thinking** | [**ThinkingEnum**](#ThinkingEnum) |  |  [optional]
 **readOnly** | **Boolean** |  |  [optional]
+**conditionsExpiry** | [**AgentConditionsExpiry**](AgentConditionsExpiry.md) |  |  [optional]
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
 **excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
+**additionalToolSources** | **List&lt;String&gt;** |  |  [optional]
+**libraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>
 ## Enum: AgentTypeEnum

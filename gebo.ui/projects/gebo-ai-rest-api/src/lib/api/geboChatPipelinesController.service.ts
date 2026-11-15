@@ -19,6 +19,7 @@ import { Observable }                                        from 'rxjs';
 
 import { GeboChatMessageEnvelope } from '../model/geboChatMessageEnvelope';
 import { GeboChatResponse } from '../model/geboChatResponse';
+import { NetworkOfAgentsSuspendedState } from '../model/networkOfAgentsSuspendedState';
 import { PipelineChatMenu } from '../model/pipelineChatMenu';
 import { PipelineRequestBody } from '../model/pipelineRequestBody';
 
@@ -29,7 +30,7 @@ import { Configuration }                                     from '../configurat
 @Injectable()
 export class GeboChatPipelinesControllerService {
 
-    protected basePath = 'http://localhost:12999';
+    protected basePath = 'http://localhost:13999';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
@@ -163,6 +164,108 @@ export class GeboChatPipelinesControllerService {
     /**
      * 
      * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public executeDefaultRespawnAgenticChat(body: PipelineRequestBody, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
+    public executeDefaultRespawnAgenticChat(body: PipelineRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
+    public executeDefaultRespawnAgenticChat(body: PipelineRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
+    public executeDefaultRespawnAgenticChat(body: PipelineRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling executeDefaultRespawnAgenticChat.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GeboChatResponse>('post',`${this.basePath}/api/users/GeboChatPipelinesController/executeDefaultRespawnAgenticChat`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param pipelineCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public executeRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GeboChatResponse>;
+    public executeRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GeboChatResponse>>;
+    public executeRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GeboChatResponse>>;
+    public executeRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling executeRespawnAgenticChat.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GeboChatResponse>('post',`${this.basePath}/api/users/GeboChatPipelinesController/executeRespawnAgenticChat`,
+            {
+                body: body,
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param chatProfileCode 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -246,6 +349,53 @@ export class GeboChatPipelinesControllerService {
         ];
 
         return this.httpClient.request<Array<PipelineChatMenu>>('get',`${this.basePath}/api/users/GeboChatPipelinesController/personalPipelinesChatMenu`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param userChatContextCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public pendingNetworkOfAgentsSuspension(userChatContextCode: string, observe?: 'body', reportProgress?: boolean): Observable<NetworkOfAgentsSuspendedState>;
+    public pendingNetworkOfAgentsSuspension(userChatContextCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<NetworkOfAgentsSuspendedState>>;
+    public pendingNetworkOfAgentsSuspension(userChatContextCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<NetworkOfAgentsSuspendedState>>;
+    public pendingNetworkOfAgentsSuspension(userChatContextCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (userChatContextCode === null || userChatContextCode === undefined) {
+            throw new Error('Required parameter userChatContextCode was null or undefined when calling pendingNetworkOfAgentsSuspension.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userChatContextCode !== undefined && userChatContextCode !== null) {
+            queryParameters = queryParameters.set('userChatContextCode', <any>userChatContextCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<NetworkOfAgentsSuspendedState>('get',`${this.basePath}/api/users/GeboChatPipelinesController/pendingNetworkOfAgentsSuspension`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
@@ -396,6 +546,108 @@ export class GeboChatPipelinesControllerService {
         return this.httpClient.request<Array<GeboChatMessageEnvelope>>('post',`${this.basePath}/api/users/GeboChatPipelinesController/streamDefaultChatPipeline`,
             {
                 body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public streamDefaultRespawnAgenticChat(body: PipelineRequestBody, observe?: 'body', reportProgress?: boolean): Observable<Array<GeboChatMessageEnvelope>>;
+    public streamDefaultRespawnAgenticChat(body: PipelineRequestBody, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboChatMessageEnvelope>>>;
+    public streamDefaultRespawnAgenticChat(body: PipelineRequestBody, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboChatMessageEnvelope>>>;
+    public streamDefaultRespawnAgenticChat(body: PipelineRequestBody, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling streamDefaultRespawnAgenticChat.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/event-stream'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<GeboChatMessageEnvelope>>('post',`${this.basePath}/api/users/GeboChatPipelinesController/streamDefaultRespawnAgenticChat`,
+            {
+                body: body,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param body 
+     * @param pipelineCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public streamRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe?: 'body', reportProgress?: boolean): Observable<Array<GeboChatMessageEnvelope>>;
+    public streamRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GeboChatMessageEnvelope>>>;
+    public streamRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GeboChatMessageEnvelope>>>;
+    public streamRespawnAgenticChat(body: PipelineRequestBody, pipelineCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling streamRespawnAgenticChat.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (pipelineCode !== undefined && pipelineCode !== null) {
+            queryParameters = queryParameters.set('pipelineCode', <any>pipelineCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'text/event-stream'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<Array<GeboChatMessageEnvelope>>('post',`${this.basePath}/api/users/GeboChatPipelinesController/streamRespawnAgenticChat`,
+            {
+                body: body,
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

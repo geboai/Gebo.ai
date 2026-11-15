@@ -49,11 +49,13 @@ public interface IGChatService extends IGGenericalChatService {
 	 * Retrieves the provider-specific capabilities or features for a given chat
 	 * model.
 	 *
-	 * @param modelCode a unique code identifying the chat model.
+	 * @param modelCode    a unique code identifying the chat model.
+	 * @param pipelineCode the pipeline the chat runs in, whose tools are told; null
+	 *                     for a direct chat with the model, which has none.
 	 * @return a ModelProviderCapabilities object that contains the capabilities of
 	 *         the model provider.
 	 */
-	public ModelProviderCapabilities getProviderCapabilities(String modelCode);
+	public ModelProviderCapabilities getProviderCapabilities(String modelCode, String pipelineCode);
 
 	public List<GKnowledgeBase> getVisibleKnowledgeBases();
 }

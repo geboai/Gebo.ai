@@ -53,6 +53,12 @@ public class GAgentConfig extends GBaseObject
 	private ChatModelThinkingOption thinking = null;
 	private Boolean readOnly = null;
 	/**
+	 * How long the conditions this agent waits for keep waiting, and whether the run
+	 * goes on when they stop; null, or none set, leaves it to the platform's default.
+	 * A tool that sets its own expiry is not overridden by it.
+	 */
+	private AgentConditionsExpiry conditionsExpiry = null;
+	/**
 	 * A list of group identifiers that have access to the model configuration.
 	 */
 	protected List<String> accessibleGroups = null;
@@ -82,6 +88,32 @@ public class GAgentConfig extends GBaseObject
 	 * tools selected by name ({@link #enabledFunctions}) are never affected.
 	 */
 	protected List<String> excludedToolSources = null;
+
+	/**
+	 * The ids of the tool sources whose tools this agent mounts even when the
+	 * installation keeps them out of automatic mounting
+	 * ({@code ai.gebo.agents.tools.auto-mounting.excluded-tool-sources}): the
+	 * counterpart of {@link #excludedToolSources}, for a family of tools that only
+	 * some agents are meant to operate. An agent that mounts every registered tool
+	 * ({@link #subscribeAllTools}) has no other way back to an excluded tool, its
+	 * automatic mounting replacing the tools selected by name
+	 * ({@link #enabledFunctions}) outright. Null or empty when the agent mounts
+	 * nothing the installation excludes; what the configuration itself excludes
+	 * stays excluded.
+	 */
+	protected List<String> additionalToolSources = null;
+
+	/**
+	 * The ids of the library types this agent works with: bundles of tools and the
+	 * resources those tools work on - a working directory with its file tools, a
+	 * sandbox with its code tools - which an agent is given whole. A library is
+	 * named by its type and comes in block: every tool of it is mounted, none is
+	 * chosen one by one, and the resources are whichever instance of the type the
+	 * conversation holds. The tools are not registered: they are bound to the instance
+	 * when the agent enters its execution, so a run with no conversation has none of
+	 * them. Null or empty when the agent works with no library.
+	 */
+	protected List<String> libraryTypeIds = null;
 
 	/**
 	 * The code of the agent configuration this one is a copy of, only while the copy

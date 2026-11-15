@@ -15,21 +15,45 @@ RUN dnf -y install fakeroot
 RUN dnf -y install  rpm-build
 RUN dnf -y install redhat-rpm-config
 RUN dnf -y install systemd-rpm-macros
-#RUN dnf -y install java-21-openjdk java-21-openjdk-devel
 #RUN dnf -y install maven
 RUN dnf -y install rpm-build
-RUN curl -L -o /opt/java/jdk-21_linux-x64_bin.rpm https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.rpm
-RUN rpm -i /opt/java/jdk-21_linux-x64_bin.rpm
-RUN rm -rf /opt/java/jdk-21_linux-x64_bin.rpm
-RUN curl -L -o /opt/java/apache-maven-3.9.11-bin.tar.gz https://dlcdn.apache.org/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
+# Oracle JDK 25 (LTS) - the JDK the release workflow (.github/workflows/release.yml)
+# bundles into the published installers. jpackage takes the runtime the .rpm
+# bundles from this JDK, and Oracle links it against a very old glibc (its newest
+# symbol is GLIBC_2.9), so the .rpm runs on EL8, EL9 and EL10 alike - measured on
+# Rocky 8.9, Rocky 9.3 (GA and updated) and AlmaLinux 10.2. Do NOT use
+# the distro java-25-openjdk instead: measured, its runtime needs GLIBC_2.35
+# symbols that only an up-to-date EL9 has - on EL8 or an un-updated EL9 the .rpm
+# still INSTALLS (it requires an unversioned glibc) and the service then fails to
+# start - and it drags in ALSA/X11 libraries that jpackage then declares as
+# Requires. Oracle's own rpm requires nothing but rpm. The sources still compile
+# to Java 21 bytecode (java.version in the root pom).
+#
+# Pinned to an update under /archive/, which Oracle keeps permanently: the moving
+# java/<major>/latest/ path disappears when Oracle stops free updates for an LTS
+# (java/21/latest is gone already). Bump JDK_VERSION with each quarterly Oracle
+# update. TARGETARCH is set by BuildKit (amd64 | arm64). curl -f fails the build on
+# an HTTP error instead of saving the 404 HTML page as the .rpm.
+ARG TARGETARCH
+ARG JDK_VERSION=25.0.5
+RUN JDK_ARCH=$(case "$TARGETARCH" in arm64) echo aarch64 ;; *) echo x64 ;; esac) \
+ && curl -fL -o /tmp/jdk.rpm "https://download.oracle.com/java/25/archive/jdk-${JDK_VERSION}_linux-${JDK_ARCH}_bin.rpm" \
+ && rpm -i /tmp/jdk.rpm \
+ && rm -f /tmp/jdk.rpm \
+ && ln -sfn "$(dirname "$(dirname "$(readlink -f "$(command -v javac)")")")" /usr/lib/jvm/jdk-25 \
+ && /usr/lib/jvm/jdk-25/bin/javac -version
+# dlcdn.apache.org only mirrors the CURRENT Maven (3.9.16 now), so 3.9.11 404s
+# there; archive.apache.org keeps every released version permanently. curl -f
+# fails the build on an HTTP error instead of saving the 404 HTML page.
+RUN curl -fL -o /opt/java/apache-maven-3.9.11-bin.tar.gz https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
 WORKDIR /opt/java/
 RUN tar zxvfs apache-maven-3.9.11-bin.tar.gz 
 RUN rm -rf  apache-maven-3.9.11-bin.tar.gz 
 ENV MVN_HOME=/opt/java/apache-maven-3.9.11
 ENV PATH=$MVN_HOME/bin:$PATH
 
-#ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk
-#ENV PATH=$JAVA_HOME/bin:/usr/share/maven/bin:$PATH
+ENV JAVA_HOME=/usr/lib/jvm/jdk-25
+ENV PATH=$JAVA_HOME/bin:$PATH
 ENV REPOSITORY=https://github.com/geboai/Gebo.ai.git
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8

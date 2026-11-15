@@ -24,6 +24,9 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
+import ai.gebo.architecture.ai.model.ToolCategoriesTree;
+import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.llms.chat.abstraction.layer.model.AgentToolsInfo;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -106,12 +109,13 @@ public class ChatAgentsToolsDescriberImpl implements IGChatAgentsToolsDescriber 
 				continue;
 			}
 			final AgentMountedTools mounted = service.getMountedTools(config);
-			final List<String> names = mounted != null && mounted.getTools() != null
-					? mounted.getTools().stream().map(AgentMountedTools.MountedTool::getName).filter(x -> x != null)
-							.toList()
+			final List<AgentMountedTools.MountedTool> tools = mounted != null && mounted.getTools() != null
+					? mounted.getTools()
 					: List.of();
+			final List<String> names = tools.stream().filter(x -> !isLibraryTool(x))
+					.map(AgentMountedTools.MountedTool::getName).filter(x -> x != null).toList();
 			info.setMountMode(mounted != null && mounted.getMountMode() != null ? mounted.getMountMode().name() : null);
-			info.setTools(toolsRepository.getEnabledToolsTree(names));
+			info.setTools(withTheLibraryTools(toolsRepository.getEnabledToolsTree(names), tools));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("describeAgentsTools(...) agent:" + info.getAgentName() + " service:"
 						+ info.getAgentServiceId() + " mountMode:" + info.getMountMode() + " tools:" + names.size());
@@ -126,5 +130,29 @@ public class ChatAgentsToolsDescriberImpl implements IGChatAgentsToolsDescriber 
 					+ " agent(s)");
 		}
 		return infos;
+	}
+
+	private static boolean isLibraryTool(AgentMountedTools.MountedTool tool) {
+		return IGAIToolsLibraryInstancesService.LIBRARY_CATEGORY.getCode().equals(tool.getCategoryCode());
+	}
+
+	/** The tools of the libraries are not registered: they come from what the agent mounts, under their category. */
+	private static List<ToolCategoriesTree> withTheLibraryTools(List<ToolCategoriesTree> registered,
+			List<AgentMountedTools.MountedTool> tools) {
+		final ToolCategoriesTree libraries = new ToolCategoriesTree(IGAIToolsLibraryInstancesService.LIBRARY_CATEGORY);
+		for (AgentMountedTools.MountedTool tool : tools) {
+			if (isLibraryTool(tool)) {
+				final ToolReference reference = new ToolReference();
+				reference.setName(tool.getName());
+				reference.setDescription(tool.getDescription());
+				libraries.getToolsReference().add(reference);
+			}
+		}
+		if (libraries.getToolsReference().isEmpty()) {
+			return registered;
+		}
+		final List<ToolCategoriesTree> all = new ArrayList<>(registered != null ? registered : List.of());
+		all.add(libraries);
+		return all;
 	}
 }

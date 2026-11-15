@@ -20,7 +20,9 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgentsCopyService;
+import ai.gebo.architecture.agents.services.IGGenericAgentService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.architecture.ai.model.LibraryToolCollision;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
@@ -112,6 +114,26 @@ public class GeboAgentAdminController {
 			LOGGER.trace("</AGENT_CONFIG>");
 		}
 		return config;
+	}
+
+	/**
+	 * The tool collisions of an agent as it stands in the editor, saved or not: the
+	 * tools of its libraries having the name of another tool it mounts. Saving is not
+	 * refused: the library's tool wins, the administrator is told what is lost.
+	 */
+	@PostMapping(value = "checkAgentToolCollisions", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public List<LibraryToolCollision> checkAgentToolCollisions(@NotNull @RequestBody GAgentConfig config) {
+		final IGAgentServiceRuntimeDao services = runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		final IGGenericAgentService service = config.getAgentServiceId() != null
+				? services.findByCode(config.getAgentServiceId())
+				: null;
+		final List<LibraryToolCollision> collisions = service != null ? service.getMountedTools(config).getCollisions()
+				: List.of();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("REST checkAgentToolCollisions code:" + config.getCode() + " service:"
+					+ config.getAgentServiceId() + " found " + collisions.size());
+		}
+		return collisions;
 	}
 
 	@PostMapping(value = "updateAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

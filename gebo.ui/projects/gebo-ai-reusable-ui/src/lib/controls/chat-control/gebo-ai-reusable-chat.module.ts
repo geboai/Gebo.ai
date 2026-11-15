@@ -33,6 +33,7 @@ import { SecurityContext } from '@angular/core';
 import { SkeletonModule } from 'primeng/skeleton';
 import { OverlayModule } from 'primeng/overlay';
 import { GeboChatUserInfoComponent } from "./chat-info.component";
+import { GeboAIChatLibrariesPanelComponent } from "./chat-libraries-panel.component";
 import { TableModule } from "primeng/table";
 import { FieldsetModule } from "primeng/fieldset";
 import { ScrollTopModule } from 'primeng/scrolltop';
@@ -59,6 +60,9 @@ import { GeboAIExtensiblePipelineRouteDisplayComponent } from "./extensible-pipe
 import { GeboAIChatStreamEventsDisplayComponent } from "./chat-stream-events-display.component";
 import { ProgressBarModule } from "primeng/progressbar";
 import { ChipModule } from "primeng/chip";
+import { RadioButtonModule } from "primeng/radiobutton";
+import { CheckboxModule } from "primeng/checkbox";
+import { GeboAIChatSuspensionAnswerModule } from "./chat-suspension-answer.module";
 @NgModule({
   imports: [CommonModule,
     ReactiveFormsModule,
@@ -90,6 +94,9 @@ import { ChipModule } from "primeng/chip";
     ContextMenuModule, 
     ProgressBarModule,
     ChipModule,
+    RadioButtonModule,
+    CheckboxModule,
+    GeboAIChatSuspensionAnswerModule,
     GeboAINotificationsModule],
   providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIReusableChatModel", multi: false },
 
@@ -102,7 +109,7 @@ import { ChipModule } from "primeng/chip";
       }
     }
   }), ReactiveRagChatService],
-  declarations: [ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
-  exports: [GeboAIReusableChatComponent]
+  declarations: [GeboAIChatLibrariesPanelComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
+  exports: [GeboAIChatLibrariesPanelComponent, GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

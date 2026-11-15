@@ -22,8 +22,11 @@ import lombok.Data;
  * filtered out of that automatic expansion, so they are never auto-associated to
  * an auto-mounting agent - regardless of which agent enables auto mounting.
  *
- * <p>The exclusion only affects <em>automatic</em> mounting: an agent can still
- * opt into an excluded tool explicitly through its {@code enabledFunctions}.
+ * <p>The exclusion only affects <em>automatic</em> mounting: an agent that selects
+ * its tools by name keeps them, an excluded one included, because nothing is being
+ * expanded for it. An auto-mounting agent is a different matter - its expansion
+ * replaces the tools selected by name - so the way back to an excluded tool is
+ * {@code GAgentConfig.additionalToolSources}, naming the source.
  *
  * <p>Configure via
  * {@code ai.gebo.agents.tools.auto-mounting.excluded-tools} in application.yml,

@@ -16,6 +16,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -85,6 +87,7 @@ import lombok.AllArgsConstructor;
  */
 @AllArgsConstructor
 public class GUsersAdminServiceImpl implements IGUsersAdminService {
+	private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
 	final UserRepository userRepo; // Repository for user-related database operations
 
@@ -187,6 +190,15 @@ public class GUsersAdminServiceImpl implements IGUsersAdminService {
 				throw new IllegalStateException("Already existing user");
 			User u = new User();
 			u.assignValues(user);
+			// A user with no authentication provider could never sign in (the local login
+			// takes AuthProvider.local users only, a federated one its own provider's), and
+			// the admin operations that validate the user they are given (update, delete)
+			// refuse it as it is stored. Checked before anything is written, so a refusal
+			// leaves no password secret behind.
+			if (u.getProvider() == null) {
+				LOGGER.debug("insertUser refused for " + username + ": no authentication provider");
+				throw new IllegalStateException("A user needs an authentication provider");
+			}
 			if (password == null || password.trim().length() == 0)
 				throw new IllegalStateException("Empty password forbidden");
 			// Written BEFORE the user row, and keyed on the username assignValues just

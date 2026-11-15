@@ -47,10 +47,17 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
         aclAliases: new FormControl()
     });
 
-    public kinds = [
+    /** Every kind there is; what is offered is whittled down to what this installation publishes. */
+    private readonly allKinds = [
         { label: 'Whole network of agents', value: 'NETWORK' },
         { label: 'Single agent', value: 'AGENT' }
     ];
+
+    /** The kinds this installation offers, which is what the screen shows. */
+    public kinds = this.allKinds;
+
+    /** Whether a single agent may be exported at all here. */
+    public agentsExported: boolean = false;
 
     /** The exported agents/networks being edited. */
     public exportedAgents: A2AExportedAgent[] = [];
@@ -70,6 +77,31 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
     ) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
         this.manageOperationStatus = true;
+        this.readExportKinds();
+    }
+
+    /**
+     * Asks what this installation publishes, and offers only that. A network of
+     * agents is the thing worth exporting; single agents are offered only where
+     * they are wanted. What the screen offers is not what makes the rule - the
+     * server refuses the rest anyway - but offering what would be refused is no
+     * use to anybody.
+     */
+    private readExportKinds(): void {
+        this.service.getExportKindsA2AServer().subscribe({
+            next: (kinds) => {
+                this.agentsExported = !!kinds?.agentsExported;
+                this.kinds = this.allKinds.filter((kind) =>
+                    kind.value === 'AGENT' ? this.agentsExported : !!kinds?.networksOfAgentsExported);
+                if (this.kinds.length > 0 && !this.kinds.some((kind) => kind.value === this.newEntry.kind)) {
+                    this.newEntry.kind = this.kinds[0].value as A2AExportedAgent.KindEnum;
+                }
+            },
+            error: () => {
+                // Nothing said means nothing changes: the screen keeps offering what it
+                // always did, and the server still refuses what it will not publish.
+            }
+        });
     }
 
     protected override onLoadedPersistentData(actualValue: A2AServerConfig): void {
@@ -87,7 +119,13 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
     }
 
     private blankEntry(): A2AExportedAgent {
-        return { kind: A2AExportedAgent.KindEnum.NETWORK, networkCode: '', agentConfigCode: '', skillName: '' };
+        return {
+            kind: A2AExportedAgent.KindEnum.NETWORK,
+            networkCode: '',
+            agentConfigCode: '',
+            skillName: '',
+            chatProfileCode: ''
+        };
     }
 
     public isNetwork(entry: A2AExportedAgent): boolean {

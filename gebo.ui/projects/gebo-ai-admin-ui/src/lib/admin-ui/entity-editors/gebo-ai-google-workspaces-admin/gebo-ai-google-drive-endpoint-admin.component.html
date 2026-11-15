@@ -55,14 +55,14 @@
             </gebo-ai-field>
           </div>
           <div class="col-6">
-            <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
-              <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project" [required]="true" [optionsObservable]="projectsObservable" [readonly]="true" gebo-ai-field-element>
+            <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
+              <geboai-editable-listbox-component formControlName="parentProjectCode" [required]="true" [optionsObservable]="projectsObservable" [readonly]="true" gebo-ai-field-element>
               </geboai-editable-listbox-component>
             </gebo-ai-field>
           </div>
           <div class="col-6">
-            <gebo-ai-field id="driveSystemCode" label="Google drive configuration" help="Already configured google drive system reference." [required]="true">
-              <geboai-editable-listbox-component formControlName="driveSystemCode" [required]="true" placeholder="Select a google drive configuration" [optionsObservable]="drivesObservable" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newGoogleDriveRequest" gebo-ai-field-element>
+            <gebo-ai-field id="driveSystemCode" label="Google drive configuration" help="Already configured google drive system reference." [required]="true" placeholder="Select a google drive configuration">
+              <geboai-editable-listbox-component formControlName="driveSystemCode" [required]="true" [optionsObservable]="drivesObservable" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newGoogleDriveRequest" gebo-ai-field-element>
               </geboai-editable-listbox-component>
             </gebo-ai-field>
           </div>
@@ -78,7 +78,7 @@
           </div>
           <div class="col-10">
             <gebo-ai-field id="catalogingCriteria" label="Folders and subfolders organization criteria" help="Please explain here how the files and folders organization criteria has been done in the google drive contents shared with Gebo.ai">
-              <textarea formControlName="catalogingCriteria" id="catalogingCriteria" cols="200" rows="2" gebo-ai-field-element></textarea>
+              <textarea formControlName="catalogingCriteria" id="catalogingCriteria" rows="2" gebo-ai-field-element></textarea>
             </gebo-ai-field>
           </div>
           <div class="col-12">

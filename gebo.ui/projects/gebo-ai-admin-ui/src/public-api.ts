@@ -89,7 +89,6 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-user.co
 export * from "./lib/admin-ui/entity-editors/gebo-ai-users-admin/gebo-ai-group.component";
 export * from "./lib/admin-ui/entity-editors/controls/access-control-group/access-control-group.component";
 export * from "./lib/admin-ui/entity-editors/controls/prompt-wizard/prompt-wizard.component";
-export * from "./lib/admin-ui/entity-editors/controls/advanced-settings-chatmodel-group/advanced-settings-chatmodel-group.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-uploads-admin/gebo-ai-uploads-endpoint.component";
 export * from "./lib/admin-ui/main-panels/ancestor-panel/ancestor-admin-panel.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-google-search-admin/gebo-ai-google-search-account.component";

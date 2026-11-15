@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.index.TextIndexed;
 
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.annotations.GObjectReference;
@@ -34,7 +35,7 @@ import lombok.Data;
  * comments
  */
 @Data
-public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableObject implements IAclGrantedResource {
+public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableObject implements IContentAclResource {
 
 	/**
 	 * The code of the parent virtual folder.

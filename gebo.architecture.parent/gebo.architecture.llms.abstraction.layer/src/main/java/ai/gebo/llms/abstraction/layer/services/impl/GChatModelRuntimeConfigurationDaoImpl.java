@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -35,7 +36,9 @@ import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.GAbstractConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGPromptContextProviders;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 
 /**
@@ -65,6 +68,20 @@ public class GChatModelRuntimeConfigurationDaoImpl
 
 	@Autowired
 	IGPersistentObjectManager persistentObjectManager;
+
+	/** Fills the placeholders of the prompts of every model registered here; looked up late, it may not exist. */
+	@Autowired(required = false)
+	ObjectProvider<IGPromptContextProviders> promptContextProviders;
+
+	/** Every model registered here fills its prompts with the providers of the application. */
+	private void attachPromptContextProviders(IGConfigurableChatModel element) {
+		final IGPromptContextProviders providers = promptContextProviders != null
+				? promptContextProviders.getIfAvailable()
+				: null;
+		if (providers != null && element instanceof GAbstractConfigurableChatModel model) {
+			model.setPromptContextProviders(providers);
+		}
+	}
 
 	/**
 	 * Default constructor initializing the base class with an empty list.
@@ -123,6 +140,7 @@ public class GChatModelRuntimeConfigurationDaoImpl
 	@Override
 	public void add(IGConfigurableChatModel element) {
 		attachProviderDealPricing(element);
+		attachPromptContextProviders(element);
 		this.staticConfigs.add(element);
 	}
 
@@ -151,6 +169,7 @@ public class GChatModelRuntimeConfigurationDaoImpl
 				// Log parsing exception if necessary
 			}
 			IGConfigurableChatModel chatModel = handler.create(config);
+			attachPromptContextProviders(chatModel);
 			LOGGER.info("Initialized chatModel successfully");
 			attachProviderDealPricing(chatModel);
 			this.staticConfigs.add(chatModel);

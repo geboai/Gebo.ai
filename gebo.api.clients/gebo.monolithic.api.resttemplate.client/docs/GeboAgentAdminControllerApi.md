@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**checkAgentToolCollisions**](GeboAgentAdminControllerApi.md#checkAgentToolCollisions) | **POST** /api/admin/GeboAgentAdminController/checkAgentToolCollisions | 
 [**copyAgent**](GeboAgentAdminControllerApi.md#copyAgent) | **POST** /api/admin/GeboAgentAdminController/copyAgent | 
 [**deleteAgent**](GeboAgentAdminControllerApi.md#deleteAgent) | **DELETE** /api/admin/GeboAgentAdminController/deleteAgent | 
 [**getAgentByCode**](GeboAgentAdminControllerApi.md#getAgentByCode) | **GET** /api/admin/GeboAgentAdminController/getAgentByCode | 
@@ -13,6 +14,49 @@ Method | HTTP request | Description
 [**getPromptTemplatesByAgentId**](GeboAgentAdminControllerApi.md#getPromptTemplatesByAgentId) | **GET** /api/admin/GeboAgentAdminController/getPromptTemplateByAgentId | 
 [**insertAgent**](GeboAgentAdminControllerApi.md#insertAgent) | **POST** /api/admin/GeboAgentAdminController/insertAgent | 
 [**updateAgent**](GeboAgentAdminControllerApi.md#updateAgent) | **POST** /api/admin/GeboAgentAdminController/updateAgent | 
+
+<a name="checkAgentToolCollisions"></a>
+# **checkAgentToolCollisions**
+> List&lt;LibraryToolCollision&gt; checkAgentToolCollisions(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboAgentAdminControllerApi;
+
+
+GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
+GAgentConfig body = new GAgentConfig(); // GAgentConfig | 
+try {
+    List<LibraryToolCollision> result = apiInstance.checkAgentToolCollisions(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentAdminControllerApi#checkAgentToolCollisions");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GAgentConfig**](GAgentConfig.md)|  |
+
+### Return type
+
+[**List&lt;LibraryToolCollision&gt;**](LibraryToolCollision.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
 
 <a name="copyAgent"></a>
 # **copyAgent**

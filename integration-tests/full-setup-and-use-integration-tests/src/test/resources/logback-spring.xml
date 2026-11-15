@@ -86,12 +86,12 @@
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	<logger name="ai.gebo.llms.deepsearch.service" level="DEBUG"
+	<logger name="ai.gebo.llms.deepsearch.service" level="INFO"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	<logger name="ai.gebo.architecture.documents.cache" level="DEBUG"
+	<logger name="ai.gebo.architecture.documents.cache" level="INFO"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
@@ -102,7 +102,7 @@
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />
 	</logger>
-	<logger name="ai.gebo.llms" level="TRACE"
+	<logger name="ai.gebo.llms" level="INFO"
 		additivity="false">
 		<appender-ref ref="RollingFile" />
 		<appender-ref ref="Console" />

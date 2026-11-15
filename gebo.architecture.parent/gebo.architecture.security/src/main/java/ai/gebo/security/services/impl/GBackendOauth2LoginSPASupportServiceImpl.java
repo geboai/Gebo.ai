@@ -15,13 +15,16 @@ import tools.jackson.databind.ObjectMapper;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.crypting.services.IGeboCryptingService;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.security.model.AuthProvider;
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.SecurityHeaderUtil;
 import ai.gebo.security.model.SecurityHeaderUtil.XAuthType;
 import ai.gebo.security.model.oauth2.Oauth2DeliveryData;
+import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
 import ai.gebo.security.repository.Oauth2DeliveryDataRepository;
 import ai.gebo.security.services.BackendOauth2LoginSPASupportException;
 import ai.gebo.security.services.IGBackendOauth2LoginSPASupportService;
+import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -31,6 +34,7 @@ public class GBackendOauth2LoginSPASupportServiceImpl implements IGBackendOauth2
 	private final IGeboCryptingService cryptingService;
 	private final Oauth2DeliveryDataRepository oauth2DeliveryDataRepository;
 	private final LocalJwtTokenProvider jwtTokenProvider;
+	private final IGOauth2RuntimeConfigurationDao oauth2RuntimeConfigurationDao;
 	private final static ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
@@ -61,7 +65,8 @@ public class GBackendOauth2LoginSPASupportServiceImpl implements IGBackendOauth2
 			if (!_data.getRemoteAddress().equalsIgnoreCase(remoteAddress))
 				throw new RuntimeException("Client registered from host:" + _data.getRemoteAddress()
 						+ " but now presenting as:" + remoteAddress);
-			String jwt = jwtTokenProvider.createToken(user, null, _data.getRegistrationId());
+			String jwt = jwtTokenProvider.createToken(user, providerOf(_data.getRegistrationId()),
+					_data.getRegistrationId());
 			SecurityHeaderData data = SecurityHeaderUtil.createSelfsignedJwtSecurityHeaderOauth2(jwt);
 			String json = objectMapper.writeValueAsString(data);
 			String crypted = cryptingService.crypt(json);
@@ -74,6 +79,23 @@ public class GBackendOauth2LoginSPASupportServiceImpl implements IGBackendOauth2
 
 		}
 
+	}
+
+	/**
+	 * The provider the login went through, for the token this login mints. It used to
+	 * be left out, and the token then recorded its provider as a placeholder which is
+	 * not a provider at all, so every renewal of that session failed and the session
+	 * died with the provider's id token.
+	 *
+	 * @param registrationId the configuration the user logged in with
+	 * @return its provider, or null if the configuration is gone by now
+	 */
+	private AuthProvider providerOf(String registrationId) {
+		if (registrationId == null) {
+			return null;
+		}
+		Oauth2RuntimeConfiguration configuration = oauth2RuntimeConfigurationDao.findByCode(registrationId);
+		return configuration != null ? configuration.getProvider() : null;
 	}
 
 	@Data

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { GBaseObject, GeboAgentsNetworkAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
@@ -12,6 +12,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionT
 export class AgentNetworksComponent extends AncestorPanelComponent implements OnInit {
     protected agentsNetworks: GBaseObject[] = [];
     protected loading:boolean=false;
+    /** The runs waiting for a human in the loop or an external condition, reloaded with the tab. */
     constructor(
         private agentNetworkService: GeboAgentsNetworkAdminControllerService,
         private geboUIActionEventService: GeboUIActionRoutingService

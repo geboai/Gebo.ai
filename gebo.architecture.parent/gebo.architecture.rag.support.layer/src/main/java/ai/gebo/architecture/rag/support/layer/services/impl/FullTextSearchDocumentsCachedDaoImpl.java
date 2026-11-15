@@ -29,14 +29,31 @@ public class FullTextSearchDocumentsCachedDaoImpl implements IGFullTextSearchDoc
 	@Override
 	public AIDocumentsSet search(List<String> q, int topK, FullTextSearchMetaDataFilter filter)
 			throws FullTextException {
+		if (!namesAKnowledgeBase(filter)) {
+			return new AIDocumentsSet();
+		}
 		List<FullTextChunkSearchHit> data = this.searchService.search(q, topK, filter);
 		return toRagDocumentCachedDaoResult(data);
 	}
 
 	@Override
 	public AIDocumentsSet search(String q, int topK, FullTextSearchMetaDataFilter filter) throws FullTextException {
+		if (!namesAKnowledgeBase(filter)) {
+			return new AIDocumentsSet();
+		}
 		List<FullTextChunkSearchHit> data = this.searchService.search(q, topK, filter);
 		return toRagDocumentCachedDaoResult(data);
+	}
+
+	/**
+	 * Whether the search is scoped to some knowledge base. Without one nothing is
+	 * searched, as the semantic search does: the full-text index drops an empty
+	 * knowledge base term, so the query would reach every indexed chunk under the
+	 * ACL alone.
+	 */
+	private static boolean namesAKnowledgeBase(FullTextSearchMetaDataFilter filter) {
+		return filter != null && filter.getKnowledgebaseCodes() != null
+				&& filter.getKnowledgebaseCodes().stream().anyMatch(code -> code != null && !code.isBlank());
 	}
 
 	private AIDocumentsSet toRagDocumentCachedDaoResult(List<FullTextChunkSearchHit> data) {

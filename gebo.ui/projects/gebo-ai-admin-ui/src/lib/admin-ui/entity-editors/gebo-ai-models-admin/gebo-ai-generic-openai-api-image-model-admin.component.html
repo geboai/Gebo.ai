@@ -65,8 +65,8 @@
             </div>
             <div class="col-6">
               <gebo-ai-field id="apiSecretCode" label="Image model API token"
-                help="Choose the image model API token to be used for this model (optional)">
-                <geboai-editable-listbox-component formControlName="apiSecretCode" placeholder="Select a token"
+                help="Choose the image model API token to be used for this model (optional)" placeholder="Select a token">
+                <geboai-editable-listbox-component formControlName="apiSecretCode"
                   [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
                   gebo-ai-field-element>
                 </geboai-editable-listbox-component>
@@ -74,9 +74,8 @@
             </div>
             <div class="col-6">
               <gebo-ai-field id="choosedModel" label="Image model choice"
-                help="Choose the image model to work with." [required]="true">
-                <p-select styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel"
-                  placeholder="Select a model" [required]="true" [options]="modelChoicesData"
+                help="Choose the image model to work with." [required]="true" placeholder="Select a model">
+                <p-select styleClass="w-full" formControlName="choosedModel" dataKey="code" id="choosedModel" [required]="true" [options]="modelChoicesData"
                 optionLabel="description" gebo-ai-field-element></p-select>
               </gebo-ai-field>
             </div>

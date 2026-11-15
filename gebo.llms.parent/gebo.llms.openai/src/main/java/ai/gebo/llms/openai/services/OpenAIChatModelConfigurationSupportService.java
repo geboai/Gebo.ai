@@ -111,8 +111,8 @@ public class OpenAIChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there is an error in configuration
 		 */
 		@Override
-		protected ChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected ChatModel configureModel(GOpenAIChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
 				throw new LLMConfigException("OpenAI api cannot work without needed api key configuration");
@@ -140,8 +140,8 @@ public class OpenAIChatModelConfigurationSupportService
 				builder = builder.topP(config.getTopP());
 			}
 
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
+			if (!toolNames.isEmpty()) {
+				List<ToolCallback> functions = functionsRepo.getTools((toolNames));
 				// The condition above tests the tool names that were REQUESTED. getTools filters
 				// the callbacks actually available by those names, so it can return fewer - or
 				// none at all, when the source that exports them failed. Configuring the model
@@ -158,10 +158,7 @@ public class OpenAIChatModelConfigurationSupportService
 					builder = builder.toolCallbacks(functions);
 					builder.parallelToolCalls(true);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ config.getEnabledFunctions().size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + config.getEnabledFunctions());
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 			// max_completion_tokens, not max_tokens: OpenAI deprecated max_tokens in its
@@ -194,8 +191,7 @@ public class OpenAIChatModelConfigurationSupportService
 
 			builder.timeout(OpenAiClientCustomizer.requestTimeout(serviceClientsProviderFactory.get(getCode())));
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			// The models of version 6 and later go through the Responses API, whose tool calls
 			// Chat Completions does not carry for them (OpenAiResponsesChatModel); the others
 			// stay on Spring AI's Chat Completions model

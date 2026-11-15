@@ -39,8 +39,20 @@ public enum AuthProvider {
 	// github(AuthProviderType.OAUTH2, "GitHub auth provider",
 	// false,Oauth2LoginModel.SPA),
 
-	// Authentication using Microsoft account "common" endpoints
-	microsoft(AuthProviderType.OAUTH2, "Microsoft Entra Id auth provider (for public cloud)", false, List.of()),
+	// Authentication using Microsoft accounts on the shared "common" endpoints:
+	// personal accounts, for an installation whose users have no organization of
+	// their own, and the accounts of the organizations it admits.
+	//
+	// Those endpoints sign every id token under the issuer of the person's own tenant,
+	// so the login checks the tenant instead of one issuer
+	// (GMicrosoftAccountsIdTokenValidator), and so does the API with a bearer token
+	// (GeboMicrosoftAccountsTenantValidator). allowedTenants lists the tenants admitted:
+	// "consumers" for personal accounts, and the tenant id of each organization. A
+	// configuration saved before it existed admits personal accounts only.
+	microsoft(AuthProviderType.OAUTH2,
+			"Microsoft accounts auth provider (personal accounts and the organizations you list)", false,
+			List.of(Oauth2CustomAttribute.of("allowedTenants",
+					"Who may sign in, comma separated: consumers for personal Microsoft accounts, and the tenant id of each organization to admit"))),
 	// Authentication using Microsoft account "multitenant" endpoints
 	microsoft_multitenant(AuthProviderType.OAUTH2,
 			"Microsoft  Entra Id multitenant auth provider (for private organizations)", true,
@@ -58,14 +70,14 @@ public enum AuthProvider {
 	aws_identity_center(AuthProviderType.OAUTH2, "AWS IAM Identity Center (SSO) OIDC provider", true,
 			List.of(Oauth2CustomAttribute.of("instanceId", "IAM Identity Center instance id (ssoins-xxxx)"),
 					Oauth2CustomAttribute.of("region", "AWS region of the Identity Center instance"))),
-	// Authentication using a Keycloak realm (OIDC). The realm is carried in the
-	// issuer/authorization/token URIs; expose it as a custom attribute so those
-	// URIs can be templated with {realm}. serverUrl is the Keycloak base/auth-server
-	// URL, used by integrations that call the Admin REST API (it is otherwise
-	// derivable from the issuer, so it is an optional override).
+	// Authentication using a Keycloak realm (OIDC). Every endpoint of the realm hangs
+	// off the server URL, so both attributes template the URIs of the provider library
+	// entry ({serverUrl} and {realm}) and both are needed: without them the entry
+	// cannot be resolved into a client registration.
 	keycloak(AuthProviderType.OAUTH2, "Keycloak OIDC auth provider", false,
-			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm"),
-					Oauth2CustomAttribute.of("serverUrl", "Keycloak base/auth-server URL (for the Admin API)"))),
+			List.of(Oauth2CustomAttribute.of("realm", "Keycloak realm name, as in the realm's own URL"),
+					Oauth2CustomAttribute.of("serverUrl",
+							"Keycloak base URL, without a trailing slash, for example https://sso.example.com"))),
 	// Authentication using Linkedin account
 	// linkedin(AuthProviderType.OAUTH2, "Linkedin auth provider",
 	// false,Oauth2LoginModel.SPA),

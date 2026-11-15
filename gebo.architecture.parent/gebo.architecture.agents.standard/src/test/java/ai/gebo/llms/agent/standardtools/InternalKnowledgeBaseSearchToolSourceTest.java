@@ -40,6 +40,7 @@ import ai.gebo.architecture.rag.support.layer.model.SemanticSearchMetaDataFilter
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.fulltext.service.IGFullTextSearchService;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource.KnowledgeBaseSearchParam;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
@@ -269,6 +270,25 @@ class InternalKnowledgeBaseSearchToolSourceTest {
 		assertTrue(answer.contains("fragment9"), "every document keeps its share");
 		assertEquals(30000, room.left(), "the tool wrapper takes the answer out of the room, not the tool");
 		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(), eq(30), eq(60000));
+	}
+
+	@Test
+	void withoutAToolsDivisorTheSharedOneApplies() throws Exception {
+		IGDocumentsSearchService search = searchFinding(10, 3000);
+		StandardAgentsConfig unset = new StandardAgentsConfig();
+		@SuppressWarnings("unchecked")
+		org.springframework.beans.factory.ObjectProvider<StandardAgentsConfig> provider = mock(
+				org.springframework.beans.factory.ObjectProvider.class);
+		when(provider.getIfAvailable()).thenReturn(unset);
+		try {
+			KnowledgeBaseSearchBudget.setRoomDivisor(6.0d);
+
+			assertEquals(6.0d, tool(search, provider).roomDivisor(), "the knowledge base searches' divisor");
+			assertEquals(5000, tool(search, provider).maxResultTokens(new ToolsTokenBudget(30000)));
+			assertEquals(2.0d, tool(search, configured(2.0d)).roomDivisor(), "the tools' own when set");
+		} finally {
+			KnowledgeBaseSearchBudget.setRoomDivisor(KnowledgeBaseSearchBudget.DEFAULT_ROOM_DIVISOR);
+		}
 	}
 
 	@Test

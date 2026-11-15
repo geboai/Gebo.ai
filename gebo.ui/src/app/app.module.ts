@@ -20,7 +20,7 @@ import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-re
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "primeng/confirmdialog";
 import { MegaMenuModule } from 'primeng/megamenu';
-import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService, adminRoleGuard } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule, GeboAIUserIntegrationsModule } from "@Gebo.ai/reusable-ui";
@@ -58,8 +58,8 @@ export const routes: Routes = [
   { path: 'ui', redirectTo: "ui/chat", pathMatch: "full" },
   { path: '', redirectTo: "ui/chat", pathMatch: "full" },
   { path: 'ui/chat', loadChildren: () => import('@Gebo.ai/gebo-ai-chat-ui').then(m => m.GeboAiChatRoutingModule) },
-  { path: 'ui/admin', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
-  { path: 'ui/admin-setup', loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
+  { path: 'ui/admin', canActivate: [adminRoleGuard], loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiAdminRoutingModule), pathMatch: 'full' },
+  { path: 'ui/admin-setup', canActivate: [adminRoleGuard], loadChildren: () => import('@Gebo.ai/gebo-ai-admin-ui').then(m => m.GeboAiSetupRoutingModule), pathMatch: 'full' },
   { path: 'ui/user-workflows', loadChildren: () => import('@Gebo.ai/reusable-ui').then(m => m.GeboAIUserWorkflowsModule) }
 ];
 const GeboAIPreset = definePreset(Aura, {

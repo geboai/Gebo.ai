@@ -46,8 +46,35 @@ import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
  *
  * Gebo.ai comment agent
  */
-@ConfigurationProperties(prefix = "gebo.microservices.topology")
+@ConfigurationProperties(prefix = GeboMicroservicesTopologyProperties.PREFIX)
 public class GeboMicroservicesTopologyProperties {
+
+	/** Prefix of the topology configuration. */
+	public static final String PREFIX = "gebo.microservices.topology";
+
+	/**
+	 * Name, under {@link #PREFIX}, of the switch that turns the topology on and off;
+	 * what the conditions of the topology's consumers test.
+	 */
+	public static final String ENABLED = "enabled";
+
+	/**
+	 * Whether this service has a topology at all. On by default: every service of
+	 * the full microservices architecture needs it.
+	 *
+	 * <p>
+	 * Off ({@code false}), none of the topology's beans exist - no topology, no
+	 * current-microservice identity, no {@code GeboMicroserviceUrlResolver} - nor the
+	 * beans built on them that turn themselves off with it (the cluster
+	 * participants, the clients topology). That is for a service deployed outside
+	 * the full architecture, e.g. beside a monolith, whose only remote party is
+	 * heimdall: its security and ACL clients then reach heimdall at their own
+	 * {@code base-url} instead. A service that needs the topology for anything else
+	 * (messaging, its own cluster surface, the gateway routes) cannot run with it
+	 * off.
+	 * </p>
+	 */
+	private boolean enabled = true;
 
 	/**
 	 * Whether to seed the topology with the built-in Gebo services
@@ -94,6 +121,14 @@ public class GeboMicroservicesTopologyProperties {
 	 */
 	@NestedConfigurationProperty
 	private Url url = new Url();
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
 	public boolean isIncludeDefaults() {
 		return includeDefaults;

@@ -23,6 +23,7 @@ import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GInputProcessingEvent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -99,8 +100,13 @@ public class InternalKnowledgeBaseRagDeepSearchService extends BaseLLMSInvokingS
 				: Flux.empty();
 		Map<String, GResponseDocumentRef> docrefs = new Hashtable<>();
 		// ranked only: the deep search analysis judges the fragments itself
-		Flux<Document> searchFlux = llmAssistedRetriveService.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
-				serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK, false).flatMap(x -> {
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+		Flux<Document> searchFlux = (toolCalling != null
+				? llmAssistedRetriveService.doDocumentsRetrieve(runtimeData.getMinimalChatContext(), serviceModel,
+						LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK, false, toolCalling)
+				: llmAssistedRetriveService.doDocumentsRetrieve(runtimeData.getMinimalChatContext(), serviceModel,
+						LLMRequestGenerationPolicy.ADDING_RESOURCES_DO_NOT_FIT_TOKENS_BUDGET, topK, false))
+				.flatMap(x -> {
 					List<Document> docsList = x.aiDocumentsList();
 					docsList.forEach(doc -> {
 						String code = doc.getMetadata() != null

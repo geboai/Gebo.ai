@@ -79,12 +79,6 @@
             }
           }
 
-          @if (decision.descriptor.id==='CHAT' && decision.offered && (decision.enabled || decision.modifying)) {
-            <div class="flex align-items-center gap-2 mt-2">
-              <p-checkbox [(ngModel)]="decision.enableAllFunctions" [ngModelOptions]="{standalone:true}" [binary]="true"></p-checkbox>
-              <span id="ChatEnableFunctions" gebo-ai-text>Enable all function calls for this chat model</span>
-            </div>
-          }
         </div>
       </gebo-ai-field>
     </div>

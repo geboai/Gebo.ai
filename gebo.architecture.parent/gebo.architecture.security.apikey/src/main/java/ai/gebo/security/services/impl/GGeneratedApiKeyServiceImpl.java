@@ -2,6 +2,7 @@ package ai.gebo.security.services.impl;
 
 import java.sql.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,9 @@ public class GGeneratedApiKeyServiceImpl implements IGGeneratedApiKeyService {
 				throw new SecurityException("Only admin users can call this service");
 			GeneratedApiKey gen = new GeneratedApiKey();
 			gen.setImpersonatedUser(username);
-			gen.setApiKey(jwtTokenProvider.createToken(username, expiration));
+			gen.setTokenId(UUID.randomUUID().toString());
+			gen.setApiKey(jwtTokenProvider.createApiKeyToken(username, expiration, gen.getTokenId(),
+					LocalJwtTokenProvider.API_KEY_KIND_ADMIN));
 			gen.setExpiration(expiration);
 			gen.setDescription(description);
 
@@ -112,7 +115,9 @@ public class GGeneratedApiKeyServiceImpl implements IGGeneratedApiKeyService {
 			username = user.getUsername();
 			GeneratedApiKey gen = new GeneratedApiKey();
 			gen.setImpersonatedUser(user.getUsername());
-			gen.setApiKey(jwtTokenProvider.createToken(user.getUsername(), expiration));
+			gen.setTokenId(UUID.randomUUID().toString());
+			gen.setApiKey(jwtTokenProvider.createApiKeyToken(user.getUsername(), expiration, gen.getTokenId(),
+					LocalJwtTokenProvider.API_KEY_KIND_USER));
 			gen.setExpiration(expiration);
 			gen.setDescription(description);
 			GeneratedApiKey inserted = this.persistentObjectManager.insert(gen);

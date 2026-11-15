@@ -223,7 +223,6 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
                 modifying: false,
                 chosenCode: preselect,
                 choices: this.libraryChoices(descriptor),
-                enableAllFunctions: false,
                 providers: this.providersFor(descriptor)
             };
             return decision;
@@ -304,6 +303,13 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
     private applyLookedUpModels(type: LLMCreateModelData.TypeEnum, models: GBaseModelChoice[]): void {
         this.decisions.filter(d => d.descriptor.type === type).forEach(decision => {
             decision.choices = this.describeModels(models, decision);
+            if (!models.length && !decision.descriptor.required && !decision.alreadyConfigured) {
+                // The provider answered and offers nothing of this kind to this key: a suggested
+                // class stays off instead of pre-ticked over an empty choice (it was skipped on apply)
+                decision.enabled = false;
+                decision.chosenCode = undefined;
+                return;
+            }
             if (decision.chosenCode && !models.some(m => m.code?.toLowerCase() === decision.chosenCode?.toLowerCase())) {
                 // The preselected model is gone from the provider: clear it and, when the class was
                 // meant to be applied, force it open so the user picks a replacement.
@@ -365,8 +371,7 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
             // the default of its kind, which also overrides a previous default when modifying.
             setAsDefaultModel: isService ? false : true,
             secretId: this.secretId,
-            baseUrl: this.baseUrl,
-            enableAllFunctions: decision.descriptor.id === "CHAT" ? decision.enableAllFunctions === true : false
+            baseUrl: this.baseUrl
         };
     }
 

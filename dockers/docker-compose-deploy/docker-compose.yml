@@ -212,6 +212,34 @@ services:
     networks: [gebo-monolith-net]
 
   # =======================
+  # gebo.ai volume ownership - one-shot, runs before gebo.ai and exits
+  # =======================
+  # geboai/gebo.ai runs as the NON-ROOT uid 10001 since the Java 25 images
+  # (dockers/gebo.ai.platform). Volumes created by an older image, which ran as
+  # root, are root-owned and the app could not write to them after an upgrade.
+  # This hands them over before gebo.ai starts. Only each volume's top directory
+  # is checked, so every later `up` is a no-op that never walks gebo-work again.
+  # gebo-shares is left alone: it is content to READ, mounted read-only.
+  gebo-volumes-owner:
+    image: alpine:3.22
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        for d in /v/work /v/home /v/logs; do
+          if [ "$$(stat -c %u "$$d")" != "10001" ]; then
+            echo "re-owning $$d for uid 10001"
+            chown -R 10001:10001 "$$d"
+          fi
+        done
+    volumes:
+      - gebo-work:/v/work
+      - gebo-home:/v/home
+      - gebo-logs:/v/logs
+
+  # =======================
   # gebo.ai
   # =======================
   # Bound to all host interfaces
@@ -232,6 +260,9 @@ services:
         condition: service_healthy
       opensearch:
         condition: service_healthy
+      # root-owned volumes from an older image are handed to uid 10001 first
+      gebo-volumes-owner:
+        condition: service_completed_successfully
     deploy:
       resources:
         limits:
@@ -279,9 +310,11 @@ services:
       # No -XX:+AggressiveHeap: it silently swaps G1 for the throughput
       # collector. No -XX:+PrintGCDetails: it is deprecated and re-routes the
       # whole GC stream to stdout, i.e. into `docker logs`, instead of gc.log.
+      # No -Dsun.jnu.encoding: the JDK ignores it. File-name encoding comes from
+      # the image's UTF-8 locale (LANG=C.UTF-8), which is what lets the app read
+      # Unicode names on mounted Windows / SMB / NTFS shares.
       JAVA_TOOL_OPTIONS:
         --enable-native-access=ALL-UNNAMED
-        -Dsun.jnu.encoding=UTF-8
         -Dfile.encoding=UTF-8
         -Dai.gebo.neo4j.enabled=true
         -Xms2g

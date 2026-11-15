@@ -16,10 +16,10 @@
 <div class="grid">
   <div class="col-12">
     <gebo-ai-field id="datasourceTypes" label="Data source types"
-      help="Data source types whose ingestion logs are listed. Leave empty to list them all.">
-      <p-multiselect id="datasourceTypesSelector" gebo-ai-label gebo-ai-field-element styleClass="w-full"
+      help="Data source types whose ingestion logs are listed. Leave empty to list them all." placeholder="All data source types">
+      <p-multiselect id="datasourceTypesSelector" gebo-ai-field-element styleClass="w-full"
         [options]="endpointTypes" optionLabel="label" optionValue="className" [(ngModel)]="selectedClassNames"
-        [showToggleAll]="true" [filter]="true" placeholder="All data source types"></p-multiselect>
+        [showToggleAll]="true" [filter]="true"></p-multiselect>
     </gebo-ai-field>
   </div>
   <div class="col-12">

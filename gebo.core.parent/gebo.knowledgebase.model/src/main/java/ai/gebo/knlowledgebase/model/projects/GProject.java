@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.model.IGObjectWithSecurity;
@@ -31,7 +32,7 @@ import lombok.Data;
 @Document
 @EntityDescription(description = "Project/item")
 @Data
-public class GProject extends GBaseVersionableObject implements IGObjectWithSecurity, IAclGrantedResource {
+public class GProject extends GBaseVersionableObject implements IGObjectWithSecurity, IContentAclResource {
 
 	// List of group IDs or names that have access to this project.
 	private List<String> accessibleGroups = null;

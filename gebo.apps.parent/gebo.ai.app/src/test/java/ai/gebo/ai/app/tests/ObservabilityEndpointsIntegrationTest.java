@@ -20,6 +20,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.jupiter.api.AfterAll;
@@ -28,14 +31,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.web.server.LocalManagementPort;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
 import com.sun.net.httpserver.HttpServer;
 
 import ai.gebo.monolithic.app.Main;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationHandler;
+import io.micrometer.observation.ObservationView;
 
 /**
  * What the observability deployments rely on, on the real application:
@@ -140,6 +148,55 @@ public class ObservabilityEndpointsIntegrationTest extends AbstractBaseIntegrati
 				"On the application port the health endpoint needs an authenticated user");
 		assertEquals(401, get(managementPort, "/actuator/metrics").statusCode(),
 				"On the management port only health and prometheus are anonymous");
+	}
+
+	/**
+	 * Every observation started while the test runs, as "name" or
+	 * "name < parent name".
+	 */
+	@TestConfiguration
+	static class StartedObservations {
+		static final List<String> started = new CopyOnWriteArrayList<>();
+
+		@Bean
+		ObservationHandler<Observation.Context> startedObservationsRecorder() {
+			return new ObservationHandler<Observation.Context>() {
+				@Override
+				public boolean supportsContext(Observation.Context context) {
+					return true;
+				}
+
+				@Override
+				public void onStart(Observation.Context context) {
+					ObservationView parent = context.getParentObservation();
+					started.add(parent == null ? context.getName()
+							: context.getName() + " < " + parent.getContextView().getName());
+				}
+			};
+		}
+	}
+
+	private static List<String> securityObservationsStartedBy(Callable<?> request) throws Exception {
+		StartedObservations.started.clear();
+		request.call();
+		return StartedObservations.started.stream().filter(s -> s.startsWith("spring.security.")).toList();
+	}
+
+	@Test
+	public void theScrapeLeavesNoTraceOfItsOwn() throws Exception {
+		// The management port has no request observation, so a security observation
+		// there would be a root span: a trace made of nothing else, twice per scrape.
+		List<String> scrape = securityObservationsStartedBy(() -> get(managementPort, "/actuator/prometheus"));
+		assertTrue(scrape.isEmpty(), "A scrape on the management port starts no security observation, got " + scrape);
+		List<String> health = securityObservationsStartedBy(() -> get(managementPort, "/actuator/health"));
+		assertTrue(health.isEmpty(), "A health probe starts no security observation, got " + health);
+
+		// On the application port the security spans stay, inside the request's span.
+		List<String> page = securityObservationsStartedBy(() -> get(serverPort, "/ui/"));
+		assertTrue(page.contains("spring.security.filterchains < http.server.requests"),
+				"A request on the application port keeps its security spans inside its trace, got " + page);
+		assertTrue(page.stream().allMatch(s -> s.contains(" < ")),
+				"No security observation on the application port is a root, got " + page);
 	}
 
 	@Test

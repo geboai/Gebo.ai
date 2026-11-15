@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
@@ -14,10 +15,10 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.security.services.ReactiveIdentityUtil;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType, ServiceType extends IGAgentsNetworkService>
 		implements IGAgentsNetworkServiceFactory<InputType, OutputType, ServiceType> {
@@ -30,7 +31,35 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 	protected final String description;
 	protected final Class<ServiceType> serviceType;
 	protected final IGRuntimeBinder runtimeBinder;
-	
+	/** Tells the type of the conditions of a suspended run, for the services built; null keeps none. */
+	private volatile IWaitingConditionTypeResolver conditionTypeResolver;
+
+	@Autowired(required = false)
+	public void setConditionTypeResolver(IWaitingConditionTypeResolver conditionTypeResolver) {
+		this.conditionTypeResolver = conditionTypeResolver;
+	}
+
+	public IWaitingConditionTypeResolver getConditionTypeResolver() {
+		return conditionTypeResolver;
+	}
+
+	/** Tells when the conditions of a suspended run stop waiting, for the services built; null gives none. */
+	private volatile IWaitingConditionExpiryPolicy conditionExpiryPolicy;
+
+	@Autowired(required = false)
+	public void setConditionExpiryPolicy(IWaitingConditionExpiryPolicy conditionExpiryPolicy) {
+		this.conditionExpiryPolicy = conditionExpiryPolicy;
+	}
+
+	public IWaitingConditionExpiryPolicy getConditionExpiryPolicy() {
+		return conditionExpiryPolicy;
+	}
+
+	/** Gives a built service what this factory was given for its suspended runs. */
+	protected void equipForSuspensions(GAbstractAgentsNetworkService<?, ?> built) {
+		built.setConditionTypeResolver(getConditionTypeResolver());
+		built.setConditionExpiryPolicy(getConditionExpiryPolicy());
+	}
 
 	@Override
 	public boolean canHandle(Class<IGAgentsNetworkService> agentNetworkService) {
@@ -98,15 +127,45 @@ public abstract class GAbstractAgentsNetworkServiceFactory<InputType, OutputType
 			INotificationSink notificationSink, Class<InputType> inputType, Class<OutputType> outputType,
 			ReactiveIdentityUtil runAs, Map<String, RuntimeAgentInfos> agentsCache) throws NetworkOfAgentsException;
 
-	protected RuntimeAgentInfos createRuntimeAgentInfos(GAgentsNetwork network, AgentNetworkParticipant agent)
-			throws NetworkOfAgentsException {
-		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
-				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+	/**
+	 * The configuration this participant runs on: the one its code names, carrying
+	 * what the participant adds to it in this network. Only the tool sources the
+	 * participant mounts on top of its configuration's own
+	 * ({@link AgentNetworkParticipant#getAdditionalToolSources()}) are added, and
+	 * only onto the instance of this run: the configuration service answers every
+	 * lookup with its own object, so the same agent in another network, or in a
+	 * chat, is unaffected.
+	 */
+	protected GAgentConfig configurationOf(AgentNetworkParticipant agent) throws NetworkOfAgentsException {
 		IAgentConfigDao agentConfigDao = runtimeBinder.getImplementationOf(IAgentConfigDao.class);
 		GAgentConfig config = agentConfigDao.findByCode(agent.getAgentConfigCode());
 		if (config == null)
 			throw new NetworkOfAgentsException(
 					"The agent config code:" + agent.getAgentConfigCode() + " does not exist");
+		List<String> addedByTheNetwork = agent.getAdditionalToolSources();
+		if (addedByTheNetwork != null && !addedByTheNetwork.isEmpty()) {
+			List<String> mounted = new ArrayList<String>(
+					config.getAdditionalToolSources() != null ? config.getAdditionalToolSources() : List.of());
+			for (String sourceId : addedByTheNetwork) {
+				if (sourceId != null && !sourceId.isBlank() && !mounted.contains(sourceId)) {
+					mounted.add(sourceId);
+				}
+			}
+			config.setAdditionalToolSources(mounted);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Participant:" + agent.getNetworkAgentName() + " mounts the tool source(s) "
+						+ addedByTheNetwork + " on its agent config code:" + config.getCode()
+						+ " for this network only");
+			}
+		}
+		return config;
+	}
+
+	protected RuntimeAgentInfos createRuntimeAgentInfos(GAgentsNetwork network, AgentNetworkParticipant agent)
+			throws NetworkOfAgentsException {
+		IGAgentServiceRuntimeDao agentServiceRuntimeDao = runtimeBinder
+				.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		GAgentConfig config = configurationOf(agent);
 		IGGenericAgentService service = agentServiceRuntimeDao.findByCode(config.getAgentServiceId());
 		if (service instanceof IGNetworkAgentService networkService) {
 			if (LOGGER.isDebugEnabled()) {

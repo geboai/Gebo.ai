@@ -7,16 +7,34 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Directive, OnInit } from "@angular/core";
+import { Directive, inject, OnInit } from "@angular/core";
 import {
   WorkflowStatsDrillDownLevel,
   WorkflowStatsDrillDownResult,
   WorkflowStatsAggregationBucket
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { Observable } from "rxjs";
+import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 
 @Directive()
 export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
+  private translationService = inject(GeboAITranslationService);
+  private moduleId = inject(GEBO_AI_MODULE, { optional: true });
+  private fieldHost = inject(GEBO_AI_FIELD_HOST, { optional: true });
+
+  /** Texts built here rather than in the template, translated as the template's are. */
+  protected texts: { [id: string]: string } = {
+    AllOption: "All",
+    InputSeries: "Input",
+    ProcessedSeries: "Processed",
+    SentToNextStepSeries: "Sent to next step",
+    DiscardedSeries: "Discarded",
+    ErrorsSeries: "Errors",
+    ChunksSeries: "Chunks",
+    TokensSeries: "Tokens (k)"
+  };
+
   loading: boolean = false;
   result?: WorkflowStatsDrillDownResult;
   hasNoStats: boolean = false;
@@ -66,7 +84,25 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.translateTexts();
     this.loadData({});
+  }
+
+  /** Translates the texts built here, then rebuilds the charts showing them. */
+  private translateTexts(): void {
+    const host = Array.isArray(this.fieldHost) ? this.fieldHost[0] : this.fieldHost;
+    const moduleId = Array.isArray(this.moduleId) ? this.moduleId[0] : this.moduleId;
+    const entityId = host?.getEntityName();
+    if (!moduleId || !entityId) return;
+    const items = Object.entries(this.texts).map(([id, label]) => ({ id, label }));
+    this.translationService.translateMenuItems(moduleId, entityId, items).subscribe(translated => {
+      const texts = { ...this.texts };
+      translated.forEach(x => {
+        if (x.id && x.label) texts[x.id] = x.label;
+      });
+      this.texts = texts;
+      this.updateCharts();
+    });
   }
 
   abstract executeDrillDown(filter: WorkflowStatsDrillDownLevel): Observable<WorkflowStatsDrillDownResult>;
@@ -114,7 +150,7 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
 
   /** Scalar sub-dimension options (workflow type/id/step, year, month). */
   getOptions(arr?: Array<any>): { label: string, value: any }[] {
-    const options: { label: string, value: any }[] = [{ label: "All", value: undefined }];
+    const options: { label: string, value: any }[] = [{ label: this.texts["AllOption"], value: undefined }];
     if (arr) {
       arr.forEach(val => {
         options.push({ label: String(val), value: val });
@@ -127,7 +163,7 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
    *  label is the human readable description/code, the value is the whole
    *  reference (matched server-side on className+code). */
   getRefOptions(arr?: Array<any>): { label: string, value: any }[] {
-    const options: { label: string, value: any }[] = [{ label: "All", value: undefined }];
+    const options: { label: string, value: any }[] = [{ label: this.texts["AllOption"], value: undefined }];
     if (arr) {
       arr.forEach(ref => {
         options.push({ label: ref?.description || ref?.code || String(ref), value: ref });
@@ -157,35 +193,35 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
       labels: labels,
       datasets: [
         {
-          label: "Input",
+          label: this.texts["InputSeries"],
           data: buckets.map(b => b.batchDocumentsInput || 0),
           backgroundColor: "rgba(66, 165, 245, 0.75)",
           borderColor: "#1E88E5",
           borderWidth: 1.5
         },
         {
-          label: "Processed",
+          label: this.texts["ProcessedSeries"],
           data: buckets.map(b => b.batchDocumentsProcessed || 0),
           backgroundColor: "rgba(102, 187, 106, 0.75)",
           borderColor: "#43A047",
           borderWidth: 1.5
         },
         {
-          label: "Sent to next step",
+          label: this.texts["SentToNextStepSeries"],
           data: buckets.map(b => b.batchSentToNextStep || 0),
           backgroundColor: "rgba(38, 166, 154, 0.75)",
           borderColor: "#00897B",
           borderWidth: 1.5
         },
         {
-          label: "Discarded",
+          label: this.texts["DiscardedSeries"],
           data: buckets.map(b => b.batchDiscardedInput || 0),
           backgroundColor: "rgba(255, 167, 38, 0.75)",
           borderColor: "#FB8C00",
           borderWidth: 1.5
         },
         {
-          label: "Errors",
+          label: this.texts["ErrorsSeries"],
           data: buckets.map(b => b.batchDocumentsProcessingErrors || 0),
           backgroundColor: "rgba(239, 83, 80, 0.75)",
           borderColor: "#E53935",
@@ -201,14 +237,14 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
       labels: labels,
       datasets: [
         {
-          label: "Chunks",
+          label: this.texts["ChunksSeries"],
           data: buckets.map(b => b.chunksProcessed || 0),
           backgroundColor: "rgba(126, 87, 194, 0.75)",
           borderColor: "#5E35B1",
           borderWidth: 1.5
         },
         {
-          label: "Tokens (k)",
+          label: this.texts["TokensSeries"],
           data: buckets.map(b => (b.tokensProcessed || 0) / 1000),
           backgroundColor: "rgba(255, 167, 38, 0.75)",
           borderColor: "#FB8C00",

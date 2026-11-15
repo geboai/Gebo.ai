@@ -112,13 +112,16 @@ public interface IGGenericalChatService {
 	/**
 	 * Retrieves user information for a specific chat model.
 	 *
-	 * @param modelCode The code representing the model for which info is retrieved.
+	 * @param modelCode    The code representing the model for which info is retrieved.
+	 * @param pipelineCode The pipeline the chat runs in, whose tools are told; null
+	 *                     for a direct chat with the model, which has none.
 	 * @return User information related to the chat model.
 	 * @throws GeboChatException  If the request fails due to chat errors.
 	 * @throws LLMConfigException If configuration issues prevent information
 	 *                            retrieval.
 	 */
-	public GeboChatUserInfo getChatModelUserInfo(String modelCode) throws GeboChatException, LLMConfigException;
+	public GeboChatUserInfo getChatModelUserInfo(String modelCode, String pipelineCode)
+			throws GeboChatException, LLMConfigException;
 
 	public GeboChatResponse chat(GPromptTemplateConfig overriddenPrompt, LLMChatRequestResources requestResources,
 			GeboChatResponse response, IGConfigurableChatModel chatModel) throws GeboChatException, LLMConfigException;

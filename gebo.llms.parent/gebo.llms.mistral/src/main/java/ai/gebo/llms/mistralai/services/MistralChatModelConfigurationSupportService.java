@@ -113,8 +113,8 @@ public class MistralChatModelConfigurationSupportService
 		 *                            credentials
 		 */
 		@Override
-		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected MistralAiChatModel configureModel(GMistralChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 			String apiKey = null;
 			String user = null;
 			if (config.getApiSecretCode() == null || config.getApiSecretCode().trim().length() == 0)
@@ -200,8 +200,8 @@ public class MistralChatModelConfigurationSupportService
 							config.getCode(), config.getThinking(), effort, reasons);
 				}
 			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
+			if (!toolNames.isEmpty()) {
+				List<ToolCallback> functions = functionsRepo.getTools((toolNames));
 				// The condition above tests the tool names that were REQUESTED. getTools filters
 				// the callbacks actually available by those names, so it can return fewer - or
 				// none at all, when the source that exports them failed. Configuring the model
@@ -210,10 +210,7 @@ public class MistralChatModelConfigurationSupportService
 				if (functions != null && !functions.isEmpty()) {
 					builder = builder.toolCallbacks(functions);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ config.getEnabledFunctions().size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + config.getEnabledFunctions());
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 
@@ -222,7 +219,7 @@ public class MistralChatModelConfigurationSupportService
 					.mistralAiApi(mistralApi)
 					.options(options)
 					.toolCallingManager(
-							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
+							functionsRepo.createToolCallingManager())
 					.retryTemplate(retryTemplate)
 					.observationRegistry(observationRegistry)
 					.build();

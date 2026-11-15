@@ -1,6 +1,7 @@
 package ai.gebo.security.services.impl.authmanagers;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,6 +24,18 @@ public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements Authe
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		// Introspection is the provider answering for a token it issued, so it needs an
+		// endpoint and the credentials to ask with. A configuration that has neither is
+		// not a failure of this token: when several providers are tried in turn, saying
+		// so as an authentication failure lets the next one be tried, where a missing
+		// client used to end the whole attempt with a null pointer instead.
+		if (oauth2Configuration.getProviderConfig() == null
+				|| oauth2Configuration.getProviderConfig().getIntrospectionUri() == null
+				|| oauth2Configuration.getClient() == null) {
+			throw new BadCredentialsException("The oauth2 configuration "
+					+ oauth2Configuration.getRegistrationId() + " cannot introspect a token: "
+					+ "it has no introspection endpoint or no stored client");
+		}
 		SpringOpaqueTokenIntrospector opaqueTokenIntrospector = new SpringOpaqueTokenIntrospector(
 				oauth2Configuration.getProviderConfig().getIntrospectionUri(),
 				oauth2Configuration.getClient().getClientId(), oauth2Configuration.getClient().getSecret());

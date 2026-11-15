@@ -7,7 +7,6 @@ ai.gebo.openchat.prompts.library:
     agentId: controllerAgent
     chatHistory: REQUIRED
     contextDocuments: REQUIRED
-    toolsCalling: REQUIRED
   - promptUse: open-chat-answer-writer-agent-prompt
     langCode: en
     systemReference: /open-chat-prompt-library/en/open-chat-answer-writer-agent-system-prompt.txt
@@ -16,7 +15,6 @@ ai.gebo.openchat.prompts.library:
     agentId: ReportWriterNetworkAgentService
     chatHistory: NOT_REQUIRED
     contextDocuments: NOT_REQUIRED
-    toolsCalling: NOT_REQUIRED
 ai.gebo.openchat.prompts.uses:
   - code: open-chat-coordinator-agent-prompt
     description: Main loop prompt for the open-chat coordinator/controller agent. It turns the user's request into a routing plan but, unlike the default coordinator, it has no internal company knowledge base to search and dispatches the external search agents only when the request actually needs fresh external information; otherwise it finalizes straight to the free-response writer.

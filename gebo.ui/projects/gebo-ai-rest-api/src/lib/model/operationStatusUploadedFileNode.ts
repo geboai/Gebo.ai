@@ -15,6 +15,6 @@ import { UploadedFileNode } from './uploadedFileNode';
 export interface OperationStatusUploadedFileNode { 
     result?: UploadedFileNode;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

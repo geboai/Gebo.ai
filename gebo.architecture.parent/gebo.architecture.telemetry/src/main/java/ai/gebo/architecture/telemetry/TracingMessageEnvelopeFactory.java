@@ -9,7 +9,7 @@
 
 package ai.gebo.architecture.telemetry;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -28,21 +28,28 @@ import io.micrometer.tracing.propagation.Propagator;
  * trace context (if any) into it via Micrometer Tracing's {@link Propagator}.
  * Because {@code GMessageEnvelopeCodec} round-trips the whole envelope as
  * JSON, this trace context survives the RabbitMQ hop automatically - no AMQP
- * header plumbing is involved. Active only when a {@link Tracer} bean exists
- * (i.e. {@code gebo.architecture.telemetry} is on the classpath); takes
- * priority over {@link DefaultMessageEnvelopeFactory} via {@code @Primary}.
+ * header plumbing is involved; inside the monolith it carries the trace from
+ * the emitting thread to the receiver's delivery thread. Takes priority over
+ * {@link DefaultMessageEnvelopeFactory} via {@code @Primary}.
+ * <p>
+ * The {@link Tracer} and {@link Propagator} are looked up when an envelope is
+ * built, not when this bean is created. They come from Spring Boot's tracing
+ * auto-configuration, which registers its beans after the component scan that
+ * finds this class, so a {@code @ConditionalOnBean(Tracer.class)} here never
+ * matched and the factory was silently left out. Without a tracer the envelope
+ * is built exactly as the default factory builds it.
+ * </p>
  */
 @Component
-@ConditionalOnBean(Tracer.class)
 @Primary
 public class TracingMessageEnvelopeFactory implements IMessageEnvelopeFactory {
 
 	private final DefaultMessageEnvelopeFactory delegate;
-	private final Tracer tracer;
-	private final Propagator propagator;
+	private final ObjectProvider<Tracer> tracer;
+	private final ObjectProvider<Propagator> propagator;
 
-	public TracingMessageEnvelopeFactory(DefaultMessageEnvelopeFactory delegate, Tracer tracer,
-			Propagator propagator) {
+	public TracingMessageEnvelopeFactory(DefaultMessageEnvelopeFactory delegate, ObjectProvider<Tracer> tracer,
+			ObjectProvider<Propagator> propagator) {
 		this.delegate = delegate;
 		this.tracer = tracer;
 		this.propagator = propagator;
@@ -64,10 +71,15 @@ public class TracingMessageEnvelopeFactory implements IMessageEnvelopeFactory {
 	}
 
 	private void injectTraceContext(GMessageEnvelope<?> envelope) {
-		Span currentSpan = tracer.currentSpan();
+		Tracer currentTracer = tracer.getIfAvailable();
+		Propagator currentPropagator = propagator.getIfAvailable();
+		if (currentTracer == null || currentPropagator == null) {
+			return;
+		}
+		Span currentSpan = currentTracer.currentSpan();
 		if (currentSpan == null || currentSpan.isNoop()) {
 			return;
 		}
-		propagator.inject(currentSpan.context(), envelope, GMessageEnvelope::putTraceContextField);
+		currentPropagator.inject(currentSpan.context(), envelope, GMessageEnvelope::putTraceContextField);
 	}
 }

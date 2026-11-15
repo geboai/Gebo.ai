@@ -61,14 +61,14 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
-                    <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
+                  <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
+                    <geboai-editable-listbox-component formControlName="parentProjectCode" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="contentManagementSystem" label="Git system" help="Already configured git system reference." [required]="true">
-                    <geboai-editable-listbox-component formControlName="contentManagementSystem" [required]="true" [readonly]="mode!=='NEW'" placeholder="Select a git server setting" [optionsObservable]="gitSystemsObservable" [readonly]="cantModifyGitSystem" gebo-ai-field-element>
+                  <gebo-ai-field id="contentManagementSystem" label="Git system" help="Already configured git system reference." [required]="true" placeholder="Select a git server setting">
+                    <geboai-editable-listbox-component formControlName="contentManagementSystem" [required]="true" [readonly]="mode!=='NEW'" [optionsObservable]="gitSystemsObservable" [readonly]="cantModifyGitSystem" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
                   </gebo-ai-field>
                 </div>
@@ -78,8 +78,8 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-4">
-                  <gebo-ai-field id="branch" label="Branch" help="Branch name to checkout (normally master, main or develop)" [required]="true">
-                    <geboai-editable-listbox-component id="branch" formControlName="branch" [required]="true" placeholder="Select a branch" [optionsObservable]="branchesObservable" gebo-ai-field-element>
+                  <gebo-ai-field id="branch" label="Branch" help="Branch name to checkout (normally master, main or develop)" [required]="true" placeholder="Select a branch">
+                    <geboai-editable-listbox-component id="branch" formControlName="branch" [required]="true" [optionsObservable]="branchesObservable" gebo-ai-field-element>
                     </geboai-editable-listbox-component>
                   </gebo-ai-field>
                 </div>
@@ -92,9 +92,9 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-4" >
-                  <gebo-ai-field id="identityCode" label="Identity used" help="Select the identity to do clone/checkout on the system" [required]="publicAccess===false">
+                  <gebo-ai-field id="identityCode" label="Identity used" help="Select the identity to do clone/checkout on the system" [required]="publicAccess===false" placeholder="Select an identity">
                     <geboai-editable-listbox-component formControlName="identityCode" id="identityCode"
-                      [required]="publicAccess===false" placeholder="Select an identity"
+                      [required]="publicAccess===false"
                       [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
                       (selectionChanged)="onGitConnectivityChange()" gebo-ai-field-element>
                     </geboai-editable-listbox-component>

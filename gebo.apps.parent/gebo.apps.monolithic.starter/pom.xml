@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.5.0</version>
+		<version>1.0.6.0</version>
 	</parent>
 	<artifactId>gebo.apps.monolithic.starter</artifactId>
 	<dependencies>
@@ -16,6 +16,12 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security.apikey</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<!-- The sessions store: live tokens and their revocation; owner-only like the keys. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.security.sessions</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- The monolith OWNS the ACL store: it reads AND allocates aliases in
@@ -202,6 +208,18 @@
 			<artifactId>gebo.architecture.agents.standard</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The events solving the conditions of suspended networks of agents, from
+		     any source (REST, the message broker), and their REST entry. -->
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.conditionevents</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.agents.conditionevents.controllers</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.open-chat-pipeline</artifactId>
@@ -331,7 +349,6 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>1.27.1</version>
 		</dependency>
 	</dependencies>
 </project>

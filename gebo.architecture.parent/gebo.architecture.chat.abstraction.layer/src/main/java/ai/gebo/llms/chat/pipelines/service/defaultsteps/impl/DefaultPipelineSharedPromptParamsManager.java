@@ -6,9 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
-import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import lombok.AllArgsConstructor;
 @Service
@@ -39,18 +37,16 @@ public class DefaultPipelineSharedPromptParamsManager {
 	public static final String DELIVERABLE_TYPES_LIST_TEMPLATE_PARAM = "deliverableTypesList";
 	
 
-	public String toolsListPromptPart(IGConfigurableChatModel chatModel) {
-		StringBuffer buffer = new StringBuffer();
-		if (chatModel != null && chatModel.getConfig() != null
-				&& chatModel.getConfig() instanceof GBaseChatModelConfig chatModelConfig) {
-			if (chatModelConfig.getEnabledFunctions() != null && !chatModelConfig.getEnabledFunctions().isEmpty()) {
-	
-				List<ToolCategoriesTree> tools = toolCallbackSourceRepo
-						.getEnabledToolsTree(chatModelConfig.getEnabledFunctions());
-				buffer.append(RoutingPromptUtil.toolsListPromptPart(tools));
-			}
+	/** The tools named, as a prompt lists them; empty when there are none. */
+	public String toolsListPromptPart(List<String> functions) {
+		if (functions == null || functions.isEmpty()) {
+			return "";
 		}
-		return buffer.toString();
+		return RoutingPromptUtil.toolsListPromptPart(toolCallbackSourceRepo.getEnabledToolsTree(functions));
+	}
+
+	public String toolsListPromptPart(IGConfigurableChatModel chatModel) {
+		return chatModel != null ? toolsListPromptPart(chatModel.getToolNames()) : "";
 	}
 
 }

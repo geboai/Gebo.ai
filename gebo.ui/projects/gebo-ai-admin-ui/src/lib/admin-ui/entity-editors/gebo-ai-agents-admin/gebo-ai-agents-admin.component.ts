@@ -1,9 +1,9 @@
 import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AgentServiceDescriptor, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolCollision, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
-import { forkJoin, map, Observable, of, take, tap } from "rxjs";
+import { catchError, debounceTime, forkJoin, map, merge, Observable, of, Subject, switchMap, take, tap } from "rxjs";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
@@ -42,11 +42,17 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
         excludedToolSources: new FormControl(),
+        libraryTypeIds: new FormControl(),
         aclAliases: new FormControl(),
         defaultConfiguration: new FormControl(),
         temperature: new FormControl(),
         thinking: new FormControl(),
-        readOnly: new FormControl()
+        readOnly: new FormControl(),
+        // how long the conditions this agent waits for keep waiting, and whether the run goes on then
+        conditionsExpiry: new FormGroup({
+            expiryMinutes: new FormControl(),
+            expiryUnblocks: new FormControl()
+        })
 
     });
     protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
@@ -59,6 +65,11 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     protected networks: GBaseObject[] = [];
     /** The registered tool sources, by description: the ones an auto-mounting agent may leave out. */
     protected toolSources: ToolSourceInfo[] = [];
+    /** The library types of tools and resources this installation manages: the ones an agent works with, whole. */
+    protected libraryTypes: AIToolsAndResourcesLibraryType[] = [];
+    /** The tools of the libraries having the name of another tool this agent mounts, as the form stands. */
+    protected toolCollisions: LibraryToolCollision[] = [];
+    private readonly collisionsCheck = new Subject<void>();
     protected promptLoadingObservable: Observable<GPromptTemplateConfig[]> = of([]);
     protected defaultChatModel?: ConfigurationEntryGBaseChatModelConfig;
     protected isChooseChatModel: boolean = false;
@@ -114,6 +125,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 error: (error) => console.error("Cannot read the adapted network " + code, error)
             });
         });
+        // a library's tool takes the place of a mounted tool of its name: the administrator
+        // is told while editing what would be lost
+        merge(this.collisionsCheck, ...["agentServiceId", "libraryTypeIds", "enabledFunctions", "subscribeAllTools", "excludedToolSources"]
+            .map(name => this.formGroup.controls[name].valueChanges))
+            .pipe(debounceTime(300), switchMap(() => this.checkToolCollisions()))
+            .subscribe(collisions => this.toolCollisions = collisions);
         // the custom prompt is edited only while the agent has one: otherwise the editor
         // is disabled and the standard template is chosen
         this.formGroup.controls["customLoopPrompt"].valueChanges.subscribe(() => this.syncPromptControls());
@@ -133,6 +150,21 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
             this.userMessages=[systemAgentService];
         }
         super.onLoadedPersistentData(actualValue);
+        this.collisionsCheck.next();
+    }
+    /** The collisions of the agent as the form stands, saved or not; none with no library. */
+    private checkToolCollisions(): Observable<LibraryToolCollision[]> {
+        const agent: GAgentConfig = { ...this.entity, ...this.formGroup.getRawValue() };
+        if (!agent.libraryTypeIds?.length || !agent.agentServiceId) {
+            return of([]);
+        }
+        return this.agentsAdminService.checkAgentToolCollisions(agent).pipe(
+            tap(collisions => console.debug("[agents-admin] " + (collisions?.length || 0) + " tool collision(s)")),
+            map(collisions => collisions || []),
+            catchError(error => {
+                console.error("Cannot check the tool collisions of the agent", error);
+                return of([]);
+            }));
     }
     /**
      * Adds or removes the required validator for a form control
@@ -176,8 +208,8 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>, Observable<GAgentRole[]>, Observable<AgentServiceDescriptor[]>, Observable<GBaseObject[]>, Observable<ToolSourceInfo[]>] =
-            [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices(), this.agentsAdminService.getAgentRoles(), this.networksService.getAgentServices(), this.networksService.getAgentsNetwork(), this.functionsLookupService.getToolSourceInfos()];
+        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>, Observable<GAgentRole[]>, Observable<AgentServiceDescriptor[]>, Observable<GBaseObject[]>, Observable<ToolSourceInfo[]>, Observable<AIToolsAndResourcesLibraryType[]>] =
+            [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices(), this.agentsAdminService.getAgentRoles(), this.networksService.getAgentServices(), this.networksService.getAgentsNetwork(), this.functionsLookupService.getToolSourceInfos(), this.functionsLookupService.getAIToolsAndResourcesLibraryType()];
         forkJoin(observables).subscribe({
             next: (values) => {
                 this.chatModelsData = values[0];
@@ -189,9 +221,10 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 this.serviceDescriptors = values[3] || [];
                 this.networks = values[4] || [];
                 this.toolSources = [...(values[5] || [])].sort((a, b) => (a.description || a.id || "").localeCompare(b.description || b.id || ""));
+                this.libraryTypes = [...(values[6] || [])].sort((a, b) => (a.description || a.id || "").localeCompare(b.description || b.id || ""));
                 console.debug("[agents-admin] " + this.agentTypes.length + " service(s), " + this.roles.length + " role(s), "
                     + this.serviceDescriptors.length + " descriptor(s), " + this.networks.length + " network(s), "
-                    + this.toolSources.length + " tool source(s)");
+                    + this.toolSources.length + " tool source(s), " + this.libraryTypes.length + " library type(s)");
             },
             complete: () => {
                 this.loadingRelatedBackend = false;

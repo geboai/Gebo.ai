@@ -40,6 +40,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Pins how the report writer fits its input: its own last output whole, and the
@@ -47,6 +48,8 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
  * writing call.
  */
 class ReportWriterEvidenceBudgetTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:ReportWriterEvidenceBudgetTest").build();
 
 	private static final IGDocumentContentRendererProvider NO_RENDERER = new IGDocumentContentRendererProvider() {
 		@Override
@@ -114,9 +117,10 @@ class ReportWriterEvidenceBudgetTest {
 	@Test
 	void extractionsOverTheFinalBudgetAreReducedAgainWithTheExtractionPrompt() throws Exception {
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		when(model.withoutTools()).thenReturn(model);
 		GPromptTemplateConfig extractorPrompt = new GPromptTemplateConfig();
 		AtomicInteger calls = new AtomicInteger();
-		when(model.textResponse(any(), any(), any())).thenAnswer(invocation -> {
+		when(model.textResponse(any(), any(), any(), any())).thenAnswer(invocation -> {
 			calls.incrementAndGet();
 			Map<String, Object> params = invocation.getArgument(1);
 			assertNotNull(params.get("SHARED_CONTEXT"), "each group is the shared context of its call");
@@ -134,24 +138,26 @@ class ReportWriterEvidenceBudgetTest {
 
 		List<String> reduced = writer().reduceExtractions(extractions, one * 3, one * 2 + 20, extractorParams, model,
 				extractorPrompt, null, ReactiveIdentityUtil.create(), new AtomicInteger(), mock(ISinkUIEmitter.class),
-				persona, mock(INotificationSink.class));
+				persona, mock(INotificationSink.class), TOOL_CALLING);
 
 		assertTrue(tokens(String.join("\r\n", reduced)) <= one * 3, "the extractions fit the final call");
 		assertTrue(reduced.stream().allMatch(x -> x.startsWith("- merged fact")), "reduced by the extraction prompt");
-		verify(model, atLeastOnce()).textResponse(any(), any(), any());
+		verify(model, atLeastOnce()).textResponse(any(), any(), any(), any());
 	}
 
 	@Test
 	void extractionsWithinTheFinalBudgetAreNotReduced() throws Exception {
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		when(model.withoutTools()).thenReturn(model);
 		List<String> extractions = List.of("- fact one [a]", "- fact two [b]");
 
 		List<String> reduced = writer().reduceExtractions(extractions, 10_000, 5_000, new HashMap<>(), model,
 				new GPromptTemplateConfig(), null, ReactiveIdentityUtil.create(), new AtomicInteger(),
-				mock(ISinkUIEmitter.class), mock(AgentNetworkParticipant.class), mock(INotificationSink.class));
+				mock(ISinkUIEmitter.class), mock(AgentNetworkParticipant.class), mock(INotificationSink.class),
+						TOOL_CALLING);
 
 		assertEquals(extractions, reduced);
-		verify(model, org.mockito.Mockito.never()).textResponse(any(), any(), any());
+		verify(model, org.mockito.Mockito.never()).textResponse(any(), any(), any(), any());
 	}
 
 	@Test

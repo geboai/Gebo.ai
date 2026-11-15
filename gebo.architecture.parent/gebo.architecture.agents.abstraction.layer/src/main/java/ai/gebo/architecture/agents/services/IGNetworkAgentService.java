@@ -12,6 +12,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.security.services.ReactiveIdentityUtil;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericAgentService {
 	public Class<InputType> getInputType();
@@ -19,12 +20,14 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 	public Class<OutputType> getOutputType();
 
 	/**
-	 * The semantic of the messages this agent produces, the one it builds them with:
+	 * The semantic of the messages this agent produces, the one it builds them
+	 * with:
 	 * <ul>
-	 * <li>{@link MessageSemantic#EXECUTE_AND_SHARE_RESULT}: the network delivers each
-	 * message to its target agent as its input. A router sends each agent it can talk
-	 * to a command typed on that agent's input; a forwarder (e.g. an input adapter)
-	 * sends its own output, which must then be consumable as the target's input.</li>
+	 * <li>{@link MessageSemantic#EXECUTE_AND_SHARE_RESULT}: the network delivers
+	 * each message to its target agent as its input. A router sends each agent it
+	 * can talk to a command typed on that agent's input; a forwarder (e.g. an input
+	 * adapter) sends its own output, which must then be consumable as the target's
+	 * input.</li>
 	 * <li>{@link MessageSemantic#RESPONSE}: the message is never delivered, it is
 	 * shared in the session context every agent reads (a performer answering, a
 	 * searcher returning evidence, a writer reporting); from an output node it is
@@ -35,7 +38,26 @@ public interface IGNetworkAgentService<InputType, OutputType> extends IGGenericA
 		return MessageSemantic.EXECUTE_AND_SHARE_RESULT;
 	}
 
-	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext, GAgentConfig config,
-			AgentsExchangeMessage<InputType> msg, int actualContributionNr,
-			GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink, AgentsCollaborationSessionContext session, AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException;
+	/**
+	 * The message delivered to this agent, with what the software controlling the
+	 * run adds to every model call of it (see {@link GeboToolCalling}), as the
+	 * network received it. The agent passes it to its model and to whatever it
+	 * calls that takes one, in one of three ways: as it is; one of its own in its
+	 * place; the two {@link GeboToolCalling#merged(GeboToolCalling, GeboToolCalling)}.
+	 * Never null: the network refuses a run without one.
+	 * <p>
+	 * The suspension handler is the run's (see
+	 * {@link IGNetworkOfAgentsSuspensionHandler}): an agent that must wait for
+	 * something outside the run asks it, in its own control code, to suspend the
+	 * run; the network never asks it. The agent then returns as usual: what it
+	 * returns is not delivered but frozen with the rest of the cut, for the
+	 * respawn. Never null: a run that cannot be suspended carries one that refuses.
+	 */
+	public List<AgentsExchangeMessage<OutputType>> onMessage(IChatRequestContext chatRequestContext,
+			GAgentConfig config, AgentsExchangeMessage<InputType> msg, int actualContributionNr, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<InputType, OutputType> mySessionContext, ReactiveIdentityUtil runAs,
+			IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler)
+			throws LLMConfigException, AgentException;
 }

@@ -102,16 +102,66 @@ public class Oauth2ClientRegistration {
 	}
 
 	private static String handlerPlaceHolders(String variable, Oauth2ClientRegistration registration) {
-		String out = variable;
-		if (out != null && registration.getClientRegistration() != null
-				&& registration.getClientRegistration().getCustomAttributes() != null
-				&& !registration.getClientRegistration().getCustomAttributes().isEmpty()) {
-			Set<Entry<String, String>> names = registration.getClientRegistration().getCustomAttributes().entrySet();
+		return resolvePlaceHolders(variable,
+				registration.getClientRegistration() != null ? registration.getClientRegistration().getCustomAttributes()
+						: null);
+	}
+
+	/**
+	 * Fills the {@code {name}} placeholders of a provider library URL with the
+	 * attributes the administrator gave for that configuration: the tenant of an
+	 * Entra organization, the domain, pool and region of a Cognito user pool, the
+	 * instance of an Identity Center, the server and realm of a Keycloak.
+	 *
+	 * <p>
+	 * This is the one substitution rule, used both when the browser login builds its
+	 * client registration and when a bearer token presented to the API is matched
+	 * against a configured provider. They used to disagree: the API side read the
+	 * library template as it stood, so an issuer still carrying {@code {tenantId}}
+	 * never matched the issuer of a real token and never discovered anything.
+	 * </p>
+	 *
+	 * @param value      a URL of the provider library, possibly templated
+	 * @param attributes the attributes of the configuration, may be null or empty
+	 * @return the URL with every known placeholder replaced
+	 */
+	public static String resolvePlaceHolders(String value, Map<String, String> attributes) {
+		String out = value;
+		if (out != null && attributes != null && !attributes.isEmpty()) {
+			Set<Entry<String, String>> names = attributes.entrySet();
 			for (Entry<String, String> entry : names) {
-				out = out.replace("{" + entry.getKey() + "}", entry.getValue());
+				if (entry.getValue() != null) {
+					out = out.replace("{" + entry.getKey() + "}", entry.getValue());
+				}
 			}
 		}
 		return out;
+	}
+
+	/**
+	 * The same provider configuration with every URL resolved, as a copy: the one
+	 * held by the configuration is the library template, shared by every
+	 * configuration of that provider, and must not be written into.
+	 *
+	 * @param providerConfig the template, may be null
+	 * @param attributes     the attributes of the configuration, may be null
+	 * @return a resolved copy, or the argument itself when there is nothing to do
+	 */
+	public static Oauth2ProviderConfig resolveProviderConfig(Oauth2ProviderConfig providerConfig,
+			Map<String, String> attributes) {
+		if (providerConfig == null || attributes == null || attributes.isEmpty()) {
+			return providerConfig;
+		}
+		Oauth2ProviderConfig resolved = new Oauth2ProviderConfig();
+		resolved.setProvider(providerConfig.getProvider());
+		resolved.setUserNameAttribute(providerConfig.getUserNameAttribute());
+		resolved.setAuthorizationUri(resolvePlaceHolders(providerConfig.getAuthorizationUri(), attributes));
+		resolved.setTokenUri(resolvePlaceHolders(providerConfig.getTokenUri(), attributes));
+		resolved.setUserInfoUri(resolvePlaceHolders(providerConfig.getUserInfoUri(), attributes));
+		resolved.setIntrospectionUri(resolvePlaceHolders(providerConfig.getIntrospectionUri(), attributes));
+		resolved.setIssuerUri(resolvePlaceHolders(providerConfig.getIssuerUri(), attributes));
+		resolved.setJwkSetUri(resolvePlaceHolders(providerConfig.getJwkSetUri(), attributes));
+		return resolved;
 	}
 
 	private static ClientAuthenticationMethod translateAuthenticationMethod(Oauth2ClientAuthMethod clientAuthMethod) {

@@ -38,4 +38,15 @@ public class SearchAgentCommand {
 	public boolean isDeepSearchRequested() {
 		return Boolean.TRUE.equals(deepSearch);
 	}
+
+	/** The same search on another text. */
+	public SearchAgentCommand withCommand(String text) {
+		final SearchAgentCommand copy = new SearchAgentCommand();
+		copy.setExecuteRanking(executeRanking);
+		copy.setTopK(topK);
+		copy.setCommand(text);
+		copy.setDeepSearch(deepSearch);
+		copy.setDeepSearchDepth(deepSearchDepth);
+		return copy;
+	}
 }

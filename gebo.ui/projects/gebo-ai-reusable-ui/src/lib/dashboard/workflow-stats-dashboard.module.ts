@@ -16,6 +16,7 @@ import { ChartModule } from "primeng/chart";
 import { ButtonModule } from "primeng/button";
 import { BlockUIModule } from "primeng/blockui";
 import { PanelModule } from "primeng/panel";
+import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 
 import { GeboAIWorkflowStatsAdminDashboardComponent } from "./workflow-stats-admin-dashboard.component";
 
@@ -28,7 +29,8 @@ import { GeboAIWorkflowStatsAdminDashboardComponent } from "./workflow-stats-adm
     ChartModule,
     ButtonModule,
     BlockUIModule,
-    PanelModule
+    PanelModule,
+    GeboAIFieldTranslationContainerModule
   ],
   declarations: [
     GeboAIWorkflowStatsAdminDashboardComponent

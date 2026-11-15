@@ -19,4 +19,5 @@ wait_for 127.0.0.1 6333  90 QDrant  || { echo "Qdrant not ready"; exit 1; }
 wait_for 127.0.0.1 7687  90 Neo4j   || { echo "Neo4j (bolt) not ready"; exit 1; }
 wait_for 127.0.0.1 9200  120 OpenSearch || { echo "OpenSearch (http) not ready"; exit 1; }
 
-exec java $JAVA_TOOL_OPTIONS -jar /opt/gebo.ai/gebo.ai.app-1.0.5.0-bootable.jar
+# The JVM reads JAVA_TOOL_OPTIONS on its own; repeating it here applied every flag twice.
+exec "$JAVA_HOME/bin/java" -jar /opt/gebo.ai/gebo.ai.app-1.0.6.0-bootable.jar

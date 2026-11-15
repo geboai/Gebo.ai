@@ -25,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
@@ -105,13 +106,19 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 
 	@Override
 	public AIDocumentsSet rankAndRemoveIrrelevant(AIDocumentsSet input, String query, int topK) throws LLMConfigException {
+		return rankAndRemoveIrrelevant(input, query, topK, (GeboToolCalling) null);
+	}
+
+	@Override
+	public AIDocumentsSet rankAndRemoveIrrelevant(AIDocumentsSet input, String query, int topK,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		final int nFragments = input.countFragments();
 		if (nFragments <= 0)
 			return input;
 
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		List<Document> documents = rankWithModel(input.aiDocumentsList(), query, topK, event);
-		return AIDocumentsSet.from(discardIrrelevantDocuments(documents, query));
+		return AIDocumentsSet.from(discardIrrelevantDocuments(documents, query, toolCalling));
 	}
 
 	@Override
@@ -122,13 +129,19 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 
 	@Override
 	public List<Document> rankAndRemoveIrrelevant(List<Document> input, String query, int topK) throws LLMConfigException {
+		return rankAndRemoveIrrelevant(input, query, topK, (GeboToolCalling) null);
+	}
+
+	@Override
+	public List<Document> rankAndRemoveIrrelevant(List<Document> input, String query, int topK,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		final int nFragments = input.size();
 		if (nFragments <= 0)
 			return input;
 
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
 		List<Document> documents = rankWithModel(input, query, topK, event);
-		return discardIrrelevantDocuments(documents, query);
+		return discardIrrelevantDocuments(documents, query, toolCalling);
 	}
 
 	@Override
@@ -215,7 +228,8 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	 * the ranked list is returned untouched, which is the behaviour the callers had
 	 * before this stage existed.
 	 */
-	private List<Document> discardIrrelevantDocuments(List<Document> ranked, String query) {
+	private List<Document> discardIrrelevantDocuments(List<Document> ranked, String query,
+			GeboToolCalling toolCalling) {
 		if (!ragSearchConfig.isRankerIrrelevanceFilterEnabled())
 			return ranked;
 		if (ranked == null || ranked.size() < ragSearchConfig.getRankerIrrelevanceFilterMinDocuments()) {
@@ -242,7 +256,8 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 						+ " not found, the ranked fragments are kept as they are");
 				return ranked;
 			}
-			final Set<Integer> discardedIndices = discardedDocumentIndices(ranked, query, serviceModel, prompt);
+			final Set<Integer> discardedIndices = discardedDocumentIndices(ranked, query, serviceModel, prompt,
+					toolCalling);
 			// Only documents the model judged useless in all of their pieces leave, and the
 			// best ranked fragment is in the output list in every situation: whatever the
 			// model thinks of it, returning nothing at all would leave the callers with no
@@ -301,7 +316,8 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	 * the walk entirely and can never be discarded.
 	 */
 	private Set<Integer> discardedDocumentIndices(List<Document> ranked, String query,
-			IGConfigurableChatModel serviceModel, GPromptTemplateConfig prompt) throws LLMConfigException {
+			IGConfigurableChatModel serviceModel, GPromptTemplateConfig prompt, GeboToolCalling toolCalling)
+			throws LLMConfigException {
 		final long batchBudget = batchTokensBudget(serviceModel, prompt, query);
 		final int maxFragmentsPerBatch = Math.max(1, ragSearchConfig.getRankerIrrelevanceFilterMaxFragmentsPerBatch());
 		final int protectedTop = Math.max(0,
@@ -346,7 +362,8 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 				batchEnd++;
 			}
 			final List<Document> batch = pieces.subList(batchStart, batchEnd);
-			final Set<String> batchDiscarded = askDiscardedFragments(batch, query, serviceModel, prompt, context);
+			final Set<String> batchDiscarded = askDiscardedFragments(batch, query, serviceModel, prompt, context,
+					toolCalling);
 			discardedPieces.addAll(batchDiscarded);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Irrelevance filter judged pieces [" + batchStart + "," + batchEnd + ") of "
@@ -411,11 +428,13 @@ public class GRankerServiceImpl extends BaseLLMSInvokingService implements IGRan
 	 * of the ones it declared completely useless for the query.
 	 */
 	private Set<String> askDiscardedFragments(List<Document> batch, String query, IGConfigurableChatModel serviceModel,
-			GPromptTemplateConfig prompt, IChatRequestContext context) throws LLMConfigException {
+			GPromptTemplateConfig prompt, IChatRequestContext context, GeboToolCalling toolCalling)
+			throws LLMConfigException {
 		Map<String, Object> params = new HashMap<>();
 		params.put(IChatRequestContext.USER_QUESTION_PROMPT_PARAM, query != null ? query : "");
 		params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, batch);
-		final String answer = callLLM(serviceModel, prompt, context, params);
+		final String answer = toolCalling != null ? callLLM(serviceModel, prompt, context, params, toolCalling)
+				: callLLM(serviceModel, prompt, context, params);
 		return extractDiscardedFragmentIds(answer, batch);
 	}
 

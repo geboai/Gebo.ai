@@ -22,7 +22,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
 
 public class GeboAdminPromptUseInfoControllerApi {
     private ApiClient apiClient;
@@ -49,8 +49,8 @@ public class GeboAdminPromptUseInfoControllerApi {
      * @return List&lt;GPromptUseInfo&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<GPromptUseInfo> findAll() throws RestClientException {
-        return findAllWithHttpInfo().getBody();
+    public List<GPromptUseInfo> findAllPromptUseInfo() throws RestClientException {
+        return findAllPromptUseInfoWithHttpInfo().getBody();
     }
 
     /**
@@ -60,7 +60,7 @@ public class GeboAdminPromptUseInfoControllerApi {
      * @return ResponseEntity&lt;List&lt;GPromptUseInfo&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<GPromptUseInfo>> findAllWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GPromptUseInfo>> findAllPromptUseInfoWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptUseController/findAll").build().toUriString();
         

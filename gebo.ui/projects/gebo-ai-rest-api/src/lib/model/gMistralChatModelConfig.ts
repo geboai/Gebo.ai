@@ -28,7 +28,6 @@ export interface GMistralChatModelConfig {
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
-    enabledFunctions?: Array<string>;
     temperature?: number;
     forUses?: Array<GMistralChatModelConfig.ForUsesEnum>;
     features?: Array<GMistralChatModelConfig.FeaturesEnum>;

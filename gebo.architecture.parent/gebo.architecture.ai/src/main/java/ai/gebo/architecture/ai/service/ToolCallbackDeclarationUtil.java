@@ -23,6 +23,7 @@ import org.springframework.ai.tool.metadata.ToolMetadata;
 import org.springframework.ai.util.json.schema.JsonSchemaGenerator;
 
 
+
 /**
  * Utility class for declaring tool callbacks for AI applications. AI generated
  * comments
@@ -92,6 +93,31 @@ public class ToolCallbackDeclarationUtil {
 	 * A non-functional class used as a return type placeholder for void functions.
 	 */
 	public static class NoReturnType {
+	}
+
+	/**
+	 * The metadata of a tool whose result always ends the model call: the tool calling
+	 * loop stops at it and its result is the call's answer (Spring AI's
+	 * {@code returnDirect}), the model is not called again after it. A tool whose stop
+	 * depends on what happened in the call - a question tool, ending the call when it
+	 * asked and not when it refused to - is not declared with this: the control it
+	 * tells ends the call (see {@code IToolCallEndingControl} in the LLM layer).
+	 */
+	public static ToolMetadata returningDirect() {
+		return ToolMetadata.builder().returnDirect(true).build();
+	}
+
+	/**
+	 * Declares a ToolCallback for a function with a return value and the given
+	 * metadata (see {@link #returningDirect()}).
+	 */
+	public static <T, R> ToolCallback declare(BiFunction<T, ToolContext, R> function, String functionName,
+			String description, Class<T> paramType, Class<R> returnedType, ToolMetadata metadata) {
+		String inputSchema = JsonSchemaGenerator.generateForType(paramType);
+		ToolDefinition toolDefinition = ToolDefinition.builder().name(functionName).description(description)
+				.inputSchema(inputSchema).build();
+		return new FunctionToolCallback<T, R>(toolDefinition,
+				metadata != null ? metadata : ToolMetadata.builder().build(), paramType, function, null);
 	}
 
 	/**

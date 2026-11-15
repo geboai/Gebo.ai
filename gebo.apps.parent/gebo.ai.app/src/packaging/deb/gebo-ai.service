@@ -11,6 +11,9 @@ WorkingDirectory=/home/gebo-ai
 # Service environment
 Environment=GEBO_HOME=/home/gebo-ai/home
 Environment=GEBO_WORK_DIRECTORY=/var/gebo-ai/data
+# UTF-8 locale: the JDK takes file-name encoding from it alone (it ignores
+# -Dsun.jnu.encoding), so Unicode names on mounted Windows/SMB/NTFS shares need it
+Environment=LANG=C.UTF-8
 
 # ATTENZIONE: verifica il path reale del launcher dopo il primo build/install
 ExecStart=/home/gebo-ai/gebo-ai/bin/gebo-ai

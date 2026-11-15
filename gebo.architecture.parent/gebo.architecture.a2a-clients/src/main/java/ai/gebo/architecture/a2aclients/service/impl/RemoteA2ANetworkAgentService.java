@@ -23,6 +23,7 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
+import ai.gebo.architecture.agents.services.IGNetworkOfAgentsSuspensionHandler;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.agents.services.INotificationSink.NotificationObject.NotificationType;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -36,6 +37,7 @@ import org.a2aproject.sdk.spec.Message;
 import org.a2aproject.sdk.spec.Part;
 import org.a2aproject.sdk.spec.Task;
 import org.a2aproject.sdk.spec.TextPart;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * Exposes a registered remote A2A agent as a first-class {@code String -> String}
@@ -124,7 +126,7 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			AgentsExchangeMessage<String> msg, int actualContributionNr, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session, AgentPrivateSessionContext<String, String> mySessionContext,
-			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao) throws LLMConfigException, AgentException {
+			ReactiveIdentityUtil runAs, IGAgentsNetworkRuntimeDao agentsDao, GeboToolCalling toolCalling, IGNetworkOfAgentsSuspensionHandler suspensionHandler) throws LLMConfigException, AgentException {
 
 		String inputText = msg.getPayload() != null ? msg.getPayload() : "";
 		if (contextAgentPersona.isAllowedToNotifyUser() && notificationSink != null) {

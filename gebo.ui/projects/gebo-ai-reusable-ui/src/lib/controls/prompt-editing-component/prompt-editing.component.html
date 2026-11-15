@@ -59,12 +59,6 @@
             </gebo-ai-field>
           </div>
 
-          <div class="col-12 md:col-4">
-            <gebo-ai-field id="toolsCalling" label="Tools calling" placeholder="Select an option" help="Whether tools calling is required by this prompt" [required]="true">
-              <p-select [options]="contextContentOptions" optionLabel="labelCode" optionValue="value" formControlName="toolsCalling" class="w-full" gebo-ai-field-element></p-select>
-            </gebo-ai-field>
-          </div>
-
           <div class="col-12 md:col-3">
             <gebo-ai-field id="langCode" label="Language code" help="Language code this template applies to (e.g. en)">
               <input pInputText id="langCode" formControlName="langCode" gebo-ai-field-element />
@@ -112,6 +106,17 @@
                 <span>
                   <span id="MissingPlaceholdersLabel" gebo-ai-text>Missing mandatory placeholders</span>:
                   <strong>{{ missingPlaceholders.join(", ") }}</strong>
+                </span>
+              </p-message>
+            </div>
+          }
+
+          @if (unknownPlaceholders.length > 0) {
+            <div class="col-12">
+              <p-message severity="error" styleClass="w-full">
+                <span>
+                  <span id="UnknownPlaceholdersLabel" gebo-ai-text>Placeholders nothing fills, the prompt cannot be saved</span>:
+                  <strong>{{ unknownPlaceholders.join(", ") }}</strong>
                 </span>
               </p-message>
             </div>

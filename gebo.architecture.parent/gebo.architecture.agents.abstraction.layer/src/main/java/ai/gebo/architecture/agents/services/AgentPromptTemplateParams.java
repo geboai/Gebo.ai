@@ -16,5 +16,10 @@ public class AgentPromptTemplateParams {
 	public static final String PRIVATE_CONTEXT_TEMPLATE_PARAM = "PRIVATE_CONTEXT";
 	public static final String SHARED_CONTEXT_TEMPLATE_PARAM = "SHARED_CONTEXT";
 	public static final String INPUT_TEMPLATE_PARAM = "INPUT";
+	/**
+	 * Where a prompt takes what is added to it for a run: the rules of the libraries
+	 * the run holds (see {@link AgentAdditionalRules}), an empty text when there are none.
+	 */
+	public static final String ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM = "additionalRulesSlot";
 
 }

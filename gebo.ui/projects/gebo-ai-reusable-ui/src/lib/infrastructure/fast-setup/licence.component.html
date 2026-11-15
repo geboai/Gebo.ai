@@ -101,10 +101,12 @@
 
             </p-scrollPanel>
         </div>
-        <div class="col-12" [formGroup]="internalFormGroup">
+        <div class="col-12 flex align-items-center gap-2" [formGroup]="internalFormGroup">
+            <!-- p-checkbox no longer renders its label input: the text is a label of its own -->
             <p-checkbox id="AcceptMark" gebo-ai-label formControlName="acceptMark" [binary]="true"
-                label="I accept the terms" [trueValue]="true"
+                inputId="AcceptMarkInput" [trueValue]="true"
                 title="By clicking here you accept the term & conditions in the licence" [falseValue]="false" />
+            <label id="AcceptMarkLabel" for="AcceptMarkInput" gebo-ai-text>I accept the terms</label>
         </div>
 
     </div>

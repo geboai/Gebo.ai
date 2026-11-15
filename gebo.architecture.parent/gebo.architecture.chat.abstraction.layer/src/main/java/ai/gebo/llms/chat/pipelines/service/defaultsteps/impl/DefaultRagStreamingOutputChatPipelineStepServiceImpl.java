@@ -5,12 +5,15 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboRagSearchConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -47,6 +50,16 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 	}
 
 	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.usedFor("Writes the answer from the documents found.");
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Plans the search in the knowledge bases.");
+	}
+
+	@Override
 	public String getStepId() {
 
 		return DEFAULT_RAG_STEP;
@@ -60,12 +73,24 @@ public class DefaultRagStreamingOutputChatPipelineStepServiceImpl implements ISt
 		try {
 			GeboRagSearchConfig ragConfig = runtimeBinder.getImplementationOf(GeboRagSearchConfig.class);
 			final int topK = ragConfig.getDefaultTopK();
-			Flux<AIDocumentsSet> documentSet = internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(
-					runtimeData.getMinimalChatContext(), serviceModel,
-					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK);
+			final GPromptTemplateConfig prompt = promptsDao
+					.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
+			// the knowledge base contents' share of what the request and the output prompt
+			// leave of the context of the chat model reading them, as the knowledge base
+			// search tools' (KnowledgeBaseSearchBudget)
+			final long used = (runtimeData.getRequestResources() != null
+					? runtimeData.getRequestResources().getTokensSize()
+					: 0) + (prompt != null ? prompt.getTokensSize() : 0);
+			final int tokensBudget = KnowledgeBaseSearchBudget.forContext(chatModel.getContextLength(), used);
+			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+			Flux<AIDocumentsSet> documentSet = toolCalling != null
+					? internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
+							serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK, true,
+							tokensBudget, toolCalling)
+					: internalKnowledgeLLMAssistedRetriever.doDocumentsRetrieve(runtimeData.getMinimalChatContext(),
+							serviceModel, LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET, topK, true,
+							tokensBudget);
 			Flux<GeboChatMessageEnvelope> flux = documentSet.concatMap(ed -> {
-				GPromptTemplateConfig prompt = promptsDao
-						.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_RAG_OUTPUT_PROMPT);
 				try {
 					LLMChatRequestResources req = chatSessionLifeCycleService.addRetrievedDocuments(
 							runtimeData.getRequestResources().getCurrentRequest(), ed, chatModel,

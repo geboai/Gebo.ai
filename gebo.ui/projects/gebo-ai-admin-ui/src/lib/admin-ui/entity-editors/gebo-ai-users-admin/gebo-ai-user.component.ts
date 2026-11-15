@@ -16,10 +16,10 @@
  * Provides functionality for creating, editing, and deleting users with role management.
  * Handles form control for user properties and displays messages for operation outcomes.
  */
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "primeng/api";
 import { map, Observable } from "rxjs";
 @Component({
@@ -27,8 +27,10 @@ import { map, Observable } from "rxjs";
     templateUrl: "gebo-ai-user.component.html",
     standalone: false,
     providers: [
-        { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false }, 
-        { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUserComponent),
+        { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false },
+        // useValue, as in the change password component: this component has no getEntityName(),
+        // so aliasing it with useExisting made every label/field lookup throw and stay English
+        { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIUserComponent"),
         multi: false
     }]
 })
@@ -160,6 +162,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
                             this.formGroup.patchValue(returnedValue);
                             this.changedData.emit(returnedValue);
                             this.userMessages = [{
+                                id: "USER_INSERTED_OK",
                                 summary: "User inserted successfully",
                                 detail: "",
                                 severity: "success"
@@ -173,6 +176,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
                 } else {
                     this.loading = false;
                     this.userMessages = [{
+                        id: "USER_ALREADY_EXISTS",
                         summary: "User already exists",
                         detail: "search the user with the users page",
                         severity: "error"
@@ -204,6 +208,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
                 this.formGroup.patchValue(value);
                 this.changedData.emit(value);
                 this.userMessages = [{
+                    id: "USER_UPDATED_OK",
                     summary: "User updated successfully",
                     detail: "",
                     severity: "success"
@@ -227,6 +232,7 @@ export class GeboAIUserComponent implements OnInit, OnChanges {
                 this.user = undefined;
                 this.changedData.emit(undefined);
                 this.userMessages = [{
+                    id: "USER_DELETED_OK",
                     summary: "User deleted successfully",
                     detail: "",
                     severity: "success"

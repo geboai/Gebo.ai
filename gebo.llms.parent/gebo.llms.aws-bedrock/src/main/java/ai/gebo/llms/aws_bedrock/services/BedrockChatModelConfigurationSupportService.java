@@ -89,8 +89,8 @@ public class BedrockChatModelConfigurationSupportService
 		}
 
 		@Override
-		protected BedrockProxyChatModel configureModel(GBedrockChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected BedrockProxyChatModel configureModel(GBedrockChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 
 			AwsCredentialsProvider credentials = credentialsResolver.resolveCredentials(config.getApiSecretCode());
 			Region region = credentialsResolver.resolveRegion(config.getApiSecretCode());
@@ -112,8 +112,8 @@ public class BedrockChatModelConfigurationSupportService
 			if (maxGeneratedTokens != null) {
 				builder.maxTokens(maxGeneratedTokens);
 			}
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				List<ToolCallback> functions = functionsRepo.getTools(config.getEnabledFunctions());
+			if (!toolNames.isEmpty()) {
+				List<ToolCallback> functions = functionsRepo.getTools(toolNames);
 				// The condition above tests the tool names that were REQUESTED. getTools filters
 				// the callbacks actually available by those names, so it can return fewer - or
 				// none at all, when the source that exports them failed. Configuring the model
@@ -122,16 +122,12 @@ public class BedrockChatModelConfigurationSupportService
 				if (functions != null && !functions.isEmpty()) {
 					builder.toolCallbacks(functions);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ config.getEnabledFunctions().size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + config.getEnabledFunctions());
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 			BedrockChatOptions options = builder.build();
 
-			ToolCallingManager toolCallingManager = toolsCallsManager != null ? toolsCallsManager
-					: functionsRepo.createToolCallingManager();
+			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 
 			// The builder defaults asyncReadTimeout and socketTimeout to 30s and
 			// connectionTimeout to 5s, which cut long streamed generations well before

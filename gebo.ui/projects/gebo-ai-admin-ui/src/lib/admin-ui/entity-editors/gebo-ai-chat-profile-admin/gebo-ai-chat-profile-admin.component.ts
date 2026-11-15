@@ -20,9 +20,9 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AgenticChatDefaultNetworksAdminControllerService, ChatModelsControllerService, EmbeddingModelsControllersService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GKnowledgeBase, KnowledgeBaseControllerService, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
+import { BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "primeng/api";
-import { forkJoin, map, Observable, of } from "rxjs";
+import { forkJoin, map, Observable } from "rxjs";
 
 /**
  * Interface that extends GChatProfileConfiguration with additional properties
@@ -81,7 +81,7 @@ function frontend2backend(model: ExtendedGChatProfileConfiguration): GChatProfil
             multi: false
         }]
 })
-export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<ExtendedGChatProfileConfiguration> {
+export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponentAutoDeleteCheck<ExtendedGChatProfileConfiguration> {
     /** The entity name used for internal identification */
     protected override entityName: string = "GChatProfileConfiguration";
 
@@ -352,16 +352,5 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponent<
      */
     override delete(value: GChatProfileConfiguration): Observable<boolean> {
         return this.geboChatProfileAdminService.deleteChatProfile(value);
-    }
-
-    /**
-     * Checks if a chat profile can be deleted
-     * Currently always returns true
-     * 
-     * @param value The chat profile to check
-     * @returns Observable with deletion status and message
-     */
-    override canBeDeleted(value: GChatProfileConfiguration): Observable<{ canBeDeleted: boolean; message: string; }> {
-        return of({ canBeDeleted: true, message: "can delete" });
     }
 }

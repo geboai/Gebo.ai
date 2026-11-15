@@ -11,7 +11,7 @@ package ai.gebo.architecture.telemetry;
 
 import java.util.Map;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
@@ -30,16 +30,20 @@ import io.micrometer.tracing.propagation.Propagator;
  * context (injected earlier by {@link TracingMessageEnvelopeFactory}) and
  * scopes a span around the real delivery call, so processing latency and span
  * nesting are correct regardless of which of the two delivery paths ran.
+ * <p>
+ * The {@link Tracer} and {@link Propagator} are looked up per delivery, for the
+ * reason given on {@link TracingMessageEnvelopeFactory}; without them, or
+ * without a trace context on the envelope, the delivery simply runs.
+ * </p>
  */
 @Component
-@ConditionalOnBean(Tracer.class)
 @Primary
 public class TracingMessageDeliveryObserver implements IGMessageDeliveryObserver {
 
-	private final Tracer tracer;
-	private final Propagator propagator;
+	private final ObjectProvider<Tracer> tracer;
+	private final ObjectProvider<Propagator> propagator;
 
-	public TracingMessageDeliveryObserver(Tracer tracer, Propagator propagator) {
+	public TracingMessageDeliveryObserver(ObjectProvider<Tracer> tracer, ObjectProvider<Propagator> propagator) {
 		this.tracer = tracer;
 		this.propagator = propagator;
 	}
@@ -47,17 +51,19 @@ public class TracingMessageDeliveryObserver implements IGMessageDeliveryObserver
 	@Override
 	public void aroundDelivery(GMessageEnvelope<?> envelope, Runnable delivery) {
 		Map<String, String> traceContext = envelope.getTraceContext();
-		if (traceContext == null || traceContext.isEmpty()) {
+		Tracer currentTracer = tracer.getIfAvailable();
+		Propagator currentPropagator = propagator.getIfAvailable();
+		if (traceContext == null || traceContext.isEmpty() || currentTracer == null || currentPropagator == null) {
 			delivery.run();
 			return;
 		}
-		Span span = propagator.extract(traceContext, Map::get)
+		Span span = currentPropagator.extract(traceContext, Map::get)
 				.name("gebo.messaging.delivery." + envelope.getTargetModule() + "." + envelope.getTargetComponent())
 				.tag("payloadType", String.valueOf(envelope.getPayloadType()))
 				.tag("sourceModule", String.valueOf(envelope.getSourceModule()))
 				.tag("targetModule", String.valueOf(envelope.getTargetModule()))
 				.start();
-		try (Tracer.SpanInScope scope = tracer.withSpan(span)) {
+		try (Tracer.SpanInScope scope = currentTracer.withSpan(span)) {
 			delivery.run();
 		} finally {
 			span.end();

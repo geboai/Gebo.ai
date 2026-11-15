@@ -80,7 +80,7 @@ The modules named `*.abstraction.layer` are **not** clean contract jars. Each is
 | 4 | **Mongo repositories** | `ChatProfilesRepository`, `AgentConfigRepository`, `AgentsNetworkRepository`, `GitEndpointRepository`, `SampledSystemCataloguesRepository` | `.impl` (owner only) |
 | 5 | **Concrete services / DAOs / message components** | `services/impl/**`, `GRuntimeChatProfileChatModelDaoImpl`, `GContentVectorizationEmitterComponent`, `SessionShrinkMessagesReceiver`, `GLlmsServiceClientsProviderFactoryImpl` | `.impl` (owner only) |
 | 6 | **Admin / erogation controllers** | `ChatModelsController`, `EmbeddingModelsControllers`, `GeboAgentAdminController`, `GeboAgentsNetworkAdminController`, `GITSystemsController`, `ContentsResetController` | `.impl` or fold into `.server-proxy` (owner only) |
-| 7 | **SDK abstract base classes (extension points)** | `GAbstractConfigurableChatModel`, `GAbstractConfigurableEmbeddingModel`, `BaseLLMSInvokingAndProvidingService`, `GAbstractAgentService`, `GAbstractContentManagementSystemHandler`, `GAbstractRemoteVirtualFilesystemContentManagementSystemHandler` | **`.sdk`** (new 5th child — see §5.7) |
+| 7 | **SDK abstract base classes (extension points)** | `GAbstractConfigurableChatModel`, `GAbstractConfigurableEmbeddingModel`, `BaseLLMSInvokingAndProvidingService`, `GAbstractReactiveAgentService`, `GAbstractContentManagementSystemHandler`, `GAbstractRemoteVirtualFilesystemContentManagementSystemHandler` | **`.sdk`** (new 5th child — see §5.7) |
 
 **The two consumer kinds** (this is the design pivot):
 
@@ -310,7 +310,7 @@ A `<module>` is split **iff** there exists a pair of services where one hosts it
 A `<module>` additionally needs a **`.sdk`** child (§5.7) **iff** it exposes category-7 abstract base classes (§1.5) that provider/handler modules extend. In this codebase that is: `llms.abstraction.layer` (LLM providers), `contentsystems.abstraction.layer` (content handlers), `agents.abstraction.layer` (agent services), and `search.abstraction.layer` (`AbstractWebSearchServiceImpl`).
 
 ### 5.7 `<module>.sdk` — the fifth child (extension point)
-- Contains the **category-7 abstract base classes** and the repository-pattern scaffolding that same-service *extenders* compile against (`GAbstractConfigurableChatModel`, `GAbstractContentManagementSystemHandler`, `GAbstractAgentService`, `BaseLLMSInvokingAndProvidingService`, the `GAbstract*RepositoryPattern` helpers).
+- Contains the **category-7 abstract base classes** and the repository-pattern scaffolding that same-service *extenders* compile against (`GAbstractConfigurableChatModel`, `GAbstractContentManagementSystemHandler`, `GAbstractReactiveAgentService`, `BaseLLMSInvokingAndProvidingService`, the `GAbstract*RepositoryPattern` helpers).
 - **May depend on Spring and the abstract persistence layer** (unlike `.interface-models`, which stays POJO). Depends on `.interface-models`.
 - Included in the **owning service** and in **any service that hosts extenders of the feature** (e.g. brain hosts `llms.sdk` + all `gebo.llms.*` providers; each content service hosts `contentsystems.sdk` + its handler).
 - **Not** shipped to pure RPC-caller services — they get `.interface-models` + `.client-proxy` only.
@@ -977,10 +977,10 @@ See Appendix B for the full class-bucket map. Summary: `IG*` service/DAO ifaces 
 ### 13.4 `gebo.architecture.agents.abstraction.layer` → `agents.{interface-models,sdk,impl,server-proxy,client-proxy}`
 | Source | → child |
 |---|---|
-| `services/IGAgentService`, `IGAgentsNetworkService(+Factory)`, `IGNetworkAgentService`, `IGReactiveAgentService`, `IGAgentsNetworkCrudService`, `IGAgentsNetworkCallerProxy(+Factory)`, `IAgentConfigDao`, `IAgentsNetworkDao`, `IGAgentServiceRuntimeDao`, `IGRoutingNetworkAgentService`, `IGDocumentsSearchNetworkAgentService` | IM |
+| `services/IGAgentsNetworkService(+Factory)`, `IGNetworkAgentService`, `IGReactiveAgentService`, `IGAgentsNetworkCrudService`, `IGAgentsNetworkCallerProxy(+Factory)`, `IAgentConfigDao`, `IAgentsNetworkDao`, `IGAgentServiceRuntimeDao`, `IGRoutingNetworkAgentService`, `IGDocumentsSearchNetworkAgentService` | IM |
 | `model/**` (`GAgentConfig`, `GAgentsNetwork`, `GAgentRole`, `AgentsExchangeMessage*`, `AgentCapabilit*`, `TargetAgentEnvelope`, `AgentServiceDescriptor`) | IM (POJO; keep `getNetworkAgentName()` keying, §11.2-4) |
 | `repository/**` (`AgentConfigRepository`, `AgentsNetworkRepository`) | IMPL |
-| `services/GAbstractAgentService`, `GAbstract*NetworkService(+Factory)`, `GBase*NetworkAgentService`, `AbstractReactiveAgentServiceNetworkAdapter` | SDK |
+| `services/GAbstractReactiveAgentService`, `GAbstract*NetworkService(+Factory)`, `GBase*NetworkAgentService`, `AbstractReactiveAgentServiceNetworkAdapter` | SDK |
 | `services/impl/**`, `controllers/GeboAgent*AdminController`, `config/**` | IMPL (controllers → SP) |
 
 ### 13.5 `gebo.architecture.contentsystems.abstraction.layer` → `contentsystems.{interface-models,sdk,impl,server-proxy,client-proxy}`

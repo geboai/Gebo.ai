@@ -1,4 +1,11 @@
-<p-panel id="MainPanel" gebo-ai-label header="Insert new OAUTH2 Authentication/Integration infos" [formGroup]="formGroup">
+<p-panel id="MainPanel" [formGroup]="formGroup">
+  <ng-template #header>
+    @if (mode === 'NEW') {
+      <span id="NewRegistrationTitle" gebo-ai-text class="p-panel-title">Insert new OAUTH2 Authentication/Integration infos</span>
+    } @else {
+      <span id="EditRegistrationTitle" gebo-ai-text class="p-panel-title">Editing OAUTH2 Authentication/Integration infos</span>
+    }
+  </ng-template>
   @if (!isWizardMode) {
     <div class="geboButtonsBar" style="vertical-align: baseline;">
       <div class="grid">
@@ -82,10 +89,9 @@
           </gebo-ai-field>
         </div>
         <div class="col-6">
-          <gebo-ai-field id="authProvider" label="Provider" help="Enter the provider of OAUTH2 Authentication">
+          <gebo-ai-field id="authProvider" label="Provider" help="Enter the provider of OAUTH2 Authentication" placeholder="Select a OAUTH2 provider">
             <geboai-editable-listbox-component
               formControlName="authProvider"
-              placeholder="Select a OAUTH2 provider"
               [readonly]="readonly || mode!=='NEW'"
               [data]="providers"
               gebo-ai-field-element
@@ -95,11 +101,10 @@
         </div>
 
         <div class="col-6">
-          <gebo-ai-field id="configurationType" label="Configuration purpose" help="Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system.">
+          <gebo-ai-field id="configurationType" label="Configuration purpose" help="Choose if this settings will be used for Authenticate in Gebo.ai or to let Gebo.ai have client connectivity to a 3rd party system." placeholder="Select configuration purpose">
             <geboai-editable-listbox-component
               id="configurationType"
               formControlName="configurationType"
-              placeholder="Select configuration purpose"
               [readonly]="readonly"
               [data]="configurationTypesData"
               gebo-ai-field-element
@@ -107,6 +112,17 @@
             </geboai-editable-listbox-component>
           </gebo-ai-field>
         </div>
+        @if (readonly!==true && currentConfigurationType==='AUTHENTICATION') {
+          <div class="col-12">
+            <gebo-ai-field id="resourceServerAudiences" label="Accepted audiences"
+              help="Which application a token sent to the API must be meant for to be accepted for this provider, separated by commas if more than one. The Client ID above is accepted whether the provider names it as the token's audience or as the application that requested it. For a stricter check, give the tokens an audience of their own at the provider (in Keycloak, an audience mapper on the client) and enter that instead. Leave it empty to accept any token this provider signed, including one issued to another of its applications."
+              placeholder="Empty: accept any token of this provider">
+              <input pInputText id="resourceServerAudiences" class="w-full" gebo-ai-field-element
+                [ngModel]="audiencesText" [ngModelOptions]="{standalone: true}"
+                (ngModelChange)="audiencesChanged($event)" />
+            </gebo-ai-field>
+          </div>
+        }
         @if (readonly!==true) {
           <div class="col-12" formGroupName="providerConfiguration" [hidden]="currentProvider!=='oauth2_generic'">
             <p-fieldset id="Oauth2ProviderUrls" gebo-ai-label legend="OAUTH2 provider URLS">

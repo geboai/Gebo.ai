@@ -135,9 +135,8 @@
                         <ng-container *ngIf="formGroup.get('authMode')?.value !== 'NONE'">
                             <div class="col-6">
                                 <gebo-ai-field id="secretCode" label="Identity credential (secret)"
-                                    help="Select or create the secret credentials.">
-                                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
-                                        placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                                    help="Select or create the secret credentials." placeholder="Select an identity">
+                                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode" [optionsObservable]="identitiesObservable"
                                         [createNewRecordRequest]="newSecretAction" gebo-ai-field-element
                                         [disabled]="readonly"></geboai-editable-listbox-component>
                                 </gebo-ai-field>
@@ -321,7 +320,8 @@
     <div class="grid gap-3 p-3">
         <div class="col-12 flex align-items-center gap-2">
             <p-checkbox [(ngModel)]="editingItemPermissions.accessibleToAll" [binary]="true" id="itemAccessibleToAll"
-                label="Accessible to everyone"></p-checkbox>
+                inputId="itemAccessibleToAllInput"></p-checkbox>
+            <label for="itemAccessibleToAllInput">Accessible to everyone</label>
         </div>
 
         <div class="col-12">

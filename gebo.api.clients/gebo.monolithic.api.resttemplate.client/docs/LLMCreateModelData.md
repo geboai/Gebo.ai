@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 **doModelsLookup** | **Boolean** |  |  [optional]
 **serviceHandler** | **String** |  | 
 **setAsDefaultModel** | **Boolean** |  |  [optional]
-**enableAllFunctions** | **Boolean** |  |  [optional]
 **secretId** | **String** |  |  [optional]
 **modelCode** | **String** |  | 
 **baseUrl** | **String** |  |  [optional]

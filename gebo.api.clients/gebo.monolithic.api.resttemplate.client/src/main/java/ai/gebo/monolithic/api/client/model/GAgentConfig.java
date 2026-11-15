@@ -14,6 +14,7 @@ package ai.gebo.monolithic.api.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.monolithic.api.client.model.AgentConditionsExpiry;
 import ai.gebo.monolithic.api.client.model.GObjectRefGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GPromptTemplateConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T22:08:53.638937800+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -195,6 +196,9 @@ public class GAgentConfig {
   @JsonProperty("readOnly")
   private Boolean readOnly = null;
 
+  @JsonProperty("conditionsExpiry")
+  private AgentConditionsExpiry conditionsExpiry = null;
+
   @JsonProperty("accessibleGroups")
   private List<String> accessibleGroups = null;
 
@@ -209,6 +213,12 @@ public class GAgentConfig {
 
   @JsonProperty("excludedToolSources")
   private List<String> excludedToolSources = null;
+
+  @JsonProperty("additionalToolSources")
+  private List<String> additionalToolSources = null;
+
+  @JsonProperty("libraryTypeIds")
+  private List<String> libraryTypeIds = null;
 
   public GAgentConfig code(String code) {
     this.code = code;
@@ -632,6 +642,24 @@ public class GAgentConfig {
     this.readOnly = readOnly;
   }
 
+  public GAgentConfig conditionsExpiry(AgentConditionsExpiry conditionsExpiry) {
+    this.conditionsExpiry = conditionsExpiry;
+    return this;
+  }
+
+   /**
+   * Get conditionsExpiry
+   * @return conditionsExpiry
+  **/
+  @Schema(description = "")
+  public AgentConditionsExpiry getConditionsExpiry() {
+    return conditionsExpiry;
+  }
+
+  public void setConditionsExpiry(AgentConditionsExpiry conditionsExpiry) {
+    this.conditionsExpiry = conditionsExpiry;
+  }
+
   public GAgentConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
     return this;
@@ -754,6 +782,58 @@ public class GAgentConfig {
     this.excludedToolSources = excludedToolSources;
   }
 
+  public GAgentConfig additionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+    return this;
+  }
+
+  public GAgentConfig addAdditionalToolSourcesItem(String additionalToolSourcesItem) {
+    if (this.additionalToolSources == null) {
+      this.additionalToolSources = new ArrayList<>();
+    }
+    this.additionalToolSources.add(additionalToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get additionalToolSources
+   * @return additionalToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getAdditionalToolSources() {
+    return additionalToolSources;
+  }
+
+  public void setAdditionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+  }
+
+  public GAgentConfig libraryTypeIds(List<String> libraryTypeIds) {
+    this.libraryTypeIds = libraryTypeIds;
+    return this;
+  }
+
+  public GAgentConfig addLibraryTypeIdsItem(String libraryTypeIdsItem) {
+    if (this.libraryTypeIds == null) {
+      this.libraryTypeIds = new ArrayList<>();
+    }
+    this.libraryTypeIds.add(libraryTypeIdsItem);
+    return this;
+  }
+
+   /**
+   * Get libraryTypeIds
+   * @return libraryTypeIds
+  **/
+  @Schema(description = "")
+  public List<String> getLibraryTypeIds() {
+    return libraryTypeIds;
+  }
+
+  public void setLibraryTypeIds(List<String> libraryTypeIds) {
+    this.libraryTypeIds = libraryTypeIds;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -787,16 +867,19 @@ public class GAgentConfig {
         Objects.equals(this.temperature, gagentConfig.temperature) &&
         Objects.equals(this.thinking, gagentConfig.thinking) &&
         Objects.equals(this.readOnly, gagentConfig.readOnly) &&
+        Objects.equals(this.conditionsExpiry, gagentConfig.conditionsExpiry) &&
         Objects.equals(this.accessibleGroups, gagentConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gagentConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gagentConfig.accessibleToAll) &&
         Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions) &&
-        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources);
+        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources) &&
+        Objects.equals(this.additionalToolSources, gagentConfig.additionalToolSources) &&
+        Objects.equals(this.libraryTypeIds, gagentConfig.libraryTypeIds);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds);
   }
 
 
@@ -828,11 +911,14 @@ public class GAgentConfig {
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
     sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
+    sb.append("    conditionsExpiry: ").append(toIndentedString(conditionsExpiry)).append("\n");
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
     sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
+    sb.append("    additionalToolSources: ").append(toIndentedString(additionalToolSources)).append("\n");
+    sb.append("    libraryTypeIds: ").append(toIndentedString(libraryTypeIds)).append("\n");
     sb.append("}");
     return sb.toString();
   }

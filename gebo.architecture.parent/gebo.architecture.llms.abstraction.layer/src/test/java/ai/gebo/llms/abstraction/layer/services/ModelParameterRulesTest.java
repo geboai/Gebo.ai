@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ChatModel;
-import org.springframework.ai.model.tool.ToolCallingManager;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -62,8 +61,7 @@ class ModelParameterRulesTest {
 		}
 
 		@Override
-		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) {
+		protected ChatModel configureModel(GBaseChatModelConfig config, GChatModelType type) {
 			requestConfigs.add(config);
 			return mock(ChatModel.class);
 		}
@@ -280,13 +278,13 @@ class ModelParameterRulesTest {
 		model.initialize(config("gpt-6.1-sol", null, null), type("openai"));
 
 		RecordingModel agentCopy = (RecordingModel) model.cloneWithOptions("agent-",
-				new ChatModelConfigOptions(0.3d, null, null, List.of(), mock(ToolCallingManager.class)));
+				new ChatModelConfigOptions(0.3d, null, null, List.of(), List.of()));
 
 		assertNull(agentCopy.lastRequestConfig().getTemperature());
 		assertEquals(0.3d, agentCopy.getConfig().getTemperature());
 
 		RecordingModel plainCopy = (RecordingModel) model.cloneWithOptions("plain-",
-				new ChatModelConfigOptions(0.3d, null, null, List.of(), null));
+				new ChatModelConfigOptions(0.3d, null, null, List.of()));
 		assertNull(plainCopy.lastRequestConfig().getTemperature());
 	}
 }

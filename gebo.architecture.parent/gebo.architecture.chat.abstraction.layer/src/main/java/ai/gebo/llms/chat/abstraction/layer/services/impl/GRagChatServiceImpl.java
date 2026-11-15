@@ -40,7 +40,9 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
@@ -53,6 +55,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.ChatProfilesRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatAgentsToolsDescriber;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileChatModel;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
@@ -65,6 +68,8 @@ import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.validation.constraints.NotNull;
+import ai.gebo.llms.chat.abstraction.layer.services.ChatRequestEnding;
+import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 
 /**
@@ -90,12 +95,13 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGTextToSpeechModelRuntimeConfigurationDao ttsModelsDao,
 			IGTranscriptModelRuntimeConfigurationDao transcriptModelsDao,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
-			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber) {
+			ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber,
+			GeboToolCallingManagerFactory toolCallingFactory, IPipelineStepModelsService stepModels) {
 
 		super(chatModelConfigurations, callbacksRepoPattern, persistenceManager, promptsDao, interactionsContext,
 				securityService, fixerServiceRepository, chatStorageAreaService, generatedResourceRepository,
 				knowledgeBaseSecurityService, chatSessionLifecycleService, ttsModelsDao, transcriptModelsDao,
-				securityAuditLoggerService, agentsToolsDescriber);
+				securityAuditLoggerService, agentsToolsDescriber, toolCallingFactory, stepModels);
 		this.chatProfilesRepository = chatProfilesRepository;
 		this.chatProfileModelsDao = chatProfileModelsDao;
 		this.knowledgeBaseVisibilityService = knowledgeBaseVisibilityService;
@@ -165,8 +171,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 			FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
 			List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
-			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-					&& !securityService.isCurrentUserAdmin()) {
+			if (securityService.isContentAclEnforced()) {
 				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 						.getAllOwnedAclAliases();
 				fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
@@ -175,8 +180,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			fullTextSearchMetaDataFilter.setKnowledgebaseCodes(kbs);
 			semanticSearchMetaDataFilter.setKnowledgeBasesCodes(kbs);
 
+			// the knowledge base contents' share of what the request and its prompt leave of
+			// the context, as the knowledge base search tools' (KnowledgeBaseSearchBudget)
 			AIDocumentsSet retrieved = this.ragSearchService.search(request, semanticSearchMetaDataFilter,
-					fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
+					fullTextSearchMetaDataFilter, KnowledgeBaseSearchBudget.forContext(handler.getContextLength(),
+							(long) fullRequest.getTokensSize() + gprompt.getTokensSize()));
 			fullRequest = chatSessionLifecycleService.addRetrievedDocuments(request, retrieved, handler,
 					LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 
@@ -184,7 +192,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IChatRequestContext chatRequestContext = fullRequest.createChatRequestContext();
 
 			chatResponse = callChatClient(handler, gprompt, kbcontext, request, chatResponse, chatRequestContext,
-					retrieved);
+					retrieved, toolCallingOf(request));
 		}
 
 		// Set response details
@@ -227,7 +235,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @throws LLMConfigException Thrown if an issue arises with LLM Configuration
 	 */
 	@Override
-	public ModelProviderCapabilities getProfileProviderModelCapabilities(String chatProfileCode)
+	public ModelProviderCapabilities getProfileProviderModelCapabilities(String chatProfileCode, String pipelineCode)
 			throws LLMConfigException {
 		// Find the chat profile by its code
 		Optional<GChatProfileConfiguration> profile = chatProfilesRepository.findById(chatProfileCode);
@@ -235,13 +243,11 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGChatProfileChatModel chatProfileModel = chatProfileModelsDao.getChatModel(profile.get());
 			if (chatProfileModel != null) {
 				IGConfigurableChatModel model = chatProfileModel.getChatModel();
-				GBaseChatModelConfig c = (GBaseChatModelConfig) model.getConfig();
-				List<String> functions = c.getEnabledFunctions();
 				boolean supportsTranscript = transcriptModelsDao.defaultHandler() != null;
 				boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
 				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 						supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
-						callbacksRepoPattern.getEnabledToolsTree(functions));
+						pipelineToolsTree(pipelineCode));
 				return cap;
 			}
 		}
@@ -259,7 +265,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 	 * @throws LLMConfigException       If there's a configuration error
 	 */
 	@Override
-	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode)
+	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(String chatProfileCode, String pipelineCode)
 			throws GeboPersistenceException, LLMConfigException {
 		// Retrieve chat profile based on code
 		Optional<GChatProfileConfiguration> profile = chatProfilesRepository.findById(chatProfileCode);
@@ -268,9 +274,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 			IGConfigurableChatModel chatModel = runtime.getChatModel();
 			GBaseChatModelConfig config = (GBaseChatModelConfig) chatModel.getConfig();
 			GBaseChatModelChoice modelChoice = (GBaseChatModelChoice) config.getChoosedModel();
-			// the tools the chat model can call are its own: a profile chooses none
-			List<ToolCategoriesTree> functionsTree = callbacksRepoPattern
-					.getEnabledToolsTree(config.getEnabledFunctions());
+			// the tools are those of the steps of the pipeline: a profile chooses none
+			List<ToolCategoriesTree> functionsTree = pipelineToolsTree(pipelineCode);
 			List<String> kbCodes = runtime.getChatProfile().getKnowledgeBaseCodes();
 			List<GKnowledgeBase> list = knowledgeBaseVisibilityService.visiblesAndChildKnowledgebases(kbCodes);
 			// Builds a list of GBaseObject from visible knowledge bases
@@ -312,8 +317,7 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		SemanticSearchMetaDataFilter semanticSearchMetaDataFilter = new SemanticSearchMetaDataFilter();
 		FullTextSearchMetaDataFilter fullTextSearchMetaDataFilter = new FullTextSearchMetaDataFilter();
 		List<String> kbs = knowledgeBases.stream().map(x -> x.getCode()).toList();
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 					.getAllOwnedAclAliases();
 			fullTextSearchMetaDataFilter.setAclAliases(aclAliases);
@@ -325,20 +329,26 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 		LLMChatRequestResources fullRequest = chatSessionLifecycleService.startRequest(request, handler,
 				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		GeboChatResponse response = this.chatSessionLifecycleService.createEmptyResponse(request);
-		AIDocumentsSet extractedDocuments = ragSearchService.search(request, semanticSearchMetaDataFilter,
-				fullTextSearchMetaDataFilter, handler.getContextLength() / 3);
-		List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
-		response.setDocumentsRef(docrefs);
-		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
-				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		String modelCode = handler != null && handler.getConfig() != null
 				&& handler.getConfig().getChoosedModel() != null ? handler.getConfig().getChoosedModel().getCode()
 						: null;
 		GPromptTemplateConfig prompt = this.promptsDao.defaultChatPrompt(modelCode, true);
+		// the knowledge base contents' share of what the request and its prompt leave of
+		// the context, as the knowledge base search tools' (KnowledgeBaseSearchBudget)
+		AIDocumentsSet extractedDocuments = ragSearchService.search(request, semanticSearchMetaDataFilter,
+				fullTextSearchMetaDataFilter, KnowledgeBaseSearchBudget.forContext(handler.getContextLength(),
+						(long) fullRequest.getTokensSize() + (prompt != null ? prompt.getTokensSize() : 0)));
+		List<GResponseDocumentRef> docrefs = GResponseDocumentRef.from(extractedDocuments);
+		response.setDocumentsRef(docrefs);
+		fullRequest = this.chatSessionLifecycleService.addRetrievedDocuments(request, extractedDocuments, handler,
+				LLMRequestGenerationPolicy.ADDING_RESOURCES_FIT_TOKENS_BUDGET);
 		// Returns the chat stream for the request, profile and context
 		recordToolCalls(fullRequest, response);
-		return this.streamChatClient(handler, prompt, Map.of(), kbcontext, request,
-				response, fullRequest.createChatRequestContext(), false, 0, extractedDocuments);
+		// a direct stream, outside the chat pipelines: ended here as the executor ends its
+		return ChatRequestEnding.ending(
+				this.streamChatClient(handler, prompt, Map.of(), kbcontext, request, response,
+						fullRequest.createChatRequestContext(), false, 0, extractedDocuments, toolCallingOf(request)),
+				this.chatSessionLifecycleService, request, response, handler, ReactiveIdentityUtil.create());
 
 	}
 

@@ -58,10 +58,9 @@
                 </gebo-ai-field>
               </div>
               <div class="col-6">
-                <gebo-ai-field id="confluenceVersion" label="Confluence version" help="Confluence version" [required]="true">
+                <gebo-ai-field id="confluenceVersion" label="Confluence version" help="Confluence version" [required]="true" placeholder="Select a confluence version">
                   <geboai-editable-listbox-component id="confluenceVersion"
-                    formControlName="confluenceVersion" [required]="true" [readonly]="mode!=='NEW'"
-                    placeholder="Select a confluence version" class="col-12 required"
+                    formControlName="confluenceVersion" [required]="true" [readonly]="mode!=='NEW'" class="col-12 required"
                   [data]="confluenceVersions" gebo-ai-field-element></geboai-editable-listbox-component>
                 </gebo-ai-field>
               </div>
@@ -73,9 +72,8 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="secretCode" label="Identity used" help="Select or create the identity to access the confluence system" [required]="true">
-                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode"
-                      placeholder="Select an identity" [optionsObservable]="identitiesObservable"
+                  <gebo-ai-field id="secretCode" label="Identity used" help="Select or create the identity to access the confluence system" [required]="true" placeholder="Select an identity">
+                    <geboai-editable-listbox-component formControlName="secretCode" id="secretCode" [optionsObservable]="identitiesObservable"
                     [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element></geboai-editable-listbox-component>
                   </gebo-ai-field>
                 </div>

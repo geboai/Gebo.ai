@@ -56,8 +56,8 @@ echo Unknown target: %TARGET% ^(use: platform, gebo.ai, easyinstall, or all^)
 exit /b 1
 
 :build_platform
-echo === Building geboai/platform:2.5 (local) ===
-docker buildx build --network=host --platform linux/amd64 --load -t geboai/platform:2.5 "%REPO_ROOT%\dockers\gebo.ai.platform"
+echo === Building geboai/platform:3.0 (local) ===
+docker buildx build --network=host --platform linux/amd64 --load -t geboai/platform:3.0 "%REPO_ROOT%\dockers\gebo.ai.platform"
 if /i "%TARGET%"=="platform" goto :done
 goto :build_gebo_ai
 

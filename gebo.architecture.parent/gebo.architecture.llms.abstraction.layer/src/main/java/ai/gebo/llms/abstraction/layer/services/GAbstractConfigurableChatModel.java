@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -38,7 +40,6 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.tool.ToolCallback;
 
 import tools.jackson.core.JacksonException;
@@ -52,6 +53,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
@@ -119,7 +121,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	protected final IChatModelUsageAdvisorFactory usageAdvisorFactory;
 	/**
 	 * The application's shared Micrometer {@link ObservationRegistry}, passed
-	 * down to {@link #configureModel(GBaseChatModelConfig, GChatModelType, ToolCallingManager)}
+	 * down to {@link #configureModel(GBaseChatModelConfig, GChatModelType)}
 	 * implementations so Spring AI's built-in chat-model observability actually
 	 * reports into it, instead of each vendor building its own disconnected
 	 * registry.
@@ -132,6 +134,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * ones when the configuration enables them.
 	 */
 	protected List<ToolCallback> additionalTools = List.of();
+	/**
+	 * The names of the tools this model declares: none on a configured model, those given
+	 * to a clone by {@link #cloneWithOptions(String, ChatModelConfigOptions)}.
+	 */
+	protected List<String> toolNames = List.of();
+	/** This model with no tools (see {@link #withoutTools()}), made the first time it is asked. */
+	private volatile IGConfigurableChatModel<ModelConfig> withoutToolsModel = null;
 	/**
 	 * The share of what a model call's messages and tools' definitions leave of the
 	 * context that its tools' results may take.
@@ -147,6 +156,20 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * them.
 	 */
 	protected final IGModelsLibraryDao modelsLibrary;
+	/**
+	 * Fills the placeholders a template names and the caller did not: the time,
+	 * the user, the conversation, the run (see {@link IGPromptContextProviders});
+	 * null leaves a template with exactly what the caller passed.
+	 */
+	protected IGPromptContextProviders promptContextProviders = null;
+
+	public void setPromptContextProviders(IGPromptContextProviders promptContextProviders) {
+		this.promptContextProviders = promptContextProviders;
+	}
+
+	public IGPromptContextProviders getPromptContextProviders() {
+		return promptContextProviders;
+	}
 	/**
 	 * The parameter rules of the model the configuration names, resolved each time it is
 	 * initialized; null when none covers it.
@@ -210,14 +233,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 * Abstract method for configuring the chat model. Implementations must define
 	 * how the model is configured.
 	 * 
-	 * @param config            The model configuration to use.
-	 * @param type              The type of the chat model.
-	 * @param toolsCallsManager TODO
+	 * @param config The model configuration to use.
+	 * @param type   The type of the chat model.
 	 * @return An instance of ChatModelType.
 	 * @throws LLMConfigException If configuration fails.
 	 */
-	protected abstract ChatModelType configureModel(ModelConfig config, GChatModelType type,
-			ToolCallingManager toolsCallsManager) throws LLMConfigException;
+	protected abstract ChatModelType configureModel(ModelConfig config, GChatModelType type)
+			throws LLMConfigException;
 
 	/**
 	 * Initializes the chat model with the given configuration and type.
@@ -249,8 +271,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		}
 		this.config = config;
 		final ModelConfig requestConfig = requestConfig(config);
-		this.model = configureModel(requestConfig, type, null);
-		Builder builder = ChatClient.builder(configureModel(requestConfig, type, null));
+		this.model = configureModel(requestConfig, type);
+		Builder builder = ChatClient.builder(configureModel(requestConfig, type));
 		// Priced through this model's getPricingConditions(), read when each call ends; a
 		// call's answer read from its answer generation, not from a reasoning one; the
 		// reasoning of every model round apart from the answer, every provider alike.
@@ -411,14 +433,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	 */
 	protected List<ToolCallback> wrapToolsClosingResults(ReactiveIdentityUtil runAs,
 			ToolCallsListener toolCallListener, String toolsResultsClosing) {
-		List<String> toolNames = config.getEnabledFunctions();
-		if (toolNames == null)
-			toolNames = List.of();
 		List<ToolCallback> tools = this.toolCallbacksRepository.getTools(toolNames);
-
+		// a tool made for this use of the model - a library's, bound to the resources of
+		// this run - takes the place of a registered tool of its name
+		final Set<String> madeForThisUse = new HashSet<>();
+		for (ToolCallback toolCallback : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			madeForThisUse.add(toolCallback.getToolDefinition().name());
+		}
 		List<ToolCallback> wrapped = new ArrayList<>();
 		for (ToolCallback toolCallback : tools) {
-			wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+			if (!madeForThisUse.contains(toolCallback.getToolDefinition().name())) {
+				wrapped.add(new RunAsToolCallback(toolCallback, runAs, toolCallListener, toolsResultsClosing));
+			}
 		}
 		// the tools made for this use of the model are not in the repository: without this
 		// they would be executable but never declared to the model
@@ -504,9 +530,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			LOGGER.debug("Begin testCall() model code=" + getCode() + " model=" + safeGetModelCode() + " type="
 					+ (type != null ? type.getCode() : null) + " temperature="
 					+ (config != null ? config.getTemperature() : null) + " thinking="
-					+ (config != null ? config.getThinking() : null) + " tools="
-					+ (config != null && config.getEnabledFunctions() != null ? config.getEnabledFunctions().size()
-							: 0));
+					+ (config != null ? config.getThinking() : null) + " tools=" + toolNames.size());
 		}
 		final ChatResponse response;
 		try {
@@ -738,20 +762,31 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
 			IChatRequestContext chatContext, ReactiveIdentityUtil runAs) {
+		return prepareCall(prompt, params, chatContext, runAs, null);
+	}
+
+	@Override
+	public RequestSpec prepareCall(GPromptTemplateConfig prompt, Map<String, Object> params,
+			IChatRequestContext chatContext, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin prepareCall(" + prompt.getPromptUse() + ", ...,...)");
+			LOGGER.debug("Begin prepareCall(" + prompt.getPromptUse() + ", ...,...)"
+					+ (toolCalling != null ? " with " + toolCalling : ""));
 		}
 		long tokens = 0;
-		ChatClient client = getChatClient();
+		// the caller's parameters, plus what the providers fill of the placeholders the
+		// template names and the caller did not
+		final Map<String, Object> completed = promptContextProviders != null
+				? promptContextProviders.complete(prompt, params, chatContext)
+				: (params != null ? params : Map.of());
 		// Here prompt, documents and consolidated history
 		List<Message> messages = new ArrayList<Message>();
-		SystemMessage systemMessage = this.createSystemMessage(prompt, params, chatContext);
+		SystemMessage systemMessage = this.createSystemMessage(prompt, completed, chatContext);
 		messages.add(systemMessage);
 		if (prompt.getChatHistory() == null || prompt.getChatHistory() == ContextContentRequired.REQUIRED) {
 			List<Message> history = this.createHistoryMessages(chatContext);
 			messages.addAll(history);
 		}
-		UserMessage lastUserMessage = this.createLastUserMessage(prompt, params, chatContext);
+		UserMessage lastUserMessage = this.createLastUserMessage(prompt, completed, chatContext);
 		messages.add(lastUserMessage);
 		if (LOGGER.isDebugEnabled()) {
 			int index = 1;
@@ -769,29 +804,135 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			}
 		}
 
-		ChatClientRequestSpec reqObject = client.prompt();
+		ChatClientRequestSpec reqObject = getChatClient().prompt();
 
-		final boolean toolsCalling = prompt.getToolsCalling() == null
-				|| prompt.getToolsCalling() == ContextContentRequired.REQUIRED;
-		final List<ToolCallback> tools = toolsCalling
-				? wrapToolsClosingResults(runAs, chatContext.getToolCallListener(),
-						createToolsResultsClosing(prompt, params, chatContext))
-				: List.of();
-		reqObject = reqObject.toolCallbacks(tools);
+		// the controlling software's recorder, when it gave one, records beside the
+		// request's: neither takes the place of the other
+		final ToolCallsListener toolCallListener = toolCalling != null && toolCalling.getListener() != null
+				? ToolCallsListener.both(toolCalling.getListener(), chatContext.getToolCallListener())
+				: chatContext.getToolCallListener();
+		final String toolsResultsClosing = createToolsResultsClosing(prompt, completed, chatContext);
+		List<ToolCallback> tools = wrapToolsClosingResults(runAs, toolCallListener, toolsResultsClosing);
+		if (toolCalling != null && !toolCalling.getMandatoryTools().isEmpty()) {
+			tools = withMandatoryTools(tools, toolCalling.getMandatoryTools(), runAs, toolCallListener,
+					toolsResultsClosing);
+		}
+		reqObject = reqObject.tools(tools);
 		// chat histroy in user, assistant format
 		reqObject = reqObject.messages(messages);
 		// tools call environment
 		Map<String, Object> toolContext = chatContext.getToolsContext();
+		if (toolCalling != null) {
+			// what the controlling software loaded for the tools, and the budget it set
+			toolContext = toolCalling.toolsContext(toolContext);
+		}
 		if (!tools.isEmpty()) {
 			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
 		}
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
 		}
+		if (toolCalling != null) {
+			// the call's own tool calling loop, in place of the one the chat client
+			// registers by default (see GeboToolCallingAdvisor)
+			reqObject = reqObject.advisors(toolCalling.advisor(observationRegistry));
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");
 		}
 		return new RequestSpec(reqObject, tokens, config != null ? config.getCode() : "<<empty model>>");
+	}
+
+	@Override
+	public List<String> getToolNames() {
+		return toolNames;
+	}
+
+	@Override
+	public IGConfigurableChatModel<ModelConfig> withoutTools() throws LLMConfigException {
+		if (!hasTools()) {
+			return this;
+		}
+		if (withoutToolsModel == null) {
+			withoutToolsModel = cloneWithOptions("", new ChatModelConfigOptions(null, null, null, List.of(), List.of()));
+		}
+		return withoutToolsModel;
+	}
+
+	/** Whether this model declares any tool: from the repository or made for this use of it. */
+	private boolean hasTools() {
+		if (toolNames.isEmpty()) {
+			return false;
+		}
+		return !toolCallbacksRepository.getTools(toolNames).isEmpty() || (additionalTools != null
+				&& additionalTools.stream().anyMatch(tool -> toolNames.contains(tool.getToolDefinition().name())));
+	}
+
+	/**
+	 * The enabled tool names found neither among {@code resolved}, the tools the
+	 * repository gave for them, nor among the tools made for this use of the model. A
+	 * tool made for this use - a library's, bound to the resources of the run, or one
+	 * made for the execution, such as notifyUser - is not in the repository by design:
+	 * it is declared to every call (see {@link #wrapToolsClosingResults}), so it is not
+	 * missing.
+	 */
+	protected List<String> unresolvedToolNames(Collection<ToolCallback> resolved) {
+		final Set<String> found = new HashSet<String>();
+		for (ToolCallback tool : resolved != null ? resolved : List.<ToolCallback>of()) {
+			found.add(tool.getToolDefinition().name());
+		}
+		for (ToolCallback tool : additionalTools != null ? additionalTools : List.<ToolCallback>of()) {
+			found.add(tool.getToolDefinition().name());
+		}
+		final List<String> unresolved = new ArrayList<String>();
+		for (String name : toolNames) {
+			if (!found.contains(name)) {
+				unresolved.add(name);
+			}
+		}
+		return unresolved;
+	}
+
+	/**
+	 * What a provider tells when the repository resolved none of the enabled tools, so
+	 * that the model is configured with no tools of its own: a warning naming the tools
+	 * found nowhere, the ones the model will never declare; when every one is made for
+	 * this use of the model, only a debug line, since each call declares them.
+	 */
+	protected void logToolsNotRegistered(Logger logger, String modelCode, Collection<ToolCallback> resolved) {
+		final List<String> unresolved = unresolvedToolNames(resolved);
+		if (!unresolved.isEmpty()) {
+			logger.warn("Chat model " + modelCode + " enables " + toolNames.size() + " tool(s) but "
+					+ unresolved.size() + " of them resolved to no callback, neither registered nor made for this"
+					+ " use of it, so it is configured without them: " + unresolved);
+		} else if (logger.isDebugEnabled()) {
+			logger.debug("Chat model " + modelCode + " declares its " + toolNames.size()
+					+ " tool(s) on each call: none is registered, all of them are made for this use of it");
+		}
+	}
+
+	/**
+	 * The declared tools with the controlling software's mandatory ones, wrapped as the
+	 * others are: a declared tool of the same name gives way to the mandatory instance,
+	 * the one bound to this call.
+	 */
+	protected List<ToolCallback> withMandatoryTools(List<ToolCallback> declared, List<ToolCallback> mandatory,
+			ReactiveIdentityUtil runAs, ToolCallsListener toolCallListener, String toolsResultsClosing) {
+		final List<ToolCallback> out = new ArrayList<>(declared);
+		for (ToolCallback tool : mandatory) {
+			final String name = tool.getToolDefinition().name();
+			if (out.removeIf(x -> name.equals(x.getToolDefinition().name())) && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("prepareCall(...) model:" + getCode() + " the mandatory tool " + name
+						+ " takes the place of the configured one");
+			}
+			out.add(new RunAsToolCallback(tool, runAs, toolCallListener, toolsResultsClosing));
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("prepareCall(...) model:" + getCode() + " declares " + mandatory.size()
+					+ " mandatory tool(s) with " + declared.size() + " configured one(s): "
+					+ out.stream().map(x -> x.getToolDefinition().name()).toList());
+		}
+		return out;
 	}
 
 	/**
@@ -1046,12 +1187,19 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return responses(promptTemplate, params, chatContext);
+		return responses(promptTemplate, params, chatContext, null);
+	}
+
+	@Deprecated
+	@Override
+	public Flux<ChatResponse> streamResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext, toolCalling);
 	}
 
 	/** The streamed chunks, normalized (ThinkingNormalizationAdvisor). */
 	private Flux<ChatResponse> responses(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
-			IChatRequestContext chatContext) throws LLMConfigException {
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			long timestamp = 0l;
@@ -1061,7 +1209,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
 						+ chatContext.getPipelineInfos() + "]");
 			}
-			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 			Flux<ChatResponse> res = reqObject.getRequestSpec().stream().chatResponse()
 					.subscribeOn(runAs.wrap(Schedulers.boundedElastic()));
 			if (LOGGER.isDebugEnabled()) {
@@ -1089,6 +1237,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return streamStringResponse(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public Flux<String> streamStringResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		return runAs.doRunAsWithReturnAndException(() -> {
 			long timestamp = 0l;
@@ -1099,7 +1253,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 						+ chatContext.getPipelineInfos() + "]");
 			}
 
-			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+			RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End streamStringResponse(" + promptTemplate.getPromptUse() + ", ...,...) " + "[session:"
 						+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
@@ -1117,18 +1271,36 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return responses(promptTemplate, params, chatContext).map(GChatAnswerChunk::of);
+		return streamAnswer(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public Flux<GChatAnswerChunk> streamAnswer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
+		return responses(promptTemplate, params, chatContext, toolCalling).map(GChatAnswerChunk::of);
 	}
 
 	@Override
 	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
-		return GChatAnswer.of(response(promptTemplate, params, chatContext));
+		return answer(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public GChatAnswer answer(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
+		return GChatAnswer.of(response(promptTemplate, params, chatContext, toolCalling));
 	}
 
 	@Override
 	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return response(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public ChatResponse response(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1137,7 +1309,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ chatContext.getSessionID() + " request:" + chatContext.getRequestID() + " pipelineInfos:"
 					+ chatContext.getPipelineInfos() + "]");
 		}
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 		CallResponseSpec res = reqObject.getRequestSpec().call();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End response(" + promptTemplate.getPromptUse() + ", ...,...)  [session:"
@@ -1152,6 +1324,13 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt)
 			throws LLMConfigException {
+		return structuredResponse(promptTemplate, params, chatContext, rt, (GeboToolCalling) null);
+	}
+
+	@Override
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1160,10 +1339,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ (rt != null ? rt.getName() : "NULL") + ")  [session:" + chatContext.getSessionID() + " request: "
 					+ chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos() + "]");
 		}
-		ChatClient client = getChatClient();
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
-		CallResponseSpec res = reqObject.getRequestSpec().call();
-		ResponseType data = res.entity(rt);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
+		ResponseType data = toolCalling != null
+				? toolCalling.parsedUnlessStopped(() -> reqObject.getRequestSpec().call().entity(rt))
+				: reqObject.getRequestSpec().call().entity(rt);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ") " + "[session:" + chatContext.getSessionID()
@@ -1180,6 +1359,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
 			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
 			BeanOutputConverter<ResponseType> outputConverter) throws LLMConfigException {
+		return structuredResponse(promptTemplate, params, chatContext, rt, outputConverter, null);
+	}
+
+	@Override
+	public <ResponseType> ResponseType structuredResponse(GPromptTemplateConfig promptTemplate,
+			Map<String, Object> params, IChatRequestContext chatContext, Class<ResponseType> rt,
+			BeanOutputConverter<ResponseType> outputConverter, GeboToolCalling toolCalling)
+			throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1189,9 +1376,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ " request: " + chatContext.getRequestID() + " pipelineInfos: " + chatContext.getPipelineInfos()
 					+ "]");
 		}
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
-		CallResponseSpec res = reqObject.getRequestSpec().call();
-		ResponseType data = res.entity(outputConverter);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
+		ResponseType data = toolCalling != null
+				? toolCalling.parsedUnlessStopped(() -> reqObject.getRequestSpec().call().entity(outputConverter))
+				: reqObject.getRequestSpec().call().entity(outputConverter);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End structuredResponse(" + promptTemplate.getPromptUse() + ", ...,...,"
 					+ (rt != null ? rt.getName() : "NULL") + ",..) " + "[session:" + chatContext.getSessionID()
@@ -1205,6 +1393,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	@Override
 	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
 			IChatRequestContext chatContext) throws LLMConfigException {
+		return textResponse(promptTemplate, params, chatContext, null);
+	}
+
+	@Override
+	public String textResponse(GPromptTemplateConfig promptTemplate, Map<String, Object> params,
+			IChatRequestContext chatContext, GeboToolCalling toolCalling) throws LLMConfigException {
 		ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 		long timestamp = 0l;
 		if (LOGGER.isDebugEnabled()) {
@@ -1213,7 +1407,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					+ chatContext.getSessionID() + " request: " + chatContext.getRequestID() + " pipelineInfos: "
 					+ chatContext.getPipelineInfos() + "]");
 		}
-		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs);
+		RequestSpec reqObject = prepareCall(promptTemplate, params, chatContext, runAs, toolCalling);
 		CallResponseSpec response = reqObject.getRequestSpec().call();
 		String out = response.content();
 		if (LOGGER.isDebugEnabled()) {
@@ -1249,8 +1443,6 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			String asString = mapper.writeValueAsString(config);
 			ModelConfig modelConfigClone = (ModelConfig) mapper.readValue(asString.getBytes(), config.getClass());
 			modelConfigClone.setCode(codePrefix + modelConfigClone.getCode());
-			modelConfigClone.setEnabledFunctions(
-					configOptions.getToolsName() != null ? configOptions.getToolsName() : List.of());
 			if (configOptions.getTemperature() != null) {
 				modelConfigClone.setTemperature(configOptions.getTemperature());
 			}
@@ -1261,8 +1453,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 				modelConfigClone.setTopP(configOptions.getTopP());
 			}
 			IGConfigurableChatModel handler = cloneMeWithInjection();
-			if (handler instanceof GAbstractConfigurableChatModel clone && configOptions.getAdditionalTools() != null) {
-				clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+			if (handler instanceof GAbstractConfigurableChatModel clone) {
+				// the clone fills its prompts as this model does
+				clone.promptContextProviders = this.promptContextProviders;
+				clone.toolNames = configOptions.getToolsName() != null ? List.copyOf(configOptions.getToolsName())
+						: List.of();
+				if (configOptions.getAdditionalTools() != null) {
+					clone.additionalTools = List.copyOf(configOptions.getAdditionalTools());
+				}
 			}
 			if (handler instanceof IGProviderDealPricedModel priced) {
 				// The clone is priced like this model, by its provider deal; best effort.
@@ -1272,29 +1470,11 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 					LOGGER.error("Cannot attach the provider deals to a clone of chat model code=" + getCode(), e);
 				}
 			}
-			if (configOptions.getToolCallingManager() == null) {
-				handler.initialize(modelConfigClone, type);
-			} else if (handler instanceof GAbstractConfigurableChatModel configurableChatModel) {
-				configurableChatModel.config = modelConfigClone;
-				configurableChatModel.type = this.type;
-				// the clone follows the parameter rules too: an agent's temperature never
-				// reaches a model refusing it
-				configurableChatModel.parameterRules = configurableChatModel.parameterRulesOf(modelConfigClone, type);
-				final GBaseChatModelConfig requestConfig = configurableChatModel.requestConfig(modelConfigClone);
-				configurableChatModel.model = configurableChatModel.configureModel(requestConfig, type,
-						configOptions.getToolCallingManager());
-				configurableChatModel.chatClient = ChatClient
-						.builder(configurableChatModel.configureModel(requestConfig, type,
-								configOptions.getToolCallingManager()))
-						.defaultAdvisors(usageAdvisorFactory.create(modelConfigClone,
-								configurableChatModel::getPricingConditions, configurableChatModel::getProviderId),
-								new AnswerFirstGenerations.Advisor(configurableChatModel::isReasoningGeneration),
-								configurableChatModel.thinkingNormalization())
-						.build();
-			} else
-				throw new IllegalStateException(
-						"The actual configurable chat model is not an GAbstractConfigurableChatModel");
-
+			// the clone is initialised as this model was: its parameter rules (an agent's
+			// temperature never reaches a model refusing it), its model and its chat client
+			// with the same advisors; the tools it declares reach every call as callbacks,
+			// so no tool calling manager of its own is needed
+			handler.initialize(modelConfigClone, type);
 			return handler;
 		} catch (JacksonException e) {
 			throw new LLMConfigException("Cannot clone model correctly");

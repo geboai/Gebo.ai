@@ -65,6 +65,8 @@ class VisibleVirtualFilesystemBrowsingTest {
 	private void aclBasedUser(List<Integer> aliases) {
 		when(security.isCurrentUserAdmin()).thenReturn(false);
 		when(security.getPlatformContentAccessPolicy()).thenReturn(ContentAccessPolicy.ACL_BASED);
+		// the one gate: ACL based policy, not an administrator, no product bypass
+		when(security.isContentAclEnforced()).thenReturn(true);
 		IAclGrantedAccessor accessor = mock(IAclGrantedAccessor.class);
 		when(accessor.getAllOwnedAclAliases()).thenReturn(aliases);
 		when(security.getCurrentAclGrantedAccessor(AclGrantType.READ)).thenReturn(accessor);

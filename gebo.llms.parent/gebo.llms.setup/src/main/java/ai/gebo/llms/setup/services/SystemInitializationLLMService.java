@@ -221,7 +221,6 @@ public class SystemInitializationLLMService {
 										LLMCreateModelData chatData = new LLMCreateModelData();
 										chatData.setBaseUrl(baseUrl);
 										chatData.setDoModelsLookup(doModelsLookup);
-										chatData.setEnableAllFunctions(chatModelConfig.isToolsEnabled());
 										chatData.setSecretId(createdSecret != null ? createdSecret.getCode() : null);
 										chatData.setModelCode(chatModelCode);
 										chatData.setServiceHandler(serviceHandler);

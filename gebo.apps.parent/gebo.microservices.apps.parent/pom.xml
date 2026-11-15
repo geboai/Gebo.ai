@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.apps</groupId>
 		<artifactId>gebo.apps.parent</artifactId>
-		<version>1.0.5.0</version>
+		<version>1.0.6.0</version>
 	</parent>
 	<groupId>ai.gebo.apps.microservices</groupId>
 	<artifactId>gebo.microservices.apps.parent</artifactId>
@@ -17,8 +17,10 @@
 		<!-- Base image for the per-microservice Jib images (docker profile). The
 		     docker:// prefix makes Jib read it from the LOCAL Docker daemon (that is
 		     where dockers/gebo.ai.platform/create-image builds it); drop the prefix
-		     once geboai/platform is published to a registry. -->
-		<gebo.docker.from>docker://geboai/platform:2.5</gebo.docker.from>
+		     once geboai/platform is published to a registry.
+		     3.0 is the hardened Java 25 base: no shell, non-root uid 10001, UTF-8
+		     locale, /usr/bin/tini (dockers/gebo.ai.platform/Dockerfile). -->
+		<gebo.docker.from>docker://geboai/platform:3.0</gebo.docker.from>
 	</properties>
 
 	<modules>
@@ -183,13 +185,32 @@
 									<volume>/opt/gebo.ai/work</volume>
 									<volume>/opt/gebo.ai/logs</volume>
 								</volumes>
-								<jvmFlags>
-									<jvmFlag>-Dsun.jnu.encoding=UTF-8</jvmFlag>
-									<jvmFlag>-Dfile.encoding=UTF-8</jvmFlag>
-									<jvmFlag>-Djava.net.preferIPv4Stack=true</jvmFlag>
-									<jvmFlag>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</jvmFlag>
-									<jvmFlag>--enable-native-access=ALL-UNNAMED</jvmFlag>
-								</jvmFlags>
+								<!--
+								  tini as PID 1, the same as the monolith image: it hands docker's
+								  SIGTERM to the JVM (graceful Spring shutdown instead of a SIGKILL at
+								  the stop timeout) and reaps orphaned children - mcpclient.gebo.ai
+								  spawns stdio MCP servers. The base provides /usr/bin/tini and runs
+								  as uid 10001; Jib keeps the base image's USER.
+
+								  A custom entrypoint makes Jib ignore <jvmFlags> and <mainClass>, so
+								  the flags live here and the classpath / main class come from the
+								  argument files Jib writes into the app root (java @file syntax).
+								  No -Dsun.jnu.encoding: the JDK ignores it - file-name encoding
+								  comes from the base's LANG=C.UTF-8, which is what makes Unicode
+								  names on mounted Windows / SMB / NTFS shares readable.
+								-->
+								<entrypoint>
+									<arg>/usr/bin/tini</arg>
+									<arg>--</arg>
+									<arg>java</arg>
+									<arg>-Dfile.encoding=UTF-8</arg>
+									<arg>-Djava.net.preferIPv4Stack=true</arg>
+									<arg>--add-opens=java.base/java.nio.charset=ALL-UNNAMED</arg>
+									<arg>--enable-native-access=ALL-UNNAMED</arg>
+									<arg>-cp</arg>
+									<arg>@/opt/gebo.ai/jib-classpath-file</arg>
+									<arg>@/opt/gebo.ai/jib-main-class-file</arg>
+								</entrypoint>
 								<creationTime>USE_CURRENT_TIMESTAMP</creationTime>
 								<labels>
 									<org.opencontainers.image.vendor>Gebo.ai</org.opencontainers.image.vendor>

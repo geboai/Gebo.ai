@@ -32,9 +32,9 @@
     </p-blockUI>
     <div class="col-12">
       @if (llmsSetupDone===false) {
-      <p-message id="LLMSNotConfiguredMessage" gebo-ai-label severity="warn" [closable]="false"
-        text="Chatting is not available yet: the system administrator must finish setting up the large language models before you can start a chat."
-        styleClass="w-full"></p-message>
+      <p-message id="LLMSNotConfiguredMessage" severity="warn" [closable]="false" styleClass="w-full">
+        <span id="LLMSNotConfiguredText" gebo-ai-text>Chatting is not available yet: the system administrator must finish setting up the large language models before you can start a chat.</span>
+      </p-message>
       }
       @if (llmsSetupDone!==false && chatProfilesData?.length) {
       <p-button icon="pi pi-pen-to-square" id="NewRagChatMiniBtn" label="Chat with knowledge base"

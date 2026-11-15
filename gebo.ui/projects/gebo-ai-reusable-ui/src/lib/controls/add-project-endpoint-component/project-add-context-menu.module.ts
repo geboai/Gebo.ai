@@ -22,6 +22,7 @@ import { PanelModule } from "primeng/panel";
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 /**
  * @fileoverview This module provides components for project data source management in a Gebo.ai application.
  * AI generated comments
@@ -43,7 +44,7 @@ import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-compone
  * - GeboAIChooseDataSourceTypeComponent: For selecting between different data source types
  */
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, ButtonModule, ContextMenuModule, GeboUIArchitectureModule, PanelModule, RadioButtonModule],
+    imports: [CommonModule, ReactiveFormsModule, ButtonModule, ContextMenuModule, GeboUIArchitectureModule, PanelModule, RadioButtonModule, GeboAIFieldTranslationContainerModule],
     declarations: [ProjectAddContextMenuComponent, GeboAIChooseDataSourceTypeComponent],
     exports: [ProjectAddContextMenuComponent, GeboAIChooseDataSourceTypeComponent],
     providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false }]

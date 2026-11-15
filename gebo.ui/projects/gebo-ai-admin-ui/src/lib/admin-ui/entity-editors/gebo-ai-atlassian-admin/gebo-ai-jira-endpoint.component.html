@@ -63,13 +63,13 @@
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true">
-                    <geboai-editable-listbox-component formControlName="parentProjectCode" placeholder="Select a project" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element></geboai-editable-listbox-component>
+                  <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
+                    <geboai-editable-listbox-component formControlName="parentProjectCode" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element></geboai-editable-listbox-component>
                   </gebo-ai-field>
                 </div>
                 <div class="col-6">
-                  <gebo-ai-field id="jiraSystemCode" label="jira system" help="Already configured jira system reference." [required]="true">
-                    <geboai-editable-listbox-component formControlName="jiraSystemCode" placeholder="Select a jira server" [optionsObservable]="jiraServersObservable" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newjiraServerRequest" gebo-ai-field-element></geboai-editable-listbox-component>
+                  <gebo-ai-field id="jiraSystemCode" label="jira system" help="Already configured jira system reference." [required]="true" placeholder="Select a jira server">
+                    <geboai-editable-listbox-component formControlName="jiraSystemCode" [optionsObservable]="jiraServersObservable" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newjiraServerRequest" gebo-ai-field-element></geboai-editable-listbox-component>
                   </gebo-ai-field>
                 </div>
                 <div class="col-12">
@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-10">
                   <gebo-ai-field id="catalogingCriteria" label="Spaces, pages and subpages organization criterias" help="Please explain here how the spaces, pages and sub pages organization criteria has been done in the jira contents shared with Gebo.ai">
-                    <textarea formControlName="catalogingCriteria" id="catalogingCriteria" cols="200" rows="2" gebo-ai-field-element></textarea>
+                    <textarea formControlName="catalogingCriteria" id="catalogingCriteria" rows="2" gebo-ai-field-element></textarea>
                   </gebo-ai-field>
                 </div>
                 <div class="col-12">

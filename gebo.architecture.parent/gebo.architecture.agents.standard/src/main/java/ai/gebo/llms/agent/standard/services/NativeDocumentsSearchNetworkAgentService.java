@@ -39,6 +39,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.security.services.IGSecurityService;
 
@@ -91,6 +92,7 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		return capabilities;
 	}
 
+	/** The query's model call and the ranking are made with the run's container. */
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
 			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
@@ -98,19 +100,8 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink) throws AgentException {
-		return retrieveDocuments(prompt, chatRequestContext, agentModel, params, network, agentRole,
-				contextAgentPersona, session, mySessionContext, msg, agentsDao, notificationSink, new ArrayList<>());
-	}
-
-	@Override
-	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
-			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
-			GAgentRole agentRole, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
-			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink, List<String> unavailableSources) throws AgentException {
+			INotificationSink notificationSink, List<String> unavailableSources, GeboToolCalling toolCalling)
+			throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		final int topK = retrievalTopK(command);
 		if (LOGGER.isDebugEnabled()) {
@@ -135,8 +126,13 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 				Map<String, Object> callParams = new HashMap<>(params);
 				callParams.putAll(nativeSearchWrapper.createCustomTemplateParamsMap(system,
 						catalogues != null ? catalogues : List.of()));
-				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt,
-						chatRequestContext, callParams, queryType);
+				NativeSearchDataStructure queryObject = callLLMStructuredReturn(agentModel, prompt, chatRequestContext,
+						callParams, queryType,
+								toolCalling);
+				if (toolCalling != null && toolCalling.isStoppedByTool()) {
+					// a tool ended the call: there is no query, and the agent waits
+					return List.of();
+				}
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<NATIVE_QUERY system=" + system.getCode() + ">");
 					LOGGER.trace(String.valueOf(queryObject));
@@ -169,8 +165,8 @@ public class NativeDocumentsSearchNetworkAgentService<CustomSearchResultExtracti
 		// Publish rich refs for these external results (built from the typed SearchResult, so
 		// they carry nestedSearchResult) so the report writer can expose them as chat-with-able.
 		publishChatWithDocumentRefs(results, session);
-		return maybeRank(chunkToDocuments(results, notificationSink, agentModel, command, keywords), command,
-				notificationSink);
+		final List<Document> chunked = chunkToDocuments(results, notificationSink, agentModel, command, keywords);
+		return maybeRank(chunked, command, notificationSink, toolCalling);
 	}
 
 }

@@ -38,6 +38,8 @@ public final class OpenChatConstants {
 	/** Router / streaming step ids (globally unique in the step repository). */
 	public static final String OPEN_CHAT_ROUTING_STEP = "open-chat-routing-step";
 	public static final String OPEN_CHAT_NETWORK_STREAMING_STEP = "open-chat-network-streaming-step";
+	/** The step that respawns the suspended network of agents of an open chat with the user's reaction. */
+	public static final String OPEN_CHAT_NETWORK_RESPAWN_STEP = "open-chat-network-respawn-step";
 
 	/** Router decision code surfaced on the response for the agentic (network) answer. */
 	public static final String OPEN_CHAT_AGENTIC_ANSWER = "OPEN_CHAT_AGENTIC_ANSWER";

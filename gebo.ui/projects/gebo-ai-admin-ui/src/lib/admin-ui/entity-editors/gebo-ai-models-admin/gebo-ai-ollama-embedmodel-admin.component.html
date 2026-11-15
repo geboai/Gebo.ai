@@ -74,16 +74,16 @@
               </gebo-ai-field>
             </div>
             <div class="col-6">
-              <gebo-ai-field id="apiSecretCode" label="Ollama token" help="Choose the Ollama token to be used for this model">
-                <geboai-editable-listbox-component id="apiSecretCode" formControlName="apiSecretCode" placeholder="Select a token"
+              <gebo-ai-field id="apiSecretCode" label="Ollama token" help="Choose the Ollama token to be used for this model" placeholder="Select a token">
+                <geboai-editable-listbox-component id="apiSecretCode" formControlName="apiSecretCode"
                   [optionsObservable]="identitiesObservable" [createNewRecordRequest]="newSecretAction"
                   gebo-ai-field-element>
                 </geboai-editable-listbox-component>
               </gebo-ai-field>
             </div>
             <div class="col-6">
-              <gebo-ai-field id="choosedModel" label="Ollama embedding model choice" help="Choose the Ollama embedding model to work with." [required]="true">
-                <p-select styleClass="w-full" id="choosedModel" formControlName="choosedModel" dataKey="code" placeholder="Select a model"
+              <gebo-ai-field id="choosedModel" label="Ollama embedding model choice" help="Choose the Ollama embedding model to work with." [required]="true" placeholder="Select a model">
+                <p-select styleClass="w-full" id="choosedModel" formControlName="choosedModel" dataKey="code"
                   [required]="true" [options]="modelChoicesData" optionLabel="description"
                 class="col-12" gebo-ai-field-element></p-select>
               </gebo-ai-field>

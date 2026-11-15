@@ -16,6 +16,7 @@ import { ChartModule } from "primeng/chart";
 import { ButtonModule } from "primeng/button";
 import { BlockUIModule } from "primeng/blockui";
 import { PanelModule } from "primeng/panel";
+import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 
 import { GeboAILLMSUsageAdminDashboardComponent } from "./llms-usage-admin-dashboard.component";
 import { GeboAILLMSUsageUserDashboardComponent } from "./llms-usage-user-dashboard.component";
@@ -29,7 +30,8 @@ import { GeboAILLMSUsageUserDashboardComponent } from "./llms-usage-user-dashboa
     ChartModule,
     ButtonModule,
     BlockUIModule,
-    PanelModule
+    PanelModule,
+    GeboAIFieldTranslationContainerModule
   ],
   declarations: [
     GeboAILLMSUsageAdminDashboardComponent,

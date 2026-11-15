@@ -446,6 +446,7 @@ public class MimeTypes {
                 put1(MIME_APPLICATION_MSWORD_2007, "docx");
                 put1(MIME_APPLICATION_VND_TEXT, "odt");
                 put1(MIME_APPLICATION_VND_MSEXCEL, "xls");
+                put1(MIME_APPLICATION_VND_MSEXCEL_2007, "xlsx");
                 put1(MIME_APPLICATION_VND_SPREADSHEET, "ods");
                 put1(MIME_APPLICATION_POSTSCRIPT, "ps");
                 put1(MIME_APPLICATION_PDF, "pdf");

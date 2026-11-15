@@ -45,6 +45,13 @@ public interface IGSecurityAuditLoggerService {
 		private String resourceId;
 		private String action;
 		private String outcome;
+		/**
+		 * The trace and span the event happened in, when tracing is on: the keys
+		 * that lead from a security-log event to the application log lines
+		 * ({@code [traceId,spanId]} in their pattern) and to the trace itself.
+		 */
+		private String traceId;
+		private String spanId;
 
 		private Map<String, Object> details = new HashMap<String, Object>();
 	}

@@ -193,6 +193,15 @@ class MessageReceiverRunner implements IGMessageReceiver, IGRunnable {
                 }
 
                 hasAlreadyReceivedMessages = true;
+                // Messages were delivered, so the next empty wait has to be a timed one
+                // again: a timeout flush is only skipped after a loop that did nothing but
+                // flush. Without this, a message that reaches this thread while a timeout
+                // flush is running (the lock is held, the sender queues it) is delivered
+                // in the loop right after it, and the thread then waits with no timeout:
+                // the receiver instance keeps that message until another one happens to
+                // come this way, which in a short job never happens - one document is
+                // then missing from its step and the job can never finish.
+                lastLoopManagesTimeout = false;
             }
         } catch (InterruptedException e) {
 

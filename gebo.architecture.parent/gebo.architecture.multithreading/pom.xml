@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.5.0</version>
+		<version>1.0.6.0</version>
 	</parent>
 	<artifactId>gebo.architecture.multithreading</artifactId>
 	<dependencies>
@@ -18,6 +18,25 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+		</dependency>
+		<!-- Carries the submitting thread's trace and MDC into the tasks (GeboTaskContext);
+			optional in micrometer-observation, so declared here. -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>context-propagation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- the tests check the security context is NOT carried: with Spring Security
+			on the classpath its accessors are in the global context registry, as in
+			the applications -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

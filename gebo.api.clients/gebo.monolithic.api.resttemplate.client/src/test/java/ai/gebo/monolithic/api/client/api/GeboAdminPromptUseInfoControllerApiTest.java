@@ -38,8 +38,8 @@ public class GeboAdminPromptUseInfoControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void findAllTest() {
-        List<GPromptUseInfo> response = api.findAll();
+    public void findAllPromptUseInfoTest() {
+        List<GPromptUseInfo> response = api.findAllPromptUseInfo();
 
         // TODO: test validations
     }

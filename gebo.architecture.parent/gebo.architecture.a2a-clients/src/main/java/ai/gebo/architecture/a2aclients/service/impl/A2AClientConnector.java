@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.a2aclients.model.A2AAuthMode;
 import ai.gebo.architecture.a2aclients.model.A2ARemoteAgentConfig;
+import ai.gebo.architecture.a2aclients.model.A2ATransportType;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
 import ai.gebo.secrets.model.GeboCustomSecretContent;
 import ai.gebo.secrets.model.GeboOauth2TokenSecretContent;
@@ -99,6 +100,7 @@ public class A2AClientConnector {
 	 * @throws Exception if the card cannot be fetched or parsed
 	 */
 	public AgentCard fetchAgentCard(A2ARemoteAgentConfig config) throws Exception {
+		requireJsonRpcTransport(config);
 		requireAgentCardUrl(config);
 		String authorization = resolveAuthorizationHeader(config);
 		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(config.getAgentCardUrl()))
@@ -122,6 +124,7 @@ public class A2AClientConnector {
 	 * @throws Exception on transport failure or a JSON-RPC error response
 	 */
 	public EventKind sendMessage(A2ARemoteAgentConfig config, String text, String contextId) throws Exception {
+		requireJsonRpcTransport(config);
 		requireAgentCardUrl(config);
 		String authorization = resolveAuthorizationHeader(config);
 		MessageSendParams params = buildParams(text, contextId);
@@ -149,6 +152,7 @@ public class A2AClientConnector {
 	 * bounded-elastic scheduler so callers get a non-blocking {@link Flux}.
 	 */
 	public Flux<StreamingEventKind> streamMessage(A2ARemoteAgentConfig config, String text, String contextId) {
+		requireJsonRpcTransport(config);
 		final HttpRequest request;
 		try {
 			requireAgentCardUrl(config);
@@ -405,12 +409,11 @@ public class A2AClientConnector {
 	 * chain and runs the exported network impersonating that same user.
 	 */
 	private String exchangeCurrentUserToken() {
-		if (isOauth2ResourceServerMode()) {
-			String relayed = currentResourceServerToken();
-			if (isBlank(relayed)) {
-				throw new IllegalStateException(
-						"OAuth2 resource-server mode: no bearer token in the current context to relay to the remote A2A agent");
-			}
+		// a caller that came with a token of an external identity provider: that token
+		// is relayed; a caller that logged in here (a local JWT, an API key) gets a
+		// short-lived local token minted, whatever the resource-server setting says
+		String relayed = currentResourceServerToken();
+		if (!isBlank(relayed)) {
 			return relayed;
 		}
 		UserInfos user = securityService.getCurrentUser();
@@ -422,9 +425,6 @@ public class A2AClientConnector {
 		return jwtTokenProvider.createToken(user.getUsername(), expiration);
 	}
 
-	private boolean isOauth2ResourceServerMode() {
-		return securityConfig != null && Boolean.TRUE.equals(securityConfig.getOauth2ResourceServerEnabled());
-	}
 
 	/**
 	 * Extracts the raw inbound OAuth2 token value from the current authentication.
@@ -468,5 +468,18 @@ public class A2AClientConnector {
 
 	private static boolean isBlank(String value) {
 		return value == null || value.trim().isEmpty();
+	}
+
+	/**
+	 * Only the JSON-RPC transport is wired (the one the SDK's jsonrpc module
+	 * implements): a configuration asking for REST or gRPC is refused here, with the
+	 * reason, instead of being served over JSON-RPC as if the choice were honoured.
+	 */
+	private static void requireJsonRpcTransport(A2ARemoteAgentConfig config) {
+		A2ATransportType transport = config != null ? config.getTransportType() : null;
+		if (transport != null && transport != A2ATransportType.JSONRPC) {
+			throw new UnsupportedOperationException("A2A transport " + transport
+					+ " is not supported yet by this client: configure the remote agent with the JSON-RPC transport");
+		}
 	}
 }

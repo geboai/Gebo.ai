@@ -17,10 +17,28 @@
  * including source code, plain text, PDF, and browsable web content.
  */
 import { HttpClient } from "@angular/common/http";
-import { Component, Input, OnChanges, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
 import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
+import { Subscription } from "rxjs";
 import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
+import { findMatchingTranslation, UIExistingText } from "../field-translation-container/text-language-resources";
+
+/**
+ * Fixed prefix of the dialog title, the file name that follows it is data. The viewer is opened
+ * from the chat, the knowledge base tree and the document opener buttons and has no
+ * GEBO_AI_MODULE/GEBO_AI_FIELD_HOST of its own (its web viewer resolves its texts on the host's),
+ * so the prefix is looked up with an explicit module/entity, the same in every host.
+ */
+const showingContentTitleText: UIExistingText = {
+  moduleId: "GeboAIContentViewerModule",
+  entityId: "GeboAIContentViewerComponent",
+  componentId: "ShowingContentTitle",
+  fieldId: "label",
+  key: "label",
+  text: "Showing content"
+};
 
 /**
  * A file Gebo.ai serves by url and that has no ingested document behind it.
@@ -56,7 +74,7 @@ const generatedContentControllerUrl: string = "/api/users/GeboLLMGeneratedResour
   templateUrl: "gebo-ai-content-viewer.component.html",
   standalone: false
 })
-export class GeboAIContentViewerComponent implements OnInit, OnChanges {
+export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestroy {
 
   /** Unique identifier for the content to be displayed */
   @Input() code: string = "";
@@ -115,6 +133,10 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
   /** Event emitter that fires when the content viewer is closed */
   @Output() close: EventEmitter<boolean> = new EventEmitter();
 
+  /** Dialog title prefix in the actual language */
+  protected showingContentTitle: string = showingContentTitleText.text;
+  private titleTranslationSubscription?: Subscription;
+
   /**
    * Constructor for the GeboAIContentViewerComponent
    * 
@@ -127,7 +149,8 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
     private contentMetaControllerService: ContentMetaInfosControllerService,
     private ingestionMetaInfoService: IngestionFileTypesLibraryControllerService,
     private httpClient: HttpClient,
-    @Inject(BASE_PATH) private path: string) {
+    @Inject(BASE_PATH) private path: string,
+    private translationService: GeboAITranslationService) {
 
   }
 
@@ -135,7 +158,16 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    * Angular lifecycle hook that initializes the component
    */
   ngOnInit(): void {
+    this.titleTranslationSubscription = this.translationService.translateOnActualLanguage([showingContentTitleText]).subscribe({
+      next: (resources) => {
+        const found = resources ? findMatchingTranslation(showingContentTitleText, resources) : undefined;
+        this.showingContentTitle = found?.translation ? found.translation : showingContentTitleText.text;
+      }
+    });
+  }
 
+  ngOnDestroy(): void {
+    this.titleTranslationSubscription?.unsubscribe();
   }
 
   /**
@@ -163,11 +195,12 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
           this.plainTextContent = fileType?.treatAs === 'plainText';
           this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
           this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
-          this.externalContentUrl = this.path + generatedContentControllerUrl + this.generatedContent?.userContextCode + "/" + this.generatedContent?.code;
-          this.contentServedByGebo = true;
         }
+        this.externalContentUrl = this.path + generatedContentControllerUrl + this.generatedContent?.userContextCode + "/" + this.generatedContent?.code;
+        this.contentServedByGebo = true;
         this.downloadableContent = fileType?.uiViewable === false;
-        this.visible = fileType?.uiViewable === true && this.activate===true;
+        // a content the viewer cannot show still opens, with its download link
+        this.visible = (fileType?.uiViewable === true || this.downloadableContent) && this.activate===true;
         console.log("Content: " + this.externalContentUrl);
         console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
         console.log("content viewer url:" + this.externalContentUrl);
@@ -182,11 +215,11 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
           this.plainTextContent = fileType?.treatAs === 'plainText';
           this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
           this.browsableContent = fileType.extensions && (".html" in fileType.extensions) ? true : false;
-          this.externalContentUrl = this.path + uploadedContentControllerUrl + this.userUploadedContent?.userContextCode + "/" + this.userUploadedContent?.code;
-          this.contentServedByGebo = true;
         }
+        this.externalContentUrl = this.path + uploadedContentControllerUrl + this.userUploadedContent?.userContextCode + "/" + this.userUploadedContent?.code;
+        this.contentServedByGebo = true;
         this.downloadableContent = fileType?.uiViewable === false;
-        this.visible = fileType?.uiViewable === true;
+        this.visible = fileType?.uiViewable === true || this.downloadableContent;
         console.log("Content: " + this.externalContentUrl);
         console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
         console.log("content viewer url:" + this.externalContentUrl);
@@ -208,14 +241,36 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
               this.plainTextContent = fileType?.treatAs === 'plainText';
               this.pdfContent = fileType?.extensions?.find(x => x === '.pdf') ? true : false;
 
-              this.browsableContent = (this.contentMetaInfo?.moduleId === 'webcrawler-module' || this.contentMetaInfo?.referenceType==="WEB");
-              if (this.browsableContent && this.contentMetaInfo?.url) {
+              /**
+               * A reference coming from the web is of either of two kinds. It can
+               * point at a page still living at its own address, and then it is
+               * browsed there and no viewer of a file type applies to it. Or the
+               * page has been archived and Gebo.ai serves the file itself, and then
+               * the file has to be rendered by the viewer of its own type: an
+               * article of a press review is a WEB reference whose archived file is
+               * a pdf, and letting the web viewer claim it too put the protected url
+               * into an iframe, which carries no authorization token and is answered
+               * with a 401. The flags have to stay mutually exclusive because the
+               * template renders every viewer whose flag is on.
+               */
+              const webReference: boolean = this.contentMetaInfo?.moduleId === 'webcrawler-module'
+                || this.contentMetaInfo?.referenceType === "WEB";
+              if (webReference && this.contentMetaInfo?.url) {
+                this.browsableContent = true;
+                this.sourceCodeContent = false;
+                this.plainTextContent = false;
+                this.pdfContent = false;
                 this.externalContentUrl = this.contentMetaInfo.url;
                 this.contentServedByGebo = false;
+              } else {
+                this.browsableContent = webReference && !this.sourceCodeContent
+                  && !this.plainTextContent && !this.pdfContent;
               }
+              console.log("content viewer webReference:" + webReference + " browsedAtItsOwnAddress:" + (webReference && this.contentMetaInfo?.url ? true : false));
             }
             this.downloadableContent = fileType?.uiViewable === false;
-            this.visible = fileType?.uiViewable === true;
+            // a document the viewer cannot show (a Word file...) still opens, with its download link
+            this.visible = fileType?.uiViewable === true || this.downloadableContent;
             console.log("Content: " + this.externalContentUrl);
 
             console.log("content viewer sourceCodeContent:" + this.sourceCodeContent + " sourceCodeContent:" + this.sourceCodeContent + " plainTextContent:" + this.plainTextContent + " externalContent:" + this.downloadableContent + " browsableContent:" + this.browsableContent + " pdfContent:" + this.pdfContent);
@@ -307,7 +362,7 @@ export class GeboAIContentViewerComponent implements OnInit, OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (changes["activate"]) {
-       this.visible = this.ingestionFileType?.uiViewable === true && this.activate===true;
+       this.visible = (this.ingestionFileType?.uiViewable === true || this.downloadableContent) && this.activate===true;
     }
     if (this.code && this.code.length && changes["code"]) {
       this.loading = true;

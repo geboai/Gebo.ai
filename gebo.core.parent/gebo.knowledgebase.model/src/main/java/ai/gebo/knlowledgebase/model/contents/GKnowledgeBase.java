@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
@@ -28,7 +29,7 @@ import lombok.Data;
  */
 @Document
 @Data
-public class GKnowledgeBase extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
+public class GKnowledgeBase extends GBaseObject implements IGObjectWithSecurity, IContentAclResource {
 
 	/** Serial version UID for serialization. */
 	private static final long serialVersionUID = 2198630339276800089L;

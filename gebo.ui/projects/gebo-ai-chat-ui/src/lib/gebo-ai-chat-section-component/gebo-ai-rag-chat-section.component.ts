@@ -14,7 +14,7 @@ import { ChangeDetectorRef, Component, Inject, OnChanges, OnInit, Optional, Simp
 import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "primeng/paginator";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, refreshTreeNodes, UI_COMPANY_FILES_NOT_SELECTABLE } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, findMatchingTranslation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, refreshTreeNodes, UI_COMPANY_FILES_NOT_SELECTABLE, UIExistingText } from "@Gebo.ai/reusable-ui";
 import { ScrollerOptions, TreeNode } from "primeng/api";
 import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -36,6 +36,19 @@ function toExtended(chatInfo: GUserChatInfo): ExtendedGUserChatInfo {
     };
     return extended;
 }
+
+/**
+ * Label of the root of the chats tree: a tree node label, so it is translated programmatically
+ * under the same module/entity as the template texts of this component.
+ */
+const chatsTitleText: UIExistingText = {
+    moduleId: "GeboAiChatModule",
+    entityId: "GeboAiChatSectionComponent",
+    componentId: "ChatsTitle",
+    fieldId: "label",
+    key: "label",
+    text: "Chats"
+};
 
 /* AI generated comments */
 /**
@@ -91,6 +104,8 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         pageSize: 100
     };
     protected chatsTree!: TreeNode[];
+    /** Label of the chats tree root in the actual language */
+    protected chatsTitle: string = chatsTitleText.text;
     protected scrollOptions!: ScrollerOptions;
     /** Form group for RAG chat profile selection */
     protected formGroup: FormGroup = new FormGroup({
@@ -128,6 +143,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
         private geboRagChatControllerService: GeboRagChatControllerService,
         private geboUserChatsControllerService: GeboUserChatsControllerService,
         private geboChatModelsControllerService: ChatModelsLookupControllerService,
+        private translationService: GeboAITranslationService,
         @Optional() @Inject(UI_COMPANY_FILES_NOT_SELECTABLE) companyFilesNotSelectable?: boolean) {
         this.disableFilesBrowsers = companyFilesNotSelectable === true;
         this.scrollOptions = {
@@ -241,7 +257,7 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      */
     protected loadChatList(): void {
         if (!this.chatsTree) {
-            this.chatsTree = [{ label: "Chats", leaf: false, children: [], expanded: true }];
+            this.chatsTree = [{ label: this.chatsTitle, leaf: false, children: [], expanded: true }];
 
         }
 
@@ -370,7 +386,18 @@ export class GeboAiChatSectionComponent implements OnInit, OnChanges {
      * Shows the chat list view and loads chat options and history
      */
     ngOnInit(): void {
-        this.chatsTree = [{ label: "Chats", leaf: false, children: [], expanded: true }];
+        this.chatsTree = [{ label: this.chatsTitle, leaf: false, children: [], expanded: true }];
+        this.translationService.translateOnActualLanguage([chatsTitleText]).subscribe({
+            next: (resources) => {
+                const found = resources ? findMatchingTranslation(chatsTitleText, resources) : undefined;
+                this.chatsTitle = found?.translation ? found.translation : chatsTitleText.text;
+                if (this.chatsTree?.length && this.chatsTree[0].label !== this.chatsTitle) {
+                    this.chatsTree[0].label = this.chatsTitle;
+                    this.chatsTree = refreshTreeNodes(this.chatsTree);
+                    this.cd.markForCheck();
+                }
+            }
+        });
         this.chatsListAndOptionsVisible = true;
         this.loadChatOptions();
         this.loadChatList();

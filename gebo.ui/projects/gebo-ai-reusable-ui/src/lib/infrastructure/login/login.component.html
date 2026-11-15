@@ -37,7 +37,7 @@
 
         <div class="gebo-login__actions">
           <p-button id="LoginBtn" gebo-ai-label [outlined]="true" icon="pi pi-sign-in" label="Login"
-            (onClick)="login()" [disabled]="formGroup.invalid" type="submit"
+            [disabled]="formGroup.invalid" type="submit"
             styleClass="gebo-login__submit"></p-button>
           @if (showForgotPasswordLink) {
             <a id="ForgotPasswordLink" class="gebo-login__link" routerLink="/ui/user-workflows/start"

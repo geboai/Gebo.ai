@@ -63,7 +63,12 @@ public class GOauth2AuthorizedClientService implements OAuth2AuthorizedClientSer
 
 		String secretId = buildSecretId(principal.getName(), client.getClientRegistration().getRegistrationId());
 		try {
-			secrets.storeSecret(content, "OAuth2 token", secretId);
+			// One record per user and registration. Storing without removing the previous
+			// one left a record holding the provider's access and refresh tokens behind at
+			// every single login, and nothing ever read them again because the id they were
+			// filed under was random while the load below looks them up by this one.
+			removeAuthorizedClient(client.getClientRegistration().getRegistrationId(), principal.getName());
+			secrets.storeSecret(content, "OAuth2 token", secretId, secretId);
 		} catch (GeboCryptSecretException e) {
 			throw new RuntimeException("Cannot store secret token", e);
 		}
@@ -81,7 +86,15 @@ public class GOauth2AuthorizedClientService implements OAuth2AuthorizedClientSer
 			String principalName) {
 		String secretId = buildSecretId(principalName, clientRegistrationId);
 		try {
-			AbstractGeboSecretContent content = secrets.getSecretContentById(secretId);
+			// Looked up by context code, not by id: records written before the tokens were
+			// filed under a stable id carry a random one. No tokens for this user and
+			// registration is an ordinary answer, not a failure: Spring asks for them
+			// before there is anything to find.
+			List<SecretInfo> stored = secrets.getSecretInfoByContextCode(secretId);
+			if (stored == null || stored.isEmpty()) {
+				return null;
+			}
+			AbstractGeboSecretContent content = secrets.getSecretContentById(stored.get(0).getCode());
 			if (content instanceof GeboOauth2TokenSecretContent tokenContent) {
 				// Retrieve client registration and create OAuth2AuthorizedClient from secret
 				// content

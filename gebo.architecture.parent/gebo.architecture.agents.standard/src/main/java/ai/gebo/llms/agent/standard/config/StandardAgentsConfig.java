@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IGConfiguredDefaultChatNetworksOfAgents;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
-import ai.gebo.llms.agent.standardtools.InternalKnowledgeBaseSearchToolSource;
 import lombok.Data;
 
 @Configuration
@@ -36,12 +36,26 @@ public class StandardAgentsConfig implements IGConfiguredDefaultChatNetworksOfAg
 	 */
 	private int searchDocumentsParallelism = SearchResultsChunker.DEFAULT_DOCUMENTS_PARALLELISM;
 	/**
-	 * The knowledge base search tool's answer takes at most the room its model call
-	 * leaves to the tools' results divided by this (a third by default). Set via
+	 * The room divisor of the knowledge base search tools only, when they must differ
+	 * from the other knowledge base searches: not set, the shared
+	 * {@code ai.gebo.llms.knowledge-base-search-room-divisor} applies (see
+	 * {@link KnowledgeBaseSearchBudget}). Set via
 	 * {@code ai.gebo.agents.standard.knowledge-base-search-room-divisor} in
 	 * application.yml.
 	 */
-	private double knowledgeBaseSearchRoomDivisor = InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
+	private Double knowledgeBaseSearchRoomDivisor = null;
+
+	/**
+	 * The room divisor of the knowledge base search tools: this configuration's own when
+	 * set, the shared one of the knowledge base searches otherwise.
+	 */
+	public static double knowledgeBaseSearchRoomDivisor(StandardAgentsConfig config) {
+		if (config != null && config.getKnowledgeBaseSearchRoomDivisor() != null) {
+			return KnowledgeBaseSearchBudget.validDivisor(config.getKnowledgeBaseSearchRoomDivisor(),
+					"ai.gebo.agents.standard.knowledge-base-search-room-divisor");
+		}
+		return KnowledgeBaseSearchBudget.roomDivisor();
+	}
 
 	/**
 	 * The standard knowledge base search tools ({@code searchKnowledgeBase},

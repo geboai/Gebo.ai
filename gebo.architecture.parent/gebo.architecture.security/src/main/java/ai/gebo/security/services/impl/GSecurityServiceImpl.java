@@ -24,6 +24,7 @@ import ai.gebo.acl.IAclAliasesDao;
 import ai.gebo.acl.IAclGrantedAccess;
 import ai.gebo.acl.IAclGrantedAccessor;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -33,7 +34,10 @@ import ai.gebo.model.IGUserSecurityProfile;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.UsersGroup;
+import org.springframework.beans.factory.ObjectProvider;
+
 import ai.gebo.security.model.UserInfos;
+import ai.gebo.security.services.IGContentAclBypass;
 import ai.gebo.security.services.IAclGrantedAccessorService;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGeboSystemUserService;
@@ -62,6 +66,28 @@ public class GSecurityServiceImpl implements IGSecurityService {
 	final IGeboCryptingService cryptService;
 	final IGPersistentObjectManager persistenceManager;
 	final IGeboSystemUserService systemUserService;
+	/** The products' bypass rules of the content ACL (see {@link IGContentAclBypass}); none by default. */
+	final ObjectProvider<IGContentAclBypass> contentAclBypasses;
+
+	@Override
+	public boolean isContentAclBypassed() {
+		final List<IGContentAclBypass> bypasses = contentAclBypasses != null ? contentAclBypasses.stream().toList()
+				: List.of();
+		if (bypasses.isEmpty()) {
+			return false;
+		}
+		final UserInfos user = getCurrentUser();
+		for (IGContentAclBypass bypass : bypasses) {
+			if (bypass.bypassesContentAcl(user)) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Content ACL bypassed for user:" + user.getUsername() + " by:"
+							+ bypass.getClass().getSimpleName());
+				}
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Retrieves the current authenticated user's information.
@@ -269,7 +295,7 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return true;
 		}
 		case ACL_BASED: {
-			if (adminCanDoAll && isCurrentUserAdmin())
+			if (readsAsAdministrator(adminCanDoAll, resource, grantType))
 				return true;
 			if (grantType == null || grantType.length == 0l)
 				return false;
@@ -300,6 +326,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
+			// a content ACL bypass opens the contents of the knowledge bases to a read, never
+			// a configuration (see IGSecurityService.readsAsAdministrator)
+			final boolean contentBypass = IGSecurityService.readOnly(grantType) && isContentAclBypassed();
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
 			IAclGrantedAccessor firstGrantsAcc = null;
 			for (AclGrantType grant : grantType) {
@@ -323,6 +352,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				}
 			};
 			List<T> out = objects.stream().filter(object -> {
+				if (contentBypass && object instanceof IContentAclResource) {
+					return true;
+				}
 				for (AclGrantType grant : grantType) {
 					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
 						return true;
@@ -348,6 +380,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 			return new ArrayList<T>(objects);
 		switch (getPlatformContentAccessPolicy()) {
 		case ACL_BASED: {
+			// a content ACL bypass opens the contents of the knowledge bases to a read, never
+			// a configuration (see IGSecurityService.readsAsAdministrator)
+			final boolean contentBypass = IGSecurityService.readOnly(grantType) && isContentAclBypassed();
 			final List<IAclGrantedAccess> accesses = new ArrayList<>();
 			IAclGrantedAccessor firstGrantsAcc = null;
 			for (AclGrantType grant : grantType) {
@@ -370,6 +405,9 @@ public class GSecurityServiceImpl implements IGSecurityService {
 				}
 			};
 			List<T> out = objects.stream().filter(object -> {
+				if (contentBypass && object instanceof IContentAclResource) {
+					return true;
+				}
 				for (AclGrantType grant : grantType) {
 					if (AclAccessCheck.hasAccess(aclAliasesDao, jointedAccessor, object, grant, false))
 						return true;

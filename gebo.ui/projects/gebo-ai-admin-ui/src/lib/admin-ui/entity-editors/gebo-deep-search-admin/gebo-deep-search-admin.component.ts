@@ -37,7 +37,6 @@ export class GeboAIDeepSearchConfigAdminComponent extends BaseEntityEditingCompo
         ragQueryOptions: new FormGroup({
             topK: new FormControl(),
             similarityThreashold: new FormControl(),
-            maxTokens: new FormControl(),
             completeness: new FormControl()
         }),
         firstHopSimilarityThreashold: new FormControl(),

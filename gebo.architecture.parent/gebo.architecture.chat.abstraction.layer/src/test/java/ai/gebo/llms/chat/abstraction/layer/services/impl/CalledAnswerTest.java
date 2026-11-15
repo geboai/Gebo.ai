@@ -39,9 +39,11 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatResponseParsingFixerServiceRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
@@ -69,7 +71,8 @@ class CalledAnswerTest {
 						mock(IGChatStorageAreaService.class), mock(LLMGeneratedResourceRepository.class),
 						mock(IGKnowledgebaseVisibilityService.class), mock(IGChatSessionLifeCycleService.class),
 						mock(IGTextToSpeechModelRuntimeConfigurationDao.class),
-						mock(IGTranscriptModelRuntimeConfigurationDao.class), audit, null)
+						mock(IGTranscriptModelRuntimeConfigurationDao.class), audit, null,
+						new GeboToolCallingManagerFactory(), mock(IPipelineStepModelsService.class))
 						.defaultAnswer(Answers.CALLS_REAL_METHODS));
 	}
 

@@ -27,6 +27,31 @@ import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemD
 import { refreshTreeNodes, treeNodeTrackBy } from "../../services/primeng-tree-refresh";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, fieldHostComponentName } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
+import { findMatchingTranlations, UIExistingText } from "../field-translation-container/text-language-resources";
+
+/**
+ * Texts bound in the tree of the dialog, translated programmatically under this component's
+ * module/entity: the tooltips of the node buttons, whose ids are per node, and the filter
+ * placeholder of p-tree, which has no multilanguage adapter.
+ */
+const vfsTexts: UIExistingText[] = [
+    { moduleId: "VFilesystemSelectorModule", entityId: "VFilesystemSelectorComponent", componentId: "ViewElementBtn", fieldId: "help", key: "help", text: "Open this element" },
+    { moduleId: "VFilesystemSelectorModule", entityId: "VFilesystemSelectorComponent", componentId: "MarkForDeletionBtn", fieldId: "help", key: "help", text: "Sign this element for deletion" },
+    { moduleId: "VFilesystemSelectorModule", entityId: "VFilesystemSelectorComponent", componentId: "KeepElementBtn", fieldId: "help", key: "help", text: "Keep this element" },
+    { moduleId: "VFilesystemSelectorModule", entityId: "VFilesystemSelectorComponent", componentId: "ElementsTree", fieldId: "placeholder", key: "placeholder", text: "Filter the loaded elements" }
+];
+/**
+ * The vfsTexts by componentId, with the translations found applied
+ */
+function vfsTextsById(translations?: UIExistingText[]): { [componentId: string]: string } {
+    const out: { [componentId: string]: string } = {};
+    vfsTexts.forEach(text => {
+        const found = translations?.find(x => x.componentId === text.componentId && x.fieldId === text.fieldId);
+        out[text.componentId as string] = found?.translation ? found.translation : text.text;
+    });
+    return out;
+}
 
 const iconsMapping:{[key:string]:string}={
     GGitProjectEndpoint:"pi pi-git",
@@ -473,12 +498,15 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
     public formGroup: FormGroup = new FormGroup({
         choosed: new FormControl()
     });
+    /** The vfsTexts in the actual language, by componentId */
+    protected texts: { [componentId: string]: string } = vfsTextsById();
 
     /**
      * Creates an instance of the VFilesystemSelectorComponent
      * @param checkChanges - Angular's change detector reference for manual change detection
+     * @param translationService - translates the texts bound in the tree (vfsTexts)
      */
-    constructor(private checkChanges: ChangeDetectorRef) {
+    constructor(private checkChanges: ChangeDetectorRef, private translationService: GeboAITranslationService) {
         this.formGroup.valueChanges.subscribe({
             next: (v) => {
                 this.resyncEditingChips();
@@ -940,6 +968,12 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
      * Angular lifecycle hook that initializes the component
      */
     ngOnInit(): void {
+        this.translationService.translateOnActualLanguage(vfsTexts).subscribe({
+            next: (resources) => {
+                this.texts = vfsTextsById(resources ? findMatchingTranlations(vfsTexts, resources) : undefined);
+                this.checkChanges.markForCheck();
+            }
+        });
     }
 
     /**

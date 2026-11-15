@@ -15,6 +15,7 @@ package ai.gebo.architecture.ai.model;
 import org.springframework.ai.tool.ToolCallback;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Represents a reference to a tool, including its name, description, and a user UI function description.
@@ -31,6 +32,11 @@ public class ToolReference {
     userUIfunctionDescription = null,
     // Input schema of the tool
     inputSchema = null;
+
+    // Whether the tool's result ends the model call it is part of: what runs the
+    // tool reads it, nothing outside the application does
+    @JsonIgnore
+    private boolean returnDirect = false;
 
     /**
      * Default constructor for ToolReference.
@@ -50,6 +56,7 @@ public class ToolReference {
         this.name = wraps.getToolDefinition().name();
         this.description = wraps.getToolDefinition().description();
         this.inputSchema = wraps.getToolDefinition().inputSchema();
+        this.returnDirect = wraps.getToolMetadata() != null && wraps.getToolMetadata().returnDirect();
     }
 
     /**
@@ -122,6 +129,26 @@ public class ToolReference {
      */
     public void setInputSchema(String inputSchema) {
         this.inputSchema = inputSchema;
+    }
+
+    /**
+     * Returns whether the tool's result ends the model call it is part of.
+     *
+     * @return true when the model is not called again after the tool.
+     */
+    @JsonIgnore
+    public boolean isReturnDirect() {
+        return returnDirect;
+    }
+
+    /**
+     * Sets whether the tool's result ends the model call it is part of.
+     *
+     * @param returnDirect true when the model is not called again after the tool.
+     */
+    @JsonIgnore
+    public void setReturnDirect(boolean returnDirect) {
+        this.returnDirect = returnDirect;
     }
 
 }

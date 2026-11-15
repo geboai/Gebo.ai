@@ -22,7 +22,9 @@ import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.IGProgressNotifier;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.standardtools.model.DeepSearchToolParam.Depth;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
@@ -97,9 +99,13 @@ public final class DeepSearchReduction {
 		return KnowledgeBaseDeepSearchTool.FRAGMENTS_PER_DOCUMENT;
 	}
 
-	/** The tokens the knowledge base search may return to a deep search: read in batches, not in one context. */
+	/**
+	 * The tokens the knowledge base search may return to a deep search: not bounded,
+	 * as the fragments are read in batches, not in one context; only the reduced
+	 * analysis is sized to the room of the model call.
+	 */
 	public static int knowledgeBaseRetrievedTokens() {
-		return KnowledgeBaseDeepSearchTool.MAX_RETRIEVED_TOKENS;
+		return KnowledgeBaseDeepSearchTool.UNBOUNDED_RETRIEVED_TOKENS;
 	}
 
 	/** The fragments kept of each document found in an external source. */
@@ -108,22 +114,14 @@ public final class DeepSearchReduction {
 	}
 
 	/**
-	 * Analyses the fragments against the question batch by batch and reduces the
-	 * partial analyses into one, as the deep search tools do.
-	 *
-	 * @param support   the deep search tools' collaborators (the analysis, the models)
-	 * @param label     names the caller in the logs
-	 * @param question  what the fragments are analysed against: the agent's command
-	 * @param depth     sizes the analysis; BROAD when null
-	 * @param fragments the fragments found by the agent's searches
-	 * @param context   the request the agent runs for: its id and the user's language
-	 * @param chatModel writes the final analysis; the default chat model when null
-	 * @param runAs     the identity the analysis runs with; a new one when null
-	 * @param notifier  tells the user the progress of the analysis; none when null
+	 * Reduces the fragments found by a search agent to one analysis at the depth
+	 * asked, telling what was read and what the analysis could not cover; the
+	 * analysis is made with what the controlling software adds to the model calls of
+	 * the agent (see {@link GeboToolCalling}).
 	 */
 	public static Outcome reduce(DeepSearchToolsSupport support, String label, String question, Depth depth,
 			List<Document> fragments, IChatRequestContext context, IGConfigurableChatModel chatModel,
-			ReactiveIdentityUtil runAs, IGProgressNotifier notifier) {
+			ReactiveIdentityUtil runAs, IGProgressNotifier notifier, GeboToolCalling toolCalling) {
 		final int found = fragments != null ? fragments.size() : 0;
 		if (found == 0) {
 			if (LOGGER.isDebugEnabled()) {
@@ -132,7 +130,14 @@ public final class DeepSearchReduction {
 			return Outcome.none(0);
 		}
 		final IGChatModelRuntimeConfigurationDao chatModelsDao = support.chatModelsDao();
-		final IGConfigurableChatModel finalModel = chatModel != null ? chatModel : chatModelsDao.defaultHandler();
+		final IGConfigurableChatModel finalModel;
+		try {
+			// the analysis reads the fragments given: tools have nothing to add
+			finalModel = chatModel != null ? chatModel.withoutTools() : chatModelsDao.defaultHandler();
+		} catch (LLMConfigException e) {
+			LOGGER.error(label + " deep search reduce: the model cannot run without its tools", e);
+			return Outcome.none(found);
+		}
 		final IGConfigurableChatModel serviceModel = chatModelsDao
 				.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		if (finalModel == null || serviceModel == null) {
@@ -158,13 +163,14 @@ public final class DeepSearchReduction {
 		}
 		final Vector<String> discardedFragmentIds = new Vector<>();
 		final DeepSearchAnalysisOutcome analysisOutcome = new DeepSearchAnalysisOutcome();
-		final String analysis = support.analysis()
-				.analyze(Flux.fromIterable(fragments), analysisContext,
-						runAs != null ? runAs : ReactiveIdentityUtil.create(), deliverable, completenessNote,
-						finalModel, serviceModel, discardedFragmentIds,
-						notifier != null ? notifier : IGProgressNotifier.NONE, analysisOutcome)
-				.reduce(new StringBuilder(), StringBuilder::append).map(StringBuilder::toString)
-				.block(AbstractDeepSearchTool.DEEP_SEARCH_TIMEOUT);
+		final ReactiveIdentityUtil identity = runAs != null ? runAs : ReactiveIdentityUtil.create();
+		final IGProgressNotifier progress = notifier != null ? notifier : IGProgressNotifier.NONE;
+		final Flux<String> analysed = support.analysis().analyze(Flux.fromIterable(fragments), analysisContext,
+				identity, deliverable,
+						completenessNote, finalModel, serviceModel, discardedFragmentIds, progress, analysisOutcome,
+						toolCalling);
+		final String analysis = analysed.reduce(new StringBuilder(), StringBuilder::append)
+				.map(StringBuilder::toString).block(AbstractDeepSearchTool.DEEP_SEARCH_TIMEOUT);
 		// the fragments the analysis stopped before were never read: not its sources
 		final Set<String> unread = analysisOutcome.getUnreadFragmentIds();
 		final List<String> sources = new ArrayList<>();

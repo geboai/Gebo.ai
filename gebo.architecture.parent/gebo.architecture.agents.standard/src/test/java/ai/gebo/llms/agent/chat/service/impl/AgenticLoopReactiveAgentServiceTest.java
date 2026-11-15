@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.agent.chat.service.impl;
 
+import static ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.ANY_SEARCH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -16,15 +17,19 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.tool.ToolCallback;
+import org.mockito.ArgumentCaptor;
 
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
@@ -53,6 +58,14 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMChatRequestResou
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.SourceGate;
+import ai.gebo.architecture.agents.model.AgentMountedTools;
+import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
+import ai.gebo.architecture.patterns.IGRuntimeBinder;
+import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
 
 /**
  * Pins the loop of the single agent with tools: the control markers never reach the
@@ -60,6 +73,8 @@ import reactor.core.publisher.Flux;
  * one receives the history of the previous ones.
  */
 class AgenticLoopReactiveAgentServiceTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgenticLoopReactiveAgentServiceTest").build();
 	private static final String STOP = ReportWriterReactiveAgentServiceImpl.AGENT_CONTROL_FINISHED;
 	private static final String MORE = ReportWriterReactiveAgentServiceImpl.AGENT_CONTROL_MORE_TOOLS;
 
@@ -95,7 +110,7 @@ class AgenticLoopReactiveAgentServiceTest {
 		@Override
 		protected Flux<ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk> callLLMReactiveResponses(
 				IGConfigurableChatModel chatModel, GPromptTemplateConfig prompt, IChatRequestContext context,
-				Map<String, Object> params) {
+				Map<String, Object> params, GeboToolCalling toolCalling) {
 			return callLLMReactive(chatModel, prompt, context, params)
 					.map(text -> new ai.gebo.llms.abstraction.layer.model.GChatAnswerChunk(text, "", false, null,
 							List.of(), null));
@@ -111,7 +126,9 @@ class AgenticLoopReactiveAgentServiceTest {
 		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
 		List<LoopIteration> history = new ArrayList<>();
 		return String.join("", agent.iteration(1, maxIterations, 10_000, history, null, new GPromptTemplateConfig(), null,
-				persona, mock(INotificationSink.class), new ToolCallsListener()).collectList().block());
+				persona, mock(INotificationSink.class), new ToolCallsListener(),
+						agent.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block());
 	}
 
 	@Test
@@ -319,7 +336,8 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		Map<String, Object> deliverable = agent.deliverableTemplateParams(agent.sessionUserIntent(session));
 		agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
-				mock(INotificationSink.class), new ToolCallsListener(), deliverable).collectList().block();
+				mock(INotificationSink.class), new ToolCallsListener(), deliverable,
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block();
 
 		assertEquals(2, agent.receivedParams.size());
 		for (Map<String, Object> params : agent.receivedParams) {
@@ -369,7 +387,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
 				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
 				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS),
-				new AgenticLoopReactiveAgentServiceImpl.SourceGate(evidenceTools, true, List.of()), null).collectList()
+				new AgenticLoopReactiveAgentServiceImpl.SourceGate(evidenceTools, true,
+						List.of()), null, TOOL_CALLING).collectList()
 				.block());
 	}
 
@@ -385,7 +404,8 @@ class AgenticLoopReactiveAgentServiceTest {
 				IChatRequestContext.builder().requestID("r1").toolsContext(Map.of()).build()), listener);
 		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
 				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
-				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS), true).collectList().block());
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS),
+						new SourceGate(ANY_SEARCH, true, List.of()), null, TOOL_CALLING).collectList().block());
 	}
 
 	/** Runs the loop asking for an analysis, the evidence of the sources required. */
@@ -397,7 +417,8 @@ class AgenticLoopReactiveAgentServiceTest {
 				listener);
 		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
 				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
-				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS), true).collectList().block());
+				agent.deliverableTemplateParams(DeliverableIntent.ANALISYS),
+						new SourceGate(ANY_SEARCH, true, List.of()), null, TOOL_CALLING).collectList().block());
 	}
 
 	@Test
@@ -474,7 +495,7 @@ class AgenticLoopReactiveAgentServiceTest {
 			ToolCallsListener listener = new ToolCallsListener();
 			agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
 					mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA),
-					AgenticLoopReactiveAgentServiceImpl.SourceGate.NONE, runAs).collectList().block();
+					SourceGate.NONE, runAs, TOOL_CALLING).collectList().block();
 		} finally {
 			org.springframework.security.core.context.SecurityContextHolder.clearContext();
 		}
@@ -517,12 +538,9 @@ class AgenticLoopReactiveAgentServiceTest {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
 				null, null, null, NO_RENDERER);
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
-		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
-				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
 		// deepSearchWeb is not mounted by this agent
-		when(config.getEnabledFunctions()).thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase",
+		when(model.getToolNames()).thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase",
 				"getDate", GAbstractGenericalAgentService.NOTIFY_USER_TOOL));
-		when(model.getConfig()).thenReturn(config);
 
 		assertEquals(Set.of("deepSearchKnowledgeBase"), agent.evidenceTools(DeliverableIntent.ANALISYS, model));
 		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"),
@@ -543,11 +561,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
 				null, null, null, NO_RENDERER);
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
-		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
-				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
-		when(config.getEnabledFunctions()).thenReturn(List.of("deepSearchKnowledgeBase",
+		when(model.getToolNames()).thenReturn(List.of("deepSearchKnowledgeBase",
 				"browseKnowledgeBaseDocuments", "getKnowledgeBaseDocumentContents"));
-		when(model.getConfig()).thenReturn(config);
 
 		assertEquals(Set.of("deepSearchKnowledgeBase", "getKnowledgeBaseDocumentContents"),
 				agent.evidenceTools(DeliverableIntent.ANALISYS, model));
@@ -573,11 +588,8 @@ class AgenticLoopReactiveAgentServiceTest {
 		AgenticLoopReactiveAgentServiceImpl agent = new AgenticLoopReactiveAgentServiceImpl(null, repository, null,
 				null, null, null, NO_RENDERER);
 		IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
-		ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig config = mock(
-				ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.class);
-		when(config.getEnabledFunctions())
+		when(model.getToolNames())
 				.thenReturn(List.of("searchKnowledgeBase", "deepSearchKnowledgeBase", "countArticles"));
-		when(model.getConfig()).thenReturn(config);
 
 		AgenticLoopReactiveAgentServiceImpl.MountedSearchTools mounted = agent.searchTools(model);
 		assertEquals(Set.of("searchKnowledgeBase", "deepSearchKnowledgeBase"), mounted.searches(),
@@ -743,7 +755,9 @@ class AgenticLoopReactiveAgentServiceTest {
 				.rulesToFollow(List.of("Always answer in Italian")).build();
 
 		agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), context, persona,
-				mock(INotificationSink.class), new ToolCallsListener()).collectList().block();
+				mock(INotificationSink.class), new ToolCallsListener(),
+						agent.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block();
 
 		assertTrue(String.valueOf(agent.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.RULES_TO_FOLLOW_PARAM))
 				.contains("- Always answer in Italian"));
@@ -761,7 +775,7 @@ class AgenticLoopReactiveAgentServiceTest {
 		return String.join("", agent.iteration(1, 5, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(),
 				context, persona, mock(INotificationSink.class), listener, agent.deliverableTemplateParams(DeliverableIntent.QA),
 				new AgenticLoopReactiveAgentServiceImpl.SourceGate(Set.of("searchKnowledgeBase"), false, chatDocuments),
-				null).collectList().block());
+				null, TOOL_CALLING).collectList().block());
 	}
 
 	@Test
@@ -818,7 +832,8 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		agent.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(),
 				IChatRequestContext.forAgent(requestContext, agentListener), persona, mock(INotificationSink.class),
-				agentListener).collectList().block();
+				agentListener, agent.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block();
 
 		assertEquals(2, agent.receivedParams.size());
 		assertTrue(String.valueOf(agent.receivedParams.get(1).get(ReportWriterReactiveAgentServiceImpl.AGENT_SESSION_STORY_PROMPT_PARAM))
@@ -866,7 +881,7 @@ class AgenticLoopReactiveAgentServiceTest {
 		agent.iteration(1, 5, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), context, persona,
 				mock(INotificationSink.class), new ToolCallsListener(),
 				agent.deliverableTemplateParams(DeliverableIntent.QA),
-				AgenticLoopReactiveAgentServiceImpl.SourceGate.NONE, null).collectList().block();
+				SourceGate.NONE, null, TOOL_CALLING).collectList().block();
 
 		Object shared = agent.receivedContexts.get(0).getToolsContext().get(ToolsTokenBudget.TOOLS_CONTEXT_KEY);
 		assertTrue(shared instanceof ToolsTokenBudget, "the model call carries the tools' room");
@@ -983,7 +998,7 @@ class AgenticLoopReactiveAgentServiceTest {
 				new AgenticLoopReactiveAgentServiceImpl.SourceGate(
 						Set.of("deepSearchKnowledgeBase", "searchKnowledgeBase", "getKnowledgeBaseDocumentContents"), true,
 						List.of(), coverageGate()),
-				null).collectList().block());
+				null, TOOL_CALLING).collectList().block());
 	}
 
 	@Test
@@ -1064,7 +1079,8 @@ class AgenticLoopReactiveAgentServiceTest {
 				listener);
 		return String.join("", agent.iteration(1, maxIterations, 10_000, new ArrayList<>(), null,
 				new GPromptTemplateConfig(), context, persona, mock(INotificationSink.class), listener,
-				agent.deliverableTemplateParams(DeliverableIntent.DECISION), gate, null).collectList().block());
+				agent.deliverableTemplateParams(DeliverableIntent.DECISION), gate, null,
+						TOOL_CALLING).collectList().block());
 	}
 
 	private static final Set<String> SEARCHES = Set.of("deepSearchKnowledgeBase", "searchKnowledgeBase",
@@ -1254,13 +1270,16 @@ class AgenticLoopReactiveAgentServiceTest {
 		Map<String, Object> deliverable = new HashMap<>(named.deliverableTemplateParams(DeliverableIntent.QA));
 		deliverable.put(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM, "English");
 		named.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
-				mock(INotificationSink.class), new ToolCallsListener(), deliverable).collectList().block();
+				mock(INotificationSink.class), new ToolCallsListener(), deliverable,
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block();
 		assertEquals("English", named.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM));
 
 		// a loop started without the session's language still renders the prompts naming it
 		ScriptedLoopAgent unnamed = new ScriptedLoopAgent(List.of(List.of("4. " + STOP)));
 		unnamed.iteration(1, 3, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null, persona,
-				mock(INotificationSink.class), new ToolCallsListener()).collectList().block();
+				mock(INotificationSink.class), new ToolCallsListener(),
+						unnamed.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block();
 		assertEquals(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_UNDETECTED,
 				unnamed.receivedParams.get(0).get(AgenticLoopReactiveAgentServiceImpl.USER_LANGUAGE_PARAM));
 	}
@@ -1292,5 +1311,106 @@ class AgenticLoopReactiveAgentServiceTest {
 
 		assertEquals("", run(agent, 1));
 		assertEquals(1, agent.receivedParams.size());
+	}
+
+	// ---- the user questions library the service implies
+
+	@Test
+	void theLoopServiceImpliesTheUserQuestionsLibraryForEveryAgentRunningOnIt() {
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID),
+				new AgenticLoopReactiveAgentServiceImpl(null, null, null, null, null, null, NO_RENDERER)
+						.getImpliedLibraryTypeIds());
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID),
+				new AgenticLoopPureChatReactiveAgentServiceImpl(null, null, null, null, null, null, NO_RENDERER)
+						.getImpliedLibraryTypeIds(),
+				"the pure chat loop too");
+	}
+
+	/** An installation keeping the user questions library, and nothing else. */
+	@SuppressWarnings("unchecked")
+	private static IGAIToolsLibraryInstancesService keepingTheQuestionsLibrary() {
+		final AIToolsAndResourcesLibraryType questions = new UserQuestionsLibrarySource().getManagedTypes().get(0);
+		IGAIToolsLibraryInstancesService instances = mock(IGAIToolsLibraryInstancesService.class);
+		when(instances.typesOf(any())).thenAnswer(x -> ((Collection<String>) x.getArgument(0))
+				.contains(UserQuestionsLibrarySource.TYPE_ID) ? List.of(questions) : List.of());
+		return instances;
+	}
+
+	/** The loop service with what a run reclaims of its libraries reachable from the test. */
+	static class ReclaimingLoopAgent extends AgenticLoopReactiveAgentServiceImpl {
+		ReclaimingLoopAgent(IGToolCallbackSourceRepositoryPattern repository, IGRuntimeBinder binder) {
+			super(null, repository, null, binder, null, null, NO_RENDERER);
+		}
+
+		void reclaim(IChatRequestContext context, GAgentConfig config) {
+			reclaimTheLibrariesOfTheConversation(context, config);
+		}
+	}
+
+	private static ReclaimingLoopAgent loopAgentIn(IGAIToolsLibraryInstancesService instances) {
+		IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		when(repository.getImplementations()).thenReturn(List.of());
+		IGRuntimeBinder binder = mock(IGRuntimeBinder.class);
+		when(binder.getImplementationOf(IGAIToolsLibraryInstancesService.class)).thenReturn(instances);
+		return new ReclaimingLoopAgent(repository, binder);
+	}
+
+	private static List<String> namesOf(AgentMountedTools mounted) {
+		return mounted.getTools().stream().map(AgentMountedTools.MountedTool::getName).toList();
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void anAgentNamingNoLibraryMountsTheQuestionToolsTheServiceImplies() {
+		IGAIToolsLibraryInstancesService instances = keepingTheQuestionsLibrary();
+		AgenticLoopReactiveAgentServiceImpl agent = loopAgentIn(instances);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("a-products-loop-agent");
+		config.setSubscribeAllTools(false);
+
+		AgentMountedTools mounted = agent.getMountedTools(config);
+
+		assertTrue(namesOf(mounted).contains("askUserSingleChoiceQuestion"), String.valueOf(namesOf(mounted)));
+		assertTrue(namesOf(mounted).contains("askUserMultipleChoiceQuestion"), String.valueOf(namesOf(mounted)));
+		ArgumentCaptor<Collection<String>> asked = ArgumentCaptor.forClass(Collection.class);
+		verify(instances).typesOf(asked.capture());
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
+				"the implied library, and nothing the configuration did not name");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void anAgentNamingTheImpliedLibraryMountsItOnce() {
+		IGAIToolsLibraryInstancesService instances = keepingTheQuestionsLibrary();
+		AgenticLoopReactiveAgentServiceImpl agent = loopAgentIn(instances);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("the-platforms-loop-agent");
+		config.setSubscribeAllTools(false);
+		config.setLibraryTypeIds(List.of("another-library", UserQuestionsLibrarySource.TYPE_ID));
+
+		AgentMountedTools mounted = agent.getMountedTools(config);
+
+		assertEquals(2, namesOf(mounted).stream().filter(n -> n.startsWith("askUser")).count(), "each tool once");
+		ArgumentCaptor<Collection<String>> asked = ArgumentCaptor.forClass(Collection.class);
+		verify(instances).typesOf(asked.capture());
+		assertEquals(List.of("another-library", UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
+				"the named ones first, the implied one once");
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	void aRunReclaimsTheImpliedLibraryOfTheConversation() {
+		IGAIToolsLibraryInstancesService instances = keepingTheQuestionsLibrary();
+		when(instances.reclaim(any(), any())).thenReturn(Map.of());
+		ReclaimingLoopAgent agent = loopAgentIn(instances);
+		GAgentConfig config = new GAgentConfig();
+		config.setCode("a-products-loop-agent");
+
+		agent.reclaim(IChatRequestContext.of("What is new?"), config);
+
+		ArgumentCaptor<Collection<String>> asked = ArgumentCaptor.forClass(Collection.class);
+		verify(instances).reclaim(any(), asked.capture());
+		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
+				"the conversation's instance of the implied library is reclaimed as a named one's");
 	}
 }

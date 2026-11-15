@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
@@ -29,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
@@ -38,7 +40,6 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResourc
 import ai.gebo.llms.chat.abstraction.layer.services.CommonChatPromptParamsUtil;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
-import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
@@ -79,11 +80,20 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 	private final IGPromptConfigDao promptsDao;
 	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	private final IGChatStorageAreaService chatStorageAreaService;
-	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 
 	@Override
 	public StepExecutorType getExecutorType() {
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Writes the prompt of the image to generate.");
 	}
 
 	@Override
@@ -150,6 +160,7 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 				resourcesEnvelope.setLastMessage(false);
 				envelopes.add(resourcesEnvelope);
 				envelopes.add(new GeboChatMessageEnvelope(response.getQueryResponse()));
+				// the pipelines executor saves the interaction as this last message passes
 				GeboChatMessageEnvelope lastEnvelope = new GeboChatMessageEnvelope(response);
 				lastEnvelope.setLastMessage(true);
 				envelopes.add(lastEnvelope);
@@ -162,21 +173,6 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 			LOGGER.error("Error while streaming image generation response", exc);
 			return Flux.just(new GeboChatMessageEnvelope(
 					GUserMessage.errorMessage("Error while streaming image generation response", exc)));
-		}).doOnComplete(() -> {
-			runAs.doAs(() -> {
-				try {
-					this.chatSessionLifecycleService.endRequest(runtimeData.getRequestResources().getCurrentRequest(),
-							response);
-				} catch (Throwable th) {
-					LOGGER.error("Error saving user context", th);
-				}
-				try {
-					this.chatSessionLifecycleService
-							.chatRequestCompleted(runtimeData.getRequestResources().getCurrentRequest(), chatModel);
-				} catch (GeboChatSessionLifecycleException | LLMConfigException | IOException e) {
-					LOGGER.error("Error closing image generation response flux with chatSessionLifecycle code", e);
-				}
-			});
 		});
 	}
 
@@ -238,8 +234,11 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 					.preparePromptParameters(runtimeData.getMinimalChatContext());
 			params.put(DefaultRoutingChatPipelineStepServiceImpl.REWRITTEN_QUERY_TEMPLATE_PARAM, actualQuery);
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-			Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params,
-					List.of(IMAGE_PROMPT_FIELD));
+			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+			Map<String, List<String>> data = toolCalling != null
+					? callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params, List.of(IMAGE_PROMPT_FIELD),
+							toolCalling)
+					: callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params, List.of(IMAGE_PROMPT_FIELD));
 			List<String> crafted = data.get(IMAGE_PROMPT_FIELD);
 			if (crafted != null && !crafted.isEmpty() && crafted.get(0) != null && !crafted.get(0).isBlank()) {
 				return crafted.get(0);

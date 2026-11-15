@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
@@ -37,6 +38,16 @@ public class DefaultDeepInternalKnowledgeBaseDeepSearchStreamOutputChatPipelineS
 	public StepExecutorType getExecutorType() {
 
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.usedFor("Writes the final analysis and its consolidations.");
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Writes the partial analysis of each batch of documents: its tools are offered on every batch.");
 	}
 
 	@Override

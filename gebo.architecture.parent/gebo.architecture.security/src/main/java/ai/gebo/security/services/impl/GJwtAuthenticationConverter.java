@@ -179,9 +179,7 @@ public class GJwtAuthenticationConverter implements Converter<Jwt, AbstractAuthe
 		if (issuer == null) {
 			return null;
 		}
-		return oauth2RuntimeConfigurationDao.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION).stream()
-				.filter(config -> config.getProviderConfig() != null
-						&& issuer.equals(config.getProviderConfig().getIssuerUri()))
-				.findFirst().orElse(null);
+		return IssuerConfigCache.answeringFor(
+				oauth2RuntimeConfigurationDao.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION), issuer);
 	}
 }

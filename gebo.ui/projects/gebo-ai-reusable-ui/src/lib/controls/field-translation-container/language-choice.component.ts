@@ -1,7 +1,13 @@
 import { Component, forwardRef, OnInit } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
+import { findMatchingTranslation, UIExistingText } from "./text-language-resources";
 export interface GeboLanguage { langCode: string, description: string };
+/**
+ * Placeholder of the select, translated programmatically: a gebo-ai-label in this template would
+ * import the label directive, which imports the translation service, which imports this file.
+ */
+const languagePlaceholderText: UIExistingText = { moduleId: "GeboAIMultilanguageModule", entityId: "GeboAILanguageChoiceComponent", componentId: "LanguageSelect", fieldId: "placeholder", key: "placeholder", text: "Choose Language" };
 @Component({
     selector: "gebo-ai-language-choice-component",
     templateUrl: "language-choice.component.html",
@@ -46,6 +52,8 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
         { "langCode": "uk", "description": "Українська" }
     ];
     protected choosableLanguages: GeboLanguage[] = [];
+    /** Placeholder of the select in the actual language */
+    protected placeholder: string = languagePlaceholderText.text;
     protected formGroup: FormGroup = new FormGroup({
         langCode: new FormControl()
     });
@@ -56,6 +64,12 @@ export class GeboAILanguageChoiceComponent implements OnInit, ControlValueAccess
         await this.geboTranslationService.tryInit();
         const langs = this.geboTranslationService.getLanguages();
         this.choosableLanguages = this.geboTranslationService.languagesList;
+        this.geboTranslationService.translateOnActualLanguage([languagePlaceholderText]).subscribe({
+            next: (resources) => {
+                const found = resources ? findMatchingTranslation(languagePlaceholderText, resources) : undefined;
+                this.placeholder = found?.translation ? found.translation : languagePlaceholderText.text;
+            }
+        });
         this.formGroup.controls["langCode"].valueChanges.subscribe({
             next: (data) => {
                 if (data) {

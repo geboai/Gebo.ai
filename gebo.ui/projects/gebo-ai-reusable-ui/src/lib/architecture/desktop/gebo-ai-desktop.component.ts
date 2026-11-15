@@ -15,7 +15,7 @@ import { LoginService } from '../../infrastructure/login/login.service';
 import { PrimeNG } from 'primeng/config';
 import { Subscription } from 'rxjs';
 import { GeboAITranslationService } from '../../controls/field-translation-container/gebo-translation.service';
-import { resetAuth, saveAuth } from '../../infrastructure/gebo-credentials';
+import { getAuth, resetAuth, saveAuth } from '../../infrastructure/gebo-credentials';
 import { ApplicationMenuProviderService } from './application-menu-provider.service';
 
 @Component({
@@ -108,7 +108,10 @@ export class GeboAIDesktopComponent implements OnInit, OnDestroy {
             this.geboTranslationService.translateMegaMenuItems("AppModule", "AppComponent", this.menuItems).subscribe({
               next: (translated) => {
                 if (translated) {
-                  this.menuItems = translated;
+                  // new items: the translation changes the labels in place, and the menubar keeps
+                  // showing the English labels of the same objects (a user's menu is never
+                  // emitted again, unlike the admin's setup status refresh)
+                  this.menuItems = translated.map(item => ({ ...item }));
                 }
               }
             });
@@ -134,7 +137,14 @@ export class GeboAIDesktopComponent implements OnInit, OnDestroy {
           this.userInfo = undefined;
         }
       });
-      this.loadUserAndMenu();
+      // Without credentials there is nobody to ask about: the question only earned a
+      // 401, a wasted round trip on every anonymous page. Logging in emits on the
+      // subscription above, which loads the user and the menu then.
+      if (getAuth()) {
+        this.loadUserAndMenu();
+      } else {
+        this.menuItems = [];
+      }
     }
     this.loginService.loginActivated.subscribe({
       next: (activated) => {

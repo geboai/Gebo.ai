@@ -114,14 +114,9 @@ public class GRuntimeChatProfileChatModelDaoImpl extends GAbstractRuntimeConfigu
             // Attempt to find and configure a new chat model
 			GBaseChatModelConfig newConfig = persistentObjectManager.findByReference(modelConfiguration,
 					GBaseChatModelConfig.class);
-			// the tools are the model's own: the chat pipelines run the referenced model
-			// as it is configured, a profile chooses no tools of its own
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("createAndAdd(...) chat profile:" + configuration.getCode() + " runs chat model:"
-						+ newConfig.getCode() + " with its " + (newConfig.getEnabledFunctions() != null
-								? newConfig.getEnabledFunctions().size()
-								: 0)
-						+ " enabled function(s)");
+						+ newConfig.getCode());
 			}
 			IGChatModelConfigurationSupportService handler = chatModelsRepositoryPattern
 					.findByCode(newConfig.getModelTypeCode());

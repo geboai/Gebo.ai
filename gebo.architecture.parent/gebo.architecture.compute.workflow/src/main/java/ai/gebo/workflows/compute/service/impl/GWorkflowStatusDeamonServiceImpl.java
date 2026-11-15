@@ -74,6 +74,10 @@ public class GWorkflowStatusDeamonServiceImpl {
 				if (!handlers.isEmpty()) {
 					ComputedWorkflowResult measures = handlers.get(0).computeWorkflowStatus(status.getCode(),
 							status.getWorkflowType(), status.getWorkflowId());
+					if (measures == null) {
+						// deleted after it was listed: nothing left to close, go on with the others
+						return;
+					}
 					boolean batchFinished = (measures.isFinished()
 							&& measures.getRootStatus().getBatchDocumentsInput() > 0);
 					boolean timeoutPassed = (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) <= now;

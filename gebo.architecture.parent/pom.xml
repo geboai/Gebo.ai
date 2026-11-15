@@ -3,7 +3,7 @@
   <parent>
    <groupId>ai.gebo</groupId>
 	<artifactId>ai.gebo.parent</artifactId>
-    <version>1.0.5.0</version>
+    <version>1.0.6.0</version>
   </parent>
   <groupId>ai.gebo.architecture</groupId>
   <artifactId>gebo.architecture.parent</artifactId>
@@ -67,6 +67,8 @@
   	<module>gebo.architecture.redis</module>
   	<module>gebo.architecture.agents.abstraction.layer</module>
   	<module>gebo.architecture.agents.standard</module>
+  	<module>gebo.architecture.agents.conditionevents</module>
+  	<module>gebo.architecture.agents.conditionevents.controllers</module>
   	<module>gebo.architecture.open-chat-pipeline</module>
   	<module>gebo.architecture.environment.monolithic</module>
   	<module>gebo.architecture.documents.cache.impl</module>
@@ -79,6 +81,7 @@
   	<module>gebo.security.directory.mongo</module>
   	<module>gebo.knowledgebase.hierarchy.local</module>
    	<module>gebo.architecture.security.apikey</module>
+   	<module>gebo.architecture.security.sessions</module>
    	<module>gebo.architecture.fastsetup</module>
    	<module>gebo.architecture.fastsetup.rag</module>
    	<module>gebo.architecture.fastsetup.system</module>

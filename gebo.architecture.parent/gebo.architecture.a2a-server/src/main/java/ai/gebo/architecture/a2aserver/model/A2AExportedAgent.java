@@ -39,6 +39,20 @@ public class A2AExportedAgent {
 	private String skillName;
 
 	/**
+	 * The chat profile this export runs with, so that a network reaching knowledge
+	 * bases works here in the environment it works in when it answers a chat: that
+	 * profile's knowledge bases, its chat and embedding models, its retrieval
+	 * thresholds and the rules set for it.
+	 * <p>
+	 * Left empty the run keeps the older behaviour, which is to see every knowledge
+	 * base the calling account can see, with the platform defaults. That is rarely
+	 * what an exported agent should do - an A2A caller has no screen on which to
+	 * choose - so stating a profile is the way to make an export say what it works
+	 * on.
+	 */
+	private String chatProfileCode;
+
+	/**
 	 * When true, aggregate the member agents' capabilities into the advertised skill
 	 * for richer discovery. Default false keeps the network opaque (member agents are
 	 * never individually reachable).

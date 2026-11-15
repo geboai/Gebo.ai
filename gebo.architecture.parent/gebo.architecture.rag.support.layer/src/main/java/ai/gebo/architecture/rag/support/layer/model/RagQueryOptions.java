@@ -12,6 +12,9 @@
 
 package ai.gebo.architecture.rag.support.layer.model;
 
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
+
 import lombok.ToString;
 
 /**
@@ -136,19 +139,23 @@ public class RagQueryOptions {
     }
 
     /**
-     * Sets the number of top K results to retrieve.
+     * Sets the number of top K results to retrieve. A JSON null, as an editor sends
+     * for a field left empty, keeps {@link #DEFAULT_TOPK}.
      *
      * @param topK the number of top K results
      */
+    @JsonSetter(nulls = Nulls.SKIP)
     public void setTopK(int topK) {
         this.topK = topK;
     }
 
     /**
-     * Sets the similarity threshold for filtering results.
+     * Sets the similarity threshold for filtering results. A JSON null keeps
+     * {@link #DEFAULT_SIMILARITY_THRESHOLD}.
      *
      * @param similarityThreashold the new similarity threshold
      */
+    @JsonSetter(nulls = Nulls.SKIP)
     public void setSimilarityThreashold(double similarityThreashold) {
         this.similarityThreashold = similarityThreashold;
     }

@@ -9,6 +9,10 @@
 
 package ai.gebo.security.config;
 
+import ai.gebo.security.services.IGAuthenticatedTokenObserver;
+
+import org.springframework.beans.factory.ObjectProvider;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,7 +35,6 @@ import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserSer
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -51,7 +54,6 @@ import ai.gebo.security.services.IGOauth2UserSyncServiceConditionedImplementatio
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
 import ai.gebo.security.services.JwtAuthenticationEntryPoint;
-import ai.gebo.security.services.RequestAuditFilter;
 import ai.gebo.security.services.impl.DirectoryBackedUserDetailsService;
 import ai.gebo.security.services.impl.GHttpRequestAuthenticationManagerResolverImpl;
 import ai.gebo.security.services.impl.GReactiveHttpRequestAuthenticationManagerResolverImpl;
@@ -214,6 +216,8 @@ public class GeboAISecurityConfig {
 	// built lazily in @Bean methods below - the resource-server provisioner and the
 	// authentication-manager resolver - audit the OAuth2 provisioning decision too.
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+	// The sessions store, when present: the resolvers tell it of every token that authenticates
+	private final ObjectProvider<IGAuthenticatedTokenObserver> tokenObservers;
 
 	/**************************************************************************************************
 	 * Building the dynamic oauth2 management in the constructor
@@ -233,7 +237,9 @@ public class GeboAISecurityConfig {
 			IGBackendOauth2LoginSPASupportService backendOauth2LoginSPASupportService,
 			IGSecurityDirectory securityDirectory,
 			IGSecurityAuditLoggerService securityAuditLoggerService,
-			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider) {
+			IGOauth2UserSyncServiceConditionedImplementationProvider oauth2UserSyncProvider,
+			ObjectProvider<IGAuthenticatedTokenObserver> tokenObservers) {
+		this.tokenObservers = tokenObservers;
 		this.oauth2UserSyncProvider = oauth2UserSyncProvider;
 		this.securityAuditLoggerService = securityAuditLoggerService;
 		this.oauth2ConfigurationService = oauth2ConfigurationService;
@@ -363,8 +369,7 @@ public class GeboAISecurityConfig {
 	 * @throws Exception If an error occurs while configuring HTTP security.
 	 */
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http, RequestAuditFilter requestAuditFilter,
-			Environment environment) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, Environment environment) throws Exception {
 		boolean oauth2LoginEnabled = securityConfig.getOauth2LoginEnabled() != null
 				&& securityConfig.getOauth2LoginEnabled();
 		boolean oauth2ResourceServerEnabled = securityConfig.getOauth2ResourceServerEnabled() != null
@@ -415,8 +420,8 @@ public class GeboAISecurityConfig {
 					oauth2 -> oauth2.authenticationManagerResolver(
 						authenticationManagerResolver(oauth2ResourceServerUserProvisioner())));
 		}
-		// request audit for security logging
-		configBuilder.addFilterAfter(requestAuditFilter, AnonymousAuthenticationFilter.class);
+		// The request audit context (RequestAuditFilter) is set by a servlet filter
+		// registered just before this chain, so authentication events have it too.
 		return configBuilder.userDetailsService(userDetailsService)
 				.exceptionHandling(ex -> ex.authenticationEntryPoint(point))
 				.sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
@@ -442,7 +447,7 @@ public class GeboAISecurityConfig {
 			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GHttpRequestAuthenticationManagerResolverImpl(userDetailsService, passwordEncoder,
 				oauth2RuntimeConfigurationDao, tokenProvider, directoryBackedUserDetailsService, securityConfig,
-				securityDirectory, resourceServerUserProvisioner, securityAuditLoggerService);
+				securityDirectory, resourceServerUserProvisioner, securityAuditLoggerService, tokenObservers);
 	}
 
 	/**
@@ -455,7 +460,7 @@ public class GeboAISecurityConfig {
 	public GReactiveHttpRequestAuthenticationManagerResolverImpl reactiveAuthenticationManagerResolver(
 			GOauth2ResourceServerUserProvisioner resourceServerUserProvisioner) {
 		return new GReactiveHttpRequestAuthenticationManagerResolverImpl(directoryBackedUserDetailsService,
-				oauth2RuntimeConfigurationDao, tokenProvider, resourceServerUserProvisioner);
+				oauth2RuntimeConfigurationDao, tokenProvider, resourceServerUserProvisioner, tokenObservers);
 	}
 
 }

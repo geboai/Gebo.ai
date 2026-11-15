@@ -14,6 +14,7 @@ import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentFragment;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentReferenceItem;
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
+import ai.gebo.llms.abstraction.layer.model.GChatRunInfo;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
@@ -54,6 +55,13 @@ public class LLMChatRequestResources implements ITokensCountable {
 	// tools of every model call of this request; computed per request, never persisted.
 	@JsonIgnore
 	private transient List<String> availableKnowledgeBaseCodes = null;
+	/**
+	 * The environment of the run serving this request - what the pipeline steps
+	 * and the caller put there for the network of agents - set by whoever runs
+	 * the network, read by whoever fills a prompt from it; never persisted.
+	 */
+	@JsonIgnore
+	private transient Map<String, Object> runEnvironment = null;
 
 	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
 			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments,
@@ -85,6 +93,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 				: new HashMap<String, String>();
 		this.toolCallsListener = request.toolCallsListener;
 		this.availableKnowledgeBaseCodes = request.availableKnowledgeBaseCodes;
+		this.runEnvironment = request.runEnvironment;
 	}
 
 	@AllArgsConstructor
@@ -209,6 +218,18 @@ public class LLMChatRequestResources implements ITokensCountable {
 				toolsContext.put(ToolCallbackDeclarationUtil.USER_LANGUAGE_CONTEXT_KEY, currentRequest.getUserLanguage());
 			}
 			return toolsContext;
+		}
+
+		@Override
+		public GChatRunInfo getRunInfo() {
+			return currentRequest != null && (currentRequest.getRunOrigin() != null || currentRequest.getAttended() != null)
+					? GChatRunInfo.of(currentRequest.getRunOrigin(), currentRequest.getAttended())
+					: null;
+		}
+
+		@Override
+		public Map<String, Object> getRunEnvironment() {
+			return runEnvironment != null ? runEnvironment : Map.of();
 		}
 
 		@Override

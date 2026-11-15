@@ -14,7 +14,7 @@
 
 <p-dialog [maximizable]="true" [visible]="visible" [modal]="true" styleClass="gebo-entity-dialog" [closable]="true"
   [showHeader]="true" (onHide)="closeMe($event)" (visibleChange)="closeMe($event)"
-  [header]="'Showing content '+contentMetaInfo?.fileName">
+  [header]="showingContentTitle+' '+contentMetaInfo?.fileName">
   <p-blockUI [target]="contentUI" [blocked]="loading">
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
@@ -29,7 +29,8 @@
       <gebo-ai-browse-content-component *ngIf="visible && browsableContent===true "
       [url]="externalContentUrl"></gebo-ai-browse-content-component> -->
       @if (visible && pdfContent) {
-        <gebo-ai-pdf-viewer-wrapper2 [pdfSrc]="externalContentUrl"></gebo-ai-pdf-viewer-wrapper2>
+        <gebo-ai-pdf-viewer-wrapper2 [pdfSrc]="externalContentUrl"
+        [fileName]="contentMetaInfo?.fileName"></gebo-ai-pdf-viewer-wrapper2>
       }
 
       @if (visible && downloadableContent) {

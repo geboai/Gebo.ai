@@ -12,14 +12,19 @@
 
 package ai.gebo.architecture.persistence.config;
 
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractMongoClientConfiguration;
+import org.springframework.data.mongodb.core.convert.MongoCustomConversions.MongoConverterConfigurationAdapter;
 import org.yaml.snakeyaml.error.MissingEnvironmentVariableException;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
+
+import ai.gebo.architecture.persistence.IGMongoConverter;
 
 /**
  * Gebo.ai comment agent
@@ -39,6 +44,18 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     
     // Boolean to indicate if the MongoDB configuration is enabled
     Boolean enabled = true;
+
+    // The converters the modules contribute for their types
+    @Autowired
+    private ObjectProvider<IGMongoConverter> contributedConverters;
+
+    /**
+     * Registers the converters the modules contribute ({@link IGMongoConverter}).
+     */
+    @Override
+    protected void configureConverters(MongoConverterConfigurationAdapter adapter) {
+        adapter.registerConverters(GeboMongoConversionsConfig.contributed(contributedConverters));
+    }
 
     /**
      * Gets the name of the database to connect to.

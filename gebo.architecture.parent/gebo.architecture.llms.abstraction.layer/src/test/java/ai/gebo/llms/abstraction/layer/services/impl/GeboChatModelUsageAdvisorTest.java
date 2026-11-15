@@ -29,6 +29,8 @@ import ai.gebo.core.messages.LLMCallOutcome;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.impl.UsageAdvisorFactoryImpl.GeboChatModelUsageAdvisor;
 import ai.gebo.model.ModelType;
+import io.micrometer.observation.Observation;
+import io.micrometer.observation.ObservationRegistry;
 import reactor.core.publisher.Flux;
 
 /**
@@ -130,6 +132,131 @@ class GeboChatModelUsageAdvisorTest {
 
 		verify(recorder, times(1)).record(eq(config), isNull(), eq(ModelType.CHAT), isNull(), anyString(), anyString(), anyLong(), notNull(), eq(40L), eq(0L), eq(40L),
 				eq(LLMCallOutcome.ERROR));
+	}
+
+	@Test
+	void aStreamEndingOnAnotherThreadIsRecordedWithTheSubscribersLoggingContext() throws InterruptedException {
+		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
+		java.util.concurrent.atomic.AtomicReference<String> correlationId = new java.util.concurrent.atomic.AtomicReference<>();
+		java.util.concurrent.atomic.AtomicReference<String> thread = new java.util.concurrent.atomic.AtomicReference<>();
+		java.util.concurrent.CountDownLatch recorded = new java.util.concurrent.CountDownLatch(1);
+		org.mockito.Mockito.doAnswer(invocation -> {
+			correlationId.set(org.slf4j.MDC.get("correlationId"));
+			thread.set(Thread.currentThread().getName());
+			recorded.countDown();
+			return null;
+		}).when(recorder).record(any(), any(), any(), any(), any(), any(), anyLong(), any(), anyLong(), anyLong(),
+				anyLong(), any());
+		GBaseChatModelConfig config = mock(GBaseChatModelConfig.class);
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(config, recorder, null);
+		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
+		// the provider's stream completes on a Reactor thread, as the real ones do
+		when(chain.nextStream(any())).thenReturn(
+				Flux.just(chunk(0, 0, 0), chunk(12, 3, 15)).publishOn(reactor.core.scheduler.Schedulers.single()));
+
+		Flux<ChatClientResponse> stream;
+		org.slf4j.MDC.put("correlationId", "4bf92f3577b34da6a3ce929d0e0e4736");
+		try {
+			stream = advisor.adviseStream(mock(ChatClientRequest.class), chain);
+		} finally {
+			org.slf4j.MDC.remove("correlationId");
+		}
+		stream.blockLast();
+		// doFinally runs on the Reactor thread after the completion has reached
+		// blockLast, so the recording may still be under way when it returns
+		org.junit.jupiter.api.Assertions.assertTrue(recorded.await(10, java.util.concurrent.TimeUnit.SECONDS),
+				"the stream was never recorded");
+
+		org.junit.jupiter.api.Assertions.assertNotNull(thread.get());
+		org.junit.jupiter.api.Assertions.assertNotEquals(Thread.currentThread().getName(), thread.get());
+		org.junit.jupiter.api.Assertions.assertEquals("4bf92f3577b34da6a3ce929d0e0e4736", correlationId.get());
+		// and the Reactor thread is given back without it
+		String leftOver = reactor.core.publisher.Mono.fromCallable(() -> String.valueOf(org.slf4j.MDC.get("correlationId")))
+				.subscribeOn(reactor.core.scheduler.Schedulers.single()).block();
+		org.junit.jupiter.api.Assertions.assertEquals("null", leftOver);
+	}
+
+	@Test
+	void aStreamEndingOnAnotherThreadIsRecordedInsideTheSubscribersObservation() throws InterruptedException {
+		// the usage message sent while recording must join the request's trace: the
+		// recording runs with the subscriber's observation current, on whatever thread
+		ObservationRegistry registry = ObservationRegistry.create();
+		registry.observationConfig().observationHandler(context -> true);
+		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
+		java.util.concurrent.atomic.AtomicReference<Observation> current = new java.util.concurrent.atomic.AtomicReference<>();
+		java.util.concurrent.CountDownLatch recorded = new java.util.concurrent.CountDownLatch(1);
+		org.mockito.Mockito.doAnswer(invocation -> {
+			current.set(registry.getCurrentObservation());
+			recorded.countDown();
+			return null;
+		}).when(recorder).record(any(), any(), any(), any(), any(), any(), anyLong(), any(), anyLong(), anyLong(),
+				anyLong(), any());
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(mock(GBaseChatModelConfig.class), recorder,
+				null);
+		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
+		when(chain.nextStream(any())).thenReturn(
+				Flux.just(chunk(0, 0, 0), chunk(12, 3, 15)).publishOn(reactor.core.scheduler.Schedulers.single()));
+
+		Observation request = Observation.start("http.server.requests", registry);
+		Flux<ChatClientResponse> stream;
+		try (Observation.Scope scope = request.openScope()) {
+			stream = advisor.adviseStream(mock(ChatClientRequest.class), chain);
+		}
+		stream.blockLast();
+		org.junit.jupiter.api.Assertions.assertTrue(recorded.await(10, java.util.concurrent.TimeUnit.SECONDS),
+				"the stream was never recorded");
+		request.stop();
+
+		org.junit.jupiter.api.Assertions.assertSame(request, current.get(),
+				"the recording runs inside the observation the stream was subscribed in");
+		// and the Reactor thread is given back without it
+		Observation leftOver = reactor.core.publisher.Mono
+				.fromCallable(() -> java.util.Optional.ofNullable(registry.getCurrentObservation()))
+				.subscribeOn(reactor.core.scheduler.Schedulers.single()).block().orElse(null);
+		org.junit.jupiter.api.Assertions.assertNull(leftOver);
+	}
+
+	@Test
+	void aStreamSubscribedWithoutAnObservationFallsBackOnTheOneInItsReactorContext() throws InterruptedException {
+		// the agentic network subscribes its answer stream on a thread that has no
+		// observation of its own; Spring AI's chat client puts its observation in the
+		// stream's Reactor context, and that is the trace the recording must run in
+		ObservationRegistry registry = ObservationRegistry.create();
+		registry.observationConfig().observationHandler(context -> true);
+		LLMUsageRecorder recorder = mock(LLMUsageRecorder.class);
+		java.util.concurrent.atomic.AtomicReference<Observation> current = new java.util.concurrent.atomic.AtomicReference<>();
+		java.util.concurrent.CountDownLatch recorded = new java.util.concurrent.CountDownLatch(1);
+		org.mockito.Mockito.doAnswer(invocation -> {
+			current.set(registry.getCurrentObservation());
+			recorded.countDown();
+			return null;
+		}).when(recorder).record(any(), any(), any(), any(), any(), any(), anyLong(), any(), anyLong(), anyLong(),
+				anyLong(), any());
+		GeboChatModelUsageAdvisor advisor = new GeboChatModelUsageAdvisor(mock(GBaseChatModelConfig.class), recorder,
+				null);
+		StreamAdvisorChain chain = mock(StreamAdvisorChain.class);
+		when(chain.nextStream(any())).thenReturn(
+				Flux.just(chunk(0, 0, 0), chunk(12, 3, 15)).publishOn(reactor.core.scheduler.Schedulers.single()));
+
+		Observation chatClient = Observation.start("spring.ai.chat.client", registry);
+		try {
+			org.junit.jupiter.api.Assertions.assertNull(registry.getCurrentObservation(),
+					"no observation is current on the subscribing thread");
+			advisor.adviseStream(mock(ChatClientRequest.class), chain)
+					.contextWrite(context -> context.put(
+							io.micrometer.observation.contextpropagation.ObservationThreadLocalAccessor.KEY, chatClient))
+					.blockLast();
+			org.junit.jupiter.api.Assertions.assertTrue(recorded.await(10, java.util.concurrent.TimeUnit.SECONDS),
+					"the stream was never recorded");
+		} finally {
+			chatClient.stop();
+		}
+		org.junit.jupiter.api.Assertions.assertSame(chatClient, current.get(),
+				"the recording runs inside the observation found in the stream's Reactor context");
+		Observation leftOver = reactor.core.publisher.Mono
+				.fromCallable(() -> java.util.Optional.ofNullable(registry.getCurrentObservation()))
+				.subscribeOn(reactor.core.scheduler.Schedulers.single()).block().orElse(null);
+		org.junit.jupiter.api.Assertions.assertNull(leftOver, "the Reactor thread is given back without it");
 	}
 
 	@Test

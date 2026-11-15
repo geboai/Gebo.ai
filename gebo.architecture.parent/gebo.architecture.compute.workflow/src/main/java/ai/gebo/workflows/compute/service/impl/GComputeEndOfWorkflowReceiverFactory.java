@@ -48,7 +48,8 @@ public class GComputeEndOfWorkflowReceiverFactory extends GAbstractMessageReceiv
 				if (!handlers.isEmpty()) {
 					ComputedWorkflowResult status = handlers.get(0).computeWorkflowStatus(payload.getJobId(),
 							payload.getWorkflowType(), payload.getWorkflowId());
-					if (status.isFinished() && status.getRootStatus().getBatchDocumentsInput() > 0) {
+					// no status: the job was deleted while its contents were in flight
+					if (status != null && status.isFinished() && status.getRootStatus().getBatchDocumentsInput() > 0) {
 						LOGGER.info("Sending the finished work broadcast message for" + payload);
 						GFinishedWorkflowPayload finishedWorkflow = new GFinishedWorkflowPayload();
 						finishedWorkflow.setJobId(payload.getJobId());

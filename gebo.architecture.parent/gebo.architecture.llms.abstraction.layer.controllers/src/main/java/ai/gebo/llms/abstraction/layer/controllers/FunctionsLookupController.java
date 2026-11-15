@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.model.ToolSourceInfo;
+import ai.gebo.architecture.ai.service.IGAIToolsAndResourcesLibrarySource;
+import ai.gebo.architecture.ai.service.IGAIToolsAndResourcesLibrarySourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.IGExternalToolCallback;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.model.base.GLookupEntry;
@@ -43,6 +46,8 @@ public class FunctionsLookupController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FunctionsLookupController.class);
 	private final IGToolCallbackSourceRepositoryPattern repoPattern; // Repository pattern to manage tool callback
 																		// sources.
+	/** The sources of the libraries of tools and resources, for the types an agent may name. */
+	private final IGAIToolsAndResourcesLibrarySourceRepositoryPattern libraries;
 
 	/**
 	 * Retrieves a list of all function entries.
@@ -83,6 +88,34 @@ public class FunctionsLookupController {
 			LOGGER.debug("getToolSourceInfos() " + sources.size() + " tool source(s)");
 		}
 		return sources;
+	}
+
+	/**
+	 * The library types of tools and resources this installation manages, as the
+	 * administrator sees them: what an agent configuration names to work with a
+	 * library whole - every tool of it, on the resources of the instance a run
+	 * holds.
+	 */
+	@GetMapping(value = "getAIToolsAndResourcesLibraryType", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<AIToolsAndResourcesLibraryType> getAIToolsAndResourcesLibraryType() {
+		final List<AIToolsAndResourcesLibraryType> types = new java.util.ArrayList<>();
+		for (IGAIToolsAndResourcesLibrarySource source : libraries.getImplementations()) {
+			if (source == null) {
+				continue;
+			}
+			try {
+				final List<AIToolsAndResourcesLibraryType> managed = source.getManagedTypes();
+				if (managed != null) {
+					types.addAll(managed.stream().filter(type -> type != null).toList());
+				}
+			} catch (RuntimeException unreadable) {
+				LOGGER.warn("The library types of source:" + source.getId() + " could not be read: " + unreadable);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getAIToolsAndResourcesLibraryType() " + types.size() + " library type(s)");
+		}
+		return types;
 	}
 
 	/***

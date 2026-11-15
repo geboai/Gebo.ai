@@ -26,12 +26,19 @@ import lombok.NoArgsConstructor;
  * does not exist, or that cannot be chosen for the pipeline type, is skipped.
  * <p>
  * The whole choice exists only while the agents are enabled by {@value #AGENTS_ENABLED_PROPERTY}
- * (enabled when missing, like the agents configurations it switches on): when they
- * are off no network is choosable and the defaults cannot be changed.
+ * (enabled when missing): when they are off no network is choosable and the defaults
+ * cannot be changed. The bundled networks have a switch of their own,
+ * {@value #STANDARD_AGENTS_ENABLED_PROPERTY}: a product switching them off to bring
+ * its own networks keeps the agents, and this choice, on.
  */
 public interface IGAgenticChatDefaultNetworkOfAgentsService {
 	/** The central switch of the agents, of the chat networks of agents with them. */
-	public static final String AGENTS_ENABLED_PROPERTY = "ai.gebo.agents.standard.enabled";
+	public static final String AGENTS_ENABLED_PROPERTY = "ai.gebo.agents.enabled";
+	/**
+	 * The switch of the bundled networks of agents and of their agents only (the
+	 * condition of the standard agents configurations), not of the agents as a whole.
+	 */
+	public static final String STANDARD_AGENTS_ENABLED_PROPERTY = "ai.gebo.agents.standard.enabled";
 
 	/** The defaults of a pipeline type, as the setup shows them. */
 	@Data

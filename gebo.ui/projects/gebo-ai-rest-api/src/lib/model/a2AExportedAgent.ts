@@ -15,6 +15,7 @@ export interface A2AExportedAgent {
     networkCode?: string;
     agentConfigCode?: string;
     skillName?: string;
+    chatProfileCode?: string;
     exposeMemberCapabilities?: boolean;
 }
 export namespace A2AExportedAgent {

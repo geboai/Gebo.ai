@@ -2,6 +2,7 @@ package ai.gebo.llms.chat.pipelines.service.defaultsteps.impl;
 
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.llms.chat.pipelines.model.IChatPipelineStepRuntimeData;
@@ -24,6 +25,16 @@ public class DefaultInputChatPipelineStepServiceImpl implements IInputChatPipeli
 	public StepExecutorType getExecutorType() {
 		
 		return StepExecutorType.PROGRAMMATIC;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.notUsed();
 	}
 
 	@Override

@@ -68,7 +68,6 @@ export class GeboAIGenericOpenAIAPIChatModelAdminComponent extends BaseEntityEdi
         accessibleGroups: new FormControl(), 
         accessibleUsers: new FormControl(), 
         accessibleToAll: new FormControl(),
-        enabledFunctions: new FormControl(),
         defaultModelPrompt:new FormControl(),
         baseUrl:new FormControl(),
         unautenticated:new FormControl(),

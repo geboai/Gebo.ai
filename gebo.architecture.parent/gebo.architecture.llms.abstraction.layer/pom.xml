@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.5.0</version>
+		<version>1.0.6.0</version>
 	</parent>
 	<artifactId>gebo.architecture.llms.abstraction.layer</artifactId>
 	<dependencies>
@@ -57,6 +57,11 @@
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
 			<artifactId>gebo.architecture.security</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ai.gebo.architecture</groupId>
+			<artifactId>gebo.architecture.multithreading</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

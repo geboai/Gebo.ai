@@ -1,0 +1,94 @@
+<div class="gebo-ai-reusable-chat__suspension" role="form">
+  <div class="gebo-ai-reusable-chat__suspension-title">
+    <i class="pi pi-question-circle" aria-hidden="true"></i>
+    <span id="SuspensionTitle" gebo-ai-text>The agents need your answer before going on</span>
+  </div>
+  @if (oneByOne && openConditions.length > 1) {
+    <div class="gebo-ai-reusable-chat__suspension-hint">
+      <span id="OneByOneHint" gebo-ai-text>You can answer some now and the others later.</span>
+    </div>
+  }
+  @for (condition of conditions; track condition.conditionId) {
+    <div class="gebo-ai-reusable-chat__suspension-condition">
+      <div class="gebo-ai-reusable-chat__suspension-statement">
+        {{statementOf(condition)}}
+        @if (!isMandatory(condition)) {
+          <span id="OptionalCondition" class="gebo-ai-reusable-chat__suspension-optional" gebo-ai-text>(optional)</span>
+        }
+      </div>
+      @if (waitedFromOf(condition); as waitedFrom) {
+        <div class="gebo-ai-reusable-chat__suspension-waited-from">
+          <i class="pi pi-users" aria-hidden="true"></i>
+          <span id="WaitedFrom" gebo-ai-text>Waited from</span> {{waitedFrom}}
+        </div>
+      }
+      @if (isSolved(condition)) {
+        <div class="gebo-ai-reusable-chat__suspension-solved">
+          <i class="pi pi-check-circle" aria-hidden="true"></i>
+          <span id="SolvedCondition" gebo-ai-text>Answered</span>
+          @if (solvedByOf(condition)) {
+            <span class="gebo-ai-reusable-chat__suspension-solved-by">({{solvedByOf(condition)}})</span>
+          }
+        </div>
+      } @else {
+      @if (explanationOf(condition)) {
+        <div class="gebo-ai-reusable-chat__suspension-explanation"><i>{{explanationOf(condition)}}</i></div>
+      }
+      @if (isClarification(condition)) {
+        @for (option of optionsOf(condition); track $index) {
+          <div class="gebo-ai-reusable-chat__suspension-option">
+            @if (isMultipleChoice(condition)) {
+              <p-checkbox [binary]="true" [inputId]="condition.conditionId + '-' + $index" [disabled]="disabled"
+                [ngModel]="isChosen(condition, option.label)"
+                (ngModelChange)="toggleOption(condition, option.label, $event)"></p-checkbox>
+            } @else {
+              <p-radioButton [name]="'option-' + condition.conditionId" [value]="option.label" [inputId]="condition.conditionId + '-' + $index"
+                [disabled]="disabled" [ngModel]="answerOf(condition).chosenOption"
+                (ngModelChange)="chooseOption(condition, option.label)"></p-radioButton>
+            }
+            <label [for]="condition.conditionId + '-' + $index" class="gebo-ai-reusable-chat__suspension-option-label">
+              {{option.label}}
+              @if (option.description) {
+                <span class="gebo-ai-reusable-chat__suspension-option-description">{{option.description}}</span>
+              }
+            </label>
+          </div>
+        }
+        @if (customAllowed(condition)) {
+          <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+            [disabled]="disabled" [(ngModel)]="answerOf(condition).customExplanation"
+            (ngModelChange)="onExplanationChange(condition)"
+            placeholder="Or explain in your own words" gebo-ai-label></textarea>
+        }
+      } @else {
+        <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+          [disabled]="disabled || goesOnWithout(condition)" [(ngModel)]="answerOf(condition).value"
+          placeholder="Your answer" gebo-ai-label></textarea>
+      }
+      @if (conversationActions) {
+        <div class="gebo-ai-reusable-chat__suspension-option gebo-ai-reusable-chat__suspension-go-on-without">
+          <p-checkbox [binary]="true" [inputId]="condition.conditionId + '-go-on-without'" [disabled]="disabled"
+            [ngModel]="goesOnWithout(condition)" (ngModelChange)="toggleGoOnWithout(condition, $event)"></p-checkbox>
+          <label [for]="condition.conditionId + '-go-on-without'" class="gebo-ai-reusable-chat__suspension-option-label">
+            <span id="GoOnWithoutCondition" gebo-ai-text>No answer: let the agents go on without it</span>
+          </label>
+        </div>
+      }
+      }
+    </div>
+  }
+  <div class="gebo-ai-reusable-chat__suspension-buttons">
+    @if (!mandatory && conversationActions) {
+      <p-button id="skipSuspensionBtn" gebo-ai-label label="Skip and go on" severity="secondary" [text]="true"
+        [disabled]="disabled" (onClick)="doSkip()"></p-button>
+    }
+    @if (hasOpenConditions && conversationActions) {
+      <p-button id="abandonSuspensionBtn" gebo-ai-label label="Abandon the run" severity="danger" [text]="true"
+        icon="pi pi-times" [disabled]="disabled" (onClick)="doAbandon()"></p-button>
+      <p-button id="goOnWithoutSuspensionBtn" gebo-ai-label label="Go on without the missing answers" severity="secondary"
+        [outlined]="true" icon="pi pi-forward" [disabled]="disabled" (onClick)="goOnWithoutAll()"></p-button>
+    }
+    <p-button id="answerSuspensionBtn" gebo-ai-label label="Answer" icon="pi pi-send"
+      [disabled]="!canSend()" (onClick)="send()"></p-button>
+  </div>
+</div>

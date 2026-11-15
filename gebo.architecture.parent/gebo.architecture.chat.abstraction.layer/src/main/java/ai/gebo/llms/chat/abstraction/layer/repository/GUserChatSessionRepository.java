@@ -9,7 +9,9 @@
 
 package ai.gebo.llms.chat.abstraction.layer.repository;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
@@ -89,5 +91,32 @@ public interface GUserChatSessionRepository extends IGBaseMongoDBRepository<GUse
 	 *         context code.
 	 */
 	public Page<GUserChatInfo> findByUsernameAndContextCodeIsNull(String username, Pageable page);
+
+	/**
+	 * The chats of a person that belong to no external context, leaving out the
+	 * conversations runs from outside a chat opened for themselves
+	 * ({@link GUserChatSession#getTransientRun()}); {@code transientRun} is the
+	 * value left out, {@code Boolean.TRUE}.
+	 */
+	public List<GUserChatInfo> findByUsernameAndContextCodeIsNullAndTransientRunNot(String username,
+			Boolean transientRun);
+
+	/** The same, paged. */
+	public Page<GUserChatInfo> findByUsernameAndContextCodeIsNullAndTransientRunNot(String username,
+			Boolean transientRun, Pageable page);
+
+	/** The chats of a person in an external context, leaving out the transient conversations. */
+	public List<GUserChatInfo> findByUsernameAndContextCodeAndTransientRunNot(String username, String contextCode,
+			Boolean transientRun);
+
+	/**
+	 * The transient conversations opened before the given moment: the ones whose run
+	 * never came back to drop them.
+	 */
+	public List<GUserChatSession> findByTransientRunTrueAndDateCreatedBefore(Date before);
+
+	/** The conversation another system opened by its own key (see {@code ExternalSessionRef}), unique together. */
+	public Optional<GUserChatSession> findByExternalSystemAndExternalSessionKey(String externalSystem,
+			String externalSessionKey);
 
 }

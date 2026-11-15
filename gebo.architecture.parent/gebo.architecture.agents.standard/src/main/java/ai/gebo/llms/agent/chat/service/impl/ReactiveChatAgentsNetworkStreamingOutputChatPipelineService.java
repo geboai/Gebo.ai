@@ -1,19 +1,22 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
 import java.util.concurrent.atomic.AtomicReference;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
+import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IDynamicAgentsNetworkDataSource;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkServiceFactory;
@@ -22,12 +25,15 @@ import ai.gebo.architecture.agents.services.NetworkOfAgentsException;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
-import ai.gebo.llms.agent.standard.services.StandardAgentsNetworkEnvironmentEntries;
-import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
+import ai.gebo.llms.agent.standard.services.ChatRuntimeDataOf;
+import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
+import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatException;
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
@@ -37,9 +43,11 @@ import ai.gebo.llms.chat.pipelines.model.StepEnvironmentParameter;
 import ai.gebo.llms.chat.pipelines.service.ChatPipelineException;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
+import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Sinks;
 import reactor.core.scheduler.Schedulers;
 
 public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
@@ -47,7 +55,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	public static final String SERVICE_ID = "ReactiveChatAgentsNetworkStreamingOutputChatPipelineService";
 	private static final String EXCEPTION_CREATING_NETWORK_OF_AGENTS = "Exception creating network of agents";
 	private static final String EXCEPTION_RUNNING_NETWORK_OF_AGENTS = "Exception running network of agents";
-	protected final IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
+	protected final IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory;
 	protected final IDynamicAgentsNetworkDataSource agentsNetworkDataSource;
 	protected final IGChatSessionLifeCycleService lifeCycleService;
 	/**
@@ -66,17 +74,28 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 */
 	protected final PipelineType pipelineType;
 	protected final IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService;
+	/** Builds the environment of the network, the same a run from outside a chat is given. */
+	protected final GNetworkEnvironmentBuilder environmentBuilder;
+	/** Gives a network that asks for it a memory of the conversation; null for none. */
+	protected final GConversationAgentsSessionFactory conversationMemory;
+	/**
+	 * Carries a suspended run to the client (see
+	 * {@link NetworkOfAgentsSuspensionTransport}): the one Spring gives, with every
+	 * translator deployed; the plain one, the default translator alone, otherwise.
+	 */
+	protected volatile NetworkOfAgentsSuspensionTransport suspensionTransport = NetworkOfAgentsSuspensionTransport
+			.plain();
 	private final static Logger LOGGER = LoggerFactory
 			.getLogger(ReactiveChatAgentsNetworkStreamingOutputChatPipelineService.class);
 
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService) {
 		this(factory, agentsNetworkDataSource, lifeCycleService, SERVICE_ID);
 	}
 
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId) {
 		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, null, null);
@@ -87,10 +106,34 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * request, the data source's first network being the fallback.
 	 */
 	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
-			IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
 			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
 			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, pipelineType, defaultNetworksService, null);
+	}
+
+	/**
+	 * The same, building the environment of the network with the given builder (the
+	 * platform's, with its contributors); null for a plain one.
+	 */
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder) {
+		this(factory, agentsNetworkDataSource, lifeCycleService, stepId, pipelineType, defaultNetworksService,
+				environmentBuilder, null);
+	}
+
+	/** The same, with the memory a network that asks for it keeps of the conversation. */
+	public ReactiveChatAgentsNetworkStreamingOutputChatPipelineService(
+			IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory,
+			IDynamicAgentsNetworkDataSource agentsNetworkDataSource, IGChatSessionLifeCycleService lifeCycleService,
+			String stepId, PipelineType pipelineType, IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory) {
 		this.factory = factory;
+		this.environmentBuilder = environmentBuilder != null ? environmentBuilder : GNetworkEnvironmentBuilder.plain();
+		this.conversationMemory = conversationMemory;
 		this.agentsNetworkDataSource = agentsNetworkDataSource;
 		this.lifeCycleService = lifeCycleService;
 		this.stepId = stepId;
@@ -102,10 +145,48 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		}
 	}
 
+	/** How the network service of a run is launched: run on the question, or respawned from a block. */
+	@FunctionalInterface
+	public interface NetworkLauncher {
+		NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> launch(IGReactiveChatAgentsNetworkService runtimeNetwork,
+				ChatPipelineExecutionRuntimeData runtimeData, String question, Map<String, Object> environment)
+				throws AgentException, LLMConfigException;
+	}
+
+	/** What a run of this step is: the network to create the service for, and how to launch it. */
+	public record RunPlan(GAgentsNetwork network, NetworkLauncher launcher) {
+	}
+
+	/**
+	 * The plan of a run of this step: the network the chat is handed to, run on the
+	 * user's question. A step that respawns a suspended network plans otherwise.
+	 */
+	protected RunPlan planRun(ChatPipelineExecutionRuntimeData runtimeData)
+			throws ChatPipelineException, GeboChatSessionLifecycleException {
+		return new RunPlan(chooseNetwork(runtimeData), this::executeNetwork);
+	}
+
+	@Autowired(required = false)
+	public void setSuspensionTransport(NetworkOfAgentsSuspensionTransport suspensionTransport) {
+		if (suspensionTransport != null) {
+			this.suspensionTransport = suspensionTransport;
+		}
+	}
+
 	@Override
 	public StepExecutorType getExecutorType() {
 
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.notUsed();
 	}
 
 	@Override
@@ -119,7 +200,7 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * pipeline response, each once: the network answer is merged onto that response,
 	 * which is what the user receives.
 	 */
-	static void mergeBackendMessages(GeboChatResponse networkResponse, GeboChatResponse pipelineResponse) {
+	public static void mergeBackendMessages(GeboChatResponse networkResponse, GeboChatResponse pipelineResponse) {
 		if (networkResponse == null || pipelineResponse == null || networkResponse == pipelineResponse
 				|| networkResponse.getBackendMessages() == null || networkResponse.getBackendMessages().isEmpty()) {
 			return;
@@ -147,30 +228,13 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin buildNetworkEnvironment(...) pipeline step:" + getStepId());
 		}
-		final Map<String, Object> environment = new HashMap<String, Object>();
 		final GeboChatRequest request = runtimeData.getRequestResources().getCurrentRequest();
 		List<GKnowledgeBase> knowledgeBases = lifeCycleService.getSessionAvailableKnowledgeBases(request);
 		List<String> knowledgeBaseCodes = knowledgeBases.stream().map(x -> x.getCode()).toList();
-		environment.put(StandardAgentsNetworkEnvironmentEntries.KNOWLEDGE_BASES_CODE, knowledgeBaseCodes);
-		environment.put(StandardAgentsNetworkEnvironmentEntries.USER_INTENT,
-				request.getUserIntent() != null ? request.getUserIntent() : DeliverableIntent.SUMMARY);
-		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED,
-				Boolean.TRUE.equals(request.getSearchRequested()));
-		environment.put(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN,
-				Boolean.TRUE.equals(request.getSearchForbidden()));
-		// detected on the user's own message when the request entered the pipelines
-		if (request.getUserLanguage() != null) {
-			environment.put(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE, request.getUserLanguage());
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End buildNetworkEnvironment(...) knowledgeBases:" + knowledgeBaseCodes.size() + " userIntent:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_INTENT) + " searchRequested:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_REQUESTED) + " searchForbidden:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.SEARCH_FORBIDDEN) + " userLanguage:"
-					+ environment.get(StandardAgentsNetworkEnvironmentEntries.USER_LANGUAGE));
-		}
+		// what the pipeline steps put in the shared environment, the standard entries,
+		// the contributors': the same environment a run from outside a chat is given
+		final Map<String, Object> environment = environmentBuilder.build(runtimeData, knowledgeBaseCodes, null);
 		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Knowledge base codes seeded into the network environment: " + knowledgeBaseCodes);
 			LOGGER.trace("<USER_QUERY>");
 			LOGGER.trace(String.valueOf(request.getQuery()));
 			LOGGER.trace("</USER_QUERY>");
@@ -183,6 +247,42 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 	 * the chat profile when the step has a pipeline type, otherwise, or when nothing
 	 * resolves, the data source's first one.
 	 */
+	/**
+	 * Runs the network for the request, with what the chat adds to the request's
+	 * model calls (see {@link ChatPipelineExecutionRuntimeData#getToolCalling()}),
+	 * built by the pipelines executor for every request.
+	 */
+	protected NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> executeNetwork(
+			IGReactiveChatAgentsNetworkService runtimeNetwork, ChatPipelineExecutionRuntimeData runtimeData,
+			String question, Map<String, Object> environment) throws AgentException, LLMConfigException {
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+		return runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(), question,
+				environment, toolCalling);
+	}
+
+	/**
+	 * What a run that suspended leaves on the response: the state the client reacts
+	 * to (see {@link NetworkOfAgentsSuspendedState}) and, as the answer's text, the
+	 * conditions rendered for a client that only shows the answer, after whatever
+	 * the agents streamed before. A run that ended leaves the response as it is.
+	 */
+	protected void carrySuspension(NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope> result,
+			GeboChatResponse response) {
+		final NetworkOfAgentsSuspendedState state = suspensionTransport.stateOf(result);
+		if (state == null || response == null) {
+			return;
+		}
+		response.setNetworkOfAgentsSuspendedState(state);
+		final String rendered = NetworkOfAgentsSuspensionTransport.render(state);
+		final String streamed = response.getQueryResponse();
+		response.setQueryResponse(streamed == null || streamed.isBlank() ? rendered : streamed + "\n\n" + rendered);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The network suspended into suspension:" + state.getNetworkOfAgentsBlockId() + " with "
+					+ (state.getConditions() != null ? state.getConditions().size() : 0)
+					+ " condition(s): carried to the client with the last message");
+		}
+	}
+
 	protected GAgentsNetwork chooseNetwork(ChatPipelineExecutionRuntimeData runtimeData)
 			throws ChatPipelineException, GeboChatSessionLifecycleException {
 		if (pipelineType != null && defaultNetworksService != null) {
@@ -228,23 +328,36 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 			ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
 			INotificationSink notificationSink = sinkUIEmitter;
 			final GeboChatResponse responseReference = runtimeData.getChatResponse();
-			final GAgentsNetwork network = chooseNetwork(runtimeData);
+			final RunPlan plan = planRun(runtimeData);
+			final GAgentsNetwork network = plan.network();
 			final Map<String, Object> environment = buildNetworkEnvironment(runtimeData);
+			// the prompts filled from the environment of the run read it from the request context
+			runtimeData.getRequestResources().setRunEnvironment(environment);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Creating runtime network of agents from config code:" + network.getCode());
 			}
-			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink,
-					ChatPipelineExecutionRuntimeData.class, GeboChatMessageEnvelope.class, runAs);
+			IGReactiveChatAgentsNetworkService runtimeNetwork = factory.create(network, notificationSink, String.class,
+					GeboChatMessageEnvelope.class, runAs,
+					GConversationAgentsSessionFactory.remembers(network) ? conversationMemory : null);
+			// the network is asked the user's question; the request it is asked in is in
+			// its environment, for the agents that need more of it
+			final String question = ChatRuntimeDataOf.query(runtimeData);
 			Flux<GeboChatMessageEnvelope> flux = runtimeNetwork.getFlux();
-			Flux<GeboChatMessageEnvelope> trailingFlux = Flux.defer(() -> {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("Emitting the trailing last-message envelope for pipeline step:" + getStepId());
-				}
-				GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(responseReference);
-				envelope.setLastMessage(true);
-				return Flux.just(envelope);
-
-			});
+			// The result of the run, for the trailing envelope: the network completes its
+			// output sink before executeNetwork returns, so the last message must wait for
+			// the result rather than follow the sink, or a suspension would be missed.
+			final Sinks.One<NetworkOfAgentsExecutionResult<GeboChatMessageEnvelope>> outcome = Sinks.one();
+			Flux<GeboChatMessageEnvelope> trailingFlux = outcome.asMono().map(Optional::of)
+					.defaultIfEmpty(Optional.empty()).flatMapMany(result -> {
+						if (LOGGER.isDebugEnabled()) {
+							LOGGER.debug("Emitting the trailing last-message envelope for pipeline step:" + getStepId()
+									+ " run result present:" + result.isPresent());
+						}
+						result.ifPresent(r -> carrySuspension(r, responseReference));
+						GeboChatMessageEnvelope envelope = new GeboChatMessageEnvelope(responseReference);
+						envelope.setLastMessage(true);
+						return Flux.just(envelope);
+					});
 			// The network runs on its own worker rather than inside the doOnSubscribe
 			// callback. Reactor invokes that callback BEFORE handing the subscription to the
 			// downstream subscriber, so running the network there finished the whole thing -
@@ -264,11 +377,11 @@ public class ReactiveChatAgentsNetworkStreamingOutputChatPipelineService
 				}
 				networkExecution.set(Schedulers.boundedElastic().schedule(() -> runAs.doAs(() -> {
 					try {
-
-						runtimeNetwork.executeNetwork(runtimeData.getRequestResources().createChatRequestContext(),
-								runtimeData, environment);
-					} catch (AgentException | LLMConfigException e) {
+						// a null result ends the outcome empty: the last message goes out as it is
+						outcome.tryEmitValue(plan.launcher().launch(runtimeNetwork, runtimeData, question, environment));
+					} catch (AgentException | LLMConfigException | RuntimeException e) {
 						LOGGER.error(EXCEPTION_RUNNING_NETWORK_OF_AGENTS, e);
+						outcome.tryEmitEmpty();
 					}
 				})));
 			}).map(x -> {

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -50,10 +51,15 @@ import ai.gebo.architecture.agents.model.GAgentRole;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
-import ai.gebo.architecture.agents.services.impl.AgentToolCallingManagerFactory;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.ToolsCategory;
 import ai.gebo.architecture.ai.model.ITokensCountable;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
+import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.architecture.ai.model.LibraryToolCollision;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
+import ai.gebo.architecture.ai.service.LibraryToolCollisions;
 import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
@@ -207,9 +213,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	/**
 	 * Adds the tools/functions reachable with the given configuration to the
 	 * capabilities descriptor. Mirrors the tool selection performed in
-	 * {@link #getAgentModel(GAgentConfig, ToolCallsListener, INotificationSink, ReactiveIdentityUtil)}:
+	 * {@link #getAgentModel(GAgentConfig, ToolCallsListener, INotificationSink, ReactiveIdentityUtil, List)}:
 	 * when {@code subscribeAllTools} is set every registered tool is advertised
-	 * (with its description), otherwise only the explicitly enabled functions are.
+	 * (with its description), otherwise the explicitly enabled functions are, in
+	 * both cases together with the tools of the sources the configuration mounts on
+	 * top ({@link GAgentConfig#getAdditionalToolSources()}) and the ones its libraries
+	 * declare ({@link GAgentConfig#getLibraryTypeIds()}).
 	 */
 	protected void appendConfiguredTools(AgentCapabilities capabilities, GAgentConfig agentConfig) {
 		if (agentConfig == null) {
@@ -242,13 +251,22 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 							tool.getToolDefinition().name(), tool.getToolDefinition().description()));
 				}
 			}
-		} else if (agentConfig.getEnabledFunctions() != null) {
-			for (String functionName : agentConfig.getEnabledFunctions()) {
+		} else {
+			for (String functionName : resolveMountedToolNames(agentConfig, null)) {
 				if (functionName != null && !functionName.isBlank()) {
 					if (LOGGER.isTraceEnabled()) {
 						LOGGER.trace("Explicitly enabled tool: " + functionName);
 					}
 					capabilities.addTool(AgentCapabilityResource.of(functionName, functionName, null));
+				}
+			}
+		}
+		final Set<String> advertised = new HashSet<>(
+				capabilities.getTools().stream().map(AgentCapabilityResource::getCode).toList());
+		for (AIToolsAndResourcesLibraryType library : configuredLibraryTypes(agentConfig)) {
+			for (ToolReference tool : library.getTools() != null ? library.getTools() : List.<ToolReference>of()) {
+				if (tool != null && tool.getName() != null && advertised.add(tool.getName())) {
+					capabilities.addTool(AgentCapabilityResource.of(tool.getName(), tool.getName(), tool.getDescription()));
 				}
 			}
 		}
@@ -334,7 +352,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	 * sources the configuration leaves out (see
 	 * {@link #withoutConfiguredExcludedSources(GAgentConfig, List)}), otherwise
 	 * exactly the enabled functions. With no registered tools to subscribe the
-	 * enabled functions are kept.
+	 * enabled functions are kept. The tools of the libraries are not among them: they
+	 * are not registered, a run binds them (see
+	 * {@link #reclaimTheLibrariesOfTheConversation(IChatRequestContext, GAgentConfig)}).
 	 *
 	 * @param registeredTools the registered tools, read only when the configuration
 	 *                        subscribes all of them
@@ -357,7 +377,217 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 						+ " mounts " + names.size() + " function(s) after its own excluded tool sources");
 			}
 		}
+		names = new ArrayList<String>(withTheConfiguredAdditionalSources(agentConfig, names));
 		return names;
+	}
+
+	/**
+	 * What an agent entering its execution has from the libraries its configuration
+	 * names: the context it works in, told what each library holds, and the tools of
+	 * the instances it holds, to mount on its model, and what they add to its prompt
+	 * (see {@link AgentAdditionalRules}).
+	 */
+	public record AgentLibraries(IChatRequestContext context, List<ToolCallback> tools, String rules) {
+		public AgentLibraries(IChatRequestContext context, List<ToolCallback> tools) {
+			this(context, tools, "");
+		}
+	}
+
+	/**
+	 * The prompt the agent works on in this turn, given the one it resolved: what the
+	 * libraries it holds add to the prompt goes where {@code createAgentTemplateParams}
+	 * finds it, and a prompt that does not name the slot gets it in a copy.
+	 */
+	protected GPromptTemplateConfig promptOfTheTurn(GPromptTemplateConfig prompt, AgentLibraries libraries,
+			AgentPrivateSessionContext<?, ?> mySessionContext) {
+		final String rules = libraries != null ? libraries.rules() : "";
+		if (mySessionContext != null) {
+			mySessionContext.setAdditionalRules(rules);
+		}
+		return AgentAdditionalRules.withSlot(prompt, rules);
+	}
+
+	/** Who keeps the library instances; null in an installation keeping none. */
+	private IGAIToolsLibraryInstancesService libraryInstances() {
+		try {
+			return runtimeBinder != null ? runtimeBinder.getImplementationOf(IGAIToolsLibraryInstancesService.class)
+					: null;
+		} catch (RuntimeException none) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("No library instances are kept in this installation: " + none);
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * Reclaims from the conversation the libraries the configuration names: the
+	 * instances the conversation holds of those types, created for it when it holds
+	 * none yet. Their tools, bound to the resources of the instances, are the only
+	 * way a tool of a library reaches a model; what each instance holds is added to
+	 * the rules the agent follows. No tools and the same context when the agent names
+	 * no library and its service implies none ({@link #libraryTypeIdsOf(GAgentConfig)}),
+	 * when there is no conversation to hold them or when this installation keeps no
+	 * library instances.
+	 */
+	protected AgentLibraries reclaimTheLibrariesOfTheConversation(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig) {
+		final AgentLibraries none = new AgentLibraries(chatRequestContext, List.of());
+		final List<String> libraryTypeIds = libraryTypeIdsOf(agentConfig);
+		if (chatRequestContext == null || agentConfig == null || libraryTypeIds.isEmpty()) {
+			return none;
+		}
+		final IGAIToolsLibraryInstancesService instances = libraryInstances();
+		if (instances == null) {
+			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " mounts the library types "
+					+ libraryTypeIds + " but this installation keeps no library instances: it works"
+					+ " without their tools");
+			return none;
+		}
+		final Map<String, AIToolsAndResourcesLibraryInstance> held = instances.reclaim(chatRequestContext.getSessionID(),
+				libraryTypeIds);
+		if (held == null || held.isEmpty()) {
+			LOGGER.warn("Agent config code:" + agentConfig.getCode() + " mounts the library types " + libraryTypeIds
+					+ " but conversation:" + chatRequestContext.getSessionID()
+					+ " holds no instance of them: it works without their tools");
+			return none;
+		}
+		final List<ToolCallback> tools = instances.toolsOf(held);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " enters its execution in conversation:"
+					+ chatRequestContext.getSessionID() + " with " + held.size() + " library instance(s): " + held.keySet()
+					+ " and " + tools.size() + " tool(s) of them, for agent service id:" + getId());
+		}
+		return new AgentLibraries(chatRequestContext.withRulesToFollow(instances.describe(held)), tools,
+				AgentAdditionalRules.of(instances.typesOf(held.keySet())));
+	}
+
+	/**
+	 * The library types the agent mounts that this installation has, for whoever
+	 * shows what an agent mounts with no run: a library comes in block, so what its
+	 * type declares is what the agent gets.
+	 */
+	protected List<AIToolsAndResourcesLibraryType> configuredLibraryTypes(GAgentConfig agentConfig) {
+		final List<String> libraryTypeIds = libraryTypeIdsOf(agentConfig);
+		if (agentConfig == null || libraryTypeIds.isEmpty()) {
+			return List.of();
+		}
+		final IGAIToolsLibraryInstancesService instances = libraryInstances();
+		return instances != null ? instances.typesOf(libraryTypeIds) : List.of();
+	}
+
+	/**
+	 * The library types an agent mounts: the ones its configuration names, then the
+	 * ones this service implies for every agent running on it
+	 * ({@link #getImpliedLibraryTypeIds()}), each once; empty when there are none.
+	 */
+	protected List<String> libraryTypeIdsOf(GAgentConfig agentConfig) {
+		final Set<String> ids = new LinkedHashSet<>();
+		if (agentConfig != null && agentConfig.getLibraryTypeIds() != null) {
+			for (String id : agentConfig.getLibraryTypeIds()) {
+				if (id != null && !id.isBlank()) {
+					ids.add(id);
+				}
+			}
+		}
+		final List<String> implied = getImpliedLibraryTypeIds();
+		if (implied != null) {
+			for (String id : implied) {
+				if (id != null && !id.isBlank()) {
+					ids.add(id);
+				}
+			}
+		}
+		return List.copyOf(ids);
+	}
+
+	/**
+	 * The names the model of a run declares: the ones the configuration mounts and the
+	 * ones of the library tools the run bound. A bound tool having the name of a tool
+	 * the configuration mounts takes its place, which is an error of the configuration
+	 * and is logged as such.
+	 */
+	protected List<String> withTheBoundLibraryTools(GAgentConfig agentConfig, List<String> toolNames,
+			List<ToolCallback> libraryTools) {
+		if (libraryTools == null || libraryTools.isEmpty()) {
+			return toolNames;
+		}
+		final List<String> mounted = new ArrayList<String>(toolNames != null ? toolNames : List.of());
+		boolean collision = false;
+		for (ToolCallback tool : libraryTools) {
+			final String name = tool.getToolDefinition().name();
+			if (mounted.contains(name)) {
+				collision = true;
+			} else {
+				mounted.add(name);
+			}
+		}
+		if (collision) {
+			logToolCollisions(agentConfig);
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Tool names with the library tools of agent config code:" + agentConfig.getCode() + " : "
+					+ mounted);
+		}
+		return mounted;
+	}
+
+	/** The collisions with the tool sources; the ones between libraries are logged where the tools are bound. */
+	private void logToolCollisions(GAgentConfig agentConfig) {
+		try {
+			for (LibraryToolCollision collision : getMountedTools(agentConfig).getCollisions()) {
+				if (collision.getShadowedSourceId() != null) {
+					LOGGER.error("Tool name collision on agent config code:" + agentConfig.getCode() + ": "
+							+ collision.written());
+				}
+			}
+		} catch (RuntimeException unreadable) {
+			LOGGER.error("Tool name collision on agent config code:" + agentConfig.getCode()
+					+ ": a library tool takes the place of a mounted tool, which could not be told", unreadable);
+		}
+	}
+
+	/**
+	 * Adds back the tools of the sources the configuration mounts on top of what it
+	 * would otherwise reach ({@link GAgentConfig#getAdditionalToolSources()}): the
+	 * families of tools an installation keeps out of automatic mounting because only
+	 * some agents are meant to operate them. It is the last word on the tool set,
+	 * since an agent mounting every registered tool has no other way to an excluded
+	 * one - the automatic mounting replaces the tools selected by name. What the
+	 * configuration itself excludes is not added back: an agent does not contradict
+	 * itself.
+	 */
+	protected List<String> withTheConfiguredAdditionalSources(GAgentConfig agentConfig, List<String> toolNames) {
+		if (agentConfig == null || agentConfig.getAdditionalToolSources() == null
+				|| agentConfig.getAdditionalToolSources().isEmpty()) {
+			return toolNames;
+		}
+		Set<String> added = toolNamesOfSources(agentConfig.getAdditionalToolSources());
+		if (added.isEmpty()) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent config code:" + agentConfig.getCode() + " mounts the tool sources "
+						+ agentConfig.getAdditionalToolSources() + " but none of them exports a tool");
+			}
+			return toolNames;
+		}
+		added.removeAll(toolNamesOfSources(agentConfig.getExcludedToolSources()));
+		List<String> mounted = new ArrayList<String>(toolNames != null ? toolNames : List.of());
+		int before = mounted.size();
+		for (String name : added) {
+			if (!mounted.contains(name)) {
+				mounted.add(name);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " mounts " + (mounted.size() - before)
+					+ " tool(s) of its additional tool sources " + agentConfig.getAdditionalToolSources()
+					+ " for agent service id:" + getId());
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Tool names added by the additional tool sources of agent config code:"
+					+ agentConfig.getCode() + " : " + added);
+		}
+		return mounted;
 	}
 
 	@Override
@@ -426,6 +656,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				}
 			}
 		}
+		addTheToolsOfTheLibraries(mounted, agentConfig);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("getMountedTools(...) agent service id:" + getId() + " agentConfig code:"
 					+ agentConfig.getCode() + " mode:" + mounted.getMountMode() + " mounted:"
@@ -435,14 +666,48 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
-	 * Resolves the set of tool names to keep out of automatic mounting, combining
-	 * the explicitly excluded tool names with every tool contributed by an excluded
-	 * tool source (see {@link AgentsToolsAutoMountingConfig}). Resolved lazily
-	 * through the runtime binder so subclasses do not need the config injected; a
-	 * missing config yields no exclusions.
+	 * Adds what the libraries of the configuration declare to the tools mounted from
+	 * the sources: a tool of a library takes the place of the mounted tool of its name,
+	 * as it does when the agent runs, and the collision is told.
+	 */
+	private void addTheToolsOfTheLibraries(AgentMountedTools mounted, GAgentConfig agentConfig) {
+		final List<AIToolsAndResourcesLibraryType> libraries = configuredLibraryTypes(agentConfig);
+		if (libraries.isEmpty()) {
+			return;
+		}
+		mounted.getCollisions().addAll(LibraryToolCollisions.find(libraries,
+				mounted.getTools().stream().filter(tool -> tool.getSourceId() != null)
+						.map(tool -> new LibraryToolCollisions.MountedSourceTool(tool.getName(), tool.getSourceId(),
+								tool.getSourceDescription()))
+						.toList()));
+		final ToolsCategory category = IGAIToolsLibraryInstancesService.LIBRARY_CATEGORY;
+		final Set<String> taken = new HashSet<>();
+		for (AIToolsAndResourcesLibraryType library : libraries) {
+			for (ToolReference tool : library.getTools() != null ? library.getTools() : List.<ToolReference>of()) {
+				if (tool == null || tool.getName() == null || !taken.add(tool.getName())) {
+					continue;
+				}
+				mounted.getTools().removeIf(other -> tool.getName().equals(other.getName()));
+				mounted.getTools().add(new AgentMountedTools.MountedTool(tool.getName(), tool.getDescription(),
+						category.getCode(), category.getDescription(), library.getId(),
+						"Library: " + (library.getDescription() != null ? library.getDescription() : library.getId()),
+						null));
+			}
+		}
+	}
+
+	/**
+	 * Resolves the set of tool names to keep out of automatic mounting: the tools of
+	 * the sources that are mounted only on the agents asking for them
+	 * ({@link #toolNamesOfSourcesMountedOnlyWhenAsked()}), which always hold, plus
+	 * what the installation itself excludes - the tool names it lists and every tool
+	 * of a source it lists (see {@link AgentsToolsAutoMountingConfig}). The
+	 * installation's part is resolved lazily through the runtime binder so
+	 * subclasses do not need the config injected; a missing config leaves only the
+	 * sources' own.
 	 */
 	protected Set<String> autoMountExcludedToolNames() {
-		Set<String> excluded = new HashSet<>();
+		Set<String> excluded = new HashSet<>(toolNamesOfSourcesMountedOnlyWhenAsked());
 		AgentsToolsAutoMountingConfig config;
 		try {
 			config = runtimeBinder.getImplementationOf(AgentsToolsAutoMountingConfig.class);
@@ -472,6 +737,34 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			LOGGER.trace("Auto mount excluded tool names: " + excluded);
 		}
 		return excluded;
+	}
+
+	/**
+	 * The names of the tools of the sources that are mounted only on the agents
+	 * asking for them ({@link IGToolCallbackSource#isMountedOnlyWhenAsked()}): they
+	 * reach an agent only when its configuration, or the network participant it runs
+	 * as, names the source. Unlike the installation's exclusions these always hold,
+	 * so a deployment cannot put them in front of every chat by forgetting a setting.
+	 */
+	protected Set<String> toolNamesOfSourcesMountedOnlyWhenAsked() {
+		Set<String> names = new HashSet<>();
+		if (toolsRepositoryPattern == null) {
+			return names;
+		}
+		List<IGToolCallbackSource> sources = toolsRepositoryPattern.getImplementations();
+		if (sources == null) {
+			return names;
+		}
+		for (IGToolCallbackSource source : sources) {
+			if (source == null || !source.isMountedOnlyWhenAsked()) {
+				continue;
+			}
+			names.addAll(toolNamesOfSources(List.of(source.getId())));
+		}
+		if (!names.isEmpty() && LOGGER.isDebugEnabled()) {
+			LOGGER.debug(names.size() + " tool(s) are mounted only on the agents asking for their source");
+		}
+		return names;
 	}
 
 	/**
@@ -539,8 +832,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		return model != null ? model : chatModelsDao.defaultHandler();
 	}
 
+	/**
+	 * @param libraryTools the tools of the libraries the agent holds in this run, as
+	 *                     {@link #reclaimTheLibrariesOfTheConversation(IChatRequestContext, GAgentConfig)}
+	 *                     gives them
+	 */
 	protected IGConfigurableChatModel getAgentModel(GAgentConfig agentConfig, ToolCallsListener callBacksListener,
-			INotificationSink notificationSink, ReactiveIdentityUtil runAs) throws LLMConfigException {
+			INotificationSink notificationSink, ReactiveIdentityUtil runAs, List<ToolCallback> libraryTools)
+			throws LLMConfigException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin getAgentModel(...) for agent service id:" + getId() + " agentConfig code:"
 					+ (agentConfig != null ? agentConfig.getCode() : null) + " useDefaultChatModel:"
@@ -559,9 +858,12 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 				throw new LLMConfigException("Default chat model not set in the system");
 		}
 
-		List<String> allFunctions = new ArrayList<String>(resolveMountedToolNames(agentConfig,
-				Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null));
-		List<ToolCallback> additionalFunctions = new ArrayList<ToolCallback>();
+		List<String> allFunctions = new ArrayList<String>(withTheBoundLibraryTools(agentConfig,
+				resolveMountedToolNames(agentConfig,
+						Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null),
+				libraryTools));
+		List<ToolCallback> additionalFunctions = new ArrayList<ToolCallback>(
+				libraryTools != null ? libraryTools : List.<ToolCallback>of());
 		if (notificationSink != null) {
 			ToolCallback userMessageTool = createUserMessageTool(notificationSink);
 			additionalFunctions.add(userMessageTool);
@@ -578,9 +880,7 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		}
 
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, additionalFunctions, runAs),
-				additionalFunctions);
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions, additionalFunctions);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End getAgentModel(...) for agent service id:" + getId());
@@ -621,37 +921,6 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 		ToolCallback callBack = ToolCallbackDeclarationUtil.declare(activeConsumer, NOTIFY_USER_TOOL,
 				NOTIFY_USER_TOOL_DESCRIPTION, UserMessageToolParam.class);
 		return callBack;
-	}
-
-	protected ToolCallingManager createToolCallingManager(ToolCallsListener callBacksListener,
-			List<String> allFunctions, List<ToolCallback> additionalTools, ReactiveIdentityUtil runAs) {
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Begin createToolCallingManager(...) agent service id:" + getId() + " functions:"
-					+ (allFunctions != null ? allFunctions.size() : 0) + " additionalTools:"
-					+ (additionalTools != null ? additionalTools.size() : 0));
-		}
-		List<ToolCallback> wrapped = GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, allFunctions,
-				toolsRepositoryPattern);
-		if (additionalTools != null && !additionalTools.isEmpty()) {
-			wrapped = new ArrayList<ToolCallback>(wrapped);
-			// Wrap the dynamically-provided tools (e.g. notifyUser, bound to the notification
-			// sink) and ADD them to the resolvable set. Previously the wrapped result was
-			// assigned to a local and dropped, so notifyUser had a name in allFunctions but no
-			// callback in callMap - AgentToolCallingManagerFactory.resolve("notifyUser") returned
-			// null and the tool was never callable.
-			wrapped.addAll(GAbstractConfigurableChatModel.wrapTools(runAs, callBacksListener, additionalTools));
-		}
-		final Map<String, ToolCallback> map = new HashMap<>();
-		for (ToolCallback toolCallback : wrapped) {
-			map.put(toolCallback.getToolDefinition().name(), toolCallback);
-		}
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("End createToolCallingManager(...) agent service id:" + getId() + " wrapped tools:" + map.size());
-		}
-		if (LOGGER.isTraceEnabled()) {
-			LOGGER.trace("Wrapped tool names for agent service id:" + getId() + " : " + map.keySet());
-		}
-		return new AgentToolCallingManagerFactory(callBacksListener, allFunctions, wrapped, map).create();
 	}
 
 	protected static String extractContent(ChatResponse chatResponse) {
@@ -803,6 +1072,8 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	private static final String TURN_OUTPUT = "TURN OUTPUT:";
 	private static final String TURN_INPUT = "TURN INPUT:";
 	private static final String BEGIN_AGENT_TURN_ITEM = "BEGIN AGENT TURN ITEM ";
+	private static final String BEGIN_SOLVED_CONDITIONS = "BEGIN WHAT YOU WAITED FOR AND WAS SOLVED";
+	private static final String END_SOLVED_CONDITIONS = "END WHAT YOU WAITED FOR AND WAS SOLVED";
 	private static final String END_ACTUAL_AGENT_CALL_HISTORY = "END ACTUAL AGENT CALL HISTORY";
 	private static final String BEGIN_ACTUAL_AGENT_CALL_HISTORY = "BEGIN ACTUAL AGENT CALL HISTORY";
 	private static final String END_SHARED_CONTEXT_DELTA = "END SHARED CONTEXT DELTA";
@@ -952,6 +1223,14 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			constantParams.put(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput);
 			remainingBudget -= ITokensCountable.stringsTokensSize(renderedInput);
 			tracePlaceholder(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput, remainingBudget);
+		}
+		if (placeholders.containsKey(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
+			// always filled: an empty text when nothing is added to the prompt
+			String additionalRules = mySessionContext != null ? nullToEmpty(mySessionContext.getAdditionalRules()) : "";
+			constantParams.put(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM, additionalRules);
+			remainingBudget -= ITokensCountable.stringsTokensSize(additionalRules);
+			tracePlaceholder(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM, additionalRules,
+					remainingBudget);
 		}
 
 		if (placeholders.containsKey(AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM)) {
@@ -1936,7 +2215,9 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			int actualContributionNr, int remainingBudget) {
 		Vector<AgentPrivateSessionContext<InputType, OutputType>.AgentInteraction> interactions = mySessionContext
 				.getInteractions();
-		if (interactions == null || interactions.isEmpty()) {
+		final String solved = ResolvedConditionText.prepend(List.copyOf(mySessionContext.getSolvedConditions()), null);
+		final boolean anySolved = solved != null && !solved.isBlank();
+		if (interactions.isEmpty() && !anySolved) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("render(privateContext) skipped: the private session context holds no interaction");
 			}
@@ -1954,8 +2235,19 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			pieces.add(renderHandlingTruncate(agentInteraction.getInputMessage()));
 			pieces.add(renderOutput(agentInteraction.getOutput()));
 		}
+		if (anySolved) {
+			pieces.add(solved);
+		}
 		List<String> fitted = allocateProportional(pieces, remainingBudget);
 		StringBuffer buffer = new StringBuffer();
+		if (anySolved) {
+			buffer.append(BEGIN_SOLVED_CONDITIONS);
+			buffer.append(NEWLINE);
+			buffer.append(fitted.get(fitted.size() - 1));
+			buffer.append(NEWLINE);
+			buffer.append(END_SOLVED_CONDITIONS);
+			buffer.append(NEWLINE);
+		}
 		buffer.append(BEGIN_ACTUAL_AGENT_CALL_HISTORY);
 		buffer.append(NEWLINE);
 		int index = 1;

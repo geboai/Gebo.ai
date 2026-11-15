@@ -16,7 +16,14 @@
     <i class="pi pi-lock" style="font-size: 3rem"></i>
   </p-blockUI>
 
-  <p-panel id="MainPanel" gebo-ai-label #userUI header="Editing user">
+  <p-panel id="MainPanel" #userUI>
+    <ng-template #header>
+      @if (mode === 'NEW') {
+        <span id="NewUserTitle" gebo-ai-text class="p-panel-title">New user</span>
+      } @else {
+        <span id="EditUserTitle" gebo-ai-text class="p-panel-title">Editing user</span>
+      }
+    </ng-template>
     <div class="grid geboVeryLargeButtonsBar" style="vertical-align: baseline">
 
       <div class="col-3">

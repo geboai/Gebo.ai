@@ -28,12 +28,16 @@ import ai.gebo.llms.agent.chat.service.IGReactiveChatAgentsNetworkService;
 import ai.gebo.llms.agent.chat.service.impl.ReportWriterReactiveAgentServiceImpl;
 import ai.gebo.llms.agent.standard.config.StandardAgentsInitialization;
 import ai.gebo.llms.agent.standard.services.ChatRuntimeDataQueryAdapterAgentService;
+import ai.gebo.llms.agent.standard.services.GConversationAgentsSessionFactory;
+import ai.gebo.llms.agent.standard.services.GNetworkEnvironmentBuilder;
 import ai.gebo.llms.agent.standard.services.DefaultControllerNetworkAgentService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
-import ai.gebo.llms.chat.pipelines.model.ChatPipelineExecutionRuntimeData;
 import ai.gebo.openchat.pipeline.OpenChatConstants;
 import ai.gebo.openchat.pipeline.steps.OpenChatAgentsNetworkStreamingStepService;
+import ai.gebo.openchat.pipeline.steps.OpenChatAgentsNetworkRespawnStepService;
+import ai.gebo.llms.agent.chat.service.impl.NetworkRespawnPlanner;
+import ai.gebo.llms.chat.pipelines.service.impl.NetworkOfAgentsSuspensionTransport;
 
 /**
  * Wires the open-chat KB-free agents network. It reuses the standard chat network
@@ -121,12 +125,28 @@ public class OpenChatAgentsInitialization {
 			@Qualifier(OpenChatConstants.OPEN_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource openChatNetworkDataSource,
 			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
 			IGChatSessionLifeCycleService lifeCycleService,
-			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService) {
-		IGAgentsNetworkServiceFactory<ChatPipelineExecutionRuntimeData, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory) {
+		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
 				.getFactory(IGReactiveChatAgentsNetworkService.class);
 		// The free chats are handed to the network resolved for the pure chat pipeline;
 		// the open-chat network is the fallback.
 		return new OpenChatAgentsNetworkStreamingStepService(factory, openChatNetworkDataSource, lifeCycleService,
-				defaultNetworksService);
+				defaultNetworksService, environmentBuilder, conversationMemory);
+	}
+
+	/** The open chat's respawner: the suspended network of a conversation respawned with the user's reaction. */
+	@Bean
+	public OpenChatAgentsNetworkRespawnStepService openChatAgentsNetworkRespawnStep(
+			@Qualifier(OpenChatConstants.OPEN_CHAT_AGENTS_NETWORK_QUALIFIER) IDynamicAgentsNetworkDataSource openChatNetworkDataSource,
+			IGAgentsNetworkServiceFactoryRepositoryPattern agentsNetworkServiceFactory,
+			IGChatSessionLifeCycleService lifeCycleService,
+			IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
+			GNetworkEnvironmentBuilder environmentBuilder, GConversationAgentsSessionFactory conversationMemory,
+			NetworkRespawnPlanner planner, NetworkOfAgentsSuspensionTransport suspensionTransport) {
+		IGAgentsNetworkServiceFactory<String, GeboChatMessageEnvelope, IGReactiveChatAgentsNetworkService> factory = agentsNetworkServiceFactory
+				.getFactory(IGReactiveChatAgentsNetworkService.class);
+		return new OpenChatAgentsNetworkRespawnStepService(factory, openChatNetworkDataSource, lifeCycleService,
+				defaultNetworksService, environmentBuilder, conversationMemory, planner, suspensionTransport);
 	}
 }

@@ -53,10 +53,16 @@ public class GeboClusterCommonsAutoConfiguration {
 	 * production) - silently skipping this bean and every cluster surface downstream
 	 * of it.
 	 * </p>
+	 *
+	 * <p>
+	 * Membership is the topology's services, so without a topology
+	 * ({@code gebo.microservices.topology.enabled=false}) there is none either: no
+	 * participants bean, and no cluster surface on that service.
+	 * </p>
 	 */
 	@Bean
 	@ConditionalOnClass(DiscoveryClient.class)
-	@ConditionalOnBean(DiscoveryClient.class)
+	@ConditionalOnBean({ DiscoveryClient.class, GeboMicroservicesTopology.class })
 	@ConditionalOnMissingBean
 	public GeboClusterParticipants geboClusterParticipants(DiscoveryClient discoveryClient,
 			GeboMicroservicesTopology topology, GeboClusterParticipantsProperties properties) {

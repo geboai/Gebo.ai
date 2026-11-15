@@ -137,7 +137,9 @@ http://<your-server-ip>:12999/
 
 All of them run inside the same container, so there is nothing else to deploy. Docker keeps the data in volumes of its own; when you later want an installation you can back up and upgrade, name those volumes as described in [dockers/PERSISTENCE.md](https://github.com/geboai/Gebo.ai/blob/develop/dockers/PERSISTENCE.md).
 
-For a structured deployment where the infrastructure services run as separate containers, use [`geboai/gebo.ai`](https://hub.docker.com/r/geboai/gebo.ai) with the official Docker Compose stack.
+Gebo.ai runs in this image on **Java 25 (LTS)**, Ubuntu's own OpenJDK build, as the **non-root user `gebo` (uid 10001)**. Volumes created by an older image, when Gebo.ai still ran as root, are handed over automatically at container start. Unicode file names on mounted Windows, SMB/CIFS and NTFS shares are read correctly.
+
+For a structured deployment where the infrastructure services run as separate containers, use [`geboai/gebo.ai`](https://hub.docker.com/r/geboai/gebo.ai) with the official Docker Compose stack. That image is also hardened further: no shell, no package manager, minimal Java runtime.
 
 ## Gebo.ai licence
 

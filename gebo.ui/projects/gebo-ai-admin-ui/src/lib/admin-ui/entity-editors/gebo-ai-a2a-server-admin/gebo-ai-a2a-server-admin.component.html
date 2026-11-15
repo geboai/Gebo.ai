@@ -84,6 +84,7 @@
                                 <th id="KindHeader" gebo-ai-text>Kind</th>
                                 <th id="ExportCodeHeader" gebo-ai-text>Network / Agent code</th>
                                 <th id="SkillNameHeader" gebo-ai-text>Skill name</th>
+                                <th id="ChatProfileHeader" gebo-ai-text>Chat profile</th>
                                 <th></th>
                             </tr>
                         </ng-template>
@@ -92,6 +93,7 @@
                                 <td>{{ isNetwork(item) ? 'Network' : 'Agent' }}</td>
                                 <td>{{ isNetwork(item) ? item.networkCode : item.agentConfigCode }}</td>
                                 <td>{{ item.skillName }}</td>
+                                <td>{{ item.chatProfileCode }}</td>
                                 <td>
                                     <p-button icon="pi pi-trash" severity="danger" [text]="true"
                                         (onClick)="removeEntry(i)" [disabled]="readonly"></p-button>
@@ -128,6 +130,13 @@
                             <gebo-ai-field id="newSkillName" label="Skill name"
                                 help="Skill id/name advertised on the Agent Card (defaults to the code).">
                                 <input pInputText id="newSkillName" [(ngModel)]="newEntry.skillName"
+                                    [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                            </gebo-ai-field>
+                        </div>
+                        <div class="col-3" *ngIf="isNetwork(newEntry)">
+                            <gebo-ai-field id="newChatProfileCode" label="Chat profile"
+                                help="The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. Left empty it sees every knowledge base the calling account can see.">
+                                <input pInputText id="newChatProfileCode" [(ngModel)]="newEntry.chatProfileCode"
                                     [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
                             </gebo-ai-field>
                         </div>

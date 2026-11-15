@@ -86,6 +86,7 @@ public class GSystemMessagesServiceImpl implements IGSystemMessagesService {
 		message.setAudience(publication.audience());
 		message.setDismissible(publication.dismissible());
 		message.setExpiresAt(publication.expiresAt());
+		message.setRecipients(recipientsOf(publication));
 		message.setRevision(existing.map(m -> m.getRevision() + 1).orElse(1L));
 		if (message.getCreatedAt() == null) {
 			message.setCreatedAt(now);
@@ -93,7 +94,8 @@ public class GSystemMessagesServiceImpl implements IGSystemMessagesService {
 		message.setUpdatedAt(now);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("publish(" + id + ") audience=" + message.getAudience() + " severity="
-					+ message.getSeverity() + " revision=" + message.getRevision());
+					+ message.getSeverity() + " revision=" + message.getRevision()
+					+ (message.getRecipients() != null ? " for " + message.getRecipients() : ""));
 		}
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("publish(" + id + ") content: " + message);
@@ -120,7 +122,18 @@ public class GSystemMessagesServiceImpl implements IGSystemMessagesService {
 				&& Objects.equals(message.getDetail(), publication.detail())
 				&& message.getAudience() == publication.audience()
 				&& message.isDismissible() == publication.dismissible()
-				&& Objects.equals(message.getExpiresAt(), publication.expiresAt());
+				&& Objects.equals(message.getExpiresAt(), publication.expiresAt())
+				&& Objects.equals(message.getRecipients(), recipientsOf(publication));
+	}
+
+	/** The named people of a publication, none when it names nobody. */
+	private static List<String> recipientsOf(SystemMessagePublication publication) {
+		if (publication.recipients() == null) {
+			return null;
+		}
+		List<String> named = publication.recipients().stream().filter(r -> r != null && !r.isBlank()).distinct()
+				.toList();
+		return named.isEmpty() ? null : named;
 	}
 
 	@Override
@@ -139,7 +152,19 @@ public class GSystemMessagesServiceImpl implements IGSystemMessagesService {
 		Map<String, Long> dismissedRevisions = dismissalRepository.findByUsername(username).stream().collect(
 				Collectors.toMap(GSystemMessageDismissal::getMessageId, GSystemMessageDismissal::getRevision,
 						Math::max));
-		List<GSystemMessage> visible = messageRepository.findByAudienceIn(audiencesOf(administrator)).stream()
+		// what the audience shows everybody of it, but nothing meant for named people
+		// unless this is one of them; and what is meant for this person by name
+		List<GSystemMessage> candidates = new java.util.ArrayList<>(
+				messageRepository.findByAudienceIn(audiencesOf(administrator)).stream()
+						.filter(m -> m.getRecipients() == null || m.getRecipients().isEmpty()).toList());
+		if (username != null) {
+			for (GSystemMessage mine : messageRepository.findByRecipientsContaining(username)) {
+				if (candidates.stream().noneMatch(m -> Objects.equals(m.getId(), mine.getId()))) {
+					candidates.add(mine);
+				}
+			}
+		}
+		List<GSystemMessage> visible = candidates.stream()
 				.filter(m -> m.getExpiresAt() == null || m.getExpiresAt().after(now))
 				.filter(m -> !m.isDismissible() || dismissedRevisions.getOrDefault(m.getId(), 0L) < m.getRevision())
 				.sorted(Comparator.comparing((Function<GSystemMessage, Integer>) m -> severityRank(m.getSeverity()))

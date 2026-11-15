@@ -55,8 +55,6 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 	private ContextContentRequired chatHistory = null;
 	@NotNull
 	private ContextContentRequired contextDocuments = null;
-	@NotNull
-	private ContextContentRequired toolsCalling = null;
 	@HashIndexed
 	private String langCode = DEFAULT_LANGUAGE;
 	@HashIndexed
@@ -289,14 +287,6 @@ public class GPromptTemplateConfig implements Cloneable, ITokensCountable {
 
 	public void setContextDocuments(ContextContentRequired contextDocuments) {
 		this.contextDocuments = contextDocuments;
-	}
-
-	public ContextContentRequired getToolsCalling() {
-		return toolsCalling;
-	}
-
-	public void setToolsCalling(ContextContentRequired toolsCalling) {
-		this.toolsCalling = toolsCalling;
 	}
 
 	public Boolean getAgentPrompt() {

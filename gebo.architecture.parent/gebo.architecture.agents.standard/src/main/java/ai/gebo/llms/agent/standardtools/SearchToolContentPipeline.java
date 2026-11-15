@@ -40,6 +40,7 @@ import ai.gebo.architecture.search.service.BestEffortSearchCalls;
 import ai.gebo.architecture.search.model.SearchServiceException;
 import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.architecture.search.service.ISearchService;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.agent.standard.config.StandardAgentsConfig;
 import ai.gebo.llms.deepsearch.service.DocumentNamesShown;
 import ai.gebo.llms.deepsearch.service.SearchResultsChunker;
@@ -607,7 +608,7 @@ public class SearchToolContentPipeline {
 	/**
 	 * The tokens the contents may take: the room the model call leaves to its tools'
 	 * results divided by the room divisor (the same rule as the knowledge base search,
-	 * see {@code ai.gebo.agents.standard.knowledge-base-search-room-divisor}), never more
+	 * see {@link KnowledgeBaseSearchBudget}), never more
 	 * than the room; {@link #DEFAULT_MAX_TOKENS} when the model call shares no room.
 	 */
 	int resultTokens(ToolsTokenBudget callBudget) {
@@ -618,8 +619,7 @@ public class SearchToolContentPipeline {
 			return DEFAULT_MAX_TOKENS;
 		}
 		final double divisor = roomDivisor();
-		final int tokens = callBudget
-				.grant((int) Math.min(Integer.MAX_VALUE, Math.floor(callBudget.left() / divisor)));
+		final int tokens = KnowledgeBaseSearchBudget.shareOfRoom(callBudget.left(), divisor);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("resultTokens(...) room left:" + callBudget.left() + " (tok) divisor:" + divisor
 					+ " contents at most:" + tokens + " (tok)");
@@ -629,11 +629,7 @@ public class SearchToolContentPipeline {
 
 	/** The divisor of the room left to the tools, as the knowledge base search's one. */
 	double roomDivisor() {
-		final StandardAgentsConfig config = agentsConfig.getIfAvailable();
-		final double divisor = config != null ? config.getKnowledgeBaseSearchRoomDivisor()
-				: InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
-		return divisor > 0 && !Double.isInfinite(divisor) ? divisor
-				: InternalKnowledgeBaseSearchToolSource.DEFAULT_ROOM_DIVISOR;
+		return StandardAgentsConfig.knowledgeBaseSearchRoomDivisor(agentsConfig.getIfAvailable());
 	}
 
 	/** The objective to rank against, the query when the model gave none, bounded in size. */

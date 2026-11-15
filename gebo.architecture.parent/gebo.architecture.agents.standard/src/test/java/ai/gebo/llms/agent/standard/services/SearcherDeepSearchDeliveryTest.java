@@ -40,6 +40,7 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
 import ai.gebo.llms.deepsearch.service.DeepSearchAnalysisOutcome;
 import ai.gebo.model.DocumentMetaInfos;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 /**
  * A search agent of the networks hands over one analysis instead of the fragments
@@ -49,6 +50,8 @@ import reactor.core.publisher.Flux;
  * search deployed, the fragments are handed over as retrieved.
  */
 class SearcherDeepSearchDeliveryTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:SearcherDeepSearchDeliveryTest").build();
 
 	private final DeepSearchToolsSupport support = mock(DeepSearchToolsSupport.class);
 	private final DeepSearchToolAnalysis analysis = mock(DeepSearchToolAnalysis.class);
@@ -85,7 +88,7 @@ class SearcherDeepSearchDeliveryTest {
 	}
 
 	private void analysisAnswers(String text, String... unreadFragmentIds) {
-		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any()))
+		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any()))
 				.thenAnswer(invocation -> {
 					DeepSearchAnalysisOutcome outcome = invocation.getArgument(9);
 					for (String id : unreadFragmentIds) {
@@ -107,7 +110,7 @@ class SearcherDeepSearchDeliveryTest {
 		persona.setAgentConfigCode("searcher");
 
 		List<Document> delivered = searcher.deliverDocuments(fragments, command(true, SearchAgentCommand.DeepSearchDepth.BROAD),
-				null, mock(IGConfigurableChatModel.class), session, persona, null, null, notices);
+				null, toolFreeModel(), session, persona, null, null, notices, TOOL_CALLING);
 
 		assertEquals(1, delivered.size(), "one analysis instead of the fragments");
 		Document analysisDocument = delivered.get(0);
@@ -138,9 +141,11 @@ class SearcherDeepSearchDeliveryTest {
 		List<String> notices = new ArrayList<>();
 
 		List<Document> plain = searcher.deliverDocuments(fragments, command(null, null), null, null,
-				new AgentsCollaborationSessionContext(), new AgentNetworkParticipant(), null, null, notices);
+				new AgentsCollaborationSessionContext(), new AgentNetworkParticipant(), null, null, notices,
+						TOOL_CALLING);
 		List<Document> refused = searcher.deliverDocuments(fragments, command(false, null), null, null,
-				new AgentsCollaborationSessionContext(), new AgentNetworkParticipant(), null, null, notices);
+				new AgentsCollaborationSessionContext(), new AgentNetworkParticipant(), null, null, notices,
+						TOOL_CALLING);
 
 		assertSame(fragments, plain);
 		assertSame(fragments, refused);
@@ -155,7 +160,8 @@ class SearcherDeepSearchDeliveryTest {
 
 		assertFalse(searcher.deepSearchRequested(command));
 		assertSame(fragments, searcher.deliverDocuments(fragments, command, null, null,
-				new AgentsCollaborationSessionContext(), new AgentNetworkParticipant(), null, null, new ArrayList<>()));
+				new AgentsCollaborationSessionContext(), new AgentNetworkParticipant(), null, null, new ArrayList<>(),
+						TOOL_CALLING));
 		// a plain search: ranking as asked, retrieval widened for it
 		assertTrue(searcher.rankingRequested(command));
 		assertEquals(20, searcher.retrievalTopK(command));
@@ -178,17 +184,23 @@ class SearcherDeepSearchDeliveryTest {
 	@Test
 	void whenTheAnalysisFailsTheFragmentsAreHandedOverAndTheReadersTold() throws Exception {
 		InternalKnowledgeBaseSearchNetworkAgentService searcher = searcher(true);
-		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any()))
+		when(analysis.analyze(any(), any(), any(), any(), anyString(), any(), any(), any(), any(), any(), any()))
 				.thenThrow(new IllegalStateException("provider down"));
 		List<Document> fragments = List.of(fragment("f1", "docA", "policy.pdf"));
 		List<String> notices = new ArrayList<>();
 
 		List<Document> delivered = searcher.deliverDocuments(fragments, command(true, null), null,
 				mock(IGConfigurableChatModel.class), new AgentsCollaborationSessionContext(),
-				new AgentNetworkParticipant(), null, null, notices);
+				new AgentNetworkParticipant(), null, null, notices, TOOL_CALLING);
 
 		assertSame(fragments, delivered);
 		assertEquals(1, notices.size());
 		assertTrue(notices.get(0).contains("could not be run"), notices.get(0));
+	}
+
+	private static IGConfigurableChatModel toolFreeModel() throws Exception {
+		final IGConfigurableChatModel model = mock(IGConfigurableChatModel.class);
+		when(model.withoutTools()).thenReturn(model);
+		return model;
 	}
 }

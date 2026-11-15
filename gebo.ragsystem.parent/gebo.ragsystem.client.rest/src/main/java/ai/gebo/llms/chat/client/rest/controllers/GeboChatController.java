@@ -104,26 +104,30 @@ public class GeboChatController {
 	/**
 	 * Retrieves the capabilities of a specific model provider
 	 * 
-	 * @param modelCode The code identifying the model
+	 * @param modelCode    The code identifying the model
+	 * @param pipelineCode The pipeline the chat runs in, none for a direct chat
 	 * @return The capabilities of the requested model provider
 	 */
 	@GetMapping(value = "getProviderCapabilities", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ModelProviderCapabilities getProviderCapabilities(@RequestParam("modelCode") String modelCode) {
-		return chatService.getProviderCapabilities(modelCode);
+	public ModelProviderCapabilities getProviderCapabilities(@RequestParam("modelCode") String modelCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode) {
+		return chatService.getProviderCapabilities(modelCode, pipelineCode);
 	}
 
 	/**
 	 * Retrieves user information related to a specific chat model
 	 * 
-	 * @param modelCode The code identifying the model
+	 * @param modelCode    The code identifying the model
+	 * @param pipelineCode The pipeline the chat runs in, none for a direct chat
 	 * @return User information for the requested model
 	 * @throws GeboChatException  If there's a problem with the chat service
 	 * @throws LLMConfigException If there's a configuration issue with the model
 	 */
 	@GetMapping(value = "getChatModelUserInfo", produces = MediaType.APPLICATION_JSON_VALUE)
-	public GeboChatUserInfo getChatModelUserInfo(@RequestParam("modelCode") String modelCode)
+	public GeboChatUserInfo getChatModelUserInfo(@RequestParam("modelCode") String modelCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
 			throws GeboChatException, LLMConfigException {
-		return chatService.getChatModelUserInfo(modelCode);
+		return chatService.getChatModelUserInfo(modelCode, pipelineCode);
 	}
 
 	/**

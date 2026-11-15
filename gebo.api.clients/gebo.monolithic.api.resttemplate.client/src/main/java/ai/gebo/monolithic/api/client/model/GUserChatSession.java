@@ -27,7 +27,7 @@ import java.util.List;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-18T11:42:17.688032100+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T23:11:35.051684500+01:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")
@@ -54,8 +54,32 @@ public class GUserChatSession {
   @JsonProperty("username")
   private String username = null;
 
+  @JsonProperty("accessibleUsers")
+  private List<String> accessibleUsers = null;
+
+  @JsonProperty("accessibleGroups")
+  private List<String> accessibleGroups = null;
+
+  @JsonProperty("accessibleToAll")
+  private Boolean accessibleToAll = null;
+
+  @JsonProperty("aclAliases")
+  private List<Integer> aclAliases = null;
+
   @JsonProperty("contextCode")
   private String contextCode = null;
+
+  @JsonProperty("transientRun")
+  private Boolean transientRun = null;
+
+  @JsonProperty("runOrigin")
+  private String runOrigin = null;
+
+  @JsonProperty("externalSystem")
+  private String externalSystem = null;
+
+  @JsonProperty("externalSessionKey")
+  private String externalSessionKey = null;
 
   @JsonProperty("chatProfileCode")
   private String chatProfileCode = null;
@@ -231,6 +255,102 @@ public class GUserChatSession {
     this.username = username;
   }
 
+  public GUserChatSession accessibleUsers(List<String> accessibleUsers) {
+    this.accessibleUsers = accessibleUsers;
+    return this;
+  }
+
+  public GUserChatSession addAccessibleUsersItem(String accessibleUsersItem) {
+    if (this.accessibleUsers == null) {
+      this.accessibleUsers = new ArrayList<>();
+    }
+    this.accessibleUsers.add(accessibleUsersItem);
+    return this;
+  }
+
+   /**
+   * Get accessibleUsers
+   * @return accessibleUsers
+  **/
+  @Schema(description = "")
+  public List<String> getAccessibleUsers() {
+    return accessibleUsers;
+  }
+
+  public void setAccessibleUsers(List<String> accessibleUsers) {
+    this.accessibleUsers = accessibleUsers;
+  }
+
+  public GUserChatSession accessibleGroups(List<String> accessibleGroups) {
+    this.accessibleGroups = accessibleGroups;
+    return this;
+  }
+
+  public GUserChatSession addAccessibleGroupsItem(String accessibleGroupsItem) {
+    if (this.accessibleGroups == null) {
+      this.accessibleGroups = new ArrayList<>();
+    }
+    this.accessibleGroups.add(accessibleGroupsItem);
+    return this;
+  }
+
+   /**
+   * Get accessibleGroups
+   * @return accessibleGroups
+  **/
+  @Schema(description = "")
+  public List<String> getAccessibleGroups() {
+    return accessibleGroups;
+  }
+
+  public void setAccessibleGroups(List<String> accessibleGroups) {
+    this.accessibleGroups = accessibleGroups;
+  }
+
+  public GUserChatSession accessibleToAll(Boolean accessibleToAll) {
+    this.accessibleToAll = accessibleToAll;
+    return this;
+  }
+
+   /**
+   * Get accessibleToAll
+   * @return accessibleToAll
+  **/
+  @Schema(description = "")
+  public Boolean isAccessibleToAll() {
+    return accessibleToAll;
+  }
+
+  public void setAccessibleToAll(Boolean accessibleToAll) {
+    this.accessibleToAll = accessibleToAll;
+  }
+
+  public GUserChatSession aclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+    return this;
+  }
+
+  public GUserChatSession addAclAliasesItem(Integer aclAliasesItem) {
+    if (this.aclAliases == null) {
+      this.aclAliases = new ArrayList<>();
+    }
+    this.aclAliases.add(aclAliasesItem);
+    return this;
+  }
+
+   /**
+   * Get aclAliases
+   * @return aclAliases
+  **/
+  @Schema(description = "")
+  public List<Integer> getAclAliases() {
+    return aclAliases;
+  }
+
+  public void setAclAliases(List<Integer> aclAliases) {
+    this.aclAliases = aclAliases;
+  }
+
   public GUserChatSession contextCode(String contextCode) {
     this.contextCode = contextCode;
     return this;
@@ -247,6 +367,78 @@ public class GUserChatSession {
 
   public void setContextCode(String contextCode) {
     this.contextCode = contextCode;
+  }
+
+  public GUserChatSession transientRun(Boolean transientRun) {
+    this.transientRun = transientRun;
+    return this;
+  }
+
+   /**
+   * Get transientRun
+   * @return transientRun
+  **/
+  @Schema(description = "")
+  public Boolean isTransientRun() {
+    return transientRun;
+  }
+
+  public void setTransientRun(Boolean transientRun) {
+    this.transientRun = transientRun;
+  }
+
+  public GUserChatSession runOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+    return this;
+  }
+
+   /**
+   * Get runOrigin
+   * @return runOrigin
+  **/
+  @Schema(description = "")
+  public String getRunOrigin() {
+    return runOrigin;
+  }
+
+  public void setRunOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+  }
+
+  public GUserChatSession externalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+    return this;
+  }
+
+   /**
+   * Get externalSystem
+   * @return externalSystem
+  **/
+  @Schema(description = "")
+  public String getExternalSystem() {
+    return externalSystem;
+  }
+
+  public void setExternalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+  }
+
+  public GUserChatSession externalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
+    return this;
+  }
+
+   /**
+   * Get externalSessionKey
+   * @return externalSessionKey
+  **/
+  @Schema(description = "")
+  public String getExternalSessionKey() {
+    return externalSessionKey;
+  }
+
+  public void setExternalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
   }
 
   public GUserChatSession chatProfileCode(String chatProfileCode) {
@@ -463,7 +655,15 @@ public class GUserChatSession {
         Objects.equals(this.dateCreated, guserChatSession.dateCreated) &&
         Objects.equals(this.chatCreationDateTime, guserChatSession.chatCreationDateTime) &&
         Objects.equals(this.username, guserChatSession.username) &&
+        Objects.equals(this.accessibleUsers, guserChatSession.accessibleUsers) &&
+        Objects.equals(this.accessibleGroups, guserChatSession.accessibleGroups) &&
+        Objects.equals(this.accessibleToAll, guserChatSession.accessibleToAll) &&
+        Objects.equals(this.aclAliases, guserChatSession.aclAliases) &&
         Objects.equals(this.contextCode, guserChatSession.contextCode) &&
+        Objects.equals(this.transientRun, guserChatSession.transientRun) &&
+        Objects.equals(this.runOrigin, guserChatSession.runOrigin) &&
+        Objects.equals(this.externalSystem, guserChatSession.externalSystem) &&
+        Objects.equals(this.externalSessionKey, guserChatSession.externalSessionKey) &&
         Objects.equals(this.chatProfileCode, guserChatSession.chatProfileCode) &&
         Objects.equals(this.modelReference, guserChatSession.modelReference) &&
         Objects.equals(this.ragChat, guserChatSession.ragChat) &&
@@ -478,7 +678,7 @@ public class GUserChatSession {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, contextCode, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, chatCreationDateTime, username, accessibleUsers, accessibleGroups, accessibleToAll, aclAliases, contextCode, transientRun, runOrigin, externalSystem, externalSessionKey, chatProfileCode, modelReference, ragChat, pipelineCode, chatMemoryId, interactions, chatModelCode, choosedKnowledgeBases, userRequiredLanguage, chatLanguage);
   }
 
 
@@ -495,7 +695,15 @@ public class GUserChatSession {
     sb.append("    dateCreated: ").append(toIndentedString(dateCreated)).append("\n");
     sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
+    sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
+    sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
+    sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
+    sb.append("    transientRun: ").append(toIndentedString(transientRun)).append("\n");
+    sb.append("    runOrigin: ").append(toIndentedString(runOrigin)).append("\n");
+    sb.append("    externalSystem: ").append(toIndentedString(externalSystem)).append("\n");
+    sb.append("    externalSessionKey: ").append(toIndentedString(externalSessionKey)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    modelReference: ").append(toIndentedString(modelReference)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");

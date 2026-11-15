@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AgentConditionsExpiry } from './agentConditionsExpiry';
 import { GObjectRefGBaseChatModelConfig } from './gObjectRefGBaseChatModelConfig';
 import { GPromptTemplateConfig } from './gPromptTemplateConfig';
 
@@ -36,11 +37,14 @@ export interface GAgentConfig {
     temperature?: number;
     thinking?: GAgentConfig.ThinkingEnum;
     readOnly?: boolean;
+    conditionsExpiry?: AgentConditionsExpiry;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
     enabledFunctions?: Array<string>;
     excludedToolSources?: Array<string>;
+    additionalToolSources?: Array<string>;
+    libraryTypeIds?: Array<string>;
 }
 export namespace GAgentConfig {
     export type AgentTypeEnum = 'AGENT' | 'AGENTS_NETWORK';

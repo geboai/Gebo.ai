@@ -60,12 +60,12 @@
         </gebo-ai-field>
       </div>
       <div class="col-2">
-        <div class="grid">
-          <div class="col-4"><p-button id="CloseBtn" gebo-ai-label (onClick)="cancelAction.emit(true)"
-          icon="pi pi-times" [outlined]="true" label="Close" severity="contrast"></p-button></div>
-          <div class="col-4"><p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete"
-          [outlined]="true" (onClick)="doDelete()"></p-button></div>
-          <div class="col-4"></div>
+        <!-- a wrapping row: a three columns grid inside this col-2 overlapped the two buttons -->
+        <div class="flex flex-wrap gap-2">
+          <p-button id="CloseBtn" gebo-ai-label (onClick)="cancelAction.emit(true)"
+          icon="pi pi-times" [outlined]="true" label="Close" severity="contrast"></p-button>
+          <p-button id="DeleteBtn" gebo-ai-label icon="pi pi-trash" severity="danger" label="Delete"
+          [outlined]="true" (onClick)="doDelete()"></p-button>
         </div>
 
 

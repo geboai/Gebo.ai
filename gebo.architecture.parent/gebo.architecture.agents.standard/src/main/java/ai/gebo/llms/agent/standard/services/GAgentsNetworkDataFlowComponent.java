@@ -510,6 +510,8 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			return "Tool arguments sent, results read";
 		case PLATFORM_DATA:
 			return "Platform data read";
+		case EXTERNAL_DATABASE:
+			return "Queries sent, rows read";
 		default:
 			return "Data exchanged";
 		}
@@ -582,9 +584,43 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			DataFlowEndpoints.addUnique(flow, platform);
 			return List.of(new ResolvedTarget(flow.qualifiedId(platform.getId()), MetaEndpointType.DATABASE, true, false));
 		}
+		case EXTERNAL_DATABASE: {
+			// the queries carry what the models give the tool, the rows found come back
+			final DataEndpoint database = externalDatabaseEndpoint(target);
+			DataFlowEndpoints.addUnique(flow, database);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Tool target of kind EXTERNAL_DATABASE resolved to endpoint id:" + database.getId()
+						+ " locality:" + database.getLocality());
+			}
+			return List.of(new ResolvedTarget(flow.qualifiedId(database.getId()), MetaEndpointType.DATABASE, true, true));
+		}
 		default:
 			return List.of();
 		}
+	}
+
+	/**
+	 * A database of the product a tool queries (see
+	 * {@link ToolDataFlowTarget.Kind#EXTERNAL_DATABASE}): local when its locator says
+	 * so, an external provider otherwise, as every endpoint reached by a locator.
+	 */
+	static DataEndpoint externalDatabaseEndpoint(ToolDataFlowTarget target) {
+		final String locator = target.locator();
+		final String name = safe(target.product(), safe(target.reference(), "database"));
+		DataEndpoint endpoint = new DataEndpoint();
+		endpoint.setId("external-database-" + safe(target.reference(), "unknown").toLowerCase().replaceAll("[^a-z0-9]+", "-"));
+		endpoint.setDescription(name);
+		endpoint.setProduct(name);
+		endpoint.setEndpoint(safe(locator, "database"));
+		endpoint.setInput(true);
+		endpoint.setOutput(true);
+		endpoint.setTypes(list(MetaEndpointType.DATABASE));
+		endpoint.setPersonalData(false);
+		if (DataFlowEndpoints.notEmpty(target.secretReference())) {
+			endpoint.setSecretReference(target.secretReference());
+		}
+		endpoint.setLocality(DataFlowEndpoints.localityOf(locator));
+		return endpoint;
 	}
 
 	/** An endpoint this component owns that the tools write to, none when it is not configured. */

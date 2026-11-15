@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.util.Date;
 import java.util.List;
 
@@ -84,7 +86,7 @@ public class GChatAnswerFeedbackServiceImpl implements IGChatAnswerFeedbackServi
 		}
 		GUserChatSession session = sessionRepository.findById(userChatContextCode)
 				.orElseThrow(() -> new GeboChatSessionLifecycleException("Chat " + userChatContextCode + " not found"));
-		securityService.checkBeingCreator(session);
+		securityService.checkBeingCreatorOrGranted(session, AclGrantType.WRITE);
 		return session;
 	}
 

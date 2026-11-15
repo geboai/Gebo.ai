@@ -3,6 +3,8 @@ package ai.gebo.architecture.agents.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import ai.gebo.architecture.ai.model.LibraryToolCollision;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,7 +46,7 @@ public class AgentMountedTools {
 		private String description;
 		private String categoryCode;
 		private String categoryDescription;
-		/** The id of the source exporting the tool. */
+		/** The id of the source exporting the tool; the library type's for a tool of a library. */
 		private String sourceId;
 		/** What the source is, for the administrator. */
 		private String sourceDescription;
@@ -66,4 +68,10 @@ public class AgentMountedTools {
 	 * out for this agent
 	 */
 	private List<MountedTool> excludedTools = new ArrayList<>();
+	/**
+	 * the tools of the libraries of this agent having the name of another tool it
+	 * mounts: the library's tool is the one in {@link #tools}, the other never reaches
+	 * the model
+	 */
+	private List<LibraryToolCollision> collisions = new ArrayList<>();
 }

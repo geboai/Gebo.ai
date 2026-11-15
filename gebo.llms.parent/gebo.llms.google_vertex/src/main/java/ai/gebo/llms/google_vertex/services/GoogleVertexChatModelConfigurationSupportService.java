@@ -121,8 +121,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 		 * @throws LLMConfigException if there's an error during configuration
 		 */
 		@Override
-		protected GoogleGenAiChatModel configureModel(GGoogleVertexChatModelConfig config, GChatModelType type,
-				ToolCallingManager toolsCallsManager) throws LLMConfigException {
+		protected GoogleGenAiChatModel configureModel(GGoogleVertexChatModelConfig config, GChatModelType type)
+				throws LLMConfigException {
 
 			Client genAiClient = configurator.createGenAiClient(config.getApiSecretCode(), config.getBaseUrl());
 			GoogleGenAiChatOptions.Builder builder = GoogleGenAiChatOptions.builder();
@@ -163,8 +163,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 			}
 
 			// Configure enabled functions if specified
-			if (config.getEnabledFunctions() != null && !config.getEnabledFunctions().isEmpty()) {
-				List<ToolCallback> functions = functionsRepo.getTools((config.getEnabledFunctions()));
+			if (!toolNames.isEmpty()) {
+				List<ToolCallback> functions = functionsRepo.getTools((toolNames));
 				// The condition above tests the tool names that were REQUESTED. getTools filters
 				// the callbacks actually available by those names, so it can return fewer - or
 				// none at all, when the source that exports them failed. Configuring the model
@@ -173,10 +173,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 				if (functions != null && !functions.isEmpty()) {
 					builder = builder.toolCallbacks(functions);
 				} else {
-					LOGGER.warn("Chat model " + config.getCode() + " enables "
-							+ config.getEnabledFunctions().size()
-							+ " tool(s) but none of them resolved to a callback, so it is configured"
-							+ " without tools: " + config.getEnabledFunctions());
+					logToolsNotRegistered(LOGGER, config.getCode(), functions);
 				}
 			}
 
@@ -186,7 +183,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 					.retryTemplate(serviceClientsProviderFactory.get(getType().getCode()).getCoreRetryTemplate())
 					.options(options)
 					.toolCallingManager(
-							toolsCallsManager != null ? toolsCallsManager : functionsRepo.createToolCallingManager())
+							functionsRepo.createToolCallingManager())
 					.observationRegistry(observationRegistry)
 					.build();
 			return model;

@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
@@ -81,6 +82,24 @@ public class OpenChatRoutingStepService implements IRoutingChatPipelineStepServi
 	@Override
 	public StepExecutorType getExecutorType() {
 		return StepExecutorType.PROGRAMMATIC;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Rewrites the user request and works out what the user wants delivered.");
+	}
+
+	@Override
+	public List<String> getReachableStepIds() {
+		return List.of(OpenChatConstants.OPEN_CHAT_NETWORK_STREAMING_STEP,
+				DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT,
+				DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl.DEFAULT_DEEPSEARCH_STREAMING,
+				OpenChatConstants.DEFAULT_CHAT_WITH_DOCS_STREAMING);
 	}
 
 	@Override

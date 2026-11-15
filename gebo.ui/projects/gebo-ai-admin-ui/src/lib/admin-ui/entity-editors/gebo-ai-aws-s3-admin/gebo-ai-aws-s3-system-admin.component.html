@@ -78,11 +78,10 @@
                       </gebo-ai-field>
                     </div>
                     <div class="col-6">
-                      <gebo-ai-field id="s3SecretCode" label="Identity used" help="Select or create the AWS connection identity (access key, secret key and region) to access the AWS S3 system" [required]="true">
+                      <gebo-ai-field id="s3SecretCode" label="Identity used" help="Select or create the AWS connection identity (access key, secret key and region) to access the AWS S3 system" [required]="true" placeholder="Select an identity">
                         <geboai-editable-listbox-component
                           id="s3SecretCode"
                           formControlName="s3SecretCode"
-                          placeholder="Select an identity"
                           [optionsObservable]="identitiesObservable"
                           [required]="true"
                           [createNewRecordRequest]="newSecretAction"

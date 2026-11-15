@@ -1,3 +1,37 @@
+// the chat with the custom areas the page reusing it may fill on its left and right:
+// they stay in view while the chat scrolls, and go above and below it on small screens
+.gebo-ai-reusable-chat-layout {
+  display: flex;
+  flex-direction: row;
+  // not stretched: a stretched chat gets a definite height, and the height: 100% of its
+  // scroll buttons would then take room in it, moving the message box of an empty chat
+  align-items: flex-start;
+  gap: var(--gebo-space-3, 0.75rem);
+  width: 100%;
+
+  &__area {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    position: sticky;
+    top: 0;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    min-width: 0;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    // in a column, stretching gives the full width, not a height
+    align-items: stretch;
+
+    &__area {
+      position: static;
+      align-self: stretch;
+      max-height: none;
+    }
+  }
+}
+
 .gebo-ai-reusable-chat {
   gebo-ai-chat-input-shell {
     display: block;
@@ -11,6 +45,9 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  // the room the custom side areas leave; in their column on small screens, the height of its content
+  flex: 1 1 auto;
+  min-width: 0;
   min-height: calc(100vh - 8rem);
   justify-content: space-between;
 
@@ -183,6 +220,12 @@
     display: flex;
     justify-content: center;
     margin-top: 1rem;
+  }
+
+  // the custom area between the selected documents and the message box
+  &__above-input-area {
+    width: 100%;
+    padding-bottom: var(--gebo-space-2, 0.5rem);
   }
 
   &__scroll {

@@ -81,7 +81,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
                 componentId: this.id,
                 key: "placeholder",
                 fieldId: "placeholder",
-                text: this.internalHelp
+                text: this.internalPlaceholder
             });
         }
         const substitutions = this.translationService.translateOnActualLanguage(existingTexts);

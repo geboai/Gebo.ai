@@ -101,9 +101,9 @@
             <div class="grid mt-3">
               <div class="col-12">
                 <gebo-ai-field id="impersonatedUserField" label="Impersonate User"
-                  help="Select the user whose permissions this API key will run under." [required]="true">
+                  help="Select the user whose permissions this API key will run under." [required]="true" placeholder="Select User">
                   <p-select id="impersonatedUser" formControlName="impersonatedUser" [options]="users"
-                    optionValue="username" optionLabel="username" placeholder="Select User" styleClass="w-full"
+                    optionValue="username" optionLabel="username" styleClass="w-full"
                   gebo-ai-field-element></p-select>
                 </gebo-ai-field>
               </div>

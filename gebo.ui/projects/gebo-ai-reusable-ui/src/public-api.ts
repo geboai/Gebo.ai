@@ -37,6 +37,10 @@ export * from "./lib/controls/relation-list-component/relation-list.component";
 
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.module';
 export * from './lib/controls/chat-control/gebo-ai-reusable-chat.component';
+export * from './lib/controls/chat-control/chat-libraries-panel.component';
+// the form answering a suspended run's conditions, reused away from the conversation
+export * from './lib/controls/chat-control/chat-suspension-answer.component';
+export * from './lib/controls/chat-control/chat-suspension-answer.module';
 export * from './lib/controls/chat-control/company-files-selection.token';
 
 
@@ -151,6 +155,7 @@ export * from "./lib/controls/choose-documents-panel/choose-documents-panel.comp
 
 export * from "./lib/infrastructure/login/login.module";
 export * from "./lib/infrastructure/login/login.service";
+export * from "./lib/infrastructure/login/admin-role.guard";
 
 export * from "./lib/infrastructure/fast-setup/fast-setup.module";
 export * from "./lib/infrastructure/fast-setup/fast-setup.component";

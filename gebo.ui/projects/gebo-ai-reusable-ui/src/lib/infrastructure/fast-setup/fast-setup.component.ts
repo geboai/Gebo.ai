@@ -26,6 +26,12 @@ import { LoginService } from "../login/login.service";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 const setupMessage:ToastMessageOptions={id:"WELCOME2SETUP", summary: "Welcome to Gebo.ai setup", detail: "Create the administration credentials for this installation", severity: "info" };
 /**
+ * Shown in place of the backend's "Admin user created !" message, whose id is a hash of its text:
+ * the text holds the administrator e-mail, so that id differs on every installation and never
+ * matches a translation. The texts here are fixed, so the message translates on its stable id.
+ */
+const adminCreatedMessage:ToastMessageOptions={id:"ADMIN_USER_CREATED", summary: "Admin user created !", detail: "The administrator account has been created successfully", severity: "success" };
+/**
  * Component responsible for the initial fast setup process of the Gebo.ai application.
  * Provides a user interface for creating the first admin account and completing installation.
  * This component handles the setup form, validation, and API communication to finalize installation.
@@ -153,7 +159,7 @@ export class FastSetupComponent implements OnInit {
         this.geboFastSetupControllerService.createSetup(param).subscribe({
             next: (result) => {
                 this.status = result;
-                this.userMessages = result?.messages as ToastMessageOptions[];
+                this.userMessages = ((result?.messages || []) as ToastMessageOptions[]).map(message => message?.summary === adminCreatedMessage.summary ? adminCreatedMessage : message);
                 if (this.status.result === true) {
                     const loginData = this.formGroup.value;
                     this.loggingin = true;

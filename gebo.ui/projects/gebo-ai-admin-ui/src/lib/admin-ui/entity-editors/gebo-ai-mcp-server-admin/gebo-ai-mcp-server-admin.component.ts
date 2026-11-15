@@ -1,6 +1,6 @@
 import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboMcpServerAdminControllerService, GeboMCPServerConfig, GObjectRefGProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboMcpServerAdminControllerService, GeboMCPAgentsNetworkTool, GeboMCPAgentTool, GeboMCPServerConfig, GObjectRefGProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, TreeNode } from "primeng/api";
 import { TreeNodeExpandEvent } from "primeng/tree";
@@ -48,6 +48,13 @@ export class GeboAIMCPServerAdminComponent extends BaseEntityEditingComponent<Ge
     resourceTreeRoots: TreeNode[] = [];
     selectedResourceNodes: TreeNode[] = [];
 
+    /** Single agents exported as tools: each answers a request in natural language. */
+    agentTools: GeboMCPAgentTool[] = [];
+    /** Networks of agents exported as tools. */
+    networkTools: GeboMCPAgentsNetworkTool[] = [];
+    newAgentTool: GeboMCPAgentTool = this.blankAgentTool();
+    newNetworkTool: GeboMCPAgentsNetworkTool = this.blankNetworkTool();
+
     constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         confirmationService: ConfirmationService,
@@ -67,12 +74,69 @@ export class GeboAIMCPServerAdminComponent extends BaseEntityEditingComponent<Ge
     }
 
     private initializeData(config: GeboMCPServerConfig) {
+        this.agentTools = [...(config?.agentAsTools || [])];
+        this.networkTools = [...(config?.agentNetworkAsTools || [])];
+        this.newAgentTool = this.blankAgentTool();
+        this.newNetworkTool = this.blankNetworkTool();
+        this.formGroup.patchValue({ agentAsTools: this.agentTools, agentNetworkAsTools: this.networkTools }, { emitEvent: false });
         this.selectedKbs = [...(config?.exportedKnowledgeBasesAsResources || [])];
         this.selectedProjs = [...(config?.exportedProjectsAsResources || [])];
         this.selectedEndpoints = [...(config?.exportedProjectEndpoints || [])];
         this.selectedResourceNodes = [];
         this.resourceTreeRoots = [];
         this.loadResourceTree();
+    }
+
+    private blankAgentTool(): GeboMCPAgentTool {
+        return { agentConfigCode: '', networkConfigCode: '', toolName: '' };
+    }
+
+    private blankNetworkTool(): GeboMCPAgentsNetworkTool {
+        return { agentsNetworkCode: '', toolName: '' };
+    }
+
+    /** Exports an agent as a tool; the tool is named after the agent when no name is given. */
+    addAgentTool(): void {
+        const entry = { ...this.newAgentTool };
+        if (!entry.agentConfigCode || !entry.agentConfigCode.trim()) {
+            this.userMessages = [{ severity: "warn", summary: "Missing agent", detail: "Enter the code of the agent to export as a tool." }];
+            return;
+        }
+        if (!entry.toolName || !entry.toolName.trim()) {
+            entry.toolName = entry.agentConfigCode;
+        }
+        this.agentTools = [...this.agentTools, entry];
+        this.formGroup.patchValue({ agentAsTools: this.agentTools });
+        this.formGroup.markAsDirty();
+        this.newAgentTool = this.blankAgentTool();
+    }
+
+    removeAgentTool(index: number): void {
+        this.agentTools = this.agentTools.filter((_, i) => i !== index);
+        this.formGroup.patchValue({ agentAsTools: this.agentTools });
+        this.formGroup.markAsDirty();
+    }
+
+    /** Exports a network of agents as a tool; the tool is named after the network when no name is given. */
+    addNetworkTool(): void {
+        const entry = { ...this.newNetworkTool };
+        if (!entry.agentsNetworkCode || !entry.agentsNetworkCode.trim()) {
+            this.userMessages = [{ severity: "warn", summary: "Missing network", detail: "Enter the code of the network of agents to export as a tool." }];
+            return;
+        }
+        if (!entry.toolName || !entry.toolName.trim()) {
+            entry.toolName = entry.agentsNetworkCode;
+        }
+        this.networkTools = [...this.networkTools, entry];
+        this.formGroup.patchValue({ agentNetworkAsTools: this.networkTools });
+        this.formGroup.markAsDirty();
+        this.newNetworkTool = this.blankNetworkTool();
+    }
+
+    removeNetworkTool(index: number): void {
+        this.networkTools = this.networkTools.filter((_, i) => i !== index);
+        this.formGroup.patchValue({ agentNetworkAsTools: this.networkTools });
+        this.formGroup.markAsDirty();
     }
 
     private loadResourceTree() {

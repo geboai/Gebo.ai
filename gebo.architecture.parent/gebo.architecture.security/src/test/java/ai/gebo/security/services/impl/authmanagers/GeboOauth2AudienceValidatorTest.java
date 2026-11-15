@@ -52,6 +52,33 @@ class GeboOauth2AudienceValidatorTest {
 	}
 
 	@Test
+	void acceptsDefaultKeycloakAccessTokenViaAzp() {
+		// What a default Keycloak realm issues for a user: addressed to its own account
+		// service, the requesting client named only in azp.
+		Jwt jwt = baseJwt().audience(List.of("account")).claim("azp", "gebo-api").build();
+		assertThat(new GeboOauth2AudienceValidator(ACCEPTED).validate(jwt).hasErrors()).isFalse();
+	}
+
+	@Test
+	void rejectsKeycloakTokenRequestedByAnotherClientOfTheRealm() {
+		// the threat the check exists for: another application of the same realm
+		Jwt jwt = baseJwt().audience(List.of("account")).claim("azp", "some-other-app").build();
+		assertThat(new GeboOauth2AudienceValidator(ACCEPTED).validate(jwt).hasErrors()).isTrue();
+	}
+
+	@Test
+	void aDistinctAudienceKeepsTheStrictReading() {
+		// A deployment wanting the strict reading accepts an audience of its own, given
+		// by a Keycloak audience mapper, distinct from the client id: a token this
+		// deployment's own client obtained for another API names only the client.
+		List<String> strict = List.of("gebo-api-resource");
+		Jwt forAnotherApi = baseJwt().audience(List.of("another-api")).claim("azp", "gebo-api").build();
+		Jwt forGebo = baseJwt().audience(List.of("gebo-api-resource")).claim("azp", "gebo-api").build();
+		assertThat(new GeboOauth2AudienceValidator(strict).validate(forAnotherApi).hasErrors()).isTrue();
+		assertThat(new GeboOauth2AudienceValidator(strict).validate(forGebo).hasErrors()).isFalse();
+	}
+
+	@Test
 	void rejectsTokenForAnotherClient() {
 		Jwt jwt = baseJwt().audience(List.of("some-other-app")).claim("client_id", "some-other-app").build();
 		assertThat(new GeboOauth2AudienceValidator(ACCEPTED).validate(jwt).hasErrors()).isTrue();

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import ai.gebo.llms.chat.pipelines.model.ChatPipelineConfiguration;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultInputChatPipelineStepServiceImpl;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.DefaultRoutingChatPipelineStepServiceImpl;
+import ai.gebo.llms.chat.pipelines.service.IStreamingOutputChatPipelineService;
 import lombok.Data;
 
 @Configuration
@@ -28,6 +29,7 @@ public class ChatPipelinesConfiguration {
 		defaultPipeline.setDefaultPipeline(true);
 		defaultPipeline.setStepInputId(DefaultInputChatPipelineStepServiceImpl.DEFAULT_INPUT_STEP);
 		defaultPipeline.setStepRouterId(DefaultRoutingChatPipelineStepServiceImpl.DEFAULT_ROUTING_STEP);
+		defaultPipeline.setRespawnStepId(IStreamingOutputChatPipelineService.DEFAULT_RESPAWN_PIPELINE_SERVICE);
 		this.pipelines.add(defaultPipeline);
 
 	}

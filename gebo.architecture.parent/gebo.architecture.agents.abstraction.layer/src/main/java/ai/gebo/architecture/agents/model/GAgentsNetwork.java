@@ -25,10 +25,6 @@ public class GAgentsNetwork extends GBaseObject
 		ALLOWED, NOT_ALLOWED
 	}
 
-	public static enum CommunicationPolicy {
-		ALLOW_ALL, DENY_ALL, ALLOW_LIST, DENY_LIST
-	}
-
 	public static enum AgentActivationType {
 		ON_RECEIVED_MESSAGE, EVERY_CYCLE
 	}
@@ -52,9 +48,7 @@ public class GAgentsNetwork extends GBaseObject
 		private boolean inputNode;
 		private boolean outputNode;
 		private boolean allowedToNotifyUser = true;
-		@NotNull
-		private CommunicationPolicy communicationPolicy = CommunicationPolicy.ALLOW_LIST;
-
+		/** The agents this one may send to: the only thing that decides who talks to whom. */
 		private List<String> communicationList;
 
 		/**
@@ -66,6 +60,17 @@ public class GAgentsNetwork extends GBaseObject
 		private boolean controller = false;
 
 		private boolean canCallTools = true;
+
+		/**
+		 * The ids of the tool sources this participant mounts in this network even when
+		 * the installation keeps them out of automatic mounting, added to whatever its
+		 * agent configuration already mounts
+		 * ({@link GAgentConfig#getAdditionalToolSources()}). It is how a family of tools
+		 * belongs to the networks that are meant to operate it rather than to every
+		 * agent that mounts all tools: the network names the source on the participant
+		 * that needs it, the installation excludes it for everyone else.
+		 */
+		private List<String> additionalToolSources = null;
 
 		private boolean canCallOtherAgents = false;
 
@@ -106,5 +111,13 @@ public class GAgentsNetwork extends GBaseObject
 	@Transient
 	@JsonIgnore
 	private String copiedFromCode = null;
+	/**
+	 * Whether the network remembers, from one turn of a conversation to the next,
+	 * what its agents contributed: the shared context of a run is digested when
+	 * the run ends and seeds the next run in the same conversation. Off by
+	 * default: a network that does not ask forgets everything but what the
+	 * conversation itself keeps.
+	 */
+	private Boolean rememberAcrossTurns = null;
 
 }

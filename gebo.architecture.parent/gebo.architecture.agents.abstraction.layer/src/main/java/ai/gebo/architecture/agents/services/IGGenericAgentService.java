@@ -21,6 +21,18 @@ public interface IGGenericAgentService {
 	}
 
 	/**
+	 * The library types this service gives every agent running on it, beyond the ones
+	 * the configuration names ({@link GAgentConfig#getLibraryTypeIds()}): none by
+	 * default. A library reaches a model only through an agent, in block; a service
+	 * implying one makes it part of what running on it means, as the agentic loop
+	 * implies the user questions library: the single agent answering the user may
+	 * ask them, whatever its configuration names.
+	 */
+	public default List<String> getImpliedLibraryTypeIds() {
+		return List.of();
+	}
+
+	/**
 	 * Exports the capabilities, catalogs, resources and tools this agent makes
 	 * available for the given configuration, so they can be rendered into the shared
 	 * network-of-agents description used by coordinating agents to reason about their

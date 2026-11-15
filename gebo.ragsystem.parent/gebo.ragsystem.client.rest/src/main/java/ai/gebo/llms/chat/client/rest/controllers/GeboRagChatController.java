@@ -122,13 +122,15 @@ public class GeboRagChatController {
 	 * Gets the capabilities of the provider model for a specific chat profile
 	 * 
 	 * @param chatProfileCode The code identifying the chat profile
+	 * @param pipelineCode    The pipeline the chat runs in, none for the default one
 	 * @return The capabilities of the provider model
 	 * @throws LLMConfigException If there's a configuration error
 	 */
 	@GetMapping(value = "getProfileProviderModelCapabilities", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ModelProviderCapabilities getProfileProviderModelCapabilities(
-			@RequestParam("chatProfileCode") String chatProfileCode) throws LLMConfigException {
-		return chatService.getProfileProviderModelCapabilities(chatProfileCode);
+			@RequestParam("chatProfileCode") String chatProfileCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode) throws LLMConfigException {
+		return chatService.getProfileProviderModelCapabilities(chatProfileCode, pipelineCode);
 	}
 
 	/**
@@ -174,9 +176,10 @@ public class GeboRagChatController {
 	 */
 	@GetMapping(value = "getChatModelUserInfoByChatProfileCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public GeboChatUserInfo getChatModelUserInfoByChatProfileCode(
-			@RequestParam("chatProfileCode") String chatProfileCode)
+			@RequestParam("chatProfileCode") String chatProfileCode,
+			@RequestParam(value = "pipelineCode", required = false) String pipelineCode)
 			throws GeboChatException, LLMConfigException, GeboPersistenceException {
-		return chatService.getChatModelUserInfoByChatProfileCode(chatProfileCode);
+		return chatService.getChatModelUserInfoByChatProfileCode(chatProfileCode, pipelineCode);
 	}
 
 	

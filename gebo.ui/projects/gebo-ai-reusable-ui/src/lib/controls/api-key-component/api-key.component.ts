@@ -6,6 +6,7 @@ import { Observable, of } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { ToastMessageOptions } from "primeng/api";
 import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
+import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 const credentialCreatedOk:ToastMessageOptions={id:"APIKEY_CREATED_OK",severity:"success",detail:"Credentials successfully created",summary:"Credentials created"};
 interface ApiKeyInternalFG {
     requireApiKeyAniway?: boolean,
@@ -119,9 +120,9 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
     protected secrets: SecretInfo[] = [];
     protected secretId?: string;
     protected useExistingOrNew: "EXISTING" | "NEW" = "NEW";
-    protected useExistingOrNewOptions: { label: string, value: string }[] = [{ label: "Existing credentials", value: "EXISTING" }, { label: "New credentials", value: "NEW" }];
+    protected useExistingOrNewOptions: { id: string, label: string, value: string }[] = [{ id: "ExistingCredentialsOption", label: "Existing credentials", value: "EXISTING" }, { id: "NewCredentialsOption", label: "New credentials", value: "NEW" }];
     protected enabled:boolean=true;
-    constructor(private secretController: SecretsControllerService) {
+    constructor(private secretController: SecretsControllerService, private translationService: GeboAITranslationService) {
         this.secretFormGroup.controls["requireApiKeyAniway"].valueChanges.subscribe({
             next: (value) => {
                 if (value === true) {
@@ -340,7 +341,9 @@ export class GeboAIApiKeyComponent implements OnInit, OnChanges, ControlValueAcc
         }
     }
     ngOnInit(): void {
-
+        // the toggle labels are select button options, translated by their ids on each language change
+        this.translationService.translateMenuItems("GeboAIApiKeyModule", "GeboAIApiKeyComponent", this.useExistingOrNewOptions)
+            .subscribe(items => this.useExistingOrNewOptions = [...items] as { id: string, label: string, value: string }[]);
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (changes["contextCode"] || changes["secretTypes"]) {

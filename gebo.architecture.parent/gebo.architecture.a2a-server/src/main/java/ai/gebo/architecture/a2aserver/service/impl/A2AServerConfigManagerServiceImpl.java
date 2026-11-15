@@ -11,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.a2aserver.config.A2AExportKindsConfig;
+import ai.gebo.architecture.a2aserver.model.A2AExportedAgent;
 import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.a2aserver.repository.A2AServerConfigRepository;
 import ai.gebo.architecture.a2aserver.runtime.A2AServerRegistry;
@@ -43,12 +45,15 @@ public class A2AServerConfigManagerServiceImpl implements A2AServerConfigManager
 	private final A2AServerConfigRepository repository;
 	private final A2AServerRegistry registry;
 	private final IGSecurityService securityService;
+	/** Which kinds of export this installation publishes at all. */
+	private final A2AExportKindsConfig exportKinds;
 
 	@Override
 	public OperationStatus<A2AServerConfig> insert(@NotNull @Valid A2AServerConfig config) {
 		List<GUserMessage> messages = new ArrayList<>();
 		requireAdmin(messages);
 		validateUrl(config, messages);
+		validateExportedKinds(config, messages);
 		if (!isBlank(config.getCode()) && repository.findById(config.getCode()).isPresent()) {
 			messages.add(GUserMessage.errorMessage("A2A server already exists",
 					"An A2A server with code '" + config.getCode() + "' already exists; use update instead"));
@@ -83,6 +88,7 @@ public class A2AServerConfigManagerServiceImpl implements A2AServerConfigManager
 		List<GUserMessage> messages = new ArrayList<>();
 		requireAdmin(messages);
 		validateUrl(config, messages);
+		validateExportedKinds(config, messages);
 		if (isBlank(config.getCode())) {
 			messages.add(GUserMessage.errorMessage("Missing code", "The A2A server to update must have a code"));
 		}
@@ -165,6 +171,28 @@ public class A2AServerConfigManagerServiceImpl implements A2AServerConfigManager
 	private void requireAdmin(List<GUserMessage> messages) {
 		if (!securityService.isCurrentUserAdmin()) {
 			messages.add(GUserMessage.errorMessage("Not allowed", "Only administrators may manage A2A servers"));
+		}
+	}
+
+	/**
+	 * Refuses an export of a kind this installation does not publish. The admin UI
+	 * offers only the kinds that are allowed, but what the UI offers is not what
+	 * makes a rule: a configuration arriving by any other route is held to the same
+	 * one.
+	 */
+	private void validateExportedKinds(A2AServerConfig config, List<GUserMessage> messages) {
+		if (config == null || config.getExportedAgents() == null) {
+			return;
+		}
+		for (A2AExportedAgent exported : config.getExportedAgents()) {
+			if (exported == null || exportKinds.isAllowed(exported.getKind())) {
+				continue;
+			}
+			final String what = exported.getKind() == A2AExportedAgent.Kind.AGENT ? "Single agents" : "Networks of agents";
+			LOGGER.warn("Refused an A2A export of kind:" + exported.getKind()
+					+ " which this installation does not publish");
+			messages.add(GUserMessage.errorMessage("Export not allowed",
+					what + " are not published over A2A in this installation"));
 		}
 	}
 

@@ -88,6 +88,23 @@ public interface IGToolCallbackSource {
     public List<ToolCallback> getToolCallbacks();
 
     /**
+     * Whether the tools of this source reach an agent only when it asks for the
+     * source by name, instead of being mounted on every agent that mounts all the
+     * registered tools, as all but a few are.
+     * <p>
+     * A source answers {@code true} when its tools belong to some agents and to
+     * nobody else: tools about a piece of work that only certain runs are part of,
+     * which in a chat would be more things the model can call and nothing it should.
+     * Such a source reaches an agent through {@code GAgentConfig.additionalToolSources},
+     * or the participant of a network naming it. This is the source's own nature,
+     * not an installation's choice - an administrator keeps other tools out of
+     * automatic mounting with {@code ai.gebo.agents.tools.auto-mounting}.
+     */
+    public default boolean isMountedOnlyWhenAsked() {
+        return false;
+    }
+
+    /**
      * Where the tool of this source named {@code toolName} sends or reads data, for the
      * compliance data-flow register (see {@link ToolDataFlowTarget}); none by default,
      * as for a tool that only computes (the date) or talks to the user.

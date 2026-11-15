@@ -8,6 +8,16 @@
 * Copyright (c) 2025+ Gebo.ai
 */
 -->
+<p-popover #priceSourcePopover>
+  @if (sourceRow) {
+    <div class="gebo-provider-deals__source">
+      <div class="font-semibold" [class.text-red-600]="priceless(sourceRow)">{{ priceSource(sourceRow) }}@if (sourceRow.dealPricing && sourceRow.dealPricingDate) { ({{ sourceRow.dealPricingDate | date:'short' }})}</div>
+      @if (priceless(sourceRow)) {
+        <div class="text-sm mt-2">{{ text('NoPriceDetail') }}</div>
+      }
+    </div>
+  }
+</p-popover>
 <div class="flex flex-column gap-3">
   <div id="ProviderDealsHint" gebo-ai-text class="text-sm text-600">
     Each provider deal groups the API keys sharing the same economic conditions. The model configurations running
@@ -32,7 +42,7 @@
               styleClass="w-16rem" appendTo="body"></p-select>
             @if (group.currency.overridden) {
               <p-button icon="pi pi-undo" [outlined]="true" severity="secondary" (onClick)="saveProviderCurrency(group, null)"
-                [title]="'Go back to the provider default currency: ' + group.currency.declaredCurrencyCode"></p-button>
+                [title]="text('BackToProviderCurrencyTitle', { currency: group.currency.declaredCurrencyCode })"></p-button>
             }
           </div>
         }
@@ -63,7 +73,7 @@
                         <span>{{ formatLimits(deal) }}</span>
                         @if (deal.spendingLimits) {
                           <span class="text-xs text-500">
-                            {{ deal.spendingLimits.autoImported ? 'imported from the provider' : 'set by an admin' }}
+                            {{ text(deal.spendingLimits.autoImported ? 'LimitsImported' : 'LimitsSetByAdmin') }}
                             @if (deal.spendingLimits.importDate) {
                               {{ deal.spendingLimits.importDate | date:'short' }}
                             }
@@ -157,10 +167,16 @@
                     <ng-template pTemplate="body" let-row>
                       <tr>
                         <td>
-                          <div class="gebo-provider-deals__code">{{ row.modelCode }}</div>
-                          <div class="text-xs text-500">{{ priceSource(row) }}
-                            @if (row.dealPricing && row.dealPricingDate) {
-                              ({{ row.dealPricingDate | date:'short' }})
+                          <div class="flex align-items-center gap-1">
+                            <span class="gebo-provider-deals__code">{{ row.modelCode }}</span>
+                            @if (priceless(row)) {
+                              <p-button id="NoPriceBtn" icon="pi pi-exclamation-triangle" severity="danger" [text]="true"
+                                [rounded]="true" size="small" [ariaLabel]="priceSource(row)"
+                                (onClick)="showPriceSource($event, row, priceSourcePopover)"></p-button>
+                            } @else {
+                              <p-button id="PriceSourceBtn" icon="pi pi-info-circle" severity="secondary" [text]="true"
+                                [rounded]="true" size="small" [ariaLabel]="priceSource(row)"
+                                (onClick)="showPriceSource($event, row, priceSourcePopover)"></p-button>
                             }
                           </div>
                         </td>
@@ -187,7 +203,7 @@
                             inputStyleClass="gebo-provider-deals__price"></p-inputNumber></td>
                         <td class="white-space-nowrap">
                           <p-button icon="pi pi-save" [outlined]="true" styleClass="mr-2"
-                            [title]="row.dealPricing ? 'Save the deal price' : 'Set this price in the deal'"
+                            [title]="text(row.dealPricing ? 'SaveDealPriceTitle' : 'SetDealPriceTitle')"
                             (onClick)="savePrice(row)"></p-button>
                           @if (row.dealPricing) {
                             <p-button id="RemoveDealPriceBtn" gebo-ai-label icon="pi pi-undo" severity="secondary" [outlined]="true"

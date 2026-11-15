@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.agent.chat.service.impl;
 
+import static ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.ANY_SEARCH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -50,6 +51,9 @@ import ai.gebo.llms.chat.abstraction.layer.services.impl.CutAnswer;
 import ai.gebo.llms.chat.pipelines.service.ISinkUIEmitter;
 import ai.gebo.model.GUserMessage;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.SourceGate;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 
 /**
  * Pins the agentic loop's reasoning streamed to the chat and its answer cut by the
@@ -57,6 +61,8 @@ import reactor.core.publisher.Flux;
  * the limit, the one written again kept; the user told otherwise.
  */
 class AgenticLoopCutAnswerTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgenticLoopCutAnswerTest").build();
 	private static final IGDocumentContentRendererProvider NO_RENDERER = new IGDocumentContentRendererProvider() {
 		@Override
 		public <T> IGDocumentContentRenderer<T> get(T doc) {
@@ -79,7 +85,8 @@ class AgenticLoopCutAnswerTest {
 		/** The scripted chunks as the model's ChatClient streams them: normalized. */
 		@Override
 		protected Flux<GChatAnswerChunk> callLLMReactiveResponses(IGConfigurableChatModel chatModel,
-				GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params) {
+				GPromptTemplateConfig prompt, IChatRequestContext context, Map<String, Object> params,
+						GeboToolCalling toolCalling) {
 			models.add(chatModel);
 			final Flux<ChatResponse> raw = Flux.fromIterable(calls.get(Math.min(models.size() - 1, calls.size() - 1)));
 			final ChatModel model = new ChatModel() {
@@ -124,7 +131,8 @@ class AgenticLoopCutAnswerTest {
 		final AgentNetworkParticipant persona = mock(AgentNetworkParticipant.class);
 		when(persona.getNetworkAgentName()).thenReturn("agenticLoopAgent");
 		return String.join("", agent.iteration(1, 3, 10_000, history, model, new GPromptTemplateConfig(), null, persona,
-				sink, new ToolCallsListener()).collectList().block());
+				sink, new ToolCallsListener(), agent.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block());
 	}
 
 	@Test
@@ -217,7 +225,8 @@ class AgenticLoopCutAnswerTest {
 
 		final String streamed = String.join("",
 				agent.iteration(1, 2, 10_000, new ArrayList<>(), model, new GPromptTemplateConfig(), null, persona,
-						mock(INotificationSink.class), new ToolCallsListener(), Map.of(), true).collectList().block());
+						mock(INotificationSink.class), new ToolCallsListener(), Map.of(),
+								new SourceGate(ANY_SEARCH, true, List.of()), null, TOOL_CALLING).collectList().block());
 
 		assertEquals(List.of(model, agent.lowered), agent.models, "the cut answer is written again,"
 				+ " the next iteration asking for less reasoning");

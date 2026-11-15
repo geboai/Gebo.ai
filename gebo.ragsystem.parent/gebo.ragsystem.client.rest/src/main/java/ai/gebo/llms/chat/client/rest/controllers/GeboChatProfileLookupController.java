@@ -68,8 +68,10 @@ public class GeboChatProfileLookupController {
 		// Retrieve all chat profile configurations with pagination
 		Page<GChatProfileConfiguration> page = persistenceManager.findAll(GChatProfileConfiguration.class,
 				_page.toPageable());
-		// Convert to GLookupEntry objects
-		Page<GLookupEntry> newpage = new PageImpl<GLookupEntry>(GLookupEntry.of(page.getContent()));
+		// Convert to GLookupEntry objects, keeping the position and the total of the page:
+		// a page built from its content alone reports that content as the whole set
+		Page<GLookupEntry> newpage = new PageImpl<GLookupEntry>(GLookupEntry.of(page.getContent()),
+				page.getPageable(), page.getTotalElements());
 		return newpage;
 	}
 
@@ -95,7 +97,8 @@ public class GeboChatProfileLookupController {
 		// Find configurations matching the filter criteria with pagination
 		Page<GChatProfileConfiguration> page = persistenceManager.findAllByQbe(param.filter, param.page.toPageable());
 		// Convert to GLookupEntry objects
-		Page<GLookupEntry> newpage = new PageImpl<GLookupEntry>(GLookupEntry.of(page.getContent()));
+		Page<GLookupEntry> newpage = new PageImpl<GLookupEntry>(GLookupEntry.of(page.getContent()),
+				page.getPageable(), page.getTotalElements());
 		return newpage;
 	}
 

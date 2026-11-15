@@ -16,6 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -72,6 +73,25 @@ class KnowledgeBaseDeepSearchToolTest {
 		assertEquals(6, chunksPerDocumentSearchedFor(Depth.BROAD));
 		assertEquals(6, chunksPerDocumentSearchedFor(null));
 		assertEquals(10, chunksPerDocumentSearchedFor(Depth.EXHAUSTIVE));
+	}
+
+	@Test
+	void theRetrievalIsBoundedByTheDocumentsAskedNotByTokens() throws Exception {
+		// the fragments are analysed in batches and reduced: only the reduced analysis is
+		// sized to the room of the model call, the searches feeding it carry no tokens cap
+		IGDocumentsSearchService search = mock(IGDocumentsSearchService.class);
+		AIDocumentsSet found = mock(AIDocumentsSet.class);
+		when(found.aiDocumentsList()).thenReturn(List.of());
+		when(search.search(anyString(), anyList(), any(), anyList(), any(), anyString(), anyInt(), anyInt()))
+				.thenReturn(found);
+		KnowledgeBaseDeepSearchTool tool = toolOn(search, mock(DeepSearchToolsSupport.class));
+
+		tool.searchDocuments(new DeepSearchToolParam<>(), List.of("query"), "question", 30, 6, new HashMap<>(),
+				chat("kb"), new ArrayList<>());
+
+		verify(search).search(anyString(), anyList(), any(), anyList(), any(), anyString(),
+				eq(30 * KnowledgeBaseDeepSearchTool.FRAGMENTS_PER_DOCUMENT), eq(Integer.MAX_VALUE));
+		assertEquals(Integer.MAX_VALUE, DeepSearchReduction.knowledgeBaseRetrievedTokens());
 	}
 
 	/** The context of a call for a chat whose knowledge bases are these. */

@@ -1,6 +1,5 @@
 package ai.gebo.llms.agent.standard.services;
 
-import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,9 @@ import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.agent.standardtools.DeepSearchReduction;
+import ai.gebo.llms.abstraction.layer.services.KnowledgeBaseSearchBudget;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.services.IGDocumentsSearchService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRankerService;
@@ -112,6 +113,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 		return capabilities;
 	}
 
+	/** The search planner's call and the ranking are made with the run's container. */
 	@Override
 	protected List<Document> retrieveDocuments(GPromptTemplateConfig prompt, IChatRequestContext chatRequestContext,
 			IGConfigurableChatModel agentModel, Map<String, Object> params, GAgentsNetwork network,
@@ -119,7 +121,8 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<SearchAgentCommand, List<Document>> mySessionContext,
 			AgentsExchangeMessage<SearchAgentCommand> msg, IGAgentsNetworkRuntimeDao agentsDao,
-			INotificationSink notificationSink) throws AgentException {
+			INotificationSink notificationSink, List<String> statusNotices, GeboToolCalling toolCalling)
+			throws AgentException {
 		final SearchAgentCommand command = msg.getPayload();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin retrieveDocuments(...) internal-KB agent command:"
@@ -147,7 +150,12 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			// injected at config time), so it is used directly instead of re-fetching the
 			// raw planner template.
 			Map<String, List<String>> fields = callLLMRepeatableFieldEntryOutput(agentModel, prompt,
-					chatRequestContext, params, List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD));
+					chatRequestContext, params,
+							List.of(SEMANTIC_QUERIES_FIELD, FULL_TEXT_QUERIES_FIELD), toolCalling);
+			if (toolCalling != null && toolCalling.isStoppedByTool()) {
+				// a tool ended the planner's call: there are no queries, and the agent waits
+				return List.of();
+			}
 			List<String> semanticQueries = fields.getOrDefault(SEMANTIC_QUERIES_FIELD, List.of());
 			List<String> fullTextQueries = fields.getOrDefault(FULL_TEXT_QUERIES_FIELD, List.of());
 			if (semanticQueries.isEmpty() && fullTextQueries.isEmpty()) {
@@ -174,8 +182,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			semanticFilter.setKnowledgeBasesCodes(kbCodes);
 			FullTextSearchMetaDataFilter fullTextFilter = new FullTextSearchMetaDataFilter();
 			fullTextFilter.setKnowledgebaseCodes(kbCodes);
-			if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-					&& !securityService.isCurrentUserAdmin()) {
+			if (securityService.isContentAclEnforced()) {
 				List<Integer> aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ)
 						.getAllOwnedAclAliases();
 				if (LOGGER.isDebugEnabled()) {
@@ -187,17 +194,22 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 			}
 
 			final boolean deepSearch = deepSearchRequested(command);
-			// the tokens budget's share of the context window (ai.gebo.llms.tokens-budget.factor)
-			final int contextShare = (int) (agentModel.getContextLength() * BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+			// the knowledge base contents' share of what the agent's prompt, history and
+			// documents leave of its model's context, as the knowledge base search tools'
+			// (KnowledgeBaseSearchBudget)
+			final int contextShare = KnowledgeBaseSearchBudget.forContext(agentModel.getContextLength(),
+					(long) (prompt != null ? prompt.getTokensSize() : 0) + chatHistoryTokens(prompt, chatRequestContext)
+							+ contextDocumentsTokens(prompt, chatRequestContext));
 			int topK = retrievalTopK(command);
 			int tokensBudget = contextShare;
 			if (deepSearch) {
-				// a deep search reads a few fragments of many documents, analysed in batches: sized
-				// as the knowledge base deep search tool, not to one context
+				// a deep search reads a few fragments of many documents, analysed in batches and
+				// reduced to one analysis: as the knowledge base deep search tool, the retrieval
+				// is bounded by the documents asked, not by a tokens budget
 				final int fragmentsPerDocument = DeepSearchReduction.fragmentsPerDocument(deepSearchDepth(command));
 				fullTextFilter.setPerDocumentInnerHits(fragmentsPerDocument);
 				topK = topK * DeepSearchReduction.knowledgeBaseFragmentsPerDocument();
-				tokensBudget = Math.max(contextShare, DeepSearchReduction.knowledgeBaseRetrievedTokens());
+				tokensBudget = DeepSearchReduction.knowledgeBaseRetrievedTokens();
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Deep search asked: " + fragmentsPerDocument + " full-text fragment(s) per document, topK:"
 							+ topK + " tokensBudget:" + tokensBudget);
@@ -223,7 +235,7 @@ public class InternalKnowledgeBaseSearchNetworkAgentService extends GAbstractSta
 					index++;
 				}
 			}
-			return maybeRank(documents, command, notificationSink);
+			return maybeRank(documents, command, notificationSink, toolCalling);
 		} catch (LLMConfigException | FullTextException e) {
 			throw new AgentException("Error executing internal knowledge base search agent", e);
 		}

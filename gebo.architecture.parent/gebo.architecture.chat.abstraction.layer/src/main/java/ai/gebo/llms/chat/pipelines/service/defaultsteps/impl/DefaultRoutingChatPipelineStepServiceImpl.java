@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import ai.gebo.llms.chat.pipelines.model.ModelUseInfos;
+import ai.gebo.llms.chat.pipelines.service.IPipelineStepModelsService;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.service.IGPromptConfigDao;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
@@ -27,6 +29,7 @@ import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsParametersCacheConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
@@ -129,6 +132,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	private final GeboPromptsParametersCacheConfig promptsParamsCacheConfig;
 	private final IGChatSessionLifeCycleService chatSessionLifecycleService;
 	private final DefaultPipelineSharedPromptParamsManager paramsManager;
+	/** Tells the tools of the tool using step: this router offers that route with them. */
+	private final IPipelineStepModelsService stepModels;
 	private final DefaultPipelineStreamingDelegatedStepServiceImpl chatAgentService;
 	private final IGImageModelRuntimeConfigurationDao imageModelsDao;
 	public static final String START_INTERNAL_KNOWLEDGEBASE_CATALOG = "INTERNAL_KNOWLEDGEBASE_CATALOG";
@@ -139,6 +144,27 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	public StepExecutorType getExecutorType() {
 
 		return StepExecutorType.LLM;
+	}
+
+	@Override
+	public ModelUseInfos getChatModelUseInfos() {
+		return ModelUseInfos.notUsed();
+	}
+
+	@Override
+	public ModelUseInfos getServiceModelUseInfos() {
+		return ModelUseInfos.usedFor("Rewrites the user request and decides which step answers it: its tools are offered on both calls.");
+	}
+
+	@Override
+	public List<String> getReachableStepIds() {
+		return List.of(DefaultRagStreamingOutputChatPipelineStepServiceImpl.DEFAULT_RAG_STEP,
+				DefaultDeepSearchStreamingOutputChatPipelineStepServiceImpl.DEFAULT_DEEPSEARCH_STREAMING,
+				DefaultToolUsingStreamingOutputChatPipelineServiceImpl.DEFAULT_TOOL_USING_STREAMING,
+				DefaultChatWithFilesStreamingOutputPipelineServiceImpl.DEFAULT_CHAT_WITH_DOCS_STREAMING,
+				DefaultPipelineStreamingDelegatedStepServiceImpl.DEFAULT_CHAT_PIPELINE_STEP_SERVICE,
+				DefaultImageGenerationStreamingOutputChatPipelineServiceImpl.IMAGE_GENERATION_STREAMING_SERVICE,
+				DefaultStreamingOutputChatPipelineServiceImpl.DEFAULT_STREAMING_OUTPUT);
 	}
 
 	@Override
@@ -190,8 +216,15 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		GPromptTemplateConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
 		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-		Map<String, List<String>> data = callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
-				List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD, USER_REQUIRED_LANGUAGE_FIELD));
+		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+		Map<String, List<String>> data = toolCalling != null
+				? callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
+						List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD,
+								USER_REQUIRED_LANGUAGE_FIELD),
+						toolCalling)
+				: callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
+						List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD,
+								USER_REQUIRED_LANGUAGE_FIELD));
 		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
 		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
@@ -278,11 +311,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					+ " chat:" + chatLanguage + " detected:" + detectedLanguage + ")");
 		}
 		if (answerLanguage != null) {
-			runtimeData.getRequestResources().getCurrentRequest().setUserLanguage(answerLanguage);
-			if (runtimeData.getMinimalChatContext() != null
-					&& runtimeData.getMinimalChatContext().getCurrentRequest() != null) {
-				runtimeData.getMinimalChatContext().getCurrentRequest().setUserLanguage(answerLanguage);
-			}
+			// the one current request, held by the resources and the minimal context alike
+			runtimeData.getCurrentRequest().setUserLanguage(answerLanguage);
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("User required language asked in the message:" + askedLanguage + " kept on the chat:"
@@ -293,7 +323,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	}
 
 	private RoutingDecision doDecideRoute(ISinkUIEmitter emitter, ChatPipelineExecutionRuntimeData runtimeData,
-			IGConfigurableChatModel chatModel, IGConfigurableChatModel serviceModel, String latestInteractions,
+			IGConfigurableChatModel serviceModel, String latestInteractions,
 			String rewrited_query) throws GeboChatSessionLifecycleException, LLMConfigException {
 		notifyUser(emitter, CHOOSING_AGENTIC_FLOW, CHOOSING_AGENTIC_FLOW_DESCRIPTION, null, 2000l,
 				NotificationType.INFO);
@@ -315,7 +345,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 							.getSessionAvailableKnowledgeBases(runtimeData.getRequestResources().getCurrentRequest());
 					Map<String, Object> templateParams = new HashMap<String, Object>();
 
-					String toolsList = paramsManager.toolsListPromptPart(chatModel);
+					String toolsList = paramsManager.toolsListPromptPart(stepModels.chatModelFunctions(
+							runtimeData.getPipelineCode(),
+							DefaultToolUsingStreamingOutputChatPipelineServiceImpl.DEFAULT_TOOL_USING_STREAMING));
 					String internalKnowledgeBaseCatalog = ragInternalKnowledgeBasePromptPart(knowledgeBases);
 					String deepSearchDataSources = deepSearchDataSourcesListPromptPart(knowledgeBases);
 					templateParams.put(
@@ -357,8 +389,12 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			final int documentsTokenBudget = Math.min(remainingContext,
 					this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
 			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
-			decisionMap = callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,
-					List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS, PIPELINE_EXECUTOR_SUGGESTION));
+			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
+			decisionMap = toolCalling != null
+					? callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,
+							List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS, PIPELINE_EXECUTOR_SUGGESTION), toolCalling)
+					: callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,
+							List.of(ROUTING_DECISION, DEEP_SEARCHED_SYSTEMS, PIPELINE_EXECUTOR_SUGGESTION));
 			sanitizeSearchedSystems(decisionMap);
 			// extracting user intent
 
@@ -533,7 +569,7 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 								.length() > 0) {
 					rd = doHandleUserRequestedRouting(emitter, runtimeData);
 				} else {
-					rd = doDecideRoute(emitter, runtimeData, chatModel, serviceModel, latestInteractions,
+					rd = doDecideRoute(emitter, runtimeData, serviceModel, latestInteractions,
 							rewrited_query);
 				}
 			}

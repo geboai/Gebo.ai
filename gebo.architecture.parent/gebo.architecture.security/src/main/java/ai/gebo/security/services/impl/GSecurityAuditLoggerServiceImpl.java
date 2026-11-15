@@ -8,6 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.environment.GeboApplicationArchitecture;
@@ -28,7 +31,7 @@ public class GSecurityAuditLoggerServiceImpl implements IGSecurityAuditLoggerSer
 		this.applicationArchitecture = applicationArchitecture;
 	}
 
-	
+
 	@Override
 	public void log(SecurityEvent event) {
 		try {
@@ -43,12 +46,46 @@ public class GSecurityAuditLoggerServiceImpl implements IGSecurityAuditLoggerSer
 				.map(frame -> frame.getClassName() + "#" + frame.getMethodName()).toList());
 		return stack.stream().collect(Collectors.joining(" <- "));
 	}
+
+	/**
+	 * Builds an event from the context of the current thread: the request
+	 * context {@code RequestAuditFilter} put in the MDC, the trace and span
+	 * Spring Boot's tracing put there, and the authenticated user.
+	 * <p>
+	 * The correlation id falls back to the trace id when no request set one, so
+	 * an event raised off a request (a job, a message delivery) still joins the
+	 * logs and the trace it ran in. The user is the MDC's when a caller put one
+	 * there, otherwise the security context's (anonymous excluded), read now
+	 * rather than when the request entered, since the request filter runs before
+	 * authentication.
+	 * </p>
+	 */
 	@Override
 	public SecurityEvent newSecurityEvent() {
+		String traceId = MDC.get(SecurityAuditConstraints.TRACE_ID);
+		String correlationId = MDC.get(SecurityAuditConstraints.CORRELATION_ID);
+		if (correlationId == null) {
+			correlationId = traceId;
+		}
+		String userId = MDC.get(SecurityAuditConstraints.USERID);
+		if (userId == null) {
+			userId = authenticatedUser();
+		}
+		SecurityEvent event = new SecurityEvent(applicationArchitecture.getArchitecture(), userId,
+				MDC.get(SecurityAuditConstraints.CLIENT_IP), applicationName, correlationId, Instant.now().toString(),
+				getCallers(), MDC.get(SecurityAuditConstraints.HTTP_METHOD),
+				MDC.get(SecurityAuditConstraints.REQUEST_URI));
+		event.setTraceId(traceId);
+		event.setSpanId(MDC.get(SecurityAuditConstraints.SPAN_ID));
+		return event;
+	}
 
-		return new SecurityEvent(applicationArchitecture.getArchitecture(), MDC.get(SecurityAuditConstraints.USERID),
-				MDC.get(SecurityAuditConstraints.CLIENT_IP), applicationName,
-				MDC.get(SecurityAuditConstraints.CORRELATION_ID), Instant.now().toString(), getCallers(),
-				MDC.get(SecurityAuditConstraints.HTTP_METHOD), MDC.get(SecurityAuditConstraints.REQUEST_URI));
+	private static String authenticatedUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication == null || !authentication.isAuthenticated()
+				|| authentication instanceof AnonymousAuthenticationToken) {
+			return null;
+		}
+		return authentication.getName();
 	}
 }

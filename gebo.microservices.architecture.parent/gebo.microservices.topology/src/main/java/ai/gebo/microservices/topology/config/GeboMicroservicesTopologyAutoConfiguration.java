@@ -13,9 +13,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
@@ -40,11 +43,20 @@ import ai.gebo.microservices.topology.GeboStandardMicroservices;
  * {@link GeboMicroservicesTopology#of}.
  * </p>
  *
+ * <p>
+ * Nothing here exists with {@code gebo.microservices.topology.enabled=false} (see
+ * {@link GeboMicroservicesTopologyProperties#isEnabled()}): a service deployed
+ * outside the full microservices architecture has no topology at all.
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 @AutoConfiguration
+@ConditionalOnProperty(prefix = GeboMicroservicesTopologyProperties.PREFIX, name = GeboMicroservicesTopologyProperties.ENABLED, havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(GeboMicroservicesTopologyProperties.class)
 public class GeboMicroservicesTopologyAutoConfiguration {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboMicroservicesTopologyAutoConfiguration.class);
 
 	/**
 	 * @param properties the bound topology overrides
@@ -77,6 +89,11 @@ public class GeboMicroservicesTopologyAutoConfiguration {
 		List<GeboMicroservice> microservices = merged.entrySet().stream()
 				.map(entry -> new GeboMicroservice(entry.getKey(), entry.getValue())).toList();
 
+		LOGGER.debug("Microservices topology on: {} microservice(s), defaults included: {}, disabled: {}",
+				microservices.size(), properties.isIncludeDefaults(), properties.getDisabledServices());
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("Microservices topology: {}", merged);
+		}
 		return GeboMicroservicesTopology.of(microservices);
 	}
 

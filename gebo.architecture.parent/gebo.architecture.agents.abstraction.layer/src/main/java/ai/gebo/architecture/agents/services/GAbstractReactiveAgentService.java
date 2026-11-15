@@ -35,6 +35,7 @@ import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 
 public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  AggregatedResponses>
 		extends GAbstractGenericalAgentService
@@ -115,7 +116,7 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			GAgentConfig agentConfig, RequestType request, GAgentsNetwork network,
 			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
 			AgentsCollaborationSessionContext session,
-			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs)
+			AgentPrivateSessionContext<RequestType, ResponseType> privateMemory, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling)
 			throws AgentException, LLMConfigException {
 
 		if (LOGGER.isDebugEnabled()) {
@@ -136,8 +137,12 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		}
 		// this agent's own tool calls, forwarded to the user request's recorder
 		final ToolCallsListener callBacksListener = agentToolCallsListener(chatRequestContext);
-		List<String> allFunctions = resolveMountedToolNames(agentConfig,
-				Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null);
+		// the libraries the agent works with are reclaimed from the conversation as it
+		// enters, so that every step of it works on the same pool of resources
+		final AgentLibraries libraries = reclaimTheLibrariesOfTheConversation(chatRequestContext, agentConfig);
+		List<String> allFunctions = withTheBoundLibraryTools(agentConfig, resolveMountedToolNames(agentConfig,
+				Boolean.TRUE.equals(agentConfig.getSubscribeAllTools()) ? toolsRepositoryPattern.getTools() : null),
+				libraries.tools());
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("Reactive agent id:" + getId() + " enabled function names: " + allFunctions);
 			LOGGER.trace("<REACTIVE_AGENT_REQUEST agent=" + getId() + ">");
@@ -151,31 +156,34 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		}
 		// tools made for this execution, bound to it (e.g. notifyUser, bound to the
 		// notification sink)
-		final List<ToolCallback> additionalTools = additionalTools(contextAgentPersona, notificationSink);
-		if (additionalTools != null && !additionalTools.isEmpty()) {
+		final List<ToolCallback> executionTools = additionalTools(contextAgentPersona, notificationSink);
+		if (executionTools != null && !executionTools.isEmpty()) {
 			allFunctions = allFunctions != null ? new ArrayList<String>(allFunctions) : new ArrayList<String>();
-			for (ToolCallback tool : additionalTools) {
+			for (ToolCallback tool : executionTools) {
 				allFunctions.add(tool.getToolDefinition().name());
 			}
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Reactive agent id:" + getId() + " adds " + additionalTools.size()
-						+ " execution tool(s): " + additionalTools.stream().map(x -> x.getToolDefinition().name())
+				LOGGER.debug("Reactive agent id:" + getId() + " adds " + executionTools.size()
+						+ " execution tool(s): " + executionTools.stream().map(x -> x.getToolDefinition().name())
 								.toList());
 			}
 		}
+		final List<ToolCallback> boundTools = new ArrayList<ToolCallback>(libraries.tools());
+		if (executionTools != null) {
+			boundTools.addAll(executionTools);
+		}
 		ChatModelConfigOptions configOptions = new ChatModelConfigOptions(agentConfig.getTemperature(),
-				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions,
-				createToolCallingManager(callBacksListener, allFunctions, additionalTools, runAs), additionalTools);
+				agentConfig.getTopP(), agentConfig.getThinking(), allFunctions, boundTools);
 		IGConfigurableChatModel agentModel = copiedModel.cloneWithOptions(getId(), configOptions);
 		final IGConfigurableChatModel baseModel = copiedModel;
 		thinkingVariants.put(agentModel,
 				thinking -> baseModel.cloneWithOptions(getId(),
 						new ChatModelConfigOptions(configOptions.getTemperature(), configOptions.getTopP(), thinking,
-								configOptions.getToolsName(), configOptions.getToolCallingManager(),
-								configOptions.getAdditionalTools())));
+								configOptions.getToolsName(), configOptions.getAdditionalTools())));
 
-		final GPromptTemplateConfig agentPrompt = resolvePrompt(agentConfig.getCustomLoopPrompt(),
-				agentConfig.getMainLoopPromptUseCode(), false);
+		final GPromptTemplateConfig agentPrompt = promptOfTheTurn(
+				resolvePrompt(agentConfig.getCustomLoopPrompt(), agentConfig.getMainLoopPromptUseCode(), false),
+				libraries, privateMemory);
 		final GAgentRole agentRole = agentRoleDao.findByCode(agentConfig.getAgentRoleCode());
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End execute(...) building reactive response flux for agent id:" + getId() + " agentRole:"
@@ -183,9 +191,10 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 		}
 		// the model wraps the tools with the listener of the context it is called with
 		Flux<IGPartialOperation<ResponseType>> iteration = createResponse(
-				IChatRequestContext.forAgent(chatRequestContext, callBacksListener), agentConfig, request, network,
+				IChatRequestContext.forAgent(libraries.context(), callBacksListener),
+				agentConfig, request, network,
 				contextAgentPersona, notificationSink, session, privateMemory, agentModel, agentRole, agentPrompt, runAs,
-				callBacksListener);
+				callBacksListener, toolCalling);
 		return iteration.subscribeOn(runAs.wrap(Schedulers.boundedElastic()))
 				.doOnSubscribe(s -> LOGGER.debug("Begin reactive agentic iteration subscription {} ", getId()))
 				.doOnNext(partial -> {
@@ -208,6 +217,6 @@ public abstract class GAbstractReactiveAgentService<RequestType, ResponseType,  
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGConfigurableChatModel agentModel,
 			GAgentRole agentRole, GPromptTemplateConfig agentPrompt, ReactiveIdentityUtil runAs,
-			ToolCallsListener callBacksListener) throws LLMConfigException, AgentException;
+			ToolCallsListener callBacksListener, GeboToolCalling toolCalling) throws LLMConfigException, AgentException;
 
 }

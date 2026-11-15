@@ -42,6 +42,7 @@ import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LaneB
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.LastWork;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.RollingFold;
 import ai.gebo.llms.abstraction.layer.services.TokensBudgetFluxCoordinator.TokensLimitCompute;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.services.TokensBudgetCalculator;
@@ -140,6 +141,24 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
 			DeepSearchQuotations quotations, DeepSearchRelevance relevance, DeepSearchAnalysisOutcome outcome,
 			Runnable onModelFailure, String label, DeepSearchOutputThinking outputThinking) {
+		return analyze(fragments, context, runAs, deliverable, completenessNote, chatModel, serviceModel,
+				discardedFragmentIds, notifier, quotations, relevance, outcome, onModelFailure, label, outputThinking,
+				null);
+	}
+
+	/**
+	 * The same, every model call of the analysis made with what the controlling
+	 * software adds to the call the analysis serves (see {@link GeboToolCalling}): the
+	 * request's container for the deep search answering a chat, the one the tool runs
+	 * in for a deep search tool. Null for nothing, which is the analysis as it always
+	 * has been.
+	 */
+	public Flux<String> analyze(Flux<Document> fragments, IChatRequestContext context, ReactiveIdentityUtil runAs,
+			DeliverableIntent deliverable, String completenessNote, IGConfigurableChatModel chatModel,
+			IGConfigurableChatModel serviceModel, Vector<String> discardedFragmentIds, IGProgressNotifier notifier,
+			DeepSearchQuotations quotations, DeepSearchRelevance relevance, DeepSearchAnalysisOutcome outcome,
+			Runnable onModelFailure, String label, DeepSearchOutputThinking outputThinking,
+			GeboToolCalling toolCalling) {
 		final DeepSearchOutputThinking thinking = outputThinking != null ? outputThinking
 				: DeepSearchOutputThinking.NONE;
 		final GPromptTemplateConfig cumulativeAnalisysPrompt = promptsDao
@@ -180,7 +199,9 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 				Map<String, Object> params = new HashMap<>(sharedParams);
 				params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, "");
 				params.put(CONSOLIDATED_SUMMARY_PROMPT_PARAM, "");
-				outFlux = thinking.text(callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params));
+				outFlux = thinking.text(toolCalling != null
+						? callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params, toolCalling)
+						: callLLMReactiveAnswer(chatModel, emptyResponsePrompt, context, params));
 			} catch (Throwable th) {
 				if (onModelFailure != null) {
 					onModelFailure.run();
@@ -206,10 +227,13 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 				final DeepSearchBatchTrace.NumberedBatch numbered = DeepSearchBatchTrace.numbered(documentsList);
 				// streamed: a long analysis keeps arriving instead of tripping the read timeout,
 				// and is stopped as soon as its relevant fragments list runs away
-				final String intermediateAnalisys = streamLLMWithDocumentsAndConsolidation(serviceModel,
-						cumulativeAnalisysPrompt, context, numbered.documents(), initialValue, params,
-						DeepSearchBatchTrace.runawayWatch(DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER,
-								numbered.documents().size()));
+				final Predicate<CharSequence> runawayWatch = DeepSearchBatchTrace.runawayWatch(
+						DeepSearchRelevance.RELEVANT_FRAGMENTS_MARKER, numbered.documents().size());
+				final String intermediateAnalisys = toolCalling != null
+						? streamLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
+								numbered.documents(), initialValue, params, runawayWatch, toolCalling)
+						: streamLLMWithDocumentsAndConsolidation(serviceModel, cumulativeAnalisysPrompt, context,
+								numbered.documents(), initialValue, params, runawayWatch);
 				if (LOGGER.isTraceEnabled()) {
 					LOGGER.trace("<DEEP_SEARCH_PARTIAL_ANALYSIS caller=\"" + label + "\">");
 					LOGGER.trace(intermediateAnalisys);
@@ -246,8 +270,9 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 					Map<String, Object> params = new HashMap<>(sharedParams);
 					params.put(IChatRequestContext.DOCUMENTS_PROMPT_PARAM, list);
 					params.put(CONSOLIDATED_TEMPLATE_VARIABLE, "");
-					return DeepSearchVerdict.withoutVerdict(
-							thinking.text(callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
+					return DeepSearchVerdict.withoutVerdict(thinking.text(toolCalling != null
+							? callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params, toolCalling)
+							: callLLMReactiveAnswer(chatModel, finalAnalisysPrompt, context, params)));
 				} else {
 					return backupNotFoundDocuments;
 				}
@@ -305,8 +330,11 @@ public class DeepSearchAnalysis extends BaseLLMSInvokingAndProvidingService {
 				return runAs.doRunAsWithReturnAndException(() -> {
 					final Map<String, Object> params = new HashMap<>(sharedParams);
 					// the report is the output: the fold's reasoning goes where the output's goes
-					final GChatAnswer folded = answerLLMWithDocumentsAndConsolidation(chatModel, finalAnalisysPrompt,
-							context, partials, report, params);
+					final GChatAnswer folded = toolCalling != null
+							? answerLLMWithDocumentsAndConsolidation(chatModel, finalAnalisysPrompt, context, partials,
+									report, params, toolCalling)
+							: answerLLMWithDocumentsAndConsolidation(chatModel, finalAnalisysPrompt, context, partials,
+									report, params);
 					thinking.reasoning(folded.thinking());
 					final DeepSearchVerdict verdict = DeepSearchVerdict.of(folded.answer());
 					if (LOGGER.isDebugEnabled()) {

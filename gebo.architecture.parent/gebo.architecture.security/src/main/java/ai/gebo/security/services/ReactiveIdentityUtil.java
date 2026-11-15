@@ -5,20 +5,32 @@ import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import ai.gebo.architecture.multithreading.GeboTaskContext;
+import io.micrometer.context.ContextSnapshot;
 import reactor.core.Disposable;
 import reactor.core.scheduler.Scheduler;
 
 public class ReactiveIdentityUtil {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ReactiveIdentityUtil.class);
 	private final Authentication authentication;
+	/**
+	 * The trace and the MDC of the thread that created this utility - the request's
+	 * audit context (correlation id, client address, method, path) and trace ids -
+	 * restored with the identity wherever the identity is, so the logs and security
+	 * events of the work it runs keep the request's correlation.
+	 */
+	private final ContextSnapshot requestContext;
 
 	private ReactiveIdentityUtil() {
 		SecurityContext securityContext = SecurityContextHolder.getContext();
 		this.authentication = securityContext != null ? securityContext.getAuthentication() : null;
+		this.requestContext = GeboTaskContext.capture();
 
 		if (this.authentication == null || !this.authentication.isAuthenticated()) {
 			LOGGER.error("ReactiveIdentityUtil.create() called without authenticated SecurityContext. thread={}",
@@ -35,6 +47,28 @@ public class ReactiveIdentityUtil {
 		return new ReactiveIdentityUtil();
 	}
 
+	/**
+	 * Restores on the running thread the trace and MDC captured at creation, with the
+	 * user this utility runs as in the MDC too (the request filter cannot put it there:
+	 * it runs before authentication). The returned scope gives the thread its own back.
+	 */
+	private ContextSnapshot.Scope enterRequestContext() {
+		final String ownUser = MDC.get(SecurityAuditConstraints.USERID);
+		final ContextSnapshot.Scope restored = requestContext.setThreadLocals();
+		if (authentication != null && authentication.isAuthenticated()
+				&& !(authentication instanceof AnonymousAuthenticationToken)) {
+			MDC.put(SecurityAuditConstraints.USERID, authentication.getName());
+		}
+		return () -> {
+			if (ownUser != null) {
+				MDC.put(SecurityAuditConstraints.USERID, ownUser);
+			} else {
+				MDC.remove(SecurityAuditConstraints.USERID);
+			}
+			restored.close();
+		};
+	}
+
 	public Runnable wrap(Runnable runnable) {
 		return () -> doAs(runnable::run);
 	}
@@ -48,6 +82,7 @@ public class ReactiveIdentityUtil {
 			LOGGER.debug("Begin doAs(...)");
 		}
 		final SecurityContext savedContext = SecurityContextHolder.getContext();
+		final ContextSnapshot.Scope carried = enterRequestContext();
 		try {
 			SecurityContext ctx = SecurityContextHolder.createEmptyContext();
 			ctx.setAuthentication(authentication);
@@ -59,6 +94,7 @@ public class ReactiveIdentityUtil {
 			}
 			runnable.run();
 		} finally {
+			carried.close();
 			SecurityContextHolder.setContext(savedContext);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End doAs(...)");
@@ -71,6 +107,7 @@ public class ReactiveIdentityUtil {
 			LOGGER.debug("Begin doAs(...)");
 		}
 		final SecurityContext savedContext = SecurityContextHolder.getContext();
+		final ContextSnapshot.Scope carried = enterRequestContext();
 		try {
 			SecurityContext ctx = SecurityContextHolder.createEmptyContext();
 			ctx.setAuthentication(authentication);
@@ -82,6 +119,7 @@ public class ReactiveIdentityUtil {
 			}
 			runnable.run();
 		} finally {
+			carried.close();
 			SecurityContextHolder.setContext(savedContext);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End doAs(...)");
@@ -95,6 +133,7 @@ public class ReactiveIdentityUtil {
 			LOGGER.debug("Begin doAs(...)");
 		}
 		final SecurityContext savedContext = SecurityContextHolder.getContext();
+		final ContextSnapshot.Scope carried = enterRequestContext();
 		try {
 			SecurityContext ctx = SecurityContextHolder.createEmptyContext();
 			ctx.setAuthentication(authentication);
@@ -106,6 +145,7 @@ public class ReactiveIdentityUtil {
 			}
 			runnable.run();
 		} finally {
+			carried.close();
 			SecurityContextHolder.setContext(savedContext);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End doAs(...)");
@@ -119,6 +159,7 @@ public class ReactiveIdentityUtil {
 			LOGGER.debug("Begin doAs(...)");
 		}
 		final SecurityContext savedContext = SecurityContextHolder.getContext();
+		final ContextSnapshot.Scope carried = enterRequestContext();
 		try {
 			SecurityContext ctx = SecurityContextHolder.createEmptyContext();
 			ctx.setAuthentication(authentication);
@@ -130,6 +171,7 @@ public class ReactiveIdentityUtil {
 			}
 			runnable.run();
 		} finally {
+			carried.close();
 			SecurityContextHolder.setContext(savedContext);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End doAs(...)");
@@ -142,6 +184,7 @@ public class ReactiveIdentityUtil {
 			LOGGER.debug("Begin doRunAsWithReturn(...)");
 		}
 		final SecurityContext savedContext = SecurityContextHolder.getContext();
+		final ContextSnapshot.Scope carried = enterRequestContext();
 		try {
 			SecurityContext ctx = SecurityContextHolder.createEmptyContext();
 			ctx.setAuthentication(authentication);
@@ -153,6 +196,7 @@ public class ReactiveIdentityUtil {
 			}
 			return runnable.apply();
 		} finally {
+			carried.close();
 			SecurityContextHolder.setContext(savedContext);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End doRunAsWithReturn(...)");
@@ -166,6 +210,7 @@ public class ReactiveIdentityUtil {
 			LOGGER.debug("Begin doRunAsWithReturnAndException(...)");
 		}
 		final SecurityContext savedContext = SecurityContextHolder.getContext();
+		final ContextSnapshot.Scope carried = enterRequestContext();
 		try {
 			SecurityContext ctx = SecurityContextHolder.createEmptyContext();
 			ctx.setAuthentication(authentication);
@@ -177,6 +222,7 @@ public class ReactiveIdentityUtil {
 			}
 			return runnable.apply();
 		} finally {
+			carried.close();
 			SecurityContextHolder.setContext(savedContext);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("End doRunAsWithReturnAndException(...)");

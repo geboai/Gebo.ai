@@ -26,6 +26,9 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import reactor.core.publisher.Flux;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.agent.chat.service.impl.AgenticLoopReactiveAgentServiceImpl.SourceGate;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 
 /**
  * Pins the cycles of the single agent with tools: up to five, each writing the whole
@@ -33,6 +36,8 @@ import reactor.core.publisher.Flux;
  * receives, the documents of the cycles' answers added up without repeating one.
  */
 class AgenticLoopCyclesTest {
+	private static final GeboToolCalling TOOL_CALLING = GeboToolCalling.builder()
+			.caller("test:AgenticLoopCyclesTest").build();
 	private static final String STOP = ReportWriterReactiveAgentServiceImpl.AGENT_CONTROL_FINISHED;
 	private static final String MORE = ReportWriterReactiveAgentServiceImpl.AGENT_CONTROL_MORE_TOOLS;
 	private static final String END = AgenticLoopReactiveAgentServiceImpl.CYCLE_END_MARK;
@@ -90,6 +95,21 @@ class AgenticLoopCyclesTest {
 	}
 
 	@Test
+	void everyCyclesAnswerSaysHowFarTheLoopWent() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+
+		List<GeboChatMessageEnvelope> out = messages(renderer(agent, 5, Map.of()), "one" + END + "two" + END + "three");
+
+		List<GeboChatResponse> answers = out.stream().filter(x -> x.getContent() instanceof GeboChatResponse)
+				.map(x -> (GeboChatResponse) x.getContent()).toList();
+		assertEquals(List.of(1, 2, 3), answers.stream()
+				.map(x -> x.getPipelineParams().get(AgenticLoopReactiveAgentServiceImpl.AGENTIC_LOOP_CYCLES_PARAM))
+				.toList(), "each cycle's answer counts the cycles so far; the last one counts them all");
+		assertEquals(5, answers.get(answers.size() - 1).getPipelineParams()
+				.get(AgenticLoopReactiveAgentServiceImpl.AGENTIC_LOOP_MAX_CYCLES_PARAM));
+	}
+
+	@Test
 	void theDocumentsOfTheCyclesAnswersAddUpWithoutRepeatingOne() {
 		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
 		Map<String, List<GResponseDocumentRef>> documents = Map.of("one", List.of(document("A")), "two",
@@ -135,7 +155,8 @@ class AgenticLoopCyclesTest {
 
 		String shown = String.join("", agent.iteration(1, agent.maxIterations(null, persona()), 10_000, new ArrayList<>(),
 				null, new GPromptTemplateConfig(), null, persona(), mock(INotificationSink.class),
-				new ToolCallsListener()).collectList().block());
+				new ToolCallsListener(), agent.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+						SourceGate.NONE, null, TOOL_CALLING).collectList().block());
 
 		assertEquals(List.of("First try. ", "Second try. ", "Third try. ", "Fourth try. ", "Fifth try. "),
 				List.of(shown.split(END)), "five cycles, each one's answer ended by the mark");
@@ -156,7 +177,9 @@ class AgenticLoopCyclesTest {
 
 		List<GeboChatMessageEnvelope> out = renderer
 				.render(agent.iteration(1, 5, 10_000, new ArrayList<>(), null, new GPromptTemplateConfig(), null,
-						persona(), mock(INotificationSink.class), new ToolCallsListener()))
+						persona(), mock(INotificationSink.class), new ToolCallsListener(),
+								agent.deliverableTemplateParams(DeliverableIntent.SUMMARY),
+								SourceGate.NONE, null, TOOL_CALLING))
 				.map(IGPartialOperation::getData).collectList().block();
 
 		assertEquals(List.of("String", "GeboChatResponse", "GAnswerCycleEvent", "String", "GeboChatResponse"),

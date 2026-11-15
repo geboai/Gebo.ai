@@ -39,6 +39,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
+import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -88,6 +89,8 @@ import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.security.services.ReactiveIdentityUtil;
 import reactor.core.publisher.Flux;
 import reactor.core.scheduler.Schedulers;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
 
 /**
  * A single agent with tools, working in the classic agentic loop over the network
@@ -143,6 +146,16 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	@Override
 	public String getDescription() {
 		return DESCRIPTION;
+	}
+
+	/**
+	 * The single agent answering the user may ask them a question the work waits
+	 * for: the user questions library is implied by running on this service, whatever
+	 * the configuration names, so a product's own loop agent asks as the platform's do.
+	 */
+	@Override
+	public List<String> getImpliedLibraryTypeIds() {
+		return List.of(UserQuestionsLibrarySource.TYPE_ID);
 	}
 
 	@Override
@@ -240,6 +253,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	static final String ANSWER_RESTART = "\n\n" + ANSWER_RESTART_MARK + "\n\n";
 	/** What the mark becomes in the answer the user sees while it streams. */
 	static final String ANSWER_RESTART_RULE = "---";
+
+	/**
+	 * How many cycles the loop used, on the answer's {@code pipelineParams}: the last
+	 * cycle's answer says how many the controller took in all. A caller that nobody is
+	 * waiting for reads it to tell a run that finished from one that merely ran out.
+	 */
+	public static final String AGENTIC_LOOP_CYCLES_PARAM = "agenticLoopCycles";
+	/** How many cycles the loop was allowed, beside {@link #AGENTIC_LOOP_CYCLES_PARAM}. */
+	public static final String AGENTIC_LOOP_MAX_CYCLES_PARAM = "agenticLoopMaxCycles";
 
 	static final String DISCARDED_WITHOUT_EVIDENCE = "This answer was discarded, the user never saw it: it used no search tool, "
 			+ "while the user asked to search or for an analysis, which must rest on what the sources contain now (the chat "
@@ -355,9 +377,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 
 	/** The tools of the search sources (see {@link #EVIDENCE_TOOL_SOURCES}) the agent model mounts. */
 	protected MountedSearchTools searchTools(IGConfigurableChatModel<?> agentModel) {
-		final List<String> enabled = agentModel != null && agentModel.getConfig() != null
-				? agentModel.getConfig().getEnabledFunctions()
-				: null;
+		final List<String> enabled = agentModel != null ? agentModel.getToolNames() : null;
 		if (enabled == null || enabled.isEmpty() || toolsRepositoryPattern == null) {
 			return new MountedSearchTools(Set.of(), Set.of());
 		}
@@ -495,6 +515,26 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			+ "it did not read in this request (what the chat history says of them is not their content). Search them "
 			+ "with the tools before citing them, or answer without citing them. Documents cited without being read: ";
 
+	/** Whether the prompt names one of the placeholders an agent's session fills. */
+	static boolean namesAnAgentPlaceholder(GPromptTemplateConfig prompt) {
+		if (prompt == null) {
+			return false;
+		}
+		for (String placeholder : List.of(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.NETWORK_SCENARY_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.AGENT_IDENTITY_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.AGENT_COMUNICATION_CAPABILITY_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.NETWORK_AGENTS_CAPABILITIES_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.PRIVATE_CONTEXT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.SHARED_CONTEXT_TEMPLATE_PARAM,
+				AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
+			if (prompt.getPlaceholders().containsKey(placeholder)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> createResponse(IChatRequestContext chatRequestContext,
 			GAgentConfig agentConfig, String request, GAgentsNetwork network,
@@ -502,7 +542,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
-			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener) throws LLMConfigException, AgentException {
+			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener, GeboToolCalling toolCalling)
+			throws LLMConfigException, AgentException {
 		final int maxIterations = maxIterations(network, contextAgentPersona);
 		final int budget = agentTokenBudget(agentModel, agentPrompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
@@ -516,6 +557,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		final Map<String, Object> deliverableParams = new HashMap<>(deliverableTemplateParams(userIntent));
 		// named for the prompts, the user template and the closing of the tools' results
 		deliverableParams.put(USER_LANGUAGE_PARAM, sessionUserLanguage(session));
+		// the network's own placeholders, when the loop's prompt names them: what the
+		// network routed to the loop, its identity, the scenario, the shared context (a
+		// custom loop prompt may; the shipped ones name only the additional rules slot)
+		if (namesAnAgentPlaceholder(agentPrompt)) {
+			deliverableParams.putAll(createAgentTemplateParams(agentPrompt, network, agentRole, contextAgentPersona,
+					session, mySessionContext, request, null, 0, budget));
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " shapes its answer for the deliverable:"
 					+ userIntent.name() + ", search requested:" + searchRequested + ", answer's language:"
@@ -573,7 +621,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					+ " answer held until a search:" + !gate.tools().isEmpty());
 		}
 		final Flux<String> iterations = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
-				loopContext, contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs);
+				loopContext, contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs,
+				toolCalling);
 		// an address no tool returned, nor the user or the chat gave, is made up: removed as
 		// the answer streams
 		final Set<String> removedAddresses = java.util.Collections.synchronizedSet(new LinkedHashSet<>());
@@ -806,6 +855,9 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			// this response carries the agent's own calls; the calls of the whole request are
 			// recorded on the pipeline response by the request's recorder
 			answer.setCalledFunctions(renderFunctions(callBacksListener.getCalls()));
+			// how far the loop went, for whoever reads the answer without having watched it
+			answer.getPipelineParams().put(AGENTIC_LOOP_CYCLES_PARAM, cycle);
+			answer.getPipelineParams().put(AGENTIC_LOOP_MAX_CYCLES_PARAM, maxCycles);
 			return answer;
 		}
 	}
@@ -1497,59 +1549,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	/**
 	 * The iterations of the loop, from the given one: the model's streamed text
 	 * without the control markers, followed by the next iteration when the model
-	 * asked for one and the limit is not reached.
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener,
-				deliverableTemplateParams(DeliverableIntent.SUMMARY));
-	}
-
-	/**
-	 * The iterations of the loop, from the given one, with the prompt parameters
-	 * shaping the deliverable the user asked for (see
-	 * {@link #deliverableTemplateParams(DeliverableIntent)}).
+	 * asked for one and the limit is not reached. The prompt parameters shape the
+	 * deliverable the user asked for (see
+	 * {@link #deliverableTemplateParams(DeliverableIntent)}); the gate says whether
+	 * an iteration's text waits for a search of the sources (an iteration ending
+	 * without one is discarded unseen and the next told why, once); each further
+	 * iteration runs as the user ({@code runAs}), since it starts on the thread the
+	 * previous one's model stream ended on, which carries no identity; and what the
+	 * controlling software adds to every model call of the run (see
+	 * {@link GeboToolCalling}) is passed to each iteration's model call.
 	 */
 	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
 			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
 			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
 			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams, false);
-	}
-
-	/**
-	 * The iterations of the loop, from the given one. When {@code evidenceRequired},
-	 * the iteration's text is held back until it uses a tool (models call their tools
-	 * before writing, so it then streams as usual); an iteration that ends without
-	 * using any tool is discarded unseen and the next one is told why, once: the
-	 * iteration after a discarded one streams whatever it does.
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams, boolean evidenceRequired) {
-		return iteration(number, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-				contextAgentPersona, notificationSink, callBacksListener, deliverableParams,
-				evidenceRequired ? new SourceGate(ANY_SEARCH, true, List.of()) : SourceGate.NONE, null);
-	}
-
-	/**
-	 * The iterations of the loop, from the given one, each further iteration running
-	 * as the user ({@code runAs}): it starts on the thread the previous one's model
-	 * stream ended on, which carries no identity, and its model call samples the
-	 * identity its tools run with.
-	 */
-	protected Flux<String> iteration(int number, int maxIterations, int budget, List<LoopIteration> history,
-			IGConfigurableChatModel agentModel, GPromptTemplateConfig agentPrompt,
-			IChatRequestContext chatRequestContext, AgentNetworkParticipant contextAgentPersona,
-			INotificationSink notificationSink, ToolCallsListener callBacksListener,
-			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs) {
+			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) {
 		return Flux.defer(() -> {
 			final Map<String, Object> params = new HashMap<>(deliverableParams);
 			params.put(CURRENT_ITERATION_PROMPT_PARAM, number);
@@ -1587,7 +1601,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						chatRequestContext != null
 								? chatRequestContext.withToolsRoom(ToolsTokenBudget.leftForTools(budget, params))
 								: null,
-						params).map(response -> chunkText(response, finishReason, thinking, ui))
+						params, toolCalling).map(response -> chunkText(response, finishReason, thinking, ui))
 						.filter(chunk -> !chunk.isEmpty()).concatWith(Flux.defer(() -> {
 							// a reasoning no text came after ends with the model's output
 							thinkingTo(ui, thinking.complete());
@@ -1674,7 +1688,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history,
 								lessReasoning != null ? lessReasoning : agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, gate.evidenceRequired() ? gate : SourceGate.NONE, runAs));
+								deliverableParams, gate.evidenceRequired() ? gate : SourceGate.NONE, runAs, toolCalling));
 					}
 					// no iteration left: the answer is shown as it is
 					LOGGER.warn("Agentic loop agent id:" + getId() + " last iteration " + number
@@ -1708,7 +1722,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history,
 								againModel != null ? againModel : agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, SourceGate.continuing(gate.coverage()), runAs));
+								deliverableParams, SourceGate.continuing(gate.coverage()), runAs, toolCalling));
 					}
 					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number + " wrote no text"
 							+ (previousEmpty ? " again" : "") + (number < maxIterations ? "" : ", the last one")
@@ -1736,7 +1750,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						final Flux<String> restart = open[0] ? Flux.just(ANSWER_RESTART) : Flux.<String>empty();
 						return restart.concatWith(asUser(runAs, iteration(number + 1, maxIterations, budget, history,
 								againModel, agentPrompt, chatRequestContext, contextAgentPersona, notificationSink,
-								callBacksListener, deliverableParams, SourceGate.continuing(gate.coverage()), runAs)));
+								callBacksListener, deliverableParams, SourceGate.continuing(gate.coverage()), runAs,
+								toolCalling)));
 					}
 					LOGGER.warn("Agentic loop agent id:" + getId() + " iteration " + number
 							+ " cut by the output limit (finish reason " + finishReason.get() + ") after " + text.length()
@@ -1804,7 +1819,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						}
 						return asUser(runAs, iteration(number + 1, maxIterations, budget, history, agentModel,
 								agentPrompt, chatRequestContext, contextAgentPersona, notificationSink, callBacksListener,
-								deliverableParams, searched, runAs));
+								deliverableParams, searched, runAs, toolCalling));
 					}
 					// done again already, or no iteration left: the answer is shown as it is, the user
 					// is told what the coverage misses
@@ -1860,7 +1875,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				// its place (see CycleRenderer)
 				return releasedText.concatWith(Flux.just(CYCLE_END_MARK)).concatWith(asUser(runAs, iteration(
 						number + 1, maxIterations, budget, history, agentModel, agentPrompt, chatRequestContext,
-						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, nextGate, runAs)));
+						contextAgentPersona, notificationSink, callBacksListener, deliverableParams, nextGate, runAs,
+						toolCalling)));
 			});
 			return visible.concatWith(next);
 		});

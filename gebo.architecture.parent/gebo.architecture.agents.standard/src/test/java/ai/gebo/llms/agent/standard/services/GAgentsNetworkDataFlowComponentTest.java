@@ -222,7 +222,18 @@ class GAgentsNetworkDataFlowComponentTest {
 		when(others.getDataFlowTargets("github_search")).thenReturn(List.of(new ToolDataFlowTarget(Kind.MCP_SERVER,
 				"github", "MCP server github", "stdio:npx", null, "arguments sent")));
 		when(others.getDataFlowTargets("now")).thenReturn(List.of());
-		when(toolSources.getImplementations()).thenReturn(List.of(knowledgeBase, others));
+		// a product's own search tool: the knowledge bases' semantic search completed by
+		// the product's database, a press review archive here
+		IGToolCallbackSource product = mock(IGToolCallbackSource.class);
+		when(product.getId()).thenReturn("product");
+		List<ToolCallback> productTools = List.of(tool("searchArchive"));
+		when(product.getToolCallbacks()).thenReturn(productTools);
+		when(product.getDataFlowTargets("searchArchive"))
+				.thenReturn(List.of(ToolDataFlowTarget.of(Kind.EMBEDDING_MODEL, "query embedded"),
+						ToolDataFlowTarget.of(Kind.KNOWLEDGE_BASE_VECTOR_STORE, "semantic search"),
+						ToolDataFlowTarget.externalDatabase("press-review", "Press review archive (DB2)",
+								"jdbc:db2://archive.example.com:50000/PRESS", "press-review-db", "articles read")));
+		when(toolSources.getImplementations()).thenReturn(List.of(knowledgeBase, others, product));
 
 		// the members: the input adapter calls no model; the agentic loop agents mount
 		// every tool (the free chat one but the knowledge base ones)
@@ -233,6 +244,9 @@ class GAgentsNetworkDataFlowComponentTest {
 				"readUrl", "getActualUser", "github_search", "now");
 		agent("free-config", "free");
 		service("free", gpt, "searchWeb", "readUrl", "getActualUser", "github_search", "now");
+		// a product's loop agent: the product's search tool instead of the knowledge base one
+		agent("product-config", "product-agent");
+		service("product-agent", gpt, "searchArchive", "now");
 		// the multi agent members: the searchers, a tool calling agent and a controller
 		agent("kb-searcher-config", InternalKnowledgeBaseSearchNetworkAgentService.INTERNAL_KNOWLEDGE_BASE_SEARCHER);
 		service(InternalKnowledgeBaseSearchNetworkAgentService.INTERNAL_KNOWLEDGE_BASE_SEARCHER, gpt);
@@ -320,6 +334,28 @@ class GAgentsNetworkDataFlowComponentTest {
 	}
 
 	@Test
+	void aProductSearchToolReachesTheProductDatabaseAsAnEndpointOfItsOwn() {
+		GDataFlowMetaInfos flow = flowOf(network("PRODUCT", "adapter-config", "product-config"));
+
+		String database = flow.qualifiedId("external-database-press-review");
+		// the queries are written to the database and the embedding model, the rows and
+		// the vector store are read
+		assertEquals(List.of(flow.qualifiedId("agent-model-gpt"), flow.qualifiedId("embedding-model-nomic"), database),
+				destinationsFrom(flow, "PRODUCT"));
+		assertEquals(List.of(DataFlowEndpoints.vectorStoreRef(), database), sourcesInto(flow, "PRODUCT"));
+		DataEndpoint endpoint = endpoint(flow, "external-database-press-review");
+		assertEquals("Press review archive (DB2)", endpoint.getProduct());
+		assertEquals("jdbc:db2://archive.example.com:50000/PRESS", endpoint.getEndpoint());
+		assertEquals("press-review-db", endpoint.getSecretReference());
+		assertEquals(List.of(MetaEndpointType.DATABASE), endpoint.getTypes());
+		assertEquals(DataEndpointLocality.EXTERNAL_PROVIDER, endpoint.getLocality());
+		assertTrue(endpoint.isInput() && endpoint.isOutput());
+		DataTransformationInfo rowsRead = flow.getTransformations().stream()
+				.filter(x -> database.equals(x.getDataSourceId())).findFirst().orElseThrow();
+		assertEquals("Queries sent, rows read (tools: searchArchive)", rowsRead.getDescription());
+	}
+
+	@Test
 	void aFreeChatNetworkReadsNoKnowledgeBase() {
 		GDataFlowMetaInfos flow = flowOf(network(FREE_CHAT, "adapter-config", "free-config"));
 
@@ -399,7 +435,8 @@ class GAgentsNetworkDataFlowComponentTest {
 
 		assertEquals(Kind.INTERNET, targets.get("readUrl").get(0).kind());
 		assertEquals(List.of(), targets.get("now"));
-		assertEquals(6, targets.size());
+		assertEquals(Kind.EXTERNAL_DATABASE, targets.get("searchArchive").get(2).kind());
+		assertEquals(7, targets.size());
 	}
 
 	/**

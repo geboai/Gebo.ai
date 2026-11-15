@@ -16,9 +16,9 @@
  * It extends AncestorPanelComponent and implements OnInit and OnChanges interfaces.
  */
 
-import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
-import { DataPage, EditableUser, PagedModelUserInfos, PagedModelUsersGroup, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
+import { Component, inject, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { DataPage, EditableUser, GUserSession, PagedModelGUserSession, PagedModelUserInfos, PagedModelUsersGroup, SessionsAdminControllerService, SessionsQuery, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "primeng/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
@@ -41,7 +41,34 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     public override reloadViewedData(): void {
         this.loadUsers();
         this.loadGroups();
+        this.loadSessions();
     }
+
+    // The live sessions: tokens in use, by whom and from where, and their revocation
+    loadingSessions: boolean = false;
+    sessionsPage: DataPage = { page: 0, pageSize: 20 };
+    sessionsPaged: PagedModelGUserSession = { content: [] };
+    sessionsQuery: SessionsQuery = { username: '', activeWithinMinutes: 15, includeRevoked: false, includeExpired: false };
+    private translationService = inject(GeboAITranslationService);
+    private moduleId = inject(GEBO_AI_MODULE, { optional: true });
+    private fieldHost = inject(GEBO_AI_FIELD_HOST, { optional: true });
+    /** The sessions' texts built here rather than in the template, translated as the template's are; {name} is filled in. */
+    private sessionTexts: { [id: string]: string } = {
+        AnyKindOption: 'Any kind',
+        SessionKindOption: 'Login session',
+        ApiKeyKindOption: 'API key',
+        Oauth2KindOption: 'External OAuth2 token',
+        SessionsNotLoadedMessage: 'The sessions could not be loaded.',
+        SessionRevokedMessage: 'Session of {username} revoked: its tokens are refused from now on.',
+        SessionNotRevokedMessage: 'The session could not be revoked.',
+        UserSessionsRevokedMessage: '{count} session(s) of {username} revoked.',
+        UserSessionsNotRevokedMessage: 'The sessions could not be revoked.'
+    };
+    sessionKinds = this.buildSessionKinds();
+    /** The session whose revocation waits for a second click, or the user whose sessions do. */
+    confirmingSessionCode?: string;
+    confirmingUsername?: string;
+    sessionsMessage?: string;
 
     // Flag indicating if users are currently being loaded
     loadingUsers: boolean = false;
@@ -81,6 +108,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
      */
     constructor(
         private geboAiUserAdminControllerService: UsersAdminControllerService,
+        private sessionsAdminService: SessionsAdminControllerService,
         private actionServices: GeboUIActionRoutingService) {
         super();
     }
@@ -89,8 +117,141 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
      * Initializes the component by loading users and groups data
      */
     ngOnInit(): void {
+        this.translateSessionTexts();
         this.loadUsers();
         this.loadGroups();
+        this.loadSessions();
+    }
+
+    private buildSessionKinds(): { label: string, value?: string }[] {
+        return [
+            { label: this.sessionTexts['AnyKindOption'], value: undefined },
+            { label: this.sessionTexts['SessionKindOption'], value: 'SESSION' },
+            { label: this.sessionTexts['ApiKeyKindOption'], value: 'API_KEY' },
+            { label: this.sessionTexts['Oauth2KindOption'], value: 'OAUTH2' }
+        ];
+    }
+
+    private sessionText(id: string, values: { [name: string]: any } = {}): string {
+        return Object.entries(values).reduce((text, [name, value]) => text.split('{' + name + '}').join(String(value)),
+            this.sessionTexts[id]);
+    }
+
+    /** Translates the sessions' texts built here, then the kind options showing them. */
+    private translateSessionTexts(): void {
+        const host = Array.isArray(this.fieldHost) ? this.fieldHost[0] : this.fieldHost;
+        const moduleId = Array.isArray(this.moduleId) ? this.moduleId[0] : this.moduleId;
+        const entityId = host?.getEntityName();
+        if (!moduleId || !entityId) return;
+        const items = Object.entries(this.sessionTexts).map(([id, label]) => ({ id, label }));
+        this.translationService.translateMenuItems(moduleId, entityId, items).subscribe(translated => {
+            const texts = { ...this.sessionTexts };
+            translated.forEach(x => {
+                if (x.id && x.label) texts[x.id] = x.label;
+            });
+            this.sessionTexts = texts;
+            this.sessionKinds = this.buildSessionKinds();
+        });
+    }
+
+    /** Reloads the sessions from the first page with the current filters. */
+    public searchSessions(): void {
+        this.sessionsPage.page = 0;
+        this.loadSessions();
+    }
+
+    public loadSessions(): void {
+        this.loadingSessions = true;
+        this.confirmingSessionCode = undefined;
+        this.confirmingUsername = undefined;
+        const query: SessionsQuery = { ...this.sessionsQuery };
+        if (!query.username) {
+            delete query.username;
+        }
+        if (!query.activeWithinMinutes) {
+            delete query.activeWithinMinutes;
+        }
+        this.sessionsAdminService.getSessionsPagedList({ page: this.sessionsPage, query }).subscribe({
+            next: (value) => {
+                this.sessionsPaged = value;
+            },
+            error: () => {
+                this.sessionsMessage = this.sessionText('SessionsNotLoadedMessage');
+            },
+            complete: () => {
+                this.loadingSessions = false;
+            }
+        });
+    }
+
+    public onSessionsPageChange(event: PaginatorState): void {
+        this.sessionsPage.page = event.page ?? 0;
+        this.sessionsPage.pageSize = event.rows ?? 20;
+        this.loadSessions();
+    }
+
+    /** The first click asks for a confirmation, the second revokes. */
+    public revokeSession(session: GUserSession): void {
+        if (!session.code) {
+            return;
+        }
+        if (this.confirmingSessionCode !== session.code) {
+            this.confirmingSessionCode = session.code;
+            this.confirmingUsername = undefined;
+            return;
+        }
+        this.loadingSessions = true;
+        this.sessionsAdminService.revokeSession(session.code).subscribe({
+            next: () => {
+                this.sessionsMessage = this.sessionText('SessionRevokedMessage', { username: session.username });
+                this.loadSessions();
+            },
+            error: () => {
+                this.sessionsMessage = this.sessionText('SessionNotRevokedMessage');
+                this.loadingSessions = false;
+            }
+        });
+    }
+
+    /** The first click asks for a confirmation, the second revokes every session of the user, the administrator's own included. */
+    public revokeUserSessions(username?: string): void {
+        if (!username) {
+            return;
+        }
+        if (this.confirmingUsername !== username) {
+            this.confirmingUsername = username;
+            this.confirmingSessionCode = undefined;
+            return;
+        }
+        this.loadingSessions = true;
+        this.sessionsAdminService.revokeUserSessions(username).subscribe({
+            next: (count) => {
+                this.sessionsMessage = this.sessionText('UserSessionsRevokedMessage', { count: count, username: username });
+                this.loadSessions();
+            },
+            error: () => {
+                this.sessionsMessage = this.sessionText('UserSessionsNotRevokedMessage');
+                this.loadingSessions = false;
+            }
+        });
+    }
+
+    public cancelRevoke(): void {
+        this.confirmingSessionCode = undefined;
+        this.confirmingUsername = undefined;
+    }
+
+    /** A short form of the user agent: the browser or the client, not the whole string. */
+    public clientOf(session: GUserSession): string {
+        const ua = session.lastUserAgent || '';
+        const known = ['Edg/', 'OPR/', 'Firefox/', 'Chrome/', 'Safari/', 'curl/', 'python-requests/', 'okhttp/', 'node'];
+        for (const marker of known) {
+            const i = ua.indexOf(marker);
+            if (i >= 0) {
+                return ua.substring(i).split(' ')[0];
+            }
+        }
+        return ua.length > 40 ? ua.substring(0, 40) + '…' : ua;
     }
 
     /**

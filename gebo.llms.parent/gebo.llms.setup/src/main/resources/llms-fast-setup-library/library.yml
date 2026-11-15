@@ -96,23 +96,35 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatgpt-OpenAI
           doModelsLookup: true
           choices:
-            # Only models that work with what the setup sends today are preset: every chat
-            # model it creates gets temperature 0, and the OpenAI handler calls Chat
-            # Completions. gpt-5 rejects sampling parameters, the gpt-6 family takes them only
-            # at reasoning effort none, and gpt-6.1-sol and gpt-6-astra call tools only
-            # through the Responses API, so they are not preset until the request follows
-            # each model's rules. They stay listed by the lookup.
-            - code: gpt-4.1
-              description: Gpt 4.1
-              contextWindow: 1000000
+            # gpt-4.1 and gpt-4.1-mini, preset until now, shut down on 2027-01-14
+            # (developers.openai.com/api/docs/deprecations, 2026-11-15). Their successors here
+            # are reasoning models whose default effort, none, turns the reasoning off; the
+            # temperature follows the models library's parameter rules
+            # (bundle-models/openai.yml), sent only where the model is known to take it.
+            # Both models have a 400,000 token window with up to 128,000 tokens of output, so
+            # 272,000 of input (the gpt-5.4-mini page states it): contextWindow is that input,
+            # so that the budgets never build a request larger than OpenAI accepts.
+            # gpt-5.2 runs the agentic chat: it reasons at effort low (efforts none, low,
+            # medium, high, xhigh), which plans the tool calls without slowing every round of
+            # the loop much. On Chat Completions the reasoning is not carried from one tool
+            # round to the next (the GPT-5.4 guide: passing it "exists only in the Responses
+            # API"), each round reasons again. Its temperature is taken only at effort none
+            # (the same guide), so none is sent while it reasons. The reasoning counts in the
+            # generated tokens.
+            - code: gpt-5.2
+              description: GPT-5.2
+              contextWindow: 272000
               uses: CHAT
+              thinking: LOW_THINKING
               defaultChoice: true
-            # Non reasoning, calls tools and takes temperature 0 (developers.openai.com,
-            # 2026-10): 1047576 tokens of context.
-            - code: gpt-4.1-mini
-              description: Gpt 4.1 mini
-              contextWindow: 1047576
+            # gpt-5.4-mini serves the internal services, short judgement calls: the reasoning
+            # is off (NO_THINKING sends effort none). The guide's temperature rule names
+            # gpt-5.4 and gpt-5.2 only, so no temperature is sent to it.
+            - code: gpt-5.4-mini
+              description: GPT-5.4 mini
+              contextWindow: 272000
               uses: INTERNAL_SERVICES
+              thinking: NO_THINKING
         - type: EMBEDDING
           serviceHandler: embedding-OpenAI
           doModelsLookup: true

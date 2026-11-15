@@ -79,7 +79,8 @@ public class GeboChatControllerApiTest {
     @Test
     public void getChatModelUserInfoTest() {
         String modelCode = null;
-        GeboChatUserInfo response = api.getChatModelUserInfo(modelCode);
+        String pipelineCode = null;
+        GeboChatUserInfo response = api.getChatModelUserInfo(modelCode, pipelineCode);
 
         // TODO: test validations
     }
@@ -94,7 +95,8 @@ public class GeboChatControllerApiTest {
     @Test
     public void getProviderCapabilitiesTest() {
         String modelCode = null;
-        ModelProviderCapabilities response = api.getProviderCapabilities(modelCode);
+        String pipelineCode = null;
+        ModelProviderCapabilities response = api.getProviderCapabilities(modelCode, pipelineCode);
 
         // TODO: test validations
     }

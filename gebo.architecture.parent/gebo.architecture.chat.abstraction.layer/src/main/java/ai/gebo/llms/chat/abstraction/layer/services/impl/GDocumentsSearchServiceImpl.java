@@ -84,8 +84,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 		}
 		List<String> knowledgeBases = new ArrayList<String>();
 		List<Integer> aclAliases = null;
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
 		}
 		double threashold = chatConfigs.getDefaultSimilarityThreshold();
@@ -173,8 +172,7 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			LOGGER.debug("Begin search(String request,..)");
 		}
 		List<Integer> aclAliases = null;
-		if (securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED
-				&& !securityService.isCurrentUserAdmin()) {
+		if (securityService.isContentAclEnforced()) {
 			aclAliases = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ).getAllOwnedAclAliases();
 		}
 		// No chat profile/session: scope to all knowledge bases visible to the current user.
@@ -273,17 +271,17 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 			// disabled does it fall back to its historical role of filling the gap left
 			// by an under delivering semantic leg.
 			if (lexicalLegAvailable && (hybrid || !endSearch)) {
-				boolean filterWithAcl = !securityService.isCurrentUserAdmin()
-						&& securityService.getPlatformContentAccessPolicy() == ContentAccessPolicy.ACL_BASED;
+				boolean filterWithAcl = securityService.isContentAclEnforced();
 				// the caller's filter (its knowledge bases, how many chunks of each document...),
 				// within the knowledge bases of this search and with the user's ACL
 				final FullTextSearchMetaDataFilter metaDataFilter = lexicalFilter(fullTextSearchMetaDataFilter,
 						knowledgeBases, filterWithAcl ? aclAliases : null);
 				if (metaDataFilter == null) {
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Lexical leg skipped: the caller's knowledge bases "
-								+ fullTextSearchMetaDataFilter.getKnowledgebaseCodes() + " are none of the searched ones "
-								+ knowledgeBases);
+						LOGGER.debug("Lexical leg skipped: no knowledge base to search (the caller's: "
+								+ (fullTextSearchMetaDataFilter != null ? fullTextSearchMetaDataFilter.getKnowledgebaseCodes()
+										: null)
+								+ ", the searched ones: " + knowledgeBases + ")");
 					}
 				} else {
 					// With hybrid retrieval the lexical leg keeps its reserved quota even when
@@ -365,8 +363,10 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 	 * documents, chunks per document...) whose knowledge bases are kept within the
 	 * searched ones (all of them when the caller names none), with the user's ACL
 	 * aliases ({@code null} when no ACL filter applies). {@code null} when the caller
-	 * names only knowledge bases outside the searched ones: an empty list would filter
-	 * nothing.
+	 * names only knowledge bases outside the searched ones, or when no knowledge base
+	 * is searched at all: the full-text index drops an empty knowledge base term, so
+	 * an empty list would reach every indexed chunk under the ACL alone (the semantic
+	 * leg searches nothing then either).
 	 */
 	static FullTextSearchMetaDataFilter lexicalFilter(FullTextSearchMetaDataFilter callerFilter,
 			List<String> searchedKnowledgeBases, List<Integer> aclAliases) {
@@ -393,6 +393,9 @@ public class GDocumentsSearchServiceImpl implements IGDocumentsSearchService {
 					return null;
 				}
 			}
+		}
+		if (knowledgeBases == null || knowledgeBases.isEmpty()) {
+			return null;
 		}
 		filter.setKnowledgebaseCodes(knowledgeBases);
 		filter.setAclAliases(aclAliases);

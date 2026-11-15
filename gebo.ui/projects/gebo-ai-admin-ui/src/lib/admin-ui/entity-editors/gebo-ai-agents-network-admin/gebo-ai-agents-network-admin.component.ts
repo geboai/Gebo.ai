@@ -67,6 +67,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         agentsNetworkServiceFactoryId: new FormControl(null, Validators.required),
         agents: new FormControl(),
         readOnly: new FormControl(),
+        rememberAcrossTurns: new FormControl<boolean>(false),
         choosableForPipelineTypes: new FormControl(),
         accessibleToAll: new FormControl(),
         accessibleUsers: new FormControl(),
@@ -147,13 +148,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
     protected inspectorTab: "participant" | "configuration" = "participant";
     private applyingSelection: boolean = false;
 
-    protected policyOptions = [
-        { id: "PolicyAllowAll", label: "Allow all", value: "ALLOW_ALL" },
-        { id: "PolicyDenyAll", label: "Deny all", value: "DENY_ALL" },
-        { id: "PolicyAllowList", label: "Allow list", value: "ALLOW_LIST" },
-        { id: "PolicyDenyList", label: "Deny list", value: "DENY_LIST" }
-    ];
-
     /** The groups of the palette, by the kind of the services; the labels are translated on init. */
     private static readonly PALETTE_GROUPS: { id: string, kind: AgentServiceDescriptor.KindEnum, label: string }[] = [
         { id: "PaletteForwarders", kind: "FORWARDER", label: "Input adapters" },
@@ -208,6 +202,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         { id: "NodeSelectedToolsTooltip", label: "The tools selected in the agent configuration" },
         { id: "NodeShowAllToolsTitle", label: "Show all the tools of this agent" },
         { id: "NodeToolFallback", label: "Tool" },
+        { id: "NodeToolCollisionsTooltip", label: "The tool of the library is used, the other one never reaches the model" },
         { id: "NodeExcludedByConfiguration", label: "Left out by this agent's configuration (its tool sources left out)" },
         { id: "NodeExcludedBySystem", label: "Kept out by the system settings" },
         { id: "NodeExcludedByService", label: "Left out by the agent service's own rule" },
@@ -234,7 +229,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         inputNode: new FormControl<boolean>(false),
         outputNode: new FormControl<boolean>(false),
         allowedToNotifyUser: new FormControl<boolean>(true),
-        communicationPolicy: new FormControl<string>("ALLOW_LIST"),
         controller: new FormControl<boolean>(false),
         canCallTools: new FormControl<boolean>(true),
         canCallOtherAgents: new FormControl<boolean>(false)
@@ -295,8 +289,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         const translations = this.myInjector.get(GeboAITranslationService);
         translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.pipelineTypeOptions)
             .subscribe(items => this.pipelineTypeOptions = [...items] as { id: string, label: string, value: string }[]);
-        translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.policyOptions)
-            .subscribe(items => this.policyOptions = [...items] as { id: string, label: string, value: string }[]);
         translations.translateMenuItems("GeboAIAgentsNetworkAdminModule", "GAgentsNetwork", this.paletteGroupLabels)
             .subscribe(items => {
                 this.paletteGroupLabels = [...items] as { id: string, label: string }[];
@@ -367,7 +359,7 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
 
     private applyReadOnly(isReadOnly: boolean): void {
         this.readonly = isReadOnly;
-        const controls = ["maxLoopIteration", "choosableForPipelineTypes", "agentsNetworkServiceFactoryId"];
+        const controls = ["maxLoopIteration", "choosableForPipelineTypes", "agentsNetworkServiceFactoryId", "rememberAcrossTurns"];
         if (this.readonly) {
             this.participantFormGroup.disable({ emitEvent: false });
             this.addTargetControl.disable({ emitEvent: false });
@@ -664,7 +656,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
             inputNode: false,
             outputNode: service?.reactive === true,
             allowedToNotifyUser: true,
-            communicationPolicy: "ALLOW_LIST",
             communicationList: [],
             // the first participant that can be the controller takes the role
             controller: this.canBeController(service) && !this.agentsList.some(p => p.controller),
@@ -700,7 +691,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
                     inputNode: participant.inputNode === true,
                     outputNode: participant.outputNode === true,
                     allowedToNotifyUser: participant.allowedToNotifyUser !== false,
-                    communicationPolicy: participant.communicationPolicy || "ALLOW_LIST",
                     controller: participant.controller === true,
                     canCallTools: participant.canCallTools !== false,
                     canCallOtherAgents: participant.canCallOtherAgents === true
@@ -746,7 +736,6 @@ export class GeboAIAgentsNetworkAdminComponent extends BaseEntityEditingComponen
         participant.inputNode = value.inputNode === true;
         participant.outputNode = value.outputNode === true;
         participant.allowedToNotifyUser = value.allowedToNotifyUser !== false;
-        participant.communicationPolicy = (value.communicationPolicy || "ALLOW_LIST") as AgentNetworkParticipant.CommunicationPolicyEnum;
         const controller = value.controller === true;
         if (controller && !participant.controller) {
             // one controller: the flag moves to this participant

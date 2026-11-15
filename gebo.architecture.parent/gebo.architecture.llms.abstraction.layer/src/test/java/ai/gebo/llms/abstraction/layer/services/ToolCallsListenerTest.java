@@ -61,6 +61,34 @@ class ToolCallsListenerTest {
 	}
 
 	@Test
+	void aListenerOfBothForwardsEachCallToBothOnce() {
+		ToolCallsListener request = new ToolCallsListener();
+		ToolCallsListener run = new ToolCallsListener();
+		ToolCallsListener agent = ToolCallsListener.both(request, run).child(null);
+
+		agent.addCall("searchWeb", "web", "{}", "result");
+
+		assertEquals(1, agent.getCalls().size());
+		assertEquals(1, request.getCalls().size(), "the request keeps recording the agents' calls");
+		assertEquals(1, run.getCalls().size(), "the run records them as well");
+		assertSame(request.getCalls().get(0), run.getCalls().get(0), "the very same call reaches both");
+	}
+
+	@Test
+	void aListenerOfBothWithOneMissingIsAChildOfTheOther() {
+		ToolCallsListener request = new ToolCallsListener();
+
+		ToolCallsListener.both(request, null).addCall("searchWeb", "web", "{}", "result");
+		ToolCallsListener.both(null, request).addCall("getActualUser", "user", "{}", "me");
+		ToolCallsListener.both(request, request).addCall("notifyUser", "notify", "{}", "ok");
+		ToolCallsListener.both(null, null).addCall("lost", "nowhere", "{}", "nothing");
+
+		assertEquals(List.of("searchWeb", "getActualUser", "notifyUser"),
+				request.getCalls().stream().map(ToolCallsListener.ToolCallExecuted::getName).toList(),
+				"each call is recorded once, the same listener twice does not double it");
+	}
+
+	@Test
 	void theRequestRecorderFillsTheResponseAsTheCallsHappen() {
 		List<CalledFunction> responseCalledFunctions = new ArrayList<>();
 		ToolCallsListener request = ToolCallsListener.appendingTo(responseCalledFunctions);
@@ -122,5 +150,28 @@ class ToolCallsListenerTest {
 		assertEquals(Map.of("k", "v"), agentContext.getToolsContext());
 		assertEquals(Map.of("p", "i"), agentContext.getPipelineInfos());
 		assertEquals(1, agentContext.getDocuments().size(), "documents are read live, not frozen");
+	}
+
+	private static List<String> shownInput(String toolInput) {
+		return ToolCallsListener
+				.toCalledFunction(new ToolCallsListener.ToolCallExecuted("ask", "asks", toolInput, "result"))
+				.getParamsDescription();
+	}
+
+	@Test
+	void theNotesTheModelWroteToItselfAreNotPartOfTheCallAsTheUserSeesIt() {
+		assertEquals(List.of("{\"question\":\"Which year?\",\"mandatory\":true}"),
+				shownInput("{\"question\":\"Which year?\",\"notesForLater\":\"the word is ZEBRA\",\"mandatory\":true}"));
+		assertEquals(List.of("{\"question\":\"Which year?\"}"),
+				shownInput("{\"question\":\"Which year?\",\"notesForLater\":null}"));
+	}
+
+	@Test
+	void anInputWithNoNotesIsShownAsItIs() {
+		assertEquals(List.of("{ \"question\" : \"Which year?\" }"), shownInput("{ \"question\" : \"Which year?\" }"));
+		assertEquals(List.of("{\"question\":\"what are notesForLater?\" }"),
+				shownInput("{\"question\":\"what are notesForLater?\" }"));
+		assertEquals(List.of("not json with notesForLater"), shownInput("not json with notesForLater"));
+		assertEquals(List.of(), shownInput(null));
 	}
 }

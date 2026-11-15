@@ -36,6 +36,7 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.impl.LocalJwtTokenProvider;
+import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
 import ai.gebo.security.services.impl.authmanagers.JwtDecoderCache;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
@@ -126,10 +127,7 @@ public class SecurityHeaderDataCompletionController {
 		if (issuer != null) {
 			List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 					.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
-			Oauth2RuntimeConfiguration matched = oauth2AuthenticationConfigs.stream()
-					.filter(config -> config.getProviderConfig() != null
-							&& issuer.equals(config.getProviderConfig().getIssuerUri()))
-					.findFirst().orElse(null);
+			Oauth2RuntimeConfiguration matched = IssuerConfigCache.answeringFor(oauth2AuthenticationConfigs, issuer);
 			if (matched != null) {
 				// Unambiguous issuer match, exactly as resolveAuto()'s single-config branch.
 				return new SecurityHeaderData(token, XAuthType.OAUTH2, matched.getRegistrationId(),
@@ -143,7 +141,7 @@ public class SecurityHeaderDataCompletionController {
 					continue;
 				}
 				try {
-					JwtDecoder decoder = jwtDecoderCache.forIssuerLocation(config.getProviderConfig().getIssuerUri());
+					JwtDecoder decoder = jwtDecoderCache.forConfiguration(config);
 					decoder.decode(token);
 					return new SecurityHeaderData(token, XAuthType.OAUTH2, config.getRegistrationId(),
 							raw.getAuthTenantId(), false);

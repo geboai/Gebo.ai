@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.acl.AclGrantType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +20,13 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.IGMessageBroker;
@@ -49,6 +57,8 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatSessionLifeCycleConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboChatUIServerConfig;
 import ai.gebo.llms.chat.abstraction.layer.config.GeboPromptsLibrary;
@@ -67,6 +77,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository
 import ai.gebo.llms.chat.abstraction.layer.services.GeboChatSessionLifecycleException;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatFullSessionStateService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionRemovalListener;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGShrinkedChatSessionStateService;
@@ -78,6 +89,8 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSfRelevantShrinkedDocumentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatFullSessionState;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ExternalSessionRef;
+import ai.gebo.llms.chat.abstraction.layer.session.model.GChatSessionOpeningOptions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ShrinkedChatSessionState;
@@ -85,6 +98,7 @@ import ai.gebo.security.model.UserInfos;
 import ai.gebo.security.services.IGSecurityService;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import io.jsonwebtoken.security.SecurityException;
+import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -105,6 +119,9 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGAIDocumentsCacheService documentsCacheService;
 	private final IGPersistentObjectManager persistenceManager;
 	private final IGSecurityService securityService;
+	/** Told of every conversation removed; not final, so the constructor stays what it is. */
+	@Autowired(required = false)
+	private ObjectProvider<IGChatSessionRemovalListener> removalListeners;
 	private final IGMessageBroker broker;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
@@ -113,8 +130,21 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private final IGEmbeddingModelRuntimeConfigurationDao embeddingModelsRuntimeDao;
 	private final IMessageEnvelopeFactory envelopeFactory;
 	private final GeboChatUIServerConfig uiServerConfig;
+	/** The library instances a conversation holds, to drop them with it. */
+	private final IGAIToolsLibraryInstancesService libraryInstances;
 	private final ChatAnswerFeedbackRepository answerFeedbackRepository;
 	private final IGChatRulesService rulesService;
+	/** Builds what the title suggestion adds to its model call: itself as the caller. */
+	private final GeboToolCallingManagerFactory toolCallingFactory;
+
+	/** The caller the title suggestion of a chat names itself as: {@code title:<session code>}. */
+	public static final String TITLE_CALLER_PREFIX = "title:";
+	/**
+	 * Writes the chat title alone (see {@link #suggestChatDescription(String)}):
+	 * a whole-session save there overwrote the first answer when a handler saved
+	 * it meanwhile.
+	 */
+	private final ObjectProvider<MongoTemplate> mongoTemplateProvider;
 	private static final int MAX_RULES_PER_REQUEST = 20;
 	private static final int MAX_RULES_LENGTH = 6000;
 
@@ -139,10 +169,10 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	/**
 	 * Notified each time a request ends with its interaction saved (see
 	 * {@link #endRequest(GeboChatRequest, GeboChatResponse)}): a chat title asked for
-	 * before the interaction is saved waits on it.
+	 * before the answered interaction is saved waits on it.
 	 */
 	private static final Object INTERACTION_SAVED = new Object();
-	/** Longest wait of a chat title for the chat's first interaction to be saved. */
+	/** Longest wait of a chat title for the chat's first answered interaction to be saved. */
 	static final long TITLE_INTERACTION_WAIT_MILLIS = 20000L;
 	/**
 	 * Interval of the re-reads of the session while waiting: the request may be served
@@ -153,6 +183,12 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void createChatSession(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		createChatSession(request, GChatSessionOpeningOptions.none());
+	}
+
+	@Override
+	public void createChatSession(GeboChatRequest request, GChatSessionOpeningOptions options)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
 
 		if (request.getUserChatContextCode() == null || request.getUserChatContextCode().trim().length() == 0) {
 			UserInfos user = securityService.getCurrentUser();
@@ -160,6 +196,14 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 			s.setUsername(user.getUsername());
 			s.setChatProfileCode(request.getChatProfileCode());
 			s.setChatModelCode(request.getChatModelCode());
+			keepExternalSession(s, request);
+			if (options != null) {
+				// a run from outside a chat: what it is, and who else works in it
+				s.setTransientRun(options.isTransientRun() ? Boolean.TRUE : null);
+				s.setRunOrigin(options.getRunOrigin());
+				s.setAccessibleUsers(othersThan(options.getSharedWithUsers(), user.getUsername()));
+				s.setAccessibleGroups(othersThan(options.getSharedWithGroups(), null));
+			}
 			if (request.getChatProfileCode() != null) {
 				Optional<GChatProfileConfiguration> data = this.chatProfilesRepository
 						.findById(request.getChatProfileCode());
@@ -200,19 +244,106 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		}
 		GUserChatSession session = this.sessionRepository.findById(id)
 				.orElseThrow(GeboChatSessionLifecycleException::new);
-		this.securityService.checkBeingCreator(session);
+		// Its owner, or whoever the conversation is granted to: a harness grants its
+		// conversation to the people it waits for, and they work in it as the owner would.
+		this.securityService.checkBeingCreatorOrGranted(session, AclGrantType.WRITE);
 		return session;
+	}
+
+	/** The names given, distinct, without the one left out and without blanks; null when none is left. */
+	private static List<String> othersThan(List<String> names, String leftOut) {
+		if (names == null) {
+			return null;
+		}
+		final List<String> others = names.stream()
+				.filter(name -> name != null && !name.isBlank() && !name.equals(leftOut)).distinct().toList();
+		return others.isEmpty() ? null : new ArrayList<String>(others);
+	}
+
+	@Override
+	public void shareChatSession(String code, List<String> users, List<String> groups)
+			throws GeboChatSessionLifecycleException {
+		if (code == null || code.isBlank()) {
+			throw new GeboChatSessionLifecycleException("session id is null");
+		}
+		final GUserChatSession session = this.sessionRepository.findById(code)
+				.orElseThrow(GeboChatSessionLifecycleException::new);
+		final List<String> moreUsers = othersThan(users, session.getUsername());
+		final List<String> moreGroups = othersThan(groups, null);
+		boolean changed = false;
+		if (moreUsers != null) {
+			final List<String> granted = new ArrayList<String>(
+					session.getAccessibleUsers() != null ? session.getAccessibleUsers() : List.of());
+			for (String name : moreUsers) {
+				if (!granted.contains(name)) {
+					granted.add(name);
+					changed = true;
+				}
+			}
+			session.setAccessibleUsers(granted);
+		}
+		if (moreGroups != null) {
+			final List<String> granted = new ArrayList<String>(
+					session.getAccessibleGroups() != null ? session.getAccessibleGroups() : List.of());
+			for (String name : moreGroups) {
+				if (!granted.contains(name)) {
+					granted.add(name);
+					changed = true;
+				}
+			}
+			session.setAccessibleGroups(granted);
+		}
+		if (changed) {
+			this.sessionRepository.save(session);
+			LOGGER.debug("Chat {} is now shared with users:{} groups:{}", code, session.getAccessibleUsers(),
+					session.getAccessibleGroups());
+		}
+	}
+
+	@Override
+	public int dropTransientChatSessionsOpenedBefore(Date before) {
+		int dropped = 0;
+		for (GUserChatSession session : this.sessionRepository.findByTransientRunTrueAndDateCreatedBefore(before)) {
+			try {
+				remove(session);
+				dropped++;
+			} catch (RuntimeException notDropped) {
+				LOGGER.error("The transient chat " + session.getCode() + " of a run from " + session.getRunOrigin()
+						+ " could not be dropped", notDropped);
+			}
+		}
+		if (dropped > 0) {
+			LOGGER.info("Dropped {} transient chat(s) opened before {} whose run never dropped them", dropped, before);
+		}
+		return dropped;
 	}
 
 	@Override
 	public void removeChatSession(String code) throws GeboChatSessionLifecycleException {
-		GUserChatSession session = get(code);
+		remove(get(code));
+	}
+
+	/** Removes the conversation with everything it holds, whoever asks. */
+	private void remove(GUserChatSession session) {
+		final String code = session.getCode();
 		this.fullSessionStateService.deleteState(code);
 		this.shrinkedSessionStateService.deleteState(code);
 		try {
 			this.chatAreaStorageSession.deleteSessionContents(code);
 		} catch (IOException e) {
 			LOGGER.error("Error deleting session contents for " + code, e);
+		}
+		// what it held - a working directory, a sandbox - goes with it
+		this.libraryInstances.dropHeldBy(code);
+		if (removalListeners != null) {
+			removalListeners.stream().forEach(listener -> {
+				try {
+					listener.chatSessionRemoved(code);
+				} catch (RuntimeException notTold) {
+					LOGGER.error("Removal listener " + listener.getClass().getName() + " failed for chat " + code,
+							notTold);
+				}
+			});
 		}
 		LOGGER.debug("Removing chat {} with its full and compact states and stored contents", code);
 		this.sessionRepository.deleteById(code);
@@ -987,8 +1118,59 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	@Override
 	public void ensureChatSessionExists(GeboChatRequest request)
 			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		resolveExternalSession(request);
 		if (!isSessionExisting(request))
 			createChatSession(request);
+	}
+
+	/**
+	 * A request naming the conversation by another system's own key (see
+	 * {@link ExternalSessionRef}) goes on in the conversation opened by that key:
+	 * the request is given its code; with none opened yet, no code, so that one is
+	 * opened and given the key. Gebo's own code wins when it names a conversation.
+	 */
+	private void resolveExternalSession(GeboChatRequest request) {
+		final ExternalSessionRef ref = request != null
+				? ExternalSessionRef.of(request.getExternalSystem(), request.getExternalSessionKey())
+				: null;
+		if (ref == null) {
+			return;
+		}
+		final String code = request.getUserChatContextCode();
+		if (code != null && !code.isBlank() && this.sessionRepository.existsById(code)) {
+			return;
+		}
+		final Optional<GUserChatSession> byKey = this.sessionRepository
+				.findByExternalSystemAndExternalSessionKey(ref.getExternalSystem(), ref.getExternalSessionKey());
+		request.setUserChatContextCode(byKey.map(GUserChatSession::getCode).orElse(null));
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The conversation named by " + ref.label() + " is "
+					+ (byKey.isPresent() ? byKey.get().getCode() : "not opened yet")
+					+ (code != null && !code.isBlank() ? " (the code given, " + code + ", names none)" : ""));
+		}
+	}
+
+	/** The conversation keeps the key another system opened it by, if the request gave one. */
+	private static void keepExternalSession(GUserChatSession session, GeboChatRequest request) {
+		final ExternalSessionRef ref = ExternalSessionRef.of(request.getExternalSystem(), request.getExternalSessionKey());
+		if (ref != null) {
+			session.setExternalSystem(ref.getExternalSystem());
+			session.setExternalSessionKey(ref.getExternalSessionKey());
+		}
+	}
+
+	@Override
+	public void ensureChatSessionExists(GeboChatRequest request, GChatSessionOpeningOptions options)
+			throws GeboChatSessionLifecycleException, GeboPersistenceException {
+		resolveExternalSession(request);
+		if (!isSessionExisting(request)) {
+			createChatSession(request, options);
+		} else if (options != null && options.isShared()) {
+			// the run goes on in a conversation somebody else may have opened: whoever
+			// the run says works in it is granted it before the conversation is read
+			shareChatSession(request.getUserChatContextCode(), options.getSharedWithUsers(),
+					options.getSharedWithGroups());
+		}
 	}
 
 	private ChatFullSessionState retrieveAndCheck(String id) throws GeboChatSessionLifecycleException {
@@ -1272,41 +1454,74 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		GPromptTemplateConfig prompt = this.promptsDao.findByPromptUse(GeboPromptsLibrary.SUMMARIZE_CHAT_DESCRIPTION);
 		IGConfigurableChatModel handler = chatModelsDao.findByUsesOrGetDefault(ChatModelsUses.INTERNAL_SERVICES);
 		try {
-			if (handler != null && context.getInteractions() != null && !context.getInteractions().isEmpty()) {
+			if (handler != null && hasAnsweredInteraction(context)) {
 				IChatRequestContext ccontext = context.createChatRequestContext();
-				String content = handler.textResponse(prompt, cache, ccontext);
+				// the title prompt takes nothing but the question and the language; the call
+				// names itself: nobody is above a title suggestion
+				final GeboToolCalling toolCalling = toolCallingFactory != null
+						? toolCallingFactory.builder().caller(TITLE_CALLER_PREFIX + id).build()
+						: null;
+				String content = toolCalling != null ? handler.textResponse(prompt, Map.of(), ccontext, toolCalling)
+						: handler.textResponse(prompt, Map.of(), ccontext);
 				String pureText = ClientChatCallUtil.removeThinking(content);
 				data.setDescription(pureText);
-				context.setDescription(pureText);
-				this.sessionRepository.save(context);
+				saveDescription(context, pureText);
 				return data;
 			}
 		} catch (Throwable th) {
 			LOGGER.error("Exception in suggestChatDescription", th);
 			return data;
 		}
-		if (context.getInteractions() == null || context.getInteractions().isEmpty()) {
-			LOGGER.warn("No chat title suggested for chat:" + id + ": it has no saved interaction");
+		if (!hasAnsweredInteraction(context)) {
+			LOGGER.warn("No chat title suggested for chat:" + id + ": it has no saved answered interaction");
 		}
 		return data;
 	}
 
 	/**
-	 * The chat session once it has a saved interaction to name the chat after. The
-	 * user interface asks for the title as soon as the first answer is streamed, which
-	 * can be before the handler that streamed it ends the request and saves the
-	 * interaction: the session is re-read, when a request ends here or every
-	 * {@value #TITLE_INTERACTION_POLL_MILLIS} ms, for at most
-	 * {@value #TITLE_INTERACTION_WAIT_MILLIS} ms.
+	 * Writes the chat's title and nothing else: the session read for the title is
+	 * stale as soon as the request that answered it is ended by its handler, and
+	 * saving it whole wrote the first interaction back without its answer. Without a
+	 * MongoDB the session is re-read and saved with the title set.
+	 */
+	private void saveDescription(GUserChatSession context, String description)
+			throws GeboChatSessionLifecycleException {
+		MongoTemplate mongoTemplate = mongoTemplateProvider != null ? mongoTemplateProvider.getIfAvailable() : null;
+		if (mongoTemplate != null) {
+			mongoTemplate.updateFirst(new Query(Criteria.where("_id").is(context.getCode())),
+					new Update().set("description", description), GUserChatSession.class);
+		} else {
+			GUserChatSession fresh = get(context.getCode());
+			fresh.setDescription(description);
+			this.sessionRepository.save(fresh);
+		}
+		context.setDescription(description);
+	}
+
+	/** Whether the session has a saved interaction that has its answer. */
+	private static boolean hasAnsweredInteraction(GUserChatSession context) {
+		return context.getInteractions() != null
+				&& context.getInteractions().stream().anyMatch(x -> x != null && x.getResponse() != null);
+	}
+
+	/**
+	 * The chat session once it has a saved answered interaction to name the chat
+	 * after. The user interface asks for the title as soon as the first answer is
+	 * streamed, which can be before the handler that streamed it ends the request and
+	 * saves the interaction with its answer; the session may already hold the
+	 * interaction without its answer, saved while the request was still running (e.g.
+	 * with the chat's language), which is not enough: the session is re-read, when a
+	 * request ends here or every {@value #TITLE_INTERACTION_POLL_MILLIS} ms, for at
+	 * most {@value #TITLE_INTERACTION_WAIT_MILLIS} ms.
 	 */
 	private GUserChatSession waitForFirstInteraction(String id) throws GeboChatSessionLifecycleException {
 		GUserChatSession context = get(id);
 		final long deadline = System.currentTimeMillis() + TITLE_INTERACTION_WAIT_MILLIS;
 		long remaining = TITLE_INTERACTION_WAIT_MILLIS;
-		if (LOGGER.isDebugEnabled() && (context.getInteractions() == null || context.getInteractions().isEmpty())) {
-			LOGGER.debug("Chat title of chat:" + id + " waits for its first interaction to be saved");
+		if (LOGGER.isDebugEnabled() && !hasAnsweredInteraction(context)) {
+			LOGGER.debug("Chat title of chat:" + id + " waits for its first answered interaction to be saved");
 		}
-		while ((context.getInteractions() == null || context.getInteractions().isEmpty()) && remaining > 0) {
+		while (!hasAnsweredInteraction(context) && remaining > 0) {
 			try {
 				synchronized (INTERACTION_SAVED) {
 					INTERACTION_SAVED.wait(Math.min(remaining, TITLE_INTERACTION_POLL_MILLIS));

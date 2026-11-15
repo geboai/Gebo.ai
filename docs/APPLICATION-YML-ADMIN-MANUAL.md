@@ -241,6 +241,13 @@ registered generically as OpenAI-API-compatible endpoints (`GenericOpenAICompati
 sourced from a bundled provider catalog), and any further OpenAI-compatible server is added the same
 way through the admin UI, not `application.yml`.
 
+How much knowledge base content a model call may take (`KnowledgeBaseSearchBudgetConfig`):
+
+| Property | Type | Shipped default | Description |
+|---|---|---|---|
+| `ai.gebo.llms.knowledge-base-search-room-divisor` | double > 0 | `3` | The knowledge base contents of a model call take the room its messages leave of its context (two thirds of it) divided by this: the chats with knowledge bases, the pipelines, the knowledge base agents of the networks and the search tools alike. |
+| `ai.gebo.agents.standard.knowledge-base-search-room-divisor` | double > 0 | *(not set)* | When set, overrides the divisor above for the search tools only. |
+
 ## 9. Vector store
 
 Bound by `GeboAIVectorStoreConfig` (`ai.gebo.vectorstore`).
@@ -613,7 +620,8 @@ large-scale ingestion tuning.
 | Property | Type | Shipped default | Description |
 |---|---|---|---|
 | `ai.gebo.rag-threashold-autotune.config.enabled` | boolean | `true` | Periodically re-computes optimal RAG similarity thresholds per vector store / embedding model / knowledge base, by sampling document fragments, generating synthetic questions, and rating match quality. |
-| `ai.gebo.agents.standard.enabled` | boolean | `true` | Enables the built-in standard document-search agents, i.e. the default network of agents. On unless explicitly set to `false`. |
+| `ai.gebo.agents.enabled` | boolean | `true` | The master switch of the agents: off, no network of agents can be chosen (Setup › Agentic chat networks, the chat profiles' network, the networks editor) and the chat information panel shows no agents. On unless explicitly set to `false`. |
+| `ai.gebo.agents.standard.enabled` | boolean | `true` | Enables the bundled networks of agents and their agents: the single-agent loop networks (with and without knowledge bases), the coordinator network with its searchers, and the standard `searchKnowledgeBase` tool. A product bringing its own networks sets it to `false` and keeps `ai.gebo.agents.enabled` on. On unless explicitly set to `false`. |
 | `ai.gebo.agents.standard.deep-search-tools.enabled` | boolean | `true` | Exposes the deep search tools (`deepSearchKnowledgeBase`, `deepSearchWeb`, `deepSearch<Product>`) to the agents operating their own tools, such as the agentic chat. |
 | `ai.gebo.agents.standard.deep-search-tools.max-analysis-tokens` | int | `16000` | Safety cap, in tokens, of the analysis a deep search tool returns. Its length is asked to the model through the depth the agent chooses; this only cuts a runaway analysis. |
 | `ai.gebo.agents.standard.deep-search-tools.max-deep-searches-per-request` | int | `8` | Deep searches a single user request can make, whatever the sources (a value that is not positive means the default). One more is refused, and the agent is told to answer with what it already has. |
@@ -737,7 +745,7 @@ you don't spend time debugging "why doesn't this setting do anything."
 | Shipped key | Status | What to use instead |
 |---|---|---|
 | `ai.gebo.lucene.config.enabled` | No binding class anywhere in the codebase. Lucene is not an implemented vector-store backend despite being mentioned in code comments as aspirational. | N/A — ignore. |
-| `ai.gebo.chat.promptDefaults[].promptUse` / `.prompt` | `GeboChatConfigs` has no `promptDefaults` field; verified with a full-repo search — this key is not referenced anywhere else either. | `ai.gebo.prompts.library[]` (`GeboPromptsLibrary`), or manage prompts via the admin UI. |
+| `ai.gebo.chat.promptDefaults[].promptUse` / `.prompt` | Removed from the shipped files in 1.0.6.0. `GeboChatConfigs` has no `promptDefaults` field, so the key is inert in an older `application.yml` still carrying it. | `ai.gebo.prompts.library[]` (`GeboPromptsLibrary`), or manage prompts via the admin UI. |
 | `ai.gebo.security.oauth2.authorizedRedirectUris` | No `authorizedRedirectUris` field exists anywhere in the codebase. | Not needed — the SPA/redirect flow doesn't use a configured allow-list this way. |
 | `ai.gebo.security.oauth2configs[].configurationTypes` (plural) | The Java field is `configurationType` (**singular**) — relaxed binding does not match `configurationTypes`, so this key is silently dropped. | Use `configurationType:` (singular) in your YAML. |
 | `ai.gebo.vectorizator.config.disposerConfig.*` / `.vectorizatorReceiverConfig.*` | `GeboDocumentsCacheConfig` only has a `documentChunkerReceiverConfig` field; these two are not bound. | `ai.gebo.vectorizator.config.documentChunkerReceiverConfig.*` (see §17). |

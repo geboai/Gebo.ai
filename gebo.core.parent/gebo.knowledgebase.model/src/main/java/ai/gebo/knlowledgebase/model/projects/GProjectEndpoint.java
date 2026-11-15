@@ -13,6 +13,7 @@ import java.util.List;
 
 import ai.gebo.acl.GAclEntry;
 import ai.gebo.acl.IAclGrantedResource;
+import ai.gebo.acl.IContentAclResource;
 import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.scheduling.ReindexingProgrammedTable;
 import ai.gebo.knlowledgebase.model.systems.BuildSystemRef;
@@ -25,7 +26,7 @@ import lombok.Data;
  * within the knowledge base system. AI generated comments
  */
 @Data
-public class GProjectEndpoint extends GBaseObject implements IAclGrantedResource {
+public class GProjectEndpoint extends GBaseObject implements IContentAclResource {
 
 	/**
 	 * FilesSynchronizationStrategy defines strategies for synchronizing files.

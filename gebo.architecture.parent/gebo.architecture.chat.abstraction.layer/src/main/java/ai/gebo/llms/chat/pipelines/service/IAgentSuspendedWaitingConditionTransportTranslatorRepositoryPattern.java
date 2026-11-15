@@ -1,0 +1,11 @@
+package ai.gebo.llms.chat.pipelines.service;
+
+import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
+import ai.gebo.architecture.patterns.IGImplementationsRepositoryPattern;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
+
+public interface IAgentSuspendedWaitingConditionTransportTranslatorRepositoryPattern
+		extends IGImplementationsRepositoryPattern<IAgentSuspendedWaitingConditionTransportTranslator> {
+	public IAgentSuspendedWaitingConditionTransportTranslator findTranslator(AgentSuspendedWaitingCondition condition);
+	public IAgentSuspendedWaitingConditionTransportTranslator findReactionTranslator(AgentSuspendedWaitingConditionReactionDto reaction);
+}
