@@ -60,8 +60,8 @@ echo Unknown target: %TARGET% ^(use: platform, gebo.ai, easyinstall, or all^)
 exit /b 1
 
 :push_platform
-echo === Pushing geboai/platform:2.5 with SBOM (%PLATFORMS%) ===
-docker buildx build --platform %PLATFORMS% --sbom=true --push -t geboai/platform:2.5 "%REPO_ROOT%\dockers\gebo.ai.platform"
+echo === Pushing geboai/platform:3.0 with SBOM (%PLATFORMS%) ===
+docker buildx build --platform %PLATFORMS% --sbom=true --push -t geboai/platform:3.0 "%REPO_ROOT%\dockers\gebo.ai.platform"
 if /i "%TARGET%"=="platform" goto :done
 goto :push_gebo_ai
 

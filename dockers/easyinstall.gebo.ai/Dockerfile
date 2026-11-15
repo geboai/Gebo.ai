@@ -26,10 +26,11 @@ LABEL org.opencontainers.image.sbom="/opt/gebo.ai/sbom.cdx.json"
 # /opt/gebo.ai - BuildKit tolerates that, but the classic builder (and some other
 # OCI builders) discard writes to an already-declared volume path, so the layout
 # was one builder away from shipping empty. Declaring them last is portable.
-#RUN useradd --home-dir /opt/gebo.ai --shell /bin/bash gebo.ai
-#RUN chown gebo.ai:users -R /opt/gebo.ai
-#USER gebo.ai
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -XX:+AggressiveHeap  -XX:+PrintGCDetails" 
+# The Gebo.ai application runs as the non-root user gebo (uid 10001, the same uid
+# as the geboai/platform images, so volumes move between the two unchanged).
+# supervisord itself stays root - it has to start mongod and drop privileges for
+# neo4j/opensearch/gebo.ai - and container-start.sh re-owns volumes created by
+# older, root-running images before it hands over to supervisord.
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 
@@ -104,7 +105,7 @@ ENV NEO4J_HOME=/var/lib/neo4j \
     NEO4J_PASSWORD=neo4jmaster
 RUN curl -fsSL https://debian.neo4j.com/neotechnology.gpg.key | gpg --dearmor -o /usr/share/keyrings/neo4j.gpg && \
 	    echo "deb [signed-by=/usr/share/keyrings/neo4j.gpg] https://debian.neo4j.com stable 5" > /etc/apt/sources.list.d/neo4j.list && \
-	    apt-get update && apt-get install -y neo4j && \
+	    apt-get update && apt-get install -y --no-install-recommends neo4j && \
 	    rm -rf /var/lib/apt/lists/*
 
 	# Configurazione minima Neo4j (bind su 0.0.0.0)
@@ -136,30 +137,37 @@ COPY opensearch.yml /opt/opensearch-${OPENSEARCH_VERSION}/config/opensearch.yml
 
 COPY supervisord.conf /etc/supervisor/supervisord.conf
 
-RUN mkdir -p /opt/
-RUN mkdir -p /opt/java/
-WORKDIR /opt/java/
-# Multiplatform: Oracle JDK uses x64 for amd64 and aarch64 for arm64.
-# JDK 21 is no longer served under /java/21/latest/ (that path 404s now that 25 is
-# the current latest) - it lives only under /archive/ with a pinned version. curl -f
-# makes an HTTP error fail the build at download instead of silently saving the 404
-# HTML page (which then breaks tar with "not in gzip format").
-ARG JDK_VERSION=21.0.9
-RUN JDK_ARCH=$(case "$TARGETARCH" in amd64) echo "x64" ;; arm64) echo "aarch64" ;; *) echo "x64" ;; esac) \
-    && curl -fL -o jdk-21.tar.gz "https://download.oracle.com/java/21/archive/jdk-${JDK_VERSION}_linux-${JDK_ARCH}_bin.tar.gz" \
-    && tar -xzf jdk-21.tar.gz \
-    && rm jdk-21.tar.gz \
-    && ln -sfn "$(ls -d jdk-21.* | head -n1)" jdk-21
-ENV JAVA_HOME=/opt/java/jdk-21
+# ======= Java runtime for Gebo.ai =======
+# Ubuntu's own OpenJDK 25 (LTS) - the same JVM build the hardened geboai/platform
+# image jlinks - kept current through the Ubuntu archive, so a rebuild picks up
+# JDK security updates. It replaces the Oracle JDK tarball, which was pinned to a
+# 21.0.x update and went stale between bumps.
+# Neo4j keeps the OpenJDK 21 its package pulled in above: Neo4j 5.x supports
+# Java 17/21 only, and neo4j-entry.sh pins its JAVA_HOME to 21. /usr/bin/java
+# (update-alternatives) resolves to 25, the highest priority.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends openjdk-25-jre-headless \
+ && rm -rf /var/lib/apt/lists/* \
+ && mkdir -p /opt/java \
+ && ln -sfn "/usr/lib/jvm/java-25-openjdk-${TARGETARCH}" /opt/java/openjdk \
+ && /opt/java/openjdk/bin/java -version
+ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH=$JAVA_HOME/bin:$PATH
 ENV JAVA_EXTRA_SECURITY_DIR=/opt/
 ENV LANG=en_US.UTF-8
 ENV LC_ALL=en_US.UTF-8
-RUN mkdir -p /opt/gebo.ai/home /opt/gebo.ai/config /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai
+RUN useradd --uid 10001 --user-group --create-home --home-dir /home/gebo --shell /usr/sbin/nologin gebo \
+ && mkdir -p /opt/gebo.ai/home /opt/gebo.ai/config /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai \
+ && chown gebo:gebo /opt/gebo.ai/home /opt/gebo.ai/work /opt/gebo.ai/logs /opt/gebo.ai/shares /var/log/gebo.ai
 COPY gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:+AggressiveHeap -XX:MaxMetaspaceSize=512m -XX:+PrintGCDetails -Xlog:gc:/opt/gebo.ai/logs/gc.log"
+# Same flags as dockers/gebo.ai/Dockerfile (supervisord.conf sets them again for
+# the gebo.ai program). No -XX:+AggressiveHeap (swaps G1 for the throughput
+# collector and sizes the heap off the HOST memory - in an image that also runs
+# four databases), no deprecated -XX:+PrintGCDetails, no -Dsun.jnu.encoding (the
+# JDK ignores it: file-name encoding comes from LANG/LC_ALL=en_US.UTF-8 above).
+ENV  JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:MaxMetaspaceSize=512m -Xlog:gc:file=/opt/gebo.ai/logs/gc.log:time,uptime:filecount=5,filesize=20M"
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 COPY gebo.ai.sh /bin/gebo.ai.sh

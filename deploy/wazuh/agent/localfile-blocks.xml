@@ -30,7 +30,7 @@
   "logs" relative to the process working directory.
 
   Confirm on the host before trusting any of it:
-      docker exec <container> ls -l /opt/gebo.ai/logs/security-log.jsonl
+      docker cp <container>:/opt/gebo.ai/logs/security-log.jsonl - | tar -tvf -
       docker inspect -f '{{range .Mounts}}{{.Source}} -> {{.Destination}}{{"\n"}}{{end}}' <container>
       systemctl show -p WorkingDirectory,ExecStart gebo-ai
   An absent file just means nothing security-relevant happened yet on that

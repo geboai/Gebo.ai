@@ -42,12 +42,12 @@ check_artifacts() {
 #            or "true" (publish phase, pushed to Docker Hub)
 image_platform() {
   local push="$1"
-  echo "=== [$([ "$push" = true ] && echo publish || echo build)] geboai/platform:2.5 ($PLATFORMS) ==="
+  echo "=== [$([ "$push" = true ] && echo publish || echo build)] geboai/platform:3.0 ($PLATFORMS) ==="
   docker buildx build \
     --platform "$PLATFORMS" \
     --sbom=true \
     --output "type=image,push=${push}" \
-    -t geboai/platform:2.5 \
+    -t geboai/platform:3.0 \
     "$REPO_ROOT/dockers/gebo.ai.platform"
 }
 

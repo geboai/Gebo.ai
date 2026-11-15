@@ -49,12 +49,12 @@ check_artifacts() {
 }
 
 build_platform() {
-  echo "=== Building geboai/platform:2.5 (local) ==="
+  echo "=== Building geboai/platform:3.0 (local) ==="
   docker buildx build \
     --network=host \
     --platform linux/amd64 \
     --load \
-    -t geboai/platform:2.5 \
+    -t geboai/platform:3.0 \
     "$REPO_ROOT/dockers/gebo.ai.platform"
 }
 

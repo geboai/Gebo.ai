@@ -120,10 +120,100 @@ services:
     volumes: [opensearch-data:/usr/share/opensearch/data]
     networks: [gebo-net]
 
+  # ---------------- Volume ownership (one-shot, runs first and exits) --------
+  # Every Gebo image runs as the NON-ROOT uid 10001 since the Java 25 base
+  # (geboai/platform:3.0). Volumes created by older images, which ran as root,
+  # are root-owned, and a service cannot write its home/work/logs there - the JVM
+  # does not even start. This hands every one of them over before anything else
+  # starts: eureka waits for it to COMPLETE, and every backend and the gateway
+  # depend on eureka (they are all discovery clients), so the ordering carries
+  # through. Only each volume's top directory is checked, so after the first
+  # upgrade it is a no-op that never walks a work volume again.
+  # Add a new service's home/work/logs volumes here as well as to the bottom list.
+  gebo-volumes-owner:
+    image: alpine:3.22
+    user: "0:0"
+    restart: "no"
+    network_mode: none
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        for d in /v/*; do
+          if [ "$$(stat -c %u "$$d")" != "10001" ]; then
+            echo "re-owning $$d for uid 10001"
+            chown -R 10001:10001 "$$d"
+          fi
+        done
+    volumes:
+      - vectorizator-home:/v/vectorizator-home
+      - filesystem-work:/v/filesystem-work
+      - graphicator-work:/v/graphicator-work
+      - tyr-home:/v/tyr-home
+      - graphicator-home:/v/graphicator-home
+      - sharepoint-work:/v/sharepoint-work
+      - gateway-logs:/v/gateway-logs
+      - eureka-logs:/v/eureka-logs
+      - uploads-logs:/v/uploads-logs
+      - userspace-logs:/v/userspace-logs
+      - filesystem-home:/v/filesystem-home
+      - mcpclient-home:/v/mcpclient-home
+      - integration-home:/v/integration-home
+      - confluence-work:/v/confluence-work
+      - confluence-logs:/v/confluence-logs
+      - aws-s3-home:/v/aws-s3-home
+      - aws-s3-logs:/v/aws-s3-logs
+      - jira-home:/v/jira-home
+      - chunker-work:/v/chunker-work
+      - git-home:/v/git-home
+      - mcpclient-logs:/v/mcpclient-logs
+      - fulltextor-work:/v/fulltextor-work
+      - webdav-home:/v/webdav-home
+      - userspace-home:/v/userspace-home
+      - userspace-work:/v/userspace-work
+      - filesystem-logs:/v/filesystem-logs
+      - googledrive-home:/v/googledrive-home
+      - tyr-logs:/v/tyr-logs
+      - tyr-work:/v/tyr-work
+      - git-logs:/v/git-logs
+      - chunker-logs:/v/chunker-logs
+      - vectorizator-logs:/v/vectorizator-logs
+      - webdav-work:/v/webdav-work
+      - aws-s3-work:/v/aws-s3-work
+      - webdav-logs:/v/webdav-logs
+      - graphicator-logs:/v/graphicator-logs
+      - fulltextor-logs:/v/fulltextor-logs
+      - jira-logs:/v/jira-logs
+      - sharepoint-home:/v/sharepoint-home
+      - sharepoint-logs:/v/sharepoint-logs
+      - heimdall-logs:/v/heimdall-logs
+      - integration-work:/v/integration-work
+      - git-work:/v/git-work
+      - googledrive-work:/v/googledrive-work
+      - jira-work:/v/jira-work
+      - heimdall-work:/v/heimdall-work
+      - uploads-home:/v/uploads-home
+      - confluence-home:/v/confluence-home
+      - integration-logs:/v/integration-logs
+      - fulltextor-home:/v/fulltextor-home
+      - vectorizator-work:/v/vectorizator-work
+      - uploads-work:/v/uploads-work
+      - brain-work:/v/brain-work
+      - mcpclient-work:/v/mcpclient-work
+      - brain-home:/v/brain-home
+      - heimdall-home:/v/heimdall-home
+      - googledrive-logs:/v/googledrive-logs
+      - chunker-home:/v/chunker-home
+      - brain-logs:/v/brain-logs
+
   # ---------------- Service registry ----------------
   eureka:
     image: geboai/eureka.gebo.ai:${GEBO_VERSION:-1.0.6.0-SNAPSHOT}
     restart: unless-stopped
+    # Everything else starts after eureka, so this one condition keeps every
+    # service off its volumes until their ownership is right - see above.
+    depends_on:
+      gebo-volumes-owner:
+        condition: service_completed_successfully
     ports:
       - "13017:13017"             # Eureka dashboard / registry
     # The registry is intentionally stateless - it rebuilds itself from the
