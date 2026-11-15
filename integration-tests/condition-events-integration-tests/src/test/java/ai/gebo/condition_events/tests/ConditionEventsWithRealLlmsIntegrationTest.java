@@ -234,11 +234,11 @@ public class ConditionEventsWithRealLlmsIntegrationTest extends AbstractVendorSe
 		final NetworkOfAgentsConditionEventsControllerApi conditionEvents = new NetworkOfAgentsConditionEventsControllerApi(
 				apiClient);
 		final long deadline = System.currentTimeMillis() + RESPAWN_TIMEOUT_MILLIS;
-		ConditionEventView view = conditionEvents.conditionEventStatus(waiting.correlationId(), null, null);
+		ConditionEventView view = conditionEvents.conditionEventStatus(waiting.correlationId(), null, null, null, null);
 		while ((view == null || view.getStatus() == null || !SETTLED.contains(view.getStatus().getValue()))
 				&& System.currentTimeMillis() < deadline) {
 			Thread.sleep(2000);
-			view = conditionEvents.conditionEventStatus(waiting.correlationId(), null, null);
+			view = conditionEvents.conditionEventStatus(waiting.correlationId(), null, null, null, null);
 		}
 		assertNotNull(view, "the event is known by its correlation id");
 		LOGGER.info("Condition event " + waiting.correlationId() + " settled as: " + view.getStatus() + " "
@@ -342,7 +342,7 @@ public class ConditionEventsWithRealLlmsIntegrationTest extends AbstractVendorSe
 				}
 				verifyRespawned(apiClient, waiting, "through the broker");
 				final ConditionEventView view = new NetworkOfAgentsConditionEventsControllerApi(apiClient)
-						.conditionEventStatus(waiting.get(0).correlationId(), null, null);
+						.conditionEventStatus(waiting.get(0).correlationId(), null, null, null, null);
 				assertEquals(ConditionEventsReceiverFactory.MODULE_ID + "." + ConditionEventsPublisher.SYSTEM_ID,
 						view.getSourceSystem(), "with no source of its own, the sending component is the source");
 			} catch (Exception e) {
