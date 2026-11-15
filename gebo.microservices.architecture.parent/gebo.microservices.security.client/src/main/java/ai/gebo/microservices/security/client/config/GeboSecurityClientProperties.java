@@ -32,17 +32,35 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * </p>
  *
  * <p>
- * There is no {@code base-url}: heimdall's address is resolved from the topology by
- * the {@code GeboMicroserviceUrlResolver}, so it follows the deployment's addressing
- * strategy. There is no token either - the caller's own is forwarded, falling back
- * to the system identity's (see {@code IGeboCallerTokenPropagator}).
+ * Heimdall's address is resolved from the topology by the
+ * {@code GeboMicroserviceUrlResolver}, so it follows the deployment's addressing
+ * strategy. Only a service whose topology is switched off
+ * ({@code gebo.microservices.topology.enabled=false}) names it, with
+ * {@link #getBaseUrl() base-url}. There is no token - the caller's own is forwarded,
+ * falling back to the system identity's (see {@code IGeboCallerTokenPropagator}).
  * </p>
  */
-@ConfigurationProperties(prefix = "ai.gebo.security.client")
+@ConfigurationProperties(prefix = GeboSecurityClientProperties.PREFIX)
 public class GeboSecurityClientProperties {
+
+	/** Prefix of the security client configuration. */
+	public static final String PREFIX = "ai.gebo.security.client";
 
 	/** Id of the microservice that owns the user store. */
 	private String microserviceId = "heimdall_gebo_ai";
+
+	/**
+	 * Heimdall's base url, context path included (e.g. {@code http://gebo-ai:12999}
+	 * for a monolith, which serves the cluster surface at its root), called with a
+	 * plain WebClient - no discovery.
+	 *
+	 * <p>
+	 * Read only with the topology switched off, and then required: the service does
+	 * not start without it. With the topology on, heimdall's address comes from the
+	 * topology and this is ignored, with a warning.
+	 * </p>
+	 */
+	private String baseUrl;
 
 	/**
 	 * Base path of the directory endpoints. Must match
@@ -101,6 +119,14 @@ public class GeboSecurityClientProperties {
 
 	public void setMicroserviceId(String microserviceId) {
 		this.microserviceId = microserviceId;
+	}
+
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	public void setBaseUrl(String baseUrl) {
+		this.baseUrl = baseUrl;
 	}
 
 	public String getBasePath() {

@@ -15,6 +15,8 @@ import ai.gebo.security.config.GeboSecurityConfig;
 
 import ai.gebo.microservices.security.client.RestInstallationIdProvider;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.webclient.WebClientCustomizer;
 import org.springframework.context.annotation.Primary;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -31,11 +34,13 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.cluster.cache.GeboTtlCache;
+import ai.gebo.microservices.cluster.config.GeboClusterClientConfigSupport;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.security.client.RestSecurityDirectory;
 import ai.gebo.microservices.security.client.RestUsersAdminService;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfiguration;
+import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyProperties;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.IGUsersAdminService;
@@ -58,6 +63,13 @@ import ai.gebo.security.services.IGUsersAdminService;
  * over local objects; swapping the directory underneath them is the entire proxy.
  * </p>
  *
+ * <p>
+ * Heimdall is reached through the topology, with a load-balanced WebClient, unless
+ * the topology is switched off ({@code gebo.microservices.topology.enabled=false}):
+ * then at {@code ai.gebo.security.client.base-url}, with a plain one (see
+ * {@link GeboClusterClientConfigSupport}).
+ * </p>
+ *
  * Gebo.ai comment agent
  */
 @AutoConfiguration(after = { GeboMicroservicesTopologyAutoConfiguration.class,
@@ -65,8 +77,18 @@ import ai.gebo.security.services.IGUsersAdminService;
 @EnableConfigurationProperties(GeboSecurityClientProperties.class)
 public class GeboSecurityMicroserviceClientAutoConfiguration {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeboSecurityMicroserviceClientAutoConfiguration.class);
+
 	static final String WEB_CLIENT_BUILDER_BEAN = "geboSecurityClientLbWebClientBuilder";
 	static final String WEB_CLIENT_BEAN = "geboSecurityClientWebClient";
+	/** The property heimdall's address is bound from when the topology is off. */
+	static final String BASE_URL_PROPERTY = GeboSecurityClientProperties.PREFIX + ".base-url";
+
+	/**
+	 * Heimdall's url resolver, chosen once for every client bean below (and logged
+	 * once): this configuration is a singleton, its bean methods run on startup.
+	 */
+	private GeboMicroserviceUrlResolver heimdallUrlResolver;
 
 	/**
 	 * A dedicated {@link LoadBalanced @LoadBalanced} builder so calls to heimdall's
@@ -74,38 +96,61 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 	 * discovery service-id, e.g. {@code heimdall-gebo-ai}, to a live instance)
 	 * instead of a literal DNS lookup, which fails: that hostname is a Eureka
 	 * service-id, not a real one. Mirrors the same fix already applied in
-	 * {@code GeboSearchServicesClientsAutoConfiguration}.
+	 * {@code GeboSearchServicesClientsAutoConfiguration}. Only with the topology on:
+	 * without it there are no service-ids to resolve.
 	 */
 	@Bean(name = WEB_CLIENT_BUILDER_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BUILDER_BEAN)
+	@ConditionalOnProperty(prefix = GeboMicroservicesTopologyProperties.PREFIX, name = GeboMicroservicesTopologyProperties.ENABLED, havingValue = "true", matchIfMissing = true)
 	@LoadBalanced
 	public WebClient.Builder geboSecurityClientLbWebClientBuilder(ObjectProvider<WebClientCustomizer> customizers) {
-		// Built as Spring Boot builds its own WebClient.Builder: with the application's
-		// customizers applied. With tracing, that is the observation filter that gives
-		// each call a span and sends the current trace (the traceparent header) to the
-		// service called. Spring Boot's builder bean itself cannot be injected here: it
-		// is a WebClient.Builder like this one, and this one would be a candidate for
-		// its own injection.
-		WebClient.Builder builder = WebClient.builder();
-		customizers.orderedStream().forEach(customizer -> customizer.customize(builder));
-		return builder;
+		return GeboClusterClientConfigSupport.customizedWebClientBuilder(customizers);
 	}
 
 	@Bean(name = WEB_CLIENT_BEAN)
 	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
+	@ConditionalOnProperty(prefix = GeboMicroservicesTopologyProperties.PREFIX, name = GeboMicroservicesTopologyProperties.ENABLED, havingValue = "true", matchIfMissing = true)
 	public WebClient geboSecurityClientWebClient(@Qualifier(WEB_CLIENT_BUILDER_BEAN) WebClient.Builder builder,
 			GeboSecurityClientProperties properties) {
+		return withHeaders(builder, properties).build();
+	}
+
+	/**
+	 * With the topology off, heimdall's {@code base-url} is a real address, called
+	 * with a plain WebClient: a load-balanced one would look its host up as a
+	 * discovery service-id, and find none.
+	 */
+	@Bean(name = WEB_CLIENT_BEAN)
+	@ConditionalOnMissingBean(name = WEB_CLIENT_BEAN)
+	@ConditionalOnProperty(prefix = GeboMicroservicesTopologyProperties.PREFIX, name = GeboMicroservicesTopologyProperties.ENABLED, havingValue = "false")
+	public WebClient geboSecurityClientDirectWebClient(ObjectProvider<WebClientCustomizer> customizers,
+			GeboSecurityClientProperties properties) {
+		LOGGER.debug("Security client: a plain WebClient to heimdall, the topology being switched off");
+		return withHeaders(GeboClusterClientConfigSupport.customizedWebClientBuilder(customizers), properties).build();
+	}
+
+	private static WebClient.Builder withHeaders(WebClient.Builder builder, GeboSecurityClientProperties properties) {
 		if (properties.getHeaders() != null) {
 			properties.getHeaders().forEach(builder::defaultHeader);
 		}
-		return builder.build();
+		return builder;
+	}
+
+	private synchronized GeboMicroserviceUrlResolver heimdallUrlResolver(
+			ObjectProvider<GeboMicroserviceUrlResolver> topologyResolver, GeboSecurityClientProperties properties) {
+		if (heimdallUrlResolver == null) {
+			heimdallUrlResolver = GeboClusterClientConfigSupport.ownerUrlResolver(topologyResolver,
+					properties.getMicroserviceId(), properties.getBaseUrl(), BASE_URL_PROPERTY);
+		}
+		return heimdallUrlResolver;
 	}
 
 	@Bean
 	@ConditionalOnMissingBean(IGSecurityDirectory.class)
 	public IGSecurityDirectory restSecurityDirectory(@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient,
-			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
+			ObjectProvider<GeboMicroserviceUrlResolver> topologyResolver, IGeboCallerTokenPropagator tokenPropagator,
 			GeboSecurityClientProperties properties, IGSecurityAuditLoggerService securityAuditLoggerService) {
+		GeboMicroserviceUrlResolver urlResolver = heimdallUrlResolver(topologyResolver, properties);
 		return new RestSecurityDirectory(geboSecurityClientWebClient, urlResolver, tokenPropagator,
 				properties.getMicroserviceId(), properties.getBasePath(),
 				new GeboTtlCache(properties.getCacheTtl(), properties.getCacheMaxEntries()),
@@ -128,9 +173,11 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 	@Bean
 	@Primary
 	public IGInstallationIdProvider restInstallationIdProvider(
-			@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient, GeboMicroserviceUrlResolver urlResolver,
-			GeboSecurityConfig securityConfig, GeboSecurityClientProperties properties,
+			@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient,
+			ObjectProvider<GeboMicroserviceUrlResolver> topologyResolver, GeboSecurityConfig securityConfig,
+			GeboSecurityClientProperties properties,
 			@Value("${spring.application.name:gebo-microservice}") String applicationName) {
+		GeboMicroserviceUrlResolver urlResolver = heimdallUrlResolver(topologyResolver, properties);
 		return new RestInstallationIdProvider(geboSecurityClientWebClient, urlResolver, securityConfig,
 				properties.getMicroserviceId(), properties.getInstallationBasePath(), applicationName);
 	}
@@ -138,8 +185,9 @@ public class GeboSecurityMicroserviceClientAutoConfiguration {
 	@Bean
 	@ConditionalOnMissingBean(IGUsersAdminService.class)
 	public IGUsersAdminService restUsersAdminService(@Qualifier(WEB_CLIENT_BEAN) WebClient geboSecurityClientWebClient,
-			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
+			ObjectProvider<GeboMicroserviceUrlResolver> topologyResolver, IGeboCallerTokenPropagator tokenPropagator,
 			GeboSecurityClientProperties properties, IGSecurityAuditLoggerService securityAuditLoggerService) {
+		GeboMicroserviceUrlResolver urlResolver = heimdallUrlResolver(topologyResolver, properties);
 		return new RestUsersAdminService(geboSecurityClientWebClient, urlResolver, tokenPropagator,
 				properties.getMicroserviceId(), properties.getBasePath(), securityAuditLoggerService);
 	}
