@@ -37,7 +37,7 @@ import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtReactiveAuthenticationManager;
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenReactiveAuthenticationManager;
-import org.springframework.security.oauth2.server.resource.introspection.SpringReactiveOpaqueTokenIntrospector;
+import org.springframework.security.oauth2.server.resource.introspection.ReactiveOpaqueTokenIntrospector;
 import org.springframework.web.server.ServerWebExchange;
 
 import ai.gebo.security.model.SecurityHeaderData;
@@ -48,6 +48,7 @@ import ai.gebo.security.services.IGOauth2RuntimeConfigurationDao;
 import ai.gebo.security.services.impl.authmanagers.GOauth2ResourceServerUserProvisioner;
 import ai.gebo.security.services.impl.authmanagers.GReactiveJwtAuthenticationConverter;
 import ai.gebo.security.services.impl.authmanagers.GReactiveOpaqueTokenAuthenticationConverter;
+import ai.gebo.security.services.impl.authmanagers.OpaqueTokenIntrospectorCache;
 import ai.gebo.security.services.impl.authmanagers.ReactiveJwtDecoderCache;
 import ai.gebo.security.services.impl.authmanagers.ReactiveSecurityHeaderUtil;
 import reactor.core.publisher.Flux;
@@ -91,6 +92,7 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 	// Nullable: policy-gated resource-server provisioner (as on the servlet path).
 	private final GOauth2ResourceServerUserProvisioner provisioner;
 	private final ReactiveJwtDecoderCache reactiveJwtDecoderCache = new ReactiveJwtDecoderCache();
+	private final OpaqueTokenIntrospectorCache opaqueTokenIntrospectorCache = new OpaqueTokenIntrospectorCache();
 
 	// The sessions store, when present: told of every local token that authenticates
 	private final List<IGAuthenticatedTokenObserver> tokenObservers;
@@ -152,9 +154,7 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 	}
 
 	private ReactiveAuthenticationManager singleOpaque(Oauth2RuntimeConfiguration cfg) {
-		SpringReactiveOpaqueTokenIntrospector introspector = new SpringReactiveOpaqueTokenIntrospector(
-				cfg.getProviderConfig().getIntrospectionUri(), cfg.getClient().getClientId(),
-				cfg.getClient().getSecret());
+		ReactiveOpaqueTokenIntrospector introspector = opaqueTokenIntrospectorCache.reactiveForConfiguration(cfg);
 		OpaqueTokenReactiveAuthenticationManager manager = new OpaqueTokenReactiveAuthenticationManager(introspector);
 		manager.setAuthenticationConverter(
 				new GReactiveOpaqueTokenAuthenticationConverter(customUserDetailsService, provisioner, cfg));
