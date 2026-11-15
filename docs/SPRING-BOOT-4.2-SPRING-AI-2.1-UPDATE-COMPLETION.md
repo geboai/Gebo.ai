@@ -23,25 +23,96 @@ end (section 14).
 
 ### Status at a glance
 
+Updated on 15 November 2026; the details of each item are in "Progress on 15 November" below.
+
 | Item | State | Effort |
 |---|---|---|
 | Version bumps, obsolete pins, RabbitMQ starter rename | done, CI green | — |
 | Reasoning read as message parts, Anthropic special-casing removed | done, CI green | — |
-| Decision model kind: abstraction, OpenAI, Ollama, generic OpenAI-compatible, admin UI, usage, compliance register | done, CI green, **not run live yet** | — |
-| MCP Java SDK aligned with Spring AI 2.1 (2.0.0 → 2.2.0-M2) | done, CI green, **not run live yet** | — |
-| 2. Boot smoke test of the application | to do | small |
-| 3. Live check of a decision model | to do | small |
-| 4. Unit tests of the decision model providers | to do | small |
-| 5. REST stubs regenerated from the live API | to do | small, needs 2 |
-| 6. Setup wizard support of the decision kind | to do | medium |
-| 7. Tool-call confirmation (human in the loop) | to design and build | large |
-| 8. Streamed tool-call arguments in the chat | to build | medium, after 7 |
-| 9. Spring AI's own OpenAI Responses model | to evaluate, then maybe switch | medium |
-| 10. Session memory | spike only | small |
-| 11. Deprecated APIs cleanup | to do | medium (large for `RestTemplate`) |
-| 12. Spring Security 7.2 | small change, one check | small |
-| 13. Documentation | to do | small |
-| 14. GA bump and merge | when the releases ship | small |
+| Decision model kind: abstraction, OpenAI, Ollama, generic OpenAI-compatible, admin UI, usage, compliance register | done, run live on Ollama | — |
+| MCP Java SDK aligned with Spring AI 2.1 (2.0.0 → 2.2.0-M2) | done, run live (server and client) | — |
+| 2. Boot smoke test of the application | done | — |
+| 3. Live check of a decision model | done on Ollama; OpenAI and generic not run (no Decisions API key) | — |
+| 4. Unit tests of the decision model providers | done | — |
+| 5. REST stubs regenerated from the live API | done for the Angular stubs and the monolithic Java client; the brain microservice clients still to regenerate | small |
+| 6. Setup wizard support of the decision kind | done, seen in the browser | — |
+| 7. Tool-call confirmation (human in the loop) | design choice open (see below) | large |
+| 8. Streamed tool-call arguments in the chat | done | — |
+| 9. Spring AI's own OpenAI Responses model | evaluated: keep Gebo's class for now, blockers listed | medium |
+| 10. Session memory | spike done: nothing to adopt, one test | — |
+| 11. Deprecated APIs cleanup | done but for the generated clients | small |
+| 12. Spring Security 7.2 | done; one live login per provider still to do | small |
+| 13. Documentation | points 1 and 2 done; 3 to 5 open | small |
+| 14. GA bump and merge | when the releases ship (still RC2 on Maven Central) | small |
+
+### Progress on 15 November
+
+- **Item 2.** The swagger jar started on Boot 4.2.0-RC2 with no error, the four "initializing
+  ... models dinamically" pairs (decision models included) and the four decision controllers in
+  `/v3/api-docs`; `getDecisionModelTypes` lists `decision-OpenAI`, `decision-ollama`,
+  `decision-generic-openai`. MCP on the 2.2.0-M2 SDK both ways: a Gebo MCP server exporting a
+  tool answered `initialize`, `tools/list` and `tools/call` over streamable HTTP, and Gebo's MCP
+  client discovered it (`testAndDiscovery`) and browsed its roots. The ranker DAO logged its
+  initialization as "image models" (fixed).
+- **Item 3.** On a throwaway stack (Ollama 0.40.16, `nomic-embed-text`, `qwen3:0.6b`,
+  `d1-omni:600m`, a lexical stand-in for the ranker): the Ollama lookup offers only
+  `d1-omni:600m` (the capability rule); saving the model makes its test call
+  (`/v1/systemone`); in the RAG route the filter judges every fragment below the protected
+  top, one question each, about 4 s per fragment on a CPU; the usage view has one `DECISION` row
+  per judged fragment with its tokens; the data flow register has the `decision-model-...`
+  endpoint, the chat profile's "relevance" and the network's "search-relevance". On the
+  threshold: `d1-omni:600m` discriminates weakly - relevant fragments got 0.32 to 0.50, off
+  topic ones up to 0.71 - so moving the 0.5 threshold would not help; the 2b model or OpenAI's
+  are the ones to try before making it configurable. The live check found two defects, fixed:
+  a rerank provider with optional authentication could not be saved (the client required a
+  key), and a small model copying the `<...>` placeholder of the query rewriting prompt as its
+  "rewritten question" made the ranker and the filter judge the placeholder.
+- **Item 5.** The regeneration found one gap in the hand-written stubs (`DECISION` missing from
+  the usage drill-down model type) and fixed the base path the previous generation left at
+  13999. The brain microservice's clients are still to regenerate with the microservices
+  procedure.
+- **Item 6.** Backend, presets (OpenAI `gpt-6-luna` without models lookup, Ollama
+  `d1-omni:600m` and `2b` with it), easy wizard, vendor and expert tabs, stubs, en/it texts,
+  `DecisionModelSetupTest`. In the browser (Italian UI): the classes step shows the decision
+  class with its default, the models step offers it for Ollama, its lookup lists the pulled
+  decision models only.
+- **Item 7, open choice.** Gebo's harness does not continue a paused model call: a respawned
+  agent is executed again from the start, the answered conditions written in its message
+  (`ResolvedConditionText`), and the ask-user tools are built on that. Two ways to build the
+  confirmation:
+  (a) as designed below, Spring AI's continuation: persist the paused prompt and reply verbatim
+  and resume with `executeToolCalls(prompt, response, decisions)` - a new resume path in the
+  agentic loop, on code Spring AI ships as a release candidate;
+  (b) the harness's own way: a tool marked as needing a person declares a waiting condition
+  (tool, arguments, allow or deny) as the ask-user tools do, the network suspends, and on the
+  respawn the model calling the same tool with the same arguments gets it run (allowed) or the
+  person's message as its result (denied) - no new resume path, the waiting conditions UI and
+  processes reused, the model redoing the work up to the call.
+- **Item 8.** Pieces of the arguments and the complete calls reach the chat as
+  `GToolCallProgress` envelopes, from the standard pipelines and from the agents; the chat
+  shows "Calling <tool>" lines filling with the arguments. Seen in the browser on an agentic
+  chat (Ollama, which sends its calls whole): the call shows complete with its arguments while
+  the agent works and goes when the answer ends; the pieces are covered by the tests.
+- **Item 9.** Spring AI's `OpenAiResponsesChatModel` covers Gebo's options but `user` (no
+  field), maps the conversation, tools, cut answers, usage and the encrypted reasoning, and
+  streams the arguments of tool calls. Before switching: the reasoning summary comes as
+  `ReasoningPart.summary()` (now read by `PARTS`, fixed); Gebo retries without summaries when
+  an organization is refused them (400), Spring AI has no such fallback; `user` maps to
+  `safetyIdentifier` or `extraBody`; the tests must be rewritten through `call`/`stream`; and
+  the live run of step 5 needs a gpt-5 or later key. Gebo's class stays until then.
+- **Item 10.** The history Gebo replays is rebuilt from the interactions as a user message and
+  its answer, text only; a turn's tool calls and results live only in that call's tool loop,
+  so no trimming can keep a call without its result. Nothing to adopt; the property is pinned
+  by `CompressedChatHistoryTest`.
+- **Item 11.** `JsonParser` → `JsonHelper` (identical output), the builders'
+  `toolCallingManager` removed (unused: every call goes through the chat client, whose advisor
+  turns the model's own tool execution off), the dead `getDefaultOptions` overrides, boxed
+  constructors, `HttpEntity(MultiValueMap)`, the integration tests' converter on Jackson 3, and
+  `RestTemplateWrapperService` plus the hand-written clients on `RestClient`. Left: the
+  generated clients (Jira Cloud, the monolithic and the microservices Java clients), which go
+  with a regeneration on a `RestClient` template.
+- **Item 12.** `OpaqueTokenIntrospectorCache`: the 7.2 introspectors, one per configuration
+  instead of one per request; the RFC 7662 request pinned by a test on both stacks.
 
 ## 2. The new concepts, in plain words
 
