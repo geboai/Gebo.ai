@@ -65,7 +65,11 @@ public class UsersAdminController {
 	 * DTO for inserting a user with mandatory fields.
 	 */
 	public static class InsertUserParam {
+		// @Valid: the user's own constraints (name, surname, roles, authentication
+		// provider) are checked as updateUser and deleteUser check them, not only its
+		// presence
 		@NotNull
+		@Valid
 		public EditableUser user = null;
 		@NotNull
 		public String password = null;
