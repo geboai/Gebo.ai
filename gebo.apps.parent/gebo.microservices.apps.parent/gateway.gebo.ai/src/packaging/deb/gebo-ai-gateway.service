@@ -8,6 +8,10 @@ User=gebo-ai-gateway
 Group=gebo-ai-gateway
 WorkingDirectory=/home/gebo-ai-gateway
 
+# UTF-8 locale: the JDK takes file-name encoding from it alone (it ignores
+# -Dsun.jnu.encoding)
+Environment=LANG=C.UTF-8
+
 # ATTENZIONE: verifica il path reale del launcher dopo il primo build/install
 ExecStart=/home/gebo-ai-gateway/gebo-ai-gateway/bin/gebo-ai-gateway
 
