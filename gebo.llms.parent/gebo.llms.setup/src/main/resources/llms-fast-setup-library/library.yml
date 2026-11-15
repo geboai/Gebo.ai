@@ -171,6 +171,16 @@ ai.gebo.llms.vendors.setup.config:
               description: GPT-4o mini Transcribe
             - code: whisper-1
               description: Whisper 1
+        # Optional: a decision model judging the retrieved fragments, on the Decisions
+        # API; the models endpoint does not list the decision models reliably
+        - type: DECISION
+          serviceHandler: decision-OpenAI
+          doModelsLookup: false
+          choices:
+            - code: gpt-6-luna
+              description: GPT-6 Luna (decision model)
+              defaultChoice: true
+
     - vendorInfo:
         vendorId: anthropic
         name: Anthropic
@@ -750,6 +760,19 @@ ai.gebo.llms.vendors.setup.config:
         - type: EMBEDDING
           serviceHandler: embedding-ollama
           doModelsLookup: true
+
+        # Optional: a decision model judging the retrieved fragments (System One
+        # endpoint, Ollama 0.40.4 or later); the lookup lists the pulled models whose
+        # capabilities include "decision"
+        - type: DECISION
+          serviceHandler: decision-ollama
+          doModelsLookup: true
+          choices:
+            - code: d1-omni:600m
+              description: d1-omni 600m (decision model, Liquid AI)
+              defaultChoice: true
+            - code: d1-omni:2b
+              description: d1-omni 2b (decision model, Liquid AI)
 
     - vendorInfo:
         vendorId: vllm
