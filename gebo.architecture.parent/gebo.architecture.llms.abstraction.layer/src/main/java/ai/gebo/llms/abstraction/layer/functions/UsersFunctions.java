@@ -20,7 +20,7 @@ import java.util.function.BiFunction;
 
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,9 @@ import ai.gebo.security.services.IGSecurityService;
  */
 @Service
 public class UsersFunctions implements IGToolCallbackSource {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	@Autowired
 	UserRepository usersRepository;
 	@Autowired
@@ -160,7 +163,7 @@ public class UsersFunctions implements IGToolCallbackSource {
 			return out;
 		}
 		final UsersList kept = new UsersList();
-		kept.addAll(ToolsTokenBudget.fitItems(out, budget.left(), JsonParser::toJson));
+		kept.addAll(ToolsTokenBudget.fitItems(out, budget.left(), JSON_HELPER::toJson));
 		return kept;
 	}
 

@@ -936,7 +936,7 @@ class AbstractDeepSearchToolTest {
 		DeepSearchToolResult result = new DeepSearchToolResult();
 		result.setAnalysis("the analysis");
 		result.setCoverage(new DeepSearchCoverage());
-		String json = org.springframework.ai.util.json.JsonParser.toJson(result);
+		String json = new org.springframework.ai.util.JsonHelper().toJson(result);
 
 		assertTrue(json.indexOf("\"coverage\"") >= 0 && json.indexOf("\"coverage\"") < json.indexOf("\"analysis\""),
 				json);

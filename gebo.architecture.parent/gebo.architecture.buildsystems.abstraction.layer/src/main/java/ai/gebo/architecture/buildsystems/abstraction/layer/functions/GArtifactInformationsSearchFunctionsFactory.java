@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import ai.gebo.architecture.ai.service.IGToolCallbackSource;
@@ -39,6 +39,9 @@ import ai.gebo.knlowledgebase.model.contents.GSoftwareArtifact;
  * Implements IGToolCallbackSource to provide tool callbacks for searching software artifacts.
  */
 public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallbackSource {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
     
     /**
      * Logger for the class.
@@ -207,7 +210,7 @@ public class GArtifactInformationsSearchFunctionsFactory implements IGToolCallba
             return found;
         }
         final ArtifactsList kept = new ArtifactsList();
-        kept.addAll(ToolsTokenBudget.fitItems(found, budget.left(), JsonParser::toJson));
+        kept.addAll(ToolsTokenBudget.fitItems(found, budget.left(), JSON_HELPER::toJson));
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(toolName + " returns " + kept.size() + " of " + found.size() + " artifact(s) in a room of "
                     + budget.left() + " (tok)");

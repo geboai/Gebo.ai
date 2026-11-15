@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
@@ -29,6 +29,9 @@ import ai.gebo.llms.standard.functions.CrawlFunctionCallbackWrapperSource.UrlCra
  * room is too small to be worth it.
  */
 class ReadUrlRoomTest {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 
 	@Test
 	void thePageAsTheModelReadsItFitsTheRoom() {
@@ -40,7 +43,7 @@ class ReadUrlRoomTest {
 
 		CrawlFunctionCallbackWrapperSource.fitInRoom(response, page.toString(), 700);
 
-		int asRead = ITokensCountable.stringsTokensSize(JsonParser.toJson(response));
+		int asRead = ITokensCountable.stringsTokensSize(JSON_HELPER.toJson(response));
 		assertTrue(asRead <= 700, "read as " + asRead + " tokens");
 		assertTrue(asRead > 500, "the room is used: " + asRead);
 		assertTrue(response.getContent().contains("truncated: about"), "the cut is marked");
@@ -64,7 +67,7 @@ class ReadUrlRoomTest {
 		ToolContext full = new ToolContext(
 				Map.of(ToolsTokenBudget.TOOLS_CONTEXT_KEY, new ToolsTokenBudget(ToolsTokenBudget.MIN_USEFUL_TOKENS - 1)));
 
-		String answer = source.create().call(JsonParser.toJson(request), full);
+		String answer = source.create().call(JSON_HELPER.toJson(request), full);
 
 		assertTrue(answer.contains("No room is left in the context"), answer);
 	}

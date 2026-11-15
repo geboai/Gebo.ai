@@ -21,7 +21,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +77,9 @@ import ai.gebo.model.DocumentMetaInfos;
  */
 @Service
 public class SearchToolContentPipeline {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(SearchToolContentPipeline.class);
 	static final int DEFAULT_TOP_K = 8;
 	static final int MAX_TOP_K = 30;
@@ -288,7 +291,7 @@ public class SearchToolContentPipeline {
 					// the documents not read are told beside the contents, never at their expense
 					final List<DocumentNotRead> notRead = result.getDocumentsNotRead();
 					result.setDocumentsNotRead(null);
-					final int overshoot = ITokensCountable.stringsTokensSize(JsonParser.toJson(result)) - maxTokens;
+					final int overshoot = ITokensCountable.stringsTokensSize(JSON_HELPER.toJson(result)) - maxTokens;
 					result.setDocumentsNotRead(notRead);
 					if (overshoot <= 0 || contentsTokens - overshoot <= 0) {
 						break;

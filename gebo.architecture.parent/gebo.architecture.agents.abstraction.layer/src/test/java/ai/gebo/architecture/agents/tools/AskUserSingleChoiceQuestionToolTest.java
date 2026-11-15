@@ -22,7 +22,7 @@ import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.model.tool.ToolCallingChatOptions;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.services.GWaitExternalConditionSink;
@@ -44,6 +44,9 @@ import reactor.core.publisher.Flux;
  * decide by itself.
  */
 class AskUserSingleChoiceQuestionToolTest {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	private final AskUserSingleChoiceQuestionTool tool = new AskUserSingleChoiceQuestionTool();
 	private final GWaitExternalConditionSink wait = new GWaitExternalConditionSink();
 
@@ -183,7 +186,7 @@ class AskUserSingleChoiceQuestionToolTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	void theNotesAreAParameterTheModelMayLeaveOut() {
-		Map<String, Object> schema = JsonParser
+		Map<String, Object> schema = JSON_HELPER
 				.fromJson(AskUserSingleChoiceQuestionTool.declare().getToolDefinition().inputSchema(), Map.class);
 
 		assertTrue(((Map<String, Object>) schema.get("properties")).containsKey(ToolCallsListener.NOTES_FOR_LATER),
