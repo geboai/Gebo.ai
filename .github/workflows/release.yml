@@ -9,17 +9,46 @@ permissions:
   contents: write
 jobs:
   build-deb:
-    runs-on: ubuntu-24.04
+    # One .deb per architecture. jpackage cannot cross-build: it bundles the
+    # runtime of the JDK it runs on and packages for the host architecture, so
+    # each one is built on a runner of its own architecture (ubuntu-24.04-arm is
+    # free for public repositories). setup-java picks the JDK matching the runner.
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - arch: amd64
+            runner: ubuntu-24.04
+          - arch: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java 21
+      # Oracle JDK 25 (LTS). jpackage bundles this runtime into the .deb, so the
+      # installer ships whatever JDK this step installs. A bare major makes
+      # setup-java try java/25/latest (the current patched update) and, when
+      # Oracle no longer serves free updates there, fall back SILENTLY to
+      # java/25/archive/jdk-25 - the unpatched GA build. That is how releases
+      # ended up bundling JDK 22 GA (.msi) and would have bundled 21 GA (.deb):
+      # java/21/latest is gone. The guard step below turns that into a failure.
+      - name: Setup Java 25
         uses: actions/setup-java@v4
         with:
           distribution: oracle
-          java-version: "21"
+          java-version: "25"
+
+      - name: Refuse an unpatched GA JDK
+        shell: bash
+        run: |
+          v=$(java -XshowSettings:properties -version 2>&1 | sed -n 's/^ *java\.version = //p')
+          echo "Bundling Java $v"
+          case "$v" in
+            *.*.*) ;;  # an update release, e.g. 25.0.5
+            *) echo "::error::setup-java installed the unpatched GA build (java.version=$v): Oracle no longer serves free updates for this LTS under java/<major>/latest - move java-version to the next LTS"; exit 1 ;;
+          esac
 
       - name: Build DEB with Maven
         run: |
@@ -30,10 +59,14 @@ jobs:
       - name: Upload DEB artifact
         uses: actions/upload-artifact@v4
         with:
-          name: deb
+          # artifact names must be unique across the matrix; the .deb files
+          # themselves are already distinct (gebo-ai_<version>_<arch>.deb)
+          name: deb-${{ matrix.arch }}
           path: |
             **/target/installer/*.deb
       - name: Upload bootable JAR
+        # architecture independent: publish it once
+        if: matrix.arch == 'amd64'
         uses: actions/upload-artifact@v4
         with:
           name: bootable-jar
@@ -72,11 +105,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java 22 (o 21 se preferisci)
+      # Same JDK as the .deb job, for the same reasons - see the comment there.
+      # This used to be "22": not an LTS, and with java/22/latest gone setup-java
+      # fell back to the JDK 22 GA build of March 2024, which the .msi bundled.
+      - name: Setup Java 25
         uses: actions/setup-java@v4
         with:
           distribution: oracle
-          java-version: "22"
+          java-version: "25"
+
+      - name: Refuse an unpatched GA JDK
+        shell: bash
+        run: |
+          v=$(java -XshowSettings:properties -version 2>&1 | sed -n 's/^ *java\.version = //p')
+          echo "Bundling Java $v"
+          case "$v" in
+            *.*.*) ;;  # an update release, e.g. 25.0.5
+            *) echo "::error::setup-java installed the unpatched GA build (java.version=$v): Oracle no longer serves free updates for this LTS under java/<major>/latest - move java-version to the next LTS"; exit 1 ;;
+          esac
 
       - name: Install WiX Toolset (per MSI)
         run: |
