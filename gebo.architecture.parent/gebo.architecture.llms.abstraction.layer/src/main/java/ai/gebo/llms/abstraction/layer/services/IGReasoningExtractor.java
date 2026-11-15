@@ -113,8 +113,9 @@ public interface IGReasoningExtractor {
 	/**
 	 * The reasoning as Spring AI (2.1 and later) keeps it, whichever the provider: the
 	 * {@link ReasoningPart}s of the assistant message, each streamed chunk's parts the
-	 * pieces it adds (a part with no text, a signature or a redacted block, says the model
-	 * is reasoning), the whole of it on a blocking call's answer. A message with no
+	 * pieces it adds, their text or, for a provider giving only a summary of its reasoning,
+	 * the summary (a part with neither, a signature or a redacted block, says the model is
+	 * reasoning), the whole of it on a blocking call's answer. A message with no
 	 * reasoning part is read the legacy way ({@link #OPENAI}): the reasoning_content
 	 * metadata a model written before the parts still keeps, all of it so far on each chunk.
 	 */
@@ -127,8 +128,11 @@ public interface IGReasoningExtractor {
 			}
 			final StringBuilder thinking = new StringBuilder();
 			for (ReasoningPart part : parts) {
-				if (part.text() != null) {
-					thinking.append(part.text());
+				// the reasoning written, else the summary of it a provider gives instead
+				// (OpenAI's Responses API streams only a summary of its reasoning)
+				final String shown = part.text() != null ? part.text() : part.summary();
+				if (shown != null) {
+					thinking.append(shown);
 				}
 			}
 			return new Reasoning(thinking.toString(), textOf(generation), true);

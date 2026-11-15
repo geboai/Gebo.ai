@@ -72,6 +72,19 @@ class PartsReasoningExtractorTest {
 	}
 
 	@Test
+	void aProviderGivingOnlyASummaryIsReadThroughIt() {
+		// OpenAI's Responses API (Spring AI's own model): a summary delta per chunk, no text
+		final IGReasoningExtractor.Round round = IGReasoningExtractor.PARTS.round();
+		assertEquals(new Reasoning("**Planning** ", "", true),
+				round.of(of(StreamingParts.partial(new ReasoningPart(null, "**Planning** ", null, Map.of()), 0))));
+		assertEquals(new Reasoning("the lookup.", "", true),
+				round.of(of(StreamingParts.partial(new ReasoningPart(null, "the lookup.", null, Map.of()), 0))));
+		assertEquals(new Reasoning("The text wins.", "", true), IGReasoningExtractor.PARTS.round()
+				.of(of(new ReasoningPart("The text wins.", "a summary", null, Map.of()))),
+				"a part with both is read through its text");
+	}
+
+	@Test
 	void aRedactedBlockHasNoTextAndStillSaysTheModelIsReasoning() {
 		final ReasoningPart redacted = new ReasoningPart(null, null,
 				new OpaquePayload("anthropic", "redacted_thinking", "EmwK"), Map.of());
