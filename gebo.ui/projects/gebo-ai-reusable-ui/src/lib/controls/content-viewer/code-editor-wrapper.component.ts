@@ -16,7 +16,7 @@
  * It integrates with Angular's form system and allows for customizing the editor
  * with different languages, themes, and content.
  */
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentObject } from "@Gebo.ai/gebo-ai-rest-api";
 import { EditorComponent, NgxEditorModel } from "ngx-monaco-editor-v2";
@@ -28,11 +28,11 @@ import { EditorComponent, NgxEditorModel } from "ngx-monaco-editor-v2";
  */
 @Component({
     selector: "gebo-ai-code-editor",
-    template: "<span  [formGroup]='formGroup'> <ngx-monaco-editor #monaco style='height: {{componentHeight}};width: 100%'  [options]='options' formControlName='content' ></ngx-monaco-editor> </span>",
+    template: "<span  [formGroup]='formGroup'> <ngx-monaco-editor #monaco style='height: {{componentHeight}};width: 100%'  [options]='options' [insideNg]='true' formControlName='content' ></ngx-monaco-editor> </span>",
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class CodeEditorWrapperComponent implements OnInit,OnChanges,AfterViewInit{
+export class CodeEditorWrapperComponent implements OnChanges{
     
     /**
      * Configuration options for the Monaco editor.
@@ -79,26 +79,6 @@ export class CodeEditorWrapperComponent implements OnInit,OnChanges,AfterViewIni
      */
     constructor() {
         
-    }
-    
-    /**
-     * Lifecycle hook called after the component's view has been initialized.
-     * Sets a flag to indicate the editor is inside an Angular context.
-     */
-    ngAfterViewInit(): void {
-        if (this.monaco) {
-            this.monaco.insideNg=true;
-        }
-    }
-    
-    /**
-     * Lifecycle hook called when the component is initialized.
-     * Sets a flag to indicate the editor is inside an Angular context.
-     */
-    ngOnInit(): void {
-        if (this.monaco) {
-            this.monaco.insideNg=true;
-        }
     }
     
     /**

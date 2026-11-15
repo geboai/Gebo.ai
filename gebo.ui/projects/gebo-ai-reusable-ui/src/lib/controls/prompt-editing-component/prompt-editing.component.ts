@@ -145,7 +145,7 @@ export class GeboAIPromptEditingComponent implements ControlValueAccessor, Valid
         language: "markdown",
         automaticLayout: true,
         minimap: { enabled: false },
-        wordWrap: "on"
+        wordWrap: "on" as const
     };
 
     /** Reactive form backing every editable field of the template. */

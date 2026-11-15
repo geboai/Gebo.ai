@@ -2,8 +2,8 @@
   "name": "@Gebo.ai/admin-ui",
   "version": "1.0.7.0-SNAPSHOT",
   "peerDependencies": {
-    "@angular/common": "^21.2.20",
-    "@angular/core": "^21.2.20",
+    "@angular/common": "^22.2.6",
+    "@angular/core": "^22.2.6",
     "@openng/optimus-ui": "^2.0.2",
     "@openng/icons": "^1.0.0",
     "primeflex": "^4.0.0",
