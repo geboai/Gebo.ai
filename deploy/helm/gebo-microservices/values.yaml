@@ -23,6 +23,23 @@ image:
   pullPolicy: IfNotPresent
 imagePullSecrets: []          # e.g. [{ name: regcred }]
 
+# Security context of every Gebo pod (eureka, gateway, backends). The images
+# (built on geboai/platform:3.0) run as the non-root uid/gid 10001 and have no
+# shell; fsGroup makes the mounted home/work volumes writable by that uid.
+# Platforms that assign their own uid (OpenShift's restricted SCC) want
+# podSecurityContext: {} instead. The infra pods keep their images' own users.
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+
 # Applied to every backend (mirrors the compose x-microservice env).
 common:
   javaToolOptions: "-Xms256m -Xmx1g"

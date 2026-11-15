@@ -76,8 +76,9 @@ reachability-metadata surface, **not** blockers.
 - **Images are JVM-only.** Microservice containers are built with
   `jib-maven-plugin` (goal `dockerBuild`) under the `-P docker` profile in
   `gebo.apps.parent/gebo.microservices.apps.parent/pom.xml`, onto the JRE base
-  `geboai/platform:2.5`, with JVM flags. A static native binary cannot reuse this
-  flow.
+  `geboai/platform:3.0` (chiselled Ubuntu 24.04 + jlinked OpenJDK 25, no shell,
+  uid 10001), started as `tini -- java <flags> -cp @jib-classpath-file
+  @jib-main-class-file`. A static native binary cannot reuse this flow.
 - **No devtools obstacle** — devtools is not on the runtime classpath of the
   candidates.
 - Stack: Spring Boot **4.1.1** / Spring 7 / Java 21 / Spring AI 2.0.1 /

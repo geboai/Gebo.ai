@@ -141,6 +141,13 @@ http://<your-server-ip>:12999/
 
 All data is kept on Docker named volumes, so it survives updates and upgrades — see [dockers/PERSISTENCE.md](https://github.com/geboai/Gebo.ai/blob/develop/dockers/PERSISTENCE.md).
 
+## The image
+
+- **Java 25 (LTS)**: Ubuntu's OpenJDK 25 build, jlinked into a minimal runtime, on chiselled Ubuntu 24.04 LTS. The image has **no shell, no package manager and no curl**.
+- Runs as the **non-root user `gebo` (uid 10001)**. Volumes created by an older, root-running image are handed over automatically by the Compose stack; for plain `docker run` installs see [Upgrading to the Java 25 images](https://github.com/geboai/Gebo.ai/blob/develop/dockers/PERSISTENCE.md#4a-upgrading-to-the-java-25-images--they-run-as-uid-10001-not-root).
+- **Unicode file names** on mounted Windows, SMB/CIFS and NTFS shares are read correctly (UTF-8 locale built in).
+- Diagnostics without a shell: `docker exec -e JAVA_TOOL_OPTIONS= <container> jcmd -l` (and `jcmd <pid> Thread.print`, `GC.heap_info`…), and `docker cp` for files.
+
 Metrics, traces and Grafana dashboards are available as an optional add-on — see [docker-compose.observability.yml](https://github.com/geboai/Gebo.ai/blob/develop/dockers/docker-compose-deploy/docker-compose.observability.yml).
 
 ## Gebo.ai licence

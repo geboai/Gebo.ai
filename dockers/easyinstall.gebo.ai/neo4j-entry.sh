@@ -1,4 +1,6 @@
 #!/bin/bash
+# Neo4j 5.x runs on Java 17/21 only; the image's default java is 25 (Gebo.ai).
+export JAVA_HOME="/usr/lib/jvm/java-21-openjdk-$(dpkg --print-architecture)"
 export JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xmx1g -XX:+AggressiveHeap -XX:+PrintGCDetails -Xlog:gc:/var/log/neo4j/gc.log"
 
 NEO4J_PASS="${NEO4J_PASSWORD:-neo4j}"

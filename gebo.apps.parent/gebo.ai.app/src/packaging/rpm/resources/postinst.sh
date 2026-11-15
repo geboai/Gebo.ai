@@ -49,6 +49,9 @@ Group=$APP_GROUP
 Environment=GEBO_HOME=$GEBO_HOME
 Environment=GEBO_WORK_DIRECTORY=$GEBO_WORK
 Environment=SPRING_CONFIG_ADDITIONAL_LOCATION=file:/etc/gebo-ai/
+# UTF-8 locale: the JDK takes file-name encoding from it alone (it ignores
+# -Dsun.jnu.encoding), so Unicode names on mounted Windows/SMB/NTFS shares need it
+Environment=LANG=C.UTF-8
 WorkingDirectory=$APP_HOME
 ExecStart=$APP_DIR/bin/gebo-ai
 Restart=on-failure

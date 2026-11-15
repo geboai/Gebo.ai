@@ -1,4 +1,7 @@
-FROM geboai/platform:2.5
+# The hardened Java 25 base (dockers/gebo.ai.platform): no shell, no package
+# manager, uid 10001. Overridable so a test build can point at another tag.
+ARG PLATFORM_IMAGE=geboai/platform:3.0
+FROM ${PLATFORM_IMAGE}
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
@@ -8,18 +11,10 @@ LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
 LABEL org.opencontainers.image.licenses="MPL-2.0,https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/"
 LABEL org.opencontainers.image.sbom="/opt/gebo.ai/sbom.cdx.json"
-# The base image (geboai/platform) already creates the whole /opt/gebo.ai layout;
-# these are kept so this Dockerfile stays buildable against an older base tag.
-RUN mkdir -p /opt/gebo.ai/home \
-             /opt/gebo.ai/work \
-             /opt/gebo.ai/config \
-             /opt/gebo.ai/logs \
-             /opt/gebo.ai/shares
-# tini as PID 1: it hands docker's SIGTERM to the JVM, which then shuts down
-# gracefully instead of being SIGKILLed when the stop timeout runs out (a shell
-# entrypoint keeps the signal for itself), and it reaps the orphaned children of
-# the processes the application starts.
-RUN apt-get update && apt-get install -y --no-install-recommends tini && rm -rf /var/lib/apt/lists/*
+# NO RUN steps: the base has no shell. Everything that used to be RUN here lives
+# in the base image now - the /opt/gebo.ai layout (owned by uid 10001) and
+# /usr/bin/tini. The COPYs below stay root-owned and read-only to the app on
+# purpose: the jar and the baked config are not the application's to modify.
 COPY gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
@@ -58,18 +53,28 @@ VOLUME /opt/gebo.ai/home
 VOLUME /opt/gebo.ai/work
 VOLUME /opt/gebo.ai/logs
 VOLUME /opt/gebo.ai/shares
-#RUN useradd --home-dir /opt/gebo.ai --shell /bin/bash gebo.ai
-#RUN chown gebo.ai:users -R /opt/gebo.ai
-#USER gebo.ai
-# No -XX:+AggressiveHeap: it silently swaps G1 for the throughput collector. No
-# -XX:+PrintGCDetails: it is deprecated and re-routes the whole GC stream to
-# stdout (i.e. into `docker logs`) instead of gc.log. The compose deployment
-# overrides JAVA_TOOL_OPTIONS with these same corrected flags; this keeps a bare
-# `docker run` of the image consistent with it. See docker-compose-deploy/docker-compose.yml.
-ENV  JAVA_TOOL_OPTIONS="-Dsun.jnu.encoding=UTF-8 -Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:MaxMetaspaceSize=512m -Xlog:gc:file=/opt/gebo.ai/logs/gc.log:time,uptime:filecount=5,filesize=20M"
+# Runs as uid 10001 (USER is inherited from the base). Volumes created by an
+# older, root-running image are root-owned: the compose files fix that with a
+# one-shot init service, and dockers/PERSISTENCE.md section 4 has the one-liner
+# for plain `docker run` installs.
+#
+# JAVA_TOOL_OPTIONS is read by the JVM itself, so the entrypoint does not repeat
+# it. No -XX:+AggressiveHeap: it silently swaps G1 for the throughput collector.
+# No -XX:+PrintGCDetails: it is deprecated and re-routes the whole GC stream to
+# stdout (i.e. into `docker logs`) instead of gc.log. No -Dsun.jnu.encoding: the
+# JDK ignores it - file-name encoding comes from the base's LANG=C.UTF-8 locale,
+# which is what makes Unicode names on mounted Windows/SMB/NTFS shares readable.
+# The compose deployment overrides JAVA_TOOL_OPTIONS with these same flags; this
+# keeps a bare `docker run` of the image consistent with it. See
+# docker-compose-deploy/docker-compose.yml.
+ENV  JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8 --add-opens=java.base/java.nio.charset=ALL-UNNAMED --enable-native-access=ALL-UNNAMED -Xms2g -Xmx4g -XX:MaxMetaspaceSize=512m -Xlog:gc:file=/opt/gebo.ai/logs/gc.log:time,uptime:filecount=5,filesize=20M"
+# Read by EnvironmentHolder (system property OR environment variable).
 ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 EXPOSE 12999
 WORKDIR /opt/gebo.ai
-# exec: the JVM replaces the shell, so the signal tini forwards reaches it
-ENTRYPOINT ["/usr/bin/tini", "--", "/bin/sh", "-c", "exec java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME -jar /opt/gebo.ai/gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar"]
+# Exec form, no shell: tini is PID 1, hands docker's SIGTERM to the JVM (which
+# then shuts down gracefully instead of being SIGKILLed at the stop timeout) and
+# reaps the orphaned children of the processes the application starts (stdio MCP
+# servers).
+ENTRYPOINT ["/usr/bin/tini", "--", "java", "-jar", "/opt/gebo.ai/gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar"]

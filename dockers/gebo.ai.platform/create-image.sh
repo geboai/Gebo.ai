@@ -10,10 +10,10 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-docker image rm geboai/platform:2.5 --force 2>/dev/null || true
+docker image rm geboai/platform:3.0 --force 2>/dev/null || true
 docker buildx build \
   --network=host \
   --platform linux/amd64 \
   --load \
-  -t geboai/platform:2.5 \
+  -t geboai/platform:3.0 \
   .

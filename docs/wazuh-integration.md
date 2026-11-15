@@ -108,8 +108,9 @@ Rotated archives always sit in `<log dir>/archived/security-log-<date>.<n>.jsonl
 > **Confirm before configuring the agent** — one command, no guessing:
 >
 > ```bash
-> # containers (monolith, appliance, any microservice)
-> docker exec <container> ls -l /opt/gebo.ai/logs/security-log.jsonl
+> # containers (monolith, appliance, any microservice). docker cp, not docker exec:
+> # the geboai/gebo.ai image has no shell and no ls.
+> docker cp <container>:/opt/gebo.ai/logs/security-log.jsonl - | tar -tvf -
 > # and where that directory actually lives on the host
 > docker inspect -f '{{range .Mounts}}{{.Source}} -> {{.Destination}}{{"\n"}}{{end}}' <container>
 > # package installs
@@ -392,7 +393,11 @@ override file:
 ```bash
 cd dockers/gebo.microservices
 export GEBO_SECURITY_LOG_BASE=/var/log/gebo-ai-microservices   # or add it to .env
-sudo mkdir -p "$GEBO_SECURITY_LOG_BASE"
+# one directory per service, owned by uid 10001 - the images run non-root, and a
+# directory Docker creates on its own is root-owned: the service could not write
+# its audit trail and would run on without one
+sudo mkdir -p "$GEBO_SECURITY_LOG_BASE"/{eureka,gateway,heimdall,tyr,brain,vectorizator,graphicator,chunker,fulltextor,git,filesystem,uploads,userspace,sharepoint,confluence,jira,aws-s3,googledrive,mcpclient,webdav,integration}
+sudo chown -R 10001:10001 "$GEBO_SECURITY_LOG_BASE"
 docker compose -f docker-compose.yml \
                -f ../../deploy/wazuh/docker/docker-compose.security-logs.override.yml \
                up -d

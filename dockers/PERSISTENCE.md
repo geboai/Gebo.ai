@@ -213,6 +213,58 @@ docker compose up -d         # recreates containers, keeps volumes
 Never `docker compose down -v` on a live deployment — `-v` removes named volumes
 too.
 
+### 4a. Upgrading to the Java 25 images — they run as uid 10001, not root
+
+From `geboai/platform:3.0` on, `geboai/gebo.ai` and every microservice image run
+as the **non-root user `gebo`, uid/gid `10001`**, on a shell-less Java 25 runtime
+(`dockers/gebo.ai.platform/Dockerfile`). In the all-in-one
+`geboai/easyinstall.gebo.ai`, supervisord still starts as root but runs the
+Gebo.ai program as the same uid 10001. A *fresh* named volume is seeded from the
+image already owned by 10001. Volumes created by an **older, root-running image
+are root-owned**, and the app cannot write to them. That is not a degraded mode:
+the JVM refuses to start (`Error opening log file '/opt/gebo.ai/logs/gc.log':
+Permission denied`) and the container crash-loops.
+
+| Deployment | What you do |
+|---|---|
+| `docker-compose-deploy/docker-compose.yml`, `gebo.ai/windows/docker-compose.yml` | Nothing. The one-shot `gebo-volumes-owner` service re-owns `gebo-work`, `gebo-home` and `gebo-logs` before `gebo.ai` starts. It checks only each volume's top directory, so it walks the data once, on the first upgrade, and is a no-op afterwards. |
+| `gebo.microservices/docker-compose.yml` | Nothing. Its `gebo-volumes-owner` service re-owns all 59 `<svc>-home` / `<svc>-work` / `<svc>-logs` volumes; `eureka` waits for it to complete, and everything else starts after eureka. A new service's volumes must be added to it. |
+| `deploy/wazuh/docker/docker-compose.security-logs.override.yml` | Its `<svc>-logs` are **host binds**, which the owner service cannot see. Create every per-service directory and `chown -R 10001:10001` the tree before `up`; the file's header has the command. A directory Docker creates on its own is root-owned, and the service then runs **without** its audit trail. |
+| `geboai/easyinstall.gebo.ai` | Nothing. `container-start.sh` does the same for `/opt/gebo.ai/{home,work,logs}` and `/var/log/gebo.ai` before it starts supervisord. |
+| `geboai/gebo.ai` with plain `docker run` | Once, with the container stopped: `docker run --rm -v <volume>:/v alpine chown -R 10001:10001 /v` for the work, home and logs volumes. |
+| Host **bind** mounts for work/home/logs | `sudo chown -R 10001:10001 <host dir>` once. |
+| `/opt/gebo.ai/shares` | Never re-owned; the app only reads it. uid 10001 needs read access (`o+rX`). Windows paths on Docker Desktop, CIFS/SMB mounts (default `file_mode`/`dir_mode` 0755) and NTFS volumes (ntfs3 default umask) are readable as they are. |
+| Kubernetes (`deploy/helm/gebo-microservices`) | Nothing. The chart runs every Gebo pod as uid 10001 with `fsGroup: 10001` (`podSecurityContext` / `containerSecurityContext` in `values.yaml`). |
+
+**File names on Windows / SMB / NTFS shares.** The images run with a UTF-8 locale
+(`LANG=C.UTF-8` in the Java 25 base, `en_US.UTF-8` in easyinstall). The JVM
+derives its file-name encoding (`sun.jnu.encoding`) from the locale *only*;
+`-Dsun.jnu.encoding=UTF-8` is ignored by the JDK. A Java image without a UTF-8
+locale — the stock `ubuntu/jre` rocks included — fails on the first accented,
+CJK or emoji name with `InvalidPathException`. The check lives in
+`dockers/tests/unicode-filesystems/`: it runs an image against real ext4, NTFS
+(kernel `ntfs3`) and SMB/CIFS mounts of the same Unicode fixture.
+
+**No shell in `geboai/gebo.ai`.** `docker exec … bash` no longer works, by design.
+What to use instead:
+
+```bash
+# JVM diagnostics. jcmd is in the image. Blank JAVA_TOOL_OPTIONS so the tool's own
+# JVM does not take the app's -Xlog:gc flag and rotate the app's gc.log.
+docker exec -e JAVA_TOOL_OPTIONS= <container> jcmd -l
+docker exec -e JAVA_TOOL_OPTIONS= <container> jcmd 7 Thread.print   # 7 = PID from jcmd -l
+# files: docker cp works without anything in the image (a tar stream on stdout)
+docker cp <container>:/opt/gebo.ai/logs - | tar -tvf -
+# a full toolbox next to the running container (same PID namespace and volumes)
+docker run --rm -it --pid container:<container> --volumes-from <container> ubuntu:24.04 bash
+```
+
+The microservice images (Jib, `gebo.microservices.apps.parent`) build on the same
+`geboai/platform:3.0` and start through the same `tini`. Their app root
+`/opt/gebo.ai` is root-owned (Jib's layers own it), and only `home`, `work`,
+`logs` and `shares` belong to 10001. The services write nothing else there;
+`docker diff` on a running cluster shows writes only under `/tmp` and the volumes.
+
 ## 5. Migrating off anonymous volumes
 
 The microservices compose used to give `/opt/gebo.ai/{home,work}` anonymous
