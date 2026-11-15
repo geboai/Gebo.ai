@@ -24,7 +24,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/cor
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, IOperationStatus } from "@Gebo.ai/reusable-ui";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, Observable } from "rxjs";
 
 @Component({

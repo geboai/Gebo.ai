@@ -2,7 +2,7 @@ import { Component, forwardRef, inject, Injector } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolCollision, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { catchError, debounceTime, forkJoin, map, merge, Observable, of, Subject, switchMap, take, tap } from "rxjs";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({

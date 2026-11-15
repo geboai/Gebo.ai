@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { IGeboChatMessage } from "../../services/gebo-chat-message";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";
 import { PipelineRoutingOption } from "./pipeline-routing-option";
 import { Subscription, timer } from "rxjs";

@@ -19,7 +19,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { GProject, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 
-import { MenuItem } from "primeng/api";
+import { MenuItem } from "@openng/optimus-ui/api";
 import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing-component/entities-modification-wizard";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";

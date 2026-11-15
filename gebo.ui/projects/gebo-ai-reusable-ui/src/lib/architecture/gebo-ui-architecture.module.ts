@@ -14,17 +14,17 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GeboUIModalOpenerComponent } from "./gebo-ui-modal-opener.component";
-import { DialogModule } from 'primeng/dialog';
+import { DialogModule } from '@openng/optimus-ui/dialog';
 import { GeboUIModalOpenerWrapperComponent } from "./gebo-ui-modal-wrapper.component";
 import { GeboFormGroupsService } from "./gebo-form-groups.service";
-import { ButtonModule } from "primeng/button";
-import { StepsModule } from 'primeng/steps';
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { StepsModule } from '@openng/optimus-ui/steps';
 import { GeboUIEntityFormsLauncherComponent } from "./gebo-ui-entity-forms-launcher.component";
 import { GeboUIModalComponent } from "./gebo-ui-modal.component";
 import { GeboAINotificationsModule } from "../notifications/notifications.module";
 import { GeboAIDesktopComponent } from "./desktop/gebo-ai-desktop.component";
-import { MegaMenuModule } from "primeng/megamenu";
-import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { MegaMenuModule } from "@openng/optimus-ui/megamenu";
+import { ConfirmDialogModule } from "@openng/optimus-ui/confirmdialog";
 import { RouterModule } from "@angular/router";
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 
@@ -37,12 +37,12 @@ import { GeboAIFieldTranslationContainerModule } from "../controls/field-transla
  * This module provides a comprehensive architecture for UI components focused on modals, forms, and entity management.
  * It bundles together components for opening and managing modals, launching entity forms, and handling form configurations.
  * 
- * The module imports several Angular and PrimeNG modules for form handling, dialog management, and UI components:
+ * The module imports several Angular and Optimus UI modules for form handling, dialog management, and UI components:
  * - CommonModule: Angular's common directives and pipes
  * - ReactiveFormsModule & FormsModule: Angular's form handling modules
- * - DialogModule: PrimeNG's dialog component for modal windows
- * - ButtonModule: PrimeNG's button components
- * - StepsModule: PrimeNG's multi-step component
+ * - DialogModule: Optimus UI's dialog component for modal windows
+ * - ButtonModule: Optimus UI's button components
+ * - StepsModule: Optimus UI's multi-step component
  * 
  * It provides services for:
  * - Action routing (GeboUIActionRoutingService)

@@ -4,7 +4,7 @@ import { GeboAwsConnectionCredentials, GeboGoogleJsonSecretContent, GUserMessage
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { Observable, of } from "rxjs";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 const credentialCreatedOk:ToastMessageOptions={id:"APIKEY_CREATED_OK",severity:"success",detail:"Credentials successfully created",summary:"Credentials created"};

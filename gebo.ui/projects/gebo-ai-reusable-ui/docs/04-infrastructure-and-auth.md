@@ -42,7 +42,7 @@ providers: [
 ```
 `AuthInterceptor` attaches the stored auth header to any request whose URL is a known Gebo backend
 (per `GeboBackendListService.isGeboBackend`) and isn't a registered "public" URL; on `401` it clears
-auth and redirects to `/ui/login`; on `500` it pops a PrimeNG confirm dialog pointing users to
+auth and redirects to `/ui/login`; on `500` it pops an Optimus UI confirm dialog pointing users to
 `assistence@gebo.ai`.
 
 `gebo-credentials.ts` is the low-level storage layer underneath `LoginService`/`AuthInterceptor` —

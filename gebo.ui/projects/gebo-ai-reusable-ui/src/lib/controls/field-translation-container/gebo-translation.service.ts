@@ -3,8 +3,8 @@ import { DEFAULT_LANGUAGE, GEBO_AI_LOCAL_STORAGE_LANG, UIExistingText, UILanguag
 import { Observable, of, Subject, concat, filter, map, timeout } from "rxjs";
 import { UiTextResourcesControllerService, UIExistingText as LibraryUIExistingText, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { InterpolatableTranslationObject, Language, TranslateService } from "@ngx-translate/core";
-import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions, Translation } from "primeng/api";
-import { PrimeNG } from "primeng/config";
+import { Confirmation, MegaMenuItem, MenuItem, ToastMessageOptions, Translation } from "@openng/optimus-ui/api";
+import { Optimus } from "@openng/optimus-ui/config";
 import { findMatchingTranlations, findMatchingTranslation } from "./text-language-resources";
 
 import { HttpClient } from "@angular/common/http";
@@ -14,13 +14,13 @@ export interface ExtendedConfirmation extends Confirmation {
     id: string;
 }
 /**
- * Texts PrimeNG components render on their own, taken from PrimeNG's translation (keyed by the
+ * Texts Optimus UI components render on their own, taken from Optimus UI's translation (keyed by the
  * componentId here): the password strength meter of the setup and user pages, the empty messages
  * of lists and tables, the confirmation and file upload buttons. They are set on
- * PrimeNG at each language change, falling back to these English texts (PrimeNG's defaults) when
+ * Optimus UI at each language change, falling back to these English texts (Optimus UI's defaults) when
  * the language has no resource for them.
  */
-const primeNGTexts: UIExistingText[] = [
+const optimusTexts: UIExistingText[] = [
     { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "weak", fieldId: "label", key: "label", text: "Weak" },
     { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "medium", fieldId: "label", key: "label", text: "Medium" },
     { moduleId: "GeboAIMultilanguageModule", entityId: "PrimeNGTranslation", componentId: "strong", fieldId: "label", key: "label", text: "Strong" },
@@ -49,7 +49,7 @@ export class GeboAITranslationService {
     constructor(private uiTextResourcesService: UiTextResourcesControllerService,
         private translateService: TranslateService,
         private httpClient: HttpClient,
-        @Optional() private primeNG?: PrimeNG) {
+        @Optional() private optimus?: Optimus) {
         this.translateService.addLangs(["ar", "cs", "de", "en", "es", "fi", "fr", "he", "hi", "it", "js", "ko", "nl", "no", "pt", "ro", "ru", "sv", "th", "tr", "vi", "zh"]);
     }
     /**
@@ -337,7 +337,7 @@ export class GeboAITranslationService {
             next: (interpolationTranslateObject: InterpolatableTranslationObject) => {
 
                 GeboAITranslationService.currentTextResources = interpolationTranslateObject as (UILanguageResources | undefined);
-                this.applyPrimeNGTranslation(GeboAITranslationService.currentTextResources);
+                this.applyOptimusTranslation(GeboAITranslationService.currentTextResources);
                 if (GeboAITranslationService.currentTextResources)
                     this.languageChanges.next(GeboAITranslationService.currentTextResources);
             }
@@ -345,16 +345,16 @@ export class GeboAITranslationService {
 
     }
     /**
-     * Sets PrimeNG's own texts (see primeNGTexts) from the resources of the actual language
+     * Sets Optimus UI's own texts (see optimusTexts) from the resources of the actual language
      */
-    private applyPrimeNGTranslation(resources: UILanguageResources | undefined): void {
-        if (!this.primeNG || !resources) return;
+    private applyOptimusTranslation(resources: UILanguageResources | undefined): void {
+        if (!this.optimus || !resources) return;
         const translation: Translation = {};
-        primeNGTexts.forEach(text => {
+        optimusTexts.forEach(text => {
             const found = findMatchingTranslation(text, resources);
             (translation as { [key: string]: string })[text.componentId as string] = found?.translation ? found.translation : text.text;
         });
-        this.primeNG.setTranslation(translation);
+        this.optimus.setTranslation(translation);
     }
     public translateMegaMenuItems(moduleId: string, entityId: string, menuItems: MegaMenuItem[]): Observable<MegaMenuItem[]> {
         const resources: UIExistingText[] = [];

@@ -20,8 +20,8 @@
 import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BrowseParam, GSharepointProjectEndpoint, GVirtualFilesystemRoot, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
-import { ToastMessageOptions, TreeNode } from "primeng/api";
-import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "primeng/tree";
+import { ToastMessageOptions, TreeNode } from "@openng/optimus-ui/api";
+import { TreeNodeExpandEvent, TreeNodeSelectEvent, TreeNodeUnSelectEvent } from "@openng/optimus-ui/tree";
 import { of } from "rxjs";
 import { loadRootsObservableCallback, browsePathObservableCallback, VFilesystemDeletableReference, VFilesystemReference, reconstructNavigationObservableCallback } from "./vfilesystem-types";
 import { refreshTreeNodes, treeNodeTrackBy } from "../../services/primeng-tree-refresh";
@@ -232,7 +232,7 @@ function toEnrichedNode(entry: VFilesystemReference, parent?: TreeNode<EnrichedF
         label: entry.path ? entry.path.name : entry.root.description,
         leaf: folder ? false : true,
         data: data,
-        // A folder gets no `icon`: PrimeNG uses `icon` whenever it is set and only
+        // A folder gets no `icon`: Optimus UI uses `icon` whenever it is set and only
         // falls back on the expanded/collapsed pair when it is not, so filling both
         // meant the open folder icon was shown even on a closed folder.
         icon: folder ? undefined : icon_file(entry),
@@ -241,7 +241,7 @@ function toEnrichedNode(entry: VFilesystemReference, parent?: TreeNode<EnrichedF
         parent: parent,
         // The node key and the lookup key of nodesMap must be the same string:
         // keeping two identity schemes (the old key was built from root code and
-        // absolute path with different rules than uniqueKey) made PrimeNG and the
+        // absolute path with different rules than uniqueKey) made Optimus UI and the
         // component disagree on which node a value refers to.
         key: uniqueCode
     };
@@ -473,7 +473,7 @@ export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlV
 
     /**
      * Node tracking of the tree. The branch of a node is rebuilt out of new node
-     * objects every time its contents change, which is the only thing PrimeNG
+     * objects every time its contents change, which is the only thing Optimus UI
      * repaints on; tracking the nodes by key keeps the views of the untouched ones.
      */
     public trackBy = treeNodeTrackBy;

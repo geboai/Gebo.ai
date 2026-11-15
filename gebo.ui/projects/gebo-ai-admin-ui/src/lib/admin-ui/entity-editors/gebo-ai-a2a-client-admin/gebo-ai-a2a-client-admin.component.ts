@@ -11,7 +11,7 @@ import { Component, forwardRef, Injector, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { A2AClientConfigControllerService, A2ARemoteAgentConfig, A2ARemoteSkill, SecretInfo, SecretsControllerService, UsersAdminControllerService, UserInfos, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { Observable, of } from "rxjs";
 import { map } from "rxjs/operators";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";

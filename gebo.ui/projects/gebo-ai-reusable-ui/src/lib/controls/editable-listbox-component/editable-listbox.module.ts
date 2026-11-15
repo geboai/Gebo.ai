@@ -15,10 +15,10 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { EditableListboxComponent } from "./editable-listbox.component";
 
-import { BlockUIModule } from 'primeng/blockui';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from "primeng/button";
-import { SelectModule } from 'primeng/select';
+import { BlockUIModule } from '@openng/optimus-ui/blockui';
+import { DialogModule } from '@openng/optimus-ui/dialog';
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { SelectModule } from '@openng/optimus-ui/select';
 import { EditableListboxBoundObjectAdapterComponent } from "./editable-listbox-bound-object-adapter.component";
 @NgModule({
     imports:[CommonModule,ReactiveFormsModule,FormsModule,SelectModule,BlockUIModule,DialogModule,ButtonModule],

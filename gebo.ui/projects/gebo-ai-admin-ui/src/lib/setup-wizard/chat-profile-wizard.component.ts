@@ -14,7 +14,7 @@ import { Component, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PagedModelGChatProfileConfiguration, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { PaginatorState } from "primeng/paginator";
+import { PaginatorState } from "@openng/optimus-ui/paginator";
 import { forkJoin, map, Observable } from "rxjs";
 /**
  * AI generated comments
@@ -146,7 +146,7 @@ export class ChatProfileWizardComponent extends BaseWizardSectionComponent {
     }
     
     /**
-     * Handles pagination events from the PrimeNG paginator
+     * Handles pagination events from the Optimus UI paginator
      * 
      * @param evt The paginator state containing page number and page size
      */

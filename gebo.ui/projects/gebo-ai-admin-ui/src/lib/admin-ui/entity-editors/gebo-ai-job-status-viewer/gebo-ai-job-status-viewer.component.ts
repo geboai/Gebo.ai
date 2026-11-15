@@ -20,8 +20,8 @@ import { Component, forwardRef, Injector, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup } from "@angular/forms";
 import { CompanySystemsControllerService, DataPage, GJobStatus, JobStatusControllerService, JobSummary, LogViewControllerService, PagedModelGUserMessage, SystemInfos } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
-import { PaginatorState } from 'primeng/paginator';
+import { ConfirmationService, ToastMessageOptions } from '@openng/optimus-ui/api';
+import { PaginatorState } from '@openng/optimus-ui/paginator';
 import { forkJoin, map, Observable, of } from "rxjs";
 import { renderData, StatusRendering } from './graphic-rendering';
 

@@ -9,7 +9,7 @@
 
 import { Injectable } from '@angular/core';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
-import { MegaMenuItem } from 'primeng/api';
+import { MegaMenuItem } from '@openng/optimus-ui/api';
 import { Observable } from 'rxjs';
 
 export abstract class ApplicationMenuProviderService {

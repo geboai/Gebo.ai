@@ -12,13 +12,13 @@
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { TableModule } from "primeng/table";
+import { TableModule } from "@openng/optimus-ui/table";
 import { GeboAIViewTableComponent } from "./view-table.component";
 /**
  * AI generated comments
  * 
  * This module provides the packaging and configuration for the GeboAIViewTable functionality.
- * It imports necessary Angular and PrimeNG dependencies, declares the GeboAIViewTableComponent,
+ * It imports necessary Angular and Optimus UI dependencies, declares the GeboAIViewTableComponent,
  * and exports it to make it available for other modules to use. This follows the standard
  * Angular module pattern for encapsulating and organizing related components.
  */

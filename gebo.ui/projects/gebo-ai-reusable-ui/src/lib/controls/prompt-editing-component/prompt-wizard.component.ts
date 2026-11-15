@@ -13,7 +13,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry } from "@Gebo.ai/gebo-ai-rest-api";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, Observable } from "rxjs";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";

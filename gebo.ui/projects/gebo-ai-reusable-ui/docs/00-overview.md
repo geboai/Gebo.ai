@@ -33,10 +33,10 @@ Peer dependencies (must already be present in the consuming app — see `package
 {
   "@angular/common": "^21.2.18",
   "@angular/core": "^21.2.18",
-  "primeng": "^21.1.9",
-  "primeicons": "^7.0.0",
+  "@openng/optimus-ui": "^1.0.2",
+  "@openng/icons": "^1.0.0",
   "primeflex": "^4.0.0",
-  "@primeng/themes": "^21.0.4",
+  "@openng/optimus-ui-themes": "^1.0.2",
   "ng-diagram": "^1.2.4"
 }
 ```

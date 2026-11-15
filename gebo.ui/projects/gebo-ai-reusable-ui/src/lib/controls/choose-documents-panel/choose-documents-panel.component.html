@@ -14,7 +14,7 @@
 
 @if (displaySelectedList) {
 <div class="grid" #chooseDocsPanel="geboBlockableContainer" geboBlockableContainer>
-  <!-- [target] scopes the mask to this panel; without it PrimeNG masks the whole
+  <!-- [target] scopes the mask to this panel; without it Optimus UI masks the whole
        document (and locks body scroll), which left a stuck page-wide lock. -->
   <p-blockUI [blocked]="loading" [target]="chooseDocsPanel">
     @if (loading) {

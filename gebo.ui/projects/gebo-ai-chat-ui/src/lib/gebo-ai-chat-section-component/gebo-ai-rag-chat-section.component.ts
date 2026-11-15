@@ -13,10 +13,10 @@
 import { ChangeDetectorRef, Component, Inject, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
 import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
-import { PaginatorState } from "primeng/paginator";
+import { PaginatorState } from "@openng/optimus-ui/paginator";
 import { fieldHostComponentName, findMatchingTranslation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, refreshTreeNodes, UI_COMPANY_FILES_NOT_SELECTABLE, UIExistingText } from "@Gebo.ai/reusable-ui";
-import { ScrollerOptions, TreeNode } from "primeng/api";
-import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "primeng/tree";
+import { ScrollerOptions, TreeNode } from "@openng/optimus-ui/api";
+import { TreeNodeSelectEvent, TreeScrollIndexChangeEvent } from "@openng/optimus-ui/tree";
 import { ActivatedRoute, Router } from "@angular/router";
 
 /**

@@ -56,7 +56,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
      * ResizeObserver, and its UpdatePortsService logs
      * "Node measurement failed: Node element not found" for every node whose
      * element is gone by the time that batch flushes. Mounting only once
-     * PrimeNG reports the dialog shown means the nodes are created inside a
+     * Optimus UI reports the dialog shown means the nodes are created inside a
      * container that already has its final size, instead of one that is still
      * animating - so a measurement pass cannot observe a node that is about to
      * be re-created. Cleared on hide so the next open is a clean mount.
@@ -673,7 +673,7 @@ export class ComplianceComponent extends AncestorPanelComponent implements OnIni
     protected openDataFlowDialog(): void {
         this.showDataFlowDialog = true;
         // The dialog content does not exist until it is shown, so the diagram must
-        // be fit only once it has a real size. onDialogShow() fires when Primeng
+        // be fit only once it has a real size. onDialogShow() fires when Optimus UI
         // has rendered the dialog; this afterNextRender is the fallback for the
         // already-open case.
         afterNextRender(() => this.fitDiagramToViewport(), { injector: this.injector });

@@ -19,7 +19,7 @@
 import { Component, OnInit } from "@angular/core";
 import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, PagedModelGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
-import { PaginatorState } from "primeng/paginator";
+import { PaginatorState } from "@openng/optimus-ui/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
 /**

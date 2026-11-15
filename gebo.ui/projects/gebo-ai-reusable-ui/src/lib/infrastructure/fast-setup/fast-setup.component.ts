@@ -21,7 +21,7 @@ import { Component, OnInit } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FastInstallationSetupData, GeboFastInstallationSetupControllerService, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { LoginService } from "../login/login.service";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 const setupMessage:ToastMessageOptions={id:"WELCOME2SETUP", summary: "Welcome to Gebo.ai setup", detail: "Create the administration credentials for this installation", severity: "info" };

@@ -19,7 +19,7 @@
 import { Inject, Injectable } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AuthControllerService, BASE_PATH, ChangePasswordParam, ChangePasswordResponse, Oauth2ClientAuthorizativeInfo, Oauth2ClientConfig, AuthProvidersControllerService, SecurityHeaderData, UserControllerService, UserInfo, TokenRenewControllerService, SessionControllerService } from "@Gebo.ai/gebo-ai-rest-api";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { map, Observable, of, Subject, Subscription } from "rxjs";
 import { getAuth, resetAuth, saveAuth } from "../gebo-credentials";
 import { AuthConfig } from 'angular-oauth2-oidc';

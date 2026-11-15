@@ -16,7 +16,7 @@ import {
     UserAccessibleMcpServerView, 
     GeneratedApiKeyInfo 
 } from "@Gebo.ai/gebo-ai-rest-api";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, of } from "rxjs";
 import { catchError, finalize } from "rxjs/operators";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";

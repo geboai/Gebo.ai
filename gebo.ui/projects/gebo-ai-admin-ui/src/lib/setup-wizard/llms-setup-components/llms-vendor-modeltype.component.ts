@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormControl, FormControlStatus, FormGroup, Validators } from "@angular/forms";
 import { LLMSSetupConfiguration, SecretInfo, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter, LLMCredentialsVerificationData, LLMUnresolvedModel } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of, Subscription } from "rxjs";
 interface IModelChoice {
     setAsDefault?: boolean;

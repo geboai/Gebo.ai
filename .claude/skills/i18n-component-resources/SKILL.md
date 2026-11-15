@@ -96,7 +96,7 @@ Reads up to three attributes, aliased onto three field ids:
 | `placeholder` | `placeholder` |
 
 `label`/`legend`/`header` collapse onto the same `label` field, first one wins. Works on a
-native element *and* on a PrimeNG component — for the latter the matching
+native element *and* on an Optimus UI component — for the latter the matching
 `P*LabelTarget` adapter in `primeng-components-multilanguage-adapters.directive.ts` pushes
 the translation into the component's own input, so check an adapter exists for the tag you
 are labelling.

@@ -14,17 +14,17 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
-import { PanelModule } from "primeng/panel";
+import { PanelModule } from "@openng/optimus-ui/panel";
 import { GeboAIChooseDocumentsPanelComponent } from "./choose-documents-panel.component";
-import { TabsModule } from 'primeng/tabs';
-import { DialogModule } from "primeng/dialog";
+import { TabsModule } from '@openng/optimus-ui/tabs';
+import { DialogModule } from "@openng/optimus-ui/dialog";
 import { GeboAISearchDocumentsComponent } from "./search-documents.component";
-import { BlockUIModule } from "primeng/blockui";
-import { ButtonModule } from "primeng/button";
-import { InputTextModule } from "primeng/inputtext";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
 import { GeboAIDocumentsListPanelComponent } from "./documents-list-panel.component";
-import { CheckboxModule } from "primeng/checkbox";
-import { PickListModule } from 'primeng/picklist';
+import { CheckboxModule } from "@openng/optimus-ui/checkbox";
+import { PickListModule } from '@openng/optimus-ui/picklist';
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { GeboAIUserspaceFilesModule } from "../userspace-files-component/userspace-files.module";
 import { VFilesystemSelectorModule } from "../vfilesystem-selector/vfilesystem-selector.module";
@@ -40,9 +40,9 @@ import { GeboBlockableContainerDirective } from "../../directives/blockable-cont
  * functionality within the Gebo.ai application. It bundles together multiple UI components that 
  * handle document selection, searching, and listing operations.
  * 
- * The module imports various Angular and PrimeNG modules that provide UI components and functionality:
+ * The module imports various Angular and Optimus UI modules that provide UI components and functionality:
  * - Angular core modules (CommonModule, ReactiveFormsModule, DragDropModule)
- * - PrimeNG UI components (PanelModule, TabsModule, DialogModule, etc.)
+ * - Optimus UI UI components (PanelModule, TabsModule, DialogModule, etc.)
  * - Gebo.ai custom modules (VFilesystemSelectorModule, GeboAIContentViewerModule, etc.)
  * 
  * It declares and exports three main components:

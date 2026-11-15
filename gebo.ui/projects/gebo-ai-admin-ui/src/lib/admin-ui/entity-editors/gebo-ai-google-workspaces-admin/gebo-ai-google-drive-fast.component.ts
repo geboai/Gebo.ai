@@ -20,7 +20,7 @@ import { Component, EventEmitter, OnChanges, OnInit, Output, SimpleChanges } fro
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { FastGoogleDriveSystemInsert, GGoogleDriveSystem, GoogleDriveSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 
 /**
  * Custom validator function that checks if a string is valid JSON.

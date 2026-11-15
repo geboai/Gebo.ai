@@ -27,7 +27,7 @@ import {
     LLMCreateModelData, LLMSSetupConfiguration, LLMSSetupConfigurationData
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { MenuItem, ToastMessageOptions } from "primeng/api";
+import { MenuItem, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, Observable } from "rxjs";
 import { MODEL_CLASSES, ModelChoiceOption, ModelClassDecision, ModelClassDescriptor } from "./model-classes";
 

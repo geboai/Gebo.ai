@@ -15,7 +15,7 @@ import { SetupWizardGrouping, SetupWizardItem } from "./setup-wizard-step";
 import { SetupStatus, SetupWizardGroupItem, SetupWizardService } from "./setup-wizard.service";
 import { BaseWizardSectionComponent } from "./base-wizard-section.component";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
-import { MenuItem, ToastMessageOptions } from "primeng/api";
+import { MenuItem, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 import { map, Observable, Subscription } from "rxjs";

@@ -122,7 +122,7 @@ Upload-into-chat widget is a **separate module**, `GeboAIUploadChatDocumentModul
 
 Generic tree browser/picker over *any* backend "virtual filesystem" (git, SharePoint, Google Drive,
 uploads, userspace, knowledge-base trees). You supply the data-fetching callbacks; the component
-only renders the PrimeNG tree + selection + edit-dialog UI.
+only renders the Optimus UI tree + selection + edit-dialog UI.
 
 ```html
 <gebo-ai-vfilesystem-selector-component

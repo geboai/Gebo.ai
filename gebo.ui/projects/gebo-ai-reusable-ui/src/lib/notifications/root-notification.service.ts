@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 
-import { MessageService, ToastMessageOptions } from "primeng/api";
+import { MessageService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Subscription, take } from "rxjs";
 import { GeboAITranslationService } from "../controls/field-translation-container/gebo-translation.service";
 import { ToastZIndexService } from "./toast-z-index.service";

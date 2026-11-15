@@ -17,24 +17,24 @@
  * 
  * This module serves as a container for the GeboAiRelationListComponent, providing
  * all necessary imports and exports to make the component available for use in other modules.
- * It includes various PrimeNG UI components (Chip, BlockUI, Button, Dialog, Panel) for UI rendering,
+ * It includes various Optimus UI UI components (Chip, BlockUI, Button, Dialog, Panel) for UI rendering,
  * forms modules for data binding, and the EditableListboxModule for displaying editable lists.
  */
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { GeboAiRelationListComponent } from "./relation-list.component";
-import { ChipModule } from 'primeng/chip';
-import { BlockUIModule } from 'primeng/blockui';
-import { ButtonModule } from 'primeng/button';
+import { ChipModule } from '@openng/optimus-ui/chip';
+import { BlockUIModule } from '@openng/optimus-ui/blockui';
+import { ButtonModule } from '@openng/optimus-ui/button';
 import { EditableListboxModule } from "../editable-listbox-component/editable-listbox.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { DialogModule } from 'primeng/dialog';
-import { PanelModule } from 'primeng/panel';
+import { DialogModule } from '@openng/optimus-ui/dialog';
+import { PanelModule } from '@openng/optimus-ui/panel';
 
 /**
  * Module that encapsulates the GeboAiRelationListComponent.
  * 
- * Imports necessary UI components from PrimeNG and Angular modules needed for forms handling.
+ * Imports necessary UI components from Optimus UI and Angular modules needed for forms handling.
  * The module makes the GeboAiRelationListComponent available to other modules through its exports.
  */
 @NgModule({

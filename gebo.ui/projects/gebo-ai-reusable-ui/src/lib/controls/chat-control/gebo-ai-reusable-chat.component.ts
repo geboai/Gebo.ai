@@ -25,7 +25,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState, WaitingConditionsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { SuspensionAnswer } from "./chat-suspension-answer.component";
 import { MermaidAPI } from "ngx-markdown";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of, Subject } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";

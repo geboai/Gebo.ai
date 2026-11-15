@@ -19,7 +19,7 @@
 import { Component, Injectable } from "@angular/core";
 import { GeboContentProcessRow, GeboFastKnowledgeBaseSetupControllerService, GeboKnowledgeBaseSetupStatus, GKnowledgeBase, GObjectRefGProjectEndpoint, GProject, JobLauncherControllerService, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, ChooseDataSourceType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, sliceWizard } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable } from "rxjs";
 import { KNOWLEDGEBASE_WIZARD } from "./wizards-navigation";
 

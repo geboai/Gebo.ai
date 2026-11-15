@@ -158,11 +158,11 @@ export class GeboUIModalOpenerComponent implements GeboUIActionRequestListener, 
      *
      * A modal p-dialog adds `p-overflow-hidden` to the document body when it opens and only
      * removes it through its leave animation (onAfterLeave -> disableModality -> unblockBodyScroll);
-     * PrimeNG's Dialog has no ngOnDestroy fallback. This opener closes by dropping the whole
+     * Optimus UI's Dialog has no ngOnDestroy fallback. This opener closes by dropping the whole
      * <p-dialog> from the DOM via @if (modal is cleared above), so that leave animation never runs
      * and the lock leaks - freezing vertical scroll on every screen until a full reload. We release
      * it here, deferred so the closing dialog is torn down first, and only when no other modal
-     * dialog is still open (PrimeNG marks active ones with data-p-scrollblocker-active).
+     * dialog is still open (Optimus UI marks active ones with data-p-scrollblocker-active).
      */
     private releaseBodyScrollLock(): void {
         if (typeof document === "undefined") {

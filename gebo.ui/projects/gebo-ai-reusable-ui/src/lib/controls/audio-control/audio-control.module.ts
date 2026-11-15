@@ -14,14 +14,14 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { GeboAIAudioControlComponent } from "./audio-control.component";
-import { ButtonModule } from "primeng/button";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 /**
  * AI generated comments
  * 
  * This module provides audio recording functionality for Gebo AI applications.
  * It encapsulates the GeboAIAudioControlComponent which handles audio recording and playback.
- * The module imports common Angular modules and PrimeNG's ButtonModule for UI elements,
+ * The module imports common Angular modules and Optimus UI's ButtonModule for UI elements,
  * declares the audio control component, and exports it for use in other modules.
  */
 @NgModule({

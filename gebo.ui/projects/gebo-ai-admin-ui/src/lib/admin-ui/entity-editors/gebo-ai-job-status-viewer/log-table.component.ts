@@ -23,7 +23,7 @@ import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/
 import { FormGroup } from "@angular/forms";
 import { GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesFilter, LogViewControllerService, PagedModelGJobStatusItem } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
-import { TableLazyLoadEvent } from "primeng/table";
+import { TableLazyLoadEvent } from "@openng/optimus-ui/table";
 import { Subject, Subscription } from "rxjs";
 import { debounceTime } from "rxjs/operators";
 

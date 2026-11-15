@@ -18,19 +18,19 @@ import { BrowserModule } from "@angular/platform-browser";
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-rest-api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ConfirmDialogModule } from "primeng/confirmdialog";
-import { MegaMenuModule } from 'primeng/megamenu';
+import { ConfirmDialogModule } from "@openng/optimus-ui/confirmdialog";
+import { MegaMenuModule } from '@openng/optimus-ui/megamenu';
 import { AuthInterceptor, GeboAIFieldTranslationContainerModule, GeboAIModulesModule, GeboAINotificationsModule, GeboUIArchitectureModule, ApplicationMenuProviderService, GeboUIEntityFormsLauncherService, GeboUIEntityFormsLauncherByInjectionService, GeboUIActionRoutingService, adminRoleGuard } from "@Gebo.ai/reusable-ui";
 import { LoginModule } from "@Gebo.ai/reusable-ui";
 import { FastSetupModule } from "@Gebo.ai/reusable-ui";
 import { GeboAIUserProfileModule, GeboAIUserIntegrationsModule } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
 import { GeboAiAdminModule, GeboAICommonModulesInjectionsModule, GeboSetupWizardsModule } from "@Gebo.ai/gebo-ai-admin-ui";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
-import { providePrimeNG } from "primeng/config";
-import Aura from '@primeng/themes/aura';
-import { definePreset } from "@primeng/themes";
+import { provideOptimus } from "@openng/optimus-ui/config";
+import Aura from '@openng/optimus-ui-themes/aura';
+import { definePreset } from "@openng/optimus-ui-themes";
 
 import { OAuthModule } from 'angular-oauth2-oidc';
 import { GeboBackendListService } from "@Gebo.ai/reusable-ui";
@@ -38,7 +38,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { AppMenuProviderService } from './app-menu-provider.service';
 import { TranslateLoader, provideTranslateService } from "@ngx-translate/core";
 import { TRANSLATE_HTTP_LOADER_CONFIG, TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { PopoverModule } from 'primeng/popover';
+import { PopoverModule } from '@openng/optimus-ui/popover';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader();
@@ -226,7 +226,7 @@ const GeboAIPreset = definePreset(Aura, {
     GeboBackendListService,
     CookieService,
     provideAnimationsAsync(),
-    providePrimeNG({
+    provideOptimus({
       theme: {
         preset: GeboAIPreset,
         options: {

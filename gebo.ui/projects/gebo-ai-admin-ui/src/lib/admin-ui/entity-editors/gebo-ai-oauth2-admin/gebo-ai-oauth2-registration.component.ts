@@ -2,7 +2,7 @@ import { Component, forwardRef, Inject, inject, Injector, Input } from "@angular
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthProviderDto, BASE_PATH, OAuth2AdminControllerService, Oauth2ProviderModifiableData } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 const frontendRedirectRelativeUris: string[] = ["/ui/oauth2-land", "/ui/chat", "/"];
 const frontendRefererUris: string[] = ["/ui/login"];

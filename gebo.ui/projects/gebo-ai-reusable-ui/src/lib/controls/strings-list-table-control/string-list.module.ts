@@ -14,11 +14,11 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GeboAIStringListComponent } from "./string-list.component";
-import { ButtonModule } from "primeng/button";
-import { ChipModule } from "primeng/chip";
-import { DialogModule } from "primeng/dialog";
-import { PanelModule } from "primeng/panel";
-import { InputTextModule } from "primeng/inputtext";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { ChipModule } from "@openng/optimus-ui/chip";
+import { DialogModule } from "@openng/optimus-ui/dialog";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
 
 @NgModule({
     imports:[CommonModule,ReactiveFormsModule,FormsModule,ButtonModule,ChipModule,ChipModule,DialogModule,PanelModule,InputTextModule],

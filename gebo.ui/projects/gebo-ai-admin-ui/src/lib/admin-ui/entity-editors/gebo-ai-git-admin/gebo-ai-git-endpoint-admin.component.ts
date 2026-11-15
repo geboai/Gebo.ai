@@ -22,7 +22,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GGitContentManagementSystem, GitSystemsControllerService, GProject, GGitProjectEndpoint, ProjectsControllerService, SecretsControllerService, SecretInfo, GJobStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, IOperationStatus } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from 'primeng/api';
+import { ConfirmationService, ToastMessageOptions } from '@openng/optimus-ui/api';
 import { newSecretActionRequest } from '../utils/gebo-ai-create-secret-action-request-factory';
 
 @Component({

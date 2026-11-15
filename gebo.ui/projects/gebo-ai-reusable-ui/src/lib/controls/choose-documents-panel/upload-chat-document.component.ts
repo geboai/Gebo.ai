@@ -6,7 +6,7 @@ import { GeboAITranslationService } from "../field-translation-container/gebo-tr
 
 import { getHttpHeaders } from "../../infrastructure/gebo-credentials";
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
-import { FileBeforeUploadEvent, FileProgressEvent, FileSelectEvent, FileSendEvent, FileUploadErrorEvent, FileUploadEvent } from "primeng/fileupload";
+import { FileBeforeUploadEvent, FileProgressEvent, FileSelectEvent, FileSendEvent, FileUploadErrorEvent, FileUploadEvent } from "@openng/optimus-ui/fileupload";
 import { IOperationStatus } from "../base-entity-editing-component/operation-status";
 import { GeboAIBuildUrlService } from "../../services/build-gebo-url.service";
 import { GeboAIRootNotificationService } from "../../notifications/root-notification.service";

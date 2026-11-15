@@ -15,7 +15,7 @@ import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFor
 import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent, GeboAwsConnectionCredentials, SecretWrapperGeboAwsConnectionCredentials } from "@Gebo.ai/gebo-ai-rest-api"
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { map, Observable, of } from "rxjs";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 /**
  * AI generated comments
  * This file defines components for managing secrets in the Gebo.ai application. It provides functionality

@@ -10,10 +10,10 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { ButtonModule } from "primeng/button";
-import { CheckboxModule } from "primeng/checkbox";
-import { RadioButtonModule } from "primeng/radiobutton";
-import { TextareaModule } from "primeng/textarea";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { CheckboxModule } from "@openng/optimus-ui/checkbox";
+import { RadioButtonModule } from "@openng/optimus-ui/radiobutton";
+import { TextareaModule } from "@openng/optimus-ui/textarea";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GeboAIChatSuspensionAnswerComponent } from "./chat-suspension-answer.component";
 

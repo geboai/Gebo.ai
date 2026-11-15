@@ -14,12 +14,12 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ProjectAddContextMenuComponent } from "./project-add-context-menu.component";
-import { ButtonModule } from "primeng/button";
-import { ContextMenuModule } from 'primeng/contextmenu';
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { ContextMenuModule } from '@openng/optimus-ui/contextmenu';
 
 import { GeboAIChooseDataSourceTypeComponent } from "./choose-data-source-type.component";
-import { PanelModule } from "primeng/panel";
-import { RadioButtonModule } from 'primeng/radiobutton';
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { RadioButtonModule } from '@openng/optimus-ui/radiobutton';
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
@@ -36,7 +36,7 @@ import { GeboAIFieldTranslationContainerModule } from "../field-translation-cont
  * data source types.
  * 
  * This module imports common Angular modules like CommonModule and ReactiveFormsModule
- * along with PrimeNG UI components (Button, ContextMenu, Panel, RadioButton) and
+ * along with Optimus UI UI components (Button, ContextMenu, Panel, RadioButton) and
  * Gebo's reusable UI architecture module.
  * 
  * The main components declared and exported are:

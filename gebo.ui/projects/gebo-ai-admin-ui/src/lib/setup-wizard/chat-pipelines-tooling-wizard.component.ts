@@ -11,7 +11,7 @@ import { Component } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboAdminChatPipelinesToolingControllerService, PipelineStepToolingInfo, PipelineToolingInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { TreeNode } from "primeng/api";
+import { TreeNode } from "@openng/optimus-ui/api";
 
 /** A step in the tree: the pipeline running it matters, a shared step has tools under each. */
 interface StepNodeData {

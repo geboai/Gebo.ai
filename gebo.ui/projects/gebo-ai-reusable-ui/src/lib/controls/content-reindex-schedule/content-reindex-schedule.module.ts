@@ -22,10 +22,10 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ButtonModule } from "primeng/button";
-import { DatePickerModule } from "primeng/datepicker";
-import { DialogModule } from "primeng/dialog";
-import { InputNumberModule } from "primeng/inputnumber";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { DatePickerModule } from "@openng/optimus-ui/datepicker";
+import { DialogModule } from "@openng/optimus-ui/dialog";
+import { InputNumberModule } from "@openng/optimus-ui/inputnumber";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 import { GeboAIContentReindexScheduleComponent } from "./content-reindex-schedule.component";

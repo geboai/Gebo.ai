@@ -22,7 +22,7 @@ import { Component, forwardRef, Injector, Input } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GProject, JobLauncherControllerService, ProjectsControllerService, GConfluenceSystem, SecretInfo, SecretsControllerService, GSharepointProjectEndpoint, SharepointBrowsingControllerService, SharepointSystemsControllerService, GSharepointContentManagementSystem } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo.ai/reusable-ui";

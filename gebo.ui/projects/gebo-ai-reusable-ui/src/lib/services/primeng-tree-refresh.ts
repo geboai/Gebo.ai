@@ -7,10 +7,10 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { TreeNode } from "primeng/api";
+import { TreeNode } from "@openng/optimus-ui/api";
 
 /**
- * Helpers to drive a lazily loaded PrimeNG `p-tree` correctly.
+ * Helpers to drive a lazily loaded Optimus UI `p-tree` correctly.
  *
  * `Tree` and `UITreeNode` both run with `ChangeDetectionStrategy.OnPush`, and a
  * `UITreeNode` is re-rendered only when its `node` input changes identity (or when
@@ -22,14 +22,14 @@ import { TreeNode } from "primeng/api";
  * `loadingMode="mask"` renders neither the chevron nor a spinner, leaving the
  * toggler blank.
  *
- * The fix is the one the PrimeNG lazy loading demo uses: after having changed a
+ * The fix is the one the Optimus UI lazy loading demo uses: after having changed a
  * node, hand the tree a new value array in which the changed branch is made of
  * new node objects.
  */
 
 /**
  * Rebuilds the branch that leads to `node` with fresh node objects, so that the
- * PrimeNG tree repaints it, and returns the array to assign to `[value]`.
+ * Optimus UI tree repaints it, and returns the array to assign to `[value]`.
  *
  * Only the ancestors of `node` are cloned: the untouched siblings keep their
  * identity, so with {@link treeNodeTrackBy} in place their views are left alone
@@ -62,7 +62,7 @@ export function refreshTreeBranch<T>(roots: TreeNode<T>[] | undefined, node: Tre
  *
  * Needed when what changed is not the contents of a single branch but something
  * the nodes read all over the tree - a selection propagated to the descendants of
- * an entry, a deletion mark, the state carried by `data`: PrimeNG would otherwise
+ * an entry, a deletion mark, the state carried by `data`: Optimus UI would otherwise
  * keep showing every node that the user did not click on as it was.
  *
  * The `data` of the nodes and their other properties are shared with the original
@@ -109,7 +109,7 @@ export function cloneTreeNode<T>(node: TreeNode<T>): TreeNode<T> {
 /**
  * `trackBy` for `p-tree`, to be bound as `[trackBy]="treeNodeTrackBy"`.
  *
- * PrimeNG tracks the nodes by object identity by default, which would throw away
+ * Optimus UI tracks the nodes by object identity by default, which would throw away
  * and rebuild the whole DOM of a branch every time {@link refreshTreeBranch}
  * replaces its nodes. Tracking them by key keeps the existing views and only
  * updates the `node` input of the ones that actually changed. Nodes without a key

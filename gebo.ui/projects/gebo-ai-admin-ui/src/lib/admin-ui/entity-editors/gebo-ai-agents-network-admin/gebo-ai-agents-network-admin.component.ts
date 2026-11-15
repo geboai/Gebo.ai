@@ -10,7 +10,7 @@ import { afterNextRender, Component, DestroyRef, ElementRef, forwardRef, Injecto
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, AgentNetworkParticipant, GAgentConfig, AgentMountedTools, AgentServiceDescriptor, NetworkServiceFactoryDescriptor, AgentTypeCompatibility, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboActionPerformedType, GeboAITranslationService, ExtendedConfirmation } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of, take } from "rxjs";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService, EdgeDrawEndedEvent, SelectionChangedEvent } from "ng-diagram";
 import { AgentNodeComponent } from "./agent-node.component";

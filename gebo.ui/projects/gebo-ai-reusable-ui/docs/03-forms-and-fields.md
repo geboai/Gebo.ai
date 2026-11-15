@@ -25,10 +25,10 @@ For plain (non-form) translated text, use the directives directly:
 ```html
 <label gebo-ai-label>Some label</label>
 <span gebo-ai-text>Some UI text</span>
-<p-button gebo-ai-label label="Save"></p-button> <!-- 22 PrimeNG components have adapter support -->
+<p-button gebo-ai-label label="Save"></p-button> <!-- 22 Optimus UI components have adapter support -->
 ```
 `[gebo-ai-label]` works on plain DOM elements' `label`/`legend`/`header`/`title`/`placeholder`
-attributes, and on 22 specific PrimeNG components (button, dialog, panel, card, chip, tag, checkbox,
+attributes, and on 22 specific Optimus UI components (button, dialog, panel, card, chip, tag, checkbox,
 radio, select, multiselect, listbox, calendar, slider, etc.) via dedicated adapter directives,
 because those components' "label" isn't a plain DOM attribute.
 

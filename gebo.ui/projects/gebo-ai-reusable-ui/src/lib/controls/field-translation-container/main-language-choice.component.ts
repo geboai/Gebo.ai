@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboAITranslationService } from "./gebo-translation.service";
 
-import { MegaMenuItem } from "primeng/api";
+import { MegaMenuItem } from "@openng/optimus-ui/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GEBO_AI_LOCAL_STORAGE_LANG } from "./text-language-resources";
 interface LanguageSetting {

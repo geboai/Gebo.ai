@@ -8,9 +8,9 @@
  */
 import { Component, input, Inject, forwardRef } from "@angular/core";
 
-import { ButtonModule } from "primeng/button";
-import { PopoverModule } from "primeng/popover";
-import { TooltipModule } from "primeng/tooltip";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { PopoverModule } from "@openng/optimus-ui/popover";
+import { TooltipModule } from "@openng/optimus-ui/tooltip";
 import { SimpleNode, NgDiagramNodeTemplate, NgDiagramNodeSelectedDirective, NgDiagramPortComponent } from "ng-diagram";
 import { GeboAIAgentsNetworkAdminComponent } from "./gebo-ai-agents-network-admin.component";
 import { AgentMountedTools, AgentNetworkParticipant, AgentServiceDescriptor, MountedTool } from "@Gebo.ai/gebo-ai-rest-api";

@@ -19,7 +19,7 @@
 import { Component, inject, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { DataPage, EditableUser, GUserSession, PagedModelGUserSession, PagedModelUserInfos, PagedModelUsersGroup, SessionsAdminControllerService, SessionsQuery, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboAITranslationService, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
-import { PaginatorState } from "primeng/paginator";
+import { PaginatorState } from "@openng/optimus-ui/paginator";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 
 /**

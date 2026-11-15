@@ -13,7 +13,7 @@ import {
     GUserMessage, ProviderDealsControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { Popover } from "primeng/popover";
+import { Popover } from "@openng/optimus-ui/popover";
 import { forkJoin, Observable, of } from "rxjs";
 
 /** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */

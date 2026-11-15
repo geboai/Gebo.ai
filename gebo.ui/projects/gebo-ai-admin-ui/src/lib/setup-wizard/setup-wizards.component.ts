@@ -19,7 +19,7 @@
  */
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupStatus } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({

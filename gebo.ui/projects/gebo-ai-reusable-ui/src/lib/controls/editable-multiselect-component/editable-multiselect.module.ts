@@ -15,18 +15,18 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { EditableMultiselectComponent } from "./editable-multiselect.component";
 
-import { MultiSelectModule } from 'primeng/multiselect';
-import { BlockUIModule } from 'primeng/blockui';
-import { DialogModule } from 'primeng/dialog';
+import { MultiSelectModule } from '@openng/optimus-ui/multiselect';
+import { BlockUIModule } from '@openng/optimus-ui/blockui';
+import { DialogModule } from '@openng/optimus-ui/dialog';
 /**
  * Angular module for the editable multiselect component.
  * AI generated comments
  * 
  * This module packages the EditableMultiselectComponent along with its required dependencies.
- * It imports various Angular and PrimeNG modules needed for the component's functionality:
+ * It imports various Angular and Optimus UI modules needed for the component's functionality:
  * - CommonModule for common Angular directives
  * - ReactiveFormsModule/FormsModule for form handling
- * - MultiSelectModule from PrimeNG for the base multiselect functionality
+ * - MultiSelectModule from Optimus UI for the base multiselect functionality
  * - BlockUIModule for blocking UI interactions during operations
  * - DialogModule for dialog/modal functionality
  * 

@@ -22,7 +22,7 @@ import { Component, EventEmitter, forwardRef, OnInit, Output } from "@angular/co
 import { AbstractControl, FormControl, FormGroup, ValidationErrors } from "@angular/forms";
 import { ConfluenceSystemsControllerService, FastConfluenceSystemInsertRequest, GConfluenceSystem, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 
 
 @Component({

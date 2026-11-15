@@ -12,7 +12,7 @@
 
 import { Directive, OnChanges, OnInit, SimpleChanges } from "@angular/core";
 import { SetupWizardComunicationService } from "./setup-wizard-comunication.service";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 
 /**
  * AI generated comments

@@ -23,7 +23,7 @@ import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from 
 import { Observable } from "rxjs";
 import { GeboActionPerformedEvent, GeboActionPerformedType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
-import { SelectChangeEvent } from "primeng/select";
+import { SelectChangeEvent } from "@openng/optimus-ui/select";
 
 /**
  * Constant string that serves as a marker for creating a new record

@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChangeUsernamePasswordData, GUserMessage, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE,GeboAITranslationService,fieldHostComponentName } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, MessageService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, MessageService, ToastMessageOptions } from "@openng/optimus-ui/api";
 
 
 

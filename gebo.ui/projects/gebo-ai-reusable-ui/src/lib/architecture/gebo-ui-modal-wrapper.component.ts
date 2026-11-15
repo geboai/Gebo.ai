@@ -23,7 +23,7 @@ import { BaseEntityEditingComponent } from "../controls/base-entity-editing-comp
 import { OpenedModals } from "./opened-modals";
 import { GeboUIOutputForwardingService } from "./gebo-ui-output-forwarding.service";
 
-import { MenuItem } from "primeng/api";
+import { MenuItem } from "@openng/optimus-ui/api";
 import { WizardButtonsBarData } from "../controls/base-entity-editing-component/entities-modification-wizard";
 import { GeboAIRootNotificationService } from "../notifications/root-notification.service";
 

@@ -2,8 +2,8 @@ import { Component, forwardRef, Injector } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboMcpServerAdminControllerService, GeboMCPAgentsNetworkTool, GeboMCPAgentTool, GeboMCPServerConfig, GObjectRefGProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, TreeNode } from "primeng/api";
-import { TreeNodeExpandEvent } from "primeng/tree";
+import { ConfirmationService, TreeNode } from "@openng/optimus-ui/api";
+import { TreeNodeExpandEvent } from "@openng/optimus-ui/tree";
 import { map, Observable, of } from "rxjs";
 
 @Component({

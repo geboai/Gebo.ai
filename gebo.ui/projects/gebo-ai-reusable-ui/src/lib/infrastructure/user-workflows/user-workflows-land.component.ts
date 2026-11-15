@@ -3,7 +3,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
 import { StartWorkflowData, UserWorkFlowChangePasswordResponse, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { getAuth, resetAuth } from "../gebo-credentials";
 
 const PASSWORD_PATTERN = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&()[\]{}_.+=~\-#:;,\/\\<>|?^*])[A-Za-z\d@$!%*?&()[\]{}_.+=~\-#:;,\/\\<>|?^*]{10,}$/;

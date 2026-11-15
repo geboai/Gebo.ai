@@ -21,7 +21,7 @@
 import { Component, OnInit } from "@angular/core";
 
 import { LoginService } from "./login.service";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboFastInstallationSetupControllerService, GUserMessage, Oauth2ClientAuthorizativeInfo, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";

@@ -21,7 +21,7 @@ import { BrowseParam, FileSystemSharesSettingControllerService, GFileSystemShare
 import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 
 /**
  * Service that checks if shared filesystem is already configured.

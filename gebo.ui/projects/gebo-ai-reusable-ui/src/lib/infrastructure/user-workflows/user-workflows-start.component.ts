@@ -3,7 +3,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
 import { StartWorkflowData, UserWorkflowsControllerService, UserWorkFlowStartResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { getAuth, resetAuth } from "../gebo-credentials";
 
 

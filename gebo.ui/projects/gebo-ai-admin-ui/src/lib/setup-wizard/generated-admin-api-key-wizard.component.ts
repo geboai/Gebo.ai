@@ -11,8 +11,8 @@ import { Component, Injectable, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GeneratedAdminApiKeyControllerService, GeneratedApiKeyInfo, GeneratedApiKey, UserInfos, UsersAdminControllerService, DataPage, PagedModelGeneratedApiKeyInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService, AbstractStatusService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
-import { PaginatorState } from "primeng/paginator";
+import { ConfirmationService } from "@openng/optimus-ui/api";
+import { PaginatorState } from "@openng/optimus-ui/paginator";
 import { Observable } from "rxjs";
 
 @Injectable({ providedIn: "root" })

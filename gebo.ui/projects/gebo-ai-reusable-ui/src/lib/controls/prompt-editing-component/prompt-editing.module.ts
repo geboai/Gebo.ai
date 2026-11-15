@@ -15,17 +15,17 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GeboAIPromptEditingComponent } from "./prompt-editing.component";
 import { GeboAIPromptWizardComponent } from "./prompt-wizard.component";
-import { TextareaModule } from 'primeng/textarea';
-import { PanelModule } from "primeng/panel";
-import { DialogModule } from "primeng/dialog";
-import { ButtonModule } from "primeng/button";
-import { BlockUIModule } from "primeng/blockui";
-import { InputTextModule } from "primeng/inputtext";
-import { SelectModule } from "primeng/select";
-import { CheckboxModule } from "primeng/checkbox";
-import { TableModule } from "primeng/table";
-import { MessageModule } from "primeng/message";
-import { TabsModule } from "primeng/tabs";
+import { TextareaModule } from '@openng/optimus-ui/textarea';
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { DialogModule } from "@openng/optimus-ui/dialog";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
+import { SelectModule } from "@openng/optimus-ui/select";
+import { CheckboxModule } from "@openng/optimus-ui/checkbox";
+import { TableModule } from "@openng/optimus-ui/table";
+import { MessageModule } from "@openng/optimus-ui/message";
+import { TabsModule } from "@openng/optimus-ui/tabs";
 
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';

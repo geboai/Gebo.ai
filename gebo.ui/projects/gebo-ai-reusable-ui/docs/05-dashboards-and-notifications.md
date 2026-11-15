@@ -2,7 +2,7 @@
 
 ## Notifications (toasts) — `GeboAINotificationsModule`
 
-Import with `.forRoot()` **exactly once**, at the app root — it provides PrimeNG's `MessageService`
+Import with `.forRoot()` **exactly once**, at the app root — it provides Optimus UI's `MessageService`
 singleton:
 ```ts
 imports: [GeboAINotificationsModule.forRoot()]
@@ -18,7 +18,7 @@ above which toasts still need to render:
 <gebo-ai-display-messages [layer]="'DIALOG'"></gebo-ai-display-messages>
 ```
 `NotificationLayerEnum = 'GLOBAL' | 'DIALOG'` — `DIALOG` toasts get a computed z-index above any
-currently-open PrimeNG dialog/overlay (handled internally by `ToastZIndexService`).
+currently-open Optimus UI dialog/overlay (handled internally by `ToastZIndexService`).
 
 Most feature components in this library expose a `userMessages: ToastMessageOptions[]` (or
 `GUserMessage[]`) array — wire it to the forwarder:

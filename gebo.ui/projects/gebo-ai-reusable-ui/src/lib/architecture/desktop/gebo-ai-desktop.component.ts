@@ -10,9 +10,9 @@
 import { Component, Input, OnDestroy, OnInit, Optional } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
-import { MegaMenuItem } from 'primeng/api';
+import { MegaMenuItem } from '@openng/optimus-ui/api';
 import { LoginService } from '../../infrastructure/login/login.service';
-import { PrimeNG } from 'primeng/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { Subscription } from 'rxjs';
 import { GeboAITranslationService } from '../../controls/field-translation-container/gebo-translation.service';
 import { getAuth, resetAuth, saveAuth } from '../../infrastructure/gebo-credentials';
@@ -34,7 +34,7 @@ export class GeboAIDesktopComponent implements OnInit, OnDestroy {
   private scrollLockSweepScheduled: boolean = false;
 
   constructor(
-    private primengConfig: PrimeNG,
+    private optimusConfig: Optimus,
     private loginService: LoginService,
     private geboTranslationService: GeboAITranslationService,
     @Optional() private applicationMenuProviderService?: ApplicationMenuProviderService
@@ -58,7 +58,7 @@ export class GeboAIDesktopComponent implements OnInit, OnDestroy {
    * that cleanup never runs and the lock stays stuck, killing vertical scroll on every screen.
    *
    * We watch the body class and, whenever the lock is present while no modal dialog is actually
-   * open (PrimeNG marks the open ones with data-p-scrollblocker-active), drop it. The check is
+   * open (Optimus UI marks the open ones with data-p-scrollblocker-active), drop it. The check is
    * deferred a little so a genuine modal opening - which sets that marker in the same render tick
    * as the class - is never unlocked from under it.
    */
@@ -124,7 +124,7 @@ export class GeboAIDesktopComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.primengConfig.ripple.set(true);
+    this.optimusConfig.ripple.set(true);
     this.installBodyScrollLockGuard();
 
     if (!this.loginService.isOauth2LandingPage()) {

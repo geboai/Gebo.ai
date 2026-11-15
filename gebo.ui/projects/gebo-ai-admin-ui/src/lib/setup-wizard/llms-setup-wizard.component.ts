@@ -21,7 +21,7 @@ import { LLMSSetupConfiguration, LLMSSetupConfigurationData, UserControllerServi
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
 import { forkJoin, Observable } from "rxjs";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 
 /**
  * Interface defining the structure of LLM entries displayed in the component.

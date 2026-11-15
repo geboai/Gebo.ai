@@ -74,7 +74,7 @@ import {
   BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE,
   GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService,
 } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { Observable, of, map } from "rxjs";
 
 @Component({

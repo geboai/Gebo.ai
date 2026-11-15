@@ -2,7 +2,7 @@ import { Component, Inject, Injectable, Input, OnChanges, SimpleChanges } from "
 import { GeboAIRootNotificationService } from "./root-notification.service";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../controls/field-host-component-iface/field-host-component-iface";
 import { GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { NotificationLayerEnum } from "./notification-layer";
 /*************************
  * This component will forward to the display messages area messages

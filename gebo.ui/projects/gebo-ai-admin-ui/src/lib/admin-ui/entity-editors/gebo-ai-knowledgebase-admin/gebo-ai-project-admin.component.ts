@@ -25,7 +25,7 @@ import { FormControl, FormGroup } from "@angular/forms";
 import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 
 /**
