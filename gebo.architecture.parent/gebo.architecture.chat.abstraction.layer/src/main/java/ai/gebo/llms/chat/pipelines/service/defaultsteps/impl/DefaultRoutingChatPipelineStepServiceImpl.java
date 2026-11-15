@@ -226,9 +226,8 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 						List.of(DELIVERABLE_FIELD, REWRITTEN_QUERY_FIELD, SEARCH_REQUESTED_FIELD,
 								USER_REQUIRED_LANGUAGE_FIELD));
 		// an output with neither field is asked once more by callLLMRepeatableFieldEntryOutput
-		List<String> rewrittenQuery = data.get(REWRITTEN_QUERY_FIELD);
 		List<String> deliverable = data.get(DELIVERABLE_FIELD);
-		String rewrited_query = rewrittenQuery != null && !rewrittenQuery.isEmpty() ? rewrittenQuery.get(0) : null;
+		String rewrited_query = rewrittenQuery(data.get(REWRITTEN_QUERY_FIELD));
 		runtimeData.getRequestResources().getCurrentRequest().setRewrittenQuery(rewrited_query);
 		DeliverableIntent userIntent = DeliverableIntent.QA;
 		if (deliverable != null && !deliverable.isEmpty()) {
@@ -642,6 +641,23 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 	static class SimpleDecision {
 		private final RespondingWith decision;
 		private final String motivation;
+	}
+
+	/**
+	 * The rewritten question of the request understanding; null, the user's own question
+	 * then standing, when the field is missing, blank or still the prompt's
+	 * {@code <...>} placeholder, which a model may copy instead of filling: the searches,
+	 * the ranker and its irrelevance filter would all work on the placeholder.
+	 */
+	static String rewrittenQuery(List<String> values) {
+		if (values == null || values.isEmpty() || values.get(0) == null) {
+			return null;
+		}
+		final String value = values.get(0).trim();
+		if (value.isEmpty() || (value.startsWith("<") && value.endsWith(">"))) {
+			return null;
+		}
+		return value;
 	}
 
 	/** Whether the request understanding said the user asked to search: true, yes or 1. */

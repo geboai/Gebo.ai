@@ -33,13 +33,15 @@ import ai.gebo.ranker.model.RankingOutput;
 /**
  * Pins how the standard rerank client authenticates: with its key as a bearer token,
  * and without any Authorization header when the provider declares optional
- * authentication and no key is configured - it used to refuse to be built at all.
+ * authentication and no key is configured - it used to refuse to be built at all. Also
+ * pins the shape of the rerank request it sends.
  */
 class GeboStandardRankerClientAuthenticationTest {
 
 	HttpServer server;
 	final AtomicReference<String> authorization = new AtomicReference<>();
 	final AtomicReference<String> path = new AtomicReference<>();
+	final AtomicReference<String> requestBody = new AtomicReference<>();
 
 	@BeforeEach
 	void startRerankServer() throws IOException {
@@ -47,6 +49,7 @@ class GeboStandardRankerClientAuthenticationTest {
 		server.createContext("/", exchange -> {
 			authorization.set(exchange.getRequestHeaders().getFirst("Authorization"));
 			path.set(exchange.getRequestURI().getPath());
+			requestBody.set(new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
 			byte[] body = "{\"results\":[{\"index\":1,\"relevance_score\":0.9},{\"index\":0,\"relevance_score\":0.2}]}"
 					.getBytes(StandardCharsets.UTF_8);
 			exchange.getResponseHeaders().add("Content-Type", "application/json");
@@ -81,6 +84,9 @@ class GeboStandardRankerClientAuthenticationTest {
 		assertNull(authorization.get());
 		assertEquals("/v1/rerank", path.get());
 		assertEquals("second fragment", output.getRanked().get(0).getDocument().getText());
+		assertEquals("{\"documents\":[\"first fragment\",\"second fragment\"],\"model\":\"lexical\","
+				+ "\"query\":\"which fragment\",\"return_documents\":false,\"top_n\":2}", requestBody.get(),
+				"the Cohere/Jina rerank request shape");
 	}
 
 	@Test
