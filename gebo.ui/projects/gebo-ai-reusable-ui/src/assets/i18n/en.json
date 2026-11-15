@@ -2986,6 +2986,32 @@
         "help": "Clear all selected documents"
       },
       "SELECTED_CHAT_DOCS_WINDOW": { "label": "Documents to chat with" }
+    },
+    "GeboAIChatSuspensionAnswerComponent": {
+      "SuspensionTitle": { "label": "The agents need your answer before going on" },
+      "OneByOneHint": { "label": "You can answer some now and the others later." },
+      "OptionalCondition": { "label": "(optional)" },
+      "WaitedFrom": { "label": "Waited from" },
+      "SolvedCondition": { "label": "Answered" },
+      "ExplanationInput": { "placeholder": "Or explain in your own words" },
+      "ValueInput": { "placeholder": "Your answer" },
+      "GoOnWithoutCondition": { "label": "No answer: let the agents go on without it" },
+      "skipSuspensionBtn": { "label": "Skip and go on" },
+      "abandonSuspensionBtn": { "label": "Abandon the run" },
+      "goOnWithoutSuspensionBtn": { "label": "Go on without the missing answers" },
+      "answerSuspensionBtn": { "label": "Answer" },
+      "ToolConfirmQuestion": { "label": "Allow the agent to run the tool" },
+      "ToolConfirmWithArguments": { "label": "with these arguments?" },
+      "ToolConfirmAllow": { "label": "Allow" },
+      "ToolConfirmAllowDescription": { "label": "The tool runs with these arguments" },
+      "ToolConfirmDeny": { "label": "Deny" },
+      "ToolConfirmDenyDescription": { "label": "The tool does not run; you may tell the agent why or what to do instead" },
+      "ToolConfirmMessagePlaceholder": { "label": "A message for the agent, with either choice (optional)" },
+      "ToolConfirmMessageNote": { "label": "(You may add a message for the agent to either choice.)" },
+      "WaitsForSomething": { "label": "The work waits for something from you." },
+      "MoreThanOneNote": { "label": "(You may choose more than one.)" },
+      "OwnWordsLine": { "label": "or explain in your own words" },
+      "MayLeaveUnansweredNote": { "label": "(You may leave this unanswered and go on.)" }
     }
   },
   "GeboAIAudioControlModule": {

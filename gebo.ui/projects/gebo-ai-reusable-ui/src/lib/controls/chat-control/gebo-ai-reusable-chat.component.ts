@@ -24,6 +24,7 @@ import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwa
 import { FormControl, FormGroup } from "@angular/forms";
 import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState, WaitingConditionsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { SuspensionAnswer } from "./chat-suspension-answer.component";
+import { GeboAISuspensionTextsService, localizedSuspendedAnswer, SuspensionTexts } from "./chat-suspension-texts";
 import { MermaidAPI } from "ngx-markdown";
 import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of, Subject } from "rxjs";
@@ -427,6 +428,29 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
      * skipped. While a mandatory one is pending only the answer can be sent.
      */
     public pendingSuspension?: NetworkOfAgentsSuspendedState;
+    private readonly suspensionTexts = inject(GeboAISuspensionTextsService);
+    /** The answers shown with their questions in the user's language, by response: computed once per text and language. */
+    private readonly localizedAnswers = new WeakMap<object, { answer: string, texts: SuspensionTexts, localized: string }>();
+
+    /**
+     * The answer as the chat shows it: a run that suspended has the questions it asks,
+     * which the backend appends in English, in the language the UI shows
+     * (see localizedSuspendedAnswer); any other answer as it is.
+     */
+    public localizedAnswer(response: GeboChatResponse | undefined | null, answer: string | undefined | null): string | undefined | null {
+        const state = response?.networkOfAgentsSuspendedState;
+        if (!response || !answer || !state?.conditions?.length) {
+            return answer;
+        }
+        const texts = this.suspensionTexts.texts;
+        const cached = this.localizedAnswers.get(response);
+        if (cached && cached.answer === answer && cached.texts === texts) {
+            return cached.localized;
+        }
+        const localized = localizedSuspendedAnswer(answer, state, texts) ?? answer;
+        this.localizedAnswers.set(response, { answer, texts, localized });
+        return localized;
+    }
 
     protected get areaContext(): GeboAIReusableChatAreaContext {
         return {

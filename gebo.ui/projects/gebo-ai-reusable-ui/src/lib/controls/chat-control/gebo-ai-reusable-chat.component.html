@@ -127,7 +127,7 @@
             </gebo-ai-chat-stream-events-display>
           }
           <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
-          [data]="$safeNavigationMigration(interaction?.response?.queryResponse)"></markdown>
+          [data]="localizedAnswer(interaction?.response, $safeNavigationMigration(interaction?.response?.queryResponse))"></markdown>
 
           @if (interaction?.response?.id) {
             <div class="gebo-ai-reusable-chat__interaction-export-buttons">
