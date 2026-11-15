@@ -304,6 +304,10 @@
       font-size: 11px;
       margin-right: 4px;
     }
+    // the template's space between the label and the tool name is not kept
+    b {
+      margin-left: 0.3em;
+    }
   }
   &-arguments {
     margin: 4px 0 0 16px;
