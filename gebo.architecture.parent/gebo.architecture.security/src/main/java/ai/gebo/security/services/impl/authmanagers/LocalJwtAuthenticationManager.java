@@ -49,9 +49,13 @@ public class LocalJwtAuthenticationManager implements AuthenticationManager {
 
 			// Loads UserDetails using the user ID
 			UserDetails userDetails = customUserDetailsService.loadUserByUsername(userId);
-			// Creates an authentication token with user details
+			// Creates an authentication token with user details. The presented jwt is
+			// kept as the credentials: it is what a call this request makes to another
+			// service of the platform forwards as the caller's own token
+			// (SecurityContextCallerTokenPropagator reads it from there); without it every
+			// such call went out as the platform's system identity.
 			UsernamePasswordAuthenticationToken _authentication = new UsernamePasswordAuthenticationToken(userDetails,
-					null, userDetails.getAuthorities());
+					token, userDetails.getAuthorities());
 			_authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			authentication = _authentication;
 		}
