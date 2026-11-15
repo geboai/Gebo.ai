@@ -70,6 +70,34 @@ class PresetChoiceDefaultsTest {
 	}
 
 	@Test
+	void theOpenAIChatPresetsReasonForTheAgenticChatNotForTheInternalServices() throws Exception {
+		StandardEnvironment environment = new StandardEnvironment();
+		environment.getPropertySources().addFirst(new GeboYamlPropertySourceFactory().createPropertySource(null,
+				new EncodedResource(new ClassPathResource("llms-fast-setup-library/library.yml"))));
+		LLMSVendorsSetupConfig library = Binder.get(environment)
+				.bind("ai.gebo.llms.vendors.setup.config", LLMSVendorsSetupConfig.class).get();
+
+		List<LLMModelPresetChoice> chat = library.getVendors().stream()
+				.filter(v -> "openai".equals(v.getVendorInfo().getVendorId()))
+				.flatMap(v -> v.getPresets().stream()).filter(p -> p.getType() == ModelType.CHAT)
+				.flatMap(p -> p.getChoices().stream()).toList();
+
+		assertEquals(List.of("gpt-5.2", "gpt-5.4-mini"), chat.stream().map(LLMModelPresetChoice::getCode).toList(),
+				"gpt-4.1 and gpt-4.1-mini shut down on 2027-01-14");
+		LLMModelPresetChoice main = chat.get(0);
+		assertTrue(main.isDefaultChoice());
+		assertEquals(List.of(ChatModelsUses.CHAT), main.getUses());
+		assertEquals(ChatModelThinkingOption.LOW_THINKING, main.thinkingFor(main.getUses()), "the agentic chat reasons");
+		LLMModelPresetChoice services = chat.get(1);
+		assertEquals(List.of(ChatModelsUses.INTERNAL_SERVICES), services.getUses());
+		assertEquals(ChatModelThinkingOption.NO_THINKING, services.thinkingFor(services.getUses()),
+				"short judgement calls, no reasoning");
+		for (LLMModelPresetChoice choice : chat) {
+			assertEquals(272000, choice.getContextWindow(), choice.getCode() + ": the input OpenAI accepts");
+		}
+	}
+
+	@Test
 	void theCloudVendorsDeclareTheCredentialsTheyTake() throws Exception {
 		StandardEnvironment environment = new StandardEnvironment();
 		environment.getPropertySources().addFirst(new GeboYamlPropertySourceFactory().createPropertySource(null,
