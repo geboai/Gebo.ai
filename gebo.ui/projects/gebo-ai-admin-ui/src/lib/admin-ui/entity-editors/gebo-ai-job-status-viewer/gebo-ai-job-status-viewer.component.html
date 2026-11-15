@@ -27,14 +27,14 @@
       <div class="col-2">
         <gebo-ai-field id="startDateTime" label="Start date/time"
           help="Start date and time of the content synchronization task">
-          <div gebo-ai-field-element>{{entity?.startDateTime | date:'short'}}</div>
+          <div gebo-ai-field-element>{{$safeNavigationMigration(entity?.startDateTime) | date:'short'}}</div>
         </gebo-ai-field>
 
       </div>
       <div class="col-2">
         <gebo-ai-field id="endDateTime" label="End date/time"
           help="End date and time of the content synchronization task">
-          <div gebo-ai-field-element>{{entity?.endDateTime | date:'short'}}</div>
+          <div gebo-ai-field-element>{{$safeNavigationMigration(entity?.endDateTime) | date:'short'}}</div>
         </gebo-ai-field>
 
       </div>
@@ -96,7 +96,7 @@
         <p-tabpanel [value]="1">
           <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
           <p-paginator id="PaginatorComponent" gebo-ai-label (onPageChange)="onPageChange($event)" [first]="0"
-            [rows]="actualPage.pageSize" [totalRecords]="actualPageData?.page?.totalElements"
+            [rows]="actualPage.pageSize" [totalRecords]="$safeNavigationMigration(actualPageData?.page?.totalElements)"
           [rowsPerPageOptions]="[10, 20, 30]"></p-paginator>
         </p-tabpanel>
       </p-tabpanels>

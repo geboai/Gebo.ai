@@ -10,7 +10,7 @@
 
 
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionPerformedType, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 
@@ -25,7 +25,8 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionP
 @Component({
     selector: "gebo-ai-secrets-admin-list-component",
     templateUrl: "gebo-ai-secrets-admin-list.component.html",
-    standalone: false, providers: [
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAiSecretsAdminModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiSecretsAdminListComponent") }
     ]

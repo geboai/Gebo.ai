@@ -10,7 +10,7 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { cloneTreeNode, EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint, refreshTreeBranch, treeNodeTrackBy } from "@Gebo.ai/reusable-ui";
 import { TreeNode } from "@openng/optimus-ui/api";
@@ -30,6 +30,7 @@ import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "@openng/optimus-ui/tre
     selector: "gebo-ai-knowledgebase-tree-component",
     templateUrl: "gebo-ai-knowledgebase-tree.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
       { provide: GEBO_AI_MODULE, useValue: "GeboAiKnowledgeBaseModule", multi: false }, 
       { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent")  }

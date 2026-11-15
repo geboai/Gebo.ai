@@ -17,11 +17,12 @@
  * It takes a URL as input and loads it into an iframe element, allowing users
  * to browse external websites or resources within the application.
  */
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
     selector: "gebo-ai-browse-content-component",
     templateUrl: "browse-content.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class BrowseContentComponent implements OnChanges,AfterViewInit {

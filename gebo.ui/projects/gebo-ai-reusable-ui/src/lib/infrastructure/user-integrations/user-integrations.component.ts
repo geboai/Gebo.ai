@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, Inject, OnInit, Optional } from "@angular/core";
+import { Component, Inject, OnInit, Optional, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { 
     BASE_PATH, 
@@ -25,6 +25,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
     selector: "gebo-ai-user-integrations",
     templateUrl: "user-integrations.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUserIntegrationsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserIntegrationsComponent") }

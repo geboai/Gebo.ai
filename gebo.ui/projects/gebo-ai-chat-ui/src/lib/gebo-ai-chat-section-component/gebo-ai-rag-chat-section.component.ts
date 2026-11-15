@@ -10,7 +10,7 @@
 
 
 
-import { ChangeDetectorRef, Component, Inject, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnChanges, OnInit, Optional, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ChatModelsLookupControllerService, ChatUIOptions, DataPage, GChatProfileConfiguration, GeboRagChatControllerService, GeboUserChatsControllerService, GUserChatInfo, PagedModelGUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginatorState } from "@openng/optimus-ui/paginator";
@@ -64,6 +64,7 @@ const chatsTitleText: UIExistingText = {
     templateUrl: "gebo-ai-rag-chat-section.component.html",
     styleUrl: "gebo-ai-rag-chat-section.component.scss",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiChatModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiChatSectionComponent") }]
 })
 export class GeboAiChatSectionComponent implements OnInit, OnChanges {

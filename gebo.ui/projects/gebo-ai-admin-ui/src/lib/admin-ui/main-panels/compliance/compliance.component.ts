@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { afterNextRender, Component, ElementRef, Injector, OnInit, runInInjectionContext, ViewChild } from "@angular/core";
+import { afterNextRender, Component, ElementRef, Injector, OnInit, runInInjectionContext, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { DataEndpointAccess, DataFlowMetaInfoControllerService, GDataFlowReport } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { initializeModel, NgDiagramNodeTemplateMap, NgDiagramConfig, provideNgDiagram, NgDiagramViewportService } from "ng-diagram";
@@ -34,6 +34,7 @@ import { AccessRuleView, ALL_FLOWS_TAB, DataFlowEndpointNode, DataFlowSummary, D
     selector: "gebo-ai-compliance-component",
     templateUrl: "compliance.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "ComplianceModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ComplianceComponent") },

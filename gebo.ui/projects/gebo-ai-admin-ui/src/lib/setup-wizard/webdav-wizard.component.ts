@@ -1,4 +1,4 @@
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { GeboModulesConfigControllerService, GWebdavContentManagementSystem, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, WEBDAB_CMS_MODULE } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -28,6 +28,7 @@ export class WebdavInstalledModuleService extends GeboRootInstalledModuleService
   selector: "gebo-webdav-wizard-component",
   templateUrl: "webdav-wizard.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("WebdavWizardComponent") }]
 })
 export class WebdavWizardComponent extends BaseWizardSectionComponent {

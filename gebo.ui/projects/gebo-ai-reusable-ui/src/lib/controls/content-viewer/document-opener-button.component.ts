@@ -10,7 +10,7 @@
 
 
 
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { EnrichedDocumentReferenceView, EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
 
 /**
@@ -22,6 +22,7 @@ import { EnrichedDocumentReferenceView, EnrichedLLMGeneratedResource, EnrichedUs
 @Component({
     selector: "gebo-ui-document-opener-button",
     templateUrl: "document-opener-button.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboUIDocumentOpenerButton {

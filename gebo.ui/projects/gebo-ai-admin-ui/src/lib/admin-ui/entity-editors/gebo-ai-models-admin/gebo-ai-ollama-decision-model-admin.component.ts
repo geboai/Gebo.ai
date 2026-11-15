@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseDecisionModelChoice, GOllamaDecisionModelConfig, OllamaDecisionModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -28,6 +28,7 @@ import { alignChoosedModel } from "../utils/choosed-model-alignment";
     selector: "gebo-ai-ollama-decision-model-admin-component",
     templateUrl: "gebo-ai-ollama-decision-model-admin.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIOllamaDecisionModelAdminComponent),
         multi: false

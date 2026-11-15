@@ -17,7 +17,7 @@
  * It extends the AncestorPanelComponent and shows, in a single page, the job entries
  * of the datasource types selected by the administrator.
  */
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroupMetaInfo, GeboAngularFormGroupMetaInfoControllerService, JobLauncherControllerService, LogViewControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
@@ -29,6 +29,7 @@ const PROJECT_ENDPOINT_CATEGORY = 'ai.gebo.knlowledgebase.model.projects.GProjec
     selector: "gebo-ai-logs-view-component",
     templateUrl: "logs-view.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLogsViewPanelModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiLogsViewComponent")
     }]

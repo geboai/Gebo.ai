@@ -1,9 +1,10 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { EnrichedDocumentReferenceViewRetrieveService, EnrichedUserUploadedContentView } from "../content-viewer/enriched-document-reference-view.service";
 @Component({
     templateUrl: "uploaded-document-ref.component.html",
     selector: "uploaded-document-ref",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUploadedDocumentRefComponent implements OnInit, OnChanges {

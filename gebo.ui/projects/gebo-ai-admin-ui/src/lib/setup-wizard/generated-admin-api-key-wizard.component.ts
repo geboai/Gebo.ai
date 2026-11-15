@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, Injectable, OnInit } from "@angular/core";
+import { Component, Injectable, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GeneratedAdminApiKeyControllerService, GeneratedApiKeyInfo, GeneratedApiKey, UserInfos, UsersAdminControllerService, DataPage, PagedModelGeneratedApiKeyInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService, AbstractStatusService } from "@Gebo.ai/reusable-ui";
@@ -30,6 +30,7 @@ export class GeneratedAdminApiKeyEnabledService extends AbstractStatusService {
     selector: "gebo-ai-generated-admin-api-key-wizard-component",
     templateUrl: "generated-admin-api-key-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeneratedAdminApiKeyWizardComponent") }
     ]

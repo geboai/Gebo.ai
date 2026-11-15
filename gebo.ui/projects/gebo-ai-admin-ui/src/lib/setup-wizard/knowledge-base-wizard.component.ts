@@ -16,7 +16,7 @@
  * It provides functionality for setting up, displaying, and interacting with knowledge bases through a wizard interface.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { GeboContentProcessRow, GeboFastKnowledgeBaseSetupControllerService, GeboKnowledgeBaseSetupStatus, GKnowledgeBase, GObjectRefGProjectEndpoint, GProject, JobLauncherControllerService, KnowledgeBaseControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, ChooseDataSourceType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, sliceWizard } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -55,6 +55,7 @@ export class KnowledgeBasePresentService extends AbstractStatusService {
     selector: "gebo-knowledge-base-wizard-component",
     templateUrl: "knowledge-base-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("KnowledgeBaseWizardComponent") }]
 })
 export class KnowledgeBaseWizardComponent extends BaseWizardSectionComponent {

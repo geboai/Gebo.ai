@@ -10,7 +10,7 @@
  
  
 
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 
 
 /**
@@ -35,6 +35,7 @@ interface TableRow{
 @Component({
     selector: 'gebo-ai-view-table-component',
     templateUrl: 'view-table.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIViewTableComponent implements OnChanges{

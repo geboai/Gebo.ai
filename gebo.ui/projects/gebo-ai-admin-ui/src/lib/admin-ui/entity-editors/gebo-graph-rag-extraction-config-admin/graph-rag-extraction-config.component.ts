@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChatModelsControllerService, CompanySystemsControllerService, ConfigurationEntryGBaseChatModelConfig, GKnowledgeBase, GObjectRef, GObjectRefGBaseModelConfig, GProject, GraphRagConfigurationControllerService, GraphRagExtractionConfig, KnowledgeBaseControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -8,6 +8,7 @@ import { forkJoin, map, Observable, of } from "rxjs";
     templateUrl: "graph-rag-extraction-config.component.html",
     selector: "gebo-ai-graph-rag-extraction-config-component",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIGraphRagExtractionModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGraphRagExtractionConfigComponent),
         multi: false

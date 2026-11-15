@@ -17,7 +17,7 @@
  * It displays files and folders in a tree structure and allows for navigation and selection.
  */
 
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { UserspaceControllerService, UserspaceFileDto, UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
 
@@ -61,6 +61,7 @@ interface UserspaceTreeItem {
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent")
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, ControlValueAccessor {

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { ToastZIndexService } from "./toast-z-index.service";
 import { NotificationLayerEnum } from "./notification-layer";
 /***********************
@@ -7,6 +7,7 @@ import { NotificationLayerEnum } from "./notification-layer";
 @Component({
     selector: "gebo-ai-display-messages",
     templateUrl: "display-messages.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIDisplayMessagesComponent {

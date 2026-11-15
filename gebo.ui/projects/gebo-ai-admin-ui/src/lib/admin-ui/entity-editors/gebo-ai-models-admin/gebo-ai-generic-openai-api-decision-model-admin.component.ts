@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, forwardRef, Injector, OnInit } from "@angular/core";
+import { Component, forwardRef, Injector, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GenericOpenAIAPIDecisionModelChoice, GenericOpenAIAPIDecisionModelConfig, GenericOpenAiDecisionModelsConfigurationControllerService, GenericOpenAIDecisionModelTypeConfig, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -27,6 +27,7 @@ import { alignChoosedModel } from "../utils/choosed-model-alignment";
     templateUrl: "gebo-ai-generic-openai-api-decision-model-admin.component.html",
     selector: "gebo-ai-generic-openai-api-decision-model-component",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false },
     {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGenericOpenAIAPIDecisionModelAdminComponent),

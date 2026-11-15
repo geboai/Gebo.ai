@@ -16,7 +16,7 @@
  * It includes status monitoring, installation services, and a wizard component for setup.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { GeboModulesConfigControllerService, GGoogleDriveSystem, GoogleDriveSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, GOOGLEDRIVE_MODULE, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -66,6 +66,7 @@ export class GoogleWorkspacesInstalledModuleService extends GeboRootInstalledMod
   selector: "gebo-google-workspace-wizard-component",
   templateUrl: "google-workspace-wizard.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GoogleWorkspacesWizardComponent") }]
 })
 export class GoogleWorkspacesWizardComponent extends BaseWizardSectionComponent {

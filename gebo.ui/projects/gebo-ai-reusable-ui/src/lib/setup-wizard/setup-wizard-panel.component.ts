@@ -10,7 +10,7 @@
 
 
 
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Type } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, Type, ChangeDetectionStrategy } from "@angular/core";
 import { SetupWizardGrouping, SetupWizardItem } from "./setup-wizard-step";
 import { SetupStatus, SetupWizardGroupItem, SetupWizardService } from "./setup-wizard.service";
 import { BaseWizardSectionComponent } from "./base-wizard-section.component";
@@ -87,6 +87,7 @@ function applyTranslations<T>(entries: T[], idOf: (entry: T) => string, found?: 
     }, {
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SetupWizardPanelComponent")
         }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
 
 })

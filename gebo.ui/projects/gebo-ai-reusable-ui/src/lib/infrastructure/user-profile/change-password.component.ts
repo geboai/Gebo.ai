@@ -16,7 +16,7 @@
  * Provides a form for users to enter their old password and a new password with confirmation.
  * Handles validation, error messages, and communication with the login service.
  */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { ChangePasswordResponse, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -27,6 +27,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
   selector: "gebo-ai-change-password-component",
   templateUrl: "change-password.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{
     provide: GEBO_AI_MODULE, useValue: "GeboAIUserProfileModule", multi: false
   }, {

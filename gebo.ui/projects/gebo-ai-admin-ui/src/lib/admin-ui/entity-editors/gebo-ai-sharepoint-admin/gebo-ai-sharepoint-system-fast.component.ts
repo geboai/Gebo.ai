@@ -16,7 +16,7 @@
  * It manages a form for collecting Sharepoint connection details and credentials, and handles
  * the submission process to the backend service.
  */
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, FastSharepointSystemInsertRequest, GConfluenceSystem, GSharepointContentManagementSystem, SharepointSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -36,7 +36,8 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Geb
     providers: [SharepointUrlService,
         { provide: GEBO_AI_MODULE, useValue: "GeboAISharepointModule", multi: false },  
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAISharepointSystemFastComponent") }
-    ], standalone: false
+    ], changeDetection: ChangeDetectionStrategy.Eager,
+ standalone: false
 })
 export class GeboAISharepointSystemFastComponent implements OnInit {
     /** Flag to indicate if an API operation is in progress */

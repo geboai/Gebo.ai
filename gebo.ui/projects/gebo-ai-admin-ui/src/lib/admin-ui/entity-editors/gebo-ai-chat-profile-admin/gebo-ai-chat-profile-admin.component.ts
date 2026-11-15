@@ -17,7 +17,7 @@
  * with support for configuring chat and embedding models, knowledge bases, and other settings.
  */
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AgenticChatDefaultNetworksAdminControllerService, ChatModelsControllerService, EmbeddingModelsControllersService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GKnowledgeBase, KnowledgeBaseControllerService, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -74,6 +74,7 @@ function frontend2backend(model: ExtendedGChatProfileConfiguration): GChatProfil
     selector: "gebo-ai-chat-profile-admin-component",
     templateUrl: "gebo-ai-chat-profile-admin.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatProfileModule", multi: false },
         {

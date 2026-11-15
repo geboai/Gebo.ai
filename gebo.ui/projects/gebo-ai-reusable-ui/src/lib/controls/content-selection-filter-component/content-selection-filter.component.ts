@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, ControlValueAccessor, FormArray, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from "@angular/forms";
 import { GContentSelectionFilter, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { validateCriteria } from "./validate-content-selection-filter-criteria";
@@ -9,6 +9,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     selector: "gebo-ai-content-selection-filter-component",
     templateUrl: "content-selection-filter.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

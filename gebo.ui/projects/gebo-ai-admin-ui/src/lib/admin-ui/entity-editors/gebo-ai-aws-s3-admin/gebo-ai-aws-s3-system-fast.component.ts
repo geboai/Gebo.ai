@@ -17,7 +17,7 @@
  * and an optional custom endpoint, and handles the submission process to the backend service,
  * mirroring the SharePoint fast setup component.
  */
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AwsS3SystemsControllerService, FastAwsS3SystemInsertRequest, GAwsS3System, GeboAwsConnectionCredentials } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -36,7 +36,8 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Geb
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIAwsS3Module", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAwsS3SystemFastComponent") }
-    ], standalone: false
+    ], changeDetection: ChangeDetectionStrategy.Eager,
+ standalone: false
 })
 export class GeboAIAwsS3SystemFastComponent implements OnInit {
     /** Flag to indicate if an API operation is in progress */

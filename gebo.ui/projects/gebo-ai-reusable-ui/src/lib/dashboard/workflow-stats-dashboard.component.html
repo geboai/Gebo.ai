@@ -46,7 +46,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="KnowledgeBaseFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Knowledge Base</label>
-                  <p-select gebo-ai-label id="KnowledgeBaseFilterSelect" [options]="getRefOptions(result?.monthlySubdimensions?.knowledgeBaseReference)"
+                  <p-select gebo-ai-label id="KnowledgeBaseFilterSelect" [options]="getRefOptions($safeNavigationMigration(result?.monthlySubdimensions?.knowledgeBaseReference))"
                   [(ngModel)]="filterTab2.knowledgeBaseReference" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -54,7 +54,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ProjectFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Project</label>
-                  <p-select gebo-ai-label id="ProjectFilterSelect" [options]="getRefOptions(result?.monthlySubdimensions?.projectReference)"
+                  <p-select gebo-ai-label id="ProjectFilterSelect" [options]="getRefOptions($safeNavigationMigration(result?.monthlySubdimensions?.projectReference))"
                   [(ngModel)]="filterTab2.projectReference" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -62,7 +62,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ProjectEndpointFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Project Endpoint</label>
-                  <p-select gebo-ai-label id="ProjectEndpointFilterSelect" [options]="getRefOptions(result?.monthlySubdimensions?.projectEndpointReference)"
+                  <p-select gebo-ai-label id="ProjectEndpointFilterSelect" [options]="getRefOptions($safeNavigationMigration(result?.monthlySubdimensions?.projectEndpointReference))"
                   [(ngModel)]="filterTab2.projectEndpointReference" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -70,7 +70,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="WorkflowTypeFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Workflow Type</label>
-                  <p-select gebo-ai-label id="WorkflowTypeFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.workflowType)"
+                  <p-select gebo-ai-label id="WorkflowTypeFilterSelect" [options]="getOptions($safeNavigationMigration(result?.monthlySubdimensions?.workflowType))"
                   [(ngModel)]="filterTab2.workflowType" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -78,7 +78,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="WorkflowIdFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Workflow Id</label>
-                  <p-select gebo-ai-label id="WorkflowIdFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.workflowId)"
+                  <p-select gebo-ai-label id="WorkflowIdFilterSelect" [options]="getOptions($safeNavigationMigration(result?.monthlySubdimensions?.workflowId))"
                   [(ngModel)]="filterTab2.workflowId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -86,7 +86,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="WorkflowStepFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Workflow Step</label>
-                  <p-select gebo-ai-label id="WorkflowStepFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.workflowStepId)"
+                  <p-select gebo-ai-label id="WorkflowStepFilterSelect" [options]="getOptions($safeNavigationMigration(result?.monthlySubdimensions?.workflowStepId))"
                   [(ngModel)]="filterTab2.workflowStepId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -94,7 +94,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="YearFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Year</label>
-                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.year)"
+                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions($safeNavigationMigration(result?.monthlySubdimensions?.year))"
                   [(ngModel)]="filterTab2.year" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -102,7 +102,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="MonthFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Month</label>
-                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions(result?.monthlySubdimensions?.month)"
+                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions($safeNavigationMigration(result?.monthlySubdimensions?.month))"
                   [(ngModel)]="filterTab2.month" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -168,7 +168,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="KnowledgeBaseFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Knowledge Base</label>
-                  <p-select gebo-ai-label id="KnowledgeBaseFilterSelect" [options]="getRefOptions(result?.currentMonthDailySubdimensions?.knowledgeBaseReference)"
+                  <p-select gebo-ai-label id="KnowledgeBaseFilterSelect" [options]="getRefOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.knowledgeBaseReference))"
                   [(ngModel)]="filterTab1.knowledgeBaseReference" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -176,7 +176,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ProjectFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Project</label>
-                  <p-select gebo-ai-label id="ProjectFilterSelect" [options]="getRefOptions(result?.currentMonthDailySubdimensions?.projectReference)"
+                  <p-select gebo-ai-label id="ProjectFilterSelect" [options]="getRefOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.projectReference))"
                   [(ngModel)]="filterTab1.projectReference" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -184,7 +184,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="ProjectEndpointFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Project Endpoint</label>
-                  <p-select gebo-ai-label id="ProjectEndpointFilterSelect" [options]="getRefOptions(result?.currentMonthDailySubdimensions?.projectEndpointReference)"
+                  <p-select gebo-ai-label id="ProjectEndpointFilterSelect" [options]="getRefOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.projectEndpointReference))"
                   [(ngModel)]="filterTab1.projectEndpointReference" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -192,7 +192,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="WorkflowTypeFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Workflow Type</label>
-                  <p-select gebo-ai-label id="WorkflowTypeFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.workflowType)"
+                  <p-select gebo-ai-label id="WorkflowTypeFilterSelect" [options]="getOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.workflowType))"
                   [(ngModel)]="filterTab1.workflowType" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -200,7 +200,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="WorkflowIdFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Workflow Id</label>
-                  <p-select gebo-ai-label id="WorkflowIdFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.workflowId)"
+                  <p-select gebo-ai-label id="WorkflowIdFilterSelect" [options]="getOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.workflowId))"
                   [(ngModel)]="filterTab1.workflowId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -208,7 +208,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="WorkflowStepFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Workflow Step</label>
-                  <p-select gebo-ai-label id="WorkflowStepFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.workflowStepId)"
+                  <p-select gebo-ai-label id="WorkflowStepFilterSelect" [options]="getOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.workflowStepId))"
                   [(ngModel)]="filterTab1.workflowStepId" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -216,7 +216,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="YearFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Year</label>
-                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.year)"
+                  <p-select gebo-ai-label id="YearFilterSelect" [options]="getOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.year))"
                   [(ngModel)]="filterTab1.year" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }
@@ -224,7 +224,7 @@
                 <div class="col-12 sm:col-6 md:col-3 lg:col-2"
                   >
                   <label id="MonthFilterLabel" gebo-ai-text class="block text-700 font-semibold mb-2">Month</label>
-                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions(result?.currentMonthDailySubdimensions?.month)"
+                  <p-select gebo-ai-label id="MonthFilterSelect" [options]="getOptions($safeNavigationMigration(result?.currentMonthDailySubdimensions?.month))"
                   [(ngModel)]="filterTab1.month" placeholder="All" styleClass="w-full"></p-select>
                 </div>
               }

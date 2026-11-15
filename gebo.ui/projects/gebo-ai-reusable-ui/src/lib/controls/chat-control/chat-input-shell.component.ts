@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo, PipelineChatMenu, PipelineChatMenuItem } from '@Gebo.ai/gebo-ai-rest-api';
 import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
@@ -68,6 +68,7 @@ const chatWithFilesPipelineOption: PipelineRoutingOption = {
   templateUrl: './chat-input-shell.component.html',
   styleUrls: ['./chat-input-shell.component.scss'],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
     { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatInputShellComponent"), multi: false }

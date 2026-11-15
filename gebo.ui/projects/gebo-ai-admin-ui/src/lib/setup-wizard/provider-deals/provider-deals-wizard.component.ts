@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
     GCurrency, GModelPricingConditions, GProviderApiKey, GProviderCurrency, GProviderDeal, GProviderModelPriceInfo,
     GUserMessage, ProviderDealsControllerService
@@ -76,6 +76,7 @@ interface ProviderGroup {
         .gebo-provider-deals__code { font-family: monospace; white-space: nowrap; }
         .gebo-provider-deals__source { max-width: 22rem; }
     `],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "ProviderDealsWizardModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProviderDealsWizardComponent")
     }]

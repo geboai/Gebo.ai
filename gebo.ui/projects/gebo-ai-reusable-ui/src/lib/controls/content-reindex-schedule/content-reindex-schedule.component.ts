@@ -10,7 +10,7 @@
 
 
 
-import { Component, forwardRef, OnDestroy, OnInit } from "@angular/core";
+import { Component, forwardRef, OnDestroy, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { ReindexingProgrammedTable } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subscription } from "rxjs";
@@ -47,6 +47,7 @@ import {
             provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIContentReindexScheduleComponent"), multi: false
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIContentReindexScheduleComponent implements OnInit, OnDestroy, ControlValueAccessor {

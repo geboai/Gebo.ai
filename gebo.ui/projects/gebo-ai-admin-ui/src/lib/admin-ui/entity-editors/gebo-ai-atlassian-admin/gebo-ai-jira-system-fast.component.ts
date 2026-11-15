@@ -18,7 +18,7 @@
  * set up a new Jira integration. The component manages form state, loading indicators,
  * and communication with backend services.
  */
-import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { FastJiraSystemInsertRequest, GJiraSystem, JiraSystemsControllerService, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -29,6 +29,7 @@ import { ToastMessageOptions } from "@openng/optimus-ui/api";
     selector: "gebo-ai-jira-system-fast-component",
     templateUrl: "gebo-ai-jira-system-fast.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ 
         { provide: GEBO_AI_MODULE, useValue: "GeboAIJiraModule", multi: false }, 
         {

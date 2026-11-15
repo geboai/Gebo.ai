@@ -16,7 +16,7 @@
  * ChatProfilesComponent manages the display and editing of RAG chat profiles with
  * pagination. Prompt templates live in their own admin panel (PromptsPanelComponent).
  */
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, PagedModelGChatProfileConfiguration } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "@openng/optimus-ui/paginator";
@@ -30,6 +30,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "chat-profiles-component",
     templateUrl: "chat-profiles.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers:[{ provide: GEBO_AI_MODULE, useValue: "ChatProfilesPanelModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ChatProfilesComponent") }]
 })
 export class ChatProfilesComponent extends AncestorPanelComponent implements OnInit {

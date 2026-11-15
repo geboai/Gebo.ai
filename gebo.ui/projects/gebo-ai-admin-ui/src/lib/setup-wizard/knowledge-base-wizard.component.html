@@ -36,11 +36,11 @@
       <ng-template #body let-item pTemplate="body">
         <tr>
           <td>
-            <p-button id="Button1" gebo-ai-label [label]="item.knowledgeBase?.description" (onClick)="editKnowledgeBase(item)" [outlined]="true" title="open knowledge base"></p-button>
+            <p-button id="Button1" gebo-ai-label [label]="$safeNavigationMigration(item.knowledgeBase?.description)" (onClick)="editKnowledgeBase(item)" [outlined]="true" title="open knowledge base"></p-button>
           </td>
           @if (item.project) {
             <td>
-              <p-button id="Button2" gebo-ai-label icon="pi pi-list-check" [label]="item.project?.description" [outlined]="true" (onClick)="editProject(item)" title="open project form"></p-button>
+              <p-button id="Button2" gebo-ai-label icon="pi pi-list-check" [label]="$safeNavigationMigration(item.project?.description)" [outlined]="true" (onClick)="editProject(item)" title="open project form"></p-button>
             </td>
           }
           @if (!item.project) {
@@ -51,7 +51,7 @@
           }
           @if (item.endpoint) {
             <td>
-              <p-button id="Button3" gebo-ai-label icon="pi pi-modify-pen" [label]="item.endpoint?.description" [outlined]="true" (onClick)="editDataSource(item)" title="open data source"></p-button>
+              <p-button id="Button3" gebo-ai-label icon="pi pi-modify-pen" [label]="$safeNavigationMigration(item.endpoint?.description)" [outlined]="true" (onClick)="editDataSource(item)" title="open data source"></p-button>
             </td>
           }
           @if (!item.endpoint ) {

@@ -11,7 +11,7 @@
 
 
 /* AI generated comments */
-import { Component, forwardRef, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, FileSystemsBrowsingControllerService, FileSystemsControllerService, GFilesystemProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback, VFilesystemReference } from "@Gebo.ai/reusable-ui";
@@ -34,6 +34,7 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIFileSystemEndpointComponent),
             multi: false
         }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponent<GFilesystemProjectEndpoint> {

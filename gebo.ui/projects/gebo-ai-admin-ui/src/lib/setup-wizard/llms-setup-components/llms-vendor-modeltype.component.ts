@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormControlStatus, FormGroup, Validators } from "@angular/forms";
 import { LLMSSetupConfiguration, SecretInfo, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter, LLMCredentialsVerificationData, LLMUnresolvedModel } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
@@ -25,6 +25,7 @@ interface IModelResolution {
 @Component({
     selector: "gebo-ai-llms-vendor-model-type-config",
     templateUrl: "llms-vendor-modeltype.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {

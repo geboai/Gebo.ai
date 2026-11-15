@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { A2AClientConfigControllerService, A2ARemoteAgentConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -32,6 +32,7 @@ export class A2AImportWizardStatusService extends AbstractStatusService {
     selector: "gebo-a2a-import-wizard-component",
     templateUrl: "a2a-import-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("A2AImportWizardComponent") }]
 })
 export class A2AImportWizardComponent extends BaseWizardSectionComponent {

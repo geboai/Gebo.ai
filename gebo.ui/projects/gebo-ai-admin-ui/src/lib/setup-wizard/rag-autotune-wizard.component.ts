@@ -1,4 +1,4 @@
-import { Component, Injectable, OnChanges, OnInit } from "@angular/core";
+import { Component, Injectable, OnChanges, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { AutotuneVectorStoreInfo, GeboAdminRagAutotuneControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable, of } from "rxjs";
@@ -16,6 +16,7 @@ export class RagAutotuneStatusService extends AbstractStatusService {
 @Component({
     selector:"gebo-ai-rag-autotune-component",
     templateUrl:"rag-autotune-wizard.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIRagAutotuneWizardComponent extends BaseWizardSectionComponent implements OnInit,OnChanges{

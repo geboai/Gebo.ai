@@ -6,7 +6,7 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai
  */
-import { Component, input, Inject, forwardRef } from "@angular/core";
+import { Component, input, Inject, forwardRef, ChangeDetectionStrategy } from "@angular/core";
 
 import { ButtonModule } from "@openng/optimus-ui/button";
 import { PopoverModule } from "@openng/optimus-ui/popover";
@@ -28,6 +28,7 @@ import { GeboAIFieldTranslationContainerModule } from "@Gebo.ai/reusable-ui";
     standalone: true,
     imports: [ButtonModule, PopoverModule, TooltipModule, NgDiagramNodeSelectedDirective, NgDiagramPortComponent, GeboAIFieldTranslationContainerModule],
     hostDirectives: [{ directive: NgDiagramNodeSelectedDirective, inputs: ["node"] }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         @let participant = node().data;
         @let service = parent.serviceOf(participant);

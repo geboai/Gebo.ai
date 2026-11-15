@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ComputedWorkflowStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { NGPieChart, renderData, StatusRendering } from "./graphic-rendering";
 import { findMatchingTranlations, GeboAITranslationService, UIExistingText } from "@Gebo.ai/reusable-ui";
@@ -8,6 +8,7 @@ const entityId: string = "GeboAIJobGraphicVisualizerComponent";
 @Component({
   templateUrl: "graphic-visualizer.component.html",
   selector: "gebo-ai-jobsummary-graphic-visualizer",
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GeboAIJobGraphicVisualizerComponent implements OnInit, OnChanges {

@@ -16,7 +16,7 @@
  * It extends BaseEntityEditingComponent to provide editing capabilities for UserspaceFilesUploadModel.
  */
 
-import { Component, Inject, Injector } from "@angular/core";
+import { Component, Inject, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidatorFn } from "@angular/forms";
 
 import { ConfirmationService } from "@openng/optimus-ui/api";
@@ -44,6 +44,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
         },{
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceFilesUploadComponent")
     }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingComponent<UserspaceFilesUploadModel> {

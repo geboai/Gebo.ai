@@ -13,7 +13,7 @@
  * and provider), a cross when it is missing - red for a mandatory class, black for an optional one
  * - and, for a missing class, a highlighted list of the providers that support that model kind.
  */
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 
 @Component({
@@ -38,6 +38,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Geb
         }
         .gebo-easy-supported__names { color: var(--gebo-text, #374151); }
     `],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("LLMSEasyClassStatusComponent"), multi: false }

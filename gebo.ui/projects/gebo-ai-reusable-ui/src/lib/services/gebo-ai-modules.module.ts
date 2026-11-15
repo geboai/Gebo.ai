@@ -13,7 +13,7 @@
 import { CommonModule } from "@angular/common";
 import { ModuleWithProviders, NgModule } from "@angular/core";
 import { GeboAIPluggableModulesConfigService, GeboAIPluggableProjectEndpointsService } from "./pluggable-project-endpoint";
-import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "./pluggable-knowledge-base-admin-tree-search.service";
 
 /**
@@ -26,7 +26,7 @@ import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "./pluggable-
  */
 @NgModule({
     imports: [CommonModule],
-    providers: [GeboAIPluggableModulesConfigService, GeboAIPluggableProjectEndpointsService,GeboAIPluggableKnowledgeAdminBaseTreeSearchService, provideHttpClient(withInterceptorsFromDi())]
+    providers: [GeboAIPluggableModulesConfigService, GeboAIPluggableProjectEndpointsService,GeboAIPluggableKnowledgeAdminBaseTreeSearchService, provideHttpClient(withXhr(), withInterceptorsFromDi())]
 })
 export class GeboAIModulesModule {
     /**
@@ -39,7 +39,7 @@ export class GeboAIModulesModule {
     static forRoot(): ModuleWithProviders<GeboAIModulesModule> {
         const modWithProd: ModuleWithProviders<GeboAIModulesModule> = {
             ngModule: GeboAIModulesModule,
-            providers: [GeboAIPluggableModulesConfigService, GeboAIPluggableProjectEndpointsService,GeboAIPluggableKnowledgeAdminBaseTreeSearchService, provideHttpClient(withInterceptorsFromDi())]
+            providers: [GeboAIPluggableModulesConfigService, GeboAIPluggableProjectEndpointsService,GeboAIPluggableKnowledgeAdminBaseTreeSearchService, provideHttpClient(withXhr(), withInterceptorsFromDi())]
         }
         return modWithProd;
     }

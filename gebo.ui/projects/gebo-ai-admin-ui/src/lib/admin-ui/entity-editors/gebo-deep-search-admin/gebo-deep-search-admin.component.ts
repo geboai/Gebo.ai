@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormArray, FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, DeepSearchConfig, DeepSearchDataSourceAccess, GBaseChatModelConfig, GBaseObject, GeboDeepSearchAdminControllerService, GObjectRefGBaseModelConfig, GroupInfo, UserInfo, UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -14,6 +14,7 @@ export interface DataSourceAccessRow {
     selector: "gebo-ai-deep-search-admin-component",
     templateUrl: "gebo-deep-search-admin.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIDeepSearchConfigAdminModule", multi: false },
         {

@@ -12,7 +12,7 @@
  * plain description of its purpose, and shows the current setting of every class (the configured
  * default and the provider that owns it, or that it is not configured yet). Read only.
  */
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { ComponentLLMSStatus, LLMSSetupConfigurationData } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { CLASS_TEXT, MODEL_CLASSES, ModelClassDescriptor } from "./model-classes";
@@ -32,6 +32,7 @@ interface ClassRow {
     selector: "gebo-ai-llms-easy-intro-step",
     templateUrl: "step-intro.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("LLMSEasyIntroStepComponent"), multi: false }

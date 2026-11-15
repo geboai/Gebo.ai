@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, Optional, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, Optional, Output, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { BASE_PATH, FileUploadsControllerService, UploadedFileNode } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIRootNotificationService } from "@Gebo.ai/reusable-ui";
@@ -45,6 +45,7 @@ const MAX_FILE_BYTES: number = 100 * 1024 * 1024;
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUploadsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUploadsFilesComponent") }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUploadsFilesComponent implements OnChanges, AfterViewInit, OnDestroy {

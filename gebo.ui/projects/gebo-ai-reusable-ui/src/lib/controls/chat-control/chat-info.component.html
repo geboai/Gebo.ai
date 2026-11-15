@@ -44,7 +44,7 @@
             <i id="NoModelToolsHint" gebo-ai-text class="text-sm text-muted-color">The chat model calls no tool</i>
           }
           @for (tree of data?.availableFunctions; track tree) {
-            <p-fieldset [legend]="tree.category?.description">
+            <p-fieldset [legend]="$safeNavigationMigration(tree.category?.description)">
               <div class="grid">
                 <div class="col-4"><b id="NameCol" gebo-ai-text>Name</b></div>
                 <div class="col-8"><b id="DescriptionCol" gebo-ai-text>Description</b></div>

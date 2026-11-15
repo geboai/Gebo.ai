@@ -17,7 +17,7 @@
  * Every row can be switched off ("don't set it now"). The decisions are the same array the parent
  * holds, so the switches and combos here feed straight into its createLLMS call.
  */
-import { Component, Input } from "@angular/core";
+import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { CLASS_TEXT, ModelChoiceOption, ModelClassDecision } from "./model-classes";
 
@@ -25,6 +25,7 @@ import { CLASS_TEXT, ModelChoiceOption, ModelClassDecision } from "./model-class
     selector: "gebo-ai-llms-easy-models-step",
     templateUrl: "step-models.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("LLMSEasyModelsStepComponent"), multi: false }

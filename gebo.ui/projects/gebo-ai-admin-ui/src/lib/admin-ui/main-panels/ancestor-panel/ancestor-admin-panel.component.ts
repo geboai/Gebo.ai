@@ -17,11 +17,12 @@
  * It provides a base structure for admin panels, with a method to reload viewed data.
  * The component is not standalone and can be used within a parent module.
  */
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 
 @Component({
     selector: "gebo-ai-ancestor-admin-panel",
     template: "",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export  class AncestorPanelComponent {

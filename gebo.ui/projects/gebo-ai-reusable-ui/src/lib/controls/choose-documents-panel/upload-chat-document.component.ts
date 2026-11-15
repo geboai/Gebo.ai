@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter } from "@angular/core";
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { GeboUserChatUploadsControllerService, IngestionFileTypesLibraryControllerService, UserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -18,6 +18,7 @@ const urlPostfixCreateSession = "api/users/GeboUserChatUploadsController/chatSes
     templateUrl: "upload-chat-document.component.html",
     selector: "gebo-ai-upload-chat-documents-files",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ GeboAIBuildUrlService,
         {
             provide: NG_VALUE_ACCESSOR,

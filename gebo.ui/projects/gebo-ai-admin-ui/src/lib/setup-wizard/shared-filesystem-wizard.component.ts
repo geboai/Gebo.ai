@@ -16,7 +16,7 @@
  * It handles configuration status tracking and UI components for the setup wizard.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { BrowseParam, FileSystemSharesSettingControllerService, GFileSystemShareReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -80,6 +80,7 @@ interface ExtendedGFileSystemShareReference extends GFileSystemShareReference {
     selector: "gebo-shared-filesystem-wizard-component",
     templateUrl: "shared-filesystem-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SharedFilesystemWizardComponent") }]
 })
 export class SharedFilesystemWizardComponent extends BaseWizardSectionComponent {

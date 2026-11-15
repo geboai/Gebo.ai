@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 import { HttpClient } from "@angular/common/http";
-import { Component, Inject, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Inject, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { AIResource, AIToolsAndResourcesLibraryInstance, BASE_PATH, GeboChatLibrariesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
@@ -22,6 +22,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     selector: "gebo-ai-chat-libraries-panel",
     templateUrl: "chat-libraries-panel.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatLibrariesPanelComponent"), multi: false }

@@ -10,7 +10,7 @@
 
 
 
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { RuleSummary, summarizeRule } from "./schedule-format";
 import { RuleProblem, ScheduleRule, ruleProblem } from "./schedule-rules.model";
 
@@ -25,6 +25,7 @@ import { RuleProblem, ScheduleRule, ruleProblem } from "./schedule-rules.model";
 @Component({
     selector: "gebo-ai-schedule-sentence",
     templateUrl: "schedule-sentence.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIScheduleSentenceComponent implements OnChanges {

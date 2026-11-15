@@ -6,7 +6,7 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai
  */
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import {
     AgenticChatDefaultNetworkInfo, AgenticChatDefaultNetworksAdminControllerService, GAgentsNetwork, GUserMessage
 } from "@Gebo.ai/gebo-ai-rest-api";
@@ -59,6 +59,7 @@ export class AgenticChatNetworksEnabledService extends AbstractStatusService {
     selector: "gebo-ai-agentic-chat-networks-wizard-component",
     templateUrl: "agentic-chat-networks-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "AgenticChatNetworksWizardModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("AgenticChatNetworksWizardComponent")
     }]

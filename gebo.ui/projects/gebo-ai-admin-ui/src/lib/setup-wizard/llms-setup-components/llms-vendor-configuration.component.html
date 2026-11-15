@@ -7,7 +7,7 @@
     <div class="grid">
       <div class="col-12">
         <label id="ProviderWWW" gebo-ai-text>Web site link</label>&nbsp;&nbsp;<a
-        [href]="vendorConfiguration?.parentModel?.webSite" target="_blank"
+        [href]="$safeNavigationMigration(vendorConfiguration?.parentModel?.webSite)" target="_blank"
       gebo-ai-field-element>{{vendorConfiguration?.parentModel?.webSite}}</a>
 
 
@@ -15,7 +15,7 @@
     @if (vendorConfiguration?.parentModel?.requiresApiKey===true) {
       <div class="col-12">
         <label id="ProviderBuy" gebo-ai-text>Buy Apy key credit link</label>&nbsp;&nbsp;<a
-        [href]="vendorConfiguration?.parentModel?.acquireKeyUrl" target="_blank"
+        [href]="$safeNavigationMigration(vendorConfiguration?.parentModel?.acquireKeyUrl)" target="_blank"
       gebo-ai-field-element>{{vendorConfiguration?.parentModel?.acquireKeyUrl}}</a>
     </div>
   }

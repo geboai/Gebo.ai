@@ -16,7 +16,7 @@
  * It integrates with Angular's form system and allows for customizing the editor
  * with different languages, themes, and content.
  */
-import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentObject } from "@Gebo.ai/gebo-ai-rest-api";
 import { EditorComponent, NgxEditorModel } from "ngx-monaco-editor-v2";
@@ -29,6 +29,7 @@ import { EditorComponent, NgxEditorModel } from "ngx-monaco-editor-v2";
 @Component({
     selector: "gebo-ai-code-editor",
     template: "<span  [formGroup]='formGroup'> <ngx-monaco-editor #monaco style='height: {{componentHeight}};width: 100%'  [options]='options' formControlName='content' ></ngx-monaco-editor> </span>",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class CodeEditorWrapperComponent implements OnInit,OnChanges,AfterViewInit{

@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, DataPage, GProject, JobLauncherControllerService, MCPClientConfig, McpClientBrowsingControllerService, McpClientConfigControllerService, McpClientSystemsControllerService, MCPClientProjectEndpoint, ProjectsControllerService, VFilesystemReference } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, browsePathObservableCallback, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, loadRootsObservableCallback, reconstructNavigationObservableCallback } from "@Gebo.ai/reusable-ui";
@@ -34,6 +34,7 @@ import { doSaveAndPublishCall } from '../utils/save-publish-callback';
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIMCPClientEndpointComponent),
             multi: false
         }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIMCPClientEndpointComponent extends BaseEntityEditingComponent<MCPClientProjectEndpoint> {

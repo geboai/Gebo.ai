@@ -19,7 +19,7 @@
  * documented placeholders (loaded as a {@link GPromptUseInfo} via its use code)
  * are highlighted and cross-checked against the edited text.
  */
-import { ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
+import { ChangeDetectorRef, Component, forwardRef, Input, OnDestroy, OnInit, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
 import {
     AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR,
     ValidationErrors, Validator, Validators
@@ -66,6 +66,7 @@ function trimAsJava(name: string): string {
     styleUrls: ["prompt-editing.component.css"],
     encapsulation: ViewEncapsulation.None,
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

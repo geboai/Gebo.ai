@@ -6,7 +6,7 @@
  * and https://mozilla.org/MPL/2.0/.
  * Copyright (c) 2025+ Gebo.ai
  */
-import { Component, Input, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { GSystemMessage, SystemMessagesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { catchError, of, Subscription, switchMap, timer } from "rxjs";
 
@@ -21,6 +21,7 @@ import { catchError, of, Subscription, switchMap, timer } from "rxjs";
     selector: "gebo-ai-system-messages",
     templateUrl: "system-messages.component.html",
     styleUrls: ["system-messages.component.scss"],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAISystemMessagesComponent implements OnInit, OnDestroy {

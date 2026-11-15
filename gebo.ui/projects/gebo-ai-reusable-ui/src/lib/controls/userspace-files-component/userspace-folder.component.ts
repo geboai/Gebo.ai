@@ -17,7 +17,7 @@
  * It extends the BaseEntityEditingComponent class to provide CRUD operations for UserspaceFolderDto objects.
  */
 
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { UserspaceControllerService, UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
 
@@ -38,6 +38,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     selector: "gebo-ai-userspace-edit-component",
     templateUrl: "userspace-folder.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers:[{
             provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
         },

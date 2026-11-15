@@ -16,7 +16,7 @@
  * It provides a UI for creating, editing, and managing Sharepoint content management system configurations.
  */
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthProviderDto, GSharepointContentManagementSystem, SecretInfo, SecretsControllerService, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -42,6 +42,7 @@ const sharepointCode: string = "sharepoint-module";
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAISharepointAdminComponent),
         multi: false
     }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAISharepointAdminComponent extends BaseEntityEditingComponent<GSharepointContentManagementSystem> {

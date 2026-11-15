@@ -10,7 +10,7 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -29,6 +29,7 @@ import { IOperationStatus } from "../base-entity-editing-component/operation-sta
     selector: "gebo-ai-prompt-wizard-control",
     templateUrl: "prompt-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         {
             provide: GEBO_AI_MODULE, useValue: "PromptEditingModule", multi: false

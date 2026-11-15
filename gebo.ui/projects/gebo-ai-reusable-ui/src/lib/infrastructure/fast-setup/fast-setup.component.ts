@@ -17,7 +17,7 @@
  * It allows new users to create their credentials, accept the license agreement,
  * and complete the installation process.
  */
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { FastInstallationSetupData, GeboFastInstallationSetupControllerService, OperationStatusBoolean } from "@Gebo.ai/gebo-ai-rest-api";
@@ -44,6 +44,7 @@ const adminCreatedMessage:ToastMessageOptions={id:"ADMIN_USER_CREATED", summary:
     }, {
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("FastSetupComponent")
         }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 
 })

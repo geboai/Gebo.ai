@@ -253,7 +253,7 @@
                               </div>
                               <span class="text-xs text-muted-color">
                                 @if (canBeInputNode(service)) { <span id="InputNodeOkHint" gebo-ai-text>accepts the input of the contract</span> }
-                                @else if (service && factory()) { <span id="InputNodeNoHint" gebo-ai-text>cannot: its input is not the input of the contract</span>&nbsp;<span class="font-monospace">{{shortType(service.inputType)}} ≠ {{shortType(factory()?.inputType)}}</span> }
+                                @else if (service && factory()) { <span id="InputNodeNoHint" gebo-ai-text>cannot: its input is not the input of the contract</span>&nbsp;<span class="font-monospace">{{shortType(service.inputType)}} ≠ {{shortType($safeNavigationMigration(factory()?.inputType))}}</span> }
                               </span>
                               <div class="flex align-items-center gap-2">
                                 <p-checkbox formControlName="outputNode" [binary]="true" inputId="OutputNodeCheck"></p-checkbox>
@@ -402,7 +402,7 @@
                         <td class="font-semibold text-primary">{{ participantName(agent) }}</td>
                         <td>{{ getAgentDescription(agent.agentConfigCode) }}</td>
                         <td>{{ serviceOf(agent)?.serviceId || '-' }}</td>
-                        <td class="font-monospace text-xs">{{ shortType(serviceOf(agent)?.inputType) }} → @if (isRouter(serviceOf(agent))) { <span id="CommandsLabel" gebo-ai-text>commands</span> } @else { {{ shortType(serviceOf(agent)?.outputType) }} }</td>
+                        <td class="font-monospace text-xs">{{ shortType($safeNavigationMigration(serviceOf(agent)?.inputType)) }} → @if (isRouter(serviceOf(agent))) { <span id="CommandsLabel" gebo-ai-text>commands</span> } @else { {{ shortType($safeNavigationMigration(serviceOf(agent)?.outputType)) }} }</td>
                         <td>
                           <div class="flex gap-1">
                             @if (agent.inputNode) {

@@ -14,19 +14,19 @@
       <div class="col-4  col-sm-12 col-xs-12">
         <gebo-ai-field id="WebSiteLink" label="Provider web site"
           help="Click here for general provider information.">
-          <a [href]="vendorSetupMetaInfos?.parentModel?.webSite" target="_blank"
+          <a [href]="$safeNavigationMigration(vendorSetupMetaInfos?.parentModel?.webSite)" target="_blank"
           gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.webSite}}</a>
         </gebo-ai-field>
       </div>
       <div class="col-4 col-sm-12 col-xs-12"><gebo-ai-field id="AcquireCreditLink" label="Purchase provider's credit"
         help="Click here to buy credit for your api key(s).">
-        <a [href]="vendorSetupMetaInfos?.parentModel?.acquireKeyUrl" target="_blank"
+        <a [href]="$safeNavigationMigration(vendorSetupMetaInfos?.parentModel?.acquireKeyUrl)" target="_blank"
         gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.acquireKeyUrl}}</a>
 
       </gebo-ai-field>
     </div>
     <div class="col-12">
-      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext" [secretTypes]="vendorSetupMetaInfos?.parentModel?.secretTypes"
+      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext" [secretTypes]="$safeNavigationMigration(vendorSetupMetaInfos?.parentModel?.secretTypes)"
         [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
       [backendValidationOnChange]="true"></gebo-ai-api-key-component>
     </div>

@@ -17,7 +17,7 @@
  * The component allows users to create, update, and delete Git system configurations
  * and manages related identity secrets.
  */
-import { Component, forwardRef, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GGitContentManagementSystem, GContentManagementSystemType, GitSystemsControllerService, SecretsControllerService, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
@@ -28,6 +28,7 @@ import { ConfirmationService } from "@openng/optimus-ui/api";
     selector: "gebo-ai-git-system-admin-component",
     templateUrl: "gebo-ai-git-system-admin.component.html",
     standalone: false, 
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAiGitModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGitSystemAdminComponent),  multi: false  }

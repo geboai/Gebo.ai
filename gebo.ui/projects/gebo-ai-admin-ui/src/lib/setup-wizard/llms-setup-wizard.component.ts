@@ -16,7 +16,7 @@
  * It facilitates configuration of chat and embedding models from different providers like OpenAI and Nvidia.
  */
 
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { LLMSSetupConfiguration, LLMSSetupConfigurationData, UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { LLMSetupWizardService } from "./llms-setup-wizard.service";
@@ -40,6 +40,7 @@ interface LLMSEntry {
     selector: "gebo-llms-wizard-component",
     templateUrl: "llms-setup-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSetupWizardComponent") }]
 })
 export class LLMSetupWizardComponent extends BaseWizardSectionComponent {

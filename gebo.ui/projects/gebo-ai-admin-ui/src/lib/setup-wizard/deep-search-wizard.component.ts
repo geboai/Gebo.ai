@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { DeepSearchConfig, GeboDeepSearchAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 
@@ -6,6 +6,7 @@ import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST,
     selector: "gebo-ai-deep-search-wizard-component",
     templateUrl: "deep-search-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGoogleSearchWizardComponent") }]
 })
 export class GeboAIDeepSearchWizardComponent extends BaseWizardSectionComponent {

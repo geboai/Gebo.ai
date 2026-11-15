@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { GBaseChatModelConfig } from "@Gebo.ai/gebo-ai-rest-api";
@@ -10,6 +10,7 @@ interface InternalData {[key:string]:boolean};
     selector: "gebo-ai-chat-model-use-component",
     templateUrl: "chat-model-use.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatModelUseModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatModelUseComponent"), multi: false },

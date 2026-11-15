@@ -19,7 +19,7 @@
  * The component is designed to be a centralized point for launching and
  * managing various entity forms within the application.
  */
-import { AfterViewInit, Component, createComponent, EnvironmentInjector, Injector, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
+import { AfterViewInit, Component, createComponent, EnvironmentInjector, Injector, OnInit, ViewChild, ViewContainerRef, ChangeDetectionStrategy } from "@angular/core";
 import { GeboUIEntityFormConfig } from "./gebo-ui-entity-form-config";
 import { GeboUIEntityFormsLauncherService } from "./gebo-ui-entity-forms-launcher.service";
 import { GeboUIModalOpenerComponent } from "./gebo-ui-modal-opener.component";
@@ -27,6 +27,7 @@ import { GeboUIModalOpenerComponent } from "./gebo-ui-modal-opener.component";
 @Component({
     selector: "gebo-ui-entities-forms-launcher-component",
     templateUrl: "gebo-ui-entity-forms-launcher.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboUIEntityFormsLauncherComponent implements OnInit,AfterViewInit {

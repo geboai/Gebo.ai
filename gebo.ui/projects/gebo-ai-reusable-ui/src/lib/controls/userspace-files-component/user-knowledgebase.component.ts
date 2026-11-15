@@ -10,7 +10,7 @@
 
 
 
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GroupInfo, UserControllerService, UserspaceControllerService, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
 import { ConfirmationService } from "@openng/optimus-ui/api";
@@ -34,6 +34,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     selector: "gebo-ai-userspace-knowledgebase-component",
     templateUrl: "user-knowledgebase.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{
         provide: GEBO_AI_MODULE, useValue: "UserSpaceFilesModule", multi: false
     },{

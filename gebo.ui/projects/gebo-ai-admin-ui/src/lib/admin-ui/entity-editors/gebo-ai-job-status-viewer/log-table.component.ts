@@ -19,7 +19,7 @@
  * ordering and searching are all resolved server side, so the table always shows a single
  * page of the whole matching set.
  */
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { GJobStatusItem, GObjectRefGProjectEndpoint, JobsEntriesFilter, LogViewControllerService, PagedModelGJobStatusItem } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
@@ -37,7 +37,8 @@ const SEARCH_DEBOUNCE_TIME = 400;
 @Component({
   selector: "gebo-ai-log-table-component",
   templateUrl: "log-table.component.html",
-  standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIJobStatusModule", multi: false }, {
+  standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIJobStatusModule", multi: false }, {
     provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LogTableComponent")
   }]
 })

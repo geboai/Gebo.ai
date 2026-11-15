@@ -17,7 +17,7 @@
  * OpenAI API chat models within the Gebo.ai system.
  */
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { FunctionsLookupControllerService, GBaseChatModelChoice, GenericOpenAIAPIChatModelConfig, GenericOpenAiapiChatModelsConfigurationControllerService, GenericOpenAIChatModelTypeConfig, GLookupEntry, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -36,7 +36,8 @@ import { alignChoosedModel } from "../utils/choosed-model-alignment";
 @Component({
     selector: "gebo-ai-generic-open-ai-api-chat-model-admin-component",
     templateUrl: "gebo-ai-generic-openai-api-chatmodel-admin.component.html",
-    standalone: false, providers: [ 
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [ 
         { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGenericOpenAIAPIChatModelAdminComponent),    multi: false  }
     ]

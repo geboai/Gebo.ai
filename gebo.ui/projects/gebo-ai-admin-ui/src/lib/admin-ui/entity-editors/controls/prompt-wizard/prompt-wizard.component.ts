@@ -20,7 +20,7 @@
  * The component handles loading available chat models, configuring the wizard,
  * and managing the dialog for prompt generation and selection.
  */
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ChatModelsLookupControllerService, GLookupEntry } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, IOperationStatus } from "@Gebo.ai/reusable-ui";
@@ -31,6 +31,7 @@ import { forkJoin, Observable } from "rxjs";
     selector: "gebo-ai-prompt-wizard-component",
     templateUrl: "prompt-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIPromptWizardModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIPromptWizardComponent") }]
 })
 export class GeboAIPromptWizardComponent implements OnInit, OnChanges {

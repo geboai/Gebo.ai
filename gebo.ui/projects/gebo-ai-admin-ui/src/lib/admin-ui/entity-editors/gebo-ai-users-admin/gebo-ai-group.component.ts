@@ -10,7 +10,7 @@
 
 
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { UserInfos, UsersAdminControllerService, UsersGroup } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -29,6 +29,7 @@ import { Observable, of } from "rxjs";
     selector: "gebo-ai-users-group-component",
     templateUrl: "gebo-ai-group.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ 
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false },   
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGroupComponent),

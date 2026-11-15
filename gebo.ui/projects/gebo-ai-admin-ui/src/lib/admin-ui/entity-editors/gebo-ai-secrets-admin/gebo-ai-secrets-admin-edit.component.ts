@@ -10,7 +10,7 @@
 
 
 
-import { Component, forwardRef, Injector, Input, SimpleChanges } from "@angular/core";
+import { Component, forwardRef, Injector, Input, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { GeboSshKeySecretContent, GeboTokenContent, SecretInfo, GeboUsernamePasswordContent, SecretWrapperGeboSshKeySecretContent, SecretWrapperGeboTokenContent, SecretWrapperGeboUsernamePasswordContent, SecretsControllerService, GeboCustomSecretContent, GeboOauth2SecretContent, GeboGoogleOauth2SecretContent, GeboGoogleJsonSecretContent, SecretWrapperGeboGoogleOauth2SecretContent, SecretWrapperGeboOauth2SecretContent, SecretWrapperGeboCustomSecretContent, SecretWrapperGeboGoogleJsonSecretContent, GeboAwsConnectionCredentials, SecretWrapperGeboAwsConnectionCredentials } from "@Gebo.ai/gebo-ai-rest-api"
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from "@angular/forms";
@@ -50,7 +50,8 @@ export interface SecretWrapper {
 @Component({
     selector: "gebo-ai-secrets-admin-edit-component",
     templateUrl: "gebo-ai-secrets-admin-edit.component.html",
-    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiSecretsAdminModule", multi: false }, {
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiSecretsAdminModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiSecretsAdminEditComponent),
         multi: false
     }]

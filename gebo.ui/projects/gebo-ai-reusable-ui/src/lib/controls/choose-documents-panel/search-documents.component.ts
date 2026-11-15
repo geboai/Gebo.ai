@@ -18,7 +18,7 @@
  * and directory browsing.
  */
 
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BrowseParam, DocumentReferenceView, SearchDocumentByNameParam, SemanticQueryParam, UserKnowledgeBaseBrowsingControllerService, VFilesystemReference, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
 
@@ -49,6 +49,7 @@ import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-ho
             multi: false
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAISearchDocumentsComponent implements OnInit, OnChanges, GeboAIFieldHost {

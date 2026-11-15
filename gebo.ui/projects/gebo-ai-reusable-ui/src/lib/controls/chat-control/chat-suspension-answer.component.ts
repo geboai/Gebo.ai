@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { AgentSuspendedWaitingConditionDto, AgentSuspendedWaitingConditionReactionDto, NetworkOfAgentsSuspendedState, NetworkOfAgentsSuspendedStateReaction } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
@@ -53,6 +53,7 @@ const GONE_ON_WITHOUT_TEXT = "(no answer: go on without it)";
     templateUrl: "chat-suspension-answer.component.html",
     styleUrls: ["chat-suspension-answer.component.scss"],
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatSuspensionAnswerComponent"), multi: false }]
 })
 export class GeboAIChatSuspensionAnswerComponent {

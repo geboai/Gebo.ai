@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, ControlValueAccessor, FormControl, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors, Validator, Validators } from "@angular/forms";
 import { AuthProviderDto, GeboOauth2SecretContent, OAuth2AdminControllerService, Oauth2CustomAttribute } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subscription } from "rxjs";
@@ -7,6 +7,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     templateUrl: "gebo-oauth2-secret.component.html",
     selector: "gebo-ui-oauth2-secret-component",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

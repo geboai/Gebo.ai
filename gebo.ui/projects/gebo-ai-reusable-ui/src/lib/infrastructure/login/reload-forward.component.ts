@@ -10,13 +10,14 @@
  
  
 
-import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LoginService } from "./login.service";
 
 @Component({
     selector: "gebo-ai-reload-forward-component",
     template: "",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIReloadForwardComponent implements OnInit, OnChanges {

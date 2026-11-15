@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, Input, OnDestroy, OnInit, Optional } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, Optional, ChangeDetectionStrategy } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { UserInfo } from '@Gebo.ai/gebo-ai-rest-api';
 import { MegaMenuItem } from '@openng/optimus-ui/api';
@@ -22,6 +22,7 @@ import { ApplicationMenuProviderService } from './application-menu-provider.serv
   selector: 'gebo-ai-desktop',
   templateUrl: './gebo-ai-desktop.component.html',
   styleUrls: ['./gebo-ai-desktop.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GeboAIDesktopComponent implements OnInit, OnDestroy {

@@ -14,7 +14,7 @@
 
 @if (document) {
   <p-button
-    [icon]="((document?.fileType?.icon)?document.fileType?.icon:'p p-unknown')"
+    [icon]="((document?.fileType?.icon)?$safeNavigationMigration(document.fileType?.icon):'p p-unknown')"
     [text]="true"
     class="custom-blue-btn"
     (onClick)="onClickFile(document)"
@@ -30,7 +30,7 @@
 
 @if (uploadedContent) {
   <p-button
-    [icon]="((uploadedContent?.fileType?.icon)?uploadedContent.fileType?.icon:'p p-unknown')"
+    [icon]="((uploadedContent?.fileType?.icon)?$safeNavigationMigration(uploadedContent.fileType?.icon):'p p-unknown')"
     [text]="true"
     class="custom-blue-btn"
     (onClick)="onClickUploadedContent(uploadedContent)"
@@ -46,7 +46,7 @@
 
 @if (generatedContent) {
   <p-button
-    [icon]="generatedContent?.fileType?.icon?generatedContent?.fileType?.icon:'p p-unknown'"
+    [icon]="generatedContent?.fileType?.icon?$safeNavigationMigration(generatedContent?.fileType?.icon):'p p-unknown'"
     (onClick)="onClickGeneratedContent(generatedContent)"
     [text]="true"
     [label]="generatedContent.fileName"

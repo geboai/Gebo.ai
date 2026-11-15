@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component, forwardRef, Injector, OnInit } from "@angular/core";
+import { Component, forwardRef, Injector, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { McpClientConfigControllerService, MCPClientConfig, SecretInfo, SecretsControllerService, UsersAdminControllerService, UserInfos, UsersGroup, MCPTool, MCPResource, MCPPrompt } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -26,6 +26,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
     selector: "gebo-ai-mcp-client-admin-component",
     templateUrl: "gebo-ai-mcp-client-admin.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIMcpClientAdminModule", multi: false },
         {

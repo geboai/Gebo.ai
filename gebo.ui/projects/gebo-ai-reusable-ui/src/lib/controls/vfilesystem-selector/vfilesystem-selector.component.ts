@@ -17,7 +17,7 @@
  * It allows users to browse and select files and folders from a virtual filesystem.
  */
 
-import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BrowseParam, GSharepointProjectEndpoint, GVirtualFilesystemRoot, VirtualFilesystemNavigationNode, VirtualFilesystemNavigationTreeStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { ToastMessageOptions, TreeNode } from "@openng/optimus-ui/api";
@@ -333,6 +333,7 @@ function findNode(x: EnrichedFilesystemReference, roots: TreeNode<EnrichedFilesy
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("VFilesystemSelectorComponent")
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class VFilesystemSelectorComponent implements OnInit, OnChanges, ControlValueAccessor {

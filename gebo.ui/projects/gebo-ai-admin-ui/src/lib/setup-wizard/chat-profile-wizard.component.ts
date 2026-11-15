@@ -10,7 +10,7 @@
  
  
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { DataPage, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboFastChatProfileStatusControllerService, GKnowledgeBase, GPromptTemplateConfig, KnowledgeBaseControllerService, PagedModelGChatProfileConfiguration, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
@@ -53,6 +53,7 @@ export class ChatProfileStatusService extends AbstractStatusService {
     selector: "gebo-ai-chat-profile-wizard-component",
     templateUrl: "chat-profile-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers:[{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ChatProfileWizardComponent") }]
 })
 export class ChatProfileWizardComponent extends BaseWizardSectionComponent {

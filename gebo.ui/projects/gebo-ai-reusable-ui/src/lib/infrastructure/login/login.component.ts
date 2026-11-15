@@ -18,7 +18,7 @@
  * manages login state, validates system setup status, and navigates users
  * accordingly based on authentication results or system status.
  */
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 
 import { LoginService } from "./login.service";
 import { ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -40,6 +40,7 @@ const ssoRefusedMessage: ToastMessageOptions = { id: "SsoRefusedMessage", summar
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{
     provide: GEBO_AI_MODULE, useValue: "LoginModule", multi: false
   }, {

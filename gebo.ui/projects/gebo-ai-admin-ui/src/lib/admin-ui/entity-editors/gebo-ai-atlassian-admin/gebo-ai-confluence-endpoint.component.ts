@@ -16,7 +16,7 @@
  * It allows users to create, edit, delete, and publish Confluence endpoints that connect
  * projects to Confluence systems.
  */
-import { Component, forwardRef, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, GConfluenceProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, ConfluenceSystemsControllerService, ConfluenceBrowsingControllerService, GConfluenceSystem } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboAIRootNotificationService, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -40,6 +40,7 @@ import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIConfluenceEndpointComponent),
         multi: false
     }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIConfluenceEndpointComponent extends BaseEntityEditingComponent<GConfluenceProjectEndpoint> {

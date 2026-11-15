@@ -16,7 +16,7 @@
  * client-side paging, and opening the full editor for a selected one. Split out of
  * the chat-profiles panel so prompts have their own admin tab.
  */
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { GeboAdminPromptsControllerService, GPromptTemplateLightView } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionType, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { PaginatorState } from "@openng/optimus-ui/paginator";
@@ -29,6 +29,7 @@ import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.c
     selector: "prompts-panel-component",
     templateUrl: "prompts-panel.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "PromptsPanelModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("PromptsPanelComponent") }

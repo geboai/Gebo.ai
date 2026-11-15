@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { BASE_PATH, LLMGeneratedResource } from "@Gebo.ai/gebo-ai-rest-api";
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { EnrichedDocumentReferenceViewRetrieveService, EnrichedLLMGeneratedResource } from "../content-viewer/enriched-document-reference-view.service";
@@ -14,6 +14,7 @@ import { EnrichedDocumentReferenceViewRetrieveService, EnrichedLLMGeneratedResou
 @Component({
     templateUrl: "llm-generated-document-ref.component.html",
     selector: "llm-generated-document-ref",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIGeneratedDocumentRefComponent implements OnInit, OnChanges, OnDestroy {

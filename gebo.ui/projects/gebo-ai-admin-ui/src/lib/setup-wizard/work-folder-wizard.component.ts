@@ -17,7 +17,7 @@
  * It handles the configuration of work directories including checking their status and enabling/configuring them.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BrowseParam, ComponentEnabledStatus, FastWorkDirectorySetupData, FileSystemSharesSettingControllerService, GeboFastWorkFolderSetupControllerService, WorkFolderSetupStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, browsePathObservableCallback, fieldHostComponentName, GEBO_AI_FIELD_HOST, loadRootsObservableCallback, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
@@ -79,6 +79,7 @@ export class WorkFolderWizardStatusService extends AbstractStatusService {
     selector: "gebo-work-folder-wizard-component",
     templateUrl: "work-folder-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("WorkFolderWizardComponent") }]
 })
 export class WorkFolderWizardComponent extends BaseWizardSectionComponent {

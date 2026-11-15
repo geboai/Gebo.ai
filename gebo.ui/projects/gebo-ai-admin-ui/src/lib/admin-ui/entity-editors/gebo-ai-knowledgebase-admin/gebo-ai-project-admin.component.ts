@@ -20,7 +20,7 @@
  * their relationships with knowledge bases and parent projects.
  */
 
-import { Component, forwardRef, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ContentsResetControllerService, GKnowledgeBase, GProject, KnowledgeBaseControllerService, ProjectsControllerService, GObjectRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, EnrichedChild, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -37,7 +37,8 @@ import { map, Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-project-admin-component",
     templateUrl: "gebo-ai-project-admin.component.html",
-    standalone: false, providers: [ 
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [ 
         { provide: GEBO_AI_MODULE, useValue: "GeboAiKnowledgeBaseModule", multi: false }, 
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiProjectAdminComponent),  multi: false   }
     ]

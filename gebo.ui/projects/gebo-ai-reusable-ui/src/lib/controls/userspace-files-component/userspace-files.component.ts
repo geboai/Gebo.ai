@@ -16,7 +16,7 @@
  * It implements ControlValueAccessor to integrate with Angular forms, allowing it to be used in form controls.
  * The component provides functionality to browse, select, and display files from the user's workspace.
  */
-import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { UserspaceControllerService, UserspaceFileDto } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIUserspaceFolderComponent } from "./userspace-folder.component";
@@ -43,6 +43,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserpaceFilesComponent")
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUserpaceFilesComponent implements OnInit, OnChanges, ControlValueAccessor {

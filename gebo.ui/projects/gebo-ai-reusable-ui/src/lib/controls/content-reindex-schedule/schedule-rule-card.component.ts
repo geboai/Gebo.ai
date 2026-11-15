@@ -10,7 +10,7 @@
 
 
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { formatDateTime, formatHourMinute, formatMinuteOfHour, weekdayNames } from "./schedule-format";
 import {
     HourMinute, RuleProblem, SCHEDULABLE_FREQUENCIES, SchedulableFrequency, ScheduleRule,
@@ -28,6 +28,7 @@ import {
 @Component({
     selector: "gebo-ai-schedule-rule-card",
     templateUrl: "schedule-rule-card.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIScheduleRuleCardComponent implements OnChanges {

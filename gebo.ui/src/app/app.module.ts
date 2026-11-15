@@ -15,7 +15,7 @@ import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { AppComponent } from "./app.component";
 import { BrowserModule } from "@angular/platform-browser";
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from "@angular/common/http";
 import { BASE_PATH, ApiModule as GeboAiChatApiModule } from '@Gebo.ai/gebo-ai-rest-api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmDialogModule } from "@openng/optimus-ui/confirmdialog";
@@ -249,7 +249,7 @@ const GeboAIPreset = definePreset(Aura, {
       useValue: { resources: [{ prefix: '/assets/i18n/', suffix: '.json' }] }
     }
     ,
-    ConfirmationService, provideHttpClient(withInterceptorsFromDi())]
+    ConfirmationService, provideHttpClient(withXhr(), withInterceptorsFromDi())]
 })
 export class AppModule {
 

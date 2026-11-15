@@ -119,7 +119,7 @@
             </ng-template>
             <ng-template pTemplate="body" let-model>
               <tr>
-                <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                 <td>{{ model.configuration?.description }}</td>
                 <td>{{ model.configuration?.modelTypeCode }}</td>
                 <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -163,7 +163,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-model>
                 <tr>
-                  <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                  <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                   <td>{{ model.configuration?.description }}</td>
                   <td>{{ model.configuration?.modelTypeCode }}</td>
                   <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -199,7 +199,7 @@
                 </ng-template>
                 <ng-template pTemplate="body" let-model>
                   <tr>
-                    <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                    <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                     <td>{{ model.configuration?.description }}</td>
                     <td>{{ model.configuration?.modelTypeCode }}</td>
                     <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -235,7 +235,7 @@
                   </ng-template>
                   <ng-template pTemplate="body" let-model>
                     <tr>
-                      <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                      <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                       <td>{{ model.configuration?.description }}</td>
                       <td>{{ model.configuration?.modelTypeCode }}</td>
                       <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -270,7 +270,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-model>
                       <tr>
-                        <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                        <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                         <td>{{ model.configuration?.description }}</td>
                         <td>{{ model.configuration?.modelTypeCode }}</td>
                         <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -305,7 +305,7 @@
                       </ng-template>
                       <ng-template pTemplate="body" let-model>
                         <tr>
-                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                           <td>{{ model.configuration?.description }}</td>
                           <td>{{ model.configuration?.modelTypeCode }}</td>
                           <td>{{ model.configuration?.choosedModel?.code }}</td>
@@ -339,7 +339,7 @@
                       </ng-template>
                       <ng-template pTemplate="body" let-model>
                         <tr>
-                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, model.configuration?.code, codePopover)" [attr.title]="model.configuration?.code">{{ model.configuration?.code | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
+                          <td><span class="gebo-code-cell" [class.gebo-code-cell--clickable]="(model.configuration?.code?.length || 0) > 20" (click)="showFullCode($event, $safeNavigationMigration(model.configuration?.code), codePopover)" [attr.title]="model.configuration?.code">{{ $safeNavigationMigration(model.configuration?.code) | slice:0:20 }}{{ (model.configuration?.code?.length || 0) > 20 ? '…' : '' }}</span></td>
                           <td>{{ model.configuration?.description }}</td>
                           <td>{{ model.configuration?.modelTypeCode }}</td>
                           <td>{{ model.configuration?.choosedModel?.code }}</td>

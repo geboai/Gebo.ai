@@ -1,4 +1,4 @@
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { AuthProvidersControllerService, Oauth2ClientAuthorizativeInfo, Oauth2ModuleStatusControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -25,6 +25,7 @@ export class Oauth2SetupEnabledService extends AbstractStatusService {
     selector: "oauth2-wizard-component",
     templateUrl: "oauth2-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("Oauth2WizardComponent") }]
 })
 export class Oauth2WizardComponent extends BaseWizardSectionComponent {

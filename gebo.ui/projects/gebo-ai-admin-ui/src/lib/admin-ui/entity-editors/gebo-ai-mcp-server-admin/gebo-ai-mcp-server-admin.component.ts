@@ -1,4 +1,4 @@
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboMcpServerAdminControllerService, GeboMCPAgentsNetworkTool, GeboMCPAgentTool, GeboMCPServerConfig, GObjectRefGProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
@@ -9,7 +9,8 @@ import { map, Observable, of } from "rxjs";
 @Component({
     selector: "gebo-ai-mcp-server-admin-component",
     templateUrl: "gebo-ai-mcp-server-admin.component.html",
-    standalone: false, providers: [
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIMcpServerAdminModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIMCPServerAdminComponent),

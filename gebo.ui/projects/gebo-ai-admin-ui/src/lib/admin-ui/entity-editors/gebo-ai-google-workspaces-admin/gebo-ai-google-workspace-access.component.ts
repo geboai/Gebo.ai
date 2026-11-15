@@ -17,7 +17,7 @@
  * and the Gebo.ai application, handling both initial authentication and cases
  * where credentials already exist.
  */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GGoogleDriveSystem, GoogleWorkspaceAccessHandshakeControllerService, StartGooglWorkspaceAccessRequest, StartGooglWorkspaceAccessRespose, UserControllerService } from "@Gebo.ai/gebo-ai-rest-api";
@@ -27,7 +27,8 @@ import { ToastMessageOptions } from "@openng/optimus-ui/api";
 @Component({
     selector: "gebo-ai-google-workspace-access-component",
     templateUrl: "gebo-ai-google-workspace-access.component.html",
-    standalone: false, providers: [
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAiGoogleWorkspacesModule", multi: false }, 
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGoogleWorkspaceAccessComponent") }
     ]

@@ -17,7 +17,7 @@
  * for Git project endpoints.
  */
 import { JobLauncherControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { Component, forwardRef, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GGitContentManagementSystem, GitSystemsControllerService, GProject, GGitProjectEndpoint, ProjectsControllerService, SecretsControllerService, SecretInfo, GJobStatus } from "@Gebo.ai/gebo-ai-rest-api";
 import { map, Observable, of } from "rxjs";
@@ -28,7 +28,8 @@ import { newSecretActionRequest } from '../utils/gebo-ai-create-secret-action-re
 @Component({
   selector: "gebo-ai-git-endpoint-admin-component",
   templateUrl: "gebo-ai-git-endpoint-admin.component.html",
-  standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiGitModule", multi: false }, {
+  standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiGitModule", multi: false }, {
     provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAiGitEndpointAdminComponent),
     multi: true
   }]
