@@ -44,8 +44,9 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.IToolCallbacksDecorat
  * until the person answers. The agent is then executed again from the start, told the
  * answer ({@link #answered(AgentSuspendedWaitingCondition)}); when the model calls the
  * tool again with the same arguments, an allowed call runs and a refused one gets the
- * person's message as its result, without running. A call with other arguments is put to
- * a person again.
+ * person's message as its result, without running. Only the option decides: a message
+ * goes with either, and a message alone decides nothing. A call with other arguments, or
+ * one nobody decided, is put to a person again.
  * <p>
  * Where nothing can wait for a person the tool is not run: the model is told it needs a
  * confirmation that cannot be asked here.
@@ -155,7 +156,9 @@ public class ConfirmingToolCallback implements ToolCallback {
 
 	/**
 	 * What a respawned agent is told of a call it put to a person: allowed, call the tool
-	 * again with the same arguments to run it; refused, with the person's message; left
+	 * again with the same arguments to run it; refused, not run; either with the message
+	 * the person left. Answered with a message alone, not run and not refused: the model
+	 * follows the message, and a call made again on it is put to a person again. Left
 	 * unanswered, not run. Null when the condition is not a tool call confirmation.
 	 */
 	public static String answered(AgentSuspendedWaitingCondition<?, ?> condition) {
@@ -168,6 +171,15 @@ public class ConfirmingToolCallback implements ToolCallback {
 			return "Nobody confirmed " + call + ": it was not run. Go on without it.";
 		}
 		final Decision decision = ToolCallConfirmations.decisionOf(condition);
+		if (decision == null) {
+			final String message = condition.getInstanceValue() instanceof ClarificationAnswer answer
+					? ToolCallConfirmations.messageOf(answer)
+					: null;
+			return "A person answered about " + call + " with a message, without allowing or refusing it: it was not"
+					+ " run. Their message: " + (message != null ? message : "(empty)")
+					+ ". Do what it asks; if it asks for this call, call the tool again: the person is asked to"
+					+ " allow it.";
+		}
 		if (decision.allowed()) {
 			return "A person allowed " + call
 					+ ". Call the tool again with exactly these arguments: this time it runs."

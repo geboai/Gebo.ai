@@ -22,8 +22,8 @@ import ai.gebo.architecture.agents.model.ToolCallConfirmationOptions;
 
 /**
  * What the people asked to confirm tool calls answered, as an agent respawned on their
- * answers reads them: for a call to a tool with given arguments, whether it is allowed,
- * refused (with the message they left for the model) or not decided. The arguments are
+ * answers reads them: for a call to a tool with given arguments, whether it is allowed or
+ * refused (with the message they left for the model), or not decided. The arguments are
  * compared as JSON, so a call written with its keys in another order is the same call.
  */
 public final class ToolCallConfirmations {
@@ -48,7 +48,8 @@ public final class ToolCallConfirmations {
 	/**
 	 * The decisions of the confirmations among the conditions a respawned agent waited
 	 * for; the other conditions are not read. A confirmation left unanswered (declined,
-	 * expired, gone on without) refuses the call.
+	 * expired, gone on without) refuses the call; one answered with a message alone
+	 * decides nothing.
 	 */
 	@SuppressWarnings("rawtypes")
 	public static ToolCallConfirmations of(Collection<AgentSuspendedWaitingCondition> resolved) {
@@ -56,25 +57,44 @@ public final class ToolCallConfirmations {
 		if (resolved != null) {
 			for (AgentSuspendedWaitingCondition<?, ?> condition : resolved) {
 				if (condition != null && condition.getLlmChosenOptions() instanceof ToolCallConfirmationOptions options) {
-					decided.add(new Decided(options.getToolName(), parsed(options.getArguments()), options.getArguments(),
-							decisionOf(condition)));
+					final Decision decision = decisionOf(condition);
+					if (decision != null) {
+						decided.add(new Decided(options.getToolName(), parsed(options.getArguments()),
+								options.getArguments(), decision));
+					}
 				}
 			}
 		}
 		return decided.isEmpty() ? NONE : new ToolCallConfirmations(decided);
 	}
 
-	/** What the answer to a confirmation decides: allowed only when the person chose to. */
+	/**
+	 * What the answer to a confirmation decides: {@value ToolCallConfirmationOptions#ALLOW}
+	 * chosen allows the call, {@value ToolCallConfirmationOptions#DENY} refuses it, the
+	 * message given with either going to the model; left unanswered, refused. A message
+	 * alone, no option chosen, decides nothing (null): whatever it says, only the option
+	 * runs the tool, so a call made again on it is put to a person again.
+	 */
 	public static Decision decisionOf(AgentSuspendedWaitingCondition<?, ?> condition) {
 		if (condition.getInstanceValue() instanceof ClarificationAnswer answer) {
-			final boolean allowed = answer.getChosenOptions() != null
-					&& answer.getChosenOptions().contains(ToolCallConfirmationOptions.ALLOW);
-			final String message = answer.getCustomExplanation() != null && !answer.getCustomExplanation().isBlank()
-					? answer.getCustomExplanation().strip()
-					: null;
-			return new Decision(allowed, message);
+			final List<String> chosen = answer.getChosenOptions() != null ? answer.getChosenOptions() : List.of();
+			final String message = messageOf(answer);
+			if (chosen.contains(ToolCallConfirmationOptions.ALLOW)) {
+				return new Decision(true, message);
+			}
+			if (chosen.contains(ToolCallConfirmationOptions.DENY)) {
+				return new Decision(false, message);
+			}
+			return null;
 		}
 		return new Decision(false, null);
+	}
+
+	/** The message a person left with their answer; null when none. */
+	public static String messageOf(ClarificationAnswer answer) {
+		return answer != null && answer.getCustomExplanation() != null && !answer.getCustomExplanation().isBlank()
+				? answer.getCustomExplanation().strip()
+				: null;
 	}
 
 	/** The decision on a call to the tool with the arguments; null when nobody decided it. */

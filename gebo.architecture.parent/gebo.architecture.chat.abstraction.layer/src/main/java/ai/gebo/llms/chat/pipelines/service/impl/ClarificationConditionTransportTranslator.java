@@ -22,6 +22,7 @@ import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ToolCallConfirmationOptions;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.AgentSuspendedWaitingConditionReactionDto;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ClarificationConditionAttributes;
@@ -48,6 +49,16 @@ public class ClarificationConditionTransportTranslator extends GAbstractConditio
 	public static final String OPTION_DESCRIPTION = "description";
 	public static final String MULTIPLE_CHOICE = "multipleChoice";
 	public static final String CUSTOM_ANSWER_ALLOWED = "customAnswerAllowed";
+	/**
+	 * True on a tool call put to a person ({@link ToolCallConfirmationOptions}): a client
+	 * shows it in its own words, from the tool ({@value #TOOL_NAME}) and the arguments
+	 * ({@value #TOOL_ARGUMENTS}), the options being {@value ToolCallConfirmationOptions#ALLOW}
+	 * and {@value ToolCallConfirmationOptions#DENY}, the explanation a message going with
+	 * either.
+	 */
+	public static final String TOOL_CALL_CONFIRMATION = "toolCallConfirmation";
+	public static final String TOOL_NAME = "toolName";
+	public static final String TOOL_ARGUMENTS = "toolArguments";
 	/** The attributes of the reaction. */
 	public static final String CHOSEN_OPTION = "chosenOption";
 	public static final String CHOSEN_OPTIONS = "chosenOptions";
@@ -77,6 +88,11 @@ public class ClarificationConditionTransportTranslator extends GAbstractConditio
 		attributes.put(OPTIONS, options != null ? described(options) : List.of());
 		attributes.put(MULTIPLE_CHOICE, options != null && options.isMultipleChoice());
 		attributes.put(CUSTOM_ANSWER_ALLOWED, options != null && options.isCustomAnswerAllowed());
+		if (options instanceof ToolCallConfirmationOptions call) {
+			attributes.put(TOOL_CALL_CONFIRMATION, true);
+			attributes.put(TOOL_NAME, call.getToolName());
+			attributes.put(TOOL_ARGUMENTS, call.getArguments());
+		}
 	}
 
 	@Override

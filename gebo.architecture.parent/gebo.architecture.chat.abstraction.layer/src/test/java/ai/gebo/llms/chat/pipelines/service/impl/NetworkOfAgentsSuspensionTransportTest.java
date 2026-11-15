@@ -18,6 +18,7 @@ import ai.gebo.architecture.agents.model.NetworkOfAgentsExecutionResult;
 import ai.gebo.architecture.agents.model.ClarificationAnswer;
 import ai.gebo.architecture.agents.model.ClarificationOption;
 import ai.gebo.architecture.agents.model.ClarificationOptions;
+import ai.gebo.architecture.agents.model.ToolCallConfirmationOptions;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.NetworkOfAgentsSuspendedState;
 import ai.gebo.llms.chat.pipelines.service.defaultsteps.impl.AgentSuspendedWaitingConditionTransportTranslatorRepositoryPatternImpl;
 
@@ -118,6 +119,36 @@ class NetworkOfAgentsSuspensionTransportTest {
 
 		assertEquals("default", state.getConditions().get(0).getConditionType());
 		assertEquals("Which year?", state.getConditions().get(0).getAttributes().get("statement"));
+	}
+
+	@Test
+	void aToolCallPutToAPersonCarriesTheToolAndArgumentsAndReadsAsAChoiceWithAMessage() {
+		ToolCallConfirmationOptions options = new ToolCallConfirmationOptions();
+		options.setToolName("readUrl");
+		options.setArguments("{\"url\":\"https://example.com\"}");
+		options.setQuestion("Allow the agent to run the tool \"readUrl\" with these arguments?\n"
+				+ "{\"url\":\"https://example.com\"}");
+		options.getOptions().addAll(List.of(ClarificationOption.of(ToolCallConfirmationOptions.ALLOW, "It runs"),
+				ClarificationOption.of(ToolCallConfirmationOptions.DENY, "It does not run")));
+		options.setCustomAnswerAllowed(true);
+		NetworkOfAgentsSuspendedState state = new NetworkOfAgentsSuspendedState();
+		state.setConditions(List.of(clarification.translate(new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
+				ClarificationAnswer.class, options.getQuestion(), "Reads a page", null, true, ClarificationOptions.class,
+				options))));
+		Map<String, Object> attributes = state.getConditions().get(0).getAttributes();
+
+		assertEquals(Boolean.TRUE, attributes.get(ClarificationConditionTransportTranslator.TOOL_CALL_CONFIRMATION));
+		assertEquals("readUrl", attributes.get(ClarificationConditionTransportTranslator.TOOL_NAME));
+		assertEquals("{\"url\":\"https://example.com\"}",
+				attributes.get(ClarificationConditionTransportTranslator.TOOL_ARGUMENTS));
+		assertEquals(options.getQuestion() + "\n- Allow: It runs\n- Deny: It does not run\n"
+				+ NetworkOfAgentsSuspensionTransport.TOOL_CALL_MESSAGE_NOTE, NetworkOfAgentsSuspensionTransport.render(state));
+		assertNull(clarificationConditionAttributes(clarificationCondition(true)).get(
+				ClarificationConditionTransportTranslator.TOOL_CALL_CONFIRMATION), "any other question: not a tool call");
+	}
+
+	private Map<String, Object> clarificationConditionAttributes(AgentSuspendedWaitingCondition<?, ?> condition) {
+		return clarification.translate(condition).getAttributes();
 	}
 
 	@Test

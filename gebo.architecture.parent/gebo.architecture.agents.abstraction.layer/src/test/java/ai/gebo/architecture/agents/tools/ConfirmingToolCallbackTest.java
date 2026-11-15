@@ -37,8 +37,9 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
  * Pins the tools an agent runs only once a person allows the call: put to a person as a
  * question with the tool and its arguments, not run; on the respawn an allowed call with
  * the same arguments (whatever the order of their keys) runs, a refused one returns the
- * person's message, other arguments are asked again; where nobody can be asked nothing
- * runs; the model is told the outcome.
+ * person's message, other arguments are asked again; a message goes with either option
+ * and alone decides nothing; where nobody can be asked nothing runs; the model is told
+ * the outcome.
  */
 class ConfirmingToolCallbackTest {
 
@@ -139,6 +140,36 @@ class ConfirmingToolCallbackTest {
 	}
 
 	@Test
+	void aMessageAloneDecidesNothingTheCallIsAskedAgain() {
+		// "yes, go ahead" written instead of choosing Allow: only the option runs the tool
+		ToolCallConfirmations decided = ToolCallConfirmations
+				.of(List.of(answered("{\"id\":\"doc-1\"}", ClarificationAnswer.explanation("yes, go ahead"))));
+		GWaitExternalConditionSink wait = new GWaitExternalConditionSink();
+
+		String result = new ConfirmingToolCallback(deleteDocument, decided).call("{\"id\":\"doc-1\"}",
+				contextWaitingIn(wait));
+
+		assertEquals(ConfirmingToolCallback.WAITING, result, "neither run nor refused: put to the person again");
+		assertEquals(0, runs.get());
+		assertEquals(1, wait.waited().size());
+		assertNull(ToolCallConfirmations.decisionOf(answered("{\"id\":\"doc-1\"}", ClarificationAnswer.explanation("no"))));
+	}
+
+	@Test
+	void aMessageGoesWithEitherOption() {
+		ClarificationAnswer allow = ClarificationAnswer.option(ToolCallConfirmationOptions.ALLOW);
+		allow.setCustomExplanation("  only this one  ");
+
+		ToolCallConfirmations.Decision decision = ToolCallConfirmations.decisionOf(answered("{\"id\":\"doc-1\"}", allow));
+
+		assertTrue(decision.allowed());
+		assertEquals("only this one", decision.message());
+		String told = ResolvedConditionText.render(answered("{\"id\":\"doc-1\"}", allow));
+		assertTrue(told.startsWith("A person allowed"), told);
+		assertTrue(told.endsWith("Their message: only this one"), told);
+	}
+
+	@Test
 	void aConfirmationLeftUnansweredRefusesTheCall() {
 		ToolCallConfirmations decided = ToolCallConfirmations.of(List.of(answered("{\"id\":\"doc-1\"}", null)));
 
@@ -194,6 +225,13 @@ class ConfirmingToolCallbackTest {
 
 		String unanswered = ResolvedConditionText.render(answered("{\"id\":\"doc-1\"}", null));
 		assertTrue(unanswered.startsWith("Nobody confirmed the call to the tool deleteDocument"), unanswered);
+
+		String messageOnly = ResolvedConditionText
+				.render(answered("{\"id\":\"doc-1\"}", ClarificationAnswer.explanation("yes, go ahead")));
+		assertTrue(messageOnly.startsWith("A person answered about the call to the tool deleteDocument"), messageOnly);
+		assertTrue(messageOnly.contains("without allowing or refusing it: it was not run"), messageOnly);
+		assertTrue(messageOnly.contains("Their message: yes, go ahead"), messageOnly);
+		assertTrue(messageOnly.contains("call the tool again: the person is asked to allow it"), messageOnly);
 
 		assertNull(ConfirmingToolCallback.answered(null));
 	}
