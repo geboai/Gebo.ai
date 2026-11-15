@@ -29,6 +29,7 @@ import ai.gebo.architecture.angular.persistence.model.SimpleGObjectRef;
 import ai.gebo.architecture.angular.persistence.service.GeboAngularFormGroupMetaInfoService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
@@ -36,6 +37,8 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository
 import ai.gebo.llms.chat.abstraction.layer.session.model.ChatInteractions;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.llms.chat.client.rest.controllers.GeboAdminChatProfilesConfigurationController;
+import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
+import ai.gebo.model.base.GObjectRef;
 
 /**
  * A chat profile a conversation runs with is not deletable: the conversation's
@@ -160,6 +163,30 @@ public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest 
 			if (persistenceManager.findById(GChatProfileConfiguration.class, profile.getCode()) != null) {
 				persistenceManager.delete(profile);
 			}
+		}
+	}
+
+	/**
+	 * A chat model is checked through the profiles that run with it. A fresh
+	 * profile holds no initialized property besides its reference, so the example
+	 * has nothing to ignore: the check must still run, not fail, and see the
+	 * profile.
+	 */
+	@Test
+	public void aChatModelAProfileRunsWithIsNotDeletable() throws Exception {
+		final GBaseChatModelConfig model = new GOpenAIChatModelConfig();
+		model.setCode("deletable-test-chat-model-" + UUID.randomUUID());
+		model.setDescription("Chat model of the deletable test");
+		assertTrue(persistenceManager.isDeletable(model), "no profile runs with the model yet");
+
+		final GChatProfileConfiguration profile = new GChatProfileConfiguration();
+		profile.setDescription("Profile running with the test chat model");
+		profile.setChatModelReference(GObjectRef.of(model));
+		final GChatProfileConfiguration saved = persistenceManager.insert(profile);
+		try {
+			assertFalse(persistenceManager.isDeletable(model), "the profile runs with the model");
+		} finally {
+			persistenceManager.delete(saved);
 		}
 	}
 }
