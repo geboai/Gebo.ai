@@ -27,7 +27,7 @@ import java.util.List;
  * GUserChatSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T23:11:35.051684500+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
 
 public class GUserChatSession {
   @JsonProperty("code")

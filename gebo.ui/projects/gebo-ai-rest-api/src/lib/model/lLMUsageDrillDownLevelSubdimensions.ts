@@ -21,13 +21,14 @@ export interface LLMUsageDrillDownLevelSubdimensions {
     month?: Array<number>;
 }
 export namespace LLMUsageDrillDownLevelSubdimensions {
-    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT';
+    export type ModelTypeEnum = 'CHAT' | 'EMBEDDING' | 'IMAGE' | 'RANKER' | 'TTS' | 'TRANSCRIPT' | 'DECISION';
     export const ModelTypeEnum = {
         CHAT: 'CHAT' as ModelTypeEnum,
         EMBEDDING: 'EMBEDDING' as ModelTypeEnum,
         IMAGE: 'IMAGE' as ModelTypeEnum,
         RANKER: 'RANKER' as ModelTypeEnum,
         TTS: 'TTS' as ModelTypeEnum,
-        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum
+        TRANSCRIPT: 'TRANSCRIPT' as ModelTypeEnum,
+        DECISION: 'DECISION' as ModelTypeEnum
     };
 }

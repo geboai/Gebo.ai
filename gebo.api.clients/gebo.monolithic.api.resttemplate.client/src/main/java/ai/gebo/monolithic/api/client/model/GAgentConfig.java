@@ -28,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T22:08:53.638937800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
