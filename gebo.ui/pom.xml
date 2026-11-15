@@ -49,8 +49,8 @@
 						<version>1.7.6</version>
 						<configuration>
 							<workingDirectory>./</workingDirectory>
-							<nodeVersion>v22.14.0</nodeVersion>
-							<npmVersion>10.9.2</npmVersion>
+							<nodeVersion>v24.22.3</nodeVersion>
+							<npmVersion>11.19.1</npmVersion>
 						</configuration>
 						<executions>
 							<execution>
