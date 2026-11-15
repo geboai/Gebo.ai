@@ -61,6 +61,36 @@ class OpenAIModelsLibrarySegmentTest {
 	}
 
 	@Test
+	void theFastSetupPresetsTakeTheirOwnRulesBeforeTheFamilyOne() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+
+		for (String id : List.of("gpt-5.2", "gpt-5.2-2025-12-11")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertEquals(Sampling.WITHOUT_REASONING, rules.getSampling(), id + ": temperature at effort none only");
+			assertEquals(List.of("none", "low", "medium", "high", "xhigh"), rules.getReasoningEfforts(), id);
+		}
+		for (String id : List.of("gpt-5.4-mini", "gpt-5.4-mini-2026-03-17")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertEquals(Sampling.REJECTED, rules.getSampling(), id + ": not named by the guide's sampling rule");
+			assertEquals(List.of("none", "low", "medium", "high", "xhigh"), rules.getReasoningEfforts(), id);
+		}
+		// the other variants stay on the family rule: no effort known, no sampling
+		for (String id : List.of("gpt-5.2-pro", "gpt-5.4-nano", "gpt-5.4")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertEquals(Sampling.REJECTED, rules.getSampling(), id);
+			assertFalse(rules.knowsEfforts(), id + ": the family rule");
+		}
+
+		for (String id : List.of("gpt-5.2", "gpt-5.4-mini")) {
+			assertEquals(400000, library.findByProviderIdAndModelId("openai", id).getContextLength(), id);
+			assertEquals(128000, library.findByProviderIdAndModelId("openai", id).getMaxOutputToken(), id);
+			assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", id).getSupportsFunctionCalls(), id);
+		}
+		assertFalse(OpenAiResponsesChatModel.usesResponsesApi("gpt-5.2"), "Chat Completions");
+		assertFalse(OpenAiResponsesChatModel.usesResponsesApi("gpt-5.4-mini"), "Chat Completions");
+	}
+
+	@Test
 	void theModelObjectTellsItsShutdownAndTheWindowACompatibleServerReports() {
 		ai.gebo.openai.integration.client.model.OpenAIModel shutting = new ai.gebo.openai.integration.client.model.OpenAIModel();
 		shutting.setId("gpt-4o-mini-tts");
