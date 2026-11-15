@@ -15,6 +15,11 @@ RUN mkdir -p /opt/gebo.ai/home \
              /opt/gebo.ai/config \
              /opt/gebo.ai/logs \
              /opt/gebo.ai/shares
+# tini as PID 1: it hands docker's SIGTERM to the JVM, which then shuts down
+# gracefully instead of being SIGKILLed when the stop timeout runs out (a shell
+# entrypoint keeps the signal for itself), and it reaps the orphaned children of
+# the processes the application starts.
+RUN apt-get update && apt-get install -y --no-install-recommends tini && rm -rf /var/lib/apt/lists/*
 COPY gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
@@ -66,4 +71,5 @@ ENV  GEBO_WORK_DIRECTORY="/opt/gebo.ai/work"
 ENV  GEBO_HOME="/opt/gebo.ai/home"
 EXPOSE 12999
 WORKDIR /opt/gebo.ai
-ENTRYPOINT  java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME  -jar /opt/gebo.ai/gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar
+# exec: the JVM replaces the shell, so the signal tini forwards reaches it
+ENTRYPOINT ["/usr/bin/tini", "--", "/bin/sh", "-c", "exec java $JAVA_TOOL_OPTIONS -DGEBO_WORK_DIRECTORY=$GEBO_WORK_DIRECTORY -DGEBO_HOME=$GEBO_HOME -jar /opt/gebo.ai/gebo.ai.app-1.0.6.0-SNAPSHOT-bootable.jar"]
