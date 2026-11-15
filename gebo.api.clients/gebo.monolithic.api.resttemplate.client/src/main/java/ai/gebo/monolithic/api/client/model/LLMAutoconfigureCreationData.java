@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMAutoconfigureCreationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:00:30.875750714+01:00[Europe/Rome]")
 
 public class LLMAutoconfigureCreationData {
   @JsonProperty("vendorId")
@@ -57,6 +57,9 @@ public class LLMAutoconfigureCreationData {
 
   @JsonProperty("imagesModel")
   private String imagesModel = null;
+
+  @JsonProperty("decisionModel")
+  private String decisionModel = null;
 
   public LLMAutoconfigureCreationData vendorId(String vendorId) {
     this.vendorId = vendorId;
@@ -256,6 +259,24 @@ public class LLMAutoconfigureCreationData {
     this.imagesModel = imagesModel;
   }
 
+  public LLMAutoconfigureCreationData decisionModel(String decisionModel) {
+    this.decisionModel = decisionModel;
+    return this;
+  }
+
+   /**
+   * Get decisionModel
+   * @return decisionModel
+  **/
+  @Schema(description = "")
+  public String getDecisionModel() {
+    return decisionModel;
+  }
+
+  public void setDecisionModel(String decisionModel) {
+    this.decisionModel = decisionModel;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -276,12 +297,13 @@ public class LLMAutoconfigureCreationData {
         Objects.equals(this.rankerModel, llMAutoconfigureCreationData.rankerModel) &&
         Objects.equals(this.transcriptModel, llMAutoconfigureCreationData.transcriptModel) &&
         Objects.equals(this.ttsModel, llMAutoconfigureCreationData.ttsModel) &&
-        Objects.equals(this.imagesModel, llMAutoconfigureCreationData.imagesModel);
+        Objects.equals(this.imagesModel, llMAutoconfigureCreationData.imagesModel) &&
+        Objects.equals(this.decisionModel, llMAutoconfigureCreationData.decisionModel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(vendorId, secretId, newApiSecret, newUserName, defaultChatModel, internalServicesModel, embeddingModel, rankerModel, transcriptModel, ttsModel, imagesModel);
+    return Objects.hash(vendorId, secretId, newApiSecret, newUserName, defaultChatModel, internalServicesModel, embeddingModel, rankerModel, transcriptModel, ttsModel, imagesModel, decisionModel);
   }
 
 
@@ -301,6 +323,7 @@ public class LLMAutoconfigureCreationData {
     sb.append("    transcriptModel: ").append(toIndentedString(transcriptModel)).append("\n");
     sb.append("    ttsModel: ").append(toIndentedString(ttsModel)).append("\n");
     sb.append("    imagesModel: ").append(toIndentedString(imagesModel)).append("\n");
+    sb.append("    decisionModel: ").append(toIndentedString(decisionModel)).append("\n");
     sb.append("}");
     return sb.toString();
   }

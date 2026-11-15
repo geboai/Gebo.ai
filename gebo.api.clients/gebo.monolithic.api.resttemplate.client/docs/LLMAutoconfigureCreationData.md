@@ -14,3 +14,4 @@ Name | Type | Description | Notes
 **transcriptModel** | **String** |  |  [optional]
 **ttsModel** | **String** |  |  [optional]
 **imagesModel** | **String** |  |  [optional]
+**decisionModel** | **String** |  |  [optional]

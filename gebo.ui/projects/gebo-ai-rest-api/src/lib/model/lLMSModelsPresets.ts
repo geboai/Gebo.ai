@@ -18,13 +18,14 @@ export interface LLMSModelsPresets {
     choices?: Array<LLMModelPresetChoice>;
 }
 export namespace LLMSModelsPresets {
-    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT';
+    export type TypeEnum = 'CHAT' | 'EMBEDDING' | 'RANKING' | 'IMAGESGEN' | 'TTS' | 'TRANSCRIPT' | 'DECISION';
     export const TypeEnum = {
         CHAT: 'CHAT' as TypeEnum,
         EMBEDDING: 'EMBEDDING' as TypeEnum,
         RANKING: 'RANKING' as TypeEnum,
         IMAGESGEN: 'IMAGESGEN' as TypeEnum,
         TTS: 'TTS' as TypeEnum,
-        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum
+        TRANSCRIPT: 'TRANSCRIPT' as TypeEnum,
+        DECISION: 'DECISION' as TypeEnum
     };
 }

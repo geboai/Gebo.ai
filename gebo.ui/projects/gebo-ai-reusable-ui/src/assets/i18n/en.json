@@ -4224,7 +4224,20 @@
         "label": "set as default",
         "help": "Set this model as the default text to speech model (overrides the current one if any)."
       },
-      "TtsCurDef": { "label": "Current default" }
+      "TtsCurDef": { "label": "Current default" },
+      "decisionPresetChoice": {
+        "label": "Default decision model",
+        "help": "Select one of the predefined decision models. It is created as the default decision model, which judges whether each retrieved fragment is useful to the question."
+      },
+      "decisionAdvancedChoice": {
+        "label": "Decision model",
+        "help": "Select one of the supplier published decision models."
+      },
+      "decisionAdvancedSetAsDefault": {
+        "label": "set as default",
+        "help": "Set this model as the default decision model (overrides the current one if any)."
+      },
+      "DecCurDef": { "label": "Current default" }
     },
     "GeboAIEasyVendorConfigurationComponent": {
       "CreateAdvancedBtn": { "label": "Create and activate" },
@@ -4273,6 +4286,10 @@
       "ImagesModel": {
         "label": "Default image generation model",
         "help": "This model will be responsible of doing image generation"
+      },
+      "DecisionModel": {
+        "label": "Default decision model",
+        "help": "This model judges whether each retrieved fragment is useful to the question"
       },
       "PresetNotOfferedText": {
         "label": "Preconfigured model is not in this provider anymore, please select one"
@@ -4349,6 +4366,10 @@
       "ClassImages": {
         "label": "Image generation model",
         "help": "Generates images from text prompts."
+      },
+      "ClassDecision": {
+        "label": "Decision model",
+        "help": "A small, fast model answering yes/no questions: it judges whether each retrieved fragment is useful to the question, so the answering model works on relevant material."
       },
       "SupportedByLabel": { "label": "Supported by providers:" }
     },
@@ -4483,7 +4504,17 @@
       "ClassImagesDeprecated": {
         "label": "The provider has deprecated this model"
       },
-      "ClassImagesReplacement": { "label": "It suggests in its place" }
+      "ClassImagesReplacement": { "label": "It suggests in its place" },
+      "ClassDecision": {
+        "label": "Decision model",
+        "help": "A small, fast model answering yes/no questions: it judges whether each retrieved fragment is useful to the question, so the answering model works on relevant material."
+      },
+      "ClassDecisionNotOffered": { "label": "The provider does not offer this model type" },
+      "ClassDecisionModify": { "label": "Change this model" },
+      "ClassDecisionEnable": { "label": "Configure this model" },
+      "ClassDecisionRetires": { "label": "The provider retires this model on" },
+      "ClassDecisionDeprecated": { "label": "The provider has deprecated this model" },
+      "ClassDecisionReplacement": { "label": "It suggests in its place" }
     },
     "LLMSEasySummaryStepComponent": {
       "SummaryComplete": {
@@ -4506,7 +4537,9 @@
       "ClassTts": { "label": "Text to speech model" },
       "ClassTtsSummaryNone": { "label": "Not configured" },
       "ClassImages": { "label": "Image generation model" },
-      "ClassImagesSummaryNone": { "label": "Not configured" }
+      "ClassImagesSummaryNone": { "label": "Not configured" },
+      "ClassDecision": { "label": "Decision model" },
+      "ClassDecisionSummaryNone": { "label": "Not configured" }
     },
     "LLMSEasyClassStatusComponent": {
       "ClassStatusNotConfigured": { "label": "Not configured yet" },

@@ -12,3 +12,4 @@ Name | Type | Description | Notes
 **imagesModelExists** | **Boolean** |  |  [optional]
 **ttsModelExists** | **Boolean** |  |  [optional]
 **transcriptModelExists** | **Boolean** |  |  [optional]
+**decisionModelExists** | **Boolean** |  |  [optional]

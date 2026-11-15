@@ -71,6 +71,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
+    protected decisionModelPresetsFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
     protected chatModelAdvancedFormGroup: FormGroup = new FormGroup({
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
@@ -96,18 +100,24 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         setAsDefault: new FormControl(),
         choosedModel: new FormControl()
     });
+    protected decisionModelAdvancedFormGroup: FormGroup = new FormGroup({
+        setAsDefault: new FormControl(),
+        choosedModel: new FormControl()
+    });
     protected chatPresets: LLMModelPresetChoice[] = [];
     protected embeddingPresets: LLMModelPresetChoice[] = [];
     protected imagePresets: LLMModelPresetChoice[] = [];
     protected rankingPresets: LLMModelPresetChoice[] = [];
     protected transcriptPresets: LLMModelPresetChoice[] = [];;
     protected ttsPresets: LLMModelPresetChoice[] = [];;
+    protected decisionPresets: LLMModelPresetChoice[] = [];
     protected lookedUpChatModels: GBaseModelChoice[] = [];
     protected lookedUpEmbeddingModels: GBaseModelChoice[] = [];
     protected lookedUpRankingModels: GBaseModelChoice[] = [];
     protected lookedUpImagesModels: GBaseModelChoice[] = [];
     protected lookedUpTtsModels: GBaseModelChoice[] = [];
     protected lookedUpTranscriptModels: GBaseModelChoice[] = [];
+    protected lookedUpDecisionModels: GBaseModelChoice[] = [];
     private oldCredentialId?: string;
     private oldBaseUrl?: string;
     protected llmsStatus!: ComponentLLMSStatus;
@@ -275,6 +285,9 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                         if (x.type === "TRANSCRIPT") {
                             this.lookedUpTranscriptModels = current.result ? current.result : [];
                         }
+                        if (x.type === "DECISION") {
+                            this.lookedUpDecisionModels = current.result ? current.result : [];
+                        }
                     });
                     this.assignBackendMessages(toastMessages);
                 },
@@ -301,6 +314,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                 this.imagesModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.imagesModelSetup !== true);
                 this.transcriptModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.transcriptModelSetup !== true);
                 this.ttsModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.ttsModelSetup !== true);
+                this.decisionModelAdvancedFormGroup.controls["setAsDefault"].setValue(value?.decisionModelSetup !== true);
             },
             complete: () => {
                 this.loading = false;
@@ -394,6 +408,13 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
                                 this.ttsModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
                             }
                         } break;
+                        case "DECISION": {
+                            this.decisionPresets = x.choices ? x.choices : [];
+                            const defaultPreset = x.choices?.find(y => y.defaultChoice === true);
+                            if (defaultPreset?.code) {
+                                this.decisionModelPresetsFormGroup.patchValue({ choosedModel: defaultPreset.code })
+                            }
+                        } break;
                     }
             });
 
@@ -409,9 +430,10 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected get showImages(): boolean { return this.llmsStatus?.imagesModelSetup !== true; }
     protected get showTts(): boolean { return this.llmsStatus?.ttsModelSetup !== true; }
     protected get showTranscript(): boolean { return this.llmsStatus?.transcriptModelSetup !== true; }
+    protected get showDecision(): boolean { return this.llmsStatus?.decisionModelSetup !== true; }
     protected get allKindsConfigured(): boolean {
         return !this.showDefaultChat && !this.showServiceChat && !this.showEmbedding
-            && !this.showRanker && !this.showImages && !this.showTts && !this.showTranscript;
+            && !this.showRanker && !this.showImages && !this.showTts && !this.showTranscript && !this.showDecision;
     }
     protected get allConfiguredNotice(): ToastMessageOptions[] {
         return this.allKindsConfigured ? [{
@@ -428,7 +450,8 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             this.rankerModelPresetsFormGroup.value,
             this.imagesModelPresetsFormGroup.value,
             this.transcriptModelPresetsFormGroup.value,
-            this.ttsModelPresetsFormGroup.value
+            this.ttsModelPresetsFormGroup.value,
+            this.decisionModelPresetsFormGroup.value
         ];
 
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
@@ -442,7 +465,8 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             this.rankerModelAdvancedFormGroup.value,
             this.imagesModelAdvancedFormGroup.value,
             this.transcriptModelAdvancedFormGroup.value,
-            this.ttsModelAdvancedFormGroup.value
+            this.ttsModelAdvancedFormGroup.value,
+            this.decisionModelAdvancedFormGroup.value
         ];
 
         return modelChoices.filter(x => x.choosedModel ? true : false)?.length > 0;
@@ -465,6 +489,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.addModelData(this.imagesModelPresetsFormGroup, modelDataCreationArray, "IMAGESGEN", this.showImages);
         this.addModelData(this.transcriptModelPresetsFormGroup, modelDataCreationArray, "TRANSCRIPT", this.showTranscript);
         this.addModelData(this.ttsModelPresetsFormGroup, modelDataCreationArray, "TTS", this.showTts);
+        this.addModelData(this.decisionModelPresetsFormGroup, modelDataCreationArray, "DECISION", this.showDecision);
 
         this.createLLMS(modelDataCreationArray);
     }
@@ -480,6 +505,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.addModelData(this.imagesModelAdvancedFormGroup, modelDataCreationArray, "IMAGESGEN", true, undefined, true);
         this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT", true, undefined, true);
         this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS", true, undefined, true);
+        this.addModelData(this.decisionModelAdvancedFormGroup, modelDataCreationArray, "DECISION", true, undefined, true);
         this.createLLMS(modelDataCreationArray);
     }
     private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum, uses?: Array<LLMCreateModelData.UsesEnum>, honorDefaultFlag: boolean = false): LLMCreateModelData | undefined {
@@ -538,6 +564,7 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
             case "IMAGESGEN": return "Image generation model";
             case "TTS": return "Text to speech model";
             case "TRANSCRIPT": return "Transcript model";
+            case "DECISION": return "Decision model";
         }
         return type ? type : "Model";
     }

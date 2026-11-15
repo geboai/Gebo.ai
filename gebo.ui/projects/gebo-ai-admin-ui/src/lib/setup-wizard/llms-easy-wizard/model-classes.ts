@@ -10,14 +10,14 @@
 import { ComponentLLMSStatus, LLMCreateModelData } from "@Gebo.ai/gebo-ai-rest-api";
 
 /**
- * The seven model "classes" the easy wizard drives, in the order they are shown. A class is a
+ * The eight model "classes" the easy wizard drives, in the order they are shown. A class is a
  * single configurable model slot: two of them (CHAT and SERVICE) share the backend ModelType
  * CHAT but differ by their {@link ModelClassDescriptor.uses}, the others map one-to-one to a
  * backend ModelType. This one descriptor table replaces the seven times repeated per-kind code
  * of the original easy/expert components: every step in the wizard iterates over
  * {@link MODEL_CLASSES} instead of hand-listing each kind.
  */
-export type ModelClassId = "CHAT" | "SERVICE" | "EMBEDDING" | "RANKING" | "TTS" | "TRANSCRIPT" | "IMAGESGEN";
+export type ModelClassId = "CHAT" | "SERVICE" | "EMBEDDING" | "RANKING" | "TTS" | "TRANSCRIPT" | "IMAGESGEN" | "DECISION";
 
 export interface ModelClassDescriptor {
     /** Internal per-slot id, also the DOM id / i18n component id prefix of its controls. */
@@ -80,6 +80,12 @@ export const MODEL_CLASSES: ModelClassDescriptor[] = [
         statusSetup: s => s?.imagesModelSetup,
         statusCode: s => s?.imagesModelCode,
         statusProvider: s => s?.imagesModelProviderId
+    },
+    {
+        id: "DECISION", type: "DECISION", required: false, fieldId: "ClassDecision",
+        statusSetup: s => s?.decisionModelSetup,
+        statusCode: s => s?.decisionModelCode,
+        statusProvider: s => s?.decisionModelProviderId
     }
 ];
 
@@ -116,6 +122,10 @@ export const CLASS_TEXT: Record<ModelClassId, { label: string; description: stri
     IMAGESGEN: {
         label: "Image generation model",
         description: "Generates images from text prompts."
+    },
+    DECISION: {
+        label: "Decision model",
+        description: "A small, fast model answering yes/no questions: it judges whether each retrieved fragment is useful to the question, so the answering model works on relevant material."
     }
 };
 

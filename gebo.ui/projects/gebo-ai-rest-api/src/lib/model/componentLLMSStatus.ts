@@ -19,6 +19,7 @@ export interface ComponentLLMSStatus {
     imagesModelSetup?: boolean;
     ttsModelSetup?: boolean;
     transcriptModelSetup?: boolean;
+    decisionModelSetup?: boolean;
     chatModelCode?: string;
     internalServicesChatModelCode?: string;
     embeddedModelCode?: string;
@@ -26,6 +27,7 @@ export interface ComponentLLMSStatus {
     imagesModelCode?: string;
     ttsModelCode?: string;
     transcriptModelCode?: string;
+    decisionModelCode?: string;
     chatModelProviderId?: string;
     internalServicesChatModelProviderId?: string;
     embeddedModelProviderId?: string;
@@ -33,4 +35,5 @@ export interface ComponentLLMSStatus {
     imagesModelProviderId?: string;
     ttsModelProviderId?: string;
     transcriptModelProviderId?: string;
+    decisionModelProviderId?: string;
 }

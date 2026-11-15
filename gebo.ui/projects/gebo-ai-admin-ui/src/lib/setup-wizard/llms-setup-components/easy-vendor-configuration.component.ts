@@ -87,7 +87,8 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
         rankerModel: new FormControl(),
         transcriptModel: new FormControl(),
         ttsModel: new FormControl(),
-        imagesModel: new FormControl()
+        imagesModel: new FormControl(),
+        decisionModel: new FormControl()
     });
     protected loading: boolean = false;
     // Number of model-kind catalogues still downloading from the provider: the panel stays
@@ -217,6 +218,16 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                                 serviceHandler: imagesModels[0].serviceHandler, doModelsLookup: imagesModels[0].doModelsLookup
                             });
                             this.formGroup.controls["imagesModel"].setValue(defaultImagesPreset?.code);
+                        }
+                        const decisionModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "DECISION");
+                        if (decisionModels && decisionModels.length && this.actualProvidersConfiguration?.decisionModelExists !== true) {
+                            const defaultDecisionPreset = decisionModels[0].choices?.find(x => x.defaultChoice === true);
+                            presets.push({
+                                type: "DECISION", presetChoices: decisionModels[0].choices, choice: defaultDecisionPreset?.code,
+                                controlName: "decisionModel", libraryChoices: decisionModels[0].choices,
+                                serviceHandler: decisionModels[0].serviceHandler, doModelsLookup: decisionModels[0].doModelsLookup
+                            });
+                            this.formGroup.controls["decisionModel"].setValue(defaultDecisionPreset?.code);
                         }
                         // Until the provider is queried the combos offer what the vendor library
                         // declares, exactly as before the api key is known. Every vendor owns its

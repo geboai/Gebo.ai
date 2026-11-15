@@ -26,6 +26,7 @@ RANKING | &quot;RANKING&quot;
 IMAGESGEN | &quot;IMAGESGEN&quot;
 TTS | &quot;TTS&quot;
 TRANSCRIPT | &quot;TRANSCRIPT&quot;
+DECISION | &quot;DECISION&quot;
 
 <a name="List<UsesEnum>"></a>
 ## Enum: List&lt;UsesEnum&gt;

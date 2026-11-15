@@ -91,6 +91,13 @@
               gebo-ai-field-element></geboai-editable-listbox-component>
             </gebo-ai-field>
           }
+          @if (preset.type==='DECISION') {
+            <gebo-ai-field id="DecisionModel" label="Default decision model"
+              help="This model judges whether each retrieved fragment is useful to the question">
+              <geboai-editable-listbox-component formControlName="decisionModel" [data]="preset.modelChoices"
+              gebo-ai-field-element></geboai-editable-listbox-component>
+            </gebo-ai-field>
+          }
           <!-- Only one field is rendered per preset, so this flags the combo just above it -->
           @if (preset.presetUnavailable) {
             <div
