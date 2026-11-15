@@ -116,6 +116,15 @@ public class GAgentConfig extends GBaseObject
 	protected List<String> libraryTypeIds = null;
 
 	/**
+	 * The names of the tools this agent runs only once a person allows each call: the
+	 * call, the tool and its arguments, is put to the conversation's user (or answered in
+	 * the processes area), the work waiting for the answer; a refused call is not run and
+	 * the model gets the person's message instead. Any tool the agent mounts can be listed,
+	 * MCP tools included. Null or empty when every call runs as the model makes it.
+	 */
+	protected List<String> toolsNeedingConfirmation = null;
+
+	/**
 	 * The code of the agent configuration this one is a copy of, only while the copy
 	 * is being inserted: its code is made from it. Neither stored nor exchanged.
 	 */

@@ -331,6 +331,27 @@ class GeboToolCallingTest {
 	}
 
 	@Test
+	void theLoadedDecoratorPutsItsToolsInPlaceOfTheCallsOnes() {
+		final IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
+		final List<ToolCallback> configured = List.of(tool("configured"), tool("other"));
+		when(repository.getTools(any())).thenReturn(configured);
+		final PreparingModel model = new PreparingModel(repository, modelAnswering(round -> text("ok")));
+		final ToolCallback gated = tool("configured");
+		final GeboToolCalling toolCalling = GeboToolCalling.builder()
+				.provide(IToolCallbacksDecorator.class, tools -> tools.stream()
+						.map(t -> "configured".equals(t.getToolDefinition().name()) ? gated : t).toList())
+				.build();
+
+		final DefaultChatClientRequestSpec request = (DefaultChatClientRequestSpec) model
+				.prepareCall(prompt(), Map.of(), context(), runningInPlace(), toolCalling).getRequestSpec();
+
+		assertEquals(List.of("configured", "other"), names(request.getToolCallbacks()));
+		assertSame(gated, request.getToolCallbacks().get(0), "the decorator's tool is the one declared");
+		assertEquals(List.of(gated), GeboToolCalling.builder().build().decorated(List.of(gated)),
+				"no decorator, the tools as they are");
+	}
+
+	@Test
 	void aMandatoryToolTakesThePlaceOfTheConfiguredOneOfItsName() {
 		final IGToolCallbackSourceRepositoryPattern repository = mock(IGToolCallbackSourceRepositoryPattern.class);
 		final List<ToolCallback> configured = List.of(tool("configured"));

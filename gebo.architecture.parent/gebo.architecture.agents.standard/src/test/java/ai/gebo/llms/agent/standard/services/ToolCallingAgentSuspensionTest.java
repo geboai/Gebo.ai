@@ -223,4 +223,83 @@ class ToolCallingAgentSuspensionTest {
 		verify(model).textResponse(any(), any(), callContext.capture(), any(GeboToolCalling.class));
 		assertEquals("the-agent", callContext.getValue().getToolsContext().get("held"));
 	}
+
+	/** A tool the agent's configuration lists as needing a person's confirmation. */
+	private final java.util.concurrent.atomic.AtomicInteger deletions = new java.util.concurrent.atomic.AtomicInteger();
+	private final ToolCallback deleteDocument = new ToolCallback() {
+		@Override
+		public org.springframework.ai.tool.definition.ToolDefinition getToolDefinition() {
+			return org.springframework.ai.tool.definition.ToolDefinition.builder().name("deleteDocument")
+					.description("Deletes a document.").inputSchema("{}").build();
+		}
+
+		@Override
+		public String call(String toolInput) {
+			deletions.incrementAndGet();
+			return "deleted";
+		}
+	};
+
+	/** The model calls deleteDocument: the tool as the call mounts it, with the call's tool context. */
+	private void theModelCallsDeleteDocument(String arguments) throws Exception {
+		when(model.textResponse(any(), any(), any(), any(GeboToolCalling.class))).thenAnswer(invocation -> {
+			GeboToolCalling callToolCalling = invocation.getArgument(3, GeboToolCalling.class);
+			ToolCallback mounted = callToolCalling.decorated(List.of(deleteDocument)).get(0);
+			return mounted.call(arguments,
+					new org.springframework.ai.chat.model.ToolContext(callToolCalling.toolsContext(Map.of())));
+		});
+	}
+
+	@Test
+	void aToolNeedingConfirmationSuspendsTheRunWithTheCallAndDoesNotRun() throws Exception {
+		config.setToolsNeedingConfirmation(List.of("deleteDocument"));
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
+		theModelCallsDeleteDocument("{\"id\":\"doc-1\"}");
+
+		List<AgentsExchangeMessage<String>> out = run(new TestAgent());
+
+		assertTrue(out.isEmpty(), "the agent waits for the person");
+		assertEquals(0, deletions.get(), "nothing runs before a person allows it");
+		ArgumentCaptor<AgentSuspendedWaitingCondition> condition = ArgumentCaptor
+				.forClass(AgentSuspendedWaitingCondition.class);
+		verify(handler).enterSuspensionState(eq(network), eq(config), eq(me), any(), condition.capture());
+		ai.gebo.architecture.agents.model.ToolCallConfirmationOptions options = (ai.gebo.architecture.agents.model.ToolCallConfirmationOptions) condition
+				.getValue().getLlmChosenOptions();
+		assertEquals("deleteDocument", options.getToolName());
+		assertEquals("{\"id\":\"doc-1\"}", options.getArguments());
+	}
+
+	@Test
+	void respawnedWithTheCallAllowedTheModelIsToldAndTheCallRuns() throws Exception {
+		config.setToolsNeedingConfirmation(List.of("deleteDocument"));
+		ai.gebo.architecture.agents.model.ToolCallConfirmationOptions options = new ai.gebo.architecture.agents.model.ToolCallConfirmationOptions();
+		options.setToolName("deleteDocument");
+		options.setArguments("{\"id\":\"doc-1\"}");
+		AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions> allowed = new AgentSuspendedWaitingCondition<ClarificationAnswer, ClarificationOptions>(
+				ClarificationAnswer.class, "Allow?", null,
+				ClarificationAnswer.option(ai.gebo.architecture.agents.model.ToolCallConfirmationOptions.ALLOW), true,
+				ClarificationOptions.class, options);
+		when(handler.takeResolvedConditionsOf(me)).thenReturn(List.<AgentSuspendedWaitingCondition>of(allowed));
+		theModelCallsDeleteDocument("{ \"id\" : \"doc-1\" }");
+
+		List<AgentsExchangeMessage<String>> out = run(new TestAgent());
+
+		assertEquals(1, deletions.get(), "the allowed call runs");
+		assertEquals(1, out.size());
+		assertEquals("deleted", out.get(0).getPayload());
+		assertTrue(String.valueOf(inputsGivenToTheModel.get(0)).startsWith("A person allowed the call to the tool deleteDocument"),
+				String.valueOf(inputsGivenToTheModel.get(0)));
+		verify(handler, never()).enterSuspensionState(any(), any(), any(), any(), any());
+	}
+
+	@Test
+	void anAgentListingNoToolRunsItsToolsAsTheyAre() throws Exception {
+		when(handler.takeResolvedConditionsOf(any())).thenReturn(List.of());
+		theModelCallsDeleteDocument("{\"id\":\"doc-1\"}");
+
+		List<AgentsExchangeMessage<String>> out = run(new TestAgent());
+
+		assertEquals(1, deletions.get());
+		assertEquals("deleted", out.get(0).getPayload());
+	}
 }

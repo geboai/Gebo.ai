@@ -93,7 +93,7 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 		// What a tool of the agent's calls declares the run must wait for: read once its
 		// stream ended. A respawned agent is told first what it waited for.
 		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Reactive agent " + getId(), toolCalling,
-				suspensionHandler, contextAgentPersona);
+				suspensionHandler, contextAgentPersona, config);
 		final GeboToolCalling callToolCalling = turn.toolCalling();
 		final RequestType request = turn.toldInput(msg.getPayload());
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(turn.toldContext(chatRequestContext, request),

@@ -14,6 +14,7 @@ import java.util.List;
 
 import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.UnansweredBecause;
+import ai.gebo.architecture.agents.tools.ConfirmingToolCallback;
 import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool;
 
 /**
@@ -68,6 +69,11 @@ public final class ResolvedConditionText {
 	}
 
 	private static String outcomeOf(AgentSuspendedWaitingCondition<?, ?> condition) {
+		final String confirmation = ConfirmingToolCallback.answered(condition);
+		if (confirmation != null) {
+			// a tool call put to a person: allowed, refused or left unanswered
+			return confirmation;
+		}
 		if (condition.getInstanceValue() == null) {
 			return "You were waiting for: " + condition.getWaitingConditionStatement() + "\n" + declinedBy(condition);
 		}

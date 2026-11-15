@@ -111,7 +111,7 @@ public abstract class GAbstractDocumentsSearchNetworkAgentService
 		// What a tool of this call declares the run must wait for: read once the call
 		// ended. A respawned agent is told first what it waited for.
 		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Documents search agent " + getId(), toolCalling, suspensionHandler,
-				contextAgentPersona);
+				contextAgentPersona, config);
 		final GeboToolCalling callToolCalling = turn.toolCalling();
 		final AgentsExchangeMessage<SearchAgentCommand> told = toldMessage(msg, turn);
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,

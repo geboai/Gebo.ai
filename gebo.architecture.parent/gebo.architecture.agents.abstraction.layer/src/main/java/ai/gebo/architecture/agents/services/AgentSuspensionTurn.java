@@ -8,6 +8,7 @@
  */
 package ai.gebo.architecture.agents.services;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -19,7 +20,10 @@ import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
+import ai.gebo.architecture.agents.tools.ConfirmingToolCallback;
+import ai.gebo.architecture.agents.tools.ToolCallConfirmations;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
+import ai.gebo.llms.abstraction.layer.services.toolcalling.IToolCallbacksDecorator;
 
 /**
  * What an agent able to wait does around its model calls in one turn, in its own
@@ -51,13 +55,19 @@ public final class AgentSuspensionTurn {
 	private final List<AgentSuspendedWaitingCondition> resolved;
 
 	private AgentSuspensionTurn(String agent, GeboToolCalling runToolCalling,
-			IGNetworkOfAgentsSuspensionHandler suspensionHandler, AgentNetworkParticipant participant) {
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler, AgentNetworkParticipant participant,
+			Collection<String> toolsNeedingConfirmation) {
 		this.agent = agent;
 		this.suspensionHandler = suspensionHandler;
 		this.participant = participant;
-		this.toolCalling = GeboToolCalling
-				.merged(GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait).build(), runToolCalling);
 		this.resolved = suspensionHandler != null ? suspensionHandler.takeResolvedConditionsOf(participant) : List.of();
+		final GeboToolCalling.Builder own = GeboToolCalling.builder().provide(IGWaitExternalCondition.class, wait);
+		if (toolsNeedingConfirmation != null && !toolsNeedingConfirmation.isEmpty()) {
+			// the tools a person confirms each call of, given the answers of this respawn
+			own.provide(IToolCallbacksDecorator.class,
+					ConfirmingToolCallback.decorator(toolsNeedingConfirmation, ToolCallConfirmations.of(resolved)));
+		}
+		this.toolCalling = GeboToolCalling.merged(own.build(), runToolCalling);
 	}
 
 	/**
@@ -70,7 +80,21 @@ public final class AgentSuspensionTurn {
 	 */
 	public static AgentSuspensionTurn of(String agent, GeboToolCalling runToolCalling,
 			IGNetworkOfAgentsSuspensionHandler suspensionHandler, AgentNetworkParticipant participant) {
-		return new AgentSuspensionTurn(agent, runToolCalling, suspensionHandler, participant);
+		return new AgentSuspensionTurn(agent, runToolCalling, suspensionHandler, participant, List.of());
+	}
+
+	/**
+	 * The turn of an agent whose configuration lists tools a person confirms each call of
+	 * ({@link GAgentConfig#getToolsNeedingConfirmation()}): those tools are put to a person
+	 * before they run (see {@link ConfirmingToolCallback}).
+	 *
+	 * @param config the agent's configuration, null for none
+	 */
+	public static AgentSuspensionTurn of(String agent, GeboToolCalling runToolCalling,
+			IGNetworkOfAgentsSuspensionHandler suspensionHandler, AgentNetworkParticipant participant,
+			GAgentConfig config) {
+		return new AgentSuspensionTurn(agent, runToolCalling, suspensionHandler, participant,
+				config != null ? config.getToolsNeedingConfirmation() : null);
 	}
 
 	/** What the model calls of the turn run with. */
