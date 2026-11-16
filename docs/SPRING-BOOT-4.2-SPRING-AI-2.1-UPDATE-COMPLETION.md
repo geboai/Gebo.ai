@@ -23,7 +23,7 @@ end (section 14).
 
 ### Status at a glance
 
-Updated on 15 November 2026; the details of each item are in "Progress on 15 November" below.
+Updated on 16 November 2026; the details of each item are in "Progress on 15 November" below.
 
 | Item | State | Effort |
 |---|---|---|
@@ -34,15 +34,15 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
 | 2. Boot smoke test of the application | done | — |
 | 3. Live check of a decision model | done on Ollama; OpenAI and generic not run (no Decisions API key) | — |
 | 4. Unit tests of the decision model providers | done | — |
-| 5. REST stubs regenerated from the live API | done for the Angular stubs and the monolithic Java client; the brain microservice clients still to regenerate | small |
+| 5. REST stubs regenerated from the live API | done (Angular stubs, monolithic Java client, the 42 microservice clients) | — |
 | 6. Setup wizard support of the decision kind | done, seen in the browser | — |
 | 7. Tool-call confirmation (human in the loop) | done the harness's way (option b), run live on gpt-5.1 | — |
 | 8. Streamed tool-call arguments in the chat | done | — |
 | 9. Spring AI's own OpenAI Responses model | evaluated: keep Gebo's class for now, blockers listed | medium |
 | 10. Session memory | spike done: nothing to adopt, one test | — |
-| 11. Deprecated APIs cleanup | done but for the generated clients | small |
+| 11. Deprecated APIs cleanup | done; the generated clients stay on `RestTemplate` until Spring Framework 8 (decided 16 November) | — |
 | 12. Spring Security 7.2 | done; one live login per provider still to do | small |
-| 13. Documentation | points 1 and 2 done; 3 to 5 open | small |
+| 13. Documentation | points 1, 2 and 4 done; 3 and 5 open | small |
 | 14. GA bump and merge | when the releases ship (still RC2 on Maven Central) | small |
 
 ### Progress on 15 November
@@ -69,8 +69,18 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
   "rewritten question" made the ranker and the filter judge the placeholder.
 - **Item 5.** The regeneration found one gap in the hand-written stubs (`DECISION` missing from
   the usage drill-down model type) and fixed the base path the previous generation left at
-  13999. The brain microservice's clients are still to regenerate with the microservices
-  procedure.
+  13999.
+  On 16 November the microservices procedure regenerated the 42 microservice clients (21 Java,
+  21 Angular) from the live stack, together with `docs/MICROSERVICES-CONTROLLERS.md` (item 13
+  point 4). Files that differed only by the generation date were restored. The real changes are
+  in brain, heimdall and tyr:
+  - brain: the decision models of this branch, plus about a month of develop the clients had
+    missed (waiting conditions, chat libraries and rules, A2A, more providers);
+  - heimdall: the live sessions, the cluster and system-message controllers;
+  - tyr: the `DECISION` model type.
+  The clients compile and the clients factory's tests pass. The run used a copy of
+  `regenerate-all-microservices-stubs.sh` without its last stage, so the stubs landed on this
+  branch rather than on `feature/stubs-refresh`.
 - **Item 6.** Backend, presets (OpenAI `gpt-6-luna` without models lookup, Ollama
   `d1-omni:600m` and `2b` with it), easy wizard, vendor and expert tabs, stubs, en/it texts,
   `DecisionModelSetupTest`. In the browser (Italian UI): the classes step shows the decision
@@ -139,8 +149,15 @@ Updated on 15 November 2026; the details of each item are in "Progress on 15 Nov
   turns the model's own tool execution off), the dead `getDefaultOptions` overrides, boxed
   constructors, `HttpEntity(MultiValueMap)`, the integration tests' converter on Jackson 3, and
   `RestTemplateWrapperService` plus the hand-written clients on `RestClient`. Left: the
-  generated clients (Jira Cloud, the monolithic and the microservices Java clients), which go
-  with a regeneration on a `RestClient` template.
+  generated clients (Jira Cloud, the monolithic and the microservices Java clients).
+  Decided on 16 November to keep them on `RestTemplate` for now. It is
+  `@Deprecated(since = "7.1", forRemoval = true)`, and `RestTemplateBuilder` is deprecated for
+  removal since Boot 4.2.0, but Spring removes it only in Framework 8.0, with open-source support
+  "until at least 2029" (spring.io, "The state of HTTP clients in Spring", 30 September 2025).
+  When the move comes, only each client's `invoker/ApiClient.java` holds `RestTemplate`:
+  - a `java-restclient` `ApiClient.mustache` next to our `java-resttemplate` templates
+    (swagger-codegen v3 has no RestClient library);
+  - Jira's one `ApiClient.java` ported by hand.
 - **Item 12.** `OpaqueTokenIntrospectorCache`: the 7.2 introspectors, one per configuration
   instead of one per request; the RFC 7662 request pinned by a test on both stacks.
 

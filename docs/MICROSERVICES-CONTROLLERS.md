@@ -6,46 +6,105 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 ### What changed this round
 
-- **Web search providers on brain.** `brain` now exposes four new web-search configuration controllers — `TavilySearchConfigurationController`, `BraveSearchConfigurationController`, `SearxngSearchConfigurationController` and `SerpapiSearchConfigurationController` (7 endpoints each) — alongside the existing `GoogleSearchConfigurationController`. These come from the new `gebo.{tavily,brave,searxng,serpapi}search.handler` modules added to `brain.gebo.ai` (each an `INativeSearchService` web-search provider). Brain went 67 → 70 controllers / 295 → 321 endpoints.
-- **`InternalMessagingTopologyController` is now on every backend.** All 19 controller-serving services expose the shared `InternalMessagingTopologyController` (`getLocalTopology`). One consequence: `fulltextor`, previously recorded here as "0 controllers by design" (a pure message-driven worker), now legitimately exposes that single topology endpoint under `/fulltextor` — so it moves from `— / 0 / 0` to `/fulltextor / 1 / 1`. The generator's hardcoded fulltextor exemption was removed accordingly; only `gateway` (pure `lb://` proxy) and `eureka` (registry, not `swagger-on`) remain at 0 by design.
+Regenerated on 16 November 2026 from `feature/spring-platforms-upgrade` (Spring Boot 4.2.0-RC2,
+Spring AI 2.1.0-RC2) rebased on develop 1.0.7.0-SNAPSHOT. The previous round was the one that
+added the web search providers to `brain`. Since then the following has changed:
+
+- **`brain`: 70 → 99 controllers, 321 → 490 endpoints.**
+  - New from this branch: the decision models (`DecisionModelsController`, plus the OpenAI,
+    Ollama and generic OpenAI-compatible configuration controllers).
+  - New from develop:
+    - the agents' waiting conditions (`WaitingConditionsController`,
+      `WaitingConditionsAdminController`, `NetworkOfAgentsConditionEventsController`);
+    - chat libraries, chat rules (user and admin), chat pipelines tooling and the default
+      agentic chat networks;
+    - A2A (client configuration and server admin);
+    - provider deals, data-flow meta info, language and UI text resources, the Neo4j module
+      setup;
+    - the Bedrock (6), Google Vertex (2), Mistral AI (2) and DeepSeek model configuration
+      controllers.
+  - Gone: `GeboAdvancedSetupStatusController` and `GeboVectorStoreConfigurationController`,
+    both removed from the code.
+- **`heimdall`: 18 → 25 controllers.**
+  - Added: the live sessions (`SessionController`, `SessionsAdminController`), the installation
+    and users-admin cluster controllers, the system messages (user and admin) and
+    `SecurityHeaderDataCompletionController`.
+  - Gone: `GeboAdvancedSetupStatusController`.
+- **`gateway`: 0 → 1.** It now serves `/public/ClientsTopologyProviderController`, the
+  topology the clients read. It is no longer a pure proxy with nothing of its own.
+- **Every backend** now exposes `GeboAngularFormGroupMetaInfoController`.
+- **Controllers that moved off the content services:**
+  - The 14 content and ingestion services no longer expose `IngestionFileTypesLibraryController`.
+  - `mcpclient` no longer exposes `McpClientConfigController`.
+  - Both were already dropped from their clients on 23 September.
+- **Smaller additions:** `graphicator` gains `GraphRagConfigurationController`, `uploads` gains
+  `UploadsBrowsingController`, `tyr` gains `GeboModulesConfigController`.
+
+The 42 clients under `gebo.api.clients/gebo.microservices.clients.parent` were regenerated in
+the same pass. Only brain, heimdall and tyr changed beyond the generation dates (for tyr, the
+`DECISION` model type); the others already matched their services.
 
 
 ## Summary
 
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
-| gateway.gebo.ai | 13000 | `—` | 0 | 0 |
-| brain.gebo.ai | 13001 | `/brain` | 70 | 321 |
-| vectorizator.gebo.ai | 13002 | `/vectorizator` | 3 | 5 |
-| graphicator.gebo.ai | 13003 | `/graphicator` | 3 | 6 |
+| gateway.gebo.ai | 13000 | `—` | 1 | 1 |
+| brain.gebo.ai | 13001 | `/brain` | 99 | 490 |
+| vectorizator.gebo.ai | 13002 | `/vectorizator` | 3 | 6 |
+| graphicator.gebo.ai | 13003 | `/graphicator` | 3 | 13 |
 | chunker.gebo.ai | 13004 | `/chunker` | 5 | 17 |
 | git.gebo.ai | 13005 | `/git` | 7 | 23 |
 | filesystem.gebo.ai | 13006 | `/filesystem` | 9 | 31 |
-| uploads.gebo.ai | 13007 | `/uploads` | 8 | 22 |
+| uploads.gebo.ai | 13007 | `/uploads` | 9 | 31 |
 | userspace.gebo.ai | 13008 | `/userspace` | 8 | 30 |
 | sharepoint.gebo.ai | 13009 | `/sharepoint` | 9 | 46 |
 | confluence.gebo.ai | 13010 | `/confluence` | 9 | 46 |
 | jira.gebo.ai | 13011 | `/jira` | 9 | 46 |
 | aws-s3.gebo.ai | 13012 | `/aws-s3` | 8 | 27 |
 | googledrive.gebo.ai | 13013 | `/googledrive` | 10 | 44 |
-| mcpclient.gebo.ai | 13014 | `/mcpclient` | 9 | 29 |
+| mcpclient.gebo.ai | 13014 | `/mcpclient` | 8 | 22 |
 | integration.gebo.ai | 13015 | `/integration` | 8 | 20 |
-| fulltextor.gebo.ai | 13016 | `/fulltextor` | 1 | 1 |
+| fulltextor.gebo.ai | 13016 | `/fulltextor` | 2 | 4 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
-| heimdall.gebo.ai | 13018 | `/heimdall` | 18 | 75 |
-| tyr.gebo.ai | 13019 | `/tyr` | 8 | 13 |
+| heimdall.gebo.ai | 13018 | `/heimdall` | 25 | 102 |
+| tyr.gebo.ai | 13019 | `/tyr` | 10 | 18 |
 | webdav.gebo.ai | 13020 | `/webdav` | 8 | 29 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
 
-_Gateway routes to backends via `lb://`; it hosts no controllers of its own — its own `/v3/api-docs` is empty by design (it proxies/aggregates the backends' specs at `/api-docs/<service>` when `swagger-on` is active)._
+1 controller(s), 1 endpoint(s):
 
+
+### `clients-topology-provider-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/public/ClientsTopologyProviderController` | getClientsTopology |
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-70 controller(s), 321 endpoint(s):
+99 controller(s), 490 endpoint(s):
 
+
+### `a-2-a-client-config-controller`
+| Method | Path | Operation |
+|---|---|---|
+| DELETE | `/brain/api/admin/A2AClientConfigController/deleteA2AAgent` | deleteA2AClientConfig |
+| GET | `/brain/api/admin/A2AClientConfigController/findByCode` | findByCodeA2AClientConfig |
+| POST | `/brain/api/admin/A2AClientConfigController/insertA2AAgent` | insertA2AClientConfig |
+| GET | `/brain/api/admin/A2AClientConfigController/list` | listA2AClientConfig |
+| POST | `/brain/api/admin/A2AClientConfigController/testAndDiscovery` | testAndDiscoveryA2AClientConfig |
+| POST | `/brain/api/admin/A2AClientConfigController/updateA2AAgent` | updateA2AClientConfig |
+
+### `agentic-chat-default-networks-admin-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/AgenticChatDefaultNetworksAdminController/getAgenticChatDefaultNetworks` | getAgenticChatDefaultNetworks |
+| GET | `/brain/api/admin/AgenticChatDefaultNetworksAdminController/getChoosableChatNetworksOfAgents` | getChoosableChatNetworksOfAgents |
+| GET | `/brain/api/admin/AgenticChatDefaultNetworksAdminController/isAgenticChatNetworksEnabled` | isAgenticChatNetworksEnabled |
+| POST | `/brain/api/admin/AgenticChatDefaultNetworksAdminController/resetAgenticChatDefaultNetwork` | resetAgenticChatDefaultNetwork |
+| POST | `/brain/api/admin/AgenticChatDefaultNetworksAdminController/setAgenticChatDefaultNetwork` | setAgenticChatDefaultNetwork |
 
 ### `anthropic-chat-models-configuration-controller`
 | Method | Path | Operation |
@@ -55,6 +114,60 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/getAnthropicModels` | getAnthropicChatModels |
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/insertAnthropicChatModelConfig` | insertAnthropicChatModelConfig |
 | POST | `/brain/api/admin/AnthropicChatModelsConfigurationController/updateAnthropicChatModelConfig` | updateAnthropicChatModelConfig |
+
+### `bedrock-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BedrockChatModelsConfigurationController/deleteBedrockChatModelConfig` | deleteBedrockChatModelConfig |
+| GET | `/brain/api/admin/BedrockChatModelsConfigurationController/findBedrockChatModelConfigByCode` | findBedrockChatModelConfigByCode |
+| POST | `/brain/api/admin/BedrockChatModelsConfigurationController/getBedrockChatModels` | getBedrockChatModels |
+| POST | `/brain/api/admin/BedrockChatModelsConfigurationController/insertBedrockChatModelConfig` | insertBedrockChatModelConfig |
+| POST | `/brain/api/admin/BedrockChatModelsConfigurationController/updateBedrockChatModelConfig` | updateBedrockChatModelConfig |
+
+### `bedrock-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BedrockEmbeddingModelsConfigurationController/deleteBedrockEmbeddingModelConfig` | deleteBedrockEmbeddingModelConfig |
+| GET | `/brain/api/admin/BedrockEmbeddingModelsConfigurationController/findBedrockEmbeddingModelConfigByCode` | findBedrockEmbeddingModelConfigByCode |
+| POST | `/brain/api/admin/BedrockEmbeddingModelsConfigurationController/getBedrockEmbeddingModels` | getBedrockEmbeddingModels |
+| POST | `/brain/api/admin/BedrockEmbeddingModelsConfigurationController/insertBedrockEmbeddingModelConfig` | insertBedrockEmbeddingModelConfig |
+| POST | `/brain/api/admin/BedrockEmbeddingModelsConfigurationController/updateBedrockEmbeddingModelConfig` | updateBedrockEmbeddingModelConfig |
+
+### `bedrock-image-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BedrockImageModelsConfigurationController/deleteBedrockImageModelConfig` | deleteBedrockImageModelConfig |
+| GET | `/brain/api/admin/BedrockImageModelsConfigurationController/findBedrockImageModelConfigByCode` | findBedrockImageModelConfigByCode |
+| POST | `/brain/api/admin/BedrockImageModelsConfigurationController/getBedrockImageModels` | getBedrockImageModels |
+| POST | `/brain/api/admin/BedrockImageModelsConfigurationController/insertBedrockImageModelConfig` | insertBedrockImageModelConfig |
+| POST | `/brain/api/admin/BedrockImageModelsConfigurationController/updateBedrockImageModelConfig` | updateBedrockImageModelConfig |
+
+### `bedrock-ranker-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BedrockRankerModelsConfigurationController/deleteBedrockRankerModelConfig` | deleteBedrockRankerModelConfig |
+| GET | `/brain/api/admin/BedrockRankerModelsConfigurationController/findBedrockRankerModelConfigByCode` | findBedrockRankerModelConfigByCode |
+| POST | `/brain/api/admin/BedrockRankerModelsConfigurationController/getBedrockRankerModels` | getBedrockRankerModels |
+| POST | `/brain/api/admin/BedrockRankerModelsConfigurationController/insertBedrockRankerModelConfig` | insertBedrockRankerModelConfig |
+| POST | `/brain/api/admin/BedrockRankerModelsConfigurationController/updateBedrockRankerModelConfig` | updateBedrockRankerModelConfig |
+
+### `bedrock-text-to-speech-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BedrockTextToSpeechModelsConfigurationController/deleteBedrockTextToSpeechModelConfig` | deleteBedrockTextToSpeechModelConfig |
+| GET | `/brain/api/admin/BedrockTextToSpeechModelsConfigurationController/findBedrockTextToSpeechModelConfigByCode` | findBedrockTextToSpeechModelConfigByCode |
+| POST | `/brain/api/admin/BedrockTextToSpeechModelsConfigurationController/getBedrockTextToSpeechModels` | getBedrockTextToSpeechModels |
+| POST | `/brain/api/admin/BedrockTextToSpeechModelsConfigurationController/insertBedrockTextToSpeechModelConfig` | insertBedrockTextToSpeechModelConfig |
+| POST | `/brain/api/admin/BedrockTextToSpeechModelsConfigurationController/updateBedrockTextToSpeechModelConfig` | updateBedrockTextToSpeechModelConfig |
+
+### `bedrock-transcript-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/BedrockTranscriptModelsConfigurationController/deleteBedrockTranscriptModelConfig` | deleteBedrockTranscriptModelConfig |
+| GET | `/brain/api/admin/BedrockTranscriptModelsConfigurationController/findBedrockTranscriptModelConfigByCode` | findBedrockTranscriptModelConfigByCode |
+| POST | `/brain/api/admin/BedrockTranscriptModelsConfigurationController/getBedrockTranscriptModels` | getBedrockTranscriptModels |
+| POST | `/brain/api/admin/BedrockTranscriptModelsConfigurationController/insertBedrockTranscriptModelConfig` | insertBedrockTranscriptModelConfig |
+| POST | `/brain/api/admin/BedrockTranscriptModelsConfigurationController/updateBedrockTranscriptModelConfig` | updateBedrockTranscriptModelConfig |
 
 ### `brave-search-configuration-controller`
 | Method | Path | Operation |
@@ -111,6 +224,26 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/brain/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
 
+### `data-flow-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/DataFlowMetaInfoController/getLocalDataFlow` | getLocalDataFlow |
+
+### `decision-models-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/DecisionModelsController/getDecisionModelTypes` | getDecisionModelTypes |
+| GET | `/brain/api/admin/DecisionModelsController/getRuntimeConfiguredDecisionModels` | getRuntimeConfiguredDecisionModels |
+
+### `deepseek-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/DeepseekChatModelsConfigurationController/deleteDeepseekChatModelConfig` | deleteDeepseekChatModelConfig |
+| GET | `/brain/api/admin/DeepseekChatModelsConfigurationController/findDeepseekChatModelConfigByCode` | findDeepseekChatModelConfigByCode |
+| POST | `/brain/api/admin/DeepseekChatModelsConfigurationController/getDeepseekModels` | getDeepseekChatModels |
+| POST | `/brain/api/admin/DeepseekChatModelsConfigurationController/insertDeepseekChatModelConfig` | insertDeepseekChatModelConfig |
+| POST | `/brain/api/admin/DeepseekChatModelsConfigurationController/updateDeepseekChatModelConfig` | updateDeepseekChatModelConfig |
+
 ### `document-content-streamer-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -126,10 +259,28 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `functions-lookup-controller`
 | Method | Path | Operation |
 |---|---|---|
+| GET | `/brain/api/admin/FunctionsLookupController/getAIToolsAndResourcesLibraryType` | getAIToolsAndResourcesLibraryType |
 | GET | `/brain/api/admin/FunctionsLookupController/getAllFunctions` | getAllFunctions |
 | GET | `/brain/api/admin/FunctionsLookupController/getAllFunctionsTree` | getAllFunctionsTree |
 | GET | `/brain/api/admin/FunctionsLookupController/getAllLocalFunctions` | getAllLocalFunctions |
 | GET | `/brain/api/admin/FunctionsLookupController/getAllLocalFunctionsTree` | getAllLocalFunctionsTree |
+| GET | `/brain/api/admin/FunctionsLookupController/getToolSourceInfos` | getToolSourceInfos |
+
+### `gebo-a-2-a-server-admin-controller`
+| Method | Path | Operation |
+|---|---|---|
+| DELETE | `/brain/api/admin/GeboA2AServerAdminController/deleteA2AServer` | deleteA2AServer |
+| GET | `/brain/api/admin/GeboA2AServerAdminController/findAll` | findAllA2AServer |
+| GET | `/brain/api/admin/GeboA2AServerAdminController/findByCode` | findByCodeA2AServer |
+| GET | `/brain/api/admin/GeboA2AServerAdminController/getExportKinds` | getExportKindsA2AServer |
+| POST | `/brain/api/admin/GeboA2AServerAdminController/insertA2AServer` | insertA2AServer |
+| POST | `/brain/api/admin/GeboA2AServerAdminController/updateA2AServer` | updateA2AServer |
+
+### `gebo-admin-chat-pipelines-tooling-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/GeboAdminChatPipelinesToolingController/getPipelinesTooling` | getPipelinesTooling |
+| POST | `/brain/api/admin/GeboAdminChatPipelinesToolingController/saveStepTooling` | saveStepTooling |
 
 ### `gebo-admin-chat-profiles-configuration-controller`
 | Method | Path | Operation |
@@ -141,10 +292,19 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/insertChatProfile` | insertChatProfile |
 | POST | `/brain/api/admin/GeboAdminChatProfilesConfigurationController/updateChatProfile` | updateChatProfile |
 
+### `gebo-admin-chat-rules-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/GeboAdminChatRulesController/checkSharedRuleConflicts` | checkSharedRuleConflicts |
+| POST | `/brain/api/admin/GeboAdminChatRulesController/createSharedRule` | createSharedRule |
+| DELETE | `/brain/api/admin/GeboAdminChatRulesController/deleteSharedRule` | deleteSharedRule |
+| GET | `/brain/api/admin/GeboAdminChatRulesController/getSharedRules` | getSharedRules |
+| POST | `/brain/api/admin/GeboAdminChatRulesController/updateSharedRule` | updateSharedRule |
+
 ### `gebo-admin-prompt-use-info-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/brain/api/admin/GeboAdminPromptUseController/findAll` | findAll |
+| GET | `/brain/api/admin/GeboAdminPromptUseController/findAll` | findAllPromptUseInfo |
 | GET | `/brain/api/admin/GeboAdminPromptUseController/findByCode` | findByCode |
 | GET | `/brain/api/admin/GeboAdminPromptUseController/findByModule` | findByModule |
 
@@ -152,10 +312,16 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/brain/api/admin/GeboAdminPromptsController/deletePromptConfig` | deletePromptConfig |
+| GET | `/brain/api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode` | findGPromptUseInfoByUseCode |
+| GET | `/brain/api/admin/GeboAdminPromptsController/findPromptConfigByAgentId` | findPromptConfigByAgentId |
 | GET | `/brain/api/admin/GeboAdminPromptsController/findPromptConfigByCode` | findPromptConfigByCode |
+| GET | `/brain/api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList` | getAllPromptConfigsLightList |
+| GET | `/brain/api/admin/GeboAdminPromptsController/getAllowedPromptPlaceholders` | getAllowedPromptPlaceholders |
+| GET | `/brain/api/admin/GeboAdminPromptsController/getKnownPromptPlaceholders` | getKnownPromptPlaceholders |
 | GET | `/brain/api/admin/GeboAdminPromptsController/getPromptCategories` | getPromptCategories |
 | POST | `/brain/api/admin/GeboAdminPromptsController/getPromptConfigByFilter` | getPromptConfigByFilter |
 | POST | `/brain/api/admin/GeboAdminPromptsController/insertPromptConfig` | insertPromptConfig |
+| GET | `/brain/api/admin/GeboAdminPromptsController/isPromptTemplateEditingEnabled` | isPromptTemplateEditingEnabled |
 | POST | `/brain/api/admin/GeboAdminPromptsController/updatePromptConfig` | updatePromptConfig |
 
 ### `gebo-admin-rag-autotune-controller`
@@ -163,17 +329,14 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | GET | `/brain/api/admin/GeboAdminRagAutotuneController/getLatestComputedVectorStores` | getLatestComputedVectorStores |
 
-### `gebo-advanced-setup-status-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/brain/api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus` | getFirstKnowledgeBaseSetupStatus |
-| GET | `/brain/api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus` | getMinimalContentsSetupStatus |
-
 ### `gebo-agent-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/brain/api/admin/GeboAgentAdminController/checkAgentToolCollisions` | checkAgentToolCollisions |
+| POST | `/brain/api/admin/GeboAgentAdminController/copyAgent` | copyAgent |
 | DELETE | `/brain/api/admin/GeboAgentAdminController/deleteAgent` | deleteAgent |
 | GET | `/brain/api/admin/GeboAgentAdminController/getAgentByCode` | getAgentByCode |
+| GET | `/brain/api/admin/GeboAgentAdminController/getAgentRoles` | getAgentRoles |
 | GET | `/brain/api/admin/GeboAgentAdminController/getAgents` | getAgents |
 | GET | `/brain/api/admin/GeboAgentAdminController/getAgentsChoices` | getAgentsChoices |
 | GET | `/brain/api/admin/GeboAgentAdminController/getPromptTemplateByAgentId` | getPromptTemplatesByAgentId |
@@ -183,18 +346,29 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `gebo-agents-network-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/brain/api/admin/GeboAgentsNetworkAdminController/copyAgentsNetwork` | copyAgentsNetwork |
 | POST | `/brain/api/admin/GeboAgentsNetworkAdminController/deleteAgentsNetwork` | deleteAgentsNetwork |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs` | getAgentConfigs |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentConfigsByServiceId` | getAgentConfigsByServiceId |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentServices` | getAgentServices |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentTypesCompatibility` | getAgentTypesCompatibility |
+| POST | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentsMountedTools` | getAgentsMountedTools |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentsNetwork` | getAgentsNetwork |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getAgentsNetworkByCode` | getAgentsNetworkByCode |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getCompatibleNextServices` | getCompatibleNextServices |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getCompatiblePreviousServices` | getCompatiblePreviousServices |
 | GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getNetworkAdapterServices` | getNetworkAdapterServices |
+| GET | `/brain/api/admin/GeboAgentsNetworkAdminController/getNetworkServiceFactories` | getNetworkServiceFactories |
 | POST | `/brain/api/admin/GeboAgentsNetworkAdminController/insertAgentsNetwork` | insertAgentsNetwork |
 | POST | `/brain/api/admin/GeboAgentsNetworkAdminController/updateAgentsNetwork` | updateAgentsNetwork |
 | POST | `/brain/api/admin/GeboAgentsNetworkAdminController/validateAgentsNetwork` | validateAgentsNetwork |
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/brain/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/brain/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
 ### `gebo-chat-controller`
 | Method | Path | Operation |
@@ -206,16 +380,27 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/GeboDirectModelChatController/getVisibleKnowledgeBases` | getVisibleKnowledgeBases |
 | POST | `/brain/api/users/GeboDirectModelChatController/streamResponse` | streamResponse |
 
+### `gebo-chat-libraries-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/users/GeboChatLibrariesController/downloadChatLibraryResource` | downloadChatLibraryResource |
+| GET | `/brain/api/users/GeboChatLibrariesController/getChatLibraryInstance` | getChatLibraryInstance |
+
 ### `gebo-chat-pipelines-controller`
 | Method | Path | Operation |
 |---|---|---|
 | GET | `/brain/api/users/GeboChatPipelinesController/defaultPersonalPipelinesChatMenu` | getDefaultPersonalPipelinesChatMenu |
 | POST | `/brain/api/users/GeboChatPipelinesController/executeChatPipeline` | executeChatPipeline |
 | POST | `/brain/api/users/GeboChatPipelinesController/executeDefaultChatPipeline` | executeDefaultChatPipeline |
+| POST | `/brain/api/users/GeboChatPipelinesController/executeDefaultRespawnAgenticChat` | executeDefaultRespawnAgenticChat |
+| POST | `/brain/api/users/GeboChatPipelinesController/executeRespawnAgenticChat` | executeRespawnAgenticChat |
+| GET | `/brain/api/users/GeboChatPipelinesController/pendingNetworkOfAgentsSuspension` | pendingNetworkOfAgentsSuspension |
 | GET | `/brain/api/users/GeboChatPipelinesController/personalPipelinesChatMenu` | getPersonalPipelinesChatMenu |
 | GET | `/brain/api/users/GeboChatPipelinesController/stopChatPipeline` | stopChatPipeline |
 | POST | `/brain/api/users/GeboChatPipelinesController/streamChatPipeline` | streamChatPipeline |
 | POST | `/brain/api/users/GeboChatPipelinesController/streamDefaultChatPipeline` | streamDefaultChatPipeline |
+| POST | `/brain/api/users/GeboChatPipelinesController/streamDefaultRespawnAgenticChat` | streamDefaultRespawnAgenticChat |
+| POST | `/brain/api/users/GeboChatPipelinesController/streamRespawnAgenticChat` | streamRespawnAgenticChat |
 
 ### `gebo-chat-profile-lookup-controller`
 | Method | Path | Operation |
@@ -223,6 +408,18 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/GeboChatProfileLookupController/findChatProfileConfigurationLookupByCode` | findChatProfileConfigurationLookupByCode |
 | POST | `/brain/api/users/GeboChatProfileLookupController/getAllChatProfileConfigurationLoookup` | getAllChatProfileConfigurationLoookup |
 | POST | `/brain/api/users/GeboChatProfileLookupController/getChatProfileConfigurationLookupByQbe` | getChatProfileConfigurationLookupByQbe |
+
+### `gebo-chat-rules-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/users/GeboChatRulesController/checkRuleConflicts` | checkRuleConflicts |
+| POST | `/brain/api/users/GeboChatRulesController/createRule` | createRule |
+| DELETE | `/brain/api/users/GeboChatRulesController/deleteRule` | deleteRule |
+| GET | `/brain/api/users/GeboChatRulesController/getChatRules` | getChatRules |
+| GET | `/brain/api/users/GeboChatRulesController/getMyRules` | getMyRules |
+| GET | `/brain/api/users/GeboChatRulesController/getSharedRulesAppliedToMe` | getSharedRulesAppliedToMe |
+| GET | `/brain/api/users/GeboChatRulesController/proposeRules` | proposeRules |
+| POST | `/brain/api/users/GeboChatRulesController/updateRule` | updateRule |
 
 ### `gebo-deep-search-admin-controller`
 | Method | Path | Operation |
@@ -292,6 +489,11 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/user/GeboMCPServerUserController/getUsersCanAccessMcpServersList` | getUsersCanAccessMcpServersList |
 | GET | `/brain/api/user/GeboMCPServerUserController/listAccessibleMcpServers` | listAccessibleMcpServers |
 
+### `gebo-neo-4j-module-setup-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/admin/GeboNeo4jModuleSetupController` | getNeo4jModuleSetupConfig |
+
 ### `gebo-rag-chat-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -301,42 +503,49 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/users/GeboChatController/getVisibleKnowledgeBasesByProfileCode` | getVisibleKnowledgeBasesByProfileCode |
 | GET | `/brain/api/users/GeboChatController/profiles` | getChatProfiles |
 | POST | `/brain/api/users/GeboChatController/ragChat` | ragChat |
+| POST | `/brain/api/users/GeboChatController/resolveForcedDocumentsRef` | resolveForcedDocumentsRef |
 | POST | `/brain/api/users/GeboChatController/streamRagResponse` | streamRagResponse |
 
 ### `gebo-text-to-speech-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/brain/api/users/GeboTextToSpeechController/isEnabled` | isEnabled_1 |
+| GET | `/brain/api/users/GeboTextToSpeechController/isEnabled` | isEnabledTextToSpeech |
 | POST | `/brain/api/users/GeboTextToSpeechController/speechText` | speechText |
 
 ### `gebo-transcript-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/brain/api/users/GeboTranscriptController/isEnabled` | isEnabled |
+| GET | `/brain/api/users/GeboTranscriptController/isEnabled` | isEnabledTranscript |
 | POST | `/brain/api/users/GeboTranscriptController/transcriptText` | transcriptText |
 
 ### `gebo-user-chat-uploads-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/brain/api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode}` | chatSessionUpload |
-| DELETE | `/brain/api/users/GeboUserChatUploadsController/deleteSessionUploads` | deleteSessionUploads |
+| DELETE | `/brain/api/users/GeboUserChatUploadsController/deleteSessionUploads/{userSessionCode}` | deleteSessionUploads |
 | GET | `/brain/api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId}` | serveContent |
 
 ### `gebo-user-chats-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/brain/api/users/GeboUserChatsController/branchChat` | branchChat |
 | POST | `/brain/api/users/GeboUserChatsController/changeChatDescription` | changeChatDescription |
 | GET | `/brain/api/users/GeboUserChatsController/createCleanChatByChatProfileCode` | createCleanChatByChatProfileCode |
+| GET | `/brain/api/users/GeboUserChatsController/createCleanChatByDefaultModel` | createCleanChatByDefaultModel |
 | GET | `/brain/api/users/GeboUserChatsController/createCleanChatByModelCode` | createCleanChatByModelCode |
 | DELETE | `/brain/api/users/GeboUserChatsController/deleteChat` | deleteChat |
 | GET | `/brain/api/users/GeboUserChatsController/exportResponse2file` | exportResponse2file |
+| GET | `/brain/api/users/GeboUserChatsController/getAnswerFeedbacks` | getAnswerFeedbacks |
 | GET | `/brain/api/users/GeboUserChatsController/getChatHistory` | getChatHistory |
 | GET | `/brain/api/users/GeboUserChatsController/getChatInfosByCode` | getChatInfosByCode |
 | POST | `/brain/api/users/GeboUserChatsController/getChatInfosByQbe` | getChatInfosByQbe |
 | GET | `/brain/api/users/GeboUserChatsController/getMyChats` | getMyChats |
+| GET | `/brain/api/users/GeboUserChatsController/getMyChatsByContextCode` | getMyChatsByContextCode |
 | GET | `/brain/api/users/GeboUserChatsController/getMyChatsPaged` | getMyChatsPaged |
 | GET | `/brain/api/users/GeboUserChatsController/getUIConfig` | getUIConfig |
 | GET | `/brain/api/users/GeboUserChatsController/isMinimalLLMSSetupDone` | isMinimalLLMSSetupDone |
+| DELETE | `/brain/api/users/GeboUserChatsController/removeAnswerFeedback` | removeAnswerFeedback |
+| POST | `/brain/api/users/GeboUserChatsController/setAnswerFeedback` | setAnswerFeedback |
 | GET | `/brain/api/users/GeboUserChatsController/suggestChatDescription` | suggestChatDescription |
 
 ### `gebo-user-knowledge-base-semantic-search-controller`
@@ -344,9 +553,16 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/brain/api/users/GeboUserKnowledgeBaseSemanticSearchController/semanticSearch` | semanticSearch |
 
-### `gebo-vector-store-configuration-controller`
+### `generic-open-ai-decision-models-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/deleteGenericOpenAIAPIDecisionModelConfig` | deleteGenericOpenAIAPIDecisionModelConfig |
+| GET | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/findGenericOpenAIAPIDecisionModelConfigByCode` | findGenericOpenAIAPIDecisionModelConfigByCode |
+| POST | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/getGenericOpenAIAPIDecisionModels` | getGenericOpenAIAPIDecisionModels |
+| GET | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/getGenericOpenAIDecisionModelConfigs` | getGenericOpenAIDecisionModelConfigs |
+| GET | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/getGenericOpenAIDecisionModelTypes` | getGenericOpenAIDecisionModelTypes |
+| POST | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/insertGenericOpenAIAPIDecisionModelConfig` | insertGenericOpenAIAPIDecisionModelConfig |
+| POST | `/brain/api/admin/GenericOpenAIDecisionModelsConfigurationController/updateGenericOpenAIAPIDecisionModelConfig` | updateGenericOpenAIAPIDecisionModelConfig |
 
 ### `generic-open-ai-ranker-models-configuration-controller`
 | Method | Path | Operation |
@@ -433,6 +649,24 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 |---|---|---|
 | POST | `/brain/api/users/GoogleSearchController/googleSearch` | googleSearch |
 
+### `google-vertex-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/GoogleVertexModelsConfigurationController/deleteGoogleVertexChatModelConfig` | deleteGoogleVertexChatModelConfig |
+| GET | `/brain/api/admin/GoogleVertexModelsConfigurationController/findGoogleVertexChatModelConfigByCode` | findGoogleVertexChatModelConfigByCode |
+| POST | `/brain/api/admin/GoogleVertexModelsConfigurationController/getGoogleVertexChatModels` | getGoogleVertexChatModels |
+| POST | `/brain/api/admin/GoogleVertexModelsConfigurationController/insertGoogleVertexChatModelConfig` | insertGoogleVertexChatModelConfig |
+| POST | `/brain/api/admin/GoogleVertexModelsConfigurationController/updateGoogleVertexChatModelConfig` | updateGoogleVertexChatModelConfig |
+
+### `google-vertex-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/GoogleVertexEmbeddingModelsConfigurationController/deleteGoogleVertexEmbeddingModelConfig` | deleteGoogleVertexEmbeddingModelConfig |
+| GET | `/brain/api/admin/GoogleVertexEmbeddingModelsConfigurationController/findGoogleVertexEmbeddingModelConfigByCode` | findGoogleVertexEmbeddingModelConfigByCode |
+| POST | `/brain/api/admin/GoogleVertexEmbeddingModelsConfigurationController/getGoogleVertexEmbeddingModels` | getGoogleVertexEmbeddingModels |
+| POST | `/brain/api/admin/GoogleVertexEmbeddingModelsConfigurationController/insertGoogleVertexEmbeddingModelConfig` | insertGoogleVertexEmbeddingModelConfig |
+| POST | `/brain/api/admin/GoogleVertexEmbeddingModelsConfigurationController/updateGoogleVertexEmbeddingModelConfig` | updateGoogleVertexEmbeddingModelConfig |
+
 ### `image-models-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -469,14 +703,22 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/KnowledgeBaseController/insertKnowledgeBase` | insertKnowledgeBase |
 | POST | `/brain/api/admin/KnowledgeBaseController/updateKnowledgeBase` | updateKnowledgeBase |
 
+### `language-resources-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/users/LanguageResourcesController` | getAllResourcesByLanguage |
+| GET | `/brain/api/users/LanguageResourcesController/getUIComponentLabels` | getUIComponentLabels |
+| POST | `/brain/api/users/LanguageResourcesController/update` | update |
+
 ### `log-view-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/brain/api/admin/LogViewController/deleteJobStatus` | deleteJobStatus |
 | POST | `/brain/api/admin/LogViewController/getJobMessagesPaged` | getJobMessagesPaged |
+| POST | `/brain/api/admin/LogViewController/getJobsEntries` | getJobsEntries |
 | POST | `/brain/api/admin/LogViewController/getJobsEntriesForClassName` | getJobsEntriesForClassName |
 | POST | `/brain/api/admin/LogViewController/getJobsEntriesForJobType` | getJobsEntriesForJobType |
-| POST | `/brain/api/admin/LogViewController/getJobsEntriesForProjectEndpoint` | getJobsEntriesForProjectEndpoint |
+| POST | `/brain/api/admin/LogViewController/getJobsEntriesForProjectEndpoint` | getJobsEntriesForProjectEndpointLogView |
 
 ### `mcp-client-config-controller`
 | Method | Path | Operation |
@@ -489,6 +731,30 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/McpClientConfigController/testAndDiscovery` | testAndDiscovery |
 | POST | `/brain/api/admin/McpClientConfigController/updateMCPClientConfig` | updateMCPClientConfig |
 
+### `mistral-ai-chat-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/MistralAIChatModelsConfigurationController/deleteMistralAIChatModelConfig` | deleteMistralAIChatModelConfig |
+| GET | `/brain/api/admin/MistralAIChatModelsConfigurationController/findMistralAIChatModelConfigByCode` | findMistralAIChatModelConfigByCode |
+| POST | `/brain/api/admin/MistralAIChatModelsConfigurationController/getMistralAIChatModels` | getMistralAIChatModels |
+| POST | `/brain/api/admin/MistralAIChatModelsConfigurationController/insertMistralAIChatModelConfig` | insertMistralAIChatModelConfig |
+| POST | `/brain/api/admin/MistralAIChatModelsConfigurationController/updateMistralAIChatModelConfig` | updateMistralAIChatModelConfig |
+
+### `mistral-ai-embedding-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/MistralAIEmbeddingModelsConfigurationController/deleteMistralAIEmbeddingModelConfig` | deleteMistralAIEmbeddingModelConfig |
+| GET | `/brain/api/admin/MistralAIEmbeddingModelsConfigurationController/findMistralAIEmbeddingModelConfigByCode` | findMistralAIEmbeddingModelConfigByCode |
+| POST | `/brain/api/admin/MistralAIEmbeddingModelsConfigurationController/getMistralAIEmbeddingModels` | getMistralAIEmbeddingModels |
+| POST | `/brain/api/admin/MistralAIEmbeddingModelsConfigurationController/insertMistralAIEmbeddingModelConfig` | insertMistralAIEmbeddingModelConfig |
+| POST | `/brain/api/admin/MistralAIEmbeddingModelsConfigurationController/updateMistralAIEmbeddingModelConfig` | updateMistralAIEmbeddingModelConfig |
+
+### `network-of-agents-condition-events-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/api/users/NetworkOfAgentsConditionEventsController/conditionEventStatus` | conditionEventStatus |
+| POST | `/brain/api/users/NetworkOfAgentsConditionEventsController/deliverConditionEvent` | deliverConditionEvent |
+
 ### `ollama-chat-models-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -497,6 +763,15 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/OllamaChatModelsConfigurationController/getOllamaModels` | getOllamaChatModels |
 | POST | `/brain/api/admin/OllamaChatModelsConfigurationController/insertOllamaChatModelConfig` | insertOllamaChatModelConfig |
 | POST | `/brain/api/admin/OllamaChatModelsConfigurationController/updateOllamaChatModelConfig` | updateOllamaChatModelConfig |
+
+### `ollama-decision-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/OllamaDecisionModelsConfigurationController/deleteOllamaDecisionModelConfig` | deleteOllamaDecisionModelConfig |
+| GET | `/brain/api/admin/OllamaDecisionModelsConfigurationController/findOllamaDecisionModelConfigByCode` | findOllamaDecisionModelConfigByCode |
+| POST | `/brain/api/admin/OllamaDecisionModelsConfigurationController/getOllamaDecisionModels` | getOllamaDecisionModels |
+| POST | `/brain/api/admin/OllamaDecisionModelsConfigurationController/insertOllamaDecisionModelConfig` | insertOllamaDecisionModelConfig |
+| POST | `/brain/api/admin/OllamaDecisionModelsConfigurationController/updateOllamaDecisionModelConfig` | updateOllamaDecisionModelConfig |
 
 ### `ollama-embedding-models-configuration-controller`
 | Method | Path | Operation |
@@ -524,6 +799,15 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/OpenAIModelsConfigurationController/getOpenAIChatModels` | getOpenAIChatModels |
 | POST | `/brain/api/admin/OpenAIModelsConfigurationController/insertOpenAIChatModelConfig` | insertOpenAIChatModelConfig |
 | POST | `/brain/api/admin/OpenAIModelsConfigurationController/updateOpenAIChatModelConfig` | updateOpenAIChatModelConfig |
+
+### `open-ai-decision-models-configuration-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/OpenAIDecisionModelsConfigurationController/deleteOpenAIDecisionModelConfig` | deleteOpenAIDecisionModelConfig |
+| GET | `/brain/api/admin/OpenAIDecisionModelsConfigurationController/findOpenAIDecisionModelConfigByCode` | findOpenAIDecisionModelConfigByCode |
+| POST | `/brain/api/admin/OpenAIDecisionModelsConfigurationController/getOpenAIDecisionModels` | getOpenAIDecisionModels |
+| POST | `/brain/api/admin/OpenAIDecisionModelsConfigurationController/insertOpenAIDecisionModelConfig` | insertOpenAIDecisionModelConfig |
+| POST | `/brain/api/admin/OpenAIDecisionModelsConfigurationController/updateOpenAIDecisionModelConfig` | updateOpenAIDecisionModelConfig |
 
 ### `open-ai-embedding-models-configuration-controller`
 | Method | Path | Operation |
@@ -586,6 +870,28 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/brain/api/admin/PromptTemplatesController/getDefaultPromptForChatModel` | getDefaultPromptForChatModel |
 | POST | `/brain/api/admin/PromptTemplatesController/getDefaultPromptForChatModelReference` | getDefaultPromptForChatModelReference |
 
+### `provider-deals-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/ProviderDealsController/assignApiKey` | assignApiKey |
+| POST | `/brain/api/admin/ProviderDealsController/createProviderDeal` | createProviderDeal |
+| POST | `/brain/api/admin/ProviderDealsController/deleteProviderDeal` | deleteProviderDeal |
+| GET | `/brain/api/admin/ProviderDealsController/getConfiguredProviderIds` | getConfiguredProviderIds |
+| GET | `/brain/api/admin/ProviderDealsController/getCurrencies` | getCurrencies |
+| GET | `/brain/api/admin/ProviderDealsController/getProviderApiKeys` | getProviderApiKeys |
+| GET | `/brain/api/admin/ProviderDealsController/getProviderCurrency` | getProviderCurrency |
+| GET | `/brain/api/admin/ProviderDealsController/getProviderDeal` | getProviderDeal |
+| GET | `/brain/api/admin/ProviderDealsController/getProviderDealProviderIds` | getProviderDealProviderIds |
+| GET | `/brain/api/admin/ProviderDealsController/getProviderDeals` | getProviderDeals |
+| GET | `/brain/api/admin/ProviderDealsController/getProviderModelPrices` | getProviderModelPrices |
+| POST | `/brain/api/admin/ProviderDealsController/refreshImportedLimits` | refreshImportedLimits |
+| POST | `/brain/api/admin/ProviderDealsController/removeApiKey` | removeApiKey |
+| POST | `/brain/api/admin/ProviderDealsController/updateDescription` | updateDescription |
+| POST | `/brain/api/admin/ProviderDealsController/updateFlatConditions` | updateFlatConditions |
+| POST | `/brain/api/admin/ProviderDealsController/updateModelPricing` | updateModelPricing |
+| POST | `/brain/api/admin/ProviderDealsController/updateProviderCurrency` | updateProviderCurrency |
+| POST | `/brain/api/admin/ProviderDealsController/updateSpendingLimits` | updateSpendingLimits |
+
 ### `ranker-models-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -637,6 +943,13 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/admin/TranscriptModelsController/getRuntimeConfiguredTranscriptModels` | getRuntimeConfiguredTranscriptModels |
 | GET | `/brain/api/admin/TranscriptModelsController/getTranscriptModelTypes` | getTranscriptModelTypes |
 
+### `ui-text-resources-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/brain/public/UITextResourcesController` | getI18n |
+| GET | `/brain/public/UITextResourcesController/getUiTextResourcesModule` | getUiTextResourcesModule |
+| POST | `/brain/public/UITextResourcesController/updateUIExistingTexts` | updateUIExistingTexts |
+
 ### `user-knowledge-base-browsing-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -646,20 +959,37 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/brain/api/user/UserKnowledgeBaseBrowsingController/getKnowledgeBaseRoots` | getKnowledgeBaseRoots |
 | POST | `/brain/api/user/UserKnowledgeBaseBrowsingController/getVisibleKnowledgeBaseByCodes` | getVisibleKnowledgeBaseByCodes |
 
+### `waiting-conditions-admin-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/admin/WaitingConditionsAdminController/abandon` | abandon_1 |
+| GET | `/brain/api/admin/WaitingConditionsAdminController/allWaitingConditions` | allWaitingConditions |
+| POST | `/brain/api/admin/WaitingConditionsAdminController/goOnWithout` | goOnWithout_1 |
+
+### `waiting-conditions-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/brain/api/users/WaitingConditionsController/abandon` | abandon |
+| POST | `/brain/api/users/WaitingConditionsController/goOnWithout` | goOnWithout |
+| GET | `/brain/api/users/WaitingConditionsController/waitingConditions` | waitingConditions |
+
 ## vectorizator.gebo.ai — port 13002 (`vectorizator-gebo-ai`) — context-path `/vectorizator`
 
-3 controller(s), 5 endpoint(s):
+3 controller(s), 6 endpoint(s):
 
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/vectorizator/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/vectorizator/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/vectorizator/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
 ### `gebo-core-analisys-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/vectorizator/api/admin/GeboCoreAnalisysController/drillDown` | coreDrillDown |
 | GET | `/vectorizator/api/admin/GeboCoreAnalisysController/getTopLevelKnowledgeBaseCategory` | getTopLevelKnowledgeBaseCategory |
-
-### `gebo-vector-store-configuration-controller`
-| Method | Path | Operation |
-|---|---|---|
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -668,19 +998,28 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## graphicator.gebo.ai — port 13003 (`graphicator-gebo-ai`) — context-path `/graphicator`
 
-3 controller(s), 6 endpoint(s):
+3 controller(s), 13 endpoint(s):
 
 
-### `gebo-vector-store-configuration-controller`
+### `gebo-angular-form-group-meta-info-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/graphicator/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/graphicator/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/graphicator/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
-### `ingestion-file-types-library-controller`
+### `graph-rag-configuration-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/graphicator/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| DELETE | `/graphicator/api/admin/GraphRagConfigurationController/deleteGraphRagExtractionConfig` | deleteGraphRagExtractionConfig |
+| GET | `/graphicator/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByCode` | findGraphRagExtractionConfigByCode |
+| GET | `/graphicator/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBase` | findGraphRagExtractionConfigByKnowledgeBase |
+| GET | `/graphicator/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode` | findGraphRagExtractionConfigByKnowledgeBaseAndProjectCode |
+| POST | `/graphicator/api/admin/GraphRagConfigurationController/findGraphRagExtractionConfigByProjectEndpointGObjectRef` | findGraphRagExtractionConfigByProjectEndpointGObjectRef |
+| GET | `/graphicator/api/admin/GraphRagConfigurationController/getDefaultGraphRagExtractionConfig` | getDefaultGraphRagExtractionConfig |
+| GET | `/graphicator/api/admin/GraphRagConfigurationController/getSystemGraphRagExtractionConfig` | getSystemGraphRagExtractionConfig |
+| POST | `/graphicator/api/admin/GraphRagConfigurationController/instertGraphRagExtractionConfig` | instertGraphRagExtractionConfig |
+| POST | `/graphicator/api/admin/GraphRagConfigurationController/saveGraphRagExtractionConfig` | saveGraphRagExtractionConfig |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -717,12 +1056,12 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/chunker/api/DocumentsChunkServiceController/streamChunksBatch` | streamChunksBatch |
 | POST | `/chunker/api/DocumentsChunkServiceController/streamChunksReactive` | streamChunksReactive |
 
-### `ingestion-file-types-library-controller`
+### `gebo-angular-form-group-meta-info-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/chunker/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/chunker/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/chunker/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
+| POST | `/chunker/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/chunker/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/chunker/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -745,6 +1084,13 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/git/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/git/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/git/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/git/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/git/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -765,13 +1111,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/git/api/admin/GITSystemsController/publishGitEndpoint` | publishGitEndpoint |
 | POST | `/git/api/admin/GITSystemsController/updateGitEndpoint` | updateGitEndpoint |
 | POST | `/git/api/admin/GITSystemsController/updateGitSystem` | updateGitSystem |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/git/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/git/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/git/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -833,17 +1172,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/filesystem/api/admin/FileSystemsController/publishFilesystemEndpoint` | publishFilesystemEndpoint |
 | POST | `/filesystem/api/admin/FileSystemsController/updateFilesystemEndpoint` | updateFilesystemEndpoint |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/filesystem/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/filesystem/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/filesystem/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/filesystem/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/filesystem/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -859,7 +1198,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## uploads.gebo.ai — port 13007 (`uploads-gebo-ai`) — context-path `/uploads`
 
-8 controller(s), 22 endpoint(s):
+9 controller(s), 31 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -877,32 +1216,37 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | Method | Path | Operation |
 |---|---|---|
 | GET | `/uploads/api/admin/FileUploadController/getHandShakeCode` | getHandShakeCode |
-| POST | `/uploads/api/admin/FileUploadController/upload/{handShakeCode}` | upload |
+| POST | `/uploads/api/admin/FileUploadController/upload/{handShakeCode}` | uploadUploadsEndpoint |
+| POST | `/uploads/api/admin/FileUploadController/uploadToEndpoint/{endpointCode}` | uploadToEndpoint |
 
 ### `file-uploads-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/uploads/api/admin/FileUploadsController/createUploadsFolder` | createUploadsFolder |
+| POST | `/uploads/api/admin/FileUploadsController/deleteUploadedFiles` | deleteUploadedFiles |
 | POST | `/uploads/api/admin/FileUploadsController/deleteUploadsEndpoint` | deleteUploadsEndpoint |
 | GET | `/uploads/api/admin/FileUploadsController/findUploadsEndpointsByProject` | findUploadsEndpointsByProject |
 | POST | `/uploads/api/admin/FileUploadsController/findUploadsEndpointsByQbe` | findUploadsEndpointsByQbe |
-| GET | `/uploads/api/admin/FileUploadsController/getFileSystemSystemTypes` | getFileSystemSystemTypes |
+| GET | `/uploads/api/admin/FileUploadsController/getFileSystemSystemTypes` | getUploadsSystemTypes |
 | GET | `/uploads/api/admin/FileUploadsController/getUploadableFilesExtensions` | getUploadableFilesExtensions |
 | GET | `/uploads/api/admin/FileUploadsController/getUploadsSystems` | getUploadsSystems |
 | POST | `/uploads/api/admin/FileUploadsController/insertUploadsEndpoint` | insertUploadsEndpoint |
+| GET | `/uploads/api/admin/FileUploadsController/listUploadedFiles` | listUploadedFiles |
+| GET | `/uploads/api/admin/FileUploadsController/listUploadedFilesTree` | listUploadedFilesTree |
 | POST | `/uploads/api/admin/FileUploadsController/publishUploadsEndpoint` | publishUploadsEndpoint |
 | POST | `/uploads/api/admin/FileUploadsController/updateUploadsEndpoint` | updateUploadsEndpoint |
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/uploads/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/uploads/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/uploads/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/uploads/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/uploads/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/uploads/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/uploads/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -915,6 +1259,14 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/uploads/api/admin/JobLauncherController/abortJob` | abortJob |
 | POST | `/uploads/api/admin/JobLauncherController/createJob` | createJob |
 | POST | `/uploads/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+### `uploads-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/uploads/api/admin/UploadsBrowsingController/browseUploadsEndpointPath` | browseUploadsEndpointPath |
+| POST | `/uploads/api/admin/UploadsBrowsingController/getUploadsEndpointNavigationStatus` | getUploadsEndpointNavigationStatus |
+| GET | `/uploads/api/admin/UploadsBrowsingController/getUploadsEndpointRoots` | getUploadsEndpointRoots |
+| GET | `/uploads/api/admin/UploadsBrowsingController/serveUploadsEndpointFile` | serveUploadsEndpointFile |
 
 ## userspace.gebo.ai — port 13008 (`userspace-gebo-ai`) — context-path `/userspace`
 
@@ -932,17 +1284,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/userspace/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/userspace/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/userspace/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/userspace/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/userspace/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/userspace/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/userspace/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/userspace/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/userspace/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -981,7 +1333,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `userspace-upload-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/userspace/api/user/UserspaceUploadController/upload/{userspaceFolderCode}` | upload |
+| POST | `/userspace/api/user/UserspaceUploadController/upload/{userspaceFolderCode}` | uploadUserspace |
 
 ## sharepoint.gebo.ai — port 13009 (`sharepoint-gebo-ai`) — context-path `/sharepoint`
 
@@ -999,17 +1351,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/sharepoint/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/sharepoint/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/sharepoint/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/sharepoint/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/sharepoint/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/sharepoint/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/sharepoint/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -1026,23 +1378,23 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `share-point-search-service-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/sharepoint/api/users/SharePointSearchServiceController/aggregate` | restAggregate |
-| POST | `/sharepoint/api/users/SharePointSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMap |
-| POST | `/sharepoint/api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/findSystemById` | restFindSystemById |
-| POST | `/sharepoint/api/users/SharePointSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getDescription` | restGetDescription |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getId` | restGetId |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCode |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getProductId` | restGetProductId |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
-| GET | `/sharepoint/api/users/SharePointSearchServiceController/isEnabled` | restIsEnabled |
-| POST | `/sharepoint/api/users/SharePointSearchServiceController/nativeSearch` | restNativeSearch |
-| POST | `/sharepoint/api/users/SharePointSearchServiceController/search` | restSearch |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/aggregate` | restAggregateSharePoint |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapSharePoint |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/findSystemById` | restFindSystemByIdSharePoint |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getDescription` | restGetDescriptionSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getId` | restGetIdSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getProductId` | restGetProductIdSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/getSearchableSystems` | restGetSearchableSystemsSharePoint |
+| GET | `/sharepoint/api/users/SharePointSearchServiceController/isEnabled` | restIsEnabledSharePoint |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/nativeSearch` | restNativeSearchSharePoint |
+| POST | `/sharepoint/api/users/SharePointSearchServiceController/search` | restSearchSharePoint |
 
 ### `sharepoint-browsing-controller`
 | Method | Path | Operation |
@@ -1085,23 +1437,23 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `confluence-search-service-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/confluence/api/users/ConfluenceSearchServiceController/aggregate` | restAggregate |
-| POST | `/confluence/api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMap |
-| POST | `/confluence/api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/findSystemById` | restFindSystemById |
-| POST | `/confluence/api/users/ConfluenceSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getDescription` | restGetDescription |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getId` | restGetId |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCode |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getProductId` | restGetProductId |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
-| GET | `/confluence/api/users/ConfluenceSearchServiceController/isEnabled` | restIsEnabled |
-| POST | `/confluence/api/users/ConfluenceSearchServiceController/nativeSearch` | restNativeSearch |
-| POST | `/confluence/api/users/ConfluenceSearchServiceController/search` | restSearch |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/aggregate` | restAggregateConfluence |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapConfluence |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/findSystemById` | restFindSystemByIdConfluence |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getDescription` | restGetDescriptionConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getId` | restGetIdConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getProductId` | restGetProductIdConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/getSearchableSystems` | restGetSearchableSystemsConfluence |
+| GET | `/confluence/api/users/ConfluenceSearchServiceController/isEnabled` | restIsEnabledConfluence |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/nativeSearch` | restNativeSearchConfluence |
+| POST | `/confluence/api/users/ConfluenceSearchServiceController/search` | restSearchConfluence |
 
 ### `confluence-systems-controller`
 | Method | Path | Operation |
@@ -1133,17 +1485,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/confluence/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/confluence/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/confluence/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/confluence/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/confluence/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/confluence/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/confluence/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/confluence/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/confluence/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -1173,17 +1525,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/jira/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/jira/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/jira/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/jira/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/jira/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/jira/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/jira/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/jira/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/jira/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -1200,23 +1552,23 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `jira-search-service-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/jira/api/users/JiraSearchServiceController/aggregate` | restAggregate |
-| POST | `/jira/api/users/JiraSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMap |
-| POST | `/jira/api/users/JiraSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
-| GET | `/jira/api/users/JiraSearchServiceController/findSystemById` | restFindSystemById |
-| POST | `/jira/api/users/JiraSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
-| GET | `/jira/api/users/JiraSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
-| GET | `/jira/api/users/JiraSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
-| GET | `/jira/api/users/JiraSearchServiceController/getDescription` | restGetDescription |
-| GET | `/jira/api/users/JiraSearchServiceController/getId` | restGetId |
-| GET | `/jira/api/users/JiraSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
-| GET | `/jira/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCode |
-| GET | `/jira/api/users/JiraSearchServiceController/getProductId` | restGetProductId |
-| GET | `/jira/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
-| GET | `/jira/api/users/JiraSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
-| GET | `/jira/api/users/JiraSearchServiceController/isEnabled` | restIsEnabled |
-| POST | `/jira/api/users/JiraSearchServiceController/nativeSearch` | restNativeSearch |
-| POST | `/jira/api/users/JiraSearchServiceController/search` | restSearch |
+| POST | `/jira/api/users/JiraSearchServiceController/aggregate` | restAggregateJira |
+| POST | `/jira/api/users/JiraSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapJira |
+| POST | `/jira/api/users/JiraSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesJira |
+| GET | `/jira/api/users/JiraSearchServiceController/findSystemById` | restFindSystemByIdJira |
+| POST | `/jira/api/users/JiraSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getDescription` | restGetDescriptionJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getId` | restGetIdJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getProductId` | restGetProductIdJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeJira |
+| GET | `/jira/api/users/JiraSearchServiceController/getSearchableSystems` | restGetSearchableSystemsJira |
+| GET | `/jira/api/users/JiraSearchServiceController/isEnabled` | restIsEnabledJira |
+| POST | `/jira/api/users/JiraSearchServiceController/nativeSearch` | restNativeSearchJira |
+| POST | `/jira/api/users/JiraSearchServiceController/search` | restSearchJira |
 
 ### `jira-systems-controller`
 | Method | Path | Operation |
@@ -1284,17 +1636,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/aws-s3/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/aws-s3/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/aws-s3/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/aws-s3/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/aws-s3/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/aws-s3/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/aws-s3/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -1324,6 +1676,13 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/googledrive/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/googledrive/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/googledrive/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/googledrive/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/googledrive/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1338,20 +1697,20 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 ### `google-drive-search-service-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/aggregate` | restAggregate |
-| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferences |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/findSystemById` | restFindSystemById |
-| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResult |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getCachedCatalogues` | restGetCachedCatalogues |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getCataloguesListSample` | restGetCataloguesListSample |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getDescription` | restGetDescription |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getId` | restGetId |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getMessagingModuleId` | restGetMessagingModuleId |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getProductId` | restGetProductId |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCode |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getSearchableSystems` | restGetSearchableSystems |
-| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/isEnabled` | restIsEnabled |
-| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/search` | restSearch |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/aggregate` | restAggregateGoogleDrive |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/findSystemById` | restFindSystemByIdGoogleDrive |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getDescription` | restGetDescriptionGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getId` | restGetIdGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getProductId` | restGetProductIdGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/getSearchableSystems` | restGetSearchableSystemsGoogleDrive |
+| GET | `/googledrive/api/users/GoogleDriveSearchServiceController/isEnabled` | restIsEnabledGoogleDrive |
+| POST | `/googledrive/api/users/GoogleDriveSearchServiceController/search` | restSearchGoogleDrive |
 
 ### `google-drive-systems-controller`
 | Method | Path | Operation |
@@ -1378,13 +1737,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | GET | `/googledrive/oauth2/google-workspace-redirect` | googleWorkspaceRedirect |
 | GET | `/googledrive/oauth2/start-workspace-access-go` | startWorkspaceAccess |
 
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/googledrive/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
-
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1399,7 +1751,7 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## mcpclient.gebo.ai — port 13014 (`mcpclient-gebo-ai`) — context-path `/mcpclient`
 
-9 controller(s), 29 endpoint(s):
+8 controller(s), 22 endpoint(s):
 
 
 ### `contents-reset-controller`
@@ -1413,17 +1765,17 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/mcpclient/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/mcpclient/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/mcpclient/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/mcpclient/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/mcpclient/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/mcpclient/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/mcpclient/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -1443,17 +1795,6 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/mcpclient/api/admin/MCPClientBrowsingController/browseMCPClientPath` | browseMCPClientPath |
 | POST | `/mcpclient/api/admin/MCPClientBrowsingController/getMCPClientNavigationStatus` | getMCPClientNavigationStatus |
 | GET | `/mcpclient/api/admin/MCPClientBrowsingController/getMCPClientRoots` | getMCPClientRoots |
-
-### `mcp-client-config-controller`
-| Method | Path | Operation |
-|---|---|---|
-| DELETE | `/mcpclient/api/admin/McpClientConfigController/deleteMCPClientConfig` | deleteMCPClientConfig |
-| GET | `/mcpclient/api/admin/McpClientConfigController/findMCPClientConfigByCode` | findMCPClientConfigByCode |
-| POST | `/mcpclient/api/admin/McpClientConfigController/findMCPClientConfigByQbe` | findMCPClientConfigByQbe |
-| POST | `/mcpclient/api/admin/McpClientConfigController/insertMCPClientConfig` | insertMCPClientConfig |
-| POST | `/mcpclient/api/admin/McpClientConfigController/listMCPClientConfig` | listMCPClientConfig |
-| POST | `/mcpclient/api/admin/McpClientConfigController/testAndDiscovery` | testAndDiscovery |
-| POST | `/mcpclient/api/admin/McpClientConfigController/updateMCPClientConfig` | updateMCPClientConfig |
 
 ### `mcp-client-systems-controller`
 | Method | Path | Operation |
@@ -1483,25 +1824,25 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 | POST | `/integration/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/integration/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/integration/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/integration/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/integration/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/integration/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/integration/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/integration/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/integration/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `integration-input-controller`
 | Method | Path | Operation |
 |---|---|---|
 | PUT | `/integration/api/application/IntegrationInputController/publishContents` | publishContents |
 | GET | `/integration/api/application/IntegrationInputController/publishSync` | publishSync |
-| POST | `/integration/api/application/IntegrationInputController/spoolDocument` | spoolDocument |
-| PUT | `/integration/api/application/IntegrationInputController/spoolDocument` | spoolDocument_1 |
+| POST | `/integration/api/application/IntegrationInputController/spoolDocument` | spoolDocumentEnvelope |
+| PUT | `/integration/api/application/IntegrationInputController/spoolDocument` | spoolDocumentFile |
 
 ### `integration-systems-controller`
 | Method | Path | Operation |
@@ -1526,8 +1867,15 @@ _Gateway routes to backends via `lb://`; it hosts no controllers of its own — 
 
 ## fulltextor.gebo.ai — port 13016 (`fulltextor-gebo-ai`) — context-path `/fulltextor`
 
-1 controller(s), 1 endpoint(s):
+2 controller(s), 4 endpoint(s):
 
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/fulltextor/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/fulltextor/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/fulltextor/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
@@ -1541,20 +1889,20 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## heimdall.gebo.ai — port 13018 (`heimdall-gebo-ai`) — context-path `/heimdall`
 
-18 controller(s), 75 endpoint(s):
+25 controller(s), 102 endpoint(s):
 
 
 ### `acl-aliases-cluster-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/heimdall/api/cluster/AclController/addAcl` | addAcl |
-| GET | `/heimdall/api/cluster/AclController/findAcl` | findAcl |
-| POST | `/heimdall/api/cluster/AclController/findAlias` | findAlias |
-| GET | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueId` | findAliasesByAclGrantedUniqueId |
-| GET | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType` | findAliasesByAclGrantedUniqueIdAndAclGrantType |
-| POST | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn` | findAliasesByAclGrantedUniqueIdIn |
-| POST | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType` | findAliasesByAclGrantedUniqueIdInAndAclGrantType |
-| DELETE | `/heimdall/api/cluster/AclController/removeAcl` | removeAcl |
+| POST | `/heimdall/api/cluster/AclController/addAcl` | infrastructureAddAcl |
+| GET | `/heimdall/api/cluster/AclController/findAcl` | infrastructureFindAcl |
+| POST | `/heimdall/api/cluster/AclController/findAlias` | infrastructureFindAlias |
+| GET | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueId` | infrastructureFindAliasesByAclGrantedUniqueId |
+| GET | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdAndAclGrantType` | infrastructureFindAliasesByAclGrantedUniqueIdAndAclGrantType |
+| POST | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdIn` | infrastructureFindAliasesByAclGrantedUniqueIdIn |
+| POST | `/heimdall/api/cluster/AclController/findAliasesByAclGrantedUniqueIdInAndAclGrantType` | infrastructureFindAliasesByAclGrantedUniqueIdInAndAclGrantType |
+| DELETE | `/heimdall/api/cluster/AclController/removeAcl` | infrastructureRemoveAcl |
 
 ### `auth-controller`
 | Method | Path | Operation |
@@ -1568,11 +1916,12 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | GET | `/heimdall/public/AuthProvidersController/listAuthProviders` | listAuthProviders |
 | GET | `/heimdall/public/AuthProvidersController/listAvailableProvidersConfig` | listAvailableProvidersConfig |
 
-### `gebo-advanced-setup-status-controller`
+### `gebo-angular-form-group-meta-info-controller`
 | Method | Path | Operation |
 |---|---|---|
-| GET | `/heimdall/api/admin/GeboAdvancedSetupStatusController/getFirstKnowledgeBaseSetupStatus` | getFirstKnowledgeBaseSetupStatus |
-| GET | `/heimdall/api/admin/GeboAdvancedSetupStatusController/getMinimalContentsSetupStatus` | getMinimalContentsSetupStatus |
+| POST | `/heimdall/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/heimdall/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/heimdall/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
 
 ### `gebo-fast-installation-setup-controller`
 | Method | Path | Operation |
@@ -1603,6 +1952,11 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/users/GeneratedUserApiKeyController/getUserGeneratedApiKeyPagedList` | getUserGeneratedApiKeyPagedList |
 | GET | `/heimdall/api/users/GeneratedUserApiKeyController/isUserGeneratedApiKeyGenerationAllowed` | isUserGeneratedApiKeyGenerationAllowed |
 
+### `installation-cluster-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/heimdall/public/InstallationController/getInstallationId` | getInstallationId |
+
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1625,13 +1979,13 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 ### `secrets-cluster-controller`
 | Method | Path | Operation |
 |---|---|---|
-| DELETE | `/heimdall/api/cluster/SecretsController/deleteSecret` | deleteSecret |
-| GET | `/heimdall/api/cluster/SecretsController/getAllSecretsId` | getAllSecretsId |
-| GET | `/heimdall/api/cluster/SecretsController/getSecretContentById` | getSecretContentById |
-| GET | `/heimdall/api/cluster/SecretsController/getSecretInfoByContextCode` | getSecretInfoByContextCode |
-| GET | `/heimdall/api/cluster/SecretsController/getSecretInfoById` | getSecretInfoById |
-| POST | `/heimdall/api/cluster/SecretsController/storeSecret` | storeSecret |
-| POST | `/heimdall/api/cluster/SecretsController/updateSecret` | updateSecret |
+| DELETE | `/heimdall/api/cluster/SecretsController/deleteSecret` | infrastructureDeleteSecret |
+| GET | `/heimdall/api/cluster/SecretsController/getAllSecretsId` | infrastructureGetAllSecretsId |
+| GET | `/heimdall/api/cluster/SecretsController/getSecretContentById` | infrastructureGetSecretContentById |
+| GET | `/heimdall/api/cluster/SecretsController/getSecretInfoByContextCode` | infrastructureGetSecretInfoByContextCode |
+| GET | `/heimdall/api/cluster/SecretsController/getSecretInfoById` | infrastructureGetSecretInfoById |
+| POST | `/heimdall/api/cluster/SecretsController/storeSecret` | infrastructureStoreSecret |
+| POST | `/heimdall/api/cluster/SecretsController/updateSecret` | infrastructureUpdateSecret |
 
 ### `secrets-controller`
 | Method | Path | Operation |
@@ -1644,16 +1998,46 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/admin/SecretsController/createSshKeySecret` | createSshKeySecret |
 | POST | `/heimdall/api/admin/SecretsController/createTokenSecret` | createTokenSecret |
 | POST | `/heimdall/api/admin/SecretsController/createUsernamePasswordSecret` | createUsernamePasswordSecret |
-| DELETE | `/heimdall/api/admin/SecretsController/deleteSecret` | deleteSecret_1 |
+| DELETE | `/heimdall/api/admin/SecretsController/deleteSecret` | deleteSecret |
 | GET | `/heimdall/api/admin/SecretsController/getSecretsByContextCode` | getSecretsByContextCode |
 
 ### `security-directory-cluster-controller`
 | Method | Path | Operation |
 |---|---|---|
-| POST | `/heimdall/api/cluster/SecurityController/checkPassword` | checkPassword |
-| GET | `/heimdall/api/cluster/SecurityController/findAllGroups` | findAllGroups |
-| GET | `/heimdall/api/cluster/SecurityController/findGroupsOfUser` | findGroupsOfUser |
-| GET | `/heimdall/api/cluster/SecurityController/findUserByUsername` | findUserByUsername |
+| POST | `/heimdall/api/cluster/SecurityController/checkPassword` | infrastructureCheckPassword |
+| POST | `/heimdall/api/cluster/SecurityController/createUserIfNotExists` | infrastructureCreateUserIfNotExists |
+| GET | `/heimdall/api/cluster/SecurityController/findAllGroups` | infrastructureFindAllGroups |
+| GET | `/heimdall/api/cluster/SecurityController/findGroupsOfUser` | infrastructureFindGroupsOfUser |
+| GET | `/heimdall/api/cluster/SecurityController/findUserByUsername` | infrastructureFindUserByUsername |
+
+### `security-header-data-completion-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/heimdall/api/users/SecurityHeaderDataCompletionController/complete` | complete |
+
+### `session-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/heimdall/api/users/SessionController/logout` | logout |
+
+### `sessions-admin-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/heimdall/api/admin/SessionsAdminController/getActiveSessionsCount` | getActiveSessionsCount |
+| POST | `/heimdall/api/admin/SessionsAdminController/getSessionsPagedList` | getSessionsPagedList |
+| POST | `/heimdall/api/admin/SessionsAdminController/revokeSession` | revokeSession |
+| POST | `/heimdall/api/admin/SessionsAdminController/revokeUserSessions` | revokeUserSessions |
+
+### `system-messages-admin-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/heimdall/api/admin/SystemMessagesAdminController/getAllSystemMessages` | getAllSystemMessages |
+
+### `system-messages-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/heimdall/api/users/SystemMessagesController/dismissSystemMessage` | dismissSystemMessage |
+| GET | `/heimdall/api/users/SystemMessagesController/getMySystemMessages` | getMySystemMessages |
 
 ### `token-renew-controller`
 | Method | Path | Operation |
@@ -1674,6 +2058,25 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/public/UserWorkflowsController/startUserWorkflow` | startUserWorkflow |
 | POST | `/heimdall/public/UserWorkflowsController/userChangePasswordWithTicket` | userChangePasswordWithTicket |
 
+### `users-admin-cluster-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/changePassword` | infrastructureChangePassword |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/createUserIfNotExists` | infrastructureCreateUserIfNotExists_1 |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/deleteGroup` | infrastructureDeleteGroup |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/deleteUser` | infrastructureDeleteUser |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/findEditableUserByQbe` | infrastructureFindUserByQbe_1 |
+| GET | `/heimdall/api/cluster/SecurityController/UsersAdmin/findGroupByCode` | infrastructureFindGroupByCode |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/findUserByQbe` | infrastructureFindUserByQbe |
+| GET | `/heimdall/api/cluster/SecurityController/UsersAdmin/findUserByUsername` | infrastructureFindUserByUsername_1 |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/findUsersGroupByQbe` | infrastructureFindUsersGroupByQbe |
+| GET | `/heimdall/api/cluster/SecurityController/UsersAdmin/getAllGroups` | infrastructureGetAllGroups |
+| GET | `/heimdall/api/cluster/SecurityController/UsersAdmin/getAllUsers` | infrastructureGetAllUsers |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/insertGroup` | infrastructureInsertGroup |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/insertUser` | infrastructureInsertUser |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/updateGroup` | infrastructureUpdateGroup |
+| POST | `/heimdall/api/cluster/SecurityController/UsersAdmin/updateUser` | infrastructureUpdateUser |
+
 ### `users-admin-controller`
 | Method | Path | Operation |
 |---|---|---|
@@ -1682,7 +2085,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/heimdall/api/admin/UsersAdminController/deleteUser` | deleteUser |
 | GET | `/heimdall/api/admin/UsersAdminController/findGroupByCode` | findGroupByCode |
 | POST | `/heimdall/api/admin/UsersAdminController/findUserByQbe` | findUserByQbe |
-| GET | `/heimdall/api/admin/UsersAdminController/findUserByUsername` | findUserByUsername_1 |
+| GET | `/heimdall/api/admin/UsersAdminController/findUserByUsername` | findUserByUsername |
 | POST | `/heimdall/api/admin/UsersAdminController/findUsersGroupByQbe` | findUsersGroupByQbe |
 | GET | `/heimdall/api/admin/UsersAdminController/getAllGroups` | getAllGroups |
 | GET | `/heimdall/api/admin/UsersAdminController/getAllUsers` | getAllUsers |
@@ -1693,8 +2096,21 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
 
-8 controller(s), 13 endpoint(s):
+10 controller(s), 18 endpoint(s):
 
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/tyr/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/tyr/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/tyr/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
+### `gebo-modules-config-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/tyr/api/users/GeboModulesConfigController/getAllModules` | getAllModules |
+| GET | `/tyr/api/users/GeboModulesConfigController/getModuleInfo` | getModuleInfo |
 
 ### `global-internal-topology-controller`
 | Method | Path | Operation |
@@ -1712,7 +2128,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 |---|---|---|
 | GET | `/tyr/api/admin/JobStatusController/getJobStatus` | getJobStatus |
 | GET | `/tyr/api/admin/JobStatusController/getJobSummary` | getJobSummary |
-| POST | `/tyr/api/admin/JobStatusController/getJobsEntriesForProjectEndpoint` | getJobsEntriesForProjectEndpoint |
+| POST | `/tyr/api/admin/JobStatusController/getJobsEntriesForProjectEndpoint` | getJobsEntriesForProjectEndpointJobStatus |
 
 ### `llms-usage-admin-level-controller`
 | Method | Path | Operation |
@@ -1757,17 +2173,17 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/webdav/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
 | POST | `/webdav/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
 
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/webdav/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/webdav/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/webdav/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
 ### `generical-publisher-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/webdav/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
-
-### `ingestion-file-types-library-controller`
-| Method | Path | Operation |
-|---|---|---|
-| GET | `/webdav/api/users/IngestionFileTypesLibraryController/getAllFileTypes` | getAllFileTypes |
-| GET | `/webdav/api/users/IngestionFileTypesLibraryController/getIngestionFileTypeByExtension` | getIngestionFileTypeByExtension |
-| GET | `/webdav/api/users/IngestionFileTypesLibraryController/getIngestionReadingModules` | getIngestionReadingModules |
 
 ### `internal-messaging-topology-controller`
 | Method | Path | Operation |
