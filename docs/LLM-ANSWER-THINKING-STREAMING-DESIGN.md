@@ -378,8 +378,10 @@ every provider (`GAbstractConfigurableChatModel.reasoningExtractor()`):
   the UI can show the model thinking before anything readable comes;
 - a message without any reasoning part is read the legacy way, `IGReasoningExtractor.OPENAI`:
   the `reasoningContent` metadata holding all the reasoning so far, of which the reading keeps
-  the piece each chunk adds. Gebo's own `OpenAiResponsesChatModel` still writes the reasoning
-  there, and any model written before the parts keeps working.
+  the piece each chunk adds. Any model written before the parts keeps working. (Gebo's own
+  Responses model wrote it there; since item 9 the OpenAI models of version 6 and later run on
+  Spring AI's `OpenAiResponsesChatModel`, which streams the reasoning summary as
+  `ReasoningPart`s.)
 
 The rest of §3 is unchanged: `ThinkingNormalizationAdvisor` reads every generation of a round
 through the extractor, inside the tool loop, and the reasoning travels in the response metadata

@@ -97,7 +97,10 @@ incoming requests:
 - **Metrics:** each call is measured as `http_client_requests_seconds`, by method, status, host
   (`client_name`) and `uri`. The `uri` is the path template, such as `/v1/chat/completions` or
   `/rest/api/content/{id}`; a URL written out in full is measured as `none`, so ids never
-  multiply the series.
+  multiply the series. The providers called through the OpenAI SDK (OpenAI itself and the
+  OpenAI-compatible ones, such as regolo.ai) are measured by Spring AI's own client as
+  `okhttp_requests_seconds`, by target host, method and status, with the same spans and trace
+  header.
 - **What is recorded:** URLs are recorded without their query string or user info, since some
   providers take their API key in the query.
 

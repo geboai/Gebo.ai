@@ -38,7 +38,7 @@ Updated on 16 November 2026; the details of each item are in "Progress on 15 Nov
 | 6. Setup wizard support of the decision kind | done, seen in the browser | — |
 | 7. Tool-call confirmation (human in the loop) | done the harness's way (option b), run live on gpt-5.1 | — |
 | 8. Streamed tool-call arguments in the chat | done | — |
-| 9. Spring AI's own OpenAI Responses model | evaluated: keep Gebo's class for now, blockers listed | medium |
+| 9. Spring AI's own OpenAI Responses model | done on RC2, run live on gpt-6 (16 November) | — |
 | 10. Session memory | spike done: nothing to adopt, one test | — |
 | 11. Deprecated APIs cleanup | done; the generated clients stay on `RestTemplate` until Spring Framework 8 (decided 16 November) | — |
 | 12. Spring Security 7.2 | done; one live login per provider still to do | small |
@@ -140,6 +140,33 @@ Updated on 16 November 2026; the details of each item are in "Progress on 15 Nov
   an organization is refused them (400), Spring AI has no such fallback; `user` maps to
   `safetyIdentifier` or `extraBody`; the tests must be rewritten through `call`/`stream`; and
   the live run of step 5 needs a gpt-5 or later key. Gebo's class stays until then.
+  **Switched on 16 November (RC2), on the user's go.** The OpenAI handler builds Spring AI's
+  `OpenAiResponsesChatModel` for the models of version 6 and later (`OpenAiApiRouting`, the
+  rule unchanged). Gebo's 594-line class and its test are gone.
+  - **The options:** `OpenAiResponsesOptions.of` maps the Chat Completions configuration:
+    `max_output_tokens` from the completion cap, the effort as it was, `reasoning.summary`
+    `auto`, `parallel_tool_calls` only with tools, and the key's `user` as `safety_identifier`.
+  - **The 400 for summaries:** answered by `ReasoningSummariesFallbackChatModel`, which
+    retries without them and never asks again; streams are retried only before their first
+    event. Spring AI's class is final, so it is wrapped.
+  - **The HTTP client:** set as for Chat Completions (`OpenAiClientCustomizer`, the
+    observation registry).
+  - **Gained:** streamed tool-call arguments (item 8), and span parenting on streams.
+  - **Usage monitoring** (an explicit requirement): `OpenAiResponsesUsageTest` runs Spring AI's
+    model, Gebo's usage advisor and Gebo's tool calling advisor against a fake OpenAI
+    Responses server (json and SSE). Each model round is recorded once with OpenAI's tokens, as
+    for every chat model: the tool calling advisor runs outside the usage advisor, so a tool
+    loop gives one record per round and nothing counted twice. That holds blocking or
+    streamed, for a failed response (ERROR), and for a request repeated without the refused
+    summaries (one record). The summary deltas reach the thinking channel through `PARTS`.
+  - **Live, gpt-6 on the user's OpenAI token**, on port 12998 against a copy of the database:
+    - gpt-6-luna (effort low) answered blocking and streamed;
+    - gpt-6.1-sol (effort medium) streamed its reasoning summary as thinking events before
+      the answer, kept in `thinkingOutputs`;
+    - the agentic chat ran the date and time tool through the Responses api;
+    - every call left an `lLMUsageDetail` row (provider openai, the model, the tokens, SUCCESS).
+  - **The cost** stays empty for OpenAI: its API publishes no prices, so they go in the
+    "openai" provider deal, as for the Chat Completions models.
 - **Item 10.** The history Gebo replays is rebuilt from the interactions as a user message and
   its answer, text only; a turn's tool calls and results live only in that call's tool loop,
   so no trimming can keep a call without its result. Nothing to adopt; the property is pinned
@@ -564,9 +591,12 @@ Note: Ollama, Mistral and Google GenAI send the call whole. The UI must cope wit
 
 ## 11. Item 9: Spring AI's own OpenAI Responses model
 
-### Where things stand
+**Done on 16 November, on RC2**: see "Progress on 15 November", item 9, for what was built,
+tested and run live. What follows is the plan as it was written before the switch.
 
-Gebo has its own chat model over OpenAI's Responses API
+### Where things stood
+
+Gebo had its own chat model over OpenAI's Responses API
 (`gebo.llms.parent/gebo.llms.openai/.../services/OpenAiResponsesChatModel.java`, 601
 lines, five tests). `OpenAIChatModelConfigurationSupportService` uses it for the
 models of version 6 and later (`usesResponsesApi`). It is stateless, runs no tool loop,

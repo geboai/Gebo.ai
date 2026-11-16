@@ -22,8 +22,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
-import org.springframework.ai.openai.setup.OpenAiSetup;
 import org.springframework.ai.openai.OpenAiChatOptions;
+import org.springframework.ai.openai.http.okhttp.OpenAiHttpClientBuilderCustomizer;
+import org.springframework.ai.openai.responses.OpenAiResponsesChatModel;
+import org.springframework.ai.openai.responses.OpenAiResponsesChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,19 +195,16 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			// The models of version 6 and later go through the Responses API, whose tool calls
-			// Chat Completions does not carry for them (OpenAiResponsesChatModel); the others
-			// stay on Spring AI's Chat Completions model
-			if (OpenAiResponsesChatModel.usesResponsesApi(options.getModel())) {
+			// Chat Completions does not carry for them (OpenAiApiRouting): Spring AI's
+			// Responses model, configured as the Chat Completions one; the others stay on
+			// Spring AI's Chat Completions model
+			if (OpenAiApiRouting.usesResponsesApi(options.getModel())) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Chat model {} ({}) goes through the OpenAI Responses API", config.getCode(),
 							options.getModel());
 				}
-				return new OpenAiResponsesChatModel(OpenAiSetup.setupSyncClient(options.getBaseUrl(),
-						options.getApiKey(), null, null, null, options.getOrganizationId(), false, false,
-						options.getModel(), options.getTimeout(), options.getMaxRetries(), null, null,
-						observationRegistry, null,
-						List.of(OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())))), options,
-						toolCallingManager, observationRegistry);
+				return responsesModel(OpenAiResponsesOptions.of(options), toolCallingManager, observationRegistry,
+						OpenAiClientCustomizer.from(serviceClientsProviderFactory.get(getCode())));
 			}
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
@@ -244,6 +243,24 @@ public class OpenAIChatModelConfigurationSupportService
 					observationRegistry, modelsLibrary);
 		}
 	};
+
+	/**
+	 * A chat model on the Responses api: Spring AI's, its HTTP client set as the Chat
+	 * Completions one's (the customizer of the provider's client settings; its calls observed
+	 * in the registry), the reasoning summaries dropped for an organization refused them
+	 * ({@link ReasoningSummariesFallbackChatModel}). Its calls are accounted as any chat
+	 * model's, by the usage advisor of the ChatClient above it.
+	 */
+	static ChatModel responsesModel(OpenAiResponsesChatOptions options, ToolCallingManager toolCallingManager,
+			ObservationRegistry observationRegistry, OpenAiHttpClientBuilderCustomizer httpClientCustomizer) {
+		final OpenAiResponsesChatModel.Builder builder = OpenAiResponsesChatModel.builder().options(options)
+				.toolCallingManager(toolCallingManager)
+				.observationRegistry(observationRegistry != null ? observationRegistry : ObservationRegistry.NOOP);
+		if (httpClientCustomizer != null) {
+			builder.httpClientBuilderCustomizer(httpClientCustomizer);
+		}
+		return new ReasoningSummariesFallbackChatModel(builder.build());
+	}
 
 	/**
 	 * Gets the model type supported by this service.
