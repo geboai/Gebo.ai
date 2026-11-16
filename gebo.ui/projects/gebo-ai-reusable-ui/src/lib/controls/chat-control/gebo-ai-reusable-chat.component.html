@@ -106,6 +106,19 @@
               <div class="gebo-ai-reusable-chat__interaction-thinking-text"><i>{{interaction.streamingThinking}}</i></div>
             </div>
           }
+          @if (interaction?.streamingToolCalls?.length) {
+            <div class="gebo-ai-reusable-chat__interaction-toolcalls">
+              @for (call of interaction.streamingToolCalls; track call.key + $index) {
+                <details class="gebo-ai-reusable-chat__interaction-toolcall">
+                  <summary>
+                    <i class="pi" [ngClass]="call.complete ? 'pi-check' : 'pi-spin pi-spinner'"></i>
+                    <span id="ToolCallLabel" gebo-ai-text>Calling</span> <b>{{call.name}}</b>
+                  </summary>
+                  <pre class="gebo-ai-reusable-chat__interaction-toolcall-arguments">{{call.arguments}}</pre>
+                </details>
+              }
+            </div>
+          }
           @if ($last) {
             <gebo-ai-chat-stream-events-display [streaming]="chatStreaming"
               [routingChoiceSelector]="currentPipelineRouterDecisionCode"
@@ -114,17 +127,17 @@
             </gebo-ai-chat-stream-events-display>
           }
           <markdown lineNumbers lineHighlight mermaid clipboard [mermaidOptions]="options"
-          [data]="interaction?.response?.queryResponse"></markdown>
+          [data]="localizedAnswer(interaction?.response, $safeNavigationMigration(interaction?.response?.queryResponse))"></markdown>
 
           @if (interaction?.response?.id) {
             <div class="gebo-ai-reusable-chat__interaction-export-buttons">
               <p-button id="wordExport" gebo-ai-label icon="pi pi-file-word" [rounded]="true" [text]="true"
                 [disabled]="chatStreaming"
-                (onClick)="exportResponse(userChatContextCode, interaction.response?.id, 'WORD')"
+                (onClick)="exportResponse(userChatContextCode, $safeNavigationMigration(interaction.response?.id), 'WORD')"
               title="Export response to Word" gebo-ai-label class="custom-word-btn"></p-button>
               <p-button id="pdfExport" gebo-ai-label icon="pi pi-file-pdf" [rounded]="true" [text]="true"
                 [disabled]="chatStreaming"
-                (onClick)="exportResponse(userChatContextCode, interaction.response?.id, 'PDF')"
+                (onClick)="exportResponse(userChatContextCode, $safeNavigationMigration(interaction.response?.id), 'PDF')"
               title="Export response to PDF" gebo-ai-label class="custom-pdf-btn"></p-button>
               <span class="gebo-ai-reusable-chat__interaction-feedback">
                 <p-button id="goodAnswerBtn" gebo-ai-label [rounded]="true" [text]="true"
@@ -163,9 +176,9 @@
             <p-button id="CalledFunctionsListBtn" gebo-ai-label title="Show the functions called"
               [text]="true" [rounded]="true" size="small"
               styleClass="gebo-ai-reusable-chat__called-function-toggle"
-              [icon]="isCalledFunctionsListExpanded(interaction.request?.id) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-              (onClick)="toggleCalledFunctionsList(interaction.request?.id)"></p-button>
-            @if (isCalledFunctionsListExpanded(interaction.request?.id)) {
+              [icon]="isCalledFunctionsListExpanded($safeNavigationMigration(interaction.request?.id)) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              (onClick)="toggleCalledFunctionsList($safeNavigationMigration(interaction.request?.id))"></p-button>
+            @if (isCalledFunctionsListExpanded($safeNavigationMigration(interaction.request?.id))) {
               <ul class="gebo-ai-reusable-chat__called-functions">
                 @for (calledFunction of interaction.response?.calledFunctions; track $index; let fi = $index) {
                   <li class="gebo-ai-reusable-chat__called-function">
@@ -176,11 +189,11 @@
                         <p-button id="CalledFunctionParamsBtn" gebo-ai-label title="Show the parameters"
                           [text]="true" [rounded]="true" size="small"
                           styleClass="gebo-ai-reusable-chat__called-function-toggle"
-                          [icon]="isCalledFunctionParamsExpanded(interaction.request?.id, fi) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                          (onClick)="toggleCalledFunctionParams(interaction.request?.id, fi)"></p-button>
+                          [icon]="isCalledFunctionParamsExpanded($safeNavigationMigration(interaction.request?.id), fi) ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                          (onClick)="toggleCalledFunctionParams($safeNavigationMigration(interaction.request?.id), fi)"></p-button>
                       }
                     </div>
-                    @if (isCalledFunctionParamsExpanded(interaction.request?.id, fi)) {
+                    @if (isCalledFunctionParamsExpanded($safeNavigationMigration(interaction.request?.id), fi)) {
                       <dl class="gebo-ai-reusable-chat__called-function-params">
                         @for (param of calledFunctionParams(calledFunction); track $index) {
                           <dt>{{param.name}}</dt>

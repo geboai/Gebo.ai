@@ -17,7 +17,7 @@
  * It safely injects HTML content provided as an input into the DOM.
  * The component handles both initial rendering and updates to the HTML content.
  */
-import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 
 /**
  * A component that renders HTML content passed to it as a string.
@@ -28,6 +28,7 @@ import { AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, 
 @Component({
     selector: "gebo-ai-html-viewer-component",
     template: "<div class='col-12' #thisDiv ></div>",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIViewHtmlComponent implements OnChanges, AfterViewInit {

@@ -272,7 +272,7 @@ public class GeboWorkflowsStatsServiceImpl implements IGeboWorkflowsStatsService
 				if (timestamp != null) {
 					long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;
 					long minutesFloorEnd = minutesFloorStart + STATS_TIME_SLOT;
-					Long key = new Long(minutesFloorStart);
+					Long key = Long.valueOf(minutesFloorStart);
 					if (!stats.containsKey(key)) {
 						stats.put(key, new HashMap<String, JobWorkflowStepSummaryTimeSlotStats>());
 					}
@@ -302,7 +302,7 @@ public class GeboWorkflowsStatsServiceImpl implements IGeboWorkflowsStatsService
 					stepSummary.setWorkflowId(item.getWorkflowId());
 					stepSummary.setWorkflowStepId(item.getWorkflowStepId());
 					for (long actualDateTime = startDateTime; actualDateTime <= endDateTime; actualDateTime += STATS_TIME_SLOT) {
-						Map<String, JobWorkflowStepSummaryTimeSlotStats> entry = stats.get(new Long(actualDateTime));
+						Map<String, JobWorkflowStepSummaryTimeSlotStats> entry = stats.get(Long.valueOf(actualDateTime));
 						JobWorkflowStepSummaryTimeSlotStats slot = null;
 						if (entry != null && entry.containsKey(stepKey)) {
 							slot = entry.get(stepKey);

@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit } from "@angular/core";
+import { Component, forwardRef, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { findMatchingTranslation, UIExistingText } from "./text-language-resources";
@@ -13,6 +13,7 @@ const languagePlaceholderText: UIExistingText = { moduleId: "GeboAIMultilanguage
     templateUrl: "language-choice.component.html",
     styleUrl: "language-choice.component.css",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => GeboAILanguageChoiceComponent),

@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.core.ResolvableType;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -74,6 +74,9 @@ import reactor.core.publisher.Flux;
  * The subclasses only say whether their source can be searched and search it.
  */
 public abstract class AbstractDeepSearchTool<Q> {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
 	/** Most searches run by a deep search. */
 	static final int MAX_QUERIES = 5;
@@ -404,15 +407,15 @@ public abstract class AbstractDeepSearchTool<Q> {
 			}
 			if (LOGGER.isTraceEnabled()) {
 				LOGGER.trace("<DEEP_SEARCH_TOOL_COVERAGE tool=" + toolName + ">");
-				LOGGER.trace(JsonParser.toJson(coverage));
+				LOGGER.trace(JSON_HELPER.toJson(coverage));
 				LOGGER.trace("</DEEP_SEARCH_TOOL_COVERAGE>");
 			}
 			// the length is asked by the depth and the room (lengthTarget): this only stops a
 			// runaway analysis, the sources and the coverage listed with it taking their part
 			// of the room left
-			final int sourcesTokens = ITokensCountable.stringsTokensSize(JsonParser.toJson(result.getSources()))
-					+ ITokensCountable.stringsTokensSize(JsonParser.toJson(coverage))
-					+ (notRead.isEmpty() ? 0 : ITokensCountable.stringsTokensSize(JsonParser.toJson(notRead)));
+			final int sourcesTokens = ITokensCountable.stringsTokensSize(JSON_HELPER.toJson(result.getSources()))
+					+ ITokensCountable.stringsTokensSize(JSON_HELPER.toJson(coverage))
+					+ (notRead.isEmpty() ? 0 : ITokensCountable.stringsTokensSize(JSON_HELPER.toJson(notRead)));
 			// the links of the analysis that are no address of the documents found, nor in
 			// their contents, are made up: removed before the agent reads them
 			final String checkedAnalysis = withoutMadeUpLinks(analysis, allFound, fragments);

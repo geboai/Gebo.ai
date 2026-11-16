@@ -10,7 +10,7 @@
 import { Injectable } from '@angular/core';
 import { ApplicationMenuProviderService, SetupStatus } from '@Gebo.ai/reusable-ui';
 import { UserInfo, GeboMcpServerUserControllerService, GeneratedUserApiKeyControllerService } from '@Gebo.ai/gebo-ai-rest-api';
-import { MegaMenuItem } from 'primeng/api';
+import { MegaMenuItem } from '@openng/optimus-ui/api';
 import { Observable, BehaviorSubject, forkJoin, of } from 'rxjs';
 import { catchError, map, shareReplay } from 'rxjs/operators';
 import { GeboSetupWizardService } from '@Gebo.ai/gebo-ai-admin-ui';

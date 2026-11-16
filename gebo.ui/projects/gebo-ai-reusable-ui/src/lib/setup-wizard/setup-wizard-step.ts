@@ -17,7 +17,7 @@
  * sections with status tracking capabilities.
  */
 
-import { Component, EventEmitter, Injectable, InjectionToken, Input, Output, Type } from '@angular/core';
+import { Component, EventEmitter, Injectable, InjectionToken, Input, Output, Type, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { BaseWizardSectionComponent } from './base-wizard-section.component';
 
@@ -68,6 +68,7 @@ export class AlwaysTrueStatusService extends AbstractStatusService {
  */
 @Component({
     selector: "gebo-wizard-section-with-no-ui", template: "",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WizardSectionWithNoUI extends BaseWizardSectionComponent {

@@ -1,3 +1,4 @@
+<div [formGroup]="formGroup">
 <gebo-ai-field id="description" label="User space description" [required]="true" help="Enter the description of your user space.">
     <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
 </gebo-ai-field>
@@ -5,4 +6,5 @@
 <gebo-ai-field id="accessibleGroups" label="Accessible from groups" help="Set which of the groups you are participating can access these documents.">
     <p-multiSelect styleClass="w-full" id="accessibleGroups" formControlName="accessibleGroups" optionLabel="description" optionValue="code" dataKey="code" [options]="userGroups" showClear="true" display="chip" gebo-ai-field-element></p-multiSelect>
 </gebo-ai-field>
+</div>
 <!-- Treated By refactory robot GeboAIHtmlMultilanguageBot -->

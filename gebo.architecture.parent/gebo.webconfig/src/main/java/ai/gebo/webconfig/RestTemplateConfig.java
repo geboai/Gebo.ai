@@ -9,11 +9,14 @@
 
 package ai.gebo.webconfig;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
+import io.micrometer.observation.ObservationRegistry;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
@@ -30,16 +33,17 @@ public class RestTemplateConfig {
 	}
 
 	/**
-	 * Creates a new RestTemplate bean that can be used for making REST calls.
+	 * Creates a new RestTemplate bean that can be used for making REST calls, its calls
+	 * observed in the application's registry (see GeboHttpClientObservations).
 	 * 
 	 * @return a configured RestTemplate instance
 	 */
 	@Bean
-	public RestTemplate restTemplate(JsonMapper objectMapper) {
+	public RestTemplate restTemplate(JsonMapper objectMapper, ObjectProvider<ObservationRegistry> observationRegistry) {
 		JacksonJsonHttpMessageConverter jackson = new JacksonJsonHttpMessageConverter(objectMapper);
 		RestTemplate restTemplate = new RestTemplate();
 		restTemplate.getMessageConverters().add(0, jackson);
-		return restTemplate;
+		return GeboHttpClientObservations.observed(restTemplate, GeboHttpClientObservations.registryOf(observationRegistry));
 	}
 
 }

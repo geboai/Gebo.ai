@@ -17,7 +17,7 @@
  * It receives user data through an Input binding and emits a close event when
  * the user information display should be closed/dismissed.
  */
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { GeboChatUserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
@@ -30,6 +30,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     selector: "gebo-user-chat-info-component",
     templateUrl: "chat-info.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboChatUserInfoComponent"), multi: false }]
 })
 export class GeboChatUserInfoComponent {

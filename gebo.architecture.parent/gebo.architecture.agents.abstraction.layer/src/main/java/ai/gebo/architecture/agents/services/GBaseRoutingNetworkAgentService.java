@@ -242,7 +242,7 @@ public class GBaseRoutingNetworkAgentService<InputType, OutputType>
 		// What a tool of this call declares the run must wait for: read once the call
 		// ended. A respawned agent is told first what it waited for.
 		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Routing agent " + getId(), toolCalling, suspensionHandler,
-				contextAgentPersona);
+				contextAgentPersona, config);
 		final GeboToolCalling callToolCalling = turn.toolCalling();
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,
 				mySessionContext, turn.toldInput(msg.getPayload()), agentsDao, actualContributionNr, tokenBudget);

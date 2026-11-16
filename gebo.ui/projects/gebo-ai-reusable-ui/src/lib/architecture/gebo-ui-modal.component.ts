@@ -10,7 +10,7 @@
  
  
 
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 /**
  * A reusable modal dialog component for Angular applications.
  * This component provides a customizable modal overlay that can be shown or hidden.
@@ -19,6 +19,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 @Component({
     selector: "gebo-ai-modal",
     templateUrl: "gebo-ui-modal.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboUIModalComponent { 

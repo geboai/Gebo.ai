@@ -79,7 +79,7 @@ export class EnrichedDocumentReferenceViewRetrieveService {
      * Determines the appropriate icon to display based on the file type's treatment category
      * 
      * @param child The file type to get an icon for
-     * @returns A string representing the PrimeNG icon class to use
+     * @returns A string representing the Optimus UI icon class to use
      */
     private getFileIcon(child: IngestionFileType): string {
 

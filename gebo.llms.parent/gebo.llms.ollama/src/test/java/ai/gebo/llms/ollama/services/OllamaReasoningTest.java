@@ -17,6 +17,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.part.ReasoningPart;
+import org.springframework.ai.chat.messages.part.TextPart;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
@@ -28,15 +30,22 @@ import ai.gebo.llms.abstraction.layer.services.ThinkingNormalizationAdvisor;
 import reactor.core.publisher.Flux;
 
 /**
- * Ollama's thinking as Spring AI's OllamaChatModel (2.0.1) streams it, the piece each
- * chunk adds in the "thinking" metadata, and the thinking tags of a model run without the
- * think api: the reasoning apart, the answer as it streams.
+ * Ollama's thinking as Spring AI's OllamaChatModel (2.1) streams it, the piece each chunk
+ * adds as a reasoning part of its message (and still in the "thinking" metadata), and the
+ * thinking tags of a model run without the think api: the reasoning apart, the answer as
+ * it streams.
  */
 class OllamaReasoningTest {
 
 	private static ChatResponse chunk(String thinking, String text) {
-		return new ChatResponse(List.of(new Generation(AssistantMessage.builder().content(text)
-				.properties(thinking != null ? Map.of("thinking", thinking) : Map.of()).build())));
+		final AssistantMessage.Builder<?> builder = AssistantMessage.builder();
+		if (thinking != null) {
+			builder.part(ReasoningPart.of(thinking)).properties(Map.of("thinking", thinking));
+		}
+		if (text != null) {
+			builder.part(TextPart.of(text));
+		}
+		return new ChatResponse(List.of(new Generation(builder.build())));
 	}
 
 	/** The chunks as an Ollama model's ChatClient streams them: markup handled. */
@@ -53,7 +62,7 @@ class OllamaReasoningTest {
 			}
 		};
 		return ChatClient.builder(model)
-				.defaultAdvisors(new ThinkingNormalizationAdvisor(OllamaChatModelConfigurationSupportService.REASONING,
+				.defaultAdvisors(new ThinkingNormalizationAdvisor(IGReasoningExtractor.PARTS,
 						() -> true, g -> false))
 				.build().prompt("q").stream().chatResponse().map(GChatAnswerChunk::of).collectList().block();
 	}
@@ -71,7 +80,7 @@ class OllamaReasoningTest {
 		assertEquals("Okay, the sum.", join(chunks, true));
 		assertEquals("It is 4.", join(chunks, false));
 		assertEquals(new IGReasoningExtractor.Reasoning("", "x", false),
-				OllamaChatModelConfigurationSupportService.REASONING.round()
+				IGReasoningExtractor.PARTS.round()
 						.of(new Generation(new AssistantMessage("x"))));
 	}
 

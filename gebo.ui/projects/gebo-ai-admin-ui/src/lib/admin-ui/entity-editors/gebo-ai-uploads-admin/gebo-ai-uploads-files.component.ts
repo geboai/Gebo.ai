@@ -7,12 +7,12 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, Optional, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Inject, Input, NgZone, OnChanges, OnDestroy, Optional, Output, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { BASE_PATH, FileUploadsControllerService, UploadedFileNode } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIRootNotificationService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ConfirmEventType, ToastMessageOptions, TreeNode } from "primeng/api";
-import { FileUpload, FileUploadHandlerEvent } from "primeng/fileupload";
+import { ConfirmationService, ConfirmEventType, ToastMessageOptions, TreeNode } from "@openng/optimus-ui/api";
+import { FileUpload, FileUploadHandlerEvent } from "@openng/optimus-ui/fileupload";
 import { lastValueFrom } from "rxjs";
 
 /** A file to upload, with the path it keeps under the target folder. */
@@ -45,6 +45,7 @@ const MAX_FILE_BYTES: number = 100 * 1024 * 1024;
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUploadsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUploadsFilesComponent") }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUploadsFilesComponent implements OnChanges, AfterViewInit, OnDestroy {
@@ -98,7 +99,7 @@ export class GeboAIUploadsFilesComponent implements OnChanges, AfterViewInit, On
     }
 
     ngAfterViewInit(): void {
-        // A dropped folder has to be read before PrimeNG takes the drop, which only
+        // A dropped folder has to be read before Optimus UI takes the drop, which only
         // sees files: the drop is caught on its way down, in the capture phase.
         this.dropArea?.nativeElement.addEventListener("drop", this.folderDropListener, true);
     }
@@ -180,7 +181,7 @@ export class GeboAIUploadsFilesComponent implements OnChanges, AfterViewInit, On
 
     // ------------------------------------------------------------- uploading
 
-    /** Files chosen or dropped through PrimeNG: kept as they are, under the target folder. */
+    /** Files chosen or dropped through Optimus UI: kept as they are, under the target folder. */
     protected onUploadHandler(event: FileUploadHandlerEvent): void {
         const files: PendingUploadFile[] = (event.files || []).map(file => ({ file, relativePath: file.name }));
         this.fileUpload?.clear();
@@ -201,7 +202,7 @@ export class GeboAIUploadsFilesComponent implements OnChanges, AfterViewInit, On
         this.upload(files);
     }
 
-    /** A drop holding folders: read here, whole, instead of by PrimeNG. */
+    /** A drop holding folders: read here, whole, instead of by Optimus UI. */
     private onDropCapture(event: DragEvent): void {
         const items = event.dataTransfer?.items;
         if (!items || !this.canAddFiles) return;
@@ -211,7 +212,7 @@ export class GeboAIUploadsFilesComponent implements OnChanges, AfterViewInit, On
             if (entry) entries.push(entry);
         }
         if (!entries.some(x => x.isDirectory)) {
-            // only files: PrimeNG takes them, with its own checks
+            // only files: Optimus UI takes them, with its own checks
             return;
         }
         event.preventDefault();

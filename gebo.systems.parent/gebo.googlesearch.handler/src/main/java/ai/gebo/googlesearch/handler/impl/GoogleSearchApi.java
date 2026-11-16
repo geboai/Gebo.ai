@@ -25,17 +25,21 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import ai.gebo.architecture.search.config.SearchCallsConfig;
 import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.googlesearch.handler.model.GoogleSearchRequest;
 import ai.gebo.googlesearch.handler.model.GoogleSearchResults;
+
+import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
+import io.micrometer.observation.ObservationRegistry;
 
 @Service
 class GoogleSearchApi {
@@ -48,23 +52,29 @@ class GoogleSearchApi {
 
 	// the Google API is called with an HTTP client of its own, whose connect and read
 	// timeouts are the search calls' ones: it does not hold a search forever
-	private final RestTemplate restTemplate;
+	private final RestClient restClient;
+	// the calls observed in the application's registry: the recorded urls never hold the
+	// query, where the API key travels (see GeboHttpClientObservations)
+	private final ObservationRegistry observationRegistry;
 
 	@Autowired
-	GoogleSearchApi(SearchCallsConfig searchCalls) {
-		this(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout());
+	GoogleSearchApi(SearchCallsConfig searchCalls, ObjectProvider<ObservationRegistry> observationRegistry) {
+		this(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout(),
+				GeboHttpClientObservations.registryOf(observationRegistry));
 	}
 
-	private GoogleSearchApi(Duration connectTimeout, Duration readTimeout) {
+	private GoogleSearchApi(Duration connectTimeout, Duration readTimeout, ObservationRegistry observationRegistry) {
 		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 		requestFactory.setConnectTimeout(connectTimeout);
 		requestFactory.setReadTimeout(readTimeout);
-		this.restTemplate = new RestTemplate(requestFactory);
+		this.observationRegistry = observationRegistry;
+		this.restClient = GeboHttpClientObservations
+				.observed(RestClient.builder().requestFactory(requestFactory), observationRegistry).build();
 	}
 
 	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
 	GoogleSearchApi using(SearchCallParameters parameters) {
-		return new GoogleSearchApi(parameters.connectTimeout(), parameters.readTimeout());
+		return new GoogleSearchApi(parameters.connectTimeout(), parameters.readTimeout(), observationRegistry);
 	}
 
 	/**
@@ -108,7 +118,8 @@ class GoogleSearchApi {
 			LOGGER.debug("Google search url:" + url.toString().replace(URLEncoder.encode(apiKey, charset), "***"));
 		}
 		URI uri = url.toURI();
-		ResponseEntity<GoogleSearchResults> returned = restTemplate.getForEntity(uri, GoogleSearchResults.class);
+		ResponseEntity<GoogleSearchResults> returned = restClient.get().uri(uri).retrieve()
+				.toEntity(GoogleSearchResults.class);
 		if (returned.hasBody())
 			return returned.getBody();
 		return new GoogleSearchResults();

@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.ai.model.NoopApiKey;
-import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.ai.openai.OpenAiChatOptions;
 import org.springframework.ai.openai.OpenAiChatOptions.Builder;
@@ -273,10 +272,8 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 			}
 			builder.timeout(OpenAiClientCustomizer.requestTimeout(clientsProvider));
 			OpenAiChatOptions options = builder.build();
-			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			OpenAiChatModel model = OpenAiChatModel.builder()
 					.options(options)
-					.toolCallingManager(toolCallingManager)
 					.observationRegistry(observationRegistry)
 					.httpClientBuilderCustomizer(OpenAiClientCustomizer.from(clientsProvider))
 					.build();

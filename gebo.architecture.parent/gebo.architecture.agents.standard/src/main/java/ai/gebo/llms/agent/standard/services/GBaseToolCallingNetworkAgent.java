@@ -141,7 +141,7 @@ public class GBaseToolCallingNetworkAgent<InputType, OutputType>
 		// What a tool of this call declares the run must wait for: read once the call
 		// ended. A respawned agent is told first what it waited for.
 		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Tool-calling agent " + getId(), toolCalling,
-				suspensionHandler, contextAgentPersona);
+				suspensionHandler, contextAgentPersona, config);
 		final GeboToolCalling callToolCalling = turn.toolCalling();
 		final Object input = turn.toldInput(msg.getPayload());
 		Map<String, Object> params = createAgentTemplateParams(prompt, network, agentRole, contextAgentPersona, session,

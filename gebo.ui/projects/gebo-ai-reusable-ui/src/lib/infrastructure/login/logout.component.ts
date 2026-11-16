@@ -10,11 +10,12 @@
  
  
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { LoginService } from "./login.service";
 @Component({
     selector: "gebo-ai-logout-component",
     template: "<h2>logout in progress</h2>",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LogoutComponent implements OnInit{

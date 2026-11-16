@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMExistingConfiguration
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:00:30.875750714+01:00[Europe/Rome]")
 
 public class LLMExistingConfiguration {
   @JsonProperty("existingModelConfig")
@@ -39,7 +39,8 @@ public class LLMExistingConfiguration {
     RANKING("RANKING"),
     IMAGESGEN("IMAGESGEN"),
     TTS("TTS"),
-    TRANSCRIPT("TRANSCRIPT");
+    TRANSCRIPT("TRANSCRIPT"),
+    DECISION("DECISION");
 
     private String value;
 

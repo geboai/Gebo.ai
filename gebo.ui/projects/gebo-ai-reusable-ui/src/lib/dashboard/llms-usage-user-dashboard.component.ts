@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai 
  */
 
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { 
   LlmsUsageUserLevelControllerService, 
   LLMUsageDrillDownLevel, 
@@ -25,6 +25,7 @@ import { BaseLLMSUsageDashboardComponent } from "./llms-usage-dashboard.componen
     { provide: GEBO_AI_MODULE, useValue: "GeboAILLMSUsageDashboardModule", multi: false },
     { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAILLMSUsageUserDashboardComponent") }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GeboAILLMSUsageUserDashboardComponent extends BaseLLMSUsageDashboardComponent {

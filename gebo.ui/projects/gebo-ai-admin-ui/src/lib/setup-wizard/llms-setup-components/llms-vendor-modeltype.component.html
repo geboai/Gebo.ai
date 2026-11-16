@@ -25,25 +25,25 @@
       </div>
     }
     <div class="col-12">
-      <gebo-ai-api-key-component formControlName="selectedSecret" [contextCode]="vendorConfiguration?.parentModel?.apiKeySecretContext" [secretTypes]="vendorConfiguration?.parentModel?.secretTypes" [apiKeyDescription]="vendorConfiguration?.parentModel?.vendorId+ ' credentials'" [backendValidation]="doBackendCredentialsValidation" [backendValidationOnChange]="true">
+      <gebo-ai-api-key-component formControlName="selectedSecret" [contextCode]="$safeNavigationMigration(vendorConfiguration?.parentModel?.apiKeySecretContext)" [secretTypes]="$safeNavigationMigration(vendorConfiguration?.parentModel?.secretTypes)" [apiKeyDescription]="$safeNavigationMigration(vendorConfiguration?.parentModel?.vendorId)+ ' credentials'" [backendValidation]="doBackendCredentialsValidation" [backendValidationOnChange]="true">
       </gebo-ai-api-key-component>
     </div>
   </div>
 </p-fieldset>
-@if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts) || lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0) {
+@if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts) || (decisionPresets.length>0 && showDecision) || lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0 || lookedUpDecisionModels.length>0) {
   <p-fieldset id="ModelsChoices" legend="Models choices" gebo-ai-label
     >
     <p-tabs [value]="0">
       <p-tablist>
-        @if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts)) {
+        @if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts) || (decisionPresets.length>0 && showDecision)) {
           <p-tab [value]="0"><span id="SuggestedModelsTab" gebo-ai-text>Suggested models selection</span></p-tab>
         }
-        @if (lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0) {
+        @if (lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0 || lookedUpDecisionModels.length>0) {
           <p-tab [value]="1"><span id="AdvancedModelsTab" gebo-ai-text>Advanced models selection</span></p-tab>
         }
       </p-tablist>
       <p-tabpanels>
-      @if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts)) {
+      @if ((chatPresets.length>0 && (showDefaultChat || showServiceChat)) || (embeddingPresets.length>0 && showEmbedding) || (rankingPresets.length>0 && showRanker) || (imagePresets.length>0 && showImages) || (transcriptPresets.length>0 && showTranscript) || (ttsPresets.length>0 && showTts) || (decisionPresets.length>0 && showDecision)) {
         <p-tabpanel [value]="0">
           <div class="grid">
             <div class="col-12">
@@ -120,6 +120,16 @@
               </div>
               <div class="col-6"></div>
             }
+            @if (decisionPresets.length>0 && showDecision) {
+              <div class="col-6" [formGroup]="decisionModelPresetsFormGroup">
+                <gebo-ai-field id="decisionPresetChoice" label="Default decision model"
+                  help="Select one of the predefined decision models. It is created as the default decision model, which judges whether each retrieved fragment is useful to the question.">
+                  <geboai-editable-listbox-component formControlName="choosedModel" [data]="decisionPresets"
+                  gebo-ai-field-element></geboai-editable-listbox-component>
+                </gebo-ai-field>
+              </div>
+              <div class="col-6"></div>
+            }
             <div class="col-3">
               <p-button id="CreatePresetBtn" gebo-ai-label [outlined]="true" label="Create and activate"
                 (onClick)="createPresetLLMS()" [disabled]="!presetCreateBtnEnabled" icon="pi pi-save"
@@ -128,7 +138,7 @@
           </div>
         </p-tabpanel>
       }
-      @if (lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0) {
+      @if (lookedUpChatModels.length>0 || lookedUpEmbeddingModels.length>0 || lookedUpRankingModels.length>0 || lookedUpImagesModels.length>0 || lookedUpTranscriptModels.length>0 || lookedUpTtsModels.length>0 || lookedUpDecisionModels.length>0) {
         <p-tabpanel [value]="1">
           <div class="grid">
             <div class="col-12">
@@ -262,6 +272,25 @@
               </div>
               <div class="col-4">@if (llmsStatus?.ttsModelCode) {
                 <small><span id="TtsCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.ttsModelCode}} ({{llmsStatus?.ttsModelProviderId}})</small>
+              }</div>
+            }
+            @if (lookedUpDecisionModels.length>0) {
+              <div class="col-5" [formGroup]="decisionModelAdvancedFormGroup">
+                <gebo-ai-field id="decisionAdvancedChoice" label="Decision model"
+                  help="Select one of the supplier published decision models.">
+                  <geboai-editable-listbox-component formControlName="choosedModel" [data]="lookedUpDecisionModels"
+                  gebo-ai-field-element></geboai-editable-listbox-component>
+                </gebo-ai-field>
+              </div>
+              <div class="col-3" [formGroup]="decisionModelAdvancedFormGroup">
+                <gebo-ai-field id="decisionAdvancedSetAsDefault" label="set as default"
+                  help="Set this model as the default decision model (overrides the current one if any).">
+                  <p-checkbox formControlName="setAsDefault" [binary]="true" gebo-ai-field-element
+                  [trueValue]="true" [falseValue]="false"></p-checkbox>
+                </gebo-ai-field>
+              </div>
+              <div class="col-4">@if (llmsStatus?.decisionModelCode) {
+                <small><span id="DecCurDef" gebo-ai-text>Current default</span>: {{llmsStatus?.decisionModelCode}} ({{llmsStatus?.decisionModelProviderId}})</small>
               }</div>
             }
             <div class="col-3">

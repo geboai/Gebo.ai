@@ -69,10 +69,10 @@
         </div>
         <div class="text-xs text-500">
           <span id="ConfiguredChatNetworkLabel" gebo-ai-text>Default of the application configuration:</span>
-          {{ networkLabel(pipeline, pipeline.info?.configuredDefaultChatNetworkOfAgents) }}
+          {{ networkLabel(pipeline, $safeNavigationMigration(pipeline.info?.configuredDefaultChatNetworkOfAgents)) }}
           &nbsp;·&nbsp;
           <span id="EffectiveChatNetworkLabel" gebo-ai-text>Now in use:</span>
-          {{ networkLabel(pipeline, pipeline.info?.effectiveChatNetworkOfAgents) }}
+          {{ networkLabel(pipeline, $safeNavigationMigration(pipeline.info?.effectiveChatNetworkOfAgents)) }}
           @if (pipeline.info?.defaultChatNetworkOfAgents) {
             <span id="ChosenChatNetworkLabel" gebo-ai-text>(chosen here)</span>
           }

@@ -291,6 +291,32 @@
   }
 }
 
+// the tool calls the model writes, as they stream: a line each, its arguments shown on demand
+.gebo-ai-reusable-chat__interaction-toolcalls {
+  margin: 0 0 8px 0;
+}
+.gebo-ai-reusable-chat__interaction-toolcall {
+  font-size: 12px;
+  color: #64748b;
+  summary {
+    cursor: pointer;
+    i {
+      font-size: 11px;
+      margin-right: 4px;
+    }
+    // the template's space between the label and the tool name is not kept
+    b {
+      margin-left: 0.3em;
+    }
+  }
+  &-arguments {
+    margin: 4px 0 0 16px;
+    font-size: 11px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
+
 // the grey round count of the GeboChatResponse messages the stream of an answer delivered: one
 // per cycle of an agent working in cycles, then the final one and the closing one of the pipeline
 .gebo-ai-reusable-chat__interaction-responses-count {

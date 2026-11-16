@@ -1,14 +1,15 @@
-import { Component, forwardRef, inject, Injector } from "@angular/core";
+import { Component, forwardRef, inject, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
-import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolCollision, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolCollision, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GLookupEntry, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { catchError, debounceTime, forkJoin, map, merge, Observable, of, Subject, switchMap, take, tap } from "rxjs";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
     templateUrl: "gebo-ai-agents-admin.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIAgentsAdminModule", multi: false },
     {
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAgentsAdminComponent),
@@ -42,6 +43,8 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         accessibleToAll: new FormControl(),
         enabledFunctions: new FormControl(),
         excludedToolSources: new FormControl(),
+        // the tools this agent runs only once a person allows each call
+        toolsNeedingConfirmation: new FormControl(),
         libraryTypeIds: new FormControl(),
         aclAliases: new FormControl(),
         defaultConfiguration: new FormControl(),
@@ -65,6 +68,8 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     protected networks: GBaseObject[] = [];
     /** The registered tool sources, by description: the ones an auto-mounting agent may leave out. */
     protected toolSources: ToolSourceInfo[] = [];
+    // every registered tool, to pick the ones a person confirms each call of
+    protected toolChoices: GLookupEntry[] = [];
     /** The library types of tools and resources this installation manages: the ones an agent works with, whole. */
     protected libraryTypes: AIToolsAndResourcesLibraryType[] = [];
     /** The tools of the libraries having the name of another tool this agent mounts, as the form stands. */
@@ -208,8 +213,8 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     override ngOnInit(): void {
         super.ngOnInit();
         this.loadingRelatedBackend = true;
-        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>, Observable<GAgentRole[]>, Observable<AgentServiceDescriptor[]>, Observable<GBaseObject[]>, Observable<ToolSourceInfo[]>, Observable<AIToolsAndResourcesLibraryType[]>] =
-            [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices(), this.agentsAdminService.getAgentRoles(), this.networksService.getAgentServices(), this.networksService.getAgentsNetwork(), this.functionsLookupService.getToolSourceInfos(), this.functionsLookupService.getAIToolsAndResourcesLibraryType()];
+        const observables: [Observable<ConfigurationEntryGBaseChatModelConfig[]>, Observable<GBaseObject[]>, Observable<GAgentRole[]>, Observable<AgentServiceDescriptor[]>, Observable<GBaseObject[]>, Observable<ToolSourceInfo[]>, Observable<AIToolsAndResourcesLibraryType[]>, Observable<GLookupEntry[]>] =
+            [this.geboChatModelsService.getRuntimeConfiguredChatModels(), this.agentsAdminService.getAgentsChoices(), this.agentsAdminService.getAgentRoles(), this.networksService.getAgentServices(), this.networksService.getAgentsNetwork(), this.functionsLookupService.getToolSourceInfos(), this.functionsLookupService.getAIToolsAndResourcesLibraryType(), this.functionsLookupService.getAllFunctions()];
         forkJoin(observables).subscribe({
             next: (values) => {
                 this.chatModelsData = values[0];
@@ -222,6 +227,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 this.networks = values[4] || [];
                 this.toolSources = [...(values[5] || [])].sort((a, b) => (a.description || a.id || "").localeCompare(b.description || b.id || ""));
                 this.libraryTypes = [...(values[6] || [])].sort((a, b) => (a.description || a.id || "").localeCompare(b.description || b.id || ""));
+                this.toolChoices = [...(values[7] || [])].sort((a, b) => (a.code || "").localeCompare(b.code || ""));
                 console.debug("[agents-admin] " + this.agentTypes.length + " service(s), " + this.roles.length + " role(s), "
                     + this.serviceDescriptors.length + " descriptor(s), " + this.networks.length + " network(s), "
                     + this.toolSources.length + " tool source(s), " + this.libraryTypes.length + " library type(s)");

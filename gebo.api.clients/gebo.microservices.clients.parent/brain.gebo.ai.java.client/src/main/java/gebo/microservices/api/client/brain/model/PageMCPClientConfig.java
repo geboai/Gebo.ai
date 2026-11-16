@@ -27,7 +27,7 @@ import java.util.List;
  * PageMCPClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class PageMCPClientConfig {
   @JsonProperty("totalElements")
@@ -39,26 +39,26 @@ public class PageMCPClientConfig {
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
+  @JsonProperty("sort")
+  private SortObject sort = null;
+
   @JsonProperty("first")
   private Boolean first = null;
 
   @JsonProperty("last")
   private Boolean last = null;
 
+  @JsonProperty("number")
+  private Integer number = null;
+
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
+
   @JsonProperty("size")
   private Integer size = null;
 
   @JsonProperty("content")
   private List<MCPClientConfig> content = null;
-
-  @JsonProperty("number")
-  private Integer number = null;
-
-  @JsonProperty("sort")
-  private SortObject sort = null;
-
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -117,6 +117,24 @@ public class PageMCPClientConfig {
     this.pageable = pageable;
   }
 
+  public PageMCPClientConfig sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
   public PageMCPClientConfig first(Boolean first) {
     this.first = first;
     return this;
@@ -151,6 +169,42 @@ public class PageMCPClientConfig {
 
   public void setLast(Boolean last) {
     this.last = last;
+  }
+
+  public PageMCPClientConfig number(Integer number) {
+    this.number = number;
+    return this;
+  }
+
+   /**
+   * Get number
+   * @return number
+  **/
+  @Schema(description = "")
+  public Integer getNumber() {
+    return number;
+  }
+
+  public void setNumber(Integer number) {
+    this.number = number;
+  }
+
+  public PageMCPClientConfig numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+    return this;
+  }
+
+   /**
+   * Get numberOfElements
+   * @return numberOfElements
+  **/
+  @Schema(description = "")
+  public Integer getNumberOfElements() {
+    return numberOfElements;
+  }
+
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
   }
 
   public PageMCPClientConfig size(Integer size) {
@@ -197,60 +251,6 @@ public class PageMCPClientConfig {
     this.content = content;
   }
 
-  public PageMCPClientConfig number(Integer number) {
-    this.number = number;
-    return this;
-  }
-
-   /**
-   * Get number
-   * @return number
-  **/
-  @Schema(description = "")
-  public Integer getNumber() {
-    return number;
-  }
-
-  public void setNumber(Integer number) {
-    this.number = number;
-  }
-
-  public PageMCPClientConfig sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
-  public PageMCPClientConfig numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-    return this;
-  }
-
-   /**
-   * Get numberOfElements
-   * @return numberOfElements
-  **/
-  @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
-  }
-
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-  }
-
   public PageMCPClientConfig empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -282,19 +282,19 @@ public class PageMCPClientConfig {
     return Objects.equals(this.totalElements, pageMCPClientConfig.totalElements) &&
         Objects.equals(this.totalPages, pageMCPClientConfig.totalPages) &&
         Objects.equals(this.pageable, pageMCPClientConfig.pageable) &&
+        Objects.equals(this.sort, pageMCPClientConfig.sort) &&
         Objects.equals(this.first, pageMCPClientConfig.first) &&
         Objects.equals(this.last, pageMCPClientConfig.last) &&
+        Objects.equals(this.number, pageMCPClientConfig.number) &&
+        Objects.equals(this.numberOfElements, pageMCPClientConfig.numberOfElements) &&
         Objects.equals(this.size, pageMCPClientConfig.size) &&
         Objects.equals(this.content, pageMCPClientConfig.content) &&
-        Objects.equals(this.number, pageMCPClientConfig.number) &&
-        Objects.equals(this.sort, pageMCPClientConfig.sort) &&
-        Objects.equals(this.numberOfElements, pageMCPClientConfig.numberOfElements) &&
         Objects.equals(this.empty, pageMCPClientConfig.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalElements, totalPages, pageable, first, last, size, content, number, sort, numberOfElements, empty);
+    return Objects.hash(totalElements, totalPages, pageable, sort, first, last, number, numberOfElements, size, content, empty);
   }
 
 
@@ -306,13 +306,13 @@ public class PageMCPClientConfig {
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    number: ").append(toIndentedString(number)).append("\n");
+    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
-    sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

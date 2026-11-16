@@ -25,7 +25,7 @@ import java.util.List;
  * LLMUnresolvedModel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class LLMUnresolvedModel {
   /**
@@ -37,7 +37,8 @@ public class LLMUnresolvedModel {
     RANKING("RANKING"),
     IMAGESGEN("IMAGESGEN"),
     TTS("TTS"),
-    TRANSCRIPT("TRANSCRIPT");
+    TRANSCRIPT("TRANSCRIPT"),
+    DECISION("DECISION");
 
     private String value;
 

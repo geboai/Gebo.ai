@@ -16,10 +16,10 @@
  * It displays menu options either as buttons or standard menu items based on configuration.
  * The component integrates with the Gebo.ai framework for handling actions and routing events.
  */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { GProject, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 
-import { MenuItem } from "primeng/api";
+import { MenuItem } from "@openng/optimus-ui/api";
 import { GeboAIEntitiesSettingWizardConfiguration } from "../base-entity-editing-component/entities-modification-wizard";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboAIPluggableKnowledgeAdminBaseTreeSearchService } from "../../services/pluggable-knowledge-base-admin-tree-search.service";
@@ -47,6 +47,7 @@ const CONFLUENCE_MODULE = "confluence-module";
   selector: "project-add-context-menu",
   templateUrl: "project-add-context-menu.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProjectAddContextMenuComponent") }]
 })
 export class ProjectAddContextMenuComponent implements OnInit, OnChanges {

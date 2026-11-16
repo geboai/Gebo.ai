@@ -18,7 +18,7 @@
  * for viewing, and supports selecting documents in a list (via the "choosed" property).
  * The component emits events when a document is selected to be added to a chosen items collection.
  */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
@@ -27,6 +27,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     templateUrl: "document-ref.component.html",
     styleUrl:"document-ref.component.scss",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("DocumentRefComponent"), multi: false }]
 })
 export class DocumentRefComponent implements OnInit, OnChanges {

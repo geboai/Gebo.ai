@@ -7,9 +7,9 @@ import { GeboAILabelDirective } from "./label.directive";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { GeboAITextDirective } from "./text.directive";
 import { GeboAILanguageResourcesDownloadComponent } from "./language-resources-download.component";
-import { ButtonModule } from "primeng/button";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { GeboAILanguageChoiceComponent } from "./language-choice.component";
-import { SelectModule } from 'primeng/select';
+import { SelectModule } from '@openng/optimus-ui/select';
 import { GeboAIMainLanguageChoiceComponent } from "./main-language-choice.component";
 import { GeboAIMainMicroLanguageComponent } from "./main-micro-language.component";
 import {
@@ -22,7 +22,7 @@ import {
     PCalendarLabelTarget, PSliderLabelTarget, PProgressBarLabelTarget,
     PStepsLabelTarget, PGalleriaLabelTarget
 } from "./primeng-components-multilanguage-adapters.directive";
-import { PopoverModule } from 'primeng/popover';
+import { PopoverModule } from '@openng/optimus-ui/popover';
 import { POldTabPanelLabelTarget } from "./primeng-components-obsolete-multilanguage-adapters.directive";
 @NgModule({
     imports: [CommonModule, ReactiveFormsModule,FormsModule, ButtonModule, SelectModule,PopoverModule],

@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GUserChatInfo, PipelineChatMenu, PipelineChatMenuItem } from '@Gebo.ai/gebo-ai-rest-api';
 import { GeboAITranslationService } from '../field-translation-container/gebo-translation.service';
 import { findMatchingTranlations, UIExistingText } from '../field-translation-container/text-language-resources';
-import { MenuItem } from 'primeng/api';
+import { MenuItem } from '@openng/optimus-ui/api';
 
 import { IGeboChatMessage } from '../../services/gebo-chat-message';
 import { PipelineRoutingOption } from './pipeline-routing-option';
-import { Chip } from 'primeng/chip';
+import { Chip } from '@openng/optimus-ui/chip';
 import { timer } from 'rxjs';
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from '../field-host-component-iface/field-host-component-iface';
 function sameStringsIgnoreOrder(a: string[], b: string[]): boolean {
@@ -68,6 +68,7 @@ const chatWithFilesPipelineOption: PipelineRoutingOption = {
   templateUrl: './chat-input-shell.component.html',
   styleUrls: ['./chat-input-shell.component.scss'],
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [
     { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
     { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatInputShellComponent"), multi: false }

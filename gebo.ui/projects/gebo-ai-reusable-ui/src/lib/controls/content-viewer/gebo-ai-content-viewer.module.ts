@@ -14,18 +14,18 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule } from "@angular/forms";
 import { GeboAIContentViewerComponent } from "./gebo-ai-content-viewer.component";
-import { PanelModule } from "primeng/panel";
-import { BlockUIModule } from "primeng/blockui";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
 
 import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
-import { DialogModule } from "primeng/dialog";
+import { DialogModule } from "@openng/optimus-ui/dialog";
 import { CodeEditorWrapperComponent } from "./code-editor-wrapper.component";
 
 import { DownloadLinkViewerWrapperComponent } from "./download-link-wrapper.component";
 import { PDFViewerWrapper2Component } from "./pdf-viewer-wrapper2.component";
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { GeboUIDocumentOpenerButton } from "./document-opener-button.component";
-import { ButtonModule } from "primeng/button";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { BrowseContentModule } from "../browse-content-component/browse-content.module";
 import { EnrichedDocumentReferenceViewRetrieveService } from "./enriched-document-reference-view.service";
 import { WebViewerModule } from "../web-viewer/web-viewer.module";

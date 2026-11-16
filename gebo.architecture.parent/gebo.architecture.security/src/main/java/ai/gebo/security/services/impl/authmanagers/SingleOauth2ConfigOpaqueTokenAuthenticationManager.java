@@ -7,7 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.server.resource.authentication.OpaqueTokenAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenAuthenticationConverter;
-import org.springframework.security.oauth2.server.resource.introspection.SpringOpaqueTokenIntrospector;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 
 import ai.gebo.security.model.SecurityHeaderData;
 import ai.gebo.security.model.oauth2.Oauth2RuntimeConfiguration;
@@ -21,6 +21,9 @@ public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements Authe
 	// Nullable: when set, introspected tokens auto-provision/sync the user
 	// (policy-gated) before the principal is loaded.
 	final GOauth2ResourceServerUserProvisioner provisioner;
+	// Nullable: the resolver's shared introspectors, one per configuration; without it
+	// an introspector is built for the call
+	final OpaqueTokenIntrospectorCache introspectorCache;
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -36,9 +39,9 @@ public class SingleOauth2ConfigOpaqueTokenAuthenticationManager implements Authe
 					+ oauth2Configuration.getRegistrationId() + " cannot introspect a token: "
 					+ "it has no introspection endpoint or no stored client");
 		}
-		SpringOpaqueTokenIntrospector opaqueTokenIntrospector = new SpringOpaqueTokenIntrospector(
-				oauth2Configuration.getProviderConfig().getIntrospectionUri(),
-				oauth2Configuration.getClient().getClientId(), oauth2Configuration.getClient().getSecret());
+		OpaqueTokenIntrospector opaqueTokenIntrospector = introspectorCache != null
+				? introspectorCache.forConfiguration(oauth2Configuration)
+				: OpaqueTokenIntrospectorCache.build(oauth2Configuration);
 
 		OpaqueTokenAuthenticationProvider opaqueProvider = new OpaqueTokenAuthenticationProvider(
 				opaqueTokenIntrospector);

@@ -17,15 +17,16 @@
  * It handles displaying setup steps, tracking setup status, and managing the wizard's
  * visibility and completion state.
  */
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ChangeDetectionStrategy } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupStatus } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "gebo-setup-wizards",
     templateUrl: "setup-wizards.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SetupWizardsComponent") }]
 })
 export class SetupWizardsComponent implements OnInit {

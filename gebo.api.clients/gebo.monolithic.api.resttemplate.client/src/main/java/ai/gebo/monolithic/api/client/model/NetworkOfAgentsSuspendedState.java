@@ -25,7 +25,7 @@ import java.util.List;
  * NetworkOfAgentsSuspendedState
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T12:45:02.532016900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
 
 public class NetworkOfAgentsSuspendedState {
   @JsonProperty("networkOfAgentsBlockId")

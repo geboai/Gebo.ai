@@ -17,13 +17,13 @@
  * inside a modal and manages their lifecycle and interactions. It also provides support for wizard-style 
  * modal interfaces with step navigation.
  */
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, Type, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, Type, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { GeboUIActionRoutingService } from "./gebo-ui-action-routing.service";
 import { BaseEntityEditingComponent } from "../controls/base-entity-editing-component/base-entity-editing.component";
 import { OpenedModals } from "./opened-modals";
 import { GeboUIOutputForwardingService } from "./gebo-ui-output-forwarding.service";
 
-import { MenuItem } from "primeng/api";
+import { MenuItem } from "@openng/optimus-ui/api";
 import { WizardButtonsBarData } from "../controls/base-entity-editing-component/entities-modification-wizard";
 import { GeboAIRootNotificationService } from "../notifications/root-notification.service";
 
@@ -31,6 +31,7 @@ import { GeboAIRootNotificationService } from "../notifications/root-notificatio
     selector: "gebo-ui-modal-wrapper",
     templateUrl: "gebo-ui-modal-wrapper.component.html",
     providers: [GeboUIOutputForwardingService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboUIModalOpenerWrapperComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {

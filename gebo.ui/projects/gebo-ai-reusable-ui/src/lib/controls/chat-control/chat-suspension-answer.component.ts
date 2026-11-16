@@ -7,9 +7,10 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy, inject } from "@angular/core";
 import { AgentSuspendedWaitingConditionDto, AgentSuspendedWaitingConditionReactionDto, NetworkOfAgentsSuspendedState, NetworkOfAgentsSuspendedStateReaction } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { GeboAISuspensionTextsService, isToolCallConfirmation, SuspensionTexts, TOOL_CALL_ALLOW, TOOL_CALL_DENY, toolCallOptionLabel } from "./chat-suspension-texts";
 
 /** What the user answered, as the request that respawns the network carries it, and as the chat shows it. */
 export interface SuspensionAnswer {
@@ -42,8 +43,10 @@ const GONE_ON_WITHOUT_TEXT = "(no answer: go on without it)";
  * The questions a suspended network of agents asks the user, under the answer that
  * asked them: one block per condition, a single or multiple choice among the options
  * the agents chose with an explanation of the user's own when allowed, a value for any other
- * kind of condition. Answering respawns the network with the reaction; a block whose
- * conditions may all be left unanswered can be skipped, the conversation going on.
+ * kind of condition. A tool call put to a person is asked in the user's language: Allow or
+ * Deny, with a message for the agent going with either. Answering respawns the network
+ * with the reaction; a block whose conditions may all be left unanswered can be skipped,
+ * the conversation going on.
  * Where the conditions are answered one at a time (the state says so) those another
  * source already solved are shown as answered, and an answer may leave others open:
  * the agents resume once every mandatory one has an answer, from whichever source.
@@ -53,9 +56,13 @@ const GONE_ON_WITHOUT_TEXT = "(no answer: go on without it)";
     templateUrl: "chat-suspension-answer.component.html",
     styleUrls: ["chat-suspension-answer.component.scss"],
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChatSuspensionAnswerComponent"), multi: false }]
 })
 export class GeboAIChatSuspensionAnswerComponent {
+    private suspensionTexts = inject(GeboAISuspensionTextsService);
+    readonly toolCallAllow = TOOL_CALL_ALLOW;
+    readonly toolCallDeny = TOOL_CALL_DENY;
     private _state?: NetworkOfAgentsSuspendedState;
     @Input() disabled: boolean = false;
     /**
@@ -169,6 +176,40 @@ export class GeboAIChatSuspensionAnswerComponent {
         return this.answers[id];
     }
 
+    /**
+     * A tool call put to a person: Allow or Deny, and a message for the agent going with
+     * either; choosing keeps the message.
+     */
+    isToolConfirmation(condition: AgentSuspendedWaitingConditionDto): boolean {
+        return isToolCallConfirmation(condition);
+    }
+
+    toolNameOf(condition: AgentSuspendedWaitingConditionDto): string {
+        return condition.attributes?.["toolName"] ?? "";
+    }
+
+    /** The arguments of the call as the model wrote them, laid out when they are JSON. */
+    toolArgumentsOf(condition: AgentSuspendedWaitingConditionDto): string {
+        const raw: string | undefined = condition.attributes?.["toolArguments"];
+        if (!raw) {
+            return "{}";
+        }
+        try {
+            return JSON.stringify(JSON.parse(raw), null, 2);
+        } catch (notJson) {
+            return raw;
+        }
+    }
+
+    chooseToolCallOption(condition: AgentSuspendedWaitingConditionDto, option: string): void {
+        this.answerOf(condition).chosenOption = option;
+    }
+
+    /** The texts around the questions in the language the UI shows. */
+    get texts(): SuspensionTexts {
+        return this.suspensionTexts.texts;
+    }
+
     /** An option chosen clears an explanation, and the other way round: one answer per condition. */
     chooseOption(condition: AgentSuspendedWaitingConditionDto, option: string): void {
         const answer = this.answerOf(condition);
@@ -218,6 +259,10 @@ export class GeboAIChatSuspensionAnswerComponent {
         const answer = this.answerOf(condition);
         if (answer.goOnWithout === true) {
             return true;
+        }
+        if (this.isToolConfirmation(condition)) {
+            // only Allow or Deny decide a tool call: a message alone is no answer
+            return answer.chosenOption === TOOL_CALL_ALLOW || answer.chosenOption === TOOL_CALL_DENY;
         }
         if (this.isClarification(condition)) {
             return !!answer.chosenOption || !!answer.chosenOptions?.length
@@ -269,6 +314,14 @@ export class GeboAIChatSuspensionAnswerComponent {
             if (answer.goOnWithout === true) {
                 reaction.attributes![GO_ON_WITHOUT] = true;
                 lines.push(GONE_ON_WITHOUT_TEXT);
+            } else if (this.isToolConfirmation(condition)) {
+                // the option as the backend offers it, the message beside it
+                const message = answer.customExplanation?.trim();
+                reaction.attributes!["chosenOption"] = answer.chosenOption;
+                if (message) {
+                    reaction.attributes!["customExplanation"] = message;
+                }
+                lines.push(toolCallOptionLabel(answer.chosenOption ?? "", this.texts), ...(message ? [message] : []));
             } else if (this.isMultipleChoice(condition)) {
                 const chosen = answer.chosenOptions ?? [];
                 const explanation = answer.customExplanation?.trim();

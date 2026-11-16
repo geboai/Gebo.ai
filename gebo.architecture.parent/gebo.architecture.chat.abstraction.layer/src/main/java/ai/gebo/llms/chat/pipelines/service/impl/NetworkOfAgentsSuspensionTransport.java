@@ -193,10 +193,14 @@ public class NetworkOfAgentsSuspensionTransport {
 		return false;
 	}
 
+	/** Under a tool call put to a person: their message goes with the option chosen. */
+	static final String TOOL_CALL_MESSAGE_NOTE = "(You may add a message for the agent to either choice.)";
+
 	/**
 	 * The state as text, for a client that only shows the answer: each condition's
 	 * statement, the options when it has them, and whether it may be left
-	 * unanswered.
+	 * unanswered. The chat of Gebo.ai shows the same lines in the user's language
+	 * (chat-suspension-texts.ts in the reusable UI follows this text line by line).
 	 */
 	public static String render(NetworkOfAgentsSuspendedState state) {
 		if (state == null || state.getConditions() == null || state.getConditions().isEmpty()) {
@@ -222,6 +226,10 @@ public class NetworkOfAgentsSuspensionTransport {
 					text.append("\n(You may choose more than one.)");
 				}
 				if (Boolean.TRUE.equals(
+						dto.getAttributes().get(ClarificationConditionTransportTranslator.TOOL_CALL_CONFIRMATION))) {
+					// a tool call put to a person: the words of their own go with the choice
+					text.append("\n").append(TOOL_CALL_MESSAGE_NOTE);
+				} else if (Boolean.TRUE.equals(
 						dto.getAttributes().get(ClarificationConditionTransportTranslator.CUSTOM_ANSWER_ALLOWED))) {
 					text.append("\n- or explain in your own words");
 				}

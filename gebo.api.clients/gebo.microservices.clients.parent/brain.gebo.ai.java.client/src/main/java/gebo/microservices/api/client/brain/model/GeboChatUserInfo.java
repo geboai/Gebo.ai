@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.AgentToolsInfo;
 import gebo.microservices.api.client.brain.model.GBaseChatModelChoice;
 import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
@@ -27,7 +28,7 @@ import java.util.List;
  * GeboChatUserInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class GeboChatUserInfo {
   @JsonProperty("ragChat")
@@ -44,6 +45,9 @@ public class GeboChatUserInfo {
 
   @JsonProperty("chatModelChoice")
   private GBaseChatModelChoice chatModelChoice = null;
+
+  @JsonProperty("agentsTools")
+  private List<AgentToolsInfo> agentsTools = null;
 
   public GeboChatUserInfo ragChat(Boolean ragChat) {
     this.ragChat = ragChat;
@@ -151,6 +155,32 @@ public class GeboChatUserInfo {
     this.chatModelChoice = chatModelChoice;
   }
 
+  public GeboChatUserInfo agentsTools(List<AgentToolsInfo> agentsTools) {
+    this.agentsTools = agentsTools;
+    return this;
+  }
+
+  public GeboChatUserInfo addAgentsToolsItem(AgentToolsInfo agentsToolsItem) {
+    if (this.agentsTools == null) {
+      this.agentsTools = new ArrayList<>();
+    }
+    this.agentsTools.add(agentsToolsItem);
+    return this;
+  }
+
+   /**
+   * Get agentsTools
+   * @return agentsTools
+  **/
+  @Schema(description = "")
+  public List<AgentToolsInfo> getAgentsTools() {
+    return agentsTools;
+  }
+
+  public void setAgentsTools(List<AgentToolsInfo> agentsTools) {
+    this.agentsTools = agentsTools;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -165,12 +195,13 @@ public class GeboChatUserInfo {
         Objects.equals(this.knowledgeBases, geboChatUserInfo.knowledgeBases) &&
         Objects.equals(this.providerId, geboChatUserInfo.providerId) &&
         Objects.equals(this.availableFunctions, geboChatUserInfo.availableFunctions) &&
-        Objects.equals(this.chatModelChoice, geboChatUserInfo.chatModelChoice);
+        Objects.equals(this.chatModelChoice, geboChatUserInfo.chatModelChoice) &&
+        Objects.equals(this.agentsTools, geboChatUserInfo.agentsTools);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(ragChat, knowledgeBases, providerId, availableFunctions, chatModelChoice);
+    return Objects.hash(ragChat, knowledgeBases, providerId, availableFunctions, chatModelChoice, agentsTools);
   }
 
 
@@ -184,6 +215,7 @@ public class GeboChatUserInfo {
     sb.append("    providerId: ").append(toIndentedString(providerId)).append("\n");
     sb.append("    availableFunctions: ").append(toIndentedString(availableFunctions)).append("\n");
     sb.append("    chatModelChoice: ").append(toIndentedString(chatModelChoice)).append("\n");
+    sb.append("    agentsTools: ").append(toIndentedString(agentsTools)).append("\n");
     sb.append("}");
     return sb.toString();
   }

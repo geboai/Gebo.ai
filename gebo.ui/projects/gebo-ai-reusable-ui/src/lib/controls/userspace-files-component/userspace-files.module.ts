@@ -20,24 +20,24 @@
 import { CommonModule } from "@angular/common";
 import { Injectable, NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BlockUIModule } from "primeng/blockui";
-import { ButtonModule } from "primeng/button";
-import { DialogModule } from "primeng/dialog";
-import { PanelModule } from "primeng/panel";
-import { TreeModule } from "primeng/tree";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { DialogModule } from "@openng/optimus-ui/dialog";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { TreeModule } from "@openng/optimus-ui/tree";
 import { GeboAIUserpaceFilesComponent } from "./userspace-files.component";
 import { GeboAIUserspaceFolderComponent } from "./userspace-folder.component";
 import { GeboAIUserspaceBrowseComponent } from "./userspace-browse.component";
 
-import { CheckboxModule } from "primeng/checkbox";
-import { FileUploadModule } from "primeng/fileupload";
+import { CheckboxModule } from "@openng/optimus-ui/checkbox";
+import { FileUploadModule } from "@openng/optimus-ui/fileupload";
 import { GeboAIUserspaceKnowledgebaseComponent } from "./user-knowledgebase.component";
 import { GeboUIEntityFormsLauncherService } from "../../architecture/gebo-ui-entity-forms-launcher.service";
 import { GeboAIUserspaceFilesUploadComponent } from "./userspace-files-upload.component";
-import { InputTextModule } from "primeng/inputtext";
-import { MultiSelectModule } from "primeng/multiselect";
-import { ChipModule } from "primeng/chip";
-import { FieldsetModule } from "primeng/fieldset";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
+import { MultiSelectModule } from "@openng/optimus-ui/multiselect";
+import { ChipModule } from "@openng/optimus-ui/chip";
+import { FieldsetModule } from "@openng/optimus-ui/fieldset";
 import { GeboUIEntityFormConfig } from "../../architecture/gebo-ui-entity-form-config";
 import { GeboAIContentViewerModule } from "../content-viewer/gebo-ai-content-viewer.module";
 import { GeboUIArchitectureModule } from "../../architecture/gebo-ui-architecture.module";
@@ -80,7 +80,7 @@ export class UserspaceFormsListService extends GeboUIEntityFormsLauncherService 
 
 /**
  * Angular module that packages all components, services, and dependencies related to
- * userspace files functionality. It imports necessary Angular and PrimeNG modules and
+ * userspace files functionality. It imports necessary Angular and Optimus UI modules and
  * declares components related to userspace file management.
  */
 @NgModule({

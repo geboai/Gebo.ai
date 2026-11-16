@@ -7,13 +7,13 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, inject } from "@angular/core";
+import { Component, inject, ChangeDetectionStrategy } from "@angular/core";
 import {
     GCurrency, GModelPricingConditions, GProviderApiKey, GProviderCurrency, GProviderDeal, GProviderModelPriceInfo,
     GUserMessage, ProviderDealsControllerService
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { Popover } from "primeng/popover";
+import { Popover } from "@openng/optimus-ui/popover";
 import { forkJoin, Observable, of } from "rxjs";
 
 /** The pseudo API key standing for the configurations running without one (GProviderDeal.NO_API_KEY). */
@@ -76,6 +76,7 @@ interface ProviderGroup {
         .gebo-provider-deals__code { font-family: monospace; white-space: nowrap; }
         .gebo-provider-deals__source { max-width: 22rem; }
     `],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "ProviderDealsWizardModule", multi: false }, {
         provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("ProviderDealsWizardComponent")
     }]

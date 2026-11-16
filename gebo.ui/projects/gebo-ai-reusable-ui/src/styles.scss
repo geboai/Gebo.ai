@@ -3,13 +3,10 @@
 @use 'styles/flags';
 
 /* Vendor styles that intentionally remain plain CSS imports. */
-@import "primeicons/primeicons.css";
+@import "@openng/icons/openng-icons.css";
 @import 'ng-diagram/styles.css';
-//@import "primeng/resources/themes/lara-light-blue/theme.css";
-//@import "primeng/resources/themes/bootstrap4-light-blue/theme.css";
-//@import "primeng/resources/primeng.css";
 
-// PrimeNG's BlockUI only ever sets an inline display style from block()/unblock(), it never
+// Optimus UI's BlockUI only ever sets an inline display style from block()/unblock(), it never
 // applies one by default. If [blocked] starts (and stays) false, those methods never run and
 // the projected content renders visible from first paint. This inline styles set by block()/
 // unblock() still win over this rule, so actual blocking is unaffected.
@@ -230,7 +227,7 @@ p-block-ui {
   background-image: url("assets/oauth2/ms-symbollockup_mssymbol_19.svg");
 }
 
-/* These names are PrimeIcons glyphs too: the font would draw its own dark icon over
+/* These names are OpenNG Icons glyphs too: the font would draw its own dark icon over
    the logo, as it did on the Microsoft accounts login button */
 .pi.pi-facebook::before,
 .pi.pi-github::before,

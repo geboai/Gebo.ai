@@ -54,8 +54,10 @@ public class SerpapiSearchApi {
 	 * answering on a sloppy network does not hold the search forever.
 	 */
 	@Autowired
-	public SerpapiSearchApi(SearchCallsConfig searchCalls) {
-		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	public SerpapiSearchApi(SearchCallsConfig searchCalls, RestTemplateWrapperService sharedClient) {
+		// the shared client's settings, its observation of the calls among them, with the
+		// search calls' timeouts
+		this(sharedClient.timingOut(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
 	}
 
 	SerpapiSearchApi(RestTemplateWrapperService restTemplateService) {
@@ -64,8 +66,7 @@ public class SerpapiSearchApi {
 
 	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
 	SerpapiSearchApi using(SearchCallParameters parameters) {
-		return new SerpapiSearchApi(
-				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+		return new SerpapiSearchApi(restTemplateService.timingOut(parameters.connectTimeout(), parameters.readTimeout()));
 	}
 
 	SerpapiApiResponse callApi(String apiKey, String query, Integer topN, String engine, String gl, String hl,

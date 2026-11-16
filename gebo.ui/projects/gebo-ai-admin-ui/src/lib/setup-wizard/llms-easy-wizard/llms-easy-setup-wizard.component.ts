@@ -21,13 +21,13 @@
  * through outputs. All backend contracts, DTOs and the catalogue/merge logic are the same the
  * original easy setup uses, so the two flows stay interchangeable at the API level.
  */
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import {
     ComponentLLMSStatus, GBaseModelChoice, GeboFastLlmsSetupControllerService, GUserMessage,
     LLMCreateModelData, LLMSSetupConfiguration, LLMSSetupConfigurationData
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboAITranslationService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
-import { MenuItem, ToastMessageOptions } from "primeng/api";
+import { MenuItem, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, Observable } from "rxjs";
 import { MODEL_CLASSES, ModelChoiceOption, ModelClassDecision, ModelClassDescriptor } from "./model-classes";
 
@@ -72,6 +72,7 @@ enum WizardStep { INTRO = 0, PROVIDER = 1, MODELS = 2, SUMMARY = 3 }
             flex: 1 1 auto;
         }
     `],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("LLMSEasySetupWizardComponent") }]
 })
 export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {

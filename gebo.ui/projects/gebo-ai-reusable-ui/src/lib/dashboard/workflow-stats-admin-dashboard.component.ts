@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import {
   WorkflowStatsAdminLevelControllerService,
   WorkflowStatsDrillDownLevel,
@@ -25,6 +25,7 @@ import { BaseWorkflowStatsDashboardComponent } from "./workflow-stats-dashboard.
     { provide: GEBO_AI_MODULE, useValue: "GeboAIWorkflowStatsDashboardModule", multi: false },
     { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIWorkflowStatsAdminDashboardComponent") }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GeboAIWorkflowStatsAdminDashboardComponent extends BaseWorkflowStatsDashboardComponent {

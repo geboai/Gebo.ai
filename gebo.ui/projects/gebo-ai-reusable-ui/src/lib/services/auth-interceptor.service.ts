@@ -17,7 +17,7 @@ import { catchError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getAuthHeader, resetAuth } from "../infrastructure/gebo-credentials";
 import { BASE_PATH } from '@Gebo.ai/gebo-ai-rest-api';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService } from '@openng/optimus-ui/api';
 import { GeboBackendListService } from './gebo-backends-list.service';
 
 @Injectable({

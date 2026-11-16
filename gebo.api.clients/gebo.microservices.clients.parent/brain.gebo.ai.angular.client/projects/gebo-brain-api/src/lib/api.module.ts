@@ -20,11 +20,13 @@ import { CompanySystemsControllerService } from './api/companySystemsController.
 import { ContentMetaInfosControllerService } from './api/contentMetaInfosController.service';
 import { ContentsResetControllerService } from './api/contentsResetController.service';
 import { DataFlowMetaInfoControllerService } from './api/dataFlowMetaInfoController.service';
+import { DecisionModelsControllerService } from './api/decisionModelsController.service';
 import { DeepseekChatModelsConfigurationControllerService } from './api/deepseekChatModelsConfigurationController.service';
 import { DocumentContentStreamerControllerService } from './api/documentContentStreamerController.service';
 import { EmbeddingModelsControllersService } from './api/embeddingModelsControllers.service';
 import { FunctionsLookupControllerService } from './api/functionsLookupController.service';
 import { GeboA2AServerAdminControllerService } from './api/geboA2AServerAdminController.service';
+import { GeboAdminChatPipelinesToolingControllerService } from './api/geboAdminChatPipelinesToolingController.service';
 import { GeboAdminChatProfilesConfigurationControllerService } from './api/geboAdminChatProfilesConfigurationController.service';
 import { GeboAdminChatRulesControllerService } from './api/geboAdminChatRulesController.service';
 import { GeboAdminPromptUseInfoControllerService } from './api/geboAdminPromptUseInfoController.service';
@@ -34,6 +36,7 @@ import { GeboAgentAdminControllerService } from './api/geboAgentAdminController.
 import { GeboAgentsNetworkAdminControllerService } from './api/geboAgentsNetworkAdminController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
 import { GeboChatControllerService } from './api/geboChatController.service';
+import { GeboChatLibrariesControllerService } from './api/geboChatLibrariesController.service';
 import { GeboChatPipelinesControllerService } from './api/geboChatPipelinesController.service';
 import { GeboChatProfileLookupControllerService } from './api/geboChatProfileLookupController.service';
 import { GeboChatRulesControllerService } from './api/geboChatRulesController.service';
@@ -53,6 +56,7 @@ import { GeboTranscriptControllerService } from './api/geboTranscriptController.
 import { GeboUserChatUploadsControllerService } from './api/geboUserChatUploadsController.service';
 import { GeboUserChatsControllerService } from './api/geboUserChatsController.service';
 import { GeboUserKnowledgeBaseSemanticSearchControllerService } from './api/geboUserKnowledgeBaseSemanticSearchController.service';
+import { GenericOpenAiDecisionModelsConfigurationControllerService } from './api/genericOpenAiDecisionModelsConfigurationController.service';
 import { GenericOpenAiRankerModelsConfigurationControllerService } from './api/genericOpenAiRankerModelsConfigurationController.service';
 import { GenericOpenAiapiChatModelsConfigurationControllerService } from './api/genericOpenAiapiChatModelsConfigurationController.service';
 import { GenericOpenAiapiEmbeddingModelsConfigurationControllerService } from './api/genericOpenAiapiEmbeddingModelsConfigurationController.service';
@@ -74,10 +78,13 @@ import { LogViewControllerService } from './api/logViewController.service';
 import { McpClientConfigControllerService } from './api/mcpClientConfigController.service';
 import { MistralAiChatModelsConfigurationControllerService } from './api/mistralAiChatModelsConfigurationController.service';
 import { MistralAiEmbeddingModelsConfigurationControllerService } from './api/mistralAiEmbeddingModelsConfigurationController.service';
+import { NetworkOfAgentsConditionEventsControllerService } from './api/networkOfAgentsConditionEventsController.service';
 import { OllamaChatModelsConfigurationControllerService } from './api/ollamaChatModelsConfigurationController.service';
+import { OllamaDecisionModelsConfigurationControllerService } from './api/ollamaDecisionModelsConfigurationController.service';
 import { OllamaEmbeddingModelsConfigurationControllerService } from './api/ollamaEmbeddingModelsConfigurationController.service';
 import { OnnxTransformersEmbeddingModelsConfigurationControllerService } from './api/onnxTransformersEmbeddingModelsConfigurationController.service';
 import { OpenAiChatModelsConfigurationControllerService } from './api/openAiChatModelsConfigurationController.service';
+import { OpenAiDecisionModelsConfigurationControllerService } from './api/openAiDecisionModelsConfigurationController.service';
 import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openAiEmbeddingModelsConfigurationController.service';
 import { OpenAiImageModelsConfigurationControllerService } from './api/openAiImageModelsConfigurationController.service';
 import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
@@ -93,6 +100,8 @@ import { TextToSpeechModelsControllerService } from './api/textToSpeechModelsCon
 import { TranscriptModelsControllerService } from './api/transcriptModelsController.service';
 import { UiTextResourcesControllerService } from './api/uiTextResourcesController.service';
 import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeBaseBrowsingController.service';
+import { WaitingConditionsAdminControllerService } from './api/waitingConditionsAdminController.service';
+import { WaitingConditionsControllerService } from './api/waitingConditionsController.service';
 
 @NgModule({
   imports:      [],
@@ -116,11 +125,13 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     ContentMetaInfosControllerService,
     ContentsResetControllerService,
     DataFlowMetaInfoControllerService,
+    DecisionModelsControllerService,
     DeepseekChatModelsConfigurationControllerService,
     DocumentContentStreamerControllerService,
     EmbeddingModelsControllersService,
     FunctionsLookupControllerService,
     GeboA2AServerAdminControllerService,
+    GeboAdminChatPipelinesToolingControllerService,
     GeboAdminChatProfilesConfigurationControllerService,
     GeboAdminChatRulesControllerService,
     GeboAdminPromptUseInfoControllerService,
@@ -130,6 +141,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboAgentsNetworkAdminControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
     GeboChatControllerService,
+    GeboChatLibrariesControllerService,
     GeboChatPipelinesControllerService,
     GeboChatProfileLookupControllerService,
     GeboChatRulesControllerService,
@@ -149,6 +161,7 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     GeboUserChatUploadsControllerService,
     GeboUserChatsControllerService,
     GeboUserKnowledgeBaseSemanticSearchControllerService,
+    GenericOpenAiDecisionModelsConfigurationControllerService,
     GenericOpenAiRankerModelsConfigurationControllerService,
     GenericOpenAiapiChatModelsConfigurationControllerService,
     GenericOpenAiapiEmbeddingModelsConfigurationControllerService,
@@ -170,10 +183,13 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     McpClientConfigControllerService,
     MistralAiChatModelsConfigurationControllerService,
     MistralAiEmbeddingModelsConfigurationControllerService,
+    NetworkOfAgentsConditionEventsControllerService,
     OllamaChatModelsConfigurationControllerService,
+    OllamaDecisionModelsConfigurationControllerService,
     OllamaEmbeddingModelsConfigurationControllerService,
     OnnxTransformersEmbeddingModelsConfigurationControllerService,
     OpenAiChatModelsConfigurationControllerService,
+    OpenAiDecisionModelsConfigurationControllerService,
     OpenAiEmbeddingModelsConfigurationControllerService,
     OpenAiImageModelsConfigurationControllerService,
     OpenAiTextToSpeechModelsConfigurationControllerService,
@@ -188,7 +204,9 @@ import { UserKnowledgeBaseBrowsingControllerService } from './api/userKnowledgeB
     TextToSpeechModelsControllerService,
     TranscriptModelsControllerService,
     UiTextResourcesControllerService,
-    UserKnowledgeBaseBrowsingControllerService ]
+    UserKnowledgeBaseBrowsingControllerService,
+    WaitingConditionsAdminControllerService,
+    WaitingConditionsControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

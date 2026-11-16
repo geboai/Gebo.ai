@@ -10,9 +10,9 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { GeboAIChooseLLMFunctionscomponent } from "./choose-llm-functions.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ButtonModule } from "primeng/button";
-import { InputTextModule } from "primeng/inputtext";
-import { TooltipModule } from "primeng/tooltip";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
+import { TooltipModule } from "@openng/optimus-ui/tooltip";
 import { GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAIFieldTranslationContainerModule } from "../field-translation-container/field-container.module";
 

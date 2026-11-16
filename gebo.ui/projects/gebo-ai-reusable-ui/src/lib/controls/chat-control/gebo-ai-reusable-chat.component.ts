@@ -20,12 +20,13 @@
  */
 
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState, WaitingConditionsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { SuspensionAnswer } from "./chat-suspension-answer.component";
+import { GeboAISuspensionTextsService, localizedSuspendedAnswer, SuspensionTexts } from "./chat-suspension-texts";
 import { MermaidAPI } from "ngx-markdown";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of, Subject } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 import { AgenticChatRequestBody, ReactiveRagChatService } from "./reactive-chat.service";
@@ -48,6 +49,13 @@ const fileExportLoaded: ToastMessageOptions = { id: "fileExportLoaded", summary:
  * Interface representing a single chat interaction between the user and the AI,
  * containing both the request and potential response.
  */
+/** A tool call the model is writing, as it streams: its arguments fill in until it is complete. */
+interface StreamingToolCall {
+    key: string;
+    name?: string;
+    arguments: string;
+    complete: boolean;
+};
 interface GeboChatInteraction {
     request: GeboChatRequest;
     response?: GeboChatTemplatedResponse;
@@ -57,6 +65,9 @@ interface GeboChatInteraction {
     // The reasoning the model writes before its answer, as it streams: accumulated and shown in
     // the answer's place until the answer starts, never part of the answer.
     streamingThinking?: string;
+    // The tool calls the model writes while answering, as they stream (GToolCallProgress): shown
+    // under the reasoning until the answer ends, never part of the answer.
+    streamingToolCalls?: StreamingToolCall[];
     // How many answers the stream of this answer delivered so far, as GeboChatResponse messages:
     // an agent working in cycles sends one per cycle, the final one included; the closing
     // envelope of the pipeline (lastMessage) repeats the final one and is not counted.
@@ -155,6 +166,7 @@ const followAnswerSlackPx: number = 24;
             multi: false
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy, GeboAIFieldHost {
@@ -416,6 +428,29 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
      * skipped. While a mandatory one is pending only the answer can be sent.
      */
     public pendingSuspension?: NetworkOfAgentsSuspendedState;
+    private readonly suspensionTexts = inject(GeboAISuspensionTextsService);
+    /** The answers shown with their questions in the user's language, by response: computed once per text and language. */
+    private readonly localizedAnswers = new WeakMap<object, { answer: string, texts: SuspensionTexts, localized: string }>();
+
+    /**
+     * The answer as the chat shows it: a run that suspended has the questions it asks,
+     * which the backend appends in English, in the language the UI shows
+     * (see localizedSuspendedAnswer); any other answer as it is.
+     */
+    public localizedAnswer(response: GeboChatResponse | undefined | null, answer: string | undefined | null): string | undefined | null {
+        const state = response?.networkOfAgentsSuspendedState;
+        if (!response || !answer || !state?.conditions?.length) {
+            return answer;
+        }
+        const texts = this.suspensionTexts.texts;
+        const cached = this.localizedAnswers.get(response);
+        if (cached && cached.answer === answer && cached.texts === texts) {
+            return cached.localized;
+        }
+        const localized = localizedSuspendedAnswer(answer, state, texts) ?? answer;
+        this.localizedAnswers.set(response, { answer, texts, localized });
+        return localized;
+    }
 
     protected get areaContext(): GeboAIReusableChatAreaContext {
         return {
@@ -1585,6 +1620,34 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
     }
 
     /**
+     * A piece of a tool call's arguments, or the call complete: the pieces of a call are added
+     * to it, the complete call replaces them; a call is told apart by its id, else by its place
+     * in the model's message.
+     */
+    private onToolCallProgress(interaction: GeboChatInteraction, progress: any): void {
+        if (!progress) {
+            return;
+        }
+        const calls = [...(interaction.streamingToolCalls ?? [])];
+        const key: string = progress.id ?? ("#" + (progress.index ?? calls.length));
+        let call = [...calls].reverse().find(c => c.key === key && !c.complete);
+        if (!call) {
+            call = { key: key, name: progress.name, arguments: "", complete: false };
+            calls.push(call);
+        }
+        if (progress.name) {
+            call.name = progress.name;
+        }
+        if (progress.complete) {
+            call.arguments = progress.arguments ?? call.arguments;
+            call.complete = true;
+        } else {
+            call.arguments += progress.arguments ?? "";
+        }
+        interaction.streamingToolCalls = calls;
+    }
+
+    /**
      * Performs a chat request using reactive/streaming API
      * 
      * @param r Chat request to send
@@ -1793,6 +1856,9 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                             }
                             console.log("answer cycle " + recvd.content?.cycle + " of at most " + recvd.content?.maxCycles + " starts");
                         } break;
+                        case "GToolCallProgress": {
+                            this.onToolCallProgress(interaction, recvd.content);
+                        } break;
                         case "GThinkingEvent": {
                             if (recvd.content?.completed) {
                                 // the reasoning ended: the answer takes its place
@@ -1811,6 +1877,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                         interaction.response.networkOfAgentsSuspendedState = this.pendingSuspension;
                     }
                     interaction.streamingThinking = undefined;
+                    interaction.streamingToolCalls = undefined;
                     flushText();
                     interaction.loading = false;
                     this.chatStreaming = false;

@@ -25,6 +25,9 @@ import org.springframework.ai.chat.client.advisor.api.CallAdvisorChain;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
 import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
 import org.springframework.ai.chat.messages.AssistantMessage;
+import org.springframework.ai.chat.messages.part.MessagePart;
+import org.springframework.ai.chat.messages.part.StreamingParts;
+import org.springframework.ai.chat.messages.part.ToolCallPart;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.core.Ordered;
@@ -50,9 +53,12 @@ import reactor.core.publisher.Flux;
  * The message metadata and the message class are kept, rebuilt only when the text
  * changes (thinking tags taken out).
  * <p>
- * A chunk carrying both reasoning and tool calls is preceded by a chunk carrying the
- * reasoning only: the ToolCallingAdvisor drops the chunks with tool calls, so the
- * reasoning of a round ending in tool calls reaches the user as well. A blocking call's
+ * A chunk carrying tool calls is preceded by a chunk carrying its reasoning and the
+ * calls complete ({@link GChatAnswerChunk#TOOL_CALLS_COMPLETE_METADATA}), with no tool
+ * call of its own: the ToolCallingAdvisor drops the chunks with tool calls, so the
+ * reasoning of a round ending in tool calls and the calls it ends with reach the user
+ * as well. The pieces of the arguments streamed before (partial tool call parts) pass
+ * through as they are. A blocking call's
  * reasoning is put under {@link GChatAnswerChunk#THINKING_METADATA}.
  */
 public final class ThinkingNormalizationAdvisor implements CallAdvisor, StreamAdvisor {
@@ -156,6 +162,22 @@ public final class ThinkingNormalizationAdvisor implements CallAdvisor, StreamAd
 		return new Generation(output.mutate().content(text).build(), generation.getMetadata());
 	}
 
+	/** The tool calls a chunk ends its round with, complete, in the order the model wrote them. */
+	static List<GChatAnswerChunk.ToolCallProgress> completeToolCalls(ChatResponse chat) {
+		final List<GChatAnswerChunk.ToolCallProgress> calls = new ArrayList<>();
+		for (Generation generation : chat.getResults()) {
+			if (generation.getOutput() == null) {
+				continue;
+			}
+			for (MessagePart part : generation.getOutput().getParts()) {
+				if (part instanceof ToolCallPart toolCall && !StreamingParts.isPartial(toolCall)) {
+					calls.add(GChatAnswerChunk.ToolCallProgress.of(toolCall));
+				}
+			}
+		}
+		return calls;
+	}
+
 	/** The reading of one model round, as its chunks stream. */
 	private static final class Round {
 		private final IGReasoningExtractor.Round reading;
@@ -191,18 +213,22 @@ public final class ThinkingNormalizationAdvisor implements CallAdvisor, StreamAd
 				generations.add(normalized);
 			}
 			active |= !thinking.isEmpty() || (splitter != null && splitter.isInsideThinking());
+			if (chat.hasToolCalls()) {
+				// the ToolCallingAdvisor drops this chunk: its reasoning and the calls it ends
+				// the round with go on their own before it
+				final ChatResponse.Builder announced = ChatResponse.builder()
+						.generations(List.of(new Generation(new AssistantMessage(""))))
+						.metadata(GChatAnswerChunk.TOOL_CALLS_COMPLETE_METADATA, completeToolCalls(chat));
+				if (!thinking.isEmpty()) {
+					announced.metadata(GChatAnswerChunk.THINKING_DELTA_METADATA, thinking.toString())
+							.metadata(GChatAnswerChunk.THINKING_ACTIVE_METADATA, Boolean.TRUE);
+				}
+				final ChatResponse toolCalls = ChatResponse.builder().from(chat).generations(generations).build();
+				return List.of(chunk.mutate().chatResponse(announced.build()).build(),
+						chunk.mutate().chatResponse(toolCalls).build());
+			}
 			if (thinking.isEmpty() && !active && !changed) {
 				return List.of(chunk);
-			}
-			if (!thinking.isEmpty() && chat.hasToolCalls()) {
-				// the ToolCallingAdvisor drops this chunk: its reasoning goes on its own before it
-				final ChatResponse reasoningOnly = ChatResponse.builder()
-						.generations(List.of(new Generation(new AssistantMessage(""))))
-						.metadata(GChatAnswerChunk.THINKING_DELTA_METADATA, thinking.toString())
-						.metadata(GChatAnswerChunk.THINKING_ACTIVE_METADATA, Boolean.TRUE).build();
-				final ChatResponse toolCalls = ChatResponse.builder().from(chat).generations(generations).build();
-				return List.of(chunk.mutate().chatResponse(reasoningOnly).build(),
-						chunk.mutate().chatResponse(toolCalls).build());
 			}
 			final ChatResponse.Builder normalized = ChatResponse.builder().from(chat).generations(generations)
 					.metadata(GChatAnswerChunk.THINKING_ACTIVE_METADATA, active);

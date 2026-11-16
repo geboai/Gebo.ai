@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **authGrantType** | [**AuthGrantTypeEnum**](#AuthGrantTypeEnum) |  |  [optional]
 **configurationType** | [**ConfigurationTypeEnum**](#ConfigurationTypeEnum) |  | 
 **description** | **String** |  | 
+**resourceServerAudiences** | **List&lt;String&gt;** |  |  [optional]
 **readOnly** | **Boolean** |  | 
 
 <a name="AuthProviderEnum"></a>

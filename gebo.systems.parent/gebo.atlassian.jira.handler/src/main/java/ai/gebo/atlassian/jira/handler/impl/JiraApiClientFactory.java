@@ -14,6 +14,7 @@ package ai.gebo.atlassian.jira.handler.impl;
 
 import java.util.Optional;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,9 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import ai.gebo.architecture.search.model.SearchCallParameters;
 
+import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
+import io.micrometer.observation.ObservationRegistry;
+
 /**
  * AI generated comments
  * 
@@ -45,6 +49,10 @@ class JiraApiClientFactory {
 	/** Repository for retrieving Jira system configurations */
 	@Autowired
 	private JiraSystemRepository systemsRepository;
+
+	/** The registry the clients' calls are observed in (see GeboHttpClientObservations). */
+	@Autowired
+	private ObjectProvider<ObservationRegistry> observationRegistry;
 
 	/**
 	 * Creates an API client for a Jira system identified by its code.
@@ -87,8 +95,9 @@ class JiraApiClientFactory {
 		case TOKEN: {
 			// Configure API client with token-based authentication
 			GeboTokenContent token = (GeboTokenContent) secretContent;
-			ApiClient apiClient = searchParameters != null ? new ApiClient(searchRestTemplate(searchParameters))
-					: new ApiClient();
+			ApiClient apiClient = new ApiClient(GeboHttpClientObservations.observed(
+					searchParameters != null ? searchRestTemplate(searchParameters) : clientRestTemplate(),
+					GeboHttpClientObservations.registryOf(observationRegistry)));
 			apiClient.setBasePath(baseUri);
 			apiClient.setPassword(token.getToken());
 			apiClient.setUsername(token.getUser());
@@ -101,6 +110,15 @@ class JiraApiClientFactory {
 
 	}
 
+
+	/**
+	 * The RestTemplate of a content integration client: as the generated client builds
+	 * its own (buffered, so a response can be read more than once), given to it so that
+	 * its calls are observed.
+	 */
+	static RestTemplate clientRestTemplate() {
+		return new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+	}
 
 	/**
 	 * The RestTemplate of a search client: as the generated client builds its own

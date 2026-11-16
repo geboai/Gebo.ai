@@ -4,9 +4,11 @@ import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.AgentMountedTools;
 import gebo.microservices.api.client.brain.model.AgentServiceDescriptor;
+import gebo.microservices.api.client.brain.model.AgentTypeCompatibility;
 import gebo.microservices.api.client.brain.model.GAgentConfig;
 import gebo.microservices.api.client.brain.model.GAgentsNetwork;
 import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.NetworkServiceFactoryDescriptor;
 import gebo.microservices.api.client.brain.model.OperationStatusGAgentsNetwork;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class GeboAgentsNetworkAdminControllerApi {
     private ApiClient apiClient;
@@ -47,6 +49,51 @@ public class GeboAgentsNetworkAdminControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return OperationStatusGAgentsNetwork
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusGAgentsNetwork copyAgentsNetwork(String code) throws RestClientException {
+        return copyAgentsNetworkWithHttpInfo(code).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param code  (required)
+     * @return ResponseEntity&lt;OperationStatusGAgentsNetwork&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusGAgentsNetwork> copyAgentsNetworkWithHttpInfo(String code) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'code' is set
+        if (code == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'code' when calling copyAgentsNetwork");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentsNetworkAdminController/copyAgentsNetwork").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "code", code));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusGAgentsNetwork> returnType = new ParameterizedTypeReference<OperationStatusGAgentsNetwork>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -97,10 +144,10 @@ public class GeboAgentsNetworkAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return List&lt;GBaseObject&gt;
+     * @return List&lt;GAgentConfig&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public List<GBaseObject> getAgentConfigs() throws RestClientException {
+    public List<GAgentConfig> getAgentConfigs() throws RestClientException {
         return getAgentConfigsWithHttpInfo().getBody();
     }
 
@@ -108,10 +155,10 @@ public class GeboAgentsNetworkAdminControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
-     * @return ResponseEntity&lt;List&lt;GBaseObject&gt;&gt;
+     * @return ResponseEntity&lt;List&lt;GAgentConfig&gt;&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<List<GBaseObject>> getAgentConfigsWithHttpInfo() throws RestClientException {
+    public ResponseEntity<List<GAgentConfig>> getAgentConfigsWithHttpInfo() throws RestClientException {
         Object postBody = null;
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentsNetworkAdminController/getAgentConfigs").build().toUriString();
         
@@ -128,7 +175,7 @@ public class GeboAgentsNetworkAdminControllerApi {
 
         String[] authNames = new String[] {  };
 
-        ParameterizedTypeReference<List<GBaseObject>> returnType = new ParameterizedTypeReference<List<GBaseObject>>() {};
+        ParameterizedTypeReference<List<GAgentConfig>> returnType = new ParameterizedTypeReference<List<GAgentConfig>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -212,6 +259,44 @@ public class GeboAgentsNetworkAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<AgentServiceDescriptor>> returnType = new ParameterizedTypeReference<List<AgentServiceDescriptor>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;AgentTypeCompatibility&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<AgentTypeCompatibility> getAgentTypesCompatibility() throws RestClientException {
+        return getAgentTypesCompatibilityWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;AgentTypeCompatibility&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<AgentTypeCompatibility>> getAgentTypesCompatibilityWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentsNetworkAdminController/getAgentTypesCompatibility").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<AgentTypeCompatibility>> returnType = new ParameterizedTypeReference<List<AgentTypeCompatibility>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
@@ -469,6 +554,44 @@ public class GeboAgentsNetworkAdminControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<AgentServiceDescriptor>> returnType = new ParameterizedTypeReference<List<AgentServiceDescriptor>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;NetworkServiceFactoryDescriptor&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<NetworkServiceFactoryDescriptor> getNetworkServiceFactories() throws RestClientException {
+        return getNetworkServiceFactoriesWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;NetworkServiceFactoryDescriptor&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<NetworkServiceFactoryDescriptor>> getNetworkServiceFactoriesWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAgentsNetworkAdminController/getNetworkServiceFactories").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<NetworkServiceFactoryDescriptor>> returnType = new ParameterizedTypeReference<List<NetworkServiceFactoryDescriptor>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

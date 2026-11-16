@@ -10,13 +10,14 @@
  
  
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { LoginService } from "./login.service";
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "gebo-ai-logged",
     template: "Ok logged in gebo!! {{profile}}",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class LoggedComponent implements OnInit{

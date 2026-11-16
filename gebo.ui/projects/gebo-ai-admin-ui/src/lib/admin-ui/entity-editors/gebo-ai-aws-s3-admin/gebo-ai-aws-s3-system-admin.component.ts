@@ -17,11 +17,11 @@
  * mirroring the SharePoint administration component but backed by an AWS_CONNECTION secret.
  */
 
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AwsS3SystemsControllerService, GAwsS3System, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
@@ -42,6 +42,7 @@ const awsS3Code: string = "aws-s3-handler";
         provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAwsS3AdminComponent),
         multi: false
     }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIAwsS3AdminComponent extends BaseEntityEditingComponent<GAwsS3System> {

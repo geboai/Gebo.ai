@@ -221,7 +221,7 @@ class GeboToolCallingManagerTest {
 	private static ChatResponse callThrough(GeboToolCalling toolCalling, Asked asked, ChatModel model) {
 		final GeboToolCallingManager manager = new GeboToolCallingManager(toolCalling.manager(ObservationRegistry.NOOP),
 				List.of(asked));
-		return ChatClient.builder(model).build().prompt().user("q").toolCallbacks(askingTool(false))
+		return ChatClient.builder(model).build().prompt().user("q").tools(askingTool(false))
 				.toolContext(toolCalling.toolsContext(null)).advisors(new GeboToolCallingAdvisor(toolCalling, manager))
 				.call().chatResponse();
 	}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { GBaseModelChoice, GeboFastLlmsSetupControllerService, GUserMessage, LLMAutoconfigureCreationData, LLMModelPresetChoice, LLMSModelsPresets, LLMSSetupConfiguration, LLMSSetupConfigurationData, LLMSVendorInfo, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, IOperationStatus } from "@Gebo.ai/reusable-ui";
@@ -66,6 +66,7 @@ const noModelCreatedMessage: GUserMessage = {
     selector: "gebo-ai-llms-easy-vendor-configuration-component",
     templateUrl: "easy-vendor-configuration.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false }, { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIEasyVendorConfigurationComponent"), multi: false }]
 })
 export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges {
@@ -86,7 +87,8 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
         rankerModel: new FormControl(),
         transcriptModel: new FormControl(),
         ttsModel: new FormControl(),
-        imagesModel: new FormControl()
+        imagesModel: new FormControl(),
+        decisionModel: new FormControl()
     });
     protected loading: boolean = false;
     // Number of model-kind catalogues still downloading from the provider: the panel stays
@@ -216,6 +218,16 @@ export class GeboAIEasyVendorConfigurationComponent implements OnInit, OnChanges
                                 serviceHandler: imagesModels[0].serviceHandler, doModelsLookup: imagesModels[0].doModelsLookup
                             });
                             this.formGroup.controls["imagesModel"].setValue(defaultImagesPreset?.code);
+                        }
+                        const decisionModels = this.vendorSetupMetaInfos.libraryModel.filter(x => x.type === "DECISION");
+                        if (decisionModels && decisionModels.length && this.actualProvidersConfiguration?.decisionModelExists !== true) {
+                            const defaultDecisionPreset = decisionModels[0].choices?.find(x => x.defaultChoice === true);
+                            presets.push({
+                                type: "DECISION", presetChoices: decisionModels[0].choices, choice: defaultDecisionPreset?.code,
+                                controlName: "decisionModel", libraryChoices: decisionModels[0].choices,
+                                serviceHandler: decisionModels[0].serviceHandler, doModelsLookup: decisionModels[0].doModelsLookup
+                            });
+                            this.formGroup.controls["decisionModel"].setValue(defaultDecisionPreset?.code);
                         }
                         // Until the provider is queried the combos offer what the vendor library
                         // declares, exactly as before the api key is known. Every vendor owns its

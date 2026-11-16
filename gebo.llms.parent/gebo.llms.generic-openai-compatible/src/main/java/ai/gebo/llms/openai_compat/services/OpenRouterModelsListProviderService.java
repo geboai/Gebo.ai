@@ -37,6 +37,10 @@ import ai.gebo.openrouter.client.OpenRouterClientException;
 import ai.gebo.openrouter.client.model.ModelPricing;
 import ai.gebo.openrouter.client.model.OpenRouterModel;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.web.client.RestClient;
+import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * Lists the models exposed by the OpenRouter.ai aggregator, using the plain
@@ -77,6 +81,8 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 	private static final String OPENROUTER_AI_MODELS_LIST = "openrouter-ai-models-list";
 
 	final IGModelChoiceMetaInfoEnricherService enricherService;
+	/** The registry the calls to OpenRouter are observed in (see GeboHttpClientObservations). */
+	final ObjectProvider<ObservationRegistry> observationRegistry;
 
 	@Override
 	public String getId() {
@@ -90,7 +96,8 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 			ModelType modelType) {
 		List<ModelChoice> models = new ArrayList<ModelChoice>();
 		try {
-			OpenRouterAiClient client = new OpenRouterAiClient(clearApiKey);
+			OpenRouterAiClient client = new OpenRouterAiClient(clearApiKey, null, GeboHttpClientObservations
+					.observed(RestClient.builder(), GeboHttpClientObservations.registryOf(observationRegistry)).build());
 			if (GBaseEmbeddingModelChoice.class.isAssignableFrom(choiceType)) {
 				List<GBaseEmbeddingModelChoice> embeddingModels = new ArrayList<GBaseEmbeddingModelChoice>();
 				for (OpenRouterModel m : client.listModelsByType(OutputModality.EMBEDDINGS)) {

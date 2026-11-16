@@ -17,7 +17,7 @@
  * for AWS S3 configuration, mirroring the SharePoint setup wizard.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { AwsS3SystemsControllerService, GAwsS3System, GeboModulesConfigControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, AWS_S3_MODULE, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -68,6 +68,7 @@ export class AwsS3InstalledModuleService extends GeboRootInstalledModuleService 
   selector: "gebo-aws-s3-wizard-component",
   templateUrl: "aws-s3-wizard.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("AwsS3WizardComponent") }]
 
 })

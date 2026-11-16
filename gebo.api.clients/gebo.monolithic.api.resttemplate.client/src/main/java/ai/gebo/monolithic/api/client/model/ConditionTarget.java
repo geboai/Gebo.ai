@@ -24,7 +24,7 @@ import java.util.List;
  * ConditionTarget
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-10T19:55:37.443344900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
 
 public class ConditionTarget {
   @JsonProperty("users")

@@ -18,7 +18,7 @@
  * with code and description properties.
  */
 
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import { Observable } from "rxjs";
@@ -39,6 +39,7 @@ import { GeboUIActionRequest } from "../../architecture/actions.model";
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class EditableListboxBoundObjectAdapterComponent implements ControlValueAccessor, OnInit, OnChanges {

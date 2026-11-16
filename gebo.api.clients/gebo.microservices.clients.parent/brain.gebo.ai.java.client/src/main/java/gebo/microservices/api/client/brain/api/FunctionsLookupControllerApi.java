@@ -2,8 +2,10 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.AIToolsAndResourcesLibraryType;
 import gebo.microservices.api.client.brain.model.GLookupEntry;
 import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
+import gebo.microservices.api.client.brain.model.ToolSourceInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class FunctionsLookupControllerApi {
     private ApiClient apiClient;
@@ -43,6 +45,44 @@ public class FunctionsLookupControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;AIToolsAndResourcesLibraryType&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<AIToolsAndResourcesLibraryType> getAIToolsAndResourcesLibraryType() throws RestClientException {
+        return getAIToolsAndResourcesLibraryTypeWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;AIToolsAndResourcesLibraryType&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<AIToolsAndResourcesLibraryType>> getAIToolsAndResourcesLibraryTypeWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getAIToolsAndResourcesLibraryType").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<AIToolsAndResourcesLibraryType>> returnType = new ParameterizedTypeReference<List<AIToolsAndResourcesLibraryType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -199,6 +239,44 @@ public class FunctionsLookupControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<ToolCategoriesTree>> returnType = new ParameterizedTypeReference<List<ToolCategoriesTree>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;ToolSourceInfo&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<ToolSourceInfo> getToolSourceInfos() throws RestClientException {
+        return getToolSourceInfosWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;ToolSourceInfo&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<ToolSourceInfo>> getToolSourceInfosWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/FunctionsLookupController/getToolSourceInfos").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<ToolSourceInfo>> returnType = new ParameterizedTypeReference<List<ToolSourceInfo>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

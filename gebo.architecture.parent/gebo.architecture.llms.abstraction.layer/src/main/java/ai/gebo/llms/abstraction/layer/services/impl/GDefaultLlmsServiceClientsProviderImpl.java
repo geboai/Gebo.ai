@@ -12,6 +12,7 @@ package ai.gebo.llms.abstraction.layer.services.impl;
 import java.io.IOException;
 import java.time.Duration;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ReactorClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -21,10 +22,17 @@ import org.springframework.retry.support.RetryTemplate;
 import org.springframework.retry.support.RetryTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.reactive.function.client.ClientHttpObservationDocumentation;
+import org.springframework.web.reactive.function.client.ClientRequestObservationContext;
+import org.springframework.web.reactive.function.client.ClientRequestObservationConvention;
+import org.springframework.web.reactive.function.client.DefaultClientRequestObservationConvention;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.Builder;
 
 import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProvider;
+import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
+import io.micrometer.common.KeyValue;
+import io.micrometer.observation.ObservationRegistry;
 import ai.gebo.llms.abstraction.layer.services.config.GeboDefaultLlmsServiceClientsProviderConfig;
 import ai.gebo.llms.abstraction.layer.services.config.GeboLlmsClientConfig;
 import okhttp3.Interceptor;
@@ -36,6 +44,14 @@ public class GDefaultLlmsServiceClientsProviderImpl implements IGLlmsServiceClie
 	@Autowired
 	GeboDefaultLlmsServiceClientsProviderConfig defaultConfig;
 
+	/**
+	 * The registry the LLM providers' HTTP calls are observed in: a client span under the
+	 * model's own observation, the trace sent on, {@code http.client.requests} by provider
+	 * host and path (see GeboHttpClientObservations).
+	 */
+	@Autowired
+	ObjectProvider<ObservationRegistry> observationRegistry;
+
 	public GDefaultLlmsServiceClientsProviderImpl() {
 	}
 
@@ -44,10 +60,29 @@ public class GDefaultLlmsServiceClientsProviderImpl implements IGLlmsServiceClie
 				.responseTimeout(Duration.ofMillis(defaultConfig.getWebClientConfig().getResponseTimeout()));
 	}
 
+	/**
+	 * Spring's WebClient convention, the url it records stripped of its query and user
+	 * info as for the RestClient (GeboHttpClientObservations).
+	 */
+	static final ClientRequestObservationConvention WITHOUT_QUERY = new DefaultClientRequestObservationConvention() {
+		@Override
+		protected KeyValue httpUrl(ClientRequestObservationContext context) {
+			if (context.getRequest() != null) {
+				return KeyValue.of(ClientHttpObservationDocumentation.HighCardinalityKeyNames.HTTP_URL,
+						GeboHttpClientObservations.recordable(context.getRequest().url()));
+			}
+			return super.httpUrl(context);
+		}
+	};
+
 	@Override
 	public Builder getWebClientBuilder() {
 		Builder builder = WebClient.builder();
 		builder.clientConnector(new ReactorClientHttpConnector(getReactorClient()));
+		final ObservationRegistry registry = GeboHttpClientObservations.registryOf(observationRegistry);
+		if (!registry.isNoop()) {
+			builder.observationRegistry(registry).observationConvention(WITHOUT_QUERY);
+		}
 		return builder;
 	}
 
@@ -55,7 +90,9 @@ public class GDefaultLlmsServiceClientsProviderImpl implements IGLlmsServiceClie
 	public org.springframework.web.client.RestClient.Builder getRestClientBuilder() {
 		org.springframework.web.client.RestClient.Builder builder = RestClient.builder();
 		builder.requestFactory(new ReactorClientHttpRequestFactory(getReactorClient()));
-		return builder;
+		// the providers call paths of their own (/v1/chat/completions): the uri tag is theirs
+		return GeboHttpClientObservations.observed(builder,
+				GeboHttpClientObservations.registryOf(observationRegistry), GeboHttpClientObservations.PATH_TEMPLATES);
 	}
 
 	@Override

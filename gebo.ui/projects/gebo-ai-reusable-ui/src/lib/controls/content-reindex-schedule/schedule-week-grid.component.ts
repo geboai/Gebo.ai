@@ -10,7 +10,7 @@
 
 
 
-import { Component, Input, OnChanges, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { formatHourLabel, weekdayNames } from "./schedule-format";
 
 /** One cell of the week grid. */
@@ -38,6 +38,7 @@ interface GridRow {
 @Component({
     selector: "gebo-ai-schedule-week-grid",
     templateUrl: "schedule-week-grid.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIScheduleWeekGridComponent implements OnChanges {

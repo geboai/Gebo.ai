@@ -17,7 +17,7 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { getAuthHeader } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH, ContentMetaInfo, IngestionFileType } from "@Gebo.ai/gebo-ai-rest-api";
 
@@ -33,6 +33,7 @@ declare function geboOpenDocumentJS(url:any,token:any,iframeElement:any,contentT
 @Component({
     selector: "gebo-ai-download-link-viewer-wrapper",
     template: "@if (downloadableContentUrl) {<a [href]='downloadableContentUrl'> Download {{contentMetaInfo?.fileName}} </a>}",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class DownloadLinkViewerWrapperComponent implements OnInit, OnChanges {

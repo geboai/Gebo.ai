@@ -21,7 +21,6 @@ export interface GChatProfileConfiguration {
     dateCreated?: Date;
     embeddingModelReference?: GObjectRefGBaseEmbeddingModelConfig;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
-    enabledFunctions?: Array<string>;
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;

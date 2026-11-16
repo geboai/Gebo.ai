@@ -15,7 +15,7 @@
  * emits the chosen provider and, whenever the credentials settle, the secret and base url the
  * parent uses to download the catalogues.
  */
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GeboFastLlmsSetupControllerService, LLMSSetupConfiguration, LLMSSetupConfigurationData, SecretInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
@@ -25,6 +25,7 @@ import { Observable, of } from "rxjs";
     selector: "gebo-ai-llms-easy-provider-step",
     templateUrl: "step-provider.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboSetupWizardsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("LLMSEasyProviderStepComponent"), multi: false }

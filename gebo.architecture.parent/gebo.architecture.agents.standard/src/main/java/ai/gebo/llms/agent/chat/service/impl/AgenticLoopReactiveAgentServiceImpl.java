@@ -26,7 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.ai.document.Document;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
@@ -109,6 +109,9 @@ import ai.gebo.llms.agent.standardlibraries.UserQuestionsLibrarySource;
  */
 @Service
 public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAgentServiceImpl {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	public static final String AGENTIC_LOOP_NETWORK_AGENT_SERVICE = "AgenticLoopNetworkAgentService";
 	private static final String DESCRIPTION = "Single agent that operates every available tool in a loop and decides by itself when the answer is complete";
 	/** The iterations (cycles) the loop may run at most. */
@@ -1895,6 +1898,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			finishReason.set(chunk.finishReason());
 		}
 		thinkingTo(ui, thinking.delta(chunk.thinking()));
+		toolCallsTo(ui, chunk.toolCalls());
 		if (!chunk.answer().isBlank()) {
 			// the text starts: the reasoning ended
 			thinkingTo(ui, thinking.complete());
@@ -2113,7 +2117,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			return null;
 		}
 		try {
-			final Map<String, Object> read = JsonParser.fromJson(result, Map.class);
+			final Map<String, Object> read = JSON_HELPER.fromJson(result, Map.class);
 			final Object coverage = read != null ? read.get("coverage") : null;
 			if (coverage instanceof Map<?, ?> fields) {
 				final boolean required = Boolean.TRUE.equals(fields.get("completionRequired"));

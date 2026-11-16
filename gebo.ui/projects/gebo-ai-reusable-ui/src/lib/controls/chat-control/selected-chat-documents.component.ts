@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, EventEmitter, forwardRef, Input, Output } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, Output, ChangeDetectionStrategy } from "@angular/core";
 import { GResponseDocumentRef } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
@@ -27,6 +27,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     templateUrl: "selected-chat-documents.component.html",
     styleUrl: "selected-chat-documents.component.scss",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIChatControlModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("SelectedChatDocumentsComponent"), multi: false }

@@ -14,11 +14,11 @@
  * This file implements an Angular component for administering Generic OpenAI API
  * Image models.
  */
-import { Component, forwardRef, Injector, OnInit } from "@angular/core";
+import { Component, forwardRef, Injector, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GenericOpenAIAPIImageModelChoice, GenericOpenAIAPIImageModelConfig, GenericOpenAiapiImageModelsConfigurationControllerService, GenericOpenAIImageModelTypeConfig, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
@@ -27,7 +27,8 @@ import { alignChoosedModel } from "../utils/choosed-model-alignment";
 @Component({
     selector: "gebo-ai-generic-open-ai-api-image-model-admin-component",
     templateUrl: "gebo-ai-generic-openai-api-image-model-admin.component.html",
-    standalone: false, providers: [
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGenericOpenAIAPIImageModelAdminComponent),
         multi: false

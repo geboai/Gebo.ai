@@ -1,10 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { getAuth } from "../gebo-credentials";
 @Component({
     selector:"gebo-ai-check-device-activation-component",
     template:"",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone:false
 })
 export class GeboAICheckDeviceActivationComponent implements OnInit{

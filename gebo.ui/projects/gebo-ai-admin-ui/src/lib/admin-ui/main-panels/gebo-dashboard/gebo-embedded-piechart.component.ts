@@ -17,7 +17,7 @@
  * the pie chart visualization.
  */
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { EmbeddingData } from "./graphics-data";
 import { GStatsHolder } from "@Gebo.ai/gebo-ai-rest-api";
 
@@ -39,6 +39,7 @@ export type NGPieChart = {
 @Component({
     selector: "gebo-ai-embedded-documents-piechart",
     templateUrl: "gebo-embedded-piechart.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAiEmbeddedDocumentsPiechartComponent implements OnChanges{

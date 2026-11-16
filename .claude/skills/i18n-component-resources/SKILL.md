@@ -96,7 +96,7 @@ Reads up to three attributes, aliased onto three field ids:
 | `placeholder` | `placeholder` |
 
 `label`/`legend`/`header` collapse onto the same `label` field, first one wins. Works on a
-native element *and* on a PrimeNG component — for the latter the matching
+native element *and* on an Optimus UI component — for the latter the matching
 `P*LabelTarget` adapter in `primeng-components-multilanguage-adapters.directive.ts` pushes
 the translation into the component's own input, so check an adapter exists for the tag you
 are labelling.
@@ -147,9 +147,13 @@ Path: `gebo.ui/projects/gebo-ai-reusable-ui/src/assets/i18n/en.json`
 (shipped to the backend as `/static/assets/i18n/en.json`, loaded by
 `gebo.ui/src/main/java/ai/gebo/ui/ExistingBundledTextResourcesDaoImpl.java`).
 
-Its own formatting: **2-space indent, `": "` separators, LF, one trailing newline**, top-level
-keys in insertion order: `json.dumps(d, indent=2, ensure_ascii=False) + '\n'` round-trips the
-committed file byte for byte. Other `<lang>.json` files use a *different* style — Jackson's
+Its own formatting: **2-space indent, `": "` separators, LF**, top-level keys in insertion
+order, and a field object with a single entry written on one line (`"Foo": { "label": "…" }`)
+while longer ones are multi-line. `json.dumps(d, indent=2)` therefore does **not** round-trip it
+(it rewrites thousands of lines): check `json.dumps(...) == original` before dumping, and when it
+fails insert the new lines textually after a sibling entry in the same style (adding the comma
+to a sibling that was last), then `json.loads` the result and compare the flattened keys with
+`git show HEAD:<file>` - nothing removed or changed, only your keys added. Other `<lang>.json` files use a *different* style — Jackson's
 `"key" : value` with 2-space indent — because they come out of the translation tool.
 **Match whatever the file you are editing already uses.**
 

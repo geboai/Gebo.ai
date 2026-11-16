@@ -14,7 +14,7 @@ import { ChildVirtualFSParam, GKnowledgeBase, GProject, KnowledgeBaseControllerS
 import { forkJoin, map, Observable, of } from "rxjs";
 import { EnrichedChild, EnrichedVFilesystemItem } from "./enriched-child";
 import { Injectable } from "@angular/core";
-import { MenuItem } from "primeng/api";
+import { MenuItem } from "@openng/optimus-ui/api";
 
 import { GeboAIModulesService } from "./gebo-ai-modules.service";
 import { GeboAIPluggableProjectEndpointsService } from "./pluggable-project-endpoint";

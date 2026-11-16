@@ -442,7 +442,7 @@ class SearchToolContentPipelineTest {
 		assertEquals(Status.OK, result.getStatus());
 		assertTrue(result.getTokens() <= 600,
 				"returned " + result.getTokens() + " tokens");
-		final int asRead = ITokensCountable.stringsTokensSize(org.springframework.ai.util.json.JsonParser.toJson(result));
+		final int asRead = ITokensCountable.stringsTokensSize(new org.springframework.ai.util.JsonHelper().toJson(result));
 		assertTrue(asRead <= 600, "the whole result as the model reads it fits its share of the room: " + asRead);
 		assertEquals(1800, budget.left(), "the tool wrapper takes what was returned out of the room, not the pipeline");
 	}

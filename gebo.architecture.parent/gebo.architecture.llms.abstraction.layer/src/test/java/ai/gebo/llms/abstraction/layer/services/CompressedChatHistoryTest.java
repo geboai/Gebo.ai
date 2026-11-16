@@ -20,7 +20,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
+import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.MessageType;
 
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
@@ -54,5 +56,37 @@ class CompressedChatHistoryTest {
 		assertEquals("answer two", messages.get(3).getText());
 		assertEquals("question three", messages.get(4).getText());
 		assertEquals("answer three", messages.get(5).getText());
+	}
+
+	/**
+	 * The history replayed to the model is made of whole turns: a user message and its
+	 * answer, text only. The tool calls of a turn and their results live in the tool loop
+	 * of that turn's call and are never part of it, so trimming the history (the session
+	 * shrink, a window) can never keep a tool call without its result: the turn-aware
+	 * compaction of Spring AI's session memory has nothing to fix here.
+	 */
+	@SuppressWarnings("rawtypes")
+	@Test
+	void theHistoryIsMadeOfWholeTurnsWithNoToolCall() {
+		GAbstractConfigurableChatModel model = mock(GAbstractConfigurableChatModel.class,
+				withSettings().defaultAnswer(Answers.CALLS_REAL_METHODS));
+		IChatRequestContext context = mock(IChatRequestContext.class);
+		when(context.getInteractions()).thenReturn(List.of(
+				IChatSessionEntry.builder().user("look it up").assistant("It is 4, as the lookup said.").build(),
+				IChatSessionEntry.builder().user("and then?").assistant("Then 5.").build()));
+
+		for (String consolidated : new String[] { null, "the summary of the older turns" }) {
+			when(context.getConsolidatedHistory()).thenReturn(consolidated);
+			List<Message> messages = model.createHistoryMessages(context);
+			assertEquals(4, messages.size());
+			for (int i = 0; i < messages.size(); i++) {
+				Message message = messages.get(i);
+				assertEquals(i % 2 == 0 ? MessageType.USER : MessageType.ASSISTANT, message.getMessageType(),
+						"a user message and its answer, turn after turn");
+				if (message instanceof AssistantMessage answer) {
+					assertFalse(answer.hasToolCalls());
+				}
+			}
+		}
 	}
 }

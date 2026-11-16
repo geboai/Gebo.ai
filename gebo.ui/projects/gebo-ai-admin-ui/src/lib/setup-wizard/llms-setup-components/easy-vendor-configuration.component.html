@@ -14,19 +14,19 @@
       <div class="col-4  col-sm-12 col-xs-12">
         <gebo-ai-field id="WebSiteLink" label="Provider web site"
           help="Click here for general provider information.">
-          <a [href]="vendorSetupMetaInfos?.parentModel?.webSite" target="_blank"
+          <a [href]="$safeNavigationMigration(vendorSetupMetaInfos?.parentModel?.webSite)" target="_blank"
           gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.webSite}}</a>
         </gebo-ai-field>
       </div>
       <div class="col-4 col-sm-12 col-xs-12"><gebo-ai-field id="AcquireCreditLink" label="Purchase provider's credit"
         help="Click here to buy credit for your api key(s).">
-        <a [href]="vendorSetupMetaInfos?.parentModel?.acquireKeyUrl" target="_blank"
+        <a [href]="$safeNavigationMigration(vendorSetupMetaInfos?.parentModel?.acquireKeyUrl)" target="_blank"
         gebo-ai-field-element>{{vendorSetupMetaInfos?.parentModel?.acquireKeyUrl}}</a>
 
       </gebo-ai-field>
     </div>
     <div class="col-12">
-      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext" [secretTypes]="vendorSetupMetaInfos?.parentModel?.secretTypes"
+      <gebo-ai-api-key-component formControlName="secretId" [contextCode]="secretContext" [secretTypes]="$safeNavigationMigration(vendorSetupMetaInfos?.parentModel?.secretTypes)"
         [apiKeyDescription]="secretDescription" [backendValidation]="validateCredentials"
       [backendValidationOnChange]="true"></gebo-ai-api-key-component>
     </div>
@@ -88,6 +88,13 @@
             <gebo-ai-field id="ImagesModel" label="Default image generation model"
               help="This model will be responsible of doing image generation">
               <geboai-editable-listbox-component formControlName="imagesModel" [data]="preset.modelChoices"
+              gebo-ai-field-element></geboai-editable-listbox-component>
+            </gebo-ai-field>
+          }
+          @if (preset.type==='DECISION') {
+            <gebo-ai-field id="DecisionModel" label="Default decision model"
+              help="This model judges whether each retrieved fragment is useful to the question">
+              <geboai-editable-listbox-component formControlName="decisionModel" [data]="preset.modelChoices"
               gebo-ai-field-element></geboai-editable-listbox-component>
             </gebo-ai-field>
           }

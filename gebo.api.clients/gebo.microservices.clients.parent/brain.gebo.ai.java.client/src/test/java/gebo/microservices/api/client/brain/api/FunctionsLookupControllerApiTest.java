@@ -12,8 +12,10 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.AIToolsAndResourcesLibraryType;
 import gebo.microservices.api.client.brain.model.GLookupEntry;
 import gebo.microservices.api.client.brain.model.ToolCategoriesTree;
+import gebo.microservices.api.client.brain.model.ToolSourceInfo;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -30,6 +32,20 @@ public class FunctionsLookupControllerApiTest {
 
     private final FunctionsLookupControllerApi api = new FunctionsLookupControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAIToolsAndResourcesLibraryTypeTest() {
+        List<AIToolsAndResourcesLibraryType> response = api.getAIToolsAndResourcesLibraryType();
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -85,6 +101,20 @@ public class FunctionsLookupControllerApiTest {
     public void getAllLocalFunctionsTreeTest() {
         Boolean ragContextFunctions = null;
         List<ToolCategoriesTree> response = api.getAllLocalFunctionsTree(ragContextFunctions);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getToolSourceInfosTest() {
+        List<ToolSourceInfo> response = api.getToolSourceInfos();
 
         // TODO: test validations
     }

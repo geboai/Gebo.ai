@@ -13,12 +13,11 @@
 package ai.gebo.llms.deepseek.services;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -124,12 +123,9 @@ public class DeepseekModelsLookupService {
 			if (secret.type() == GeboSecretType.TOKEN) {
 				// Use token to authenticate with Deepseek API
 				GeboTokenContent tokenContent = (GeboTokenContent) secret;
-				Map<String, Object> rawHeaders = new HashMap<>();
-				rawHeaders.put("Authorization", "Bearer " + tokenContent.getToken());
-				org.springframework.util.MultiValueMap header = org.springframework.util.MultiValueMap
-						.fromSingleValue(rawHeaders);
-
-				HttpEntity requestEntity = new HttpEntity<>(header);
+				HttpHeaders headers = new HttpHeaders();
+				headers.setBearerAuth(tokenContent.getToken());
+				HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 				ResponseEntity<DeepseekModelsList> data = restTemplateWrapperService.exchange(
 						modelsUrl(config.getBaseUrl()), HttpMethod.GET, requestEntity, DeepseekModelsList.class);
 				if (data.hasBody()) {

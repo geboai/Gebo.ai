@@ -18,11 +18,11 @@
  * and provides functionality for file uploads, project selection, and publishing.
  */
 
-import { Component, forwardRef, Inject, Injector, Input, ViewChild } from "@angular/core";
+import { Component, forwardRef, Inject, Injector, Input, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { BASE_PATH, GUploadsProjectEndpoint, GProject, JobLauncherControllerService, ProjectsControllerService, FileUploadsControllerService, UploadedFileNode } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIFileType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService, ServedFileReference } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 import { GeboAIUploadsFilesComponent } from "./gebo-ai-uploads-files.component";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
@@ -49,6 +49,7 @@ const serveContentsUrl: string = "/api/admin/UploadsBrowsingController/serveUplo
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUploadsModule", multi: false },   
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIUploadsEndpointComponent), multi: true
     }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUploadsEndpointComponent extends BaseEntityEditingComponent<GUploadsProjectEndpoint> {

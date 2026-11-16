@@ -17,7 +17,7 @@
  * The component tracks whether a user has accepted a license agreement and emits the
  * license content when accepted.
  */
-import { Component, ElementRef, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 
@@ -37,6 +37,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("FastSetupComponent")
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAILicenceComponent implements ControlValueAccessor, OnInit, OnChanges {

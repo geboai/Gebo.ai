@@ -18,7 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.resource.introspection.SpringOpaqueTokenIntrospector;
+import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +38,7 @@ import ai.gebo.security.services.SecurityAuditTaxonomy;
 import ai.gebo.security.services.impl.LocalJwtTokenProvider;
 import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
 import ai.gebo.security.services.impl.authmanagers.JwtDecoderCache;
+import ai.gebo.security.services.impl.authmanagers.OpaqueTokenIntrospectorCache;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 
@@ -82,6 +83,8 @@ public class SecurityHeaderDataCompletionController {
 	// one per controller instance is enough to avoid rebuilding a decoder for every config
 	// tried within a single request.
 	private final JwtDecoderCache jwtDecoderCache = new JwtDecoderCache();
+	// The introspectors trying an opaque token, one per configuration, built once
+	private final OpaqueTokenIntrospectorCache introspectorCache = new OpaqueTokenIntrospectorCache();
 
 	@GetMapping(value = "complete", produces = MediaType.APPLICATION_JSON_VALUE)
 	public SecurityHeaderData complete(HttpServletRequest request) {
@@ -172,9 +175,7 @@ public class SecurityHeaderDataCompletionController {
 				continue;
 			}
 			try {
-				SpringOpaqueTokenIntrospector introspector = new SpringOpaqueTokenIntrospector(
-						config.getProviderConfig().getIntrospectionUri(), config.getClient().getClientId(),
-						config.getClient().getSecret());
+				OpaqueTokenIntrospector introspector = introspectorCache.forConfiguration(config);
 				OAuth2AuthenticatedPrincipal principal = introspector.introspect(raw.getToken());
 				if (principal != null) {
 					return new SecurityHeaderData(raw.getToken(), XAuthType.OAUTH2, config.getRegistrationId(),

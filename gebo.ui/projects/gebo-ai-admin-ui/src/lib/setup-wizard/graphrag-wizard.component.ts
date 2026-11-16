@@ -1,4 +1,4 @@
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { GeboNeo4jModuleSetupControllerService, GraphRagConfigurationControllerService, GraphRagExtractionConfig } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractInstalledModuleService, AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { concatMap, map, Observable, of } from "rxjs";
@@ -35,6 +35,7 @@ export class GraphRagStatusService extends AbstractStatusService {
     templateUrl: "graphrag-wizard.component.html",
     selector: "gebo-ai-graphrag-setup-component",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GraphRagWizardComponent") }]
 })
 export class GraphRagWizardComponent extends BaseWizardSectionComponent {

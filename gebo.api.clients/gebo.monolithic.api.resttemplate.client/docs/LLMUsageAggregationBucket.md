@@ -37,3 +37,4 @@ IMAGE | &quot;IMAGE&quot;
 RANKER | &quot;RANKER&quot;
 TTS | &quot;TTS&quot;
 TRANSCRIPT | &quot;TRANSCRIPT&quot;
+DECISION | &quot;DECISION&quot;

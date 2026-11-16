@@ -48,7 +48,8 @@ public class GeboRagChatControllerApiTest {
     @Test
     public void getChatModelUserInfoByChatProfileCodeTest() {
         String chatProfileCode = null;
-        GeboChatUserInfo response = api.getChatModelUserInfoByChatProfileCode(chatProfileCode);
+        String pipelineCode = null;
+        GeboChatUserInfo response = api.getChatModelUserInfoByChatProfileCode(chatProfileCode, pipelineCode);
 
         // TODO: test validations
     }
@@ -92,7 +93,8 @@ public class GeboRagChatControllerApiTest {
     @Test
     public void getProfileProviderModelCapabilitiesTest() {
         String chatProfileCode = null;
-        ModelProviderCapabilities response = api.getProfileProviderModelCapabilities(chatProfileCode);
+        String pipelineCode = null;
+        ModelProviderCapabilities response = api.getProfileProviderModelCapabilities(chatProfileCode, pipelineCode);
 
         // TODO: test validations
     }

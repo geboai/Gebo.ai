@@ -9,6 +9,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AgentToolsInfo } from './agentToolsInfo';
 import { GBaseChatModelChoice } from './gBaseChatModelChoice';
 import { GBaseObject } from './gBaseObject';
 import { ToolCategoriesTree } from './toolCategoriesTree';
@@ -19,4 +20,5 @@ export interface GeboChatUserInfo {
     providerId?: string;
     availableFunctions?: Array<ToolCategoriesTree>;
     chatModelChoice?: GBaseChatModelChoice;
+    agentsTools?: Array<AgentToolsInfo>;
 }

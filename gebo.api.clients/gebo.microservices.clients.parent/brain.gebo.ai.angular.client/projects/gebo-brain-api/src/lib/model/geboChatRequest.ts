@@ -12,6 +12,7 @@
 import { AdditionalContent } from './additionalContent';
 import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GeboRagRequestCustomConfig } from './geboRagRequestCustomConfig';
+import { NetworkOfAgentsSuspendedStateReaction } from './networkOfAgentsSuspendedStateReaction';
 import { UserUploadedContent } from './userUploadedContent';
 
 export interface GeboChatRequest { 
@@ -33,6 +34,11 @@ export interface GeboChatRequest {
     searchRequested?: boolean;
     searchForbidden?: boolean;
     userLanguage?: string;
+    runOrigin?: string;
+    attended?: boolean;
+    externalSystem?: string;
+    externalSessionKey?: string;
+    networkOfAgentsSuspendedStateReaction?: NetworkOfAgentsSuspendedStateReaction;
     additionalContents?: Array<AdditionalContent>;
     tokensSize?: number;
 }

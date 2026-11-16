@@ -31,6 +31,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableDecisionModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
@@ -41,6 +42,9 @@ import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurat
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
@@ -106,6 +110,8 @@ public class GeboLLMSSetupService {
 	private final IGImageModelConfigurationSupportServiceRepositoryPattern imageModelsSupportRepo;
 	private final IGRankerModelRuntimeConfigurationDao rankerModelsRuntimeDao;
 	private final IGRankerModelConfigurationSupportServiceRepositoryPattern rankerModelsSupportRepo;
+	private final IGDecisionModelRuntimeConfigurationDao decisionModelsRuntimeDao;
+	private final IGDecisionModelConfigurationSupportServiceRepositoryPattern decisionModelsSupportRepo;
 	private final IGTextToSpeechModelRuntimeConfigurationDao ttsModelsRuntimeDao;
 	private final IGTextToSpeechModelConfigurationSupportServiceRepositoryPattern ttsModelsSupportRepo;
 	private final IGTranscriptModelRuntimeConfigurationDao transcriptModelsRuntimeDao;
@@ -168,6 +174,7 @@ public class GeboLLMSSetupService {
 		boolean images;
 		boolean tts;
 		boolean transcript;
+		boolean decision;
 		// The model code of the current default (or, for the chat service slot, the
 		// internal-services model) of each kind, for display in the expert UI.
 		String defaultChatCode;
@@ -177,6 +184,7 @@ public class GeboLLMSSetupService {
 		String imagesCode;
 		String ttsCode;
 		String transcriptCode;
+		String decisionCode;
 		// The provider (model type handler code, e.g. chatgpt-OpenAI / chatmodel-regolo.ai)
 		// of each current default, so the expert UI can show which provider owns it.
 		String defaultChatProviderId;
@@ -186,6 +194,7 @@ public class GeboLLMSSetupService {
 		String imagesProviderId;
 		String ttsProviderId;
 		String transcriptProviderId;
+		String decisionProviderId;
 	}
 
 	private static String modelCodeOf(GBaseModelConfig config) {
@@ -268,6 +277,13 @@ public class GeboLLMSSetupService {
 				presence.transcript = true;
 				presence.transcriptCode = modelCodeOf(model.getConfig());
 				presence.transcriptProviderId = providerIdOf(model.getType());
+			}
+		}
+		for (IGConfigurableDecisionModel model : decisionModelsRuntimeDao.getConfigurations()) {
+			if (model.getConfig().getDefaultModel() != null && model.getConfig().getDefaultModel()) {
+				presence.decision = true;
+				presence.decisionCode = modelCodeOf(model.getConfig());
+				presence.decisionProviderId = providerIdOf(model.getType());
 			}
 		}
 		return presence;
@@ -454,6 +470,35 @@ public class GeboLLMSSetupService {
 					}
 				}
 					break;
+				case DECISION: {
+					IGDecisionModelConfigurationSupportService handler = decisionModelsSupportRepo
+							.findByCode(preset.getServiceHandler());
+					if (handler == null) {
+						LOGGER.debug("The {} handler {} is not present or started up", preset.getType(),
+								preset.getServiceHandler());
+						continue;
+					}
+					GModelType modelProviderType = handler.getType();
+					List<IGConfigurableDecisionModel> configurations = this.decisionModelsRuntimeDao
+							.getConfigurations();
+					for (IGConfigurableDecisionModel thisModel : configurations) {
+						if (thisModel.getType().getCode().equals(modelProviderType.getCode())) {
+							LLMExistingConfiguration existingConfiguration = new LLMExistingConfiguration();
+							existingConfiguration.setModelType(ModelType.DECISION);
+							existingConfiguration.setExistingModelConfig(GObjectRef.of(thisModel.getConfig()));
+							String secretCode = thisModel.getConfig().getApiSecretCode();
+							if (secretCode != null) {
+								SecretInfo infos = secretService.getSecretInfoById(secretCode);
+								existingConfiguration.setSecretInfo(infos);
+							}
+							if (vendorData.getParentModel().isRequiresCustomUrl()) {
+								existingConfiguration.setBaseUrl(thisModel.getConfig().getBaseUrl());
+							}
+							vendorData.getRuntimeConfigs().add(existingConfiguration);
+						}
+					}
+				}
+					break;
 				}
 			}
 			configData.getConfigurations().add(vendorData);
@@ -467,6 +512,7 @@ public class GeboLLMSSetupService {
 		configData.setRankerModelExists(presence.ranker);
 		configData.setTranscriptModelExists(presence.transcript);
 		configData.setTtsModelExists(presence.tts);
+		configData.setDecisionModelExists(presence.decision);
 		configData.setCanRunAutoconfigure(!(presence.defaultChat && presence.embedding));
 		return configData;
 	}
@@ -487,6 +533,7 @@ public class GeboLLMSSetupService {
 		status.imagesModelSetup = presence.images;
 		status.ttsModelSetup = presence.tts;
 		status.transcriptModelSetup = presence.transcript;
+		status.decisionModelSetup = presence.decision;
 		status.chatModelCode = presence.defaultChatCode;
 		status.internalServicesChatModelCode = presence.internalServicesChatCode;
 		status.embeddedModelCode = presence.embeddingCode;
@@ -494,6 +541,7 @@ public class GeboLLMSSetupService {
 		status.imagesModelCode = presence.imagesCode;
 		status.ttsModelCode = presence.ttsCode;
 		status.transcriptModelCode = presence.transcriptCode;
+		status.decisionModelCode = presence.decisionCode;
 		status.chatModelProviderId = presence.defaultChatProviderId;
 		status.internalServicesChatModelProviderId = presence.internalServicesChatProviderId;
 		status.embeddedModelProviderId = presence.embeddingProviderId;
@@ -501,6 +549,7 @@ public class GeboLLMSSetupService {
 		status.imagesModelProviderId = presence.imagesProviderId;
 		status.ttsModelProviderId = presence.ttsProviderId;
 		status.transcriptModelProviderId = presence.transcriptProviderId;
+		status.decisionModelProviderId = presence.decisionProviderId;
 		status.isSetup = status.chatModelSetup && status.embeddedModelSetup;
 		return status;
 	}
@@ -649,6 +698,26 @@ public class GeboLLMSSetupService {
 			return OperationStatus.of(secretService.getSecretInfoById(secretId));
 
 		}
+		case DECISION: {
+			IGDecisionModelConfigurationSupportService supportLogic = this.decisionModelsSupportRepo
+					.findByCode(apiKeyData.getServiceHandler());
+			String secretId = secretService.storeSecret(geboToken, supportLogic.getType().getDescription() + " api key",
+					apiKeyData.getApiKeySecretContext());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(secretId);
+			configuration.setBaseUrl(apiKeyData.getBaseUrl());
+
+			if (apiKeyData.getDoModelsLookup() != null && apiKeyData.getDoModelsLookup()) {
+				OperationStatus modelsLookupStatus = supportLogic.getModelChoices(configuration);
+				if (modelsLookupStatus.isHasErrorMessages()) {
+					secretService.deleteSecret(secretId);
+					return OperationStatus.ofError("Invalid credentials",
+							"Cannot access provider service with entered credentials");
+				}
+			}
+			return OperationStatus.of(secretService.getSecretInfoById(secretId));
+
+		}
 		}
 		throw new RuntimeException("This code zone has not to be reached");
 
@@ -761,6 +830,16 @@ public class GeboLLMSSetupService {
 							&& autoconfiguredata.getTtsModel().trim().length() > 0) {
 						LLMCreateModelData modelData = this.createModel(secretId, vendorData,
 								autoconfiguredata.getTtsModel(), preset.getType());
+						configs.add(modelData);
+					}
+				}
+					break;
+				case DECISION: {
+					// optional, as the images: created only when the wizard asks for one
+					if (autoconfiguredata.getDecisionModel() != null
+							&& autoconfiguredata.getDecisionModel().trim().length() > 0) {
+						LLMCreateModelData modelData = this.createModel(secretId, vendorData,
+								autoconfiguredata.getDecisionModel(), preset.getType());
 						configs.add(modelData);
 					}
 				}
@@ -914,6 +993,14 @@ public class GeboLLMSSetupService {
 		}
 		case TTS: {
 			IGTextToSpeechModelConfigurationSupportService supportLogic = this.ttsModelsSupportRepo
+					.findByCode(credentials.getServiceHandler());
+			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
+			configuration.setApiSecretCode(credentials.getSecretId());
+			configuration.setBaseUrl(credentials.getBaseUrl());
+			return supportLogic.getModelChoices(configuration);
+		}
+		case DECISION: {
+			IGDecisionModelConfigurationSupportService supportLogic = this.decisionModelsSupportRepo
 					.findByCode(credentials.getServiceHandler());
 			GBaseModelConfig configuration = supportLogic.createBaseConfiguration(null);
 			configuration.setApiSecretCode(credentials.getSecretId());
@@ -1158,6 +1245,20 @@ public class GeboLLMSSetupService {
 			case IMAGESGEN: {
 				try {
 					IGImageModelConfigurationSupportService supportLogic = this.imageModelsSupportRepo
+							.findByCode(config.getServiceHandler());
+					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
+					configuration.setApiSecretCode(config.getSecretId());
+					configuration.setBaseUrl(config.getBaseUrl());
+					configuration.setDefaultModel(config.getSetAsDefaultModel());
+					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
+				} catch (Throwable th) {
+					operationsOutput.add(OperationStatus.of(th));
+				}
+			}
+				break;
+			case DECISION: {
+				try {
+					IGDecisionModelConfigurationSupportService supportLogic = this.decisionModelsSupportRepo
 							.findByCode(config.getServiceHandler());
 					GBaseModelConfig configuration = supportLogic.createBaseConfiguration(config.getModelCode());
 					configuration.setApiSecretCode(config.getSecretId());

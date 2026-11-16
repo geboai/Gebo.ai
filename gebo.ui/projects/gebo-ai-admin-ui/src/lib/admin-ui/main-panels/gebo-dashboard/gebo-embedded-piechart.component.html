@@ -16,7 +16,7 @@
   <table class='grid'>
     <div class="col-12"><b>{{item.parentData?.label}} <span id="SpanEmbedding" gebo-ai-text>embedding vs total nr of documents</span> </b></div>
     <div class="col-2">@if (item.parentData?.data?.canDrillDown===true) {
-      <p-button id="MoreDetailsBtn" gebo-ai-label label="More details" (onClick)="drillDown.emit(item.parentData?.data)"></p-button>
+      <p-button id="MoreDetailsBtn" gebo-ai-label label="More details" (onClick)="drillDown.emit($safeNavigationMigration(item.parentData?.data))"></p-button>
     }</div>
     <div class='col-10'>
       <p-chart id="Chart" gebo-ai-label type="pie" [data]="pieChartData" [options]="pieOptions" [height]="'300px'" />

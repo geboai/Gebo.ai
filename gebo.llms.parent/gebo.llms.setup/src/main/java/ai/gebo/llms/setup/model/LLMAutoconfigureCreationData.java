@@ -17,4 +17,5 @@ public class LLMAutoconfigureCreationData {
 	private String transcriptModel = null;
 	private String ttsModel = null;
 	private String imagesModel = null;
+	private String decisionModel = null;
 }

@@ -33,6 +33,7 @@ import ai.gebo.security.services.IGSecurityDirectory;
 import ai.gebo.security.services.impl.authmanagers.GOauth2ResourceServerUserProvisioner;
 import ai.gebo.security.services.impl.authmanagers.IssuerConfigCache;
 import ai.gebo.security.services.impl.authmanagers.JwtDecoderCache;
+import ai.gebo.security.services.impl.authmanagers.OpaqueTokenIntrospectorCache;
 import ai.gebo.security.services.impl.authmanagers.LocalJwtAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.SessionAwareAuthenticationManager;
 import ai.gebo.security.services.impl.authmanagers.MultiOauth2ConfigJwtAuthenticationManager;
@@ -66,6 +67,8 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 	// Shared per-issuer JwtDecoder cache. The resolver is a singleton, so this cache
 	// lives for the application lifetime and is reused across all per-request managers.
 	private final JwtDecoderCache jwtDecoderCache = new JwtDecoderCache();
+	// Shared opaque token introspectors, one per configuration, for the same reason
+	private final OpaqueTokenIntrospectorCache opaqueTokenIntrospectorCache = new OpaqueTokenIntrospectorCache();
 	// Shared per-issuer -> Oauth2RuntimeConfiguration cache, used both to pick a
 	// manager when X-AuthType is AUTO (absent) and, inside jwtAuthenticationConverter,
 	// to resolve the AuthProvider for auto-provisioning - one cache, one cost per
@@ -130,7 +133,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 							jwtAuthenticationConverter, jwtDecoderCache, provisioner);
 				} else {
 					manager = new SingleOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2Configuration,
-							tokenAuthenticationConverter, provisioner);
+							tokenAuthenticationConverter, provisioner, opaqueTokenIntrospectorCache);
 				}
 			} else {
 				List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
@@ -143,7 +146,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 							jwtAuthenticationConverter, jwtDecoderCache, provisioner);
 				} else {
 					manager = new MultiOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2AuthenticationConfigs,
-							tokenAuthenticationConverter, provisioner);
+							tokenAuthenticationConverter, provisioner, opaqueTokenIntrospectorCache);
 				}
 			}
 		}
@@ -193,7 +196,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 								+ "configured to try it as an opaque token against");
 			}
 			return new MultiOauth2ConfigOpaqueTokenAuthenticationManager(header, oauth2AuthenticationConfigs,
-					tokenAuthenticationConverter, provisioner);
+					tokenAuthenticationConverter, provisioner, opaqueTokenIntrospectorCache);
 		}
 		// Gebo's own LOCAL_JWT self-identifies with these claims (see
 		// SecurityHeaderUtil.createSelfsignedJwtSecurityHeader and LocalJwtTokenProvider) -

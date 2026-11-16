@@ -1,4 +1,4 @@
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GGoogleSearchApiCredentials, GoogleSearchConfig, GoogleSearchConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
@@ -24,6 +24,7 @@ export class GoogleSearcStatusService extends AbstractStatusService {
     selector: "gebo-ai-google-search-wizard-component",
     templateUrl: "google-search-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIGoogleSearchWizardComponent") }]
 })
 export class GeboAIGoogleSearchWizardComponent extends BaseWizardSectionComponent {

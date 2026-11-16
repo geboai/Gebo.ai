@@ -53,6 +53,7 @@ import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDa
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.DataFlowEndpoints.KnowledgeBaseSearchLegs;
 import ai.gebo.model.base.GeboComponentInfo;
@@ -107,6 +108,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDaoProvider;
 	private final ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider;
 	private final ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider;
+	private final ObjectProvider<IGDecisionModelRuntimeConfigurationDao> decisionModelsDaoProvider;
 	private final ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider;
 	private final ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider;
 	private final ObjectProvider<IAgentConfigDao> agentConfigDaoProvider;
@@ -119,6 +121,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			@Autowired ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModelsDaoProvider,
 			@Autowired ObjectProvider<IGEmbeddingModelRuntimeConfigurationDao> embeddingModelsDaoProvider,
 			@Autowired ObjectProvider<IGRankerModelRuntimeConfigurationDao> rankerModelsDaoProvider,
+			@Autowired ObjectProvider<IGDecisionModelRuntimeConfigurationDao> decisionModelsDaoProvider,
 			@Autowired ObjectProvider<IGFullTextSearchDocumentsCachedDao> fullTextSearchProvider,
 			@Autowired ObjectProvider<IKnowledgeGraphSearchService> knowledgeGraphSearchProvider,
 			@Autowired ObjectProvider<IAgentConfigDao> agentConfigDaoProvider,
@@ -130,6 +133,7 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		this.chatModelsDaoProvider = chatModelsDaoProvider;
 		this.embeddingModelsDaoProvider = embeddingModelsDaoProvider;
 		this.rankerModelsDaoProvider = rankerModelsDaoProvider;
+		this.decisionModelsDaoProvider = decisionModelsDaoProvider;
 		this.fullTextSearchProvider = fullTextSearchProvider;
 		this.knowledgeGraphSearchProvider = knowledgeGraphSearchProvider;
 		this.agentConfigDaoProvider = agentConfigDaoProvider;
@@ -485,6 +489,16 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 		addUnique(flow, ranker);
 		processed(flow, "search-rank", key, "Agent " + member + ": documents found ranked against the query",
 				MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId, flow.qualifiedId(ranker.getId()));
+		// the ranked documents are judged for relevance by the decision model, when one is configured
+		final DataEndpoint decision = DataFlowEndpoints.decisionModel(
+				decisionModelsDaoProvider != null ? decisionModelsDaoProvider.getIfAvailable() : null);
+		if (decision != null) {
+			addUnique(flow, decision);
+			processed(flow, "search-relevance", key,
+					"Agent " + member + ": ranked documents judged for relevance to the query",
+					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId,
+					flow.qualifiedId(decision.getId()));
+		}
 	}
 
 	/** What the tools do at a target of the kind, as the register describes the link. */

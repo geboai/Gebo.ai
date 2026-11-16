@@ -54,7 +54,7 @@ import ai.gebo.model.EmbedType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.architecture.ai.model.ITokensCountable;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import lombok.Data;
 
 /**
@@ -73,6 +73,9 @@ import lombok.Data;
  */
 @Component
 public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(KnowledgeBaseBrowsingToolSource.class);
 
 	public static final String KNOWLEDGE_BASE_BROWSING_TOOL_SOURCE = "knowledge-base-browsing-tool-source";
@@ -902,7 +905,7 @@ public class KnowledgeBaseBrowsingToolSource implements IGToolCallbackSource {
 	<T> ListPage<T> fitted(List<T> items, int page, int pageSize, long total, ToolsTokenBudget budget, String tool) {
 		List<T> kept = items;
 		if (budget != null) {
-			final Function<T, String> rendering = JsonParser::toJson;
+			final Function<T, String> rendering = JSON_HELPER::toJson;
 			kept = ToolsTokenBudget.fitItems(items, budget.grant(budget.left()), rendering);
 		}
 		final int leftOut = items.size() - kept.size();

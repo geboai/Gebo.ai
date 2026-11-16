@@ -12,6 +12,7 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.A2AExportKinds;
 import gebo.microservices.api.client.brain.model.A2AServerConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusA2AServerConfig;
 import gebo.microservices.api.client.brain.model.OperationStatusBoolean;
@@ -72,6 +73,20 @@ public class GeboA2AServerAdminControllerApiTest {
     public void findByCodeA2AServerTest() {
         String code = null;
         OperationStatusA2AServerConfig response = api.findByCodeA2AServer(code);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getExportKindsA2AServerTest() {
+        A2AExportKinds response = api.getExportKindsA2AServer();
 
         // TODO: test validations
     }

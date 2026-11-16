@@ -28,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T22:08:53.638937800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:49:47.391112550+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -219,6 +219,9 @@ public class GAgentConfig {
 
   @JsonProperty("libraryTypeIds")
   private List<String> libraryTypeIds = null;
+
+  @JsonProperty("toolsNeedingConfirmation")
+  private List<String> toolsNeedingConfirmation = null;
 
   public GAgentConfig code(String code) {
     this.code = code;
@@ -834,6 +837,32 @@ public class GAgentConfig {
     this.libraryTypeIds = libraryTypeIds;
   }
 
+  public GAgentConfig toolsNeedingConfirmation(List<String> toolsNeedingConfirmation) {
+    this.toolsNeedingConfirmation = toolsNeedingConfirmation;
+    return this;
+  }
+
+  public GAgentConfig addToolsNeedingConfirmationItem(String toolsNeedingConfirmationItem) {
+    if (this.toolsNeedingConfirmation == null) {
+      this.toolsNeedingConfirmation = new ArrayList<>();
+    }
+    this.toolsNeedingConfirmation.add(toolsNeedingConfirmationItem);
+    return this;
+  }
+
+   /**
+   * Get toolsNeedingConfirmation
+   * @return toolsNeedingConfirmation
+  **/
+  @Schema(description = "")
+  public List<String> getToolsNeedingConfirmation() {
+    return toolsNeedingConfirmation;
+  }
+
+  public void setToolsNeedingConfirmation(List<String> toolsNeedingConfirmation) {
+    this.toolsNeedingConfirmation = toolsNeedingConfirmation;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -874,12 +903,13 @@ public class GAgentConfig {
         Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions) &&
         Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources) &&
         Objects.equals(this.additionalToolSources, gagentConfig.additionalToolSources) &&
-        Objects.equals(this.libraryTypeIds, gagentConfig.libraryTypeIds);
+        Objects.equals(this.libraryTypeIds, gagentConfig.libraryTypeIds) &&
+        Objects.equals(this.toolsNeedingConfirmation, gagentConfig.toolsNeedingConfirmation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds, toolsNeedingConfirmation);
   }
 
 
@@ -919,6 +949,7 @@ public class GAgentConfig {
     sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
     sb.append("    additionalToolSources: ").append(toIndentedString(additionalToolSources)).append("\n");
     sb.append("    libraryTypeIds: ").append(toIndentedString(libraryTypeIds)).append("\n");
+    sb.append("    toolsNeedingConfirmation: ").append(toIndentedString(toolsNeedingConfirmation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

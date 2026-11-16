@@ -18,7 +18,7 @@
  * listing, creating, and editing users in the Gebo.ai system.
  */
 
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { UserInfos, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 
@@ -32,6 +32,7 @@ import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST,
     selector: "gebo-ai-users-wizard-component",
     templateUrl: "users-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("UsersWizardComponent") }]
 })
 export class UsersWizardComponent extends BaseWizardSectionComponent {

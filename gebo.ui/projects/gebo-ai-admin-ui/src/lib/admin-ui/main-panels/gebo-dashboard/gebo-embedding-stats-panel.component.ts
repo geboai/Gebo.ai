@@ -17,13 +17,14 @@
  * It provides functionality to view hierarchical data about embeddings, with the ability
  * to drill down into categories for more detailed information.
  */
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { GeboCoreAnalisysControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { TotalHistogramBar, transformData } from "./graphics-data";
 
 @Component({
     selector: "gebo-ai-embedding-stats-panel",
     templateUrl: "gebo-embedding-stats-panel.component.html",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIEmbeddingStatsPanelComponent implements OnInit, OnChanges {

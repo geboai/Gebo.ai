@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from "@angular/core";
+import { Component, forwardRef, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { GContentSelectionFilterCriteria, IngestionFileType } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
@@ -7,6 +7,7 @@ const entityName: string = "SelectionFilterCriteria";
     selector: "gebo-ai-selection-filter-criteria-component",
     templateUrl: "content-selection-filter-criteria.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{
         provide: GEBO_AI_MODULE, useValue: "GeboAIContentSelectionFilterModule", multi: false
     }, {

@@ -16,16 +16,17 @@
  * Provides functionality for creating, editing, and deleting users with role management.
  * Handles form control for user properties and displays messages for operation outcomes.
  */
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AuthProviderDto, AuthProvidersControllerService, EditableUser, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { map, Observable } from "rxjs";
 @Component({
     selector: "gebo-ai-user-component",
     templateUrl: "gebo-ai-user.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false },
         // useValue, as in the change password component: this component has no getEntityName(),

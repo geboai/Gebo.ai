@@ -1,8 +1,8 @@
-import { Component, forwardRef, Inject, inject, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Inject, inject, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
 import { AuthProviderDto, BASE_PATH, OAuth2AdminControllerService, Oauth2ProviderModifiableData } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 const frontendRedirectRelativeUris: string[] = ["/ui/oauth2-land", "/ui/chat", "/"];
 const frontendRefererUris: string[] = ["/ui/login"];
@@ -12,7 +12,8 @@ const backendRefererUris: string[] = ["/oauth2/authorization/{registrationId}"];
 @Component({
     selector: "gebo-ai-oauth2-registration-component",
     templateUrl: "gebo-ai-oauth2-registration.component.html",
-    standalone: false, providers: [ 
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [ 
         { provide: GEBO_AI_MODULE, useValue: "GeboAIOauth2RegistrationModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIOauth2RegistrationComponent),
         multi: false  }

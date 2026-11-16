@@ -2,9 +2,11 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.invoker.ApiClient;
 
+import gebo.microservices.api.client.brain.model.AllowedPromptPlaceholders;
 import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
 import gebo.microservices.api.client.brain.model.GPromptTemplateLightView;
 import gebo.microservices.api.client.brain.model.GPromptUseInfo;
+import gebo.microservices.api.client.brain.model.KnownPromptPlaceholders;
 import gebo.microservices.api.client.brain.model.PromptFilter;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class GeboAdminPromptsControllerApi {
     private ApiClient apiClient;
@@ -137,6 +139,51 @@ public class GeboAdminPromptsControllerApi {
      * 
      * 
      * <p><b>200</b> - OK
+     * @param agentId  (required)
+     * @return List&lt;GPromptTemplateConfig&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<GPromptTemplateConfig> findPromptConfigByAgentId(String agentId) throws RestClientException {
+        return findPromptConfigByAgentIdWithHttpInfo(agentId).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param agentId  (required)
+     * @return ResponseEntity&lt;List&lt;GPromptTemplateConfig&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<GPromptTemplateConfig>> findPromptConfigByAgentIdWithHttpInfo(String agentId) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'agentId' is set
+        if (agentId == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'agentId' when calling findPromptConfigByAgentId");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/findPromptConfigByAgentId").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "agentId", agentId));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<GPromptTemplateConfig>> returnType = new ParameterizedTypeReference<List<GPromptTemplateConfig>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
      * @param code  (required)
      * @return GPromptTemplateConfig
      * @throws RestClientException if an error occurs while attempting to invoke the API
@@ -214,6 +261,92 @@ public class GeboAdminPromptsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GPromptTemplateLightView>> returnType = new ParameterizedTypeReference<List<GPromptTemplateLightView>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param promptUse  (required)
+     * @param agentPrompt  (optional)
+     * @return AllowedPromptPlaceholders
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public AllowedPromptPlaceholders getAllowedPromptPlaceholders(String promptUse, Boolean agentPrompt) throws RestClientException {
+        return getAllowedPromptPlaceholdersWithHttpInfo(promptUse, agentPrompt).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param promptUse  (required)
+     * @param agentPrompt  (optional)
+     * @return ResponseEntity&lt;AllowedPromptPlaceholders&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<AllowedPromptPlaceholders> getAllowedPromptPlaceholdersWithHttpInfo(String promptUse, Boolean agentPrompt) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'promptUse' is set
+        if (promptUse == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'promptUse' when calling getAllowedPromptPlaceholders");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getAllowedPromptPlaceholders").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "promptUse", promptUse));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "agentPrompt", agentPrompt));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<AllowedPromptPlaceholders> returnType = new ParameterizedTypeReference<AllowedPromptPlaceholders>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return KnownPromptPlaceholders
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public KnownPromptPlaceholders getKnownPromptPlaceholders() throws RestClientException {
+        return getKnownPromptPlaceholdersWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;KnownPromptPlaceholders&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<KnownPromptPlaceholders> getKnownPromptPlaceholdersWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/GeboAdminPromptsController/getKnownPromptPlaceholders").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<KnownPromptPlaceholders> returnType = new ParameterizedTypeReference<KnownPromptPlaceholders>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

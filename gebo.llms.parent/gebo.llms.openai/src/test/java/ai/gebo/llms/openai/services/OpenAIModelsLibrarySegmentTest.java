@@ -86,8 +86,8 @@ class OpenAIModelsLibrarySegmentTest {
 			assertEquals(128000, library.findByProviderIdAndModelId("openai", id).getMaxOutputToken(), id);
 			assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", id).getSupportsFunctionCalls(), id);
 		}
-		assertFalse(OpenAiResponsesChatModel.usesResponsesApi("gpt-5.2"), "Chat Completions");
-		assertFalse(OpenAiResponsesChatModel.usesResponsesApi("gpt-5.4-mini"), "Chat Completions");
+		assertFalse(OpenAiApiRouting.usesResponsesApi("gpt-5.2"), "Chat Completions");
+		assertFalse(OpenAiApiRouting.usesResponsesApi("gpt-5.4-mini"), "Chat Completions");
 	}
 
 	@Test

@@ -17,11 +17,11 @@
  * Google Vertex embedding model configurations, including CRUD operations,
  * model selection, and secret management integration.
  */
-import { Component, forwardRef, Injector } from "@angular/core";
+import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GBaseChatModelChoice, GGoogleVertexEmbeddingModelConfig, GoogleVertexEmbeddingModelsConfigurationControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 import { isValidUrl } from "../utils/url-ok";
@@ -36,7 +36,8 @@ import { alignChoosedModel } from "../utils/choosed-model-alignment";
 @Component({
     selector: "gebo-ai-google-vertex-embed-model-admin-component",
     templateUrl: "gebo-ai-google-vertex-embedmodel-admin.component.html",
-    standalone: false, providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [{ provide: GEBO_AI_MODULE, useValue: "GeboAiLargeLanguageModelsModule", multi: false }, 
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIGoogleVertexEmbedModelAdminComponent), multi: false  }
     ]
 })

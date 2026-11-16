@@ -204,3 +204,16 @@ ai.gebo.llms.generic.config:
       providerId: generic-openai
       description: Standard ranking API ranking model
       baseUrl:
+
+  # Decision model providers: OpenAI compatible servers exposing a Decisions API
+  # (/v1/decisions, the one Spring AI's OpenAiDecisionModel calls) for the small
+  # models answering yes/no, choice and score questions. No public compatible
+  # provider documents one yet, so only the generic entry is declared: the admin
+  # sets the base url, the token when the server wants one, and picks the model
+  # among the ones the server lists as decision models (or the defaultModel below).
+  decisionModelProviders:
+    - code: decision-generic-openai
+      providerId: generic-openai
+      description: Standard Decisions API decision model
+      optionalAuthentication: true
+      baseUrl:

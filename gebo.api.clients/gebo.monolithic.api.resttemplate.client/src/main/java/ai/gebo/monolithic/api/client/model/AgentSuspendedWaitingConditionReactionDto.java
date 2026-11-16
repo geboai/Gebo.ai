@@ -27,7 +27,7 @@ import java.util.Map;
  * AgentSuspendedWaitingConditionReactionDto
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-09T19:03:18.605928900+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
 
 public class AgentSuspendedWaitingConditionReactionDto {
   @JsonProperty("conditionType")

@@ -28,7 +28,6 @@ export interface GBedrockChatModelConfig {
     accessibleGroups?: Array<string>;
     accessibleUsers?: Array<string>;
     accessibleToAll?: boolean;
-    enabledFunctions?: Array<string>;
     temperature?: number;
     forUses?: Array<GBedrockChatModelConfig.ForUsesEnum>;
     features?: Array<GBedrockChatModelConfig.FeaturesEnum>;

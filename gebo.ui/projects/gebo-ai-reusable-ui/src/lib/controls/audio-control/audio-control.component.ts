@@ -18,7 +18,7 @@
  * previously recorded or provided audio. The component implements lifecycle hooks
  * to handle initialization, changes to inputs, and cleanup.
  */
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 
 /** Why recording is currently unavailable, so callers can show a specific message instead of a generic error. */
@@ -28,6 +28,7 @@ export type GeboAudioErrorReason = 'permission-denied' | 'no-device' | 'device-b
     selector: "gebo-ai-audio-component",
     templateUrl: "audio-control.component.html",
     standalone: false,
+     changeDetection: ChangeDetectionStrategy.Eager,
      providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIAudioControlModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIAudioControlComponent")}

@@ -286,9 +286,9 @@ public class RegoloAIModelsListProviderService implements IGModelsListProvider {
 				? model.getModel_info().get("max_input_tokens")
 				: null);
 		if (max_input_tokens != null)
-			return new Integer(max_input_tokens.intValue());
+			return Integer.valueOf(max_input_tokens.intValue());
 		if (max_tokens != null)
-			return new Integer(max_tokens.intValue());
+			return Integer.valueOf(max_tokens.intValue());
 		return null;
 	}
 

@@ -13,7 +13,7 @@
 
 
 <p-panel [header]="title" [formGroup]="formGroup" #docsListPanel>
-  <!-- [target] scopes the mask to this panel; without it PrimeNG masks the whole document. -->
+  <!-- [target] scopes the mask to this panel; without it Optimus UI masks the whole document. -->
   <p-blockUI [blocked]="loading" [target]="docsListPanel">
     @if (loading) {
       <i class="pi pi-lock" style="font-size: 3rem"></i>

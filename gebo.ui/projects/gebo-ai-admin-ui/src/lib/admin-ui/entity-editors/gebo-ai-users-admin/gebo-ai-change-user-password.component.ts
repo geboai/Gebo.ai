@@ -1,15 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ChangeUsernamePasswordData, GUserMessage, UsersAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE,GeboAITranslationService,fieldHostComponentName } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, MessageService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, MessageService, ToastMessageOptions } from "@openng/optimus-ui/api";
 
 
 
 @Component({
     selector: "gebo-ai-change-user-password-component",
     templateUrl: "gebo-ai-change-user-password.component.html",
-    standalone: false, providers: [
+    standalone: false, changeDetection: ChangeDetectionStrategy.Eager,
+ providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIUsersGroupModule", multi: false },
         {
             provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIChangeUserPasswordComponent"),

@@ -103,7 +103,7 @@ export function renderData(result: ComputedWorkflowStatus, workflowStepsSummarie
   };
   return out;
 }/**
- * Type definition for PrimeNG pie chart data structure.
+ * Type definition for Optimus UI pie chart data structure.
  * Represents a structured format for chart visualization with labels, datasets, and styling options.
  */
 

@@ -10,12 +10,12 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
-import { TabsModule } from "primeng/tabs";
-import { SelectModule } from "primeng/select";
-import { ChartModule } from "primeng/chart";
-import { ButtonModule } from "primeng/button";
-import { BlockUIModule } from "primeng/blockui";
-import { PanelModule } from "primeng/panel";
+import { TabsModule } from "@openng/optimus-ui/tabs";
+import { SelectModule } from "@openng/optimus-ui/select";
+import { ChartModule } from "@openng/optimus-ui/chart";
+import { ButtonModule } from "@openng/optimus-ui/button";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
+import { PanelModule } from "@openng/optimus-ui/panel";
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
 
 import { GeboAIWorkflowStatsAdminDashboardComponent } from "./workflow-stats-admin-dashboard.component";

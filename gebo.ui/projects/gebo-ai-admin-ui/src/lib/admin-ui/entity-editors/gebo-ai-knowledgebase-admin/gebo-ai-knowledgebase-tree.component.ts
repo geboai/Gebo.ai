@@ -10,11 +10,11 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { GKnowledgeBase, GProject, IngestionFileType, IngestionFileTypesLibraryControllerService, IngestionHandlerConfig, VDocumentInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { cloneTreeNode, EnrichedChild, extractTargetType, fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboUIActionRequest, GeboUIActionRoutingService, getNodeIcon, getVFSIcon, isProjectEndpoint, refreshTreeBranch, treeNodeTrackBy } from "@Gebo.ai/reusable-ui";
-import { TreeNode } from "primeng/api";
-import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
+import { TreeNode } from "@openng/optimus-ui/api";
+import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "@openng/optimus-ui/tree";
 
 /**
  * AI generated comments
@@ -30,6 +30,7 @@ import { TreeNodeExpandEvent, TreeNodeSelectEvent } from "primeng/tree";
     selector: "gebo-ai-knowledgebase-tree-component",
     templateUrl: "gebo-ai-knowledgebase-tree.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
       { provide: GEBO_AI_MODULE, useValue: "GeboAiKnowledgeBaseModule", multi: false }, 
       { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiKnowledgeBaseTreeComponent")  }
@@ -71,7 +72,7 @@ export class GeboAiKnowledgeBaseTreeComponent implements OnInit, OnChanges {
   /**
    * Hands the tree the branch of a node whose contents have just changed.
    *
-   * PrimeNG renders the tree with OnPush nodes: filling `children` from an http
+   * Optimus UI renders the tree with OnPush nodes: filling `children` from an http
    * callback is invisible to it until the branch is handed over as new node
    * objects, which is why an expansion used to need a second click to show up and
    * why the toggler kept the icon it had when the request was fired.

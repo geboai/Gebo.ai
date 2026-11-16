@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * ComponentLLMSStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-08T10:33:08.754105800+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:00:30.875750714+01:00[Europe/Rome]")
 
 public class ComponentLLMSStatus {
   @JsonProperty("isSetup")
@@ -49,6 +49,9 @@ public class ComponentLLMSStatus {
   @JsonProperty("transcriptModelSetup")
   private Boolean transcriptModelSetup = null;
 
+  @JsonProperty("decisionModelSetup")
+  private Boolean decisionModelSetup = null;
+
   @JsonProperty("chatModelCode")
   private String chatModelCode = null;
 
@@ -70,6 +73,9 @@ public class ComponentLLMSStatus {
   @JsonProperty("transcriptModelCode")
   private String transcriptModelCode = null;
 
+  @JsonProperty("decisionModelCode")
+  private String decisionModelCode = null;
+
   @JsonProperty("chatModelProviderId")
   private String chatModelProviderId = null;
 
@@ -90,6 +96,9 @@ public class ComponentLLMSStatus {
 
   @JsonProperty("transcriptModelProviderId")
   private String transcriptModelProviderId = null;
+
+  @JsonProperty("decisionModelProviderId")
+  private String decisionModelProviderId = null;
 
   public ComponentLLMSStatus isSetup(Boolean isSetup) {
     this.isSetup = isSetup;
@@ -235,6 +244,24 @@ public class ComponentLLMSStatus {
     this.transcriptModelSetup = transcriptModelSetup;
   }
 
+  public ComponentLLMSStatus decisionModelSetup(Boolean decisionModelSetup) {
+    this.decisionModelSetup = decisionModelSetup;
+    return this;
+  }
+
+   /**
+   * Get decisionModelSetup
+   * @return decisionModelSetup
+  **/
+  @Schema(description = "")
+  public Boolean isDecisionModelSetup() {
+    return decisionModelSetup;
+  }
+
+  public void setDecisionModelSetup(Boolean decisionModelSetup) {
+    this.decisionModelSetup = decisionModelSetup;
+  }
+
   public ComponentLLMSStatus chatModelCode(String chatModelCode) {
     this.chatModelCode = chatModelCode;
     return this;
@@ -359,6 +386,24 @@ public class ComponentLLMSStatus {
 
   public void setTranscriptModelCode(String transcriptModelCode) {
     this.transcriptModelCode = transcriptModelCode;
+  }
+
+  public ComponentLLMSStatus decisionModelCode(String decisionModelCode) {
+    this.decisionModelCode = decisionModelCode;
+    return this;
+  }
+
+   /**
+   * Get decisionModelCode
+   * @return decisionModelCode
+  **/
+  @Schema(description = "")
+  public String getDecisionModelCode() {
+    return decisionModelCode;
+  }
+
+  public void setDecisionModelCode(String decisionModelCode) {
+    this.decisionModelCode = decisionModelCode;
   }
 
   public ComponentLLMSStatus chatModelProviderId(String chatModelProviderId) {
@@ -487,6 +532,24 @@ public class ComponentLLMSStatus {
     this.transcriptModelProviderId = transcriptModelProviderId;
   }
 
+  public ComponentLLMSStatus decisionModelProviderId(String decisionModelProviderId) {
+    this.decisionModelProviderId = decisionModelProviderId;
+    return this;
+  }
+
+   /**
+   * Get decisionModelProviderId
+   * @return decisionModelProviderId
+  **/
+  @Schema(description = "")
+  public String getDecisionModelProviderId() {
+    return decisionModelProviderId;
+  }
+
+  public void setDecisionModelProviderId(String decisionModelProviderId) {
+    this.decisionModelProviderId = decisionModelProviderId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -505,6 +568,7 @@ public class ComponentLLMSStatus {
         Objects.equals(this.imagesModelSetup, componentLLMSStatus.imagesModelSetup) &&
         Objects.equals(this.ttsModelSetup, componentLLMSStatus.ttsModelSetup) &&
         Objects.equals(this.transcriptModelSetup, componentLLMSStatus.transcriptModelSetup) &&
+        Objects.equals(this.decisionModelSetup, componentLLMSStatus.decisionModelSetup) &&
         Objects.equals(this.chatModelCode, componentLLMSStatus.chatModelCode) &&
         Objects.equals(this.internalServicesChatModelCode, componentLLMSStatus.internalServicesChatModelCode) &&
         Objects.equals(this.embeddedModelCode, componentLLMSStatus.embeddedModelCode) &&
@@ -512,18 +576,20 @@ public class ComponentLLMSStatus {
         Objects.equals(this.imagesModelCode, componentLLMSStatus.imagesModelCode) &&
         Objects.equals(this.ttsModelCode, componentLLMSStatus.ttsModelCode) &&
         Objects.equals(this.transcriptModelCode, componentLLMSStatus.transcriptModelCode) &&
+        Objects.equals(this.decisionModelCode, componentLLMSStatus.decisionModelCode) &&
         Objects.equals(this.chatModelProviderId, componentLLMSStatus.chatModelProviderId) &&
         Objects.equals(this.internalServicesChatModelProviderId, componentLLMSStatus.internalServicesChatModelProviderId) &&
         Objects.equals(this.embeddedModelProviderId, componentLLMSStatus.embeddedModelProviderId) &&
         Objects.equals(this.rankingModelProviderId, componentLLMSStatus.rankingModelProviderId) &&
         Objects.equals(this.imagesModelProviderId, componentLLMSStatus.imagesModelProviderId) &&
         Objects.equals(this.ttsModelProviderId, componentLLMSStatus.ttsModelProviderId) &&
-        Objects.equals(this.transcriptModelProviderId, componentLLMSStatus.transcriptModelProviderId);
+        Objects.equals(this.transcriptModelProviderId, componentLLMSStatus.transcriptModelProviderId) &&
+        Objects.equals(this.decisionModelProviderId, componentLLMSStatus.decisionModelProviderId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(isSetup, chatModelSetup, internalServicesChatModelSetup, embeddedModelSetup, rankingModelSetup, imagesModelSetup, ttsModelSetup, transcriptModelSetup, chatModelCode, internalServicesChatModelCode, embeddedModelCode, rankingModelCode, imagesModelCode, ttsModelCode, transcriptModelCode, chatModelProviderId, internalServicesChatModelProviderId, embeddedModelProviderId, rankingModelProviderId, imagesModelProviderId, ttsModelProviderId, transcriptModelProviderId);
+    return Objects.hash(isSetup, chatModelSetup, internalServicesChatModelSetup, embeddedModelSetup, rankingModelSetup, imagesModelSetup, ttsModelSetup, transcriptModelSetup, decisionModelSetup, chatModelCode, internalServicesChatModelCode, embeddedModelCode, rankingModelCode, imagesModelCode, ttsModelCode, transcriptModelCode, decisionModelCode, chatModelProviderId, internalServicesChatModelProviderId, embeddedModelProviderId, rankingModelProviderId, imagesModelProviderId, ttsModelProviderId, transcriptModelProviderId, decisionModelProviderId);
   }
 
 
@@ -540,6 +606,7 @@ public class ComponentLLMSStatus {
     sb.append("    imagesModelSetup: ").append(toIndentedString(imagesModelSetup)).append("\n");
     sb.append("    ttsModelSetup: ").append(toIndentedString(ttsModelSetup)).append("\n");
     sb.append("    transcriptModelSetup: ").append(toIndentedString(transcriptModelSetup)).append("\n");
+    sb.append("    decisionModelSetup: ").append(toIndentedString(decisionModelSetup)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    internalServicesChatModelCode: ").append(toIndentedString(internalServicesChatModelCode)).append("\n");
     sb.append("    embeddedModelCode: ").append(toIndentedString(embeddedModelCode)).append("\n");
@@ -547,6 +614,7 @@ public class ComponentLLMSStatus {
     sb.append("    imagesModelCode: ").append(toIndentedString(imagesModelCode)).append("\n");
     sb.append("    ttsModelCode: ").append(toIndentedString(ttsModelCode)).append("\n");
     sb.append("    transcriptModelCode: ").append(toIndentedString(transcriptModelCode)).append("\n");
+    sb.append("    decisionModelCode: ").append(toIndentedString(decisionModelCode)).append("\n");
     sb.append("    chatModelProviderId: ").append(toIndentedString(chatModelProviderId)).append("\n");
     sb.append("    internalServicesChatModelProviderId: ").append(toIndentedString(internalServicesChatModelProviderId)).append("\n");
     sb.append("    embeddedModelProviderId: ").append(toIndentedString(embeddedModelProviderId)).append("\n");
@@ -554,6 +622,7 @@ public class ComponentLLMSStatus {
     sb.append("    imagesModelProviderId: ").append(toIndentedString(imagesModelProviderId)).append("\n");
     sb.append("    ttsModelProviderId: ").append(toIndentedString(ttsModelProviderId)).append("\n");
     sb.append("    transcriptModelProviderId: ").append(toIndentedString(transcriptModelProviderId)).append("\n");
+    sb.append("    decisionModelProviderId: ").append(toIndentedString(decisionModelProviderId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

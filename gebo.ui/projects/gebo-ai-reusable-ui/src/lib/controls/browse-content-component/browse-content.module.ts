@@ -15,20 +15,20 @@
  * @description AI generated comments
  * This module provides components for browsing and viewing content in the application.
  * It sets up the necessary dependencies and exports components that allow users to browse
- * content and view HTML content in a structured way. The module leverages PrimeNG's panel
+ * content and view HTML content in a structured way. The module leverages Optimus UI's panel
  * component for UI presentation.
  */
 
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { PanelModule } from "primeng/panel";
+import { PanelModule } from "@openng/optimus-ui/panel";
 import { BrowseContentComponent } from "./browse-content.component";
 import { GeboAIViewHtmlComponent } from "./view-html-content.component";
 
 /**
  * @NgModule BrowseContentModule
  * @description Angular module that encapsulates content browsing functionality.
- * This module imports common Angular modules and PrimeNG's Panel module for UI components.
+ * This module imports common Angular modules and Optimus UI's Panel module for UI components.
  * It declares and exports two main components:
  * - BrowseContentComponent: Likely handles the main content browsing interface
  * - GeboAIViewHtmlComponent: Specialized component for viewing HTML content

@@ -13,21 +13,21 @@
 /**
  * AI generated comments
  * This module provides user profile management functionality for the GeboAI application.
- * It sets up routing for the user profile component and imports necessary Angular and PrimeNG modules
+ * It sets up routing for the user profile component and imports necessary Angular and Optimus UI modules
  * required for form handling, UI components, and routing.
  */
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { PasswordModule } from "primeng/password";
-import { PanelModule } from "primeng/panel";
-import { BlockUIModule } from "primeng/blockui";
+import { PasswordModule } from "@openng/optimus-ui/password";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-import { InputTextModule } from "primeng/inputtext";
-import { ButtonModule } from "primeng/button";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { GeboAIUserProfileComponent } from "./user-profile.component";
 import { GeboAIChangePasswordComponent } from "./change-password.component";
-import { DialogModule } from "primeng/dialog";
+import { DialogModule } from "@openng/optimus-ui/dialog";
 import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
 /**
@@ -41,7 +41,7 @@ const routes:Routes=[{
 
 /**
  * NgModule that bundles all the components and dependencies required for user profile functionality.
- * It imports UI modules from PrimeNG (like Password, Panel, Dialog), form handling modules,
+ * It imports UI modules from Optimus UI (like Password, Panel, Dialog), form handling modules,
  * and sets up routing. It declares the user profile and password change components.
  */
 @NgModule({

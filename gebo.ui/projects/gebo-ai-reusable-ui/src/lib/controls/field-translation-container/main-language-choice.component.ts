@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboAITranslationService } from "./gebo-translation.service";
 
-import { MegaMenuItem } from "primeng/api";
+import { MegaMenuItem } from "@openng/optimus-ui/api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
 import { GEBO_AI_LOCAL_STORAGE_LANG } from "./text-language-resources";
 interface LanguageSetting {
@@ -13,6 +13,7 @@ interface LanguageSetting {
     templateUrl: "main-language-choice.component.html",
     styleUrl: "language-choice.component.css",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIMultilanguageModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useValue: fieldHostComponentName("GeboAIMainLanguageChoiceComponent"), multi: false }

@@ -59,6 +59,7 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.ChatNotificationContent.NotificationType;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GThinkingEvent;
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GToolCallProgress;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse;
 import ai.gebo.llms.chat.abstraction.layer.services.impl.ThinkingStream;
@@ -384,6 +385,7 @@ public class ReportWriterReactiveAgentServiceImpl
 			final ThinkingStream thinking = new ThinkingStream();
 			return chunks.map(chunk -> {
 				thinkingTo(ui, thinking.delta(chunk.thinking()));
+				toolCallsTo(ui, chunk.toolCalls());
 				if (!chunk.answer().isBlank()) {
 					// the text starts: the reasoning ended
 					thinkingTo(ui, thinking.complete());
@@ -398,6 +400,25 @@ public class ReportWriterReactiveAgentServiceImpl
 	}
 
 	/** The reasoning events sent to the user's chat, never failing the answer. */
+	/**
+	 * The tool calls the model is writing, sent to the chat as they come (the pieces of
+	 * their arguments, then each call complete); nothing when the request has no chat.
+	 */
+	protected void toolCallsTo(ISinkUIEmitter ui, List<GChatAnswerChunk.ToolCallProgress> toolCalls) {
+		if (ui == null || toolCalls.isEmpty()) {
+			return;
+		}
+		try {
+			for (GChatAnswerChunk.ToolCallProgress toolCall : toolCalls) {
+				ui.next(new GeboChatMessageEnvelope<GToolCallProgress>(GToolCallProgress.of(toolCall)));
+			}
+		} catch (RuntimeException e) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agent id:" + getId() + " the tool calls could not be sent to the chat: " + e.getMessage());
+			}
+		}
+	}
+
 	protected void thinkingTo(ISinkUIEmitter ui, List<GThinkingEvent> events) {
 		if (ui == null || events.isEmpty()) {
 			return;

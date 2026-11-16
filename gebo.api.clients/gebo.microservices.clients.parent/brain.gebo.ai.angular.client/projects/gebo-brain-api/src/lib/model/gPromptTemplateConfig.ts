@@ -18,7 +18,6 @@ export interface GPromptTemplateConfig {
     toolsResultsPromptTemplate?: string;
     chatHistory: GPromptTemplateConfig.ChatHistoryEnum;
     contextDocuments: GPromptTemplateConfig.ContextDocumentsEnum;
-    toolsCalling: GPromptTemplateConfig.ToolsCallingEnum;
     langCode?: string;
     promptUse: string;
     modelProvider?: string;
@@ -40,10 +39,5 @@ export namespace GPromptTemplateConfig {
     export const ContextDocumentsEnum = {
         REQUIRED: 'REQUIRED' as ContextDocumentsEnum,
         NOTREQUIRED: 'NOT_REQUIRED' as ContextDocumentsEnum
-    };
-    export type ToolsCallingEnum = 'REQUIRED' | 'NOT_REQUIRED';
-    export const ToolsCallingEnum = {
-        REQUIRED: 'REQUIRED' as ToolsCallingEnum,
-        NOTREQUIRED: 'NOT_REQUIRED' as ToolsCallingEnum
     };
 }

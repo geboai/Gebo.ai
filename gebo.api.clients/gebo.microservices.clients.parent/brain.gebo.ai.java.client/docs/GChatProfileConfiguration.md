@@ -11,7 +11,6 @@ Name | Type | Description | Notes
 **dateCreated** | [**Date**](Date.md) |  |  [optional]
 **embeddingModelReference** | [**GObjectRefGBaseEmbeddingModelConfig**](GObjectRefGBaseEmbeddingModelConfig.md) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
-**enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]

@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import {
     BraveSearchConfigurationControllerService,
@@ -51,6 +51,7 @@ export class WebSearchStatusService extends AbstractStatusService {
     selector: "gebo-ai-web-search-wizard-component",
     templateUrl: "web-search-wizard.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIWebSearchWizardComponent") }]
 })
 export class GeboAIWebSearchWizardComponent extends BaseWizardSectionComponent {

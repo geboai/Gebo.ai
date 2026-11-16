@@ -14,9 +14,11 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.AgentMountedTools;
 import gebo.microservices.api.client.brain.model.AgentServiceDescriptor;
+import gebo.microservices.api.client.brain.model.AgentTypeCompatibility;
 import gebo.microservices.api.client.brain.model.GAgentConfig;
 import gebo.microservices.api.client.brain.model.GAgentsNetwork;
 import gebo.microservices.api.client.brain.model.GBaseObject;
+import gebo.microservices.api.client.brain.model.NetworkServiceFactoryDescriptor;
 import gebo.microservices.api.client.brain.model.OperationStatusGAgentsNetwork;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -43,6 +45,21 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void copyAgentsNetworkTest() {
+        String code = null;
+        OperationStatusGAgentsNetwork response = api.copyAgentsNetwork(code);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void deleteAgentsNetworkTest() {
         GAgentsNetwork body = null;
         OperationStatusGAgentsNetwork response = api.deleteAgentsNetwork(body);
@@ -59,7 +76,7 @@ public class GeboAgentsNetworkAdminControllerApiTest {
      */
     @Test
     public void getAgentConfigsTest() {
-        List<GBaseObject> response = api.getAgentConfigs();
+        List<GAgentConfig> response = api.getAgentConfigs();
 
         // TODO: test validations
     }
@@ -89,6 +106,20 @@ public class GeboAgentsNetworkAdminControllerApiTest {
     @Test
     public void getAgentServicesTest() {
         List<AgentServiceDescriptor> response = api.getAgentServices();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAgentTypesCompatibilityTest() {
+        List<AgentTypeCompatibility> response = api.getAgentTypesCompatibility();
 
         // TODO: test validations
     }
@@ -177,6 +208,20 @@ public class GeboAgentsNetworkAdminControllerApiTest {
     @Test
     public void getNetworkAdapterServicesTest() {
         List<AgentServiceDescriptor> response = api.getNetworkAdapterServices();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getNetworkServiceFactoriesTest() {
+        List<NetworkServiceFactoryDescriptor> response = api.getNetworkServiceFactories();
 
         // TODO: test validations
     }

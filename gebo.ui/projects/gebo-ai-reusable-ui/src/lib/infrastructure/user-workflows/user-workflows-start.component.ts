@@ -1,9 +1,9 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
 import { StartWorkflowData, UserWorkflowsControllerService, UserWorkFlowStartResponse } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute } from "@angular/router";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { getAuth, resetAuth } from "../gebo-credentials";
 
 
@@ -11,6 +11,7 @@ import { getAuth, resetAuth } from "../gebo-credentials";
     selector: 'gebo-ai-user-start-workflows',
     templateUrl: 'user-workflows-start.component.html',
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{
         provide: GEBO_AI_MODULE, useValue: "GeboAIUserWorkflowsModule", multi: false
     }, {

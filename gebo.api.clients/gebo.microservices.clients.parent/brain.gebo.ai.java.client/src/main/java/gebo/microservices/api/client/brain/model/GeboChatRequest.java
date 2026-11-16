@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.AdditionalContent;
 import gebo.microservices.api.client.brain.model.GResponseDocumentRef;
 import gebo.microservices.api.client.brain.model.GeboRagRequestCustomConfig;
+import gebo.microservices.api.client.brain.model.NetworkOfAgentsSuspendedStateReaction;
 import gebo.microservices.api.client.brain.model.UserUploadedContent;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ import java.util.List;
  * GeboChatRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class GeboChatRequest {
   @JsonProperty("id")
@@ -120,6 +121,21 @@ public class GeboChatRequest {
 
   @JsonProperty("userLanguage")
   private String userLanguage = null;
+
+  @JsonProperty("runOrigin")
+  private String runOrigin = null;
+
+  @JsonProperty("attended")
+  private Boolean attended = null;
+
+  @JsonProperty("externalSystem")
+  private String externalSystem = null;
+
+  @JsonProperty("externalSessionKey")
+  private String externalSessionKey = null;
+
+  @JsonProperty("networkOfAgentsSuspendedStateReaction")
+  private NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction = null;
 
   @JsonProperty("additionalContents")
   private List<AdditionalContent> additionalContents = null;
@@ -491,6 +507,96 @@ public class GeboChatRequest {
     this.userLanguage = userLanguage;
   }
 
+  public GeboChatRequest runOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+    return this;
+  }
+
+   /**
+   * Get runOrigin
+   * @return runOrigin
+  **/
+  @Schema(description = "")
+  public String getRunOrigin() {
+    return runOrigin;
+  }
+
+  public void setRunOrigin(String runOrigin) {
+    this.runOrigin = runOrigin;
+  }
+
+  public GeboChatRequest attended(Boolean attended) {
+    this.attended = attended;
+    return this;
+  }
+
+   /**
+   * Get attended
+   * @return attended
+  **/
+  @Schema(description = "")
+  public Boolean isAttended() {
+    return attended;
+  }
+
+  public void setAttended(Boolean attended) {
+    this.attended = attended;
+  }
+
+  public GeboChatRequest externalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+    return this;
+  }
+
+   /**
+   * Get externalSystem
+   * @return externalSystem
+  **/
+  @Schema(description = "")
+  public String getExternalSystem() {
+    return externalSystem;
+  }
+
+  public void setExternalSystem(String externalSystem) {
+    this.externalSystem = externalSystem;
+  }
+
+  public GeboChatRequest externalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
+    return this;
+  }
+
+   /**
+   * Get externalSessionKey
+   * @return externalSessionKey
+  **/
+  @Schema(description = "")
+  public String getExternalSessionKey() {
+    return externalSessionKey;
+  }
+
+  public void setExternalSessionKey(String externalSessionKey) {
+    this.externalSessionKey = externalSessionKey;
+  }
+
+  public GeboChatRequest networkOfAgentsSuspendedStateReaction(NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction) {
+    this.networkOfAgentsSuspendedStateReaction = networkOfAgentsSuspendedStateReaction;
+    return this;
+  }
+
+   /**
+   * Get networkOfAgentsSuspendedStateReaction
+   * @return networkOfAgentsSuspendedStateReaction
+  **/
+  @Schema(description = "")
+  public NetworkOfAgentsSuspendedStateReaction getNetworkOfAgentsSuspendedStateReaction() {
+    return networkOfAgentsSuspendedStateReaction;
+  }
+
+  public void setNetworkOfAgentsSuspendedStateReaction(NetworkOfAgentsSuspendedStateReaction networkOfAgentsSuspendedStateReaction) {
+    this.networkOfAgentsSuspendedStateReaction = networkOfAgentsSuspendedStateReaction;
+  }
+
   public GeboChatRequest additionalContents(List<AdditionalContent> additionalContents) {
     this.additionalContents = additionalContents;
     return this;
@@ -563,13 +669,18 @@ public class GeboChatRequest {
         Objects.equals(this.searchRequested, geboChatRequest.searchRequested) &&
         Objects.equals(this.searchForbidden, geboChatRequest.searchForbidden) &&
         Objects.equals(this.userLanguage, geboChatRequest.userLanguage) &&
+        Objects.equals(this.runOrigin, geboChatRequest.runOrigin) &&
+        Objects.equals(this.attended, geboChatRequest.attended) &&
+        Objects.equals(this.externalSystem, geboChatRequest.externalSystem) &&
+        Objects.equals(this.externalSessionKey, geboChatRequest.externalSessionKey) &&
+        Objects.equals(this.networkOfAgentsSuspendedStateReaction, geboChatRequest.networkOfAgentsSuspendedStateReaction) &&
         Objects.equals(this.additionalContents, geboChatRequest.additionalContents) &&
         Objects.equals(this.tokensSize, geboChatRequest.tokensSize);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, additionalContents, tokensSize);
+    return Objects.hash(id, userChatContextCode, chatProfileCode, chatModelCode, streamResponse, query, rewrittenQuery, customRagConfig, choosedKnowledgeBases, chatPipelineProcessId, forcedRequestDocuments, forcedDocumentsRef, userUploadedContents, deepSearchDataSources, userIntent, searchRequested, searchForbidden, userLanguage, runOrigin, attended, externalSystem, externalSessionKey, networkOfAgentsSuspendedStateReaction, additionalContents, tokensSize);
   }
 
 
@@ -596,6 +707,11 @@ public class GeboChatRequest {
     sb.append("    searchRequested: ").append(toIndentedString(searchRequested)).append("\n");
     sb.append("    searchForbidden: ").append(toIndentedString(searchForbidden)).append("\n");
     sb.append("    userLanguage: ").append(toIndentedString(userLanguage)).append("\n");
+    sb.append("    runOrigin: ").append(toIndentedString(runOrigin)).append("\n");
+    sb.append("    attended: ").append(toIndentedString(attended)).append("\n");
+    sb.append("    externalSystem: ").append(toIndentedString(externalSystem)).append("\n");
+    sb.append("    externalSessionKey: ").append(toIndentedString(externalSessionKey)).append("\n");
+    sb.append("    networkOfAgentsSuspendedStateReaction: ").append(toIndentedString(networkOfAgentsSuspendedStateReaction)).append("\n");
     sb.append("    additionalContents: ").append(toIndentedString(additionalContents)).append("\n");
     sb.append("    tokensSize: ").append(toIndentedString(tokensSize)).append("\n");
     sb.append("}");

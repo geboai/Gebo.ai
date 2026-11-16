@@ -11,6 +11,7 @@ import { GeboFastInstallationSetupControllerService } from './api/geboFastInstal
 import { GeboFastWorkFolderSetupControllerService } from './api/geboFastWorkFolderSetupController.service';
 import { GeneratedAdminApiKeyControllerService } from './api/generatedAdminApiKeyController.service';
 import { GeneratedUserApiKeyControllerService } from './api/generatedUserApiKeyController.service';
+import { InstallationClusterControllerService } from './api/installationClusterController.service';
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
@@ -18,6 +19,8 @@ import { SecretsClusterControllerService } from './api/secretsClusterController.
 import { SecretsControllerService } from './api/secretsController.service';
 import { SecurityDirectoryClusterControllerService } from './api/securityDirectoryClusterController.service';
 import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
+import { SessionControllerService } from './api/sessionController.service';
+import { SessionsAdminControllerService } from './api/sessionsAdminController.service';
 import { SystemMessagesAdminControllerService } from './api/systemMessagesAdminController.service';
 import { SystemMessagesControllerService } from './api/systemMessagesController.service';
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
@@ -39,6 +42,7 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     GeboFastWorkFolderSetupControllerService,
     GeneratedAdminApiKeyControllerService,
     GeneratedUserApiKeyControllerService,
+    InstallationClusterControllerService,
     InternalMessagingTopologyControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
@@ -46,6 +50,8 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     SecretsControllerService,
     SecurityDirectoryClusterControllerService,
     SecurityHeaderDataCompletionControllerService,
+    SessionControllerService,
+    SessionsAdminControllerService,
     SystemMessagesAdminControllerService,
     SystemMessagesControllerService,
     TokenRenewControllerService,

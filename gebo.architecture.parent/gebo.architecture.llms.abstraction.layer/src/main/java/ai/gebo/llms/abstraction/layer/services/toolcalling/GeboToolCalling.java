@@ -258,6 +258,20 @@ public final class GeboToolCalling {
 	}
 
 	/**
+	 * The tools of a model call as the controlling software wants the model given them:
+	 * through the {@link IToolCallbacksDecorator} it loaded, as they are when it loaded
+	 * none.
+	 */
+	public List<ToolCallback> decorated(List<ToolCallback> tools) {
+		final Object decorator = controls.get(IToolCallbacksDecorator.class);
+		if (tools == null || !(decorator instanceof IToolCallbacksDecorator decorating)) {
+			return tools;
+		}
+		final List<ToolCallback> decorated = decorating.decorate(tools);
+		return decorated != null ? decorated : tools;
+	}
+
+	/**
 	 * The tools declared to the model whatever its configuration enables, each the
 	 * instance the controlling software gave (bound to this call's state): a tool of
 	 * the same name the configuration enables is replaced by it.

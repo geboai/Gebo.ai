@@ -23,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableRankerModel;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableDecisionModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
 import ai.gebo.llms.abstraction.layer.services.IGProviderDealService;
@@ -145,6 +146,8 @@ public class GProviderModelPricesServiceImpl implements IGProviderModelPricesSer
 			return ModelType.TTS;
 		} else if (model instanceof IGConfigurableTranscriptModel) {
 			return ModelType.TRANSCRIPT;
+		} else if (model instanceof IGConfigurableDecisionModel) {
+			return ModelType.DECISION;
 		}
 		return null;
 	}

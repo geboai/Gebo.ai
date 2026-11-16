@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { GBaseObject, GeboChatControllerService, GeboDeepSearchControllerService, GeboRagChatControllerService } from '@Gebo.ai/gebo-ai-rest-api';
 import { forkJoin, Observable } from 'rxjs';
@@ -25,6 +25,7 @@ const atLeastAKnowledgeBaseOrSystemValidator: ValidatorFn = (ctrl) => {
 @Component({
     selector: 'gebo-ai-deep-search-sources-choice',
     templateUrl: './deep-search-sources-choice.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIDeepSearchSoucesChoiceComponent implements OnInit, OnChanges {

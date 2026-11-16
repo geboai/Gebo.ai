@@ -1,5 +1,4 @@
-import { Component, Inject, Input, OnChanges, OnInit, Optional, SimpleChanges } from "@angular/core";
-import { ControlContainer, FormGroupDirective } from "@angular/forms";
+import { Component, Inject, Input, OnChanges, OnInit, Optional, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { Subject } from "rxjs";
 import { findMatchingTranslation, UIExistingText } from "./text-language-resources";
@@ -8,11 +7,8 @@ import { GeboAITranslationService } from "./gebo-translation.service";
 @Component({
     templateUrl: "field-container.component.html",
     selector: "gebo-ai-field",
-    standalone: false,
-    providers: [
-
-        { provide: ControlContainer, useExisting: FormGroupDirective }
-    ]    
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     @Input({ required: true }) id!: string;

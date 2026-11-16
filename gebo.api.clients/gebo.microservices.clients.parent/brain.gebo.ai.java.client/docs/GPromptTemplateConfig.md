@@ -10,7 +10,6 @@ Name | Type | Description | Notes
 **toolsResultsPromptTemplate** | **String** |  |  [optional]
 **chatHistory** | [**ChatHistoryEnum**](#ChatHistoryEnum) |  | 
 **contextDocuments** | [**ContextDocumentsEnum**](#ContextDocumentsEnum) |  | 
-**toolsCalling** | [**ToolsCallingEnum**](#ToolsCallingEnum) |  | 
 **langCode** | **String** |  |  [optional]
 **promptUse** | **String** |  | 
 **modelProvider** | **String** |  |  [optional]
@@ -31,13 +30,6 @@ NOT_REQUIRED | &quot;NOT_REQUIRED&quot;
 
 <a name="ContextDocumentsEnum"></a>
 ## Enum: ContextDocumentsEnum
-Name | Value
----- | -----
-REQUIRED | &quot;REQUIRED&quot;
-NOT_REQUIRED | &quot;NOT_REQUIRED&quot;
-
-<a name="ToolsCallingEnum"></a>
-## Enum: ToolsCallingEnum
 Name | Value
 ---- | -----
 REQUIRED | &quot;REQUIRED&quot;

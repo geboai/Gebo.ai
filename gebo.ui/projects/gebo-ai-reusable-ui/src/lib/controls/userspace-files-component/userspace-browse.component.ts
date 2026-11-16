@@ -17,12 +17,12 @@
  * It displays files and folders in a tree structure and allows for navigation and selection.
  */
 
-import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR, Validators } from "@angular/forms";
 import { UserspaceControllerService, UserspaceFileDto, UserspaceFolderDto, UserspaceKnowledgebaseDto } from "@Gebo.ai/gebo-ai-rest-api";
 
-import { TreeNode } from "primeng/api";
-import { TreeNodeExpandEvent } from "primeng/tree";
+import { TreeNode } from "@openng/optimus-ui/api";
+import { TreeNodeExpandEvent } from "@openng/optimus-ui/tree";
 import { USERSPACE_UPLOADS_WIZARD } from "./userspace-wizard";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboActionType, GeboUIActionRequest } from "../../architecture/actions.model";
@@ -61,6 +61,7 @@ interface UserspaceTreeItem {
             provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIUserspaceBrowseComponent")
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, ControlValueAccessor {
@@ -82,7 +83,7 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
 
     /**
      * Node tracking of the tree. The branch of a node is rebuilt out of new node
-     * objects every time its contents change, which is what PrimeNG repaints on;
+     * objects every time its contents change, which is what Optimus UI repaints on;
      * tracking the nodes by key keeps the views of the untouched ones in place.
      */
     public trackBy = treeNodeTrackBy;
@@ -128,7 +129,7 @@ export class GeboAIUserspaceBrowseComponent implements OnInit, OnChanges, Contro
         }
         const item: TreeNode<UserspaceTreeItem> = {
             data: node,
-            // No `icon`: PrimeNG only falls back on the expanded/collapsed pair when
+            // No `icon`: Optimus UI only falls back on the expanded/collapsed pair when
             // `icon` is not set, so filling it kept the closed folder icon on an
             // open folder. `pi-opened-folder` did not exist either.
             collapsedIcon: "pi pi-folder",

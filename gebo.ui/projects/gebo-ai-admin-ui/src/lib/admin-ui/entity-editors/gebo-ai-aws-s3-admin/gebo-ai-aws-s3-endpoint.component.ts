@@ -19,11 +19,11 @@
  * mirroring the SharePoint endpoint component.
  */
 
-import { Component, forwardRef, Injector, Input } from "@angular/core";
+import { Component, forwardRef, Injector, Input, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { AwsS3BrowsingControllerService, AwsS3SystemsControllerService, BrowseParam, GAwsS3ProjectEndpoint, GAwsS3System, GProject, JobLauncherControllerService, ProjectsControllerService, SecretInfo, SecretsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboFormGroupsService, GeboUIActionRequest, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
-import { ConfirmationService, ToastMessageOptions } from "primeng/api";
+import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo.ai/reusable-ui";
@@ -46,6 +46,7 @@ const awsS3Code: string = "aws-s3-handler";
         { provide: GEBO_AI_MODULE, useValue: "GeboAIAwsS3Module", multi: false },
         { provide: GEBO_AI_FIELD_HOST, useExisting: forwardRef(() => GeboAIAwsS3EndpointComponent), multi: false
     }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAIAwsS3EndpointComponent extends BaseEntityEditingComponent<GAwsS3ProjectEndpoint> {

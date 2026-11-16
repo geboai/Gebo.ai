@@ -8,13 +8,16 @@ import java.util.UUID;
 import java.util.Vector;
 import java.util.function.Consumer;
 
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public class ToolCallsListener {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	/**
 	 * The parameter a tool stopping the work offers the model to write to itself: what
 	 * it writes is for the model alone, so it is not part of a call as the user sees it.
@@ -146,12 +149,12 @@ public class ToolCallsListener {
 			return toolInput;
 		}
 		try {
-			final Map<String, Object> input = JsonParser.fromJson(toolInput, LinkedHashMap.class);
+			final Map<String, Object> input = JSON_HELPER.fromJson(toolInput, LinkedHashMap.class);
 			if (!input.containsKey(NOTES_FOR_LATER)) {
 				return toolInput;
 			}
 			input.remove(NOTES_FOR_LATER);
-			return JsonParser.toJson(input);
+			return JSON_HELPER.toJson(input);
 		} catch (RuntimeException notAnObject) {
 			return toolInput;
 		}

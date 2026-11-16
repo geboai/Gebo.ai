@@ -1,6 +1,6 @@
 # @Gebo.ai/reusable-ui — Overview
 
-Angular 21 library of components/services powering the Gebo.ai web app (chat, knowledge-base
+Angular 22 library of components/services powering the Gebo.ai web app (chat, knowledge-base
 browsing/ingestion, admin entity forms, login/setup, usage dashboards). It is consumed by three
 sibling libraries in the same monorepo (`gebo-ai-chat-ui`, `gebo-ai-admin-ui`) and by the shell
 app (`gebo.ui/src/app`), and is also published as an installable npm package for third-party apps
@@ -31,12 +31,12 @@ Peer dependencies (must already be present in the consuming app — see `package
 
 ```json
 {
-  "@angular/common": "^21.2.18",
-  "@angular/core": "^21.2.18",
-  "primeng": "^21.1.9",
-  "primeicons": "^7.0.0",
+  "@angular/common": "^22.2.6",
+  "@angular/core": "^22.2.6",
+  "@openng/optimus-ui": "^2.0.2",
+  "@openng/icons": "^1.0.0",
   "primeflex": "^4.0.0",
-  "@primeng/themes": "^21.0.4",
+  "@openng/optimus-ui-themes": "^2.0.2",
   "ng-diagram": "^1.2.4"
 }
 ```

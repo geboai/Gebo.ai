@@ -361,3 +361,45 @@ above, or settles what the design left open:
 - **Removed:** `ClientChatCallUtil.isAfterThinking`, `isInsideThinking`, `isWithThinking`,
   `isNonThinkingOutput`; `ThinkingStream.reasoning` and its `REASONING_CONTENT_METADATA`.
   `streamResponse` is deprecated.
+
+## 8. Spring AI 2.1: the reasoning as message parts
+
+Spring AI 2.1 gives every provider's reasoning the same shape: the assistant message of a
+generation carries an ordered list of parts, and the reasoning is its `ReasoningPart`s
+(`AssistantMessage.getReasoning()`). A streamed chunk carries the piece it adds, Claude's
+`thinking_delta` events included, ahead of the answer; a signature or a redacted block arrives as
+a part with no text; a blocking call returns the whole reasoning in its one generation.
+
+**The reading.** `IGReasoningExtractor.PARTS` reads the parts and is the reading by default of
+every provider (`GAbstractConfigurableChatModel.reasoningExtractor()`):
+
+- each streamed chunk's parts are the piece of reasoning it adds, concatenated in order;
+- a part with no text marks the model as reasoning (`Reasoning.active`) without adding text, so
+  the UI can show the model thinking before anything readable comes;
+- a message without any reasoning part is read the legacy way, `IGReasoningExtractor.OPENAI`:
+  the `reasoningContent` metadata holding all the reasoning so far, of which the reading keeps
+  the piece each chunk adds. Any model written before the parts keeps working. (Gebo's own
+  Responses model wrote it there; since item 9 the OpenAI models of version 6 and later run on
+  Spring AI's `OpenAiResponsesChatModel`, which streams the reasoning summary as
+  `ReasoningPart`s.)
+
+The rest of §3 is unchanged: `ThinkingNormalizationAdvisor` reads every generation of a round
+through the extractor, inside the tool loop, and the reasoning travels in the response metadata
+(`geboThinkingDelta`, `geboThinkingActive`, `geboThinking`).
+
+**What went away.**
+
+- *The Anthropic thinking tap* (§7). It read the `thinking_delta` events off the HTTP stream
+  because Spring AI 2.0 gave Claude's thinking as separate generations, after the answer of the
+  round, and its 2.0 metadata (`anthropicThinkingContents`) is gone in 2.1. With 2.1 the thinking
+  streams as parts ahead of the answer and a blocking call returns one generation, so the tap,
+  its extractor and the reordering of the thinking generations were removed.
+- *The per-provider readings* of DeepSeek (`DeepSeekAssistantMessage.getReasoningContent`),
+  Mistral (`MistralAiChatModel.THINKING_CONTENT_METADATA`) and Ollama (`thinking`): their carriers
+  are deprecated in 2.1 and the default reading covers them.
+
+**Tests.** `PartsReasoningExtractorTest` covers the pieces, the signature-only and redacted parts,
+the legacy fallback and a Claude-shaped stream through the advisor; the provider reasoning tests
+(`DeepseekReasoningTest`, `MistralReasoningTest`, `OllamaReasoningTest`) build their chunks as
+parts; `AnthropicLiveThinkingTest` drives the 2.1 model over a recorded Messages API stream with
+no tap.

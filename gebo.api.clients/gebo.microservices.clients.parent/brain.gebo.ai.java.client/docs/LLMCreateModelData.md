@@ -7,7 +7,6 @@ Name | Type | Description | Notes
 **doModelsLookup** | **Boolean** |  |  [optional]
 **serviceHandler** | **String** |  | 
 **setAsDefaultModel** | **Boolean** |  |  [optional]
-**enableAllFunctions** | **Boolean** |  |  [optional]
 **secretId** | **String** |  |  [optional]
 **modelCode** | **String** |  | 
 **baseUrl** | **String** |  |  [optional]
@@ -27,6 +26,7 @@ RANKING | &quot;RANKING&quot;
 IMAGESGEN | &quot;IMAGESGEN&quot;
 TTS | &quot;TTS&quot;
 TRANSCRIPT | &quot;TRANSCRIPT&quot;
+DECISION | &quot;DECISION&quot;
 
 <a name="List<UsesEnum>"></a>
 ## Enum: List&lt;UsesEnum&gt;

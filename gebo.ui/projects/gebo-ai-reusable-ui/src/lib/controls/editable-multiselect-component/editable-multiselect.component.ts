@@ -18,12 +18,12 @@
  * also provides functionality to create new entries through a popup window.
  */
 
-import { ChangeDetectorRef, Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { Observable } from "rxjs";
 import { GeboActionPerformedEvent, GeboActionPerformedType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
-import { SelectChangeEvent } from "primeng/select";
+import { SelectChangeEvent } from "@openng/optimus-ui/select";
 
 /**
  * Constant string that serves as a marker for creating a new record
@@ -49,6 +49,7 @@ const createNewValueCodeConstant: string = "InsertNewRecord@@@@[Gebo.ai]";
             multi: true
         }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class EditableMultiselectComponent implements ControlValueAccessor, OnInit, OnChanges {

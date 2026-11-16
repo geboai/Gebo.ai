@@ -5,35 +5,35 @@ import {
   Self
 } from '@angular/core';
 
-// PrimeNG component classes (importa solo quelli che usi davvero nel progetto)
-import { Button, ButtonDirective } from 'primeng/button';
-import { Fieldset } from 'primeng/fieldset';
-import { Panel } from 'primeng/panel';
-import { Dialog } from 'primeng/dialog';
-import { Drawer } from 'primeng/drawer';
-import { Card } from 'primeng/card';
-import { TabPanel } from 'primeng/tabs';
+// Optimus UI component classes (importa solo quelli che usi davvero nel progetto)
+import { Button, ButtonDirective } from '@openng/optimus-ui/button';
+import { Fieldset } from '@openng/optimus-ui/fieldset';
+import { Panel } from '@openng/optimus-ui/panel';
+import { Dialog } from '@openng/optimus-ui/dialog';
+import { Drawer } from '@openng/optimus-ui/drawer';
+import { Card } from '@openng/optimus-ui/card';
+import { TabPanel } from '@openng/optimus-ui/tabs';
 
-import { AccordionPanel } from 'primeng/accordion';
-import { Toolbar } from 'primeng/toolbar';
-import { Chip } from 'primeng/chip';
-import { Badge } from 'primeng/badge';
-import { Tag } from 'primeng/tag';
-import { Checkbox } from 'primeng/checkbox';
-import { RadioButton } from 'primeng/radiobutton';
-import { ToggleButton } from 'primeng/togglebutton';
-import { InputText } from 'primeng/inputtext';
-import { Textarea } from 'primeng/textarea';
-import { InputNumber } from 'primeng/inputnumber';
-import { Select } from 'primeng/select';
-import { MultiSelect } from 'primeng/multiselect';
-import { Listbox } from 'primeng/listbox';
-import { DatePicker } from 'primeng/datepicker';
-import { Slider } from 'primeng/slider';
-import { ProgressBar } from 'primeng/progressbar';
-import { Steps } from 'primeng/steps';
+import { AccordionPanel } from '@openng/optimus-ui/accordion';
+import { Toolbar } from '@openng/optimus-ui/toolbar';
+import { Chip } from '@openng/optimus-ui/chip';
+import { Badge } from '@openng/optimus-ui/badge';
+import { Tag } from '@openng/optimus-ui/tag';
+import { Checkbox } from '@openng/optimus-ui/checkbox';
+import { RadioButton } from '@openng/optimus-ui/radiobutton';
+import { ToggleButton } from '@openng/optimus-ui/togglebutton';
+import { InputText } from '@openng/optimus-ui/inputtext';
+import { Textarea } from '@openng/optimus-ui/textarea';
+import { InputNumber } from '@openng/optimus-ui/inputnumber';
+import { Select } from '@openng/optimus-ui/select';
+import { MultiSelect } from '@openng/optimus-ui/multiselect';
+import { Listbox } from '@openng/optimus-ui/listbox';
+import { DatePicker } from '@openng/optimus-ui/datepicker';
+import { Slider } from '@openng/optimus-ui/slider';
+import { ProgressBar } from '@openng/optimus-ui/progressbar';
+import { Steps } from '@openng/optimus-ui/steps';
 
-import { Galleria } from 'primeng/galleria';
+import { Galleria } from '@openng/optimus-ui/galleria';
 
 export interface LabelTarget {
   set(key: string, value: string): void;

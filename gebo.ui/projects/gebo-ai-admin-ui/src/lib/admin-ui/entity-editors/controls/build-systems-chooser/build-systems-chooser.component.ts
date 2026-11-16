@@ -10,7 +10,7 @@
 
 
 
-import { Component, forwardRef, Input, OnInit } from "@angular/core";
+import { Component, forwardRef, Input, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { BuildSystemRef, BuildSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -39,6 +39,7 @@ interface ExtendedBuildSystemRef extends BuildSystemRef {
     }, { provide: GEBO_AI_MODULE, useValue: "BuildSystemsChooserModule", multi: false },
     { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("BuildSystemsChooserComponent") }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class BuildSystemsChooserComponent implements OnInit, ControlValueAccessor {

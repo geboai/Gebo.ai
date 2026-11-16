@@ -1,9 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {
-    Component,
-    Input,
-    OnChanges,
-    SimpleChanges
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
 import { getAuth, getAuthHeader } from '../../infrastructure/gebo-credentials';
@@ -12,6 +13,7 @@ import { getAuth, getAuthHeader } from '../../infrastructure/gebo-credentials';
     selector: 'gebo-ai-web-viewer',
     templateUrl: './web-viewer.component.html',
     styleUrls: ['./web-viewer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class WebViewerComponent implements OnChanges {

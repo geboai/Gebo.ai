@@ -30,7 +30,7 @@
           [disabled]="canDelete===false" />
         </div>
         <div class="col-3">
-          <gebo-ai-test-chat-component [chatModelCode]="entity?.code"></gebo-ai-test-chat-component>
+          <gebo-ai-test-chat-component [chatModelCode]="$safeNavigationMigration(entity?.code)"></gebo-ai-test-chat-component>
         </div>
       </div>
     }

@@ -10,7 +10,7 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { GBaseChatModelConfig, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -36,6 +36,7 @@ const standardDefaultContextLength: number = 4096;
     selector: "gebo-ai-standard-chat-model-settings-component",
     templateUrl: "standard-chat-model-settings.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         { provide: GEBO_AI_MODULE, useValue: "GeboAIStandardChatModelModule", multi: false },
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }

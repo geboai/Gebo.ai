@@ -3,7 +3,7 @@ import { findMatchingTranlations, findMatchingTranslation, UIExistingText } from
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { GEBO_MULILANGUAGE_TARGET, LabelTarget, safeSet } from "./primeng-components-multilanguage-adapters.directive";
-import { BaseComponent } from "primeng/basecomponent";
+import { BaseComponent } from "@openng/optimus-ui/basecomponent";
 
 @Directive({
     selector: '[gebo-ai-label]',

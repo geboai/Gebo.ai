@@ -74,7 +74,7 @@
 
 
 
-      <div class="col-4" [hidden]="status?.result">
+      <div class="col-4" [hidden]="$safeNavigationMigration(status?.result)">
         <p-button id="CreateBtn" gebo-ai-label icon="pi pi-wrench" label="Create system setup" (onClick)="doSetup()"
         [disabled]="formGroup.invalid"></p-button>
       </div>

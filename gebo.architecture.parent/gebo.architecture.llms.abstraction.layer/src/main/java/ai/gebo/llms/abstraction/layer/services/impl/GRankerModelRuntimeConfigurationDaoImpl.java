@@ -127,7 +127,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 
 	@Override
 	protected void initializeRuntimeModels() {
-		LOGGER.info("Begin initializing image models dinamically");
+		LOGGER.info("Begin initializing ranker models dinamically");
 		try {
 			// Retrieve all configurations extending GBaseChatModelConfig
 			List<GBaseRankerModelConfig> configs = persistentObjectManager
@@ -146,7 +146,7 @@ public class GRankerModelRuntimeConfigurationDaoImpl
 			LOGGER.error("Cannot read the ranker models configuration", e);
 		}
 
-		LOGGER.info("End initializing image models dinamically");
+		LOGGER.info("End initializing ranker models dinamically");
 
 	}
 

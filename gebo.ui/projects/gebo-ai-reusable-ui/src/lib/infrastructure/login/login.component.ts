@@ -18,10 +18,10 @@
  * manages login state, validates system setup status, and navigates users
  * accordingly based on authentication results or system status.
  */
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 
 import { LoginService } from "./login.service";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { FormControl, FormGroup } from "@angular/forms";
 import { GeboFastInstallationSetupControllerService, GUserMessage, Oauth2ClientAuthorizativeInfo, UserWorkflowsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -40,6 +40,7 @@ const ssoRefusedMessage: ToastMessageOptions = { id: "SsoRefusedMessage", summar
 @Component({
   selector: "gebo-ai-login-component", templateUrl: "login.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{
     provide: GEBO_AI_MODULE, useValue: "LoginModule", multi: false
   }, {

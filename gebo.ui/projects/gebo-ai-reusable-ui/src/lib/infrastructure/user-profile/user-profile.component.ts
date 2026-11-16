@@ -17,7 +17,7 @@
  * It fetches user profile data upon initialization and provides functionality for 
  * displaying user information and managing password changes.
  */
-import { Component, OnChanges, OnInit, SimpleChanges } from "@angular/core";
+import { Component, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { LoginService } from "../login/login.service";
 import { UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../../controls/field-host-component-iface/field-host-component-iface";
@@ -26,6 +26,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../.
     selector: "gebo-ai-current-user-profile",
     templateUrl: "user-profile.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{
         provide: GEBO_AI_MODULE, useValue: "GeboAIUserProfileModule", multi: false
     }, {

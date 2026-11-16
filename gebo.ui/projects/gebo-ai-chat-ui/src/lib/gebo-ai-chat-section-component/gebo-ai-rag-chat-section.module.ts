@@ -16,7 +16,7 @@
  * 
  * This module provides the necessary imports and declarations for the GeboAiChatSection functionality.
  * It serves as a feature module that encapsulates all components, directives, and pipes related to
- * the AI chat interface. This module bundles PrimeNG UI components along with Angular form modules
+ * the AI chat interface. This module bundles Optimus UI UI components along with Angular form modules
  * to create a comprehensive chat experience.
  */
 
@@ -24,32 +24,32 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { GeboAiChatSectionComponent } from "./gebo-ai-rag-chat-section.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { ButtonModule } from 'primeng/button';
-import { ProgressSpinnerModule } from 'primeng/progressspinner';
-import { BlockUIModule } from "primeng/blockui";
-import { ListboxModule } from 'primeng/listbox';
-import { ScrollerModule } from 'primeng/scroller';
-import { TreeModule } from 'primeng/tree';
-import { PaginatorModule } from 'primeng/paginator';
+import { ButtonModule } from '@openng/optimus-ui/button';
+import { ProgressSpinnerModule } from '@openng/optimus-ui/progressspinner';
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
+import { ListboxModule } from '@openng/optimus-ui/listbox';
+import { ScrollerModule } from '@openng/optimus-ui/scroller';
+import { TreeModule } from '@openng/optimus-ui/tree';
+import { PaginatorModule } from '@openng/optimus-ui/paginator';
 import { EditableListboxModule, GEBO_AI_MODULE, GeboAIReusableChatModule, GeboAIFieldTranslationContainerModule, GeboAINotificationsModule, GeboBlockableContainerDirective } from "@Gebo.ai/reusable-ui";
-import { DrawerModule } from 'primeng/drawer';
-import { PanelModule } from "primeng/panel";
-import { ScrollPanelModule } from "primeng/scrollpanel";
-import { PopoverModule } from 'primeng/popover';
-import { MessageModule } from 'primeng/message';
+import { DrawerModule } from '@openng/optimus-ui/drawer';
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { ScrollPanelModule } from "@openng/optimus-ui/scrollpanel";
+import { PopoverModule } from '@openng/optimus-ui/popover';
+import { MessageModule } from '@openng/optimus-ui/message';
 import { RouterLinkWithHref } from "@angular/router";
 
 /**
  * The GeboAiChatModule provides a self-contained feature module for chat functionality.
  * 
- * This module imports various UI components from PrimeNG (buttons, spinners, listboxes, etc.) and
+ * This module imports various UI components from Optimus UI (buttons, spinners, listboxes, etc.) and
  * Angular modules (forms, common) to support the chat interface. It declares the GeboAiChatSectionComponent
  * which is the main component for rendering the chat interface, and exports it to make it available
  * to other modules that import this module.
  * 
  * The UI components include:
  * - Form handling (ReactiveFormsModule, FormsModule)
- * - UI components from PrimeNG (Button, ProgressSpinner, BlockUI, etc.)
+ * - UI components from Optimus UI (Button, ProgressSpinner, BlockUI, etc.)
  * - Custom Gebo.ai components (EditableListboxModule, GeboAIReusableChatModel)
  */
 @NgModule({

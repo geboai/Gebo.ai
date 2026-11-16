@@ -11,7 +11,13 @@
   @for (condition of conditions; track condition.conditionId) {
     <div class="gebo-ai-reusable-chat__suspension-condition">
       <div class="gebo-ai-reusable-chat__suspension-statement">
-        {{statementOf(condition)}}
+        @if (isToolConfirmation(condition)) {
+          {{texts.ToolConfirmQuestion}} <code class="gebo-ai-reusable-chat__suspension-tool-name">{{toolNameOf(condition)}}</code>
+          {{texts.ToolConfirmWithArguments}}
+          <pre class="gebo-ai-reusable-chat__suspension-tool-arguments">{{toolArgumentsOf(condition)}}</pre>
+        } @else {
+          {{statementOf(condition)}}
+        }
         @if (!isMandatory(condition)) {
           <span id="OptionalCondition" class="gebo-ai-reusable-chat__suspension-optional" gebo-ai-text>(optional)</span>
         }
@@ -34,7 +40,23 @@
       @if (explanationOf(condition)) {
         <div class="gebo-ai-reusable-chat__suspension-explanation"><i>{{explanationOf(condition)}}</i></div>
       }
-      @if (isClarification(condition)) {
+      @if (isToolConfirmation(condition)) {
+        @for (option of [toolCallAllow, toolCallDeny]; track option) {
+          <div class="gebo-ai-reusable-chat__suspension-option">
+            <p-radioButton [name]="'option-' + condition.conditionId" [value]="option" [inputId]="condition.conditionId + '-' + option"
+              [disabled]="disabled" [ngModel]="answerOf(condition).chosenOption"
+              (ngModelChange)="chooseToolCallOption(condition, option)"></p-radioButton>
+            <label [for]="condition.conditionId + '-' + option" class="gebo-ai-reusable-chat__suspension-option-label">
+              {{option === toolCallAllow ? texts.ToolConfirmAllow : texts.ToolConfirmDeny}}
+              <span class="gebo-ai-reusable-chat__suspension-option-description">{{option === toolCallAllow ?
+                texts.ToolConfirmAllowDescription : texts.ToolConfirmDenyDescription}}</span>
+            </label>
+          </div>
+        }
+        <textarea pTextarea rows="3" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
+          [disabled]="disabled" [(ngModel)]="answerOf(condition).customExplanation"
+          [placeholder]="texts.ToolConfirmMessagePlaceholder"></textarea>
+      } @else if (isClarification(condition)) {
         @for (option of optionsOf(condition); track $index) {
           <div class="gebo-ai-reusable-chat__suspension-option">
             @if (isMultipleChoice(condition)) {
@@ -58,12 +80,12 @@
           <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
             [disabled]="disabled" [(ngModel)]="answerOf(condition).customExplanation"
             (ngModelChange)="onExplanationChange(condition)"
-            placeholder="Or explain in your own words" gebo-ai-label></textarea>
+            id="ExplanationInput" placeholder="Or explain in your own words" gebo-ai-label></textarea>
         }
       } @else {
         <textarea pTextarea rows="5" maxlength="2000" class="gebo-ai-reusable-chat__suspension-explanation-input"
           [disabled]="disabled || goesOnWithout(condition)" [(ngModel)]="answerOf(condition).value"
-          placeholder="Your answer" gebo-ai-label></textarea>
+          id="ValueInput" placeholder="Your answer" gebo-ai-label></textarea>
       }
       @if (conversationActions) {
         <div class="gebo-ai-reusable-chat__suspension-option gebo-ai-reusable-chat__suspension-go-on-without">

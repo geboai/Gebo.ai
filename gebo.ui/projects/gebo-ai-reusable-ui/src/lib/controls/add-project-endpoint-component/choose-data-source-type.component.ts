@@ -17,12 +17,12 @@
  * It extends BaseEntityEditingComponent to handle the editing of ChooseDataSourceType entities,
  * providing UI for selecting the type of data source to be added to a Gebo project.
  */
-import { Component, Injector } from "@angular/core";
+import { Component, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 
 import { Observable, of, Subscription } from "rxjs";
 import { ChooseDataSourceType } from "./choose-data-source-type";
-import { ConfirmationService, MenuItem } from "primeng/api";
+import { ConfirmationService, MenuItem } from "@openng/optimus-ui/api";
 import { GProject, ProjectsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
@@ -42,6 +42,7 @@ import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../f
     selector: "gebo-ui-choose-data-source-type-component",
     templateUrl: "choose-data-source-type.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: GEBO_AI_MODULE, useValue: "ProjectAddContextMenuModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIChooseDataSourceTypeComponent") }]
 })
 export class GeboAIChooseDataSourceTypeComponent extends BaseEntityEditingComponent<ChooseDataSourceType> {

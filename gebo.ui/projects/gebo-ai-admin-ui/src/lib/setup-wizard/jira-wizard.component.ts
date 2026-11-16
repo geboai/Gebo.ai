@@ -16,7 +16,7 @@
  * It includes status checking, module installation verification, and UI components for the Jira setup wizard.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { ConfluenceSystemsControllerService, GConfluenceSystem, GeboModulesConfigControllerService, GJiraSystem, JiraSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, CONFLUENCE_MODULE, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -63,6 +63,7 @@ export class JiraInstalledModuleService extends GeboRootInstalledModuleService {
   selector: "gebo-jira-wizard-component",
   templateUrl: "jira-wizard.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("JiraWizardComponent") }]
 })
 export class JiraWizardComponent extends BaseWizardSectionComponent {

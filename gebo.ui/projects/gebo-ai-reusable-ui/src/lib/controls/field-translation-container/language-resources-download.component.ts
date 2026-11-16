@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, ChangeDetectionStrategy } from "@angular/core";
 import { GeboAITranslationService } from "./gebo-translation.service";
 import { Observable, take } from "rxjs";
 
@@ -6,6 +6,7 @@ import { Observable, take } from "rxjs";
 @Component({
     selector: "gebo-ai-language-resource-download",
     template: "@if (enabled) {<p-button icon='pi pi-language' (onClick)='download()' [rounded]='true' [text]='true' [raised]='true' severity='info'></p-button>}",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class GeboAILanguageResourcesDownloadComponent {

@@ -22,15 +22,15 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { SetupWizardPanelComponent } from "./setup-wizard-panel.component";
 import { RouterModule, Routes } from "@angular/router";
 import { AlwaysTrueStatusService, WizardSectionWithNoUI } from "./setup-wizard-step";
-import { PanelModule } from "primeng/panel";
-import { BlockUIModule } from "primeng/blockui";
-import { ButtonModule } from "primeng/button";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { SetupWizardService } from "./setup-wizard.service";
-import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { BreadcrumbModule } from '@openng/optimus-ui/breadcrumb';
 import { GeboAIFieldTranslationContainerModule } from "../controls/field-translation-container/field-container.module";
-import { DialogModule } from "primeng/dialog";
-import { TabsModule } from "primeng/tabs";
-import { AccordionModule } from "primeng/accordion";
+import { DialogModule } from "@openng/optimus-ui/dialog";
+import { TabsModule } from "@openng/optimus-ui/tabs";
+import { AccordionModule } from "@openng/optimus-ui/accordion";
 import { GeboAINotificationsModule } from "../notifications/notifications.module";
 
 /**

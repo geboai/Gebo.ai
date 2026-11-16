@@ -7,7 +7,7 @@
  * Copyright (c) 2025+ Gebo.ai
  */
 
-import { Component, input } from "@angular/core";
+import { Component, input, ChangeDetectionStrategy } from "@angular/core";
 
 import { SimpleNode, NgDiagramNodeTemplate, NgDiagramNodeSelectedDirective, NgDiagramPortComponent } from "ng-diagram";
 import { DataFlowTransformationNode } from "./compliance-data-flow.model";
@@ -24,6 +24,7 @@ import { DataFlowTransformationNode } from "./compliance-data-flow.model";
     standalone: true,
     imports: [NgDiagramNodeSelectedDirective, NgDiagramPortComponent],
     hostDirectives: [{ directive: NgDiagramNodeSelectedDirective, inputs: ["node"] }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="node-card p-3 border-round shadow-2 flex flex-column gap-2 text-left relative"
           style="min-width: 200px; max-width: 240px; border: 2px dashed var(--primary-color);

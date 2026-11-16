@@ -16,7 +16,7 @@
  * It provides functionality to display and manage different build system types and their configurations.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { BuildSystemsControllerService, GBuildSystem,  GBuildSystemType } from "@Gebo.ai/gebo-ai-rest-api";
 import { AncestorPanelComponent } from "../ancestor-panel/ancestor-admin-panel.component";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -39,6 +39,7 @@ interface BuildSystemNode {
     selector: "build-packaging-systems-component",
     templateUrl: "build-packaging-systems.component.html",
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers:[{ provide: GEBO_AI_MODULE, useValue: "BuildPackagingSystemsPanelModule", multi: false },{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("BuildPackagingSystemsComponent")}]
 })
 export class BuildPackagingSystemsComponent extends AncestorPanelComponent  implements OnInit{

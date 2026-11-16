@@ -152,6 +152,15 @@
                     </div>
 
                     <div class="col-12">
+                      <gebo-ai-field id="toolsNeedingConfirmation" label="Tools a person confirms"
+                        help="The tools this agent runs only once a person allows each call: the call, with its arguments, is put to the user of the conversation (or answered in the processes area) and the work waits for the answer; a refused call does not run and the agent is given the person's message instead.">
+                        <p-multiSelect id="toolsNeedingConfirmation" formControlName="toolsNeedingConfirmation"
+                          [options]="toolChoices" optionLabel="code" optionValue="code" display="chip" [filter]="true"
+                          [maxSelectedLabels]="100" [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
+                      </gebo-ai-field>
+                    </div>
+
+                    <div class="col-12">
                       <gebo-ai-field id="libraryTypeIds" label="Libraries of tools and resources"
                         help="The libraries this agent works with, whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a chosen library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available.">
                         <p-multiSelect id="libraryTypeIds" formControlName="libraryTypeIds"

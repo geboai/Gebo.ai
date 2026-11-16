@@ -176,7 +176,7 @@ gebo-setup-wizards p-button .p-button.w-full,
 .geboHalfHeight { height: 50%; }
 .geboThirdHeight { height: 33.333%; }
 
-/* PrimeNG typography baseline */
+/* Optimus UI typography baseline */
 .p-component,
 .p-inputtext,
 .p-textarea,
@@ -416,7 +416,7 @@ textarea.p-inputtextarea:read-only {
    position rather than by a descendant combinator so that a tab strip further
    down inside some editor keeps its natural size.
 
-   :not([hidden]) matters - PrimeNG hides inactive panels with the hidden
+   :not([hidden]) matters - Optimus UI hides inactive panels with the hidden
    attribute, and an author display:flex would beat the UA rule and render
    every tab at once. */
 .gebo-full-height-tabs { min-height: var(--gebo-shell-content-height); }
@@ -1115,7 +1115,7 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 
    The scheduler is built from four components (field summary, rule card, rule
    sentence, week grid) that share this vocabulary, and it restyles the inner
-   input of a PrimeNG datepicker through inputStyleClass. Both reasons put the
+   input of an Optimus UI datepicker through inputStyleClass. Both reasons put the
    rules here rather than in per component stylesheets, next to the other
    gebo* classes the dialogs already rely on.
    =========================================================================== */

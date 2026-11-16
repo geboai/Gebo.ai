@@ -15,7 +15,7 @@
  * This module provides the login functionality for the application. It encapsulates all components,
  * services, and dependencies required for the login feature.
  * 
- * The module imports various UI components from PrimeNG like Password, Panel, BlockUI, Messages,
+ * The module imports various UI components from Optimus UI like Password, Panel, BlockUI, Messages,
  * InputText, and Button for building the login interface. It also imports Angular's form modules
  * for handling form validation and submission.
  * 
@@ -25,15 +25,15 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { LoginComponent } from "./login.component";
-import { PasswordModule } from "primeng/password";
-import { PanelModule } from "primeng/panel";
-import { BlockUIModule } from "primeng/blockui";
+import { PasswordModule } from "@openng/optimus-ui/password";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-import { InputTextModule } from "primeng/inputtext";
-import { ButtonModule } from "primeng/button";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { LoginService } from "./login.service";
-import { FieldsetModule } from "primeng/fieldset";
+import { FieldsetModule } from "@openng/optimus-ui/fieldset";
 import { GenericOauth2ClientLoginService, GenericOauth2ServerSideLoginService } from "./oauth2/oauth2-login.service";
 import { GeboAIOauth2LandingComponent } from "./oauth2/oauth2landing/oauth2-landing.component";
 import { LoggedComponent } from "./logged.component";

@@ -13,28 +13,28 @@
 /**
  * AI generated comments
  * This module provides a fast setup functionality for the application.
- * It imports various Angular and PrimeNG modules needed for UI components and form handling.
+ * It imports various Angular and Optimus UI modules needed for UI components and form handling.
  * The module registers FastSetupComponent route and declares both FastSetupComponent 
  * and GeboAILicenceComponent while only exporting FastSetupComponent for use in other modules.
  */
 import { CommonModule } from "@angular/common";
 import { NgModule, OnInit } from "@angular/core";
-import { PasswordModule } from "primeng/password";
-import { PanelModule } from "primeng/panel";
-import { BlockUIModule } from "primeng/blockui";
+import { PasswordModule } from "@openng/optimus-ui/password";
+import { PanelModule } from "@openng/optimus-ui/panel";
+import { BlockUIModule } from "@openng/optimus-ui/blockui";
 
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule, Routes } from "@angular/router";
-import { InputTextModule } from "primeng/inputtext";
-import { ButtonModule } from "primeng/button";
+import { InputTextModule } from "@openng/optimus-ui/inputtext";
+import { ButtonModule } from "@openng/optimus-ui/button";
 import { FastSetupComponent } from "./fast-setup.component";
-import { SelectModule } from "primeng/select";
-import { CheckboxModule } from "primeng/checkbox";
-import { RadioButtonModule } from 'primeng/radiobutton';
+import { SelectModule } from "@openng/optimus-ui/select";
+import { CheckboxModule } from "@openng/optimus-ui/checkbox";
+import { RadioButtonModule } from '@openng/optimus-ui/radiobutton';
 import { GeboAILicenceComponent } from "./licence.component";
-import { ScrollPanelModule } from "primeng/scrollpanel";
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { FieldsetModule } from "primeng/fieldset";
+import { ScrollPanelModule } from "@openng/optimus-ui/scrollpanel";
+import { SelectButtonModule } from '@openng/optimus-ui/selectbutton';
+import { FieldsetModule } from "@openng/optimus-ui/fieldset";
 import { EditableListboxModule } from "../../controls/editable-listbox-component/editable-listbox.module";
 import { GeboAIFieldTranslationContainerModule } from "../../controls/field-translation-container/field-container.module";
 import { GeboAINotificationsModule } from "../../notifications/notifications.module";
@@ -44,7 +44,7 @@ const routes: Routes = [{ path: 'ui/setup', component: FastSetupComponent }];
 
 /**
  * This Angular module encapsulates all the components and dependencies needed for the fast setup functionality.
- * It bundles UI components from PrimeNG library and custom components such as FastSetupComponent
+ * It bundles UI components from Optimus UI library and custom components such as FastSetupComponent
  * and GeboAILicenceComponent to provide a complete setup interface.
  * The module handles routing to the setup page and provides all necessary form controls and UI elements.
  */

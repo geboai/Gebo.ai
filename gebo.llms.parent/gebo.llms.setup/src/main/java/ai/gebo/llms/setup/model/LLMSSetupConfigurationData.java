@@ -23,4 +23,5 @@ public class LLMSSetupConfigurationData {
 	private Boolean imagesModelExists = null;
 	private Boolean ttsModelExists = null;
 	private Boolean transcriptModelExists = null;
+	private Boolean decisionModelExists = null;
 }

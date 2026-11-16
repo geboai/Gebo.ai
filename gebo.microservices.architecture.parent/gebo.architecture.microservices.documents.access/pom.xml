@@ -18,7 +18,7 @@
 		and any extra headers are configurable under ai.gebo.documents.access.client.*.
 	-->
 	<properties>
-		<spring-cloud.version>2025.1.2</spring-cloud.version>
+		<spring-cloud.version>2026.0.0-RC2</spring-cloud.version>
 	</properties>
 
 	<dependencyManagement>

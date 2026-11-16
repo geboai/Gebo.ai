@@ -18,12 +18,12 @@
  * The component implements ControlValueAccessor to integrate with Angular's form controls.
  */
 
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Optional, Output, Self, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Optional, Output, Self, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, NgControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { GeboActionPerformedEvent, GeboActionPerformedType, GeboUIActionRequest } from "../../architecture/actions.model";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
-import { SelectChangeEvent } from "primeng/select";
+import { SelectChangeEvent } from "@openng/optimus-ui/select";
 
 /**
  * EditableListboxComponent provides a dropdown/listbox component that can display a list of options and
@@ -40,6 +40,7 @@ import { SelectChangeEvent } from "primeng/select";
     selector: "geboai-editable-listbox-component",
     templateUrl: "editable-listbox.component.html",
 
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class EditableListboxComponent implements ControlValueAccessor, OnInit, OnChanges {

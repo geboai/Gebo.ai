@@ -17,7 +17,7 @@
  * including source code, plain text, PDF, and browsable web content.
  */
 import { HttpClient } from "@angular/common/http";
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Inject, Output, EventEmitter } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, Inject, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { BASE_PATH, ContentMetaInfo, ContentMetaInfosControllerService, ContentObject, IngestionFileType, IngestionFileTypesLibraryControllerService, UserUploadedContent } from "@Gebo.ai/gebo-ai-rest-api";
 import { Subscription } from "rxjs";
 import { EnrichedLLMGeneratedResource, EnrichedUserUploadedContentView } from "./enriched-document-reference-view.service";
@@ -72,6 +72,7 @@ const generatedContentControllerUrl: string = "/api/users/GeboLLMGeneratedResour
 @Component({
   selector: "gebo-ai-content-viewer",
   templateUrl: "gebo-ai-content-viewer.component.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GeboAIContentViewerComponent implements OnInit, OnChanges, OnDestroy {

@@ -21,13 +21,13 @@
  * The component manages various states including loading, validation, backend operations,
  * and user messages, providing a consistent interface for entity management operations.
  */
-import { Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from "@angular/core";
+import { Component, EventEmitter, Injector, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControlStatus, FormGroup } from "@angular/forms";
-import { ToastMessageOptions } from "primeng/api";
+import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { Observable, of, Subject, Subscription } from "rxjs";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
-import { ConfirmationService } from "primeng/api";
+import { ConfirmationService } from "@openng/optimus-ui/api";
 import { GObjectRef, GUserMessage } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIEntitiesSettingWizardConfiguration, WizardButtonsBarData } from "./entities-modification-wizard";
 import { errorStatus, IOperationStatus } from "./operation-status";
@@ -46,6 +46,7 @@ import { GeboAITranslationService } from "../field-translation-container/gebo-tr
 @Component({
   selector: "base-entity-component",
   template: "",
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export abstract class BaseEntityEditingComponent<RecordType extends { code?: string, description?: string }> implements OnInit, OnChanges, OnDestroy, GeboAIFieldHost {

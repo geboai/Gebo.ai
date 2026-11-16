@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.testcontainers.qdrant.QdrantContainer;
 
@@ -189,10 +189,10 @@ public class AbstractVendorSetupAndUseTest extends AbstractGeboMonolithicIntegra
 
 		// Rimuovi eventuali converter Jackson predefiniti
 		List<HttpMessageConverter<?>> converters = new ArrayList<>(rt.getMessageConverters());
-		converters.removeIf(c -> c instanceof MappingJackson2HttpMessageConverter);
+		converters.removeIf(c -> c instanceof JacksonJsonHttpMessageConverter);
 
 		// Crea il converter Jackson con il tuo mapper
-		MappingJackson2HttpMessageConverter jackson = new MappingJackson2HttpMessageConverter();
+		JacksonJsonHttpMessageConverter jackson = new JacksonJsonHttpMessageConverter();
 
 		// (Opzionale) aggiungi anche text/plain se alcuni endpoint rispondono JSON con
 		// content-type sbagliato

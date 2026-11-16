@@ -23,6 +23,25 @@
   font-weight: 500;
 }
 
+/* a tool call put to a person: the tool, then the arguments the model wrote */
+.gebo-ai-reusable-chat__suspension-tool-name {
+  font-family: var(--p-font-family-monospace, monospace);
+  padding: 0 0.25rem;
+}
+
+.gebo-ai-reusable-chat__suspension-tool-arguments {
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  max-height: 12rem;
+  overflow: auto;
+  font-weight: 400;
+  font-size: 0.9em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border-radius: var(--p-border-radius-sm, 4px);
+  background: var(--p-content-hover-background, rgba(0, 0, 0, 0.04));
+}
+
 .gebo-ai-reusable-chat__suspension-optional {
   margin-left: 0.5rem;
   font-weight: 400;

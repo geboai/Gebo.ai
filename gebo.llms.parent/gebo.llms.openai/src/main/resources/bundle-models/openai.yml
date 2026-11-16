@@ -91,7 +91,7 @@ ai.gebo.models.providers.openai:
     # (fetched 2026-10-11): OpenAI's /v1/models gives id, created, owned_by and
     # shutdown_date only, so this is where their limits come from. supportsFunctionCalls
     # is about the api Gebo calls each model through: the models of version 6 and later go
-    # through the Responses api (OpenAiResponsesChatModel), where their pages list function
+    # through the Responses api (Spring AI's OpenAiResponsesChatModel), where their pages list function
     # calling - on Chat Completions gpt-6.1-sol and gpt-6-astra call no tools (reasoning
     # guide) and gpt-6-sol / gpt-6-luna only at reasoning effort none (their pages).
     - providerId: openai

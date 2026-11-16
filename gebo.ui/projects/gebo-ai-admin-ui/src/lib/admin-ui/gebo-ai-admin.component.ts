@@ -17,7 +17,7 @@
  * It handles user authentication, setup status management, and interfaces with various admin panels.
  */
 
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { UserControllerService, UserInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboUIActionRoutingService, GeboActionType, SetupWizardService, SetupStatus, GeboAIPluggableModulesConfigService, GeboAIEnabledModulesConfig, GEBO_AI_FIELD_HOST, fieldHostComponentName, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
@@ -49,6 +49,7 @@ interface LocalStorageSetupStatus {
     { provide: GEBO_AI_MODULE, useValue: "GeboAiAdminPanelModule", multi: false }, 
     { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAiAdminComponent") }
   ],
+  changeDetection: ChangeDetectionStrategy.Eager,
   standalone: false
 })
 export class GeboAiAdminComponent implements OnInit {

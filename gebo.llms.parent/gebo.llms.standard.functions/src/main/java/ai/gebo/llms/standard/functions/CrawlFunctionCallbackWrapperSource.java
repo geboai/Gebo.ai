@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.ai.util.json.JsonParser;
+import org.springframework.ai.util.JsonHelper;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal;
@@ -43,6 +43,9 @@ import ai.gebo.architecture.ai.model.ToolsCategory;
  */
 @Service
 public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource {
+	/** Spring AI's JSON, the one its tool result converter writes. */
+	private static final JsonHelper JSON_HELPER = new JsonHelper();
+
 	static Logger LOGGER = LoggerFactory.getLogger(CrawlFunctionCallbackWrapperSource.class);
 	/** Maximum allowed length for content to be fetched (32KB) */
 	static long LENGTH_LIMIT = 1024 * 32;
@@ -191,7 +194,7 @@ public class CrawlFunctionCallbackWrapperSource implements IGToolCallbackSource 
 		int contentRoom = room;
 		response.setContent(ToolsTokenBudget.fitText(content, contentRoom));
 		for (int attempt = 0; attempt < 3; attempt++) {
-			final int overshoot = ITokensCountable.stringsTokensSize(JsonParser.toJson(response)) - room;
+			final int overshoot = ITokensCountable.stringsTokensSize(JSON_HELPER.toJson(response)) - room;
 			if (overshoot <= 0) {
 				break;
 			}

@@ -1,93 +1,158 @@
 /**
- * This Source Code is subject to the terms of the 
+ * This Source Code is subject to the terms of the
  * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
- * If a copy of the LICENCE was not distributed with this file, You can obtain one at 
- * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/  
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
  * and https://mozilla.org/MPL/2.0/.
- * Copyright (c) 2025+ Gebo.ai 
+ * Copyright (c) 2025+ Gebo.ai
  */
 
 package ai.gebo.restintegration.abstraction.layer;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.RequestCallback;
-import org.springframework.web.client.ResponseExtractor;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
 import ai.gebo.model.GUserMessage;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
- * AI generated comments Service class that wraps the functionality of
- * RestTemplate for HTTP requests.
+ * The HTTP calls of the integrations (the models lookups, the search services, the
+ * content management systems): get, post and exchange, their status mapped to Gebo's
+ * exceptions (404 {@link GeboNotFoundException}, 401-403
+ * {@link GeboInvalidAccessException}, 5xx {@link GeboRemoteBackendErrorException},
+ * anything else {@link GeboRestIntegrationException}).
+ * <p>
+ * It calls through Spring's {@link RestClient}: {@code RestTemplate}, which it wrapped
+ * before, is deprecated for removal in Spring Framework 7.1. The class keeps its name and
+ * its methods, so its callers did not change; the urls are expanded and encoded the way
+ * {@code RestTemplate} did ({@link EncodingMode#URI_COMPONENT}).
+ * <p>
+ * The shared bean's calls, and those of the wrappers it derives
+ * ({@link #timingOut(Duration, Duration)}), are observed in the application's registry
+ * (see {@link GeboHttpClientObservations}).
  */
 @Service
 public class RestTemplateWrapperService {
-	// Logger for this class
-	private static Logger LOGGER = LoggerFactory.getLogger(RestTemplateWrapperService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RestTemplateWrapperService.class);
 
-	// RestTemplate instance to perform HTTP requests
-	RestTemplate restTemplate = new RestTemplate();
-
-	/**
-	 * Default constructor for RestTemplateWrapperService
-	 */
-	public RestTemplateWrapperService() {
-
+	/** Reads a response as it comes, its body a stream (a file download). */
+	@FunctionalInterface
+	public interface ResponseReader<T> {
+		T read(ClientHttpResponse response) throws IOException;
 	}
 
-	/** A wrapper calling through the given RestTemplate. */
-	public RestTemplateWrapperService(RestTemplate restTemplate) {
-		this.restTemplate = restTemplate;
+	private final RestClient restClient;
+	private final ObservationRegistry observationRegistry;
+
+	/**
+	 * A wrapper calling with no timeout, as the shared bean always did, over the JDK's
+	 * HttpURLConnection as RestTemplate did (its proxy settings, its redirections). Its
+	 * calls are not observed.
+	 */
+	public RestTemplateWrapperService() {
+		this(ObservationRegistry.NOOP);
+	}
+
+	/**
+	 * The shared bean: as {@link #RestTemplateWrapperService()}, its calls observed in the
+	 * application's registry (see {@link GeboHttpClientObservations}).
+	 */
+	@Autowired
+	public RestTemplateWrapperService(ObjectProvider<ObservationRegistry> observationRegistry) {
+		this(GeboHttpClientObservations.registryOf(observationRegistry));
+	}
+
+	private RestTemplateWrapperService(ObservationRegistry observationRegistry) {
+		this(RestClient.builder().requestFactory(new SimpleClientHttpRequestFactory()), observationRegistry);
+	}
+
+	/** A wrapper calling through a client built from the builder, urls encoded as RestTemplate did. */
+	public RestTemplateWrapperService(RestClient.Builder builder) {
+		this(builder, ObservationRegistry.NOOP);
+	}
+
+	/**
+	 * A wrapper calling through a client built from the builder, urls encoded as
+	 * RestTemplate did, its calls observed in the registry.
+	 */
+	public RestTemplateWrapperService(RestClient.Builder builder, ObservationRegistry observationRegistry) {
+		final DefaultUriBuilderFactory uris = new DefaultUriBuilderFactory();
+		uris.setEncodingMode(EncodingMode.URI_COMPONENT);
+		this.observationRegistry = observationRegistry != null ? observationRegistry : ObservationRegistry.NOOP;
+		this.restClient = GeboHttpClientObservations.observed(builder, this.observationRegistry)
+				.uriBuilderFactory(uris).build();
 	}
 
 	/**
 	 * A wrapper of its own whose calls time out: for callers that must not wait forever
-	 * on a provider (the shared bean's RestTemplate has no timeout, and the other users
-	 * of it keep that).
+	 * on a provider (the shared bean has no timeout, and the other users of it keep that).
+	 * Its calls are not observed: a Spring bean derives its own with
+	 * {@link #timingOut(Duration, Duration)} from the shared one.
 	 *
 	 * @param connectTimeout time a call may take to connect
 	 * @param readTimeout    time a call may wait for the answer
 	 */
 	public static RestTemplateWrapperService withTimeouts(Duration connectTimeout, Duration readTimeout) {
+		return new RestTemplateWrapperService(RestClient.builder().requestFactory(timingOutFactory(connectTimeout,
+				readTimeout)), ObservationRegistry.NOOP);
+	}
+
+	/**
+	 * A wrapper of its own whose calls time out, observed as this one's are: for callers
+	 * that must not wait forever on a provider.
+	 *
+	 * @param connectTimeout time a call may take to connect
+	 * @param readTimeout    time a call may wait for the answer
+	 */
+	public RestTemplateWrapperService timingOut(Duration connectTimeout, Duration readTimeout) {
+		return new RestTemplateWrapperService(
+				RestClient.builder().requestFactory(timingOutFactory(connectTimeout, readTimeout)),
+				observationRegistry);
+	}
+
+	private static SimpleClientHttpRequestFactory timingOutFactory(Duration connectTimeout, Duration readTimeout) {
 		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 		requestFactory.setConnectTimeout(connectTimeout);
 		requestFactory.setReadTimeout(readTimeout);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("withTimeouts(...) connect:" + connectTimeout + " read:" + readTimeout);
+			LOGGER.debug("timing out, connect:" + connectTimeout + " read:" + readTimeout);
 		}
-		return new RestTemplateWrapperService(new RestTemplate(requestFactory));
+		return requestFactory;
 	}
 
 	/**
 	 * Exchanges HTTP requests with specified URL, method, and request entity,
 	 * returning a response entity of the specified type.
-	 * 
-	 * @param url           URL to send the request to
-	 * @param method        HTTP method to use
-	 * @param requestEntity HTTP entity with the request data
-	 * @param responseType  Class type of the response expected
-	 * @param <T>           Type of the response body
-	 * @return ResponseEntity of the given response type
+	 *
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
 	public <T> ResponseEntity<T> exchange(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
@@ -96,14 +161,8 @@ public class RestTemplateWrapperService {
 	}
 
 	/**
-	 * Exchanges HTTP requests and returns the response body as an object.
-	 * 
-	 * @param url           URL to send the request to
-	 * @param method        HTTP method to use
-	 * @param requestEntity HTTP entity with the request data
-	 * @param responseType  Class type of the response expected
-	 * @param <T>           Type of the response body
-	 * @return Response body as an object or null if there's no body
+	 * Exchanges HTTP requests and returns the response body, null when there is none.
+	 *
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
 	public <T> T exchangeAndReturn(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
@@ -113,13 +172,11 @@ public class RestTemplateWrapperService {
 	}
 
 	/**
-	 * Handles HTTP error responses by throwing appropriate exceptions based on the
-	 * status code.
-	 * 
-	 * @param statusCode HTTP status code of the error response
-	 * @throws GeboRestIntegrationException when an error status code is encountered
+	 * Throws the exception of an error status: 5xx {@link GeboRemoteBackendErrorException},
+	 * 404 {@link GeboNotFoundException}, 401-403 {@link GeboInvalidAccessException}, any
+	 * other error {@link GeboRestIntegrationException}.
 	 */
-	private void handleError(HttpStatusCode statusCode) throws GeboRestIntegrationException {
+	private static void handleError(HttpStatusCode statusCode) throws GeboRestIntegrationException {
 		if (statusCode.is5xxServerError()) {
 			throw new GeboRemoteBackendErrorException(statusCode.toString());
 		}
@@ -134,13 +191,7 @@ public class RestTemplateWrapperService {
 	}
 
 	/**
-	 * Converts HttpClientErrorException into GUserMessage to provide user-friendly
-	 * error messages.
-	 * 
-	 * @param exc         Exception thrown during HTTP client operation
-	 * @param serviceName Name of the service being accessed
-	 * @param content     Content or resource being accessed
-	 * @return GUserMessage with error details
+	 * Converts an HTTP client error into a user-friendly message based on the status code.
 	 */
 	public static GUserMessage toMessage(HttpClientErrorException exc, String serviceName, String content) {
 		HttpStatusCode statusCode = exc.getStatusCode();
@@ -166,56 +217,7 @@ public class RestTemplateWrapperService {
 	}
 
 	/**
-	 * Exchanges HTTP requests with specified URL, method, request entity, and
-	 * variables, returning a response entity of the specified type.
-	 * 
-	 * @param url           URL to send the request to
-	 * @param method        HTTP method to use
-	 * @param requestEntity HTTP entity with the request data
-	 * @param responseType  Class type of the response expected
-	 * @param uriVariables  Variables for URI template
-	 * @param <T>           Type of the response body
-	 * @return ResponseEntity of the given response type
-	 * @throws GeboRestIntegrationException when HTTP request fails
-	 */
-	public <T> ResponseEntity<T> exchange(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
-			Class<T> responseType, Object... uriVariables) throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> value = restTemplate.exchange(url, method, requestEntity, responseType, uriVariables);
-
-			if (value.getStatusCode().is2xxSuccessful()) {
-				return value;
-			} else {
-				if (value.getStatusCode().is3xxRedirection()) {
-					List<String> redirection = value.getHeaders().getValuesAsList("Location");
-					if (redirection != null && !redirection.isEmpty()) {
-						return this.exchange(redirection.get(0), method, requestEntity, responseType, uriVariables);
-					}
-				}
-
-				handleError(value.getStatusCode());
-				throw new GeboRestIntegrationException(value.getStatusCode().toString());
-			}
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in exchange(" + url + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + url, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in exchange(" + url + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + url, exc);
-		}
-	}
-
-	/**
-	 * Converts GeboRestIntegrationException into GUserMessage to provide
-	 * user-friendly error messages.
-	 * 
-	 * @param exc         Exception thrown during HTTP client operation
-	 * @param serviceName Name of the service being accessed
-	 * @param content     Content or resource being accessed
-	 * @return GUserMessage with error details
+	 * Converts a Gebo REST integration exception into a user-friendly message.
 	 */
 	public static GUserMessage toMessage(GeboRestIntegrationException exc, String serviceName, String content) {
 		if (exc != null) {
@@ -240,326 +242,189 @@ public class RestTemplateWrapperService {
 				"Netork error comunicating to the remote system accessing content\n" + content + toString(exc));
 	}
 
-	/**
-	 * Converts exception to a string message.
-	 * 
-	 * @param exc Exception to be converted
-	 * @return String message from the exception
-	 */
 	private static String toString(Throwable exc) {
-
 		return exc.getMessage();
 	}
 
-	/**
-	 * Executes a general HTTP request using the RestTemplate, by providing URI,
-	 * method, request callback, and response extractor.
-	 * 
-	 * @param uri       URI to send the request to
-	 * @param method    HTTP method to use
-	 * @param callback  Callback to prepare the request
-	 * @param extractor Extractor to process the response
-	 * @param <T>       Type of the response body
-	 * @return The processed response
-	 * @throws GeboRestIntegrationException when HTTP request fails
-	 */
-	public <T> T execute(URI uri, HttpMethod method, RequestCallback callback, ResponseExtractor<T> extractor)
-			throws GeboRestIntegrationException {
-		try {
-			return restTemplate.execute(uri, method, callback, extractor);
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in execute(" + uri + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
+	/** The headers and the body of a request object, an HttpEntity or a plain body. */
+	private static RestClient.RequestBodySpec withRequest(RestClient.RequestBodySpec spec, @Nullable Object request) {
+		if (request instanceof HttpEntity<?> entity) {
+			spec.headers(headers -> headers.addAll(entity.getHeaders()));
+			if (entity.getBody() != null) {
+				spec.body(entity.getBody());
 			}
-			throw new GeboRestIntegrationException("Exception accessing => " + uri, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in execute(" + uri + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + uri, exc);
+		} else if (request != null) {
+			spec.body(request);
 		}
-
+		return spec;
 	}
 
 	/**
-	 * Executes a general HTTP request using the RestTemplate by providing URL,
-	 * method, request callback, and response extractor.
-	 * 
-	 * @param url       URL to send the request to
-	 * @param method    HTTP method to use
-	 * @param callback  Callback to prepare the request
-	 * @param extractor Extractor to process the response
-	 * @param <T>       Type of the response body
-	 * @return The processed response
+	 * Runs a call, its error status turned into Gebo's exceptions: a 2xx entity is
+	 * returned, any other status thrown as its exception.
+	 */
+	private static <T> ResponseEntity<T> call(String what, Supplier<ResponseEntity<T>> call)
+			throws GeboRestIntegrationException {
+		final ResponseEntity<T> value;
+		try {
+			value = call.get();
+		} catch (HttpStatusCodeException exc) {
+			LOGGER.error("Error calling " + what, exc);
+			handleError(exc.getStatusCode());
+			throw new GeboRestIntegrationException("Exception accessing => " + what, exc);
+		} catch (Throwable exc) {
+			LOGGER.error("Error calling " + what, exc);
+			throw new GeboRestIntegrationException("Error working with url:" + what, exc);
+		}
+		if (!value.getStatusCode().is2xxSuccessful()) {
+			handleError(value.getStatusCode());
+			throw new GeboRestIntegrationException(what + " answered " + value.getStatusCode());
+		}
+		return value;
+	}
+
+	/**
+	 * Exchanges HTTP requests with specified URL, method, request entity and url
+	 * variables; a redirection is followed.
+	 *
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
-	public <T> T execute(String url, HttpMethod method, RequestCallback callback, ResponseExtractor<T> extractor)
-			throws GeboRestIntegrationException {
-
+	public <T> ResponseEntity<T> exchange(String url, HttpMethod method, @Nullable HttpEntity<?> requestEntity,
+			Class<T> responseType, Object... uriVariables) throws GeboRestIntegrationException {
+		final ResponseEntity<T> value;
 		try {
-			return execute(new URI(url), method, callback, extractor);
+			value = withRequest(restClient.method(method).uri(url, uriVariables), requestEntity).retrieve()
+					.toEntity(responseType);
+		} catch (HttpStatusCodeException exc) {
+			LOGGER.error("Error in exchange(" + url + ",...)", exc);
+			handleError(exc.getStatusCode());
+			throw new GeboRestIntegrationException("Exception accessing => " + url, exc);
+		} catch (Throwable exc) {
+			LOGGER.error("Error in exchange(" + url + ",...)", exc);
+			throw new GeboRestIntegrationException("Error working with url:" + url, exc);
+		}
+		if (value.getStatusCode().is2xxSuccessful()) {
+			return value;
+		}
+		if (value.getStatusCode().is3xxRedirection()) {
+			List<String> redirection = value.getHeaders().getValuesAsList(HttpHeaders.LOCATION);
+			if (redirection != null && !redirection.isEmpty()) {
+				return this.exchange(redirection.get(0), method, requestEntity, responseType, uriVariables);
+			}
+		}
+		handleError(value.getStatusCode());
+		throw new GeboRestIntegrationException(value.getStatusCode().toString());
+	}
+
+	/**
+	 * Calls the url and reads the response as it comes (its body a stream, for a file
+	 * download); an error status is thrown as its exception before anything is read.
+	 *
+	 * @param headers the headers of the request, null for none
+	 * @throws GeboRestIntegrationException when HTTP request fails
+	 */
+	public <T> T read(URI uri, HttpMethod method, @Nullable HttpHeaders headers, ResponseReader<T> reader)
+			throws GeboRestIntegrationException {
+		try {
+			return restClient.method(method).uri(uri).headers(h -> {
+				if (headers != null) {
+					h.addAll(headers);
+				}
+			}).exchange((request, response) -> {
+				if (response.getStatusCode().isError()) {
+					throw statusException(response);
+				}
+				return reader.read(response);
+			});
+		} catch (HttpStatusCodeException exc) {
+			LOGGER.error("Error in read(" + uri + ",...)", exc);
+			handleError(exc.getStatusCode());
+			throw new GeboRestIntegrationException("Exception accessing => " + uri, exc);
+		} catch (Throwable exc) {
+			LOGGER.error("Error in read(" + uri + ",...)", exc);
+			throw new GeboRestIntegrationException("Error working with url:" + uri, exc);
+		}
+	}
+
+	/** The same, the url a string. */
+	public <T> T read(String url, HttpMethod method, @Nullable HttpHeaders headers, ResponseReader<T> reader)
+			throws GeboRestIntegrationException {
+		try {
+			return read(new URI(url), method, headers, reader);
 		} catch (URISyntaxException e) {
-			LOGGER.error("Error in execute(" + url + ",...)", e);
+			LOGGER.error("Error in read(" + url + ",...)", e);
 			throw new GeboRestIntegrationException("url=>" + url + " is not a valid URI", e);
 		}
 	}
 
+	private static HttpStatusCodeException statusException(ClientHttpResponse response) throws IOException {
+		final byte[] body = StreamUtils.copyToByteArray(response.getBody());
+		return response.getStatusCode().is5xxServerError()
+				? HttpServerErrorException.create(response.getStatusCode(), response.getStatusText(),
+						response.getHeaders(), body, StandardCharsets.UTF_8)
+				: HttpClientErrorException.create(response.getStatusCode(), response.getStatusText(),
+						response.getHeaders(), body, StandardCharsets.UTF_8);
+	}
+
 	/**
-	 * Processes HTTP POST requests and returns response entity for given URI,
-	 * request object, and response type.
-	 * 
-	 * @param uri           URI to send the POST request to
-	 * @param requestObject Object containing request data
-	 * @param responseType  Class type of the response expected
-	 * @param <T>           Type of the response body
-	 * @return ResponseEntity of the given response type
+	 * Posts the request (an HttpEntity, its headers sent too, or a plain body) to the uri.
+	 *
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
 	public <T> ResponseEntity<T> postForEntity(URI uri, Object requestObject, Class<T> responseType)
 			throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> retValue = restTemplate.postForEntity(uri, requestObject, responseType);
-			if (retValue.getStatusCode().is2xxSuccessful())
-				return retValue;
-			else
-				handleError(retValue.getStatusCode());
-			return null;
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in postForEntity(" + uri + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + uri, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in postForEntity(" + uri + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + uri, exc);
-		}
+		return call("postForEntity(" + uri + ")",
+				() -> withRequest(restClient.post().uri(uri), requestObject).retrieve().toEntity(responseType));
 	}
 
-	/**
-	 * Processes HTTP POST requests and returns response entity for given URL,
-	 * request object, and response type with URI variables.
-	 * 
-	 * @param uri           URL to send the POST request to
-	 * @param requestObject Object containing request data
-	 * @param responseType  Class type of the response expected
-	 * @param uriVariables  Variables for URI template
-	 * @param <T>           Type of the response body
-	 * @return ResponseEntity of the given response type
-	 * @throws GeboRestIntegrationException when HTTP request fails
-	 */
+	/** The same, the url a template expanded with the variables. */
 	public <T> ResponseEntity<T> postForEntity(String uri, Object requestObject, Class<T> responseType,
 			Map<String, ?> uriVariables) throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> retValue = restTemplate.postForEntity(uri, requestObject, responseType, uriVariables);
-			if (retValue.getStatusCode().is2xxSuccessful())
-				return retValue;
-			else
-				handleError(retValue.getStatusCode());
-			return null;
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in postForEntity(" + uri + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + uri, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in postForEntity(" + uri + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + uri, exc);
-		}
+		return call("postForEntity(" + uri + ")", () -> withRequest(restClient.post().uri(uri, uriVariables),
+				requestObject).retrieve().toEntity(responseType));
 	}
 
-	/**
-	 * Processes HTTP POST requests and returns response entity for given URL,
-	 * request object, and response type with URI variables.
-	 * 
-	 * @param uri           URL to send the POST request to
-	 * @param requestObject Object containing request data
-	 * @param responseType  Class type of the response expected
-	 * @param uriVariables  Variables for URI template
-	 * @param <T>           Type of the response body
-	 * @return ResponseEntity of the given response type
-	 * @throws GeboRestIntegrationException when HTTP request fails
-	 */
+	/** The same, the url a template expanded with the variables. */
 	public <T> ResponseEntity<T> postForEntity(String uri, Object requestObject, Class<T> responseType,
 			Object... uriVariables) throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> retValue = restTemplate.postForEntity(uri, requestObject, responseType, uriVariables);
-			if (retValue.getStatusCode().is2xxSuccessful())
-				return retValue;
-			else
-				handleError(retValue.getStatusCode());
-			return null;
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in postForEntity(" + uri + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + uri, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in postForEntity(" + uri + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + uri, exc);
-		}
+		return call("postForEntity(" + uri + ")", () -> withRequest(restClient.post().uri(uri, uriVariables),
+				requestObject).retrieve().toEntity(responseType));
 	}
 
 	/**
-	 * Processes HTTP GET requests and returns response entity for given URL and
-	 * response type with URI variables.
-	 * 
-	 * @param url          URL to send the GET request to
-	 * @param responseType Class type of the response expected
-	 * @param uriVariables Variables for URI template
-	 * @param <T>          Type of the response body
-	 * @return ResponseEntity of the given response type
+	 * Gets the url, a template expanded with the variables.
+	 *
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
 	public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Map<String, ?> uriVariables)
 			throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> retValue = restTemplate.getForEntity(url, responseType, uriVariables);
-			if (retValue.getStatusCode().is2xxSuccessful())
-				return retValue;
-			else
-				handleError(retValue.getStatusCode());
-			return null;
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in getForEntity(" + url + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + url, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in getForEntity(" + url + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + url, exc);
-		}
+		return call("getForEntity(" + url + ")",
+				() -> restClient.get().uri(url, uriVariables).retrieve().toEntity(responseType));
 	}
 
-	/**
-	 * Processes HTTP GET requests and returns response entity for given URL and
-	 * response type with URI variables.
-	 * 
-	 * @param url          URL to send the GET request to
-	 * @param responseType Class type of the response expected
-	 * @param uriVariables Variables for URI template
-	 * @param <T>          Type of the response body
-	 * @return ResponseEntity of the given response type
-	 * @throws GeboRestIntegrationException when HTTP request fails
-	 */
+	/** The same, the variables in order. */
 	public <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType, Object... uriVariables)
 			throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> retValue = restTemplate.getForEntity(url, responseType, uriVariables);
-			if (retValue.getStatusCode().is2xxSuccessful())
-				return retValue;
-			else
-				handleError(retValue.getStatusCode());
-			return null;
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in getForEntity(" + url + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + url, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in getForEntity(" + url + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + url, exc);
-		}
+		return call("getForEntity(" + url + ")",
+				() -> restClient.get().uri(url, uriVariables).retrieve().toEntity(responseType));
 	}
 
-	/**
-	 * Processes HTTP GET requests and returns response entity for given URI and
-	 * response type.
-	 * 
-	 * @param uri          URI to send the GET request to
-	 * @param responseType Class type of the response expected
-	 * @param <T>          Type of the response body
-	 * @return ResponseEntity of the given response type
-	 * @throws GeboRestIntegrationException when HTTP request fails
-	 */
+	/** The same, the uri as it is. */
 	public <T> ResponseEntity<T> getForEntity(URI uri, Class<T> responseType) throws GeboRestIntegrationException {
-		try {
-			ResponseEntity<T> retValue = restTemplate.getForEntity(uri, responseType);
-			if (retValue.getStatusCode().is2xxSuccessful())
-				return retValue;
-			else
-				handleError(retValue.getStatusCode());
-			return null;
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in getForEntity(" + uri + ",...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Exception accessing => " + uri, exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in getForEntity(" + uri + ",...)", exc);
-			throw new GeboRestIntegrationException("Error working with url:" + uri, exc);
-		}
+		return call("getForEntity(" + uri + ")", () -> restClient.get().uri(uri).retrieve().toEntity(responseType));
 	}
 
 	/**
-	 * Sets a custom ClientHttpRequestFactory to the rest template.
-	 * 
-	 * @param bufferingClientHttpRequestFactory Request factory to use
-	 */
-	public void setRequestFactory(ClientHttpRequestFactory bufferingClientHttpRequestFactory) {
-		restTemplate.setRequestFactory(bufferingClientHttpRequestFactory);
-
-	}
-
-	/**
-	 * Retrieves the currently configured ClientHttpRequestFactory.
-	 * 
-	 * @return Current ClientHttpRequestFactory used
-	 */
-	public ClientHttpRequestFactory getRequestFactory() {
-
-		return restTemplate.getRequestFactory();
-	}
-
-	/**
-	 * Sets a list of ClientHttpRequestInterceptors to the rest template.
-	 * 
-	 * @param currentInterceptors List of interceptors
-	 */
-	public void setInterceptors(List<ClientHttpRequestInterceptor> currentInterceptors) {
-		restTemplate.setInterceptors(currentInterceptors);
-
-	}
-
-	/**
-	 * Retrieves the list of ClientHttpRequestInterceptors currently associated with
-	 * the rest template.
-	 * 
-	 * @return List of current interceptors
-	 */
-	public List<ClientHttpRequestInterceptor> getInterceptors() {
-		return restTemplate.getInterceptors();
-	}
-
-	/**
-	 * Exchanges HTTP requests with specified RequestEntity and
-	 * ParameterizedTypeReference, returning a response entity of the specified
-	 * type.
-	 * 
-	 * @param requestEntity Request entity to send
-	 * @param returnType    Expected return type with parameterized type reference
-	 * @param <T>           Type of the response body
-	 * @return ResponseEntity of the given response type
+	 * Exchanges a request entity (method, url, headers, body), the response read as the
+	 * given type.
+	 *
 	 * @throws GeboRestIntegrationException when HTTP request fails
 	 */
 	public <T> ResponseEntity<T> exchange(RequestEntity<Object> requestEntity, ParameterizedTypeReference<T> returnType)
 			throws GeboRestIntegrationException {
-		try {
-			return restTemplate.exchange(requestEntity, returnType);
-		} catch (HttpClientErrorException exc) {
-			LOGGER.error("Error in exchange(...)", exc);
-			if (exc.getStatusCode() != null) {
-				handleError(exc.getStatusCode());
-			}
-			throw new GeboRestIntegrationException("Error in exchange(...)", exc);
-		} catch (Throwable exc) {
-			LOGGER.error("Error in exchange(...)", exc);
-			throw new GeboRestIntegrationException("Error in exchange(...)", exc);
-		}
+		return call("exchange(" + requestEntity.getUrl() + ")",
+				() -> withRequest(restClient.method(requestEntity.getMethod()).uri(requestEntity.getUrl()),
+						requestEntity).retrieve().toEntity(returnType));
 	}
 
 	public static String urlConcat(String... partialAddresses) {

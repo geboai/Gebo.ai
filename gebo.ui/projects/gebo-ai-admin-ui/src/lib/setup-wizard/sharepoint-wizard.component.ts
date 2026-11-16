@@ -17,7 +17,7 @@
  * for SharePoint configuration.
  */
 
-import { Component, Injectable } from "@angular/core";
+import { Component, Injectable, ChangeDetectionStrategy } from "@angular/core";
 import { GeboModulesConfigControllerService, GSharepointContentManagementSystem, SharepointSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { AbstractStatusService, BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService, SetupWizardComunicationService, SHAREPOINT_MODULE } from "@Gebo.ai/reusable-ui";
 import { map, Observable } from "rxjs";
@@ -68,6 +68,7 @@ export class SharepointInstalledModuleService extends GeboRootInstalledModuleSer
   selector: "gebo-sharepoint-wizard-component",
   templateUrl: "sharepoint-wizard.component.html",
   standalone: false,
+  changeDetection: ChangeDetectionStrategy.Eager,
   providers: [{ provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("SharepointWizardComponent") }]
 
 })

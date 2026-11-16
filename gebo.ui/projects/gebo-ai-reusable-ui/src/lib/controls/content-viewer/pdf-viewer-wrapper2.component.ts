@@ -17,7 +17,7 @@
  */
 
 import { HttpClient } from "@angular/common/http";
-import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { getAuth, getHttpHeaders } from "../../infrastructure/gebo-credentials";
 import { BASE_PATH } from "@Gebo.ai/gebo-ai-rest-api";
@@ -53,6 +53,7 @@ import { pdfDefaultOptions } from 'ngx-extended-pdf-viewer';
 @Component({
     selector: "gebo-ai-pdf-viewer-wrapper2",
     template: "@if (pdfData) {<ngx-extended-pdf-viewer  [src]='pdfData'  [filenameForDownload]='fileName'     style='height: 650px;width: 100%' (pdfLoadingFailed)='onError($event)' ></ngx-extended-pdf-viewer>}",
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
 export class PDFViewerWrapper2Component implements OnInit, OnChanges, OnDestroy {

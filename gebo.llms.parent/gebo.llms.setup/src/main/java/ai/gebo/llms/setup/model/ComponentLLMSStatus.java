@@ -37,6 +37,8 @@ public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.Compon
     public boolean ttsModelSetup;
 
     public boolean transcriptModelSetup;
+    // Optional, like the images: a default decision model judging the retrieved fragments
+    public boolean decisionModelSetup;
 
     // Model code of the current default (or, for the chat service slot, the
     // internal-services model) of each kind. Null when none is configured. Used by
@@ -54,6 +56,7 @@ public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.Compon
     public String ttsModelCode;
 
     public String transcriptModelCode;
+    public String decisionModelCode;
 
     // Provider (model type handler code) that owns each current default, shown next
     // to the model code in the expert (Advanced) wizard tab.
@@ -70,4 +73,5 @@ public class ComponentLLMSStatus extends ai.gebo.architecture.setup.model.Compon
     public String ttsModelProviderId;
 
     public String transcriptModelProviderId;
+    public String decisionModelProviderId;
 }

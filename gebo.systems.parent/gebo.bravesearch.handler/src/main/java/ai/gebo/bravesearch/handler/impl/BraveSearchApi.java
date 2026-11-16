@@ -53,8 +53,10 @@ public class BraveSearchApi {
 	 * answering on a sloppy network does not hold the search forever.
 	 */
 	@Autowired
-	public BraveSearchApi(SearchCallsConfig searchCalls) {
-		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	public BraveSearchApi(SearchCallsConfig searchCalls, RestTemplateWrapperService sharedClient) {
+		// the shared client's settings, its observation of the calls among them, with the
+		// search calls' timeouts
+		this(sharedClient.timingOut(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
 	}
 
 	BraveSearchApi(RestTemplateWrapperService restTemplateService) {
@@ -63,8 +65,7 @@ public class BraveSearchApi {
 
 	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
 	BraveSearchApi using(SearchCallParameters parameters) {
-		return new BraveSearchApi(
-				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+		return new BraveSearchApi(restTemplateService.timingOut(parameters.connectTimeout(), parameters.readTimeout()));
 	}
 
 	BraveApiResponse callApi(String apiKey, String query, Integer topN) throws GeboRestIntegrationException {

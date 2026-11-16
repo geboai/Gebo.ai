@@ -21,3 +21,4 @@ Name | Type | Description | Notes
 **pipelineRouterDecisionCode** | **String** |  |  [optional]
 **pipelineParams** | **Map&lt;String, Object&gt;** |  |  [optional]
 **deepSearchRequestId** | **String** |  |  [optional]
+**networkOfAgentsSuspendedState** | [**NetworkOfAgentsSuspendedState**](NetworkOfAgentsSuspendedState.md) |  |  [optional]

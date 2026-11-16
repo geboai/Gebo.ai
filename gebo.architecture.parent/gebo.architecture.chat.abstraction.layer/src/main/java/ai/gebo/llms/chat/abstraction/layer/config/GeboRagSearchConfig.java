@@ -73,6 +73,11 @@ public class GeboRagSearchConfig {
 	// scored among the most relevant, so the top of the ranked list is protected from
 	// it. Set to 0 to let the filter judge the whole list.
 	private int rankerIrrelevanceFilterProtectedTopFragments = 2;
+	// The filter judges the fragments with the default decision model when one is
+	// configured (one yes/no question per fragment, a small dedicated model, no prompt
+	// to parse), falling back to the internal services chat model otherwise. Set to
+	// false to keep judging with the chat model even when a decision model exists.
+	private boolean rankerIrrelevanceFilterUsesDecisionModel = true;
 	// Hybrid retrieval. When enabled the lexical (full text) leg ALWAYS runs beside
 	// the semantic one and the two share the requested topK, instead of the lexical
 	// leg running only as a fallback when the semantic one under delivers. With a

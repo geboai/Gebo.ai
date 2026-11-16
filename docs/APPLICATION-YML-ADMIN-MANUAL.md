@@ -87,6 +87,23 @@ for how this plugs into the bundled Grafana/Prometheus/Tempo stack.)*
 | `management.opentelemetry.tracing.export.otlp.endpoint` | URL | unset (env: `MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT`) | Where OTLP traces are exported, e.g. `http://otel-collector:4318/v1/traces` — the bundled `otel-collector` of the observability overlay. Unset, no span exporter is created, so an installation without a collector logs no export failures. Spring Boot 4 no longer reads the old `management.otlp.tracing.endpoint` / `MANAGEMENT_OTLP_TRACING_ENDPOINT`. |
 | `management.server.port` | port | unset (env: `MANAGEMENT_SERVER_PORT`) | Moves the actuator to a separate management port, where `/actuator/health` and `/actuator/prometheus` answer **anonymously**, for Prometheus and health probes. Never publish this port: the observability overlay sets `12998` and keeps it on the internal network. Unset (or equal to `server.port`), every actuator call needs an authenticated user, as before. Every other actuator endpoint (`metrics` included) always needs one. |
 
+**Outgoing calls.** Gebo.ai observes the HTTP calls it makes, under the same settings as the
+incoming requests:
+- **Which calls:** the content integrations (Confluence, SharePoint, Jira, WebDAV), the web
+  search providers, the LLM providers and rankers, the OAuth2 token requests and the model
+  lookups.
+- **Traces:** each call is a client span inside the request or job that made it, and it sends
+  the trace on to the server called (the W3C `traceparent` header).
+- **Metrics:** each call is measured as `http_client_requests_seconds`, by method, status, host
+  (`client_name`) and `uri`. The `uri` is the path template, such as `/v1/chat/completions` or
+  `/rest/api/content/{id}`; a URL written out in full is measured as `none`, so ids never
+  multiply the series. The providers called through the OpenAI SDK (OpenAI itself and the
+  OpenAI-compatible ones, such as regolo.ai) are measured by Spring AI's own client as
+  `okhttp_requests_seconds`, by target host, method and status, with the same spans and trace
+  header.
+- **What is recorded:** URLs are recorded without their query string or user info, since some
+  providers take their API key in the query.
+
 ## 6. Security — authentication, tokens, CORS, SSO
 
 Bound by `GeboSecurityConfig` (`ai.gebo.security`) except `cors.allowedOrigins`, which is a
@@ -240,6 +257,27 @@ xAI/Grok, NVIDIA, Groq, Regolo.ai and OpenRouter.ai have **no individual `*Enabl
 registered generically as OpenAI-API-compatible endpoints (`GenericOpenAICompatibleProvidersConfig`,
 sourced from a bundled provider catalog), and any further OpenAI-compatible server is added the same
 way through the admin UI, not `application.yml`.
+
+**Decision models.** Besides chat, embedding, ranker, image, text to speech and transcription
+models, a provider can serve *decision models* (Spring AI 2.1 `DecisionModel`): small, fast models
+that write no text and answer yes/no, multiple-choice and score questions about an input, with a
+probability for each answer. Gebo uses the default one to judge whether a ranked knowledge base
+fragment is useful to the question (see the irrelevance filter in §18). Three providers offer them,
+all configured from Setup › LLMs › "New decision model", not from `application.yml`:
+
+- **OpenAI** (`decision-OpenAI`), on OpenAI's Decisions API; Spring AI's default model is
+  `gpt-6-luna`.
+- **Ollama** (`decision-ollama`), on the server's System One endpoint (`/v1/systemone`, Ollama
+  0.40.4 or later). The model list shows only the models whose capabilities include `decision`,
+  for instance `d1-omni:600m` or `d1-omni:2b`.
+- **Any server exposing an OpenAI style Decisions API** (`decision-generic-openai`), declared in the
+  bundled provider catalog under `ai.gebo.llms.generic.config.decisionModelProviders` (each entry:
+  `code`, `providerId`, `description`, `baseUrl`, `optionalAuthentication`, `modelsListProvider`,
+  `defaultModel`); the url typed in the model's editor wins over the entry's `baseUrl`.
+
+Saving a decision model asks it one short question, so a wrong key, url or model name is reported
+when the model is saved. Its calls are accounted in the LLM usage views as model type `DECISION`,
+and it appears in the data flow register beside the pipelines and networks that use it.
 
 How much knowledge base content a model call may take (`KnowledgeBaseSearchBudgetConfig`):
 
@@ -630,6 +668,17 @@ large-scale ingestion tuning.
 | `ai.gebo.agents.standard.deep-search-tools.coverage.min-documents-found` | int | `3` | Documents used or left unread by the analysis before `min-documents-used` applies. |
 | `ai.gebo.agents.standard.deep-search-tools.coverage.barely-read-fragments` | int | `2` | Knowledge base only (its documents can be read whole): a source read in at most this many fragments of a longer document is read in part, and named for a full read. |
 | `ai.gebo.agents.standard.deep-search-tools.coverage.barely-read-share` | double | `0.5` | Knowledge base only: the coverage is thin when more than this share of the sources were read in part (a value outside 0..1 means the default). |
+| `ai.gebo.ragsearch.config.default-top-k` | int | `15` | Fragments a knowledge base search keeps by default. With a ranker model configured, twice as many are retrieved and the ranker keeps the best `default-top-k`. |
+| `ai.gebo.ragsearch.config.default-similarity-threshold` | double 0..1 | `0.57` *(built-in `0.50`)* | Minimum cosine similarity of a fragment retrieved by the semantic search. The value suits the shipped embedding models; an embedding model scoring lower similarities (some small local ones) retrieves more with a lower value. |
+| `ai.gebo.ragsearch.config.hybrid-search-enabled` | boolean | `true` | Runs the lexical (full text) search beside the semantic one, the two sharing the requested fragments, so questions carrying rare literal terms (exact phrases, proper nouns, codes) find them. Set to `false` for the semantic search alone, the lexical one completing it only when it under delivers. |
+| `ai.gebo.ragsearch.config.hybrid-full-text-share` | double 0..1 | `0.5` | Share of the requested fragments given to the lexical search when the hybrid search is on; lower it to favour semantic recall, raise it to favour literal matches. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-enabled` | boolean | `true` | Second relevance stage after the ranker model: the ranked fragments useless for the question are dropped before they reach the answering model. The best ranked fragment is always kept. Set to `false` to pass the ranker's output as it is. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-uses-decision-model` | boolean | `true` | The filter judges each fragment with the default decision model when one is configured (one yes/no question per fragment, kept when the yes probability is at least 0.5), else with the internal services chat model and its prompt. Set to `false` to keep judging with the chat model. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-min-documents` | int | `5` | The filter runs on at least this many ranked fragments; on fewer the extra model calls are not worth their latency. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-protected-top-fragments` | int | `2` | The best ranked fragments the filter never judges, so a model's verdict cannot drop the ranker's strongest picks. `0` lets it judge the whole list. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-context-fraction` | double 0..1 | `0.5` | Chat model judging only: share of its context window filled by one batch of fragments. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-max-fragments-per-batch` | int | `15` | Chat model judging only: most fragments in one batch, on top of the context budget, so the model judges them one by one. |
+| `ai.gebo.ragsearch.config.ranker-irrelevance-filter-warn-rate` | double 0..1 | `0.6` | Share of discarded fragments above which the filter logs a WARN naming the question: a sustained high rate means the searches are off target for the questions asked. |
 | `ai.gebo.chatpipes.defaultPipelineStepIsChatAgent` | boolean | `true` | **Currently has no effect** - the value is read and never used. The behaviour it describes (agentic flow vs. the LLM routing/decision step) is governed by `ai.gebo.agents.standard.enabled` instead. See [`CHAT-PIPELINE-ROUTING-ARCHITECTURE.md`](./CHAT-PIPELINE-ROUTING-ARCHITECTURE.md) §8. |
 
 ## 19. Web search tool (Google Custom Search)

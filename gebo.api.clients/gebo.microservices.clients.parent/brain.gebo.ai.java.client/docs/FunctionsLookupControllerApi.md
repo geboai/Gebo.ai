@@ -4,10 +4,51 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**getAIToolsAndResourcesLibraryType**](FunctionsLookupControllerApi.md#getAIToolsAndResourcesLibraryType) | **GET** /api/admin/FunctionsLookupController/getAIToolsAndResourcesLibraryType | 
 [**getAllFunctions**](FunctionsLookupControllerApi.md#getAllFunctions) | **GET** /api/admin/FunctionsLookupController/getAllFunctions | 
 [**getAllFunctionsTree**](FunctionsLookupControllerApi.md#getAllFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllFunctionsTree | 
 [**getAllLocalFunctions**](FunctionsLookupControllerApi.md#getAllLocalFunctions) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctions | 
 [**getAllLocalFunctionsTree**](FunctionsLookupControllerApi.md#getAllLocalFunctionsTree) | **GET** /api/admin/FunctionsLookupController/getAllLocalFunctionsTree | 
+[**getToolSourceInfos**](FunctionsLookupControllerApi.md#getToolSourceInfos) | **GET** /api/admin/FunctionsLookupController/getToolSourceInfos | 
+
+<a name="getAIToolsAndResourcesLibraryType"></a>
+# **getAIToolsAndResourcesLibraryType**
+> List&lt;AIToolsAndResourcesLibraryType&gt; getAIToolsAndResourcesLibraryType()
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.FunctionsLookupControllerApi;
+
+
+FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
+try {
+    List<AIToolsAndResourcesLibraryType> result = apiInstance.getAIToolsAndResourcesLibraryType();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FunctionsLookupControllerApi#getAIToolsAndResourcesLibraryType");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;AIToolsAndResourcesLibraryType&gt;**](AIToolsAndResourcesLibraryType.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="getAllFunctions"></a>
 # **getAllFunctions**
@@ -163,6 +204,45 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;ToolCategoriesTree&gt;**](ToolCategoriesTree.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getToolSourceInfos"></a>
+# **getToolSourceInfos**
+> List&lt;ToolSourceInfo&gt; getToolSourceInfos()
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.FunctionsLookupControllerApi;
+
+
+FunctionsLookupControllerApi apiInstance = new FunctionsLookupControllerApi();
+try {
+    List<ToolSourceInfo> result = apiInstance.getToolSourceInfos();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling FunctionsLookupControllerApi#getToolSourceInfos");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;ToolSourceInfo&gt;**](ToolSourceInfo.md)
 
 ### Authorization
 

@@ -1483,7 +1483,36 @@
       "CodeHeader4": { "label": "Code" },
       "ModelHeader4": { "label": "Model " },
       "TextToSpeechModelsZone": { "label": "Configured text to speech models" },
-      "ConfigureBtn4": { "label": "configure" }
+      "ConfigureBtn4": { "label": "configure" },
+        "decision": {
+          "label": "New decision model",
+          "help": "Select the supplier to add a new decision model: a small model answering yes/no, choice and score questions, used to judge the relevance of the retrieved fragments",
+          "placeholder": "Select the decision model provider"
+        },
+        "NewDecisionModelConfigurationBtn": {
+          "label": "New decision model configuration"
+        },
+        "DecisionModelsZone": {
+          "label": "Configured decision models"
+        },
+        "CodeHeader7": {
+          "label": "Code"
+        },
+        "DescriptionHeader7": {
+          "label": "Description"
+        },
+        "ModelProviderHeader7": {
+          "label": "Model provider"
+        },
+        "ModelHeader7": {
+          "label": "Model "
+        },
+        "RoleHeader7": {
+          "label": "Role"
+        },
+        "ConfigureBtn7": {
+          "label": "configure"
+        }
     }
   },
   "GeboAiLargeLanguageModelsModule": {
@@ -2507,7 +2536,135 @@
         "summary": "OK!",
         "detail": "Operation done successfully"
       }
-    }
+    },
+      "GOpenAIDecisionModelConfig": {
+        "MainPanel": {
+          "label": "Editing OpenAI decision model configuration"
+        },
+        "SaveBtn": {
+          "label": "Save"
+        },
+        "CancelBtn": {
+          "label": "Cancel"
+        },
+        "DeleteBtn": {
+          "label": "Delete"
+        },
+        "DecisionModelUseNote": {
+          "label": "A decision model answers yes/no, choice and score questions about a text. The default one judges the relevance of the retrieved fragments in place of the service chat model."
+        },
+        "description": {
+          "label": "Description",
+          "help": "Enter the description of the decision model configuration"
+        },
+        "code": {
+          "label": "Unique Code",
+          "help": "Automatically generated unique code of the decision model configuration"
+        },
+        "apiSecretCode": {
+          "label": "OpenAI token",
+          "help": "Choose the OpenAI token to be used for this model",
+          "placeholder": "Select a token"
+        },
+        "choosedModel": {
+          "label": "OpenAI decision model choice",
+          "help": "Choose the OpenAI decision model to work with.",
+          "placeholder": "Select a model"
+        },
+        "defaultModel": {
+          "label": "set this as default decision model",
+          "help": "If true this will be used as default decision model where decision model is not indicated"
+        }
+      },
+      "GOllamaDecisionModelConfig": {
+        "MainPanel": {
+          "label": "Editing Ollama local (or lan) decision model configuration"
+        },
+        "SaveBtn": {
+          "label": "Save"
+        },
+        "CancelBtn": {
+          "label": "Cancel"
+        },
+        "DeleteBtn": {
+          "label": "Delete"
+        },
+        "DecisionModelUseNote": {
+          "label": "A decision model answers yes/no, choice and score questions about a text. The default one judges the relevance of the retrieved fragments in place of the service chat model. Only the models the Ollama server reports with the decision capability (such as d1-omni) are offered."
+        },
+        "description": {
+          "label": "Description",
+          "help": "Enter the description of the decision model configuration"
+        },
+        "code": {
+          "label": "Unique Code",
+          "help": "Automatically generated unique code of the decision model configuration"
+        },
+        "baseUrl": {
+          "label": "Base ollama server address",
+          "help": "Base address (like http://servername:234/) the ollama local or lan server responds."
+        },
+        "apiSecretCode": {
+          "label": "Ollama token",
+          "help": "Choose the Ollama token to be used for this model",
+          "placeholder": "Select a token"
+        },
+        "choosedModel": {
+          "label": "Ollama decision model choice",
+          "help": "Choose the Ollama decision model to work with.",
+          "placeholder": "Select a model"
+        },
+        "defaultModel": {
+          "label": "set this as default decision model",
+          "help": "If true this will be used as default decision model where decision model is not indicated"
+        }
+      },
+      "GenericOpenAIAPIDecisionModelConfig": {
+        "MainPanel": {
+          "label": "Editing decision model configuration"
+        },
+        "SaveBtn": {
+          "label": "Save"
+        },
+        "CancelBtn": {
+          "label": "Cancel"
+        },
+        "DeleteBtn": {
+          "label": "Delete"
+        },
+        "TitleFragment": {
+          "label": "Editing decision model provider:"
+        },
+        "DecisionModelUseNote": {
+          "label": "A decision model answers yes/no, choice and score questions about a text through the provider's Decisions API. The default one judges the relevance of the retrieved fragments in place of the service chat model."
+        },
+        "description": {
+          "label": "Description",
+          "help": "Enter the description of the model configuration"
+        },
+        "code": {
+          "label": "Unique Code",
+          "help": "Automatically generated unique code of the model configuration"
+        },
+        "baseUrl": {
+          "label": "Decisions API base server address",
+          "help": "Base address of the server exposing the Decisions API."
+        },
+        "apiSecretCode": {
+          "label": "Decisions API token",
+          "help": "Choose the API token to be used for this model (optional when the server accepts anonymous calls)",
+          "placeholder": "Select a token"
+        },
+        "choosedModel": {
+          "label": "Decision model choice",
+          "help": "Choose the decision model to work with, among the ones the server lists.",
+          "placeholder": "Select a model"
+        },
+        "defaultModel": {
+          "label": "set this as default decision model",
+          "help": "If true this will be used as default decision model where decision model is not indicated"
+        }
+      }
   },
   "GeboAIChatControlModule": {
     "GeboAIReusableChatComponent": {
@@ -2696,6 +2853,7 @@
       },
       "CalledFunctionsListBtn": { "help": "Show the functions called" },
       "ThinkingLabel": { "label": "Reasoning:" },
+      "ToolCallLabel": { "label": "Calling" },
       "PreviewTitle": { "label": "Displaying external content" },
       "NoUrlSetYet": { "label": "No url set yet" },
       "PreviewGeboTitle": { "label": "Displaying content" },
@@ -2828,6 +2986,32 @@
         "help": "Clear all selected documents"
       },
       "SELECTED_CHAT_DOCS_WINDOW": { "label": "Documents to chat with" }
+    },
+    "GeboAIChatSuspensionAnswerComponent": {
+      "SuspensionTitle": { "label": "The agents need your answer before going on" },
+      "OneByOneHint": { "label": "You can answer some now and the others later." },
+      "OptionalCondition": { "label": "(optional)" },
+      "WaitedFrom": { "label": "Waited from" },
+      "SolvedCondition": { "label": "Answered" },
+      "ExplanationInput": { "placeholder": "Or explain in your own words" },
+      "ValueInput": { "placeholder": "Your answer" },
+      "GoOnWithoutCondition": { "label": "No answer: let the agents go on without it" },
+      "skipSuspensionBtn": { "label": "Skip and go on" },
+      "abandonSuspensionBtn": { "label": "Abandon the run" },
+      "goOnWithoutSuspensionBtn": { "label": "Go on without the missing answers" },
+      "answerSuspensionBtn": { "label": "Answer" },
+      "ToolConfirmQuestion": { "label": "Allow the agent to run the tool" },
+      "ToolConfirmWithArguments": { "label": "with these arguments?" },
+      "ToolConfirmAllow": { "label": "Allow" },
+      "ToolConfirmAllowDescription": { "label": "The tool runs with these arguments" },
+      "ToolConfirmDeny": { "label": "Deny" },
+      "ToolConfirmDenyDescription": { "label": "The tool does not run; you may tell the agent why or what to do instead" },
+      "ToolConfirmMessagePlaceholder": { "label": "A message for the agent, with either choice (optional)" },
+      "ToolConfirmMessageNote": { "label": "(You may add a message for the agent to either choice.)" },
+      "WaitsForSomething": { "label": "The work waits for something from you." },
+      "MoreThanOneNote": { "label": "(You may choose more than one.)" },
+      "OwnWordsLine": { "label": "or explain in your own words" },
+      "MayLeaveUnansweredNote": { "label": "(You may leave this unanswered and go on.)" }
     }
   },
   "GeboAIAudioControlModule": {
@@ -4067,7 +4251,20 @@
         "label": "set as default",
         "help": "Set this model as the default text to speech model (overrides the current one if any)."
       },
-      "TtsCurDef": { "label": "Current default" }
+      "TtsCurDef": { "label": "Current default" },
+      "decisionPresetChoice": {
+        "label": "Default decision model",
+        "help": "Select one of the predefined decision models. It is created as the default decision model, which judges whether each retrieved fragment is useful to the question."
+      },
+      "decisionAdvancedChoice": {
+        "label": "Decision model",
+        "help": "Select one of the supplier published decision models."
+      },
+      "decisionAdvancedSetAsDefault": {
+        "label": "set as default",
+        "help": "Set this model as the default decision model (overrides the current one if any)."
+      },
+      "DecCurDef": { "label": "Current default" }
     },
     "GeboAIEasyVendorConfigurationComponent": {
       "CreateAdvancedBtn": { "label": "Create and activate" },
@@ -4116,6 +4313,10 @@
       "ImagesModel": {
         "label": "Default image generation model",
         "help": "This model will be responsible of doing image generation"
+      },
+      "DecisionModel": {
+        "label": "Default decision model",
+        "help": "This model judges whether each retrieved fragment is useful to the question"
       },
       "PresetNotOfferedText": {
         "label": "Preconfigured model is not in this provider anymore, please select one"
@@ -4192,6 +4393,10 @@
       "ClassImages": {
         "label": "Image generation model",
         "help": "Generates images from text prompts."
+      },
+      "ClassDecision": {
+        "label": "Decision model",
+        "help": "A small, fast model answering yes/no questions: it judges whether each retrieved fragment is useful to the question, so the answering model works on relevant material."
       },
       "SupportedByLabel": { "label": "Supported by providers:" }
     },
@@ -4326,7 +4531,17 @@
       "ClassImagesDeprecated": {
         "label": "The provider has deprecated this model"
       },
-      "ClassImagesReplacement": { "label": "It suggests in its place" }
+      "ClassImagesReplacement": { "label": "It suggests in its place" },
+      "ClassDecision": {
+        "label": "Decision model",
+        "help": "A small, fast model answering yes/no questions: it judges whether each retrieved fragment is useful to the question, so the answering model works on relevant material."
+      },
+      "ClassDecisionNotOffered": { "label": "The provider does not offer this model type" },
+      "ClassDecisionModify": { "label": "Change this model" },
+      "ClassDecisionEnable": { "label": "Configure this model" },
+      "ClassDecisionRetires": { "label": "The provider retires this model on" },
+      "ClassDecisionDeprecated": { "label": "The provider has deprecated this model" },
+      "ClassDecisionReplacement": { "label": "It suggests in its place" }
     },
     "LLMSEasySummaryStepComponent": {
       "SummaryComplete": {
@@ -4349,7 +4564,9 @@
       "ClassTts": { "label": "Text to speech model" },
       "ClassTtsSummaryNone": { "label": "Not configured" },
       "ClassImages": { "label": "Image generation model" },
-      "ClassImagesSummaryNone": { "label": "Not configured" }
+      "ClassImagesSummaryNone": { "label": "Not configured" },
+      "ClassDecision": { "label": "Decision model" },
+      "ClassDecisionSummaryNone": { "label": "Not configured" }
     },
     "LLMSEasyClassStatusComponent": {
       "ClassStatusNotConfigured": { "label": "Not configured yet" },
@@ -4760,6 +4977,10 @@
       "enabledFunctions": {
         "label": "Tools of this agent",
         "help": "Mount every registered tool, or pick the ones this agent may call: by category, by name, or one by one."
+      },
+      "toolsNeedingConfirmation": {
+        "label": "Tools a person confirms",
+        "help": "The tools this agent runs only once a person allows each call: the call, with its arguments, is put to the user of the conversation (or answered in the processes area) and the work waits for the answer; a refused call does not run and the agent is given the person's message instead."
       },
       "excludedToolSources": {
         "label": "Tool sources left out",
