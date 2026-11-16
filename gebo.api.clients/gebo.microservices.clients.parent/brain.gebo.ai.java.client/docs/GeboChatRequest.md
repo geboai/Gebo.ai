@@ -21,6 +21,11 @@ Name | Type | Description | Notes
 **searchRequested** | **Boolean** |  |  [optional]
 **searchForbidden** | **Boolean** |  |  [optional]
 **userLanguage** | **String** |  |  [optional]
+**runOrigin** | **String** |  |  [optional]
+**attended** | **Boolean** |  |  [optional]
+**externalSystem** | **String** |  |  [optional]
+**externalSessionKey** | **String** |  |  [optional]
+**networkOfAgentsSuspendedStateReaction** | [**NetworkOfAgentsSuspendedStateReaction**](NetworkOfAgentsSuspendedStateReaction.md) |  |  [optional]
 **additionalContents** | [**List&lt;AdditionalContent&gt;**](AdditionalContent.md) |  |  [optional]
 **tokensSize** | **Integer** |  |  [optional]
 

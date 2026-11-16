@@ -6,8 +6,11 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**deletePromptConfig**](GeboAdminPromptsControllerApi.md#deletePromptConfig) | **POST** /api/admin/GeboAdminPromptsController/deletePromptConfig | 
 [**findGPromptUseInfoByUseCode**](GeboAdminPromptsControllerApi.md#findGPromptUseInfoByUseCode) | **GET** /api/admin/GeboAdminPromptsController/findGPromptUseInfoByUseCode | 
+[**findPromptConfigByAgentId**](GeboAdminPromptsControllerApi.md#findPromptConfigByAgentId) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByAgentId | 
 [**findPromptConfigByCode**](GeboAdminPromptsControllerApi.md#findPromptConfigByCode) | **GET** /api/admin/GeboAdminPromptsController/findPromptConfigByCode | 
 [**getAllPromptConfigsLightList**](GeboAdminPromptsControllerApi.md#getAllPromptConfigsLightList) | **GET** /api/admin/GeboAdminPromptsController/getAllPromptConfigsLightList | 
+[**getAllowedPromptPlaceholders**](GeboAdminPromptsControllerApi.md#getAllowedPromptPlaceholders) | **GET** /api/admin/GeboAdminPromptsController/getAllowedPromptPlaceholders | 
+[**getKnownPromptPlaceholders**](GeboAdminPromptsControllerApi.md#getKnownPromptPlaceholders) | **GET** /api/admin/GeboAdminPromptsController/getKnownPromptPlaceholders | 
 [**getPromptCategories**](GeboAdminPromptsControllerApi.md#getPromptCategories) | **GET** /api/admin/GeboAdminPromptsController/getPromptCategories | 
 [**getPromptConfigByFilter**](GeboAdminPromptsControllerApi.md#getPromptConfigByFilter) | **POST** /api/admin/GeboAdminPromptsController/getPromptConfigByFilter | 
 [**insertPromptConfig**](GeboAdminPromptsControllerApi.md#insertPromptConfig) | **POST** /api/admin/GeboAdminPromptsController/insertPromptConfig | 
@@ -99,6 +102,49 @@ No authorization required
  - **Content-Type**: Not defined
  - **Accept**: application/json
 
+<a name="findPromptConfigByAgentId"></a>
+# **findPromptConfigByAgentId**
+> List&lt;GPromptTemplateConfig&gt; findPromptConfigByAgentId(agentId)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+String agentId = "agentId_example"; // String | 
+try {
+    List<GPromptTemplateConfig> result = apiInstance.findPromptConfigByAgentId(agentId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#findPromptConfigByAgentId");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **agentId** | **String**|  |
+
+### Return type
+
+[**List&lt;GPromptTemplateConfig&gt;**](GPromptTemplateConfig.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
 <a name="findPromptConfigByCode"></a>
 # **findPromptConfigByCode**
 > GPromptTemplateConfig findPromptConfigByCode(code)
@@ -171,6 +217,90 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;GPromptTemplateLightView&gt;**](GPromptTemplateLightView.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAllowedPromptPlaceholders"></a>
+# **getAllowedPromptPlaceholders**
+> AllowedPromptPlaceholders getAllowedPromptPlaceholders(promptUse, agentPrompt)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+String promptUse = "promptUse_example"; // String | 
+Boolean agentPrompt = true; // Boolean | 
+try {
+    AllowedPromptPlaceholders result = apiInstance.getAllowedPromptPlaceholders(promptUse, agentPrompt);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getAllowedPromptPlaceholders");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **promptUse** | **String**|  |
+ **agentPrompt** | **Boolean**|  | [optional]
+
+### Return type
+
+[**AllowedPromptPlaceholders**](AllowedPromptPlaceholders.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getKnownPromptPlaceholders"></a>
+# **getKnownPromptPlaceholders**
+> KnownPromptPlaceholders getKnownPromptPlaceholders()
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboAdminPromptsControllerApi;
+
+
+GeboAdminPromptsControllerApi apiInstance = new GeboAdminPromptsControllerApi();
+try {
+    KnownPromptPlaceholders result = apiInstance.getKnownPromptPlaceholders();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAdminPromptsControllerApi#getKnownPromptPlaceholders");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**KnownPromptPlaceholders**](KnownPromptPlaceholders.md)
 
 ### Authorization
 

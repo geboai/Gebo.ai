@@ -13,8 +13,11 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GAgentConfig;
+import gebo.microservices.api.client.brain.model.GAgentRole;
 import gebo.microservices.api.client.brain.model.GBaseObject;
 import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
+import gebo.microservices.api.client.brain.model.LibraryToolCollision;
+import gebo.microservices.api.client.brain.model.OperationStatusGAgentConfig;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -31,6 +34,36 @@ public class GeboAgentAdminControllerApiTest {
 
     private final GeboAgentAdminControllerApi api = new GeboAgentAdminControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void checkAgentToolCollisionsTest() {
+        GAgentConfig body = null;
+        List<LibraryToolCollision> response = api.checkAgentToolCollisions(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void copyAgentTest() {
+        String code = null;
+        OperationStatusGAgentConfig response = api.copyAgent(code);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -58,6 +91,20 @@ public class GeboAgentAdminControllerApiTest {
     public void getAgentByCodeTest() {
         String code = null;
         GAgentConfig response = api.getAgentByCode(code);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAgentRolesTest() {
+        List<GAgentRole> response = api.getAgentRoles();
 
         // TODO: test validations
     }

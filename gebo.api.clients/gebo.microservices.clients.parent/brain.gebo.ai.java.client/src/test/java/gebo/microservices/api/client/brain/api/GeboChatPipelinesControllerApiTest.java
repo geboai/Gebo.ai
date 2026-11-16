@@ -14,6 +14,7 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.GeboChatMessageEnvelope;
 import gebo.microservices.api.client.brain.model.GeboChatResponse;
+import gebo.microservices.api.client.brain.model.NetworkOfAgentsSuspendedState;
 import gebo.microservices.api.client.brain.model.PipelineChatMenu;
 import gebo.microservices.api.client.brain.model.PipelineRequestBody;
 import org.junit.Test;
@@ -72,6 +73,37 @@ public class GeboChatPipelinesControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void executeDefaultRespawnAgenticChatTest() {
+        PipelineRequestBody body = null;
+        GeboChatResponse response = api.executeDefaultRespawnAgenticChat(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void executeRespawnAgenticChatTest() {
+        PipelineRequestBody body = null;
+        String pipelineCode = null;
+        GeboChatResponse response = api.executeRespawnAgenticChat(body, pipelineCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void getDefaultPersonalPipelinesChatMenuTest() {
         String chatProfileCode = null;
         List<PipelineChatMenu> response = api.getDefaultPersonalPipelinesChatMenu(chatProfileCode);
@@ -91,6 +123,21 @@ public class GeboChatPipelinesControllerApiTest {
         String chatProfileCode = null;
         String pipelineCode = null;
         List<PipelineChatMenu> response = api.getPersonalPipelinesChatMenu(chatProfileCode, pipelineCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void pendingNetworkOfAgentsSuspensionTest() {
+        String userChatContextCode = null;
+        NetworkOfAgentsSuspendedState response = api.pendingNetworkOfAgentsSuspension(userChatContextCode);
 
         // TODO: test validations
     }
@@ -137,6 +184,37 @@ public class GeboChatPipelinesControllerApiTest {
     public void streamDefaultChatPipelineTest() {
         PipelineRequestBody body = null;
         List<GeboChatMessageEnvelope> response = api.streamDefaultChatPipeline(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void streamDefaultRespawnAgenticChatTest() {
+        PipelineRequestBody body = null;
+        List<GeboChatMessageEnvelope> response = api.streamDefaultRespawnAgenticChat(body);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void streamRespawnAgenticChatTest() {
+        PipelineRequestBody body = null;
+        String pipelineCode = null;
+        List<GeboChatMessageEnvelope> response = api.streamRespawnAgenticChat(body, pipelineCode);
 
         // TODO: test validations
     }

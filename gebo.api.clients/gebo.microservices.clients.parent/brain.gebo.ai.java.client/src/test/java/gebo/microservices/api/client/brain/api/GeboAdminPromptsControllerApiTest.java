@@ -12,9 +12,11 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.AllowedPromptPlaceholders;
 import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
 import gebo.microservices.api.client.brain.model.GPromptTemplateLightView;
 import gebo.microservices.api.client.brain.model.GPromptUseInfo;
+import gebo.microservices.api.client.brain.model.KnownPromptPlaceholders;
 import gebo.microservices.api.client.brain.model.PromptFilter;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -71,6 +73,21 @@ public class GeboAdminPromptsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void findPromptConfigByAgentIdTest() {
+        String agentId = null;
+        List<GPromptTemplateConfig> response = api.findPromptConfigByAgentId(agentId);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void findPromptConfigByCodeTest() {
         String code = null;
         GPromptTemplateConfig response = api.findPromptConfigByCode(code);
@@ -88,6 +105,36 @@ public class GeboAdminPromptsControllerApiTest {
     @Test
     public void getAllPromptConfigsLightListTest() {
         List<GPromptTemplateLightView> response = api.getAllPromptConfigsLightList();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getAllowedPromptPlaceholdersTest() {
+        String promptUse = null;
+        Boolean agentPrompt = null;
+        AllowedPromptPlaceholders response = api.getAllowedPromptPlaceholders(promptUse, agentPrompt);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getKnownPromptPlaceholdersTest() {
+        KnownPromptPlaceholders response = api.getKnownPromptPlaceholders();
 
         // TODO: test validations
     }

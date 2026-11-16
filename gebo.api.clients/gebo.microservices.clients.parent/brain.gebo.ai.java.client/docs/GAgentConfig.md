@@ -20,17 +20,21 @@ Name | Type | Description | Notes
 **useDefaultChatModel** | **Boolean** |  |  [optional]
 **useChatModelWithUse** | [**UseChatModelWithUseEnum**](#UseChatModelWithUseEnum) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
-**maxLoopIterations** | **Integer** |  | 
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **defaultConfiguration** | **Boolean** |  |  [optional]
 **topP** | **Double** |  |  [optional]
 **temperature** | **Double** |  |  [optional]
 **thinking** | [**ThinkingEnum**](#ThinkingEnum) |  |  [optional]
 **readOnly** | **Boolean** |  |  [optional]
+**conditionsExpiry** | [**AgentConditionsExpiry**](AgentConditionsExpiry.md) |  |  [optional]
 **accessibleGroups** | **List&lt;String&gt;** |  |  [optional]
 **accessibleUsers** | **List&lt;String&gt;** |  |  [optional]
 **accessibleToAll** | **Boolean** |  |  [optional]
 **enabledFunctions** | **List&lt;String&gt;** |  |  [optional]
+**excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
+**additionalToolSources** | **List&lt;String&gt;** |  |  [optional]
+**libraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
+**toolsNeedingConfirmation** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>
 ## Enum: AgentTypeEnum

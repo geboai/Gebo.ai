@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageableObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class PageableObject {
   @JsonProperty("paged")
@@ -35,11 +35,11 @@ public class PageableObject {
   @JsonProperty("pageSize")
   private Integer pageSize = null;
 
-  @JsonProperty("offset")
-  private Long offset = null;
-
   @JsonProperty("sort")
   private SortObject sort = null;
+
+  @JsonProperty("offset")
+  private Long offset = null;
 
   @JsonProperty("unpaged")
   private Boolean unpaged = null;
@@ -98,24 +98,6 @@ public class PageableObject {
     this.pageSize = pageSize;
   }
 
-  public PageableObject offset(Long offset) {
-    this.offset = offset;
-    return this;
-  }
-
-   /**
-   * Get offset
-   * @return offset
-  **/
-  @Schema(description = "")
-  public Long getOffset() {
-    return offset;
-  }
-
-  public void setOffset(Long offset) {
-    this.offset = offset;
-  }
-
   public PageableObject sort(SortObject sort) {
     this.sort = sort;
     return this;
@@ -132,6 +114,24 @@ public class PageableObject {
 
   public void setSort(SortObject sort) {
     this.sort = sort;
+  }
+
+  public PageableObject offset(Long offset) {
+    this.offset = offset;
+    return this;
+  }
+
+   /**
+   * Get offset
+   * @return offset
+  **/
+  @Schema(description = "")
+  public Long getOffset() {
+    return offset;
+  }
+
+  public void setOffset(Long offset) {
+    this.offset = offset;
   }
 
   public PageableObject unpaged(Boolean unpaged) {
@@ -165,14 +165,14 @@ public class PageableObject {
     return Objects.equals(this.paged, pageableObject.paged) &&
         Objects.equals(this.pageNumber, pageableObject.pageNumber) &&
         Objects.equals(this.pageSize, pageableObject.pageSize) &&
-        Objects.equals(this.offset, pageableObject.offset) &&
         Objects.equals(this.sort, pageableObject.sort) &&
+        Objects.equals(this.offset, pageableObject.offset) &&
         Objects.equals(this.unpaged, pageableObject.unpaged);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(paged, pageNumber, pageSize, offset, sort, unpaged);
+    return Objects.hash(paged, pageNumber, pageSize, sort, offset, unpaged);
   }
 
 
@@ -184,8 +184,8 @@ public class PageableObject {
     sb.append("    paged: ").append(toIndentedString(paged)).append("\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
-    sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    offset: ").append(toIndentedString(offset)).append("\n");
     sb.append("    unpaged: ").append(toIndentedString(unpaged)).append("\n");
     sb.append("}");
     return sb.toString();

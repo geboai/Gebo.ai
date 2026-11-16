@@ -18,4 +18,23 @@ export interface AgentServiceDescriptor {
     networkAgent?: boolean;
     routingAgent?: boolean;
     networkAdapter?: boolean;
+    reactive?: boolean;
+    adaptable?: boolean;
+    messageSemantic?: AgentServiceDescriptor.MessageSemanticEnum;
+    kind?: AgentServiceDescriptor.KindEnum;
+}
+export namespace AgentServiceDescriptor {
+    export type MessageSemanticEnum = 'EXECUTE_AND_SHARE_RESULT' | 'RESPONSE';
+    export const MessageSemanticEnum = {
+        EXECUTEANDSHARERESULT: 'EXECUTE_AND_SHARE_RESULT' as MessageSemanticEnum,
+        RESPONSE: 'RESPONSE' as MessageSemanticEnum
+    };
+    export type KindEnum = 'ROUTER' | 'FORWARDER' | 'RESPONDER' | 'NETWORK_ADAPTER' | 'WRITER';
+    export const KindEnum = {
+        ROUTER: 'ROUTER' as KindEnum,
+        FORWARDER: 'FORWARDER' as KindEnum,
+        RESPONDER: 'RESPONDER' as KindEnum,
+        NETWORKADAPTER: 'NETWORK_ADAPTER' as KindEnum,
+        WRITER: 'WRITER' as KindEnum
+    };
 }

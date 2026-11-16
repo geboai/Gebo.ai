@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageDrillDownLevel
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:24.171841609+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:32:15.444091156+01:00[Europe/Rome]")
 
 public class LLMUsageDrillDownLevel {
   @JsonProperty("providerId")
@@ -49,7 +49,8 @@ public class LLMUsageDrillDownLevel {
     IMAGE("IMAGE"),
     RANKER("RANKER"),
     TTS("TTS"),
-    TRANSCRIPT("TRANSCRIPT");
+    TRANSCRIPT("TRANSCRIPT"),
+    DECISION("DECISION");
 
     private String value;
 

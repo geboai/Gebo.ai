@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.AgentConditionsExpiry;
 import gebo.microservices.api.client.brain.model.GObjectRefGBaseChatModelConfig;
 import gebo.microservices.api.client.brain.model.GPromptTemplateConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -143,9 +144,6 @@ public class GAgentConfig {
   @JsonProperty("chatModelReference")
   private GObjectRefGBaseChatModelConfig chatModelReference = null;
 
-  @JsonProperty("maxLoopIterations")
-  private Integer maxLoopIterations = null;
-
   @JsonProperty("aclAliases")
   private List<Integer> aclAliases = null;
 
@@ -198,6 +196,9 @@ public class GAgentConfig {
   @JsonProperty("readOnly")
   private Boolean readOnly = null;
 
+  @JsonProperty("conditionsExpiry")
+  private AgentConditionsExpiry conditionsExpiry = null;
+
   @JsonProperty("accessibleGroups")
   private List<String> accessibleGroups = null;
 
@@ -209,6 +210,18 @@ public class GAgentConfig {
 
   @JsonProperty("enabledFunctions")
   private List<String> enabledFunctions = null;
+
+  @JsonProperty("excludedToolSources")
+  private List<String> excludedToolSources = null;
+
+  @JsonProperty("additionalToolSources")
+  private List<String> additionalToolSources = null;
+
+  @JsonProperty("libraryTypeIds")
+  private List<String> libraryTypeIds = null;
+
+  @JsonProperty("toolsNeedingConfirmation")
+  private List<String> toolsNeedingConfirmation = null;
 
   public GAgentConfig code(String code) {
     this.code = code;
@@ -516,24 +529,6 @@ public class GAgentConfig {
     this.chatModelReference = chatModelReference;
   }
 
-  public GAgentConfig maxLoopIterations(Integer maxLoopIterations) {
-    this.maxLoopIterations = maxLoopIterations;
-    return this;
-  }
-
-   /**
-   * Get maxLoopIterations
-   * @return maxLoopIterations
-  **/
-  @Schema(required = true, description = "")
-  public Integer getMaxLoopIterations() {
-    return maxLoopIterations;
-  }
-
-  public void setMaxLoopIterations(Integer maxLoopIterations) {
-    this.maxLoopIterations = maxLoopIterations;
-  }
-
   public GAgentConfig aclAliases(List<Integer> aclAliases) {
     this.aclAliases = aclAliases;
     return this;
@@ -650,6 +645,24 @@ public class GAgentConfig {
     this.readOnly = readOnly;
   }
 
+  public GAgentConfig conditionsExpiry(AgentConditionsExpiry conditionsExpiry) {
+    this.conditionsExpiry = conditionsExpiry;
+    return this;
+  }
+
+   /**
+   * Get conditionsExpiry
+   * @return conditionsExpiry
+  **/
+  @Schema(description = "")
+  public AgentConditionsExpiry getConditionsExpiry() {
+    return conditionsExpiry;
+  }
+
+  public void setConditionsExpiry(AgentConditionsExpiry conditionsExpiry) {
+    this.conditionsExpiry = conditionsExpiry;
+  }
+
   public GAgentConfig accessibleGroups(List<String> accessibleGroups) {
     this.accessibleGroups = accessibleGroups;
     return this;
@@ -746,6 +759,110 @@ public class GAgentConfig {
     this.enabledFunctions = enabledFunctions;
   }
 
+  public GAgentConfig excludedToolSources(List<String> excludedToolSources) {
+    this.excludedToolSources = excludedToolSources;
+    return this;
+  }
+
+  public GAgentConfig addExcludedToolSourcesItem(String excludedToolSourcesItem) {
+    if (this.excludedToolSources == null) {
+      this.excludedToolSources = new ArrayList<>();
+    }
+    this.excludedToolSources.add(excludedToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get excludedToolSources
+   * @return excludedToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getExcludedToolSources() {
+    return excludedToolSources;
+  }
+
+  public void setExcludedToolSources(List<String> excludedToolSources) {
+    this.excludedToolSources = excludedToolSources;
+  }
+
+  public GAgentConfig additionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+    return this;
+  }
+
+  public GAgentConfig addAdditionalToolSourcesItem(String additionalToolSourcesItem) {
+    if (this.additionalToolSources == null) {
+      this.additionalToolSources = new ArrayList<>();
+    }
+    this.additionalToolSources.add(additionalToolSourcesItem);
+    return this;
+  }
+
+   /**
+   * Get additionalToolSources
+   * @return additionalToolSources
+  **/
+  @Schema(description = "")
+  public List<String> getAdditionalToolSources() {
+    return additionalToolSources;
+  }
+
+  public void setAdditionalToolSources(List<String> additionalToolSources) {
+    this.additionalToolSources = additionalToolSources;
+  }
+
+  public GAgentConfig libraryTypeIds(List<String> libraryTypeIds) {
+    this.libraryTypeIds = libraryTypeIds;
+    return this;
+  }
+
+  public GAgentConfig addLibraryTypeIdsItem(String libraryTypeIdsItem) {
+    if (this.libraryTypeIds == null) {
+      this.libraryTypeIds = new ArrayList<>();
+    }
+    this.libraryTypeIds.add(libraryTypeIdsItem);
+    return this;
+  }
+
+   /**
+   * Get libraryTypeIds
+   * @return libraryTypeIds
+  **/
+  @Schema(description = "")
+  public List<String> getLibraryTypeIds() {
+    return libraryTypeIds;
+  }
+
+  public void setLibraryTypeIds(List<String> libraryTypeIds) {
+    this.libraryTypeIds = libraryTypeIds;
+  }
+
+  public GAgentConfig toolsNeedingConfirmation(List<String> toolsNeedingConfirmation) {
+    this.toolsNeedingConfirmation = toolsNeedingConfirmation;
+    return this;
+  }
+
+  public GAgentConfig addToolsNeedingConfirmationItem(String toolsNeedingConfirmationItem) {
+    if (this.toolsNeedingConfirmation == null) {
+      this.toolsNeedingConfirmation = new ArrayList<>();
+    }
+    this.toolsNeedingConfirmation.add(toolsNeedingConfirmationItem);
+    return this;
+  }
+
+   /**
+   * Get toolsNeedingConfirmation
+   * @return toolsNeedingConfirmation
+  **/
+  @Schema(description = "")
+  public List<String> getToolsNeedingConfirmation() {
+    return toolsNeedingConfirmation;
+  }
+
+  public void setToolsNeedingConfirmation(List<String> toolsNeedingConfirmation) {
+    this.toolsNeedingConfirmation = toolsNeedingConfirmation;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -773,22 +890,26 @@ public class GAgentConfig {
         Objects.equals(this.useDefaultChatModel, gagentConfig.useDefaultChatModel) &&
         Objects.equals(this.useChatModelWithUse, gagentConfig.useChatModelWithUse) &&
         Objects.equals(this.chatModelReference, gagentConfig.chatModelReference) &&
-        Objects.equals(this.maxLoopIterations, gagentConfig.maxLoopIterations) &&
         Objects.equals(this.aclAliases, gagentConfig.aclAliases) &&
         Objects.equals(this.defaultConfiguration, gagentConfig.defaultConfiguration) &&
         Objects.equals(this.topP, gagentConfig.topP) &&
         Objects.equals(this.temperature, gagentConfig.temperature) &&
         Objects.equals(this.thinking, gagentConfig.thinking) &&
         Objects.equals(this.readOnly, gagentConfig.readOnly) &&
+        Objects.equals(this.conditionsExpiry, gagentConfig.conditionsExpiry) &&
         Objects.equals(this.accessibleGroups, gagentConfig.accessibleGroups) &&
         Objects.equals(this.accessibleUsers, gagentConfig.accessibleUsers) &&
         Objects.equals(this.accessibleToAll, gagentConfig.accessibleToAll) &&
-        Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions);
+        Objects.equals(this.enabledFunctions, gagentConfig.enabledFunctions) &&
+        Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources) &&
+        Objects.equals(this.additionalToolSources, gagentConfig.additionalToolSources) &&
+        Objects.equals(this.libraryTypeIds, gagentConfig.libraryTypeIds) &&
+        Objects.equals(this.toolsNeedingConfirmation, gagentConfig.toolsNeedingConfirmation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, maxLoopIterations, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds, toolsNeedingConfirmation);
   }
 
 
@@ -814,17 +935,21 @@ public class GAgentConfig {
     sb.append("    useDefaultChatModel: ").append(toIndentedString(useDefaultChatModel)).append("\n");
     sb.append("    useChatModelWithUse: ").append(toIndentedString(useChatModelWithUse)).append("\n");
     sb.append("    chatModelReference: ").append(toIndentedString(chatModelReference)).append("\n");
-    sb.append("    maxLoopIterations: ").append(toIndentedString(maxLoopIterations)).append("\n");
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    defaultConfiguration: ").append(toIndentedString(defaultConfiguration)).append("\n");
     sb.append("    topP: ").append(toIndentedString(topP)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
     sb.append("    readOnly: ").append(toIndentedString(readOnly)).append("\n");
+    sb.append("    conditionsExpiry: ").append(toIndentedString(conditionsExpiry)).append("\n");
     sb.append("    accessibleGroups: ").append(toIndentedString(accessibleGroups)).append("\n");
     sb.append("    accessibleUsers: ").append(toIndentedString(accessibleUsers)).append("\n");
     sb.append("    accessibleToAll: ").append(toIndentedString(accessibleToAll)).append("\n");
     sb.append("    enabledFunctions: ").append(toIndentedString(enabledFunctions)).append("\n");
+    sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
+    sb.append("    additionalToolSources: ").append(toIndentedString(additionalToolSources)).append("\n");
+    sb.append("    libraryTypeIds: ").append(toIndentedString(libraryTypeIds)).append("\n");
+    sb.append("    toolsNeedingConfirmation: ").append(toIndentedString(toolsNeedingConfirmation)).append("\n");
     sb.append("}");
     return sb.toString();
   }

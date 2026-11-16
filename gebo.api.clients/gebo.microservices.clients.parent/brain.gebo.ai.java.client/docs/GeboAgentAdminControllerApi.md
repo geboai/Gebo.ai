@@ -4,13 +4,102 @@ All URIs are relative to *http://localhost:13001/brain*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**checkAgentToolCollisions**](GeboAgentAdminControllerApi.md#checkAgentToolCollisions) | **POST** /api/admin/GeboAgentAdminController/checkAgentToolCollisions | 
+[**copyAgent**](GeboAgentAdminControllerApi.md#copyAgent) | **POST** /api/admin/GeboAgentAdminController/copyAgent | 
 [**deleteAgent**](GeboAgentAdminControllerApi.md#deleteAgent) | **DELETE** /api/admin/GeboAgentAdminController/deleteAgent | 
 [**getAgentByCode**](GeboAgentAdminControllerApi.md#getAgentByCode) | **GET** /api/admin/GeboAgentAdminController/getAgentByCode | 
+[**getAgentRoles**](GeboAgentAdminControllerApi.md#getAgentRoles) | **GET** /api/admin/GeboAgentAdminController/getAgentRoles | 
 [**getAgents**](GeboAgentAdminControllerApi.md#getAgents) | **GET** /api/admin/GeboAgentAdminController/getAgents | 
 [**getAgentsChoices**](GeboAgentAdminControllerApi.md#getAgentsChoices) | **GET** /api/admin/GeboAgentAdminController/getAgentsChoices | 
 [**getPromptTemplatesByAgentId**](GeboAgentAdminControllerApi.md#getPromptTemplatesByAgentId) | **GET** /api/admin/GeboAgentAdminController/getPromptTemplateByAgentId | 
 [**insertAgent**](GeboAgentAdminControllerApi.md#insertAgent) | **POST** /api/admin/GeboAgentAdminController/insertAgent | 
 [**updateAgent**](GeboAgentAdminControllerApi.md#updateAgent) | **POST** /api/admin/GeboAgentAdminController/updateAgent | 
+
+<a name="checkAgentToolCollisions"></a>
+# **checkAgentToolCollisions**
+> List&lt;LibraryToolCollision&gt; checkAgentToolCollisions(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboAgentAdminControllerApi;
+
+
+GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
+GAgentConfig body = new GAgentConfig(); // GAgentConfig | 
+try {
+    List<LibraryToolCollision> result = apiInstance.checkAgentToolCollisions(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentAdminControllerApi#checkAgentToolCollisions");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GAgentConfig**](GAgentConfig.md)|  |
+
+### Return type
+
+[**List&lt;LibraryToolCollision&gt;**](LibraryToolCollision.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="copyAgent"></a>
+# **copyAgent**
+> OperationStatusGAgentConfig copyAgent(code)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboAgentAdminControllerApi;
+
+
+GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
+String code = "code_example"; // String | 
+try {
+    OperationStatusGAgentConfig result = apiInstance.copyAgent(code);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentAdminControllerApi#copyAgent");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **code** | **String**|  |
+
+### Return type
+
+[**OperationStatusGAgentConfig**](OperationStatusGAgentConfig.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="deleteAgent"></a>
 # **deleteAgent**
@@ -87,6 +176,45 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GAgentConfig**](GAgentConfig.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getAgentRoles"></a>
+# **getAgentRoles**
+> List&lt;GAgentRole&gt; getAgentRoles()
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.GeboAgentAdminControllerApi;
+
+
+GeboAgentAdminControllerApi apiInstance = new GeboAgentAdminControllerApi();
+try {
+    List<GAgentRole> result = apiInstance.getAgentRoles();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboAgentAdminControllerApi#getAgentRoles");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;GAgentRole&gt;**](GAgentRole.md)
 
 ### Authorization
 

@@ -27,7 +27,7 @@ import java.util.List;
  * PageGeneratedApiKeyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:52.907609785+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:31:38.818352780+01:00[Europe/Rome]")
 
 public class PageGeneratedApiKeyInfo {
   @JsonProperty("totalPages")
@@ -39,15 +39,6 @@ public class PageGeneratedApiKeyInfo {
   @JsonProperty("pageable")
   private PageableObject pageable = null;
 
-  @JsonProperty("size")
-  private Integer size = null;
-
-  @JsonProperty("content")
-  private List<GeneratedApiKeyInfo> content = null;
-
-  @JsonProperty("number")
-  private Integer number = null;
-
   @JsonProperty("sort")
   private SortObject sort = null;
 
@@ -57,8 +48,17 @@ public class PageGeneratedApiKeyInfo {
   @JsonProperty("last")
   private Boolean last = null;
 
+  @JsonProperty("number")
+  private Integer number = null;
+
   @JsonProperty("numberOfElements")
   private Integer numberOfElements = null;
+
+  @JsonProperty("size")
+  private Integer size = null;
+
+  @JsonProperty("content")
+  private List<GeneratedApiKeyInfo> content = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -117,68 +117,6 @@ public class PageGeneratedApiKeyInfo {
     this.pageable = pageable;
   }
 
-  public PageGeneratedApiKeyInfo size(Integer size) {
-    this.size = size;
-    return this;
-  }
-
-   /**
-   * Get size
-   * @return size
-  **/
-  @Schema(description = "")
-  public Integer getSize() {
-    return size;
-  }
-
-  public void setSize(Integer size) {
-    this.size = size;
-  }
-
-  public PageGeneratedApiKeyInfo content(List<GeneratedApiKeyInfo> content) {
-    this.content = content;
-    return this;
-  }
-
-  public PageGeneratedApiKeyInfo addContentItem(GeneratedApiKeyInfo contentItem) {
-    if (this.content == null) {
-      this.content = new ArrayList<>();
-    }
-    this.content.add(contentItem);
-    return this;
-  }
-
-   /**
-   * Get content
-   * @return content
-  **/
-  @Schema(description = "")
-  public List<GeneratedApiKeyInfo> getContent() {
-    return content;
-  }
-
-  public void setContent(List<GeneratedApiKeyInfo> content) {
-    this.content = content;
-  }
-
-  public PageGeneratedApiKeyInfo number(Integer number) {
-    this.number = number;
-    return this;
-  }
-
-   /**
-   * Get number
-   * @return number
-  **/
-  @Schema(description = "")
-  public Integer getNumber() {
-    return number;
-  }
-
-  public void setNumber(Integer number) {
-    this.number = number;
-  }
-
   public PageGeneratedApiKeyInfo sort(SortObject sort) {
     this.sort = sort;
     return this;
@@ -233,6 +171,24 @@ public class PageGeneratedApiKeyInfo {
     this.last = last;
   }
 
+  public PageGeneratedApiKeyInfo number(Integer number) {
+    this.number = number;
+    return this;
+  }
+
+   /**
+   * Get number
+   * @return number
+  **/
+  @Schema(description = "")
+  public Integer getNumber() {
+    return number;
+  }
+
+  public void setNumber(Integer number) {
+    this.number = number;
+  }
+
   public PageGeneratedApiKeyInfo numberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
     return this;
@@ -249,6 +205,50 @@ public class PageGeneratedApiKeyInfo {
 
   public void setNumberOfElements(Integer numberOfElements) {
     this.numberOfElements = numberOfElements;
+  }
+
+  public PageGeneratedApiKeyInfo size(Integer size) {
+    this.size = size;
+    return this;
+  }
+
+   /**
+   * Get size
+   * @return size
+  **/
+  @Schema(description = "")
+  public Integer getSize() {
+    return size;
+  }
+
+  public void setSize(Integer size) {
+    this.size = size;
+  }
+
+  public PageGeneratedApiKeyInfo content(List<GeneratedApiKeyInfo> content) {
+    this.content = content;
+    return this;
+  }
+
+  public PageGeneratedApiKeyInfo addContentItem(GeneratedApiKeyInfo contentItem) {
+    if (this.content == null) {
+      this.content = new ArrayList<>();
+    }
+    this.content.add(contentItem);
+    return this;
+  }
+
+   /**
+   * Get content
+   * @return content
+  **/
+  @Schema(description = "")
+  public List<GeneratedApiKeyInfo> getContent() {
+    return content;
+  }
+
+  public void setContent(List<GeneratedApiKeyInfo> content) {
+    this.content = content;
   }
 
   public PageGeneratedApiKeyInfo empty(Boolean empty) {
@@ -282,19 +282,19 @@ public class PageGeneratedApiKeyInfo {
     return Objects.equals(this.totalPages, pageGeneratedApiKeyInfo.totalPages) &&
         Objects.equals(this.totalElements, pageGeneratedApiKeyInfo.totalElements) &&
         Objects.equals(this.pageable, pageGeneratedApiKeyInfo.pageable) &&
-        Objects.equals(this.size, pageGeneratedApiKeyInfo.size) &&
-        Objects.equals(this.content, pageGeneratedApiKeyInfo.content) &&
-        Objects.equals(this.number, pageGeneratedApiKeyInfo.number) &&
         Objects.equals(this.sort, pageGeneratedApiKeyInfo.sort) &&
         Objects.equals(this.first, pageGeneratedApiKeyInfo.first) &&
         Objects.equals(this.last, pageGeneratedApiKeyInfo.last) &&
+        Objects.equals(this.number, pageGeneratedApiKeyInfo.number) &&
         Objects.equals(this.numberOfElements, pageGeneratedApiKeyInfo.numberOfElements) &&
+        Objects.equals(this.size, pageGeneratedApiKeyInfo.size) &&
+        Objects.equals(this.content, pageGeneratedApiKeyInfo.content) &&
         Objects.equals(this.empty, pageGeneratedApiKeyInfo.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, size, content, number, sort, first, last, numberOfElements, empty);
+    return Objects.hash(totalPages, totalElements, pageable, sort, first, last, number, numberOfElements, size, content, empty);
   }
 
 
@@ -306,13 +306,13 @@ public class PageGeneratedApiKeyInfo {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
     sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
-    sb.append("    content: ").append(toIndentedString(content)).append("\n");
-    sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    last: ").append(toIndentedString(last)).append("\n");
+    sb.append("    number: ").append(toIndentedString(number)).append("\n");
     sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("    content: ").append(toIndentedString(content)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

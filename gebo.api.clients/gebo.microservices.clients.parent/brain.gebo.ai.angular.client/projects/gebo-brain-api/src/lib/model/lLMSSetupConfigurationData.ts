@@ -21,4 +21,5 @@ export interface LLMSSetupConfigurationData {
     imagesModelExists?: boolean;
     ttsModelExists?: boolean;
     transcriptModelExists?: boolean;
+    decisionModelExists?: boolean;
 }

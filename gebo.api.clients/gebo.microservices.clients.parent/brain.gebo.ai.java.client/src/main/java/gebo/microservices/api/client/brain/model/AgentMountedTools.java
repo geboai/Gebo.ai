@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import gebo.microservices.api.client.brain.model.LibraryToolCollision;
 import gebo.microservices.api.client.brain.model.MountedTool;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import java.util.List;
  * AgentMountedTools
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
 
 public class AgentMountedTools {
   @JsonProperty("agentConfigCode")
@@ -73,6 +74,9 @@ public class AgentMountedTools {
 
   @JsonProperty("excludedTools")
   private List<MountedTool> excludedTools = null;
+
+  @JsonProperty("collisions")
+  private List<LibraryToolCollision> collisions = null;
 
   public AgentMountedTools agentConfigCode(String agentConfigCode) {
     this.agentConfigCode = agentConfigCode;
@@ -180,6 +184,32 @@ public class AgentMountedTools {
     this.excludedTools = excludedTools;
   }
 
+  public AgentMountedTools collisions(List<LibraryToolCollision> collisions) {
+    this.collisions = collisions;
+    return this;
+  }
+
+  public AgentMountedTools addCollisionsItem(LibraryToolCollision collisionsItem) {
+    if (this.collisions == null) {
+      this.collisions = new ArrayList<>();
+    }
+    this.collisions.add(collisionsItem);
+    return this;
+  }
+
+   /**
+   * Get collisions
+   * @return collisions
+  **/
+  @Schema(description = "")
+  public List<LibraryToolCollision> getCollisions() {
+    return collisions;
+  }
+
+  public void setCollisions(List<LibraryToolCollision> collisions) {
+    this.collisions = collisions;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -194,12 +224,13 @@ public class AgentMountedTools {
         Objects.equals(this.agentServiceId, agentMountedTools.agentServiceId) &&
         Objects.equals(this.mountMode, agentMountedTools.mountMode) &&
         Objects.equals(this.tools, agentMountedTools.tools) &&
-        Objects.equals(this.excludedTools, agentMountedTools.excludedTools);
+        Objects.equals(this.excludedTools, agentMountedTools.excludedTools) &&
+        Objects.equals(this.collisions, agentMountedTools.collisions);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(agentConfigCode, agentServiceId, mountMode, tools, excludedTools);
+    return Objects.hash(agentConfigCode, agentServiceId, mountMode, tools, excludedTools, collisions);
   }
 
 
@@ -213,6 +244,7 @@ public class AgentMountedTools {
     sb.append("    mountMode: ").append(toIndentedString(mountMode)).append("\n");
     sb.append("    tools: ").append(toIndentedString(tools)).append("\n");
     sb.append("    excludedTools: ").append(toIndentedString(excludedTools)).append("\n");
+    sb.append("    collisions: ").append(toIndentedString(collisions)).append("\n");
     sb.append("}");
     return sb.toString();
   }

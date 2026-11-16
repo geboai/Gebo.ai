@@ -22,4 +22,5 @@ export interface LLMAutoconfigureCreationData {
     transcriptModel?: string;
     ttsModel?: string;
     imagesModel?: string;
+    decisionModel?: string;
 }
