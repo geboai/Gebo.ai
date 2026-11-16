@@ -87,6 +87,20 @@ for how this plugs into the bundled Grafana/Prometheus/Tempo stack.)*
 | `management.opentelemetry.tracing.export.otlp.endpoint` | URL | unset (env: `MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT`) | Where OTLP traces are exported, e.g. `http://otel-collector:4318/v1/traces` — the bundled `otel-collector` of the observability overlay. Unset, no span exporter is created, so an installation without a collector logs no export failures. Spring Boot 4 no longer reads the old `management.otlp.tracing.endpoint` / `MANAGEMENT_OTLP_TRACING_ENDPOINT`. |
 | `management.server.port` | port | unset (env: `MANAGEMENT_SERVER_PORT`) | Moves the actuator to a separate management port, where `/actuator/health` and `/actuator/prometheus` answer **anonymously**, for Prometheus and health probes. Never publish this port: the observability overlay sets `12998` and keeps it on the internal network. Unset (or equal to `server.port`), every actuator call needs an authenticated user, as before. Every other actuator endpoint (`metrics` included) always needs one. |
 
+**Outgoing calls.** Gebo.ai observes the HTTP calls it makes, under the same settings as the
+incoming requests:
+- **Which calls:** the content integrations (Confluence, SharePoint, Jira, WebDAV), the web
+  search providers, the LLM providers and rankers, the OAuth2 token requests and the model
+  lookups.
+- **Traces:** each call is a client span inside the request or job that made it, and it sends
+  the trace on to the server called (the W3C `traceparent` header).
+- **Metrics:** each call is measured as `http_client_requests_seconds`, by method, status, host
+  (`client_name`) and `uri`. The `uri` is the path template, such as `/v1/chat/completions` or
+  `/rest/api/content/{id}`; a URL written out in full is measured as `none`, so ids never
+  multiply the series.
+- **What is recorded:** URLs are recorded without their query string or user info, since some
+  providers take their API key in the query.
+
 ## 6. Security — authentication, tokens, CORS, SSO
 
 Bound by `GeboSecurityConfig` (`ai.gebo.security`) except `cors.allowedOrigins`, which is a

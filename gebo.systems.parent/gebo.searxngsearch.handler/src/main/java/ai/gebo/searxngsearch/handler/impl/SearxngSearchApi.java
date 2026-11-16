@@ -52,8 +52,10 @@ public class SearxngSearchApi {
 	 * answering on a sloppy network does not hold the search forever.
 	 */
 	@Autowired
-	public SearxngSearchApi(SearchCallsConfig searchCalls) {
-		this(RestTemplateWrapperService.withTimeouts(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
+	public SearxngSearchApi(SearchCallsConfig searchCalls, RestTemplateWrapperService sharedClient) {
+		// the shared client's settings, its observation of the calls among them, with the
+		// search calls' timeouts
+		this(sharedClient.timingOut(searchCalls.httpConnectTimeout(), searchCalls.httpReadTimeout()));
 	}
 
 	SearxngSearchApi(RestTemplateWrapperService restTemplateService) {
@@ -62,8 +64,7 @@ public class SearxngSearchApi {
 
 	/** This API called with an HTTP client of its own whose timeouts are the call parameters'. */
 	SearxngSearchApi using(SearchCallParameters parameters) {
-		return new SearxngSearchApi(
-				RestTemplateWrapperService.withTimeouts(parameters.connectTimeout(), parameters.readTimeout()));
+		return new SearxngSearchApi(restTemplateService.timingOut(parameters.connectTimeout(), parameters.readTimeout()));
 	}
 
 	private static String searchEndpoint(String baseUrl) {

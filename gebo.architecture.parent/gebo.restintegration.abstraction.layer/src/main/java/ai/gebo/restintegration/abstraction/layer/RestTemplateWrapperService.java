@@ -20,6 +20,8 @@ import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,6 +42,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory.EncodingMode;
 
 import ai.gebo.model.GUserMessage;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * The HTTP calls of the integrations (the models lookups, the search services, the
@@ -52,6 +55,10 @@ import ai.gebo.model.GUserMessage;
  * before, is deprecated for removal in Spring Framework 7.1. The class keeps its name and
  * its methods, so its callers did not change; the urls are expanded and encoded the way
  * {@code RestTemplate} did ({@link EncodingMode#URI_COMPONENT}).
+ * <p>
+ * The shared bean's calls, and those of the wrappers it derives
+ * ({@link #timingOut(Duration, Duration)}), are observed in the application's registry
+ * (see {@link GeboHttpClientObservations}).
  */
 @Service
 public class RestTemplateWrapperService {
@@ -64,37 +71,82 @@ public class RestTemplateWrapperService {
 	}
 
 	private final RestClient restClient;
+	private final ObservationRegistry observationRegistry;
 
 	/**
 	 * A wrapper calling with no timeout, as the shared bean always did, over the JDK's
-	 * HttpURLConnection as RestTemplate did (its proxy settings, its redirections).
+	 * HttpURLConnection as RestTemplate did (its proxy settings, its redirections). Its
+	 * calls are not observed.
 	 */
 	public RestTemplateWrapperService() {
-		this(RestClient.builder().requestFactory(new SimpleClientHttpRequestFactory()));
+		this(ObservationRegistry.NOOP);
+	}
+
+	/**
+	 * The shared bean: as {@link #RestTemplateWrapperService()}, its calls observed in the
+	 * application's registry (see {@link GeboHttpClientObservations}).
+	 */
+	@Autowired
+	public RestTemplateWrapperService(ObjectProvider<ObservationRegistry> observationRegistry) {
+		this(GeboHttpClientObservations.registryOf(observationRegistry));
+	}
+
+	private RestTemplateWrapperService(ObservationRegistry observationRegistry) {
+		this(RestClient.builder().requestFactory(new SimpleClientHttpRequestFactory()), observationRegistry);
 	}
 
 	/** A wrapper calling through a client built from the builder, urls encoded as RestTemplate did. */
 	public RestTemplateWrapperService(RestClient.Builder builder) {
+		this(builder, ObservationRegistry.NOOP);
+	}
+
+	/**
+	 * A wrapper calling through a client built from the builder, urls encoded as
+	 * RestTemplate did, its calls observed in the registry.
+	 */
+	public RestTemplateWrapperService(RestClient.Builder builder, ObservationRegistry observationRegistry) {
 		final DefaultUriBuilderFactory uris = new DefaultUriBuilderFactory();
 		uris.setEncodingMode(EncodingMode.URI_COMPONENT);
-		this.restClient = builder.uriBuilderFactory(uris).build();
+		this.observationRegistry = observationRegistry != null ? observationRegistry : ObservationRegistry.NOOP;
+		this.restClient = GeboHttpClientObservations.observed(builder, this.observationRegistry)
+				.uriBuilderFactory(uris).build();
 	}
 
 	/**
 	 * A wrapper of its own whose calls time out: for callers that must not wait forever
 	 * on a provider (the shared bean has no timeout, and the other users of it keep that).
+	 * Its calls are not observed: a Spring bean derives its own with
+	 * {@link #timingOut(Duration, Duration)} from the shared one.
 	 *
 	 * @param connectTimeout time a call may take to connect
 	 * @param readTimeout    time a call may wait for the answer
 	 */
 	public static RestTemplateWrapperService withTimeouts(Duration connectTimeout, Duration readTimeout) {
+		return new RestTemplateWrapperService(RestClient.builder().requestFactory(timingOutFactory(connectTimeout,
+				readTimeout)), ObservationRegistry.NOOP);
+	}
+
+	/**
+	 * A wrapper of its own whose calls time out, observed as this one's are: for callers
+	 * that must not wait forever on a provider.
+	 *
+	 * @param connectTimeout time a call may take to connect
+	 * @param readTimeout    time a call may wait for the answer
+	 */
+	public RestTemplateWrapperService timingOut(Duration connectTimeout, Duration readTimeout) {
+		return new RestTemplateWrapperService(
+				RestClient.builder().requestFactory(timingOutFactory(connectTimeout, readTimeout)),
+				observationRegistry);
+	}
+
+	private static SimpleClientHttpRequestFactory timingOutFactory(Duration connectTimeout, Duration readTimeout) {
 		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 		requestFactory.setConnectTimeout(connectTimeout);
 		requestFactory.setReadTimeout(readTimeout);
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("withTimeouts(...) connect:" + connectTimeout + " read:" + readTimeout);
+			LOGGER.debug("timing out, connect:" + connectTimeout + " read:" + readTimeout);
 		}
-		return new RestTemplateWrapperService(RestClient.builder().requestFactory(requestFactory));
+		return requestFactory;
 	}
 
 	/**

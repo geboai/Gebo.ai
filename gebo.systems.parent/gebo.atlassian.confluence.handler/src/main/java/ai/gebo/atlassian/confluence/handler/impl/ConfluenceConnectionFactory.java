@@ -105,8 +105,7 @@ class ConfluenceConnectionFactory {
 	/** The shared client, or one of its own timing out as the search parameters say. */
 	private RestTemplateWrapperService client(SearchCallParameters searchParameters) {
 		return searchParameters != null
-				? RestTemplateWrapperService.withTimeouts(searchParameters.connectTimeout(),
-						searchParameters.readTimeout())
+				? restWrapperService.timingOut(searchParameters.connectTimeout(), searchParameters.readTimeout())
 				: restWrapperService;
 	}
 }

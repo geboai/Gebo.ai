@@ -10,11 +10,14 @@
 package ai.gebo.ai.app.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -29,6 +32,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -37,10 +41,13 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.web.client.RestTemplate;
 
 import com.sun.net.httpserver.HttpServer;
 
+import ai.gebo.llms.abstraction.layer.services.impl.GDefaultLlmsServiceClientsProviderImpl;
 import ai.gebo.monolithic.app.Main;
+import ai.gebo.restintegration.abstraction.layer.RestTemplateWrapperService;
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationHandler;
 import io.micrometer.observation.ObservationView;
@@ -197,6 +204,60 @@ public class ObservabilityEndpointsIntegrationTest extends AbstractBaseIntegrati
 				"A request on the application port keeps its security spans inside its trace, got " + page);
 		assertTrue(page.stream().allMatch(s -> s.contains(" < ")),
 				"No security observation on the application port is a root, got " + page);
+	}
+
+	@Autowired
+	private RestTemplateWrapperService integrationsClient;
+
+	@Autowired
+	private RestTemplate restTemplate;
+
+	@Autowired
+	private GDefaultLlmsServiceClientsProviderImpl llmsClients;
+
+	/**
+	 * The HTTP clients Gebo builds itself are observed (GeboHttpClientObservations): the
+	 * integrations' shared client, the RestTemplate bean, the LLM providers' clients.
+	 * Each call sends the trace to the server called and is measured, the uri tag never
+	 * an id nor a query, the key carried in a query nowhere in the scrape.
+	 */
+	@Test
+	public void theCallsOfGebosOwnHttpClientsAreTracedAndMeasured() throws Exception {
+		final List<String> traceparents = new CopyOnWriteArrayList<>();
+		final HttpServer server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+		server.createContext("/", exchange -> {
+			traceparents.add(String.valueOf(exchange.getRequestHeaders().getFirst("traceparent")));
+			final byte[] body = "{}".getBytes(StandardCharsets.UTF_8);
+			exchange.getResponseHeaders().add("Content-Type", "application/json");
+			exchange.sendResponseHeaders(200, body.length);
+			try (OutputStream out = exchange.getResponseBody()) {
+				out.write(body);
+			}
+		});
+		server.start();
+		try {
+			final String base = "http://127.0.0.1:" + server.getAddress().getPort();
+			integrationsClient.getForEntity(base + "/items/{id}?key={key}", String.class, "7", "s3cret-key");
+			integrationsClient.timingOut(Duration.ofSeconds(5), Duration.ofSeconds(5))
+					.getForEntity(base + "/plain/42?key=s3cret-key", String.class);
+			// the bean reads JSON with its Jackson converter first: an object, not a String
+			restTemplate.getForObject(base + "/bean/call", java.util.Map.class);
+			llmsClients.getRestClientBuilder().baseUrl(base).build().get().uri("/v1/models").retrieve()
+					.toBodilessEntity();
+		} finally {
+			server.stop(0);
+		}
+
+		assertEquals(4, traceparents.size());
+		// W3C trace context: version, trace id, span id, flags (sampled, and random in level 2)
+		assertTrue(traceparents.stream().allMatch(t -> t.matches("00-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}")),
+				"Every call sends its trace: " + traceparents);
+		final String scrape = get(managementPort, "/actuator/prometheus").body();
+		assertTrue(scrape.contains("http_client_requests_seconds_count"), "The client calls are measured");
+		assertTrue(scrape.contains("uri=\"/items/{id}\""), "A template's path names the integration call");
+		assertTrue(scrape.contains("uri=\"/v1/models\""), "A provider's own path names its call");
+		assertTrue(scrape.contains("uri=\"none\""), "A url without template is not split by its ids");
+		assertFalse(scrape.contains("s3cret-key"), "A key carried in a query never reaches the measures");
 	}
 
 	@Test

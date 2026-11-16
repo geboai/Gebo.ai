@@ -19,6 +19,11 @@ import ai.gebo.llms.abstraction.layer.model.GProviderKeyLimit;
 import ai.gebo.llms.abstraction.layer.services.IGProviderKeyLimitsReader;
 import ai.gebo.openrouter.client.OpenRouterAiClient;
 import ai.gebo.openrouter.client.model.OpenRouterKeyInfo;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestClient;
+import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
+import io.micrometer.observation.ObservationRegistry;
 
 /**
  * Reads the spending limit of an OpenRouter.ai API key through
@@ -58,9 +63,14 @@ public class OpenRouterKeyLimitsReader implements IGProviderKeyLimitsReader {
 		return limit;
 	}
 
+	/** The registry the calls to OpenRouter are observed in (see GeboHttpClientObservations). */
+	@Autowired
+	ObjectProvider<ObservationRegistry> observationRegistry;
+
 	/** The client for a key; overridable to stub the HTTP calls. */
 	protected OpenRouterAiClient newClient(String clearApiKey) {
-		return new OpenRouterAiClient(clearApiKey);
+		return new OpenRouterAiClient(clearApiKey, null, GeboHttpClientObservations
+				.observed(RestClient.builder(), GeboHttpClientObservations.registryOf(observationRegistry)).build());
 	}
 
 	static GProviderKeyLimit.Period toPeriod(String limitReset) {
