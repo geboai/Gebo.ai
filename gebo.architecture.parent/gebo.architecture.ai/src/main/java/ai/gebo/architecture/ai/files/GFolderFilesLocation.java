@@ -18,11 +18,14 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.PosixFileAttributeView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
@@ -211,13 +214,19 @@ public class GFolderFilesLocation implements IGFilesLocation {
 			}
 			checkVersion(path, file, expectedVersion);
 			Files.createDirectories(file.getParent());
-			final Path temp = Files.createTempFile(file.getParent(), SAVING_PREFIX, ".tmp");
+			// An ordinary new file, not Files.createTempFile: that one is owner-only on
+			// POSIX, and the move would leave the written file unreadable to the other
+			// users of the folder. A replaced file keeps the permissions it had.
+			final Path temp = file.getParent().resolve(SAVING_PREFIX + UUID.randomUUID() + ".tmp");
 			try {
 				long written;
-				try (InputStream in = content.getInputStream(); OutputStream out = Files.newOutputStream(temp)) {
+				try (InputStream in = content.getInputStream();
+						OutputStream out = Files.newOutputStream(temp, StandardOpenOption.CREATE_NEW,
+								StandardOpenOption.WRITE)) {
 					written = transfer(path, in, out);
 				}
 				checkSize(path, written);
+				keepPermissionsOf(file, temp);
 				try {
 					Files.move(temp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
 				} catch (AtomicMoveNotSupportedException notAtomic) {
@@ -228,6 +237,14 @@ public class GFolderFilesLocation implements IGFilesLocation {
 			}
 			return fileOf(file, Files.readAttributes(file, BasicFileAttributes.class));
 		});
+	}
+
+	/** The POSIX permissions of the file a write replaces, given to the new content. */
+	private static void keepPermissionsOf(Path replaced, Path replacing) throws IOException {
+		if (Files.exists(replaced, LinkOption.NOFOLLOW_LINKS)
+				&& Files.getFileAttributeView(replaced, PosixFileAttributeView.class) != null) {
+			Files.setPosixFilePermissions(replacing, Files.getPosixFilePermissions(replaced));
+		}
 	}
 
 	private long transfer(String path, InputStream in, OutputStream out) throws IOException {

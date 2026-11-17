@@ -14,9 +14,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.FileTime;
+import java.nio.file.attribute.PosixFileAttributeView;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -85,11 +90,20 @@ class GFolderFilesLocationTest {
 		final Path inside = Files.createDirectories(root.resolve("lib"));
 		Files.writeString(root.resolve("outside.txt"), "out");
 		final GFolderFilesLocation location = new GFolderFilesLocation("lib", "a folder", inside, true);
-		for (String path : List.of("../outside.txt", "a/../../outside.txt", ".metadata.json", "x/.hidden/y.txt",
-				root.resolve("outside.txt").toString())) {
+		for (String path : List.of("../outside.txt", "a/../../outside.txt", ".metadata.json", "x/.hidden/y.txt")) {
 			assertThrows(IllegalArgumentException.class, () -> location.read(path), path);
 			assertThrows(IllegalArgumentException.class, () -> location.write(path, text("x"), null), path);
 		}
+		// an absolute path is a path of the folder (its leading / dropped) where it can be one, refused
+		// where it cannot (a Windows drive): either way the file outside is never reached
+		final String absolute = root.resolve("outside.txt").toString();
+		try {
+			location.write(absolute, text("x"), null);
+			assertTrue(location.resolve(absolute).startsWith(inside), absolute);
+		} catch (IllegalArgumentException refused) {
+			// a drive path
+		}
+		assertEquals("out", Files.readString(root.resolve("outside.txt")));
 		assertThrows(IllegalArgumentException.class, () -> location.read("missing.txt"));
 		assertThrows(IllegalArgumentException.class, () -> location.write("", text("x"), null));
 	}
@@ -105,5 +119,23 @@ class GFolderFilesLocationTest {
 		assertThrows(IllegalArgumentException.class, () -> small.read("big.txt"));
 		assertArrayEquals("12345".getBytes(StandardCharsets.UTF_8), Files.readAllBytes(root.resolve("big.txt")));
 		assertTrue(small.isWritable());
+	}
+
+	@Test
+	void writtenFilesAreReadableAsAnyNewFileAndAReplacedFileKeepsItsPermissions() throws IOException {
+		Assumptions.assumeTrue(Files.getFileAttributeView(root, PosixFileAttributeView.class) != null,
+				"POSIX permissions only");
+		final GFolderFilesLocation location = new GFolderFilesLocation("wd", "a folder", root, true);
+		final Path probe = Files.createFile(root.resolve("probe.txt"));
+		location.write("new.txt", text("new"), IGFilesLocation.ABSENT);
+		assertEquals(Files.getPosixFilePermissions(probe), Files.getPosixFilePermissions(root.resolve("new.txt")),
+				"a written file gets the permissions of any new file, not the owner-only ones of a temp file");
+		final Set<PosixFilePermission> shared = PosixFilePermissions.fromString("rw-rw-r--");
+		Files.setPosixFilePermissions(root.resolve("new.txt"), shared);
+		location.write("new.txt", text("changed"), null);
+		assertEquals(shared, Files.getPosixFilePermissions(root.resolve("new.txt")));
+		try (var files = Files.list(root)) {
+			assertTrue(files.noneMatch(f -> f.getFileName().toString().startsWith(".saving-")), "no temp file left");
+		}
 	}
 }
