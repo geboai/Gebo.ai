@@ -1353,6 +1353,21 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	}
 
 	/**
+	 * The names a gate lets an answer cite, with the files the libraries' tools
+	 * handled in this request so far: the gate is made before the iteration runs,
+	 * and a library tool - no search - can produce, in that iteration, the file
+	 * the answer names.
+	 */
+	static List<String> withHandledFiles(Collection<String> gateNames, IChatRequestContext chatRequestContext) {
+		final List<String> names = new ArrayList<>(gateNames != null ? gateNames : List.of());
+		final ToolsFoundDocuments collector = collectorOf(chatRequestContext);
+		if (collector != null) {
+			names.addAll(collector.getHandledNames());
+		}
+		return names;
+	}
+
+	/**
 	 * The names an answer may cite a document by after the tools ran in this request:
 	 * the chat's own documents and every document the tools returned or listed so far.
 	 */
@@ -1652,7 +1667,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 						&& usedEvidenceTool(callBacksListener, callsBefore, gate.tools());
 				// no search used: the answer has not been shown yet
 				final List<String> unread = open[0] || heldForCoverage || gate.evidenceRequired() ? List.of()
-						: unreadCitations(text.toString(), gate.readDocumentNames());
+						: unreadCitations(text.toString(), withHandledFiles(gate.readDocumentNames(), chatRequestContext));
 				final boolean discard = !open[0] && !heldForCoverage
 						&& (gate.evidenceRequired() || !unread.isEmpty());
 				Flux<String> released = Flux.empty();
