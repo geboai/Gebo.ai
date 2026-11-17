@@ -19,7 +19,10 @@
 		<!-- TODO: Test if works ok
 		<org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
 		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
-		<apache-poi.version>5.5.1</apache-poi.version>
+		<!-- POI 6 needs Java 17+. No tika release is built on it yet (tika 4.2.0
+		     still compiles against 5.5.1): tika's office parsers run on 6.0.0 here. -->
+		<apache-poi.version>6.0.0</apache-poi.version>
+		<odfdom.version>0.13.0</odfdom.version>
 		<spring.ai.version>2.1.0-RC2</spring.ai.version>
 		<springdoc.version>3.0.3</springdoc.version>
 		<!-- Official Agent2Agent (A2A) Java SDK (org.a2aproject.sdk, the current group;
@@ -253,6 +256,67 @@
 				<groupId>com.github.junrar</groupId>
 				<artifactId>junrar</artifactId>
 				<version>7.6.1</version>
+			</dependency>
+			<!-- The whole POI family on ${apache-poi.version}. Tika's microsoft module
+			     brings poi-ooxml-full at its own poi.version (5.5.1 up to tika 4.2.0)
+			     next to the poi-ooxml-lite of our poi-ooxml: unmanaged, the two
+			     majors would meet on one classpath. Declared here, they win over the
+			     imported tika-bom. -->
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi</artifactId>
+				<version>${apache-poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml</artifactId>
+				<version>${apache-poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-lite</artifactId>
+				<version>${apache-poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-ooxml-full</artifactId>
+				<version>${apache-poi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.poi</groupId>
+				<artifactId>poi-scratchpad</artifactId>
+				<version>${apache-poi.version}</version>
+			</dependency>
+			<!-- OpenDocument, which POI does not read nor write: one version and one set
+			     of exclusions for whoever uses it (ingestion, the spreadsheet library).
+			     The logging bridges would fight Spring Boot's; commons-validator and
+			     commons-beanutils are taken at the versions the app declares. -->
+			<dependency>
+				<groupId>org.odftoolkit</groupId>
+				<artifactId>odfdom-java</artifactId>
+				<version>${odfdom.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>jcl-over-slf4j</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-simple</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>commons-validator</groupId>
+						<artifactId>commons-validator</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>commons-beanutils</groupId>
+						<artifactId>commons-beanutils</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<!-- opentelemetry-semconv is pulled transitively at 1.41.1, which is inside the
 			     range of CVE-2026-39883 (>=1.15.0,<1.43.0). Spring Boot manages the
