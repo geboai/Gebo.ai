@@ -1413,4 +1413,14 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
 				"the conversation's instance of the implied library is reclaimed as a named one's");
 	}
+
+	@org.junit.jupiter.api.Test
+	void anAnswerMayCiteTheFilesTheLibrariesToolsHandledInTheRun() {
+		final ai.gebo.llms.agent.standardtools.ToolsFoundDocuments run = new ai.gebo.llms.agent.standardtools.ToolsFoundDocuments();
+		run.addHandled(List.of("sales-total.ods", "out/budget 2026.xlsx"));
+		final String answer = "I copied sales.xlsx to sales-total.ods and changed budget 2026.xlsx; see also other.pdf.";
+		final List<String> unread = AgenticLoopReactiveAgentServiceImpl.unreadCitations(answer,
+				java.util.stream.Stream.concat(java.util.stream.Stream.of("sales.xlsx"), run.getHandledNames().stream()).toList());
+		assertEquals(List.of("other.pdf"), unread);
+	}
 }

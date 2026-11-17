@@ -40,6 +40,7 @@ import ai.gebo.architecture.ai.model.AIResourceType.ConsentActions;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
 
 /**
  * A working directory: a folder of its own the agents build files in with the
@@ -208,5 +209,22 @@ class WorkingDirectoryLibrarySourceTest {
 
 		source.dropInstance(instance);
 		assertNull(source.filesOf(instance), "a folder gone holds no files");
+	}
+
+	@Test
+	void theFilesTheToolsHandleAreReportedToTheRunTheyArePartOf() {
+		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("the-conversation"));
+		List<ToolCallback> tools = source.getToolCallbacks(instance);
+		ToolsFoundDocuments run = new ToolsFoundDocuments();
+		ToolContext context = new ToolContext(Map.of(ToolsFoundDocuments.TOOLS_CONTEXT_KEY, run));
+		tool(tools, "writeFile").call("{\"path\":\"report/total.md\",\"content\":\"151.5\"}", context);
+		tool(tools, "readFile").call("{\"path\":\"report/total.md\"}", context);
+		tool(tools, "moveEntry").call("{\"from\":\"report/total.md\",\"to\":\"total.md\"}", context);
+		tool(tools, "createFolder").call("{\"path\":\"empty\"}", context);
+		tool(tools, "listFiles").call("{\"recursive\":true}", context);
+		assertEquals(List.of("report/total.md", "total.md"), run.getHandledNames(),
+				"files written, read, moved and listed, once each; no folder");
+		tool(tools, "readFile").call("{\"path\":\"total.md\"}");
+		assertEquals(2, run.getHandledNames().size(), "a call outside the run reports to nobody");
 	}
 }

@@ -41,6 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ai.gebo.architecture.ai.files.GFolderFilesLocation;
 import ai.gebo.architecture.ai.files.IGAILibraryFilesSource;
 import ai.gebo.architecture.ai.files.IGFilesLocation;
+import ai.gebo.architecture.ai.files.IGToolsHandledFiles;
 import ai.gebo.architecture.ai.model.AIResource;
 import ai.gebo.architecture.ai.model.AIResourceCategory;
 import ai.gebo.architecture.ai.model.AIResourceContent;
@@ -393,18 +394,36 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 	public record Done(String done) {
 	}
 
+	/** A listing, its files reported as handled by the run the call is part of. */
+	private static Listing reported(ToolContext context, Listing listing) {
+		if (listing != null && listing.entries() != null) {
+			IGToolsHandledFiles.report(context,
+					listing.entries().stream().filter(entry -> "file".equals(entry.kind())).map(Entry::path).toList());
+		}
+		return listing;
+	}
+
 	@Override
 	public List<ToolCallback> getToolCallbacks(AIToolsAndResourcesLibraryInstance instance) {
 		final Path folder = folderOf(instance.getId());
 		final List<ToolCallback> callbacks = new ArrayList<>();
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<ListParam, ToolContext, Listing>) (param, context) -> listFiles(folder, param),
+				(BiFunction<ListParam, ToolContext, Listing>) (param, context) -> reported(context,
+						listFiles(folder, param)),
 				LIST_FILES_TOOL, LIST_FILES_DESCRIPTION, ListParam.class, Listing.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<PathParam, ToolContext, String>) (param, context) -> readFile(folder, param), READ_FILE_TOOL,
+				(BiFunction<PathParam, ToolContext, String>) (param, context) -> {
+					final String read = readFile(folder, param);
+					IGToolsHandledFiles.report(context, param != null ? param.getPath() : null);
+					return read;
+				}, READ_FILE_TOOL,
 				READ_FILE_DESCRIPTION, PathParam.class, String.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<WriteParam, ToolContext, Done>) (param, context) -> writeFile(folder, param),
+				(BiFunction<WriteParam, ToolContext, Done>) (param, context) -> {
+					final Done written = writeFile(folder, param);
+					IGToolsHandledFiles.report(context, param != null ? param.getPath() : null);
+					return written;
+				},
 				WRITE_FILE_TOOL, WRITE_FILE_DESCRIPTION, WriteParam.class, Done.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<PathParam, ToolContext, Done>) (param, context) -> createFolder(folder, param),
@@ -413,7 +432,12 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 				(BiFunction<PathParam, ToolContext, Done>) (param, context) -> deleteEntry(folder, param),
 				DELETE_ENTRY_TOOL, DELETE_ENTRY_DESCRIPTION, PathParam.class, Done.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<MoveParam, ToolContext, Done>) (param, context) -> moveEntry(folder, param),
+				(BiFunction<MoveParam, ToolContext, Done>) (param, context) -> {
+					final Done moved = moveEntry(folder, param);
+					IGToolsHandledFiles.report(context, param != null ? param.getFrom() : null,
+							param != null ? param.getTo() : null);
+					return moved;
+				},
 				MOVE_ENTRY_TOOL, MOVE_ENTRY_DESCRIPTION, MoveParam.class, Done.class));
 		return callbacks;
 	}

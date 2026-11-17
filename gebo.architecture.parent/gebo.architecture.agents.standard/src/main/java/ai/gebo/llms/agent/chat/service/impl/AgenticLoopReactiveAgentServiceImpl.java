@@ -1361,6 +1361,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		final ToolsFoundDocuments collector = collectorOf(chatRequestContext);
 		if (collector != null) {
 			names.addAll(collector.getListedNames());
+			// the files the libraries' tools handled: what the answer says of them comes from this run
+			names.addAll(collector.getHandledNames());
 			for (GResponseDocumentRef ref : collector.getDocuments()) {
 				names.addAll(citableNames(ref));
 			}
@@ -1527,6 +1529,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		if (toolDocuments != null) {
 			readNames.addAll(toolDocuments.getListedNames());
+			readNames.addAll(toolDocuments.getHandledNames());
 			// every document the tools read counts as read, also the ones the answer does
 			// not rest on (not among its documents)
 			for (GResponseDocumentRef ref : toolDocuments.getDocuments()) {
