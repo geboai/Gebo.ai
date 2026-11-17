@@ -208,6 +208,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 			if (currentRequest != null && currentRequest.getId() != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
 			}
+			// the conversation, whose files locations the tools working on files reach
+			if (currentRequest != null && currentRequest.getUserChatContextCode() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.CHAT_SESSION_CONTEXT_KEY,
+						currentRequest.getUserChatContextCode());
+			}
 			// the knowledge bases the tools may search, browse and read: the chat's
 			if (availableKnowledgeBaseCodes != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.CHAT_KNOWLEDGE_BASES_CONTEXT_KEY,

@@ -56,6 +56,11 @@ public class MinimalChatContext implements ITokensCountable {
 			if (currentRequest.getId() != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
 			}
+			// the conversation, whose files locations the tools working on files reach
+			if (currentRequest.getUserChatContextCode() != null) {
+				toolsContext.put(ToolCallbackDeclarationUtil.CHAT_SESSION_CONTEXT_KEY,
+						currentRequest.getUserChatContextCode());
+			}
 			if (currentRequest.getUserLanguage() != null) {
 				builder = builder.userLanguage(currentRequest.getUserLanguage());
 				toolsContext.put(ToolCallbackDeclarationUtil.USER_LANGUAGE_CONTEXT_KEY, currentRequest.getUserLanguage());

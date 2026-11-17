@@ -73,6 +73,22 @@ public class ToolCallbackDeclarationUtil {
 	}
 
 	/**
+	 * Tools context key carrying the code of the conversation the tools are called
+	 * for: a tool working on files reaches through it the files locations the
+	 * conversation holds ({@code IGAILibraryFilesService}).
+	 */
+	public static final String CHAT_SESSION_CONTEXT_KEY = "geboChatSession";
+
+	/** The conversation a tool is called for, or null when the caller did not say. */
+	public static String chatSessionCode(ToolContext toolContext) {
+		if (toolContext == null || toolContext.getContext() == null) {
+			return null;
+		}
+		Object value = toolContext.getContext().get(CHAT_SESSION_CONTEXT_KEY);
+		return value instanceof String code && !code.isBlank() ? code : null;
+	}
+
+	/**
 	 * The codes of the knowledge bases of the chat a tool is called for. Empty when the
 	 * chat has none, and when the tool is not called for a chat session: a call
 	 * outside a chat has no knowledge base.
