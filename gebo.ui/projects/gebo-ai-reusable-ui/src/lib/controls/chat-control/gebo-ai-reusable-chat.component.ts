@@ -22,7 +22,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, inject, Inject, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState, WaitingConditionsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AdditionalContent, AnswerFeedbackRequest, BASE_PATH, CalledFunction, ChatWrittenFile, GConversationFile, GeboChatLibrariesControllerService, GBaseChatModelChoice, GChatAnswerFeedback, GeboChatControllerService, GeboChatPipelinesControllerService, GeboChatRequest, GeboChatResponse, GeboChatUserInfo, GeboRagChatControllerService, GeboTextToSpeechControllerService, GeboTranscriptControllerService, GeboUserChatsControllerService, GResponseDocumentRef, GUserChatInfo, GUserMessage, LLMGeneratedResource, ModelProviderCapabilities, PipelineChatMenu, SpeechRequest, TranscriptResponse, NetworkOfAgentsSuspendedState, WaitingConditionsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { SuspensionAnswer } from "./chat-suspension-answer.component";
 import { GeboAISuspensionTextsService, localizedSuspendedAnswer, SuspensionTexts } from "./chat-suspension-texts";
 import { MermaidAPI } from "ngx-markdown";
@@ -92,6 +92,8 @@ interface GeboChatTemplatedResponse {
     documentsRef?: Array<GResponseDocumentRef>;
     calledFunctions?: Array<CalledFunction>;
     generatedResources?: LLMGeneratedResource[];
+    // the files the tools wrote while answering
+    writtenFiles?: Array<GConversationFile>;
 };
 /**
  * What the custom areas of the chat (left, right, above the message box) receive
@@ -589,6 +591,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
     protected changeDescriptionDialogOpened: boolean = false;
     // The user's rating of each answer, by request id
     protected answerFeedbacks: Map<string, GChatAnswerFeedback> = new Map<string, GChatAnswerFeedback>();
+    /** Every file the tools of the conversation wrote, as it holds them now: says which an answer's files can be downloaded. */
+    public conversationWrittenFiles: ChatWrittenFile[] = [];
     protected feedbackDialogOpened: boolean = false;
     protected feedbackRequestId?: string;
     protected feedbackFormGroup: FormGroup = new FormGroup({ comment: new FormControl<string | null>(null) });
@@ -612,6 +616,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         private textToSpeechService: GeboTextToSpeechControllerService,
         private transcriptService: GeboTranscriptControllerService,
         private waitingConditionsService: WaitingConditionsControllerService,
+        private chatLibrariesService: GeboChatLibrariesControllerService,
         private httpClient: HttpClient,
         @Inject(BASE_PATH) private basePath: string) {
         this.formGroup.controls["userChatContextCode"].valueChanges.subscribe({
@@ -1231,6 +1236,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
                     } else {
                         this.answerFeedbacks.clear();
                     }
+                    this.loadConversationWrittenFiles(value?.code);
 
                 },
                 complete: () => {
@@ -1240,8 +1246,27 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
         } else {
             this.interactions = [];
             this.pendingSuspension = undefined;
+            this.conversationWrittenFiles = [];
         }
 
+    }
+
+    /** The files the tools of the conversation wrote, read again once a run may have written some. */
+    public loadConversationWrittenFiles(userChatContextCode?: string): void {
+        if (!userChatContextCode) {
+            this.conversationWrittenFiles = [];
+            return;
+        }
+        this.chatLibrariesService.getChatWrittenFiles(userChatContextCode).subscribe({
+            next: (written) => {
+                this.conversationWrittenFiles = written || [];
+                console.debug("[chat-written-files] conversation " + userChatContextCode + " has " + this.conversationWrittenFiles.length + " file(s) written by its tools");
+            },
+            error: (e) => {
+                console.debug("[chat-written-files] the files written in conversation " + userChatContextCode + " could not be read", e);
+                this.conversationWrittenFiles = [];
+            }
+        });
     }
 
     /** The suspended network of agents the conversation still waits for, shown again to be answered. */
@@ -1900,6 +1925,8 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
             }
 
             this.chatInputShell.onStreamError(error);
+            // a run that failed may still have written files
+            this.loadConversationWrittenFiles(this.userChatContextCode);
 
         }
         this.chatStreaming = true;
@@ -1913,6 +1940,7 @@ export class GeboAIReusableChatComponent implements OnInit, OnChanges, AfterView
             if (interaction) {
                 interaction.loading = false;
             }
+            this.loadConversationWrittenFiles(this.userChatContextCode);
         };
 
         if (this.ragsystem === true) {

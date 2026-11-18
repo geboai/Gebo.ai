@@ -1,0 +1,24 @@
+@if (written.length) {
+  <div class="gebo-ai-reusable-chat__interaction-item">
+    <span class="gebo-ai-reusable-chat__interaction-item-icon">
+      <i class="pi pi-file-edit" id="WrittenFiles"></i>
+    </span>
+    <span class="gebo-ai-reusable-chat__interaction-item-title" id="WrittenFilesCtl" gebo-ai-text>Files written</span>
+    <span class="gebo-ai-reusable-chat__called-functions-count">({{written.length}})</span>
+    <ul class="gebo-ai-reusable-chat__written-files">
+      @for (file of written; track keyOf(file)) {
+        <li class="gebo-ai-reusable-chat__written-file" [title]="keyOf(file)">
+          <i class="pi pi-file"></i>
+          <span class="gebo-ai-reusable-chat__written-file-name">{{ nameOf(file) }}</span>
+          <span class="gebo-ai-reusable-chat__written-file-location">{{ file.location }}</span>
+          @if (isDownloadable(file)) {
+            <p-button id="DownloadWrittenFileBtn" gebo-ai-label icon="pi pi-download" [text]="true" [rounded]="true"
+              size="small" title="Download" [loading]="downloading === keyOf(file)"
+              [disabled]="disabled || downloading !== null" (onClick)="download(file)">
+            </p-button>
+          }
+        </li>
+      }
+    </ul>
+  </div>
+}

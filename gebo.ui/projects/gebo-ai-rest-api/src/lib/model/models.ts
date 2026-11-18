@@ -47,6 +47,7 @@ export * from './chatProfileConfigurationLookupByQbeParam';
 export * from './chatRuleConflict';
 export * from './chatSessionUploadUserSessionCodeBody';
 export * from './chatUIOptions';
+export * from './chatWrittenFile';
 export * from './childVirtualFSParam';
 export * from './clarificationConditionAttributes';
 export * from './clarificationOption';

@@ -962,6 +962,43 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 
 .gebo-ai-reusable-chat__called-function-name { font-weight: 600; }
 
+/* The files the tools wrote while answering: one per line, with a download when the file is one of its own. */
+/* The row is a component of its own: the chat's scoped title and icon styles do not reach it. */
+gebo-ai-chat-written-files .gebo-ai-reusable-chat__interaction-item-title {
+  margin: var(--gebo-space-2, 0.5rem) 0;
+  color: var(--gebo-text-muted, #4b5563);
+  font-size: var(--gebo-font-size-sm, 13px);
+  font-weight: var(--gebo-font-weight-semibold, 600);
+}
+
+gebo-ai-chat-written-files .gebo-ai-reusable-chat__interaction-item-icon {
+  margin-right: var(--gebo-space-1, 0.25rem);
+  color: var(--gebo-text-subtle, #6b7280);
+}
+
+.gebo-ai-reusable-chat__written-files {
+  margin: var(--gebo-space-2) 0 0;
+  padding-left: var(--gebo-space-4);
+  list-style: none;
+}
+
+.gebo-ai-reusable-chat__written-file {
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-2);
+  min-height: 1.75rem;
+}
+
+.gebo-ai-reusable-chat__written-file-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.gebo-ai-reusable-chat__written-file-location {
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+}
+
 /* How many functions were called, next to the title of the closed list. */
 .gebo-ai-reusable-chat__called-functions-count {
   margin-left: var(--gebo-space-1);

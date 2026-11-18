@@ -58,8 +58,9 @@
       </div>
     }
     <div class="chat-input-shell__frame_chip card flex items-center gap-2 flex-wrap">
-      <!-- under the text box, not over it: a labelled button there covered what the user writes -->
-      <gebo-ai-chat-libraries-panel [userChatContextCode]="userChatContextCode" [refreshKey]="$safeNavigationMigration(interactions?.length)"
+      <!-- under the text box, not over it: a labelled button there covered what the user writes;
+           read again when a run ends too: the run mounts the libraries and writes their files -->
+      <gebo-ai-chat-libraries-panel [userChatContextCode]="userChatContextCode" [refreshKey]="(interactions?.length ?? 0) + (streaming ? ':running' : '')"
         [disabled]="loading"></gebo-ai-chat-libraries-panel>
       @if (choosedPipelineRoutingChip) {
         <p-chip #actualRoutingChoiceChip [icon]="choosedPipelineRoutingChip.icon"
