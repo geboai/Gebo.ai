@@ -40,6 +40,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.ai.files.GFolderFilesLocation;
 import ai.gebo.architecture.ai.files.IGAILibraryFilesSource;
+import ai.gebo.architecture.ai.files.IGConversationFilesKeeper;
 import ai.gebo.architecture.ai.files.IGFilesLocation;
 import ai.gebo.architecture.ai.files.IGToolsHandledFiles;
 import ai.gebo.architecture.ai.model.AIResource;
@@ -394,6 +395,25 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 	public record Done(String done) {
 	}
 
+	/**
+	 * Reports a file a tool wrote to the keeper of the request's written files
+	 * (see {@link IGConversationFilesKeeper}), at its version once written.
+	 */
+	private void reportWritten(ToolContext context, AIToolsAndResourcesLibraryInstance instance, String path) {
+		if (path == null || path.isBlank()) {
+			return;
+		}
+		try {
+			final IGFilesLocation location = filesOf(instance);
+			if (location != null) {
+				IGConversationFilesKeeper.report(context, location.describe(path));
+			}
+		} catch (IOException | RuntimeException notDescribed) {
+			LOGGER.warn("The file " + path + " written in working directory:" + instance.getId()
+					+ " could not be described for the conversation's files: " + notDescribed);
+		}
+	}
+
 	/** A listing, its files reported as handled by the run the call is part of. */
 	private static Listing reported(ToolContext context, Listing listing) {
 		if (listing != null && listing.entries() != null) {
@@ -422,6 +442,7 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 				(BiFunction<WriteParam, ToolContext, Done>) (param, context) -> {
 					final Done written = writeFile(folder, param);
 					IGToolsHandledFiles.report(context, param != null ? param.getPath() : null);
+					reportWritten(context, instance, param != null ? param.getPath() : null);
 					return written;
 				},
 				WRITE_FILE_TOOL, WRITE_FILE_DESCRIPTION, WriteParam.class, Done.class));
@@ -436,6 +457,7 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 					final Done moved = moveEntry(folder, param);
 					IGToolsHandledFiles.report(context, param != null ? param.getFrom() : null,
 							param != null ? param.getTo() : null);
+					reportWritten(context, instance, param != null ? param.getTo() : null);
 					return moved;
 				},
 				MOVE_ENTRY_TOOL, MOVE_ENTRY_DESCRIPTION, MoveParam.class, Done.class));

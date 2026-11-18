@@ -49,6 +49,8 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 	// names: kept
 	// with the chat's history, the next requests may name them
 	private List<String> listedDocumentNames = null;
+	// the files the tools of the request wrote: the agents of the next requests are told of them
+	private List<ai.gebo.architecture.ai.files.GConversationFile> writtenFiles = null;
 	// List of functions called during the interaction
 	private List<CalledFunction> calledFunctions = new ArrayList<LLMtInteractionContextThreadLocal.CalledFunction>();
 	private ChatModelRequestContextWindowStats contextWindowStats = null; // Statistics related to the context window
@@ -81,6 +83,7 @@ public class GeboTemplatedChatResponse<ResponseType> implements Serializable {
 		backendMessages = r.backendMessages;
 		documentsRef = r.documentsRef;
 		listedDocumentNames = r.listedDocumentNames;
+		writtenFiles = r.writtenFiles;
 		calledFunctions = r.calledFunctions;
 		networkOfAgentsSuspendedState = r.networkOfAgentsSuspendedState;
 	}

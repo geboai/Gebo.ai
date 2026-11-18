@@ -21,5 +21,11 @@ public class AgentPromptTemplateParams {
 	 * the run holds (see {@link AgentAdditionalRules}), an empty text when there are none.
 	 */
 	public static final String ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM = "additionalRulesSlot";
+	/**
+	 * Where a prompt takes the files the tools of the conversation wrote, with their
+	 * outlines as they are now (see {@link ConversationFilesRenderer}); "none" when
+	 * there are none. A prompt not naming it gets them in its additional rules slot.
+	 */
+	public static final String CONVERSATION_FILES_TEMPLATE_PARAM = "CONVERSATION_FILES";
 
 }

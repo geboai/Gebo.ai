@@ -33,7 +33,7 @@ public final class GConversationFilesText {
 	static final String HEADING = "Files the tools of this conversation wrote, the latest first. Each outline shows the file as it is now: "
 			+ "read or change it with the library tools, by its location and path.";
 
-	/** A file written in a request of the conversation, 1 the first. */
+	/** A file written in a request of the conversation, by the request's index, 0 the first. */
 	public record Entry(int request, GConversationFile file) {
 	}
 
@@ -46,6 +46,8 @@ public final class GConversationFilesText {
 	 *
 	 * @param entries          the files written, by request; a file written in
 	 *                         several requests is shown once, at the last
+	 * @param currentRequest   the index of the request being answered: its
+	 *                         files are said written "in this request"
 	 * @param locations        the files locations of the conversation by id; null
 	 *                         for one it no longer holds
 	 * @param outliners        the outliners of the files' kinds
@@ -53,7 +55,7 @@ public final class GConversationFilesText {
 	 * @param maxTokens        the most tokens the whole text takes, but for the
 	 *                         names of the files left without an outline
 	 */
-	public static String render(List<Entry> entries, Function<String, IGFilesLocation> locations,
+	public static String render(List<Entry> entries, int currentRequest, Function<String, IGFilesLocation> locations,
 			List<? extends IGFilesOutliner> outliners, int maxTokensPerFile, int maxTokens) {
 		if (entries == null || entries.isEmpty()) {
 			return null;
@@ -75,7 +77,7 @@ public final class GConversationFilesText {
 			} catch (NoSuchFileException deleted) {
 				continue;
 			} catch (IOException | RuntimeException unreadable) {
-				onlyNamed.add(name(file) + " (written in request " + entry.request() + ", not readable now: "
+				onlyNamed.add(name(file) + " (written " + when(entry, currentRequest) + ", not readable now: "
 						+ unreadable.getMessage() + ")");
 				any = true;
 				continue;
@@ -84,7 +86,7 @@ public final class GConversationFilesText {
 				continue;
 			}
 			any = true;
-			final String line = "\n- " + name(file) + " - written in request " + entry.request() + ", "
+			final String line = "\n- " + name(file) + " - written " + when(entry, currentRequest) + ", "
 					+ size(now.size()) + (changed(file, now) ? "; changed since by something else than the tools" : "");
 			final String outline = left - ITokensCountable.stringsTokensSize(line) >= MIN_OUTLINE_TOKENS
 					? outline(outliners, location, file.getPath(),
@@ -96,7 +98,7 @@ public final class GConversationFilesText {
 				text.append(shown);
 				left -= cost;
 			} else {
-				onlyNamed.add(name(file) + " (written in request " + entry.request() + ")");
+				onlyNamed.add(name(file) + " (written " + when(entry, currentRequest) + ")");
 			}
 		}
 		if (!any) {
@@ -146,6 +148,11 @@ public final class GConversationFilesText {
 			}
 		}
 		return null;
+	}
+
+	/** When a file was written: in this request, or in a request as the user counts them, 1 the first. */
+	private static String when(Entry entry, int currentRequest) {
+		return entry.request() >= currentRequest ? "in this request" : "in request " + (entry.request() + 1);
 	}
 
 	private static boolean changed(GConversationFile written, GLibraryFile now) {

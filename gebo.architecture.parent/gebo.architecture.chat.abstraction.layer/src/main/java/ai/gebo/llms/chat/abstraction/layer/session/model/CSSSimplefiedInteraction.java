@@ -32,6 +32,8 @@ public class CSSSimplefiedInteraction implements ITokensCountable, Cloneable {
 	 * names, null when none.
 	 */
 	private List<String> listedDocumentNames = null;
+	// the files the tools of the request wrote: the agents of the next requests are told of them
+	private List<ai.gebo.architecture.ai.files.GConversationFile> writtenFiles = null;
 
 	/** The documents an answer rested on, as kept with the chat's history. */
 	public static List<GResponseDocumentRef> keptDocuments(List<GResponseDocumentRef> answerDocuments) {

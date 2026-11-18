@@ -168,6 +168,10 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		final ToolCallsListener requestToolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
 		resources.setToolCallsListener(requestToolCalls);
 		minimalChatContext.setToolCallsListener(requestToolCalls);
+		// one keeper for the files every tool of the request writes: the response
+		// carries them as they are written, and with it the chat's history
+		resources.setConversationFilesKeeper(
+				new ai.gebo.architecture.ai.files.GConversationFilesKeeper(response::setWrittenFiles));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Recording the tool calls of request:" + request.getId() + " into its response");
 		}
@@ -478,6 +482,10 @@ public class ChatPipelinesExecutorImpl implements IChatPipelinesExecutor {
 		final ToolCallsListener requestToolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
 		resources.setToolCallsListener(requestToolCalls);
 		minimalChatContext.setToolCallsListener(requestToolCalls);
+		// one keeper for the files every tool of the request writes: the response
+		// carries them as they are written, and with it the chat's history
+		resources.setConversationFilesKeeper(
+				new ai.gebo.architecture.ai.files.GConversationFilesKeeper(response::setWrittenFiles));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Recording the tool calls of respawn request:" + request.getId() + " into its response");
 		}

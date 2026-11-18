@@ -68,6 +68,11 @@ public class GShrinkedChatSessionStateServiceImpl implements IGShrinkedChatSessi
 		interaction.setDocumentsRef(CSSSimplefiedInteraction.keptDocuments(response.getDocumentsRef()));
 		interaction.setListedDocumentNames(response.getListedDocumentNames() != null
 				&& !response.getListedDocumentNames().isEmpty() ? new ArrayList<>(response.getListedDocumentNames()) : null);
+		// the files the request's tools wrote, at the request's index in the conversation
+		interaction.setWrittenFiles(response.getWrittenFiles() != null && !response.getWrittenFiles().isEmpty()
+				? new ArrayList<>(response.getWrittenFiles())
+				: null);
+		interaction.setInteractionIndex(index);
 		length = ITokensCountable.tokensEstimator.estimate(interaction.getAssistant())
 				+ interaction.documentsTokensSize();
 		interaction.setAssistantTokenSize(length);

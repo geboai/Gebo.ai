@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * The keeper of a request's written files: safe for the tools of agents
@@ -19,6 +20,20 @@ import java.util.Map;
  */
 public class GConversationFilesKeeper implements IGConversationFilesKeeper {
 	private final Map<String, GConversationFile> written = new LinkedHashMap<>();
+	private final Consumer<List<GConversationFile>> onWritten;
+	private int changes = 0;
+
+	public GConversationFilesKeeper() {
+		this(null);
+	}
+
+	/**
+	 * @param onWritten given the files written so far after each write (e.g. to
+	 *                  keep them on the response of the request), or null
+	 */
+	public GConversationFilesKeeper(Consumer<List<GConversationFile>> onWritten) {
+		this.onWritten = onWritten;
+	}
 
 	@Override
 	public synchronized void written(GLibraryFile file) {
@@ -33,6 +48,15 @@ public class GConversationFilesKeeper implements IGConversationFilesKeeper {
 		} else {
 			written.put(kept.key(), kept);
 		}
+		changes++;
+		if (onWritten != null) {
+			onWritten.accept(getWritten());
+		}
+	}
+
+	/** How many writes were kept so far: it changes whenever the files written do. */
+	public synchronized int changes() {
+		return changes;
 	}
 
 	@Override

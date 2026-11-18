@@ -18,6 +18,15 @@ import org.springframework.ai.chat.model.ToolContext;
  * context carries. What it kept goes with the request's answer.
  */
 public interface IGConversationFilesKeeper {
+	/** The key of the request's keeper in a tools context. */
+	String TOOLS_CONTEXT_KEY = "geboConversationFilesKeeper";
+
+	/** The keeper a tools context carries, or null. */
+	static IGConversationFilesKeeper of(java.util.Map<String, Object> toolsContext) {
+		return toolsContext != null && toolsContext.get(TOOLS_CONTEXT_KEY) instanceof IGConversationFilesKeeper keeper
+				? keeper
+				: null;
+	}
 
 	/**
 	 * Records a file a tool wrote, at its version once written: a file written

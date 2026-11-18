@@ -147,14 +147,14 @@ class GConversationFilesTest {
 		final Files work = new Files("working-directory").with("notes.txt", 300, "n1");
 		final String text = GConversationFilesText.render(
 				List.of(entry(1, "presentations", "deck.pptx", "v1"), entry(1, "working-directory", "notes.txt", "n1"),
-						entry(2, "presentations", "deck.pptx", "v2")),
+						entry(2, "presentations", "deck.pptx", "v2")), 3,
 				Map.of("presentations", (IGFilesLocation) presentations, "working-directory", work)::get,
 				List.of(new Decks(2)), 20000, 100000);
 		assertTrue(text.startsWith(GConversationFilesText.HEADING), text);
 		// the deck once, at request 2, before the notes of request 1
 		assertEquals(1, text.split("presentations: deck.pptx", -1).length - 1, text);
-		assertTrue(text.indexOf("presentations: deck.pptx - written in request 2, 2.0 KB")
-				< text.indexOf("working-directory: notes.txt - written in request 1, 300 bytes"), text);
+		assertTrue(text.indexOf("presentations: deck.pptx - written in request 3, 2.0 KB")
+				< text.indexOf("working-directory: notes.txt - written in request 2, 300 bytes"), text);
 		assertTrue(text.contains("\n  1 TITLE_AND_CONTENT \"Slide 1\"\n  2 TITLE_AND_CONTENT \"Slide 2\""), text);
 		assertTrue(!text.contains("changed since"), text);
 	}
@@ -164,14 +164,14 @@ class GConversationFilesTest {
 		final Files presentations = new Files("presentations").with("deck.pptx", 2048, "edited-by-hand");
 		final String text = GConversationFilesText.render(
 				List.of(entry(1, "presentations", "deck.pptx", "v1"), entry(1, "presentations", "gone.pptx", "g1"),
-						entry(1, "uploads", "held-no-more.pptx", "u1")),
+						entry(1, "uploads", "held-no-more.pptx", "u1")), 3,
 				Map.of("presentations", (IGFilesLocation) presentations)::get, List.of(new Decks(1)), 20000, 100000);
-		assertTrue(text.contains("deck.pptx - written in request 1, 2.0 KB; changed since by something else than the tools"),
+		assertTrue(text.contains("deck.pptx - written in request 2, 2.0 KB; changed since by something else than the tools"),
 				text);
 		assertTrue(!text.contains("gone.pptx") && !text.contains("held-no-more.pptx"), text);
-		assertNull(GConversationFilesText.render(List.of(entry(1, "presentations", "gone.pptx", "g1")),
+		assertNull(GConversationFilesText.render(List.of(entry(1, "presentations", "gone.pptx", "g1")), 3,
 				Map.of("presentations", (IGFilesLocation) presentations)::get, List.of(), 20000, 100000));
-		assertNull(GConversationFilesText.render(List.of(), id -> null, List.of(), 20000, 100000));
+		assertNull(GConversationFilesText.render(List.of(), 3, id -> null, List.of(), 20000, 100000));
 	}
 
 	@Test
@@ -179,10 +179,10 @@ class GConversationFilesTest {
 		final Files presentations = new Files("presentations").with("big.pptx", 900000, "b1").with("small.pptx", 900,
 				"s1");
 		final String text = GConversationFilesText.render(
-				List.of(entry(1, "presentations", "small.pptx", "s1"), entry(2, "presentations", "big.pptx", "b1")),
+				List.of(entry(1, "presentations", "small.pptx", "s1"), entry(2, "presentations", "big.pptx", "b1")), 3,
 				Map.of("presentations", (IGFilesLocation) presentations)::get, List.of(new Decks(400)), 20000, 1500);
 		// the big deck's outline takes more than the whole budget: only named; the small one finds no room after it
-		assertTrue(text.contains("Also written, without an outline here: presentations: big.pptx (written in request 2)"),
+		assertTrue(text.contains("Also written, without an outline here: presentations: big.pptx (written in request 3)"),
 				text);
 		assertTrue(!text.contains("Slide 400"), text);
 	}
@@ -197,10 +197,33 @@ class GConversationFilesTest {
 			}
 		};
 		final String text = GConversationFilesText.render(
-				List.of(entry(1, "working-directory", "broken.pptx", "b1"), entry(1, "working-directory", "data.csv", "c1")),
+				List.of(entry(1, "working-directory", "broken.pptx", "b1"), entry(1, "working-directory", "data.csv", "c1")), 3,
 				Map.of("working-directory", (IGFilesLocation) work)::get, List.of(failing), 20000, 100000);
-		assertTrue(text.contains("broken.pptx - written in request 1, 10 bytes\n  (its outline could not be read: not a presentation)"),
+		assertTrue(text.contains("broken.pptx - written in request 2, 10 bytes\n  (its outline could not be read: not a presentation)"),
 				text);
-		assertTrue(text.contains("data.csv - written in request 1, 4.9 KB"), text);
+		assertTrue(text.contains("data.csv - written in request 2, 4.9 KB"), text);
+	}
+
+	@Test
+	void theFilesOfTheRequestBeingAnsweredAreWrittenInThisRequest() {
+		final Files presentations = new Files("presentations").with("deck.pptx", 2048, "v1").with("old.pptx", 10, "o1");
+		final String text = GConversationFilesText.render(
+				List.of(entry(0, "presentations", "old.pptx", "o1"), entry(4, "presentations", "deck.pptx", "v1")), 4,
+				Map.of("presentations", (IGFilesLocation) presentations)::get, List.of(new Decks(1)), 20000, 100000);
+		assertTrue(text.contains("presentations: deck.pptx - written in this request, 2.0 KB"), text);
+		assertTrue(text.contains("presentations: old.pptx - written in request 1, 10 bytes"), text);
+	}
+
+	@Test
+	void theKeeperTellsEveryWriteAndCountsThem() {
+		final List<List<GConversationFile>> told = new java.util.ArrayList<>();
+		final GConversationFilesKeeper keeper = new GConversationFilesKeeper(told::add);
+		keeper.written(new GLibraryFile("presentations", "decks\\a.pptx", 1, null, "v1", null));
+		keeper.written(new GLibraryFile("presentations", "decks/a.pptx", 1, null, "v2", null));
+		assertEquals(2, keeper.changes());
+		assertEquals(2, told.size());
+		assertEquals(List.of(new GConversationFile("presentations", "decks/a.pptx", "v2")), told.get(1));
+		assertEquals(keeper, IGConversationFilesKeeper.of(Map.of(IGConversationFilesKeeper.TOOLS_CONTEXT_KEY, keeper)));
+		assertNull(IGConversationFilesKeeper.of(Map.of()));
 	}
 }

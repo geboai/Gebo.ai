@@ -9,6 +9,8 @@ public class CSSConsolidatedChatHistory implements ITokensCountable {
 	private Integer lastInteractionPointer = null;
 	private int consolidationTextTokenSize = 0;
 	private CSSSimplifiedChatHistory latestEntries = new CSSSimplifiedChatHistory();
+	// the files written by the requests the summary took the place of
+	private java.util.List<CSSWrittenFile> earlierWrittenFiles = null;
 
 	@Override
 	public int getTokensSize() {
