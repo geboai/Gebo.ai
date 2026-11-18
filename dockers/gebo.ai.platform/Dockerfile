@@ -75,13 +75,20 @@ RUN set -eux; \
 # libstdc++/libgcc are also what the native libraries bundled in the app need:
 # onnxruntime, DJL tokenizers, netty epoll/tcnative/quic, conscrypt and JNA all
 # load on this layer (verified as uid 10001).
+# Fonts: FreeType, HarfBuzz, fontconfig and the DejaVu families. Java lays text
+# out through them (java.awt fonts; Ubuntu's libfontmanager.so links the system
+# HarfBuzz and FreeType), and so does every library measuring text on top of it:
+# Apache POI fitting columns or shapes to their text, table cells' layout,
+# rendering. Without them such a call throws UnsatisfiedLinkError on
+# libfontmanager.so. fontconfig's config slice brings the DejaVu config with it.
 RUN set -eux; \
     mkdir /rootfs; \
     chisel cut --release "ubuntu-${UBUNTU_RELEASE}" --root /rootfs \
       base-files_base base-files_chisel base-files_release-info base-passwd_data \
       ca-certificates_data libc-bin_locale libc-bin_nsswitch \
       libc6_libs libgcc-s1_libs libstdc++6_libs zlib1g_libs \
-      libpcsclite1_libs libnss3_libs
+      libpcsclite1_libs libnss3_libs \
+      libfreetype6_libs libharfbuzz0b_libs libfontconfig1_libs fonts-dejavu-core_fonts
 
 # Make the image's packages visible to vulnerability scanners and SBOM tools
 # (Trivy, Grype/Syft, Docker Scout, BuildKit's --sbom). They read dpkg's
