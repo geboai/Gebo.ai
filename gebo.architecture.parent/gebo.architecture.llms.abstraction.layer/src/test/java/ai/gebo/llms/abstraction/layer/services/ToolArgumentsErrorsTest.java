@@ -30,9 +30,10 @@ import ai.gebo.security.services.ReactiveIdentityUtil;
 import ai.gebo.security.services.RunAsWithReturn;
 
 /**
- * A tool called with arguments its parameters do not take fails as an error of
- * the tool, which the tool calling hands back to the model as the call's result,
- * instead of ending the model call and the agent's turn with it.
+ * A tool called with arguments its parameters do not take, or that cannot run in
+ * this environment, fails as an error of the tool, which the tool calling hands
+ * back to the model as the call's result, instead of ending the model call and
+ * the agent's turn with it.
  */
 class ToolArgumentsErrorsTest {
 
@@ -104,6 +105,29 @@ class ToolArgumentsErrorsTest {
 		ToolExecutionException error = assertThrows(ToolExecutionException.class,
 				() -> wrapped.call("{\"text\":\"hello\"}", CONTEXT));
 		assertEquals("No such document", error.getMessage(), "the tool's own error, not wrapped again");
+	}
+
+	@Test
+	void aToolThatCannotRunHereIsAnErrorOfTheTool() {
+		ToolCallback unlinked = FunctionToolCallback.builder("measureText", (Paint paint, ToolContext context) -> {
+			throw new UnsatisfiedLinkError("libfreetype.so.6: cannot open shared object file");
+		}).description("Measures a text").inputType(Paint.class).build();
+		RunAsToolCallback wrapped = new RunAsToolCallback(unlinked, runningInPlace(), new ToolCallsListener());
+
+		ToolExecutionException error = assertThrows(ToolExecutionException.class,
+				() -> wrapped.call("{\"text\":\"hello\"}", CONTEXT));
+		String result = DefaultToolExecutionExceptionProcessor.builder().build().process(error);
+		assertEquals("The call of the tool measureText failed: libfreetype.so.6: cannot open shared object file",
+				result, "a native library missing: this tool cannot run, the run goes on");
+	}
+
+	@Test
+	void theJvmsOwnErrorsGoOn() {
+		ToolCallback exhausted = FunctionToolCallback.builder("exhausting", (Paint paint, ToolContext context) -> {
+			throw new OutOfMemoryError("Java heap space");
+		}).description("Exhausts the heap").inputType(Paint.class).build();
+		RunAsToolCallback wrapped = new RunAsToolCallback(exhausted, runningInPlace(), new ToolCallsListener());
+		assertThrows(OutOfMemoryError.class, () -> wrapped.call("{\"text\":\"hello\"}", CONTEXT));
 	}
 
 	@Test

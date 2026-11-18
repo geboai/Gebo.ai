@@ -94,6 +94,12 @@ public class RunAsToolCallback implements ToolCallback {
 	 * one of an enum's, a field of the wrong type - came out as any other exception and
 	 * ended the model call, with it the agent's turn. As an error of the tool the model
 	 * reads what went wrong, the field and the values it takes, and calls it again.
+	 * <p>
+	 * A {@link LinkageError} - a native library or a class the tool needs missing, a
+	 * class it uses failing to initialize - says this tool cannot run here, not that the
+	 * JVM is in trouble, yet Reactor takes it as fatal and ends the whole run without an
+	 * answer: it is an error of the tool as well, so the agent answers with the others.
+	 * Out of memory, a stack overflow and the other {@link VirtualMachineError}s go on.
 	 */
 	private String called(Supplier<String> call) {
 		try {
@@ -102,10 +108,12 @@ public class RunAsToolCallback implements ToolCallback {
 			throw ofTheTool;
 		} catch (RuntimeException aroundTheTool) {
 			throw asToolError(aroundTheTool);
+		} catch (LinkageError cannotRunHere) {
+			throw asToolError(cannotRunHere);
 		}
 	}
 
-	private ToolExecutionException asToolError(RuntimeException failure) {
+	private ToolExecutionException asToolError(Throwable failure) {
 		final String name = delegate.getToolDefinition().name();
 		Throwable root = failure;
 		while (root.getCause() != null && root.getCause() != root) {
@@ -113,7 +121,12 @@ public class RunAsToolCallback implements ToolCallback {
 		}
 		final String reason = root.getMessage() != null && !root.getMessage().isBlank() ? root.getMessage()
 				: root.getClass().getSimpleName();
-		LOGGER.warn("Tool:" + name + " could not be called, the error goes back to the model: " + reason, failure);
+		if (failure instanceof LinkageError) {
+			LOGGER.error("Tool:" + name + " cannot run in this environment, the error goes back to the model: "
+					+ reason, failure);
+		} else {
+			LOGGER.warn("Tool:" + name + " could not be called, the error goes back to the model: " + reason, failure);
+		}
 		return new ToolExecutionException(delegate.getToolDefinition(),
 				new IllegalArgumentException("The call of the tool " + name + " failed: " + reason, failure));
 	}
