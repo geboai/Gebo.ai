@@ -1,5 +1,5 @@
 import { Component, forwardRef, inject, Injector, ChangeDetectionStrategy } from "@angular/core";
-import { AbstractControl, FormControl, FormGroup, Validators } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolCollision, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, FunctionsLookupControllerService, GAgentConfig, GAgentRole, GAgentsNetwork, GBaseChatModelConfig, GBaseObject, GeboAgentAdminControllerService, GeboAgentsNetworkAdminControllerService, GLookupEntry, GPromptTemplateConfig, ToolSourceInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
@@ -142,13 +142,12 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         // is disabled and the standard template is chosen
         this.formGroup.controls["customLoopPrompt"].valueChanges.subscribe(() => this.syncPromptControls());
         this.syncPromptControls();
-        // Enable/disable chat model selection based on useDefaultChatModel value
+        // the chat model is chosen while the default one is not used; the template makes
+        // it required for the agents building prompts
         this.formGroup.controls["useDefaultChatModel"].valueChanges.subscribe(
             x => {
-
                 this.isChooseChatModel = x === true;
-                this.setControlEnabledAndRequired("chatModelReference", !this.isChooseChatModel);
-
+                this.setControlEnabled("chatModelReference", !this.isChooseChatModel);
             }
         );
     }
@@ -174,40 +173,19 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
             }));
     }
     /**
-     * Adds or removes the required validator for a form control
-     * 
+     * Enables or disables a form control. Whether it is required is bound in the
+     * template: a disabled control is not validated.
+     *
      * @param ctrlName Name of the form control
-     * @param required Whether the control should be required
+     * @param enabled Whether the control should be enabled
      */
-    private setControlRequired(ctrlName: string, required: boolean) {
-        const ctrl = this.formGroup.controls[ctrlName];
-        if (required) {
-            if (ctrl.hasValidator(Validators.required)) {
-                ctrl.clearValidators();
-                this.formGroup.updateValueAndValidity();
-            }
-        } else {
-            if (!ctrl.hasValidator(Validators.required)) {
-                ctrl.setValidators(Validators.required);
-                this.formGroup.updateValueAndValidity();
-            }
-        }
-    }
-    /**
-   * Enables or disables a form control and sets its required status accordingly
-   * 
-   * @param ctrlName Name of the form control
-   * @param enabled Whether the control should be enabled
-   */
-    private setControlEnabledAndRequired(ctrlName: string, enabled: boolean) {
+    private setControlEnabled(ctrlName: string, enabled: boolean) {
         const ctrl = this.formGroup.controls[ctrlName];
         if (ctrl.enabled !== enabled) {
             if (enabled === true) {
                 ctrl.enable();
-                this.setControlRequired(ctrlName, true);
             } else {
                 ctrl.disable();
-                this.setControlRequired(ctrlName, false);
             }
         }
         this.formGroup.updateValueAndValidity();

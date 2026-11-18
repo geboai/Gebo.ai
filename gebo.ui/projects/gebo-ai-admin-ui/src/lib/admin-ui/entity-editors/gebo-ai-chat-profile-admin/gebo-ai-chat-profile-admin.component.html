@@ -99,7 +99,7 @@
                         value="CHOOSEMODEL" [required]="true"></p-radioButton></div>
                         <div class="col-8">
                           <p-select id="ChatModelSelect" gebo-ai-label styleClass="w-full" formControlName="chatModelReference"
-                            styleClass="w-full" [options]="chatModelsData" optionLabel="description"
+                            styleClass="w-full" [options]="chatModelsData" optionLabel="description" [required]="true"
                           placeholder="Select a chat model configuration"></p-select>
                         </div>
                       </div>
@@ -127,7 +127,7 @@
                       </div>
                       <div class="col-8">
                         <p-select id="EmbeddingModelSelect" gebo-ai-label styleClass="w-full" formControlName="embeddingModelReference"
-                          class="col-12" [options]="embeddingModelsData" optionLabel="description"
+                          class="col-12" [options]="embeddingModelsData" optionLabel="description" [required]="true"
                           styleClass="w-full"
                         placeholder="Select an embedding model configuration"></p-select>
                       </div>

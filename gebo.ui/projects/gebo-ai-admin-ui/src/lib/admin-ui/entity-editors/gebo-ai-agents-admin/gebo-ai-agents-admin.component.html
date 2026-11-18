@@ -132,7 +132,7 @@
                               formControlName="useDefaultChatModel" name="useDefaultChatModel"
                             label="choose" [value]="false" [required]="true"></p-radioButton>
                             <p-select id="ChatModelSelect" gebo-ai-label styleClass="w-full"
-                              formControlName="chatModelReference" styleClass="w-full"
+                              formControlName="chatModelReference" styleClass="w-full" [required]="isBuildingPrompts()"
                               [options]="chatModelsData" optionLabel="configuration.description"
                               optionValue="objectReference"
                             placeholder="Select a chat model configuration"></p-select>
