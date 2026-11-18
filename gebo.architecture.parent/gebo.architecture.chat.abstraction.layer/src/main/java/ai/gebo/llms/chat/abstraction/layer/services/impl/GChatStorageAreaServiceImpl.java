@@ -39,6 +39,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository
 import ai.gebo.llms.chat.abstraction.layer.repository.LLMGeneratedResourceRepository;
 import ai.gebo.llms.chat.abstraction.layer.repository.UserUploadContentServerSideRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatUploadFileTypesService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
@@ -61,6 +62,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final IGDocumentReferenceIngestionHandler ingestionHandler;
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final LLMGeneratedResourceRepository llmGeneratedResourceRepository;
+	final IGChatUploadFileTypesService uploadFileTypes;
 	final static String SESSIONS_PATH_PREFIX = "SESSIONS_AREA";
 	final static ObjectMapper objectMapper = new ObjectMapper();
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -121,10 +123,25 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 
 		file.transferTo(newPath);
 		GDocumentReference reference = documentReferenceFactory.createReference(newPath);
-		IngestionHandlerData data = ingestionHandler.handleContent(reference, Files.newInputStream(newPath));
-		if (data.isUnmanagedContent())
-			return null;
-		else {
+		final InputStream content = Files.newInputStream(newPath);
+		IngestionHandlerData data = ingestionHandler.handleContent(reference, content);
+		if (data.isUnmanagedContent()) {
+			content.close();
+			if (serverSide.getExtension() == null
+					|| !uploadFileTypes.toolsFileTypesOfSession(userSessionCode).contains(serverSide.getExtension())) {
+				// refused: it does not stay behind in the session's folder
+				Files.deleteIfExists(newPath);
+				return null;
+			}
+			// kept for the tools of the chat's agents only: no content handler reads it, so it has
+			// no ingested text, is not read into the chat and gives the models nothing of it
+			serverSide.setTokensCount(0L);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("addUploadedFile(...) session:" + userSessionCode + " file:" + file.getOriginalFilename()
+						+ " kept for the agents' tools only");
+			}
+			return uploadContentsRepository.insert(serverSide);
+		} else {
 			HashMap<String, Object> commonMetaData = this.createCommonMetaData(serverSide);
 
 			serverSide.setIngestedJsonPath(serverSide.getCode() + "-ingest.json");
@@ -145,8 +162,9 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 				}
 				return doc;
 			}).toList();
-			SerializedDocumentsContent content = new SerializedDocumentsContent(documents);
-			objectMapper.writeValue(jsonPath.toFile(), content);
+			SerializedDocumentsContent serialized = new SerializedDocumentsContent(documents);
+			objectMapper.writeValue(jsonPath.toFile(), serialized);
+			content.close();
 		}
 		serverSide = uploadContentsRepository.insert(serverSide);
 		return serverSide;

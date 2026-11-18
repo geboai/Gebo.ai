@@ -21,6 +21,8 @@ import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
+import ai.gebo.llms.chat.abstraction.layer.model.GChatUploadFileTypes;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatUploadFileTypesService;
 import ai.gebo.model.OperationStatus;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,6 +38,19 @@ public class GeboUserChatUploadsController {
 	final IGUserUploadContentHandler uploadsHandler;
 	final IGChatService chatService;
 	final IGRagChatService ragChatService;
+	final IGChatUploadFileTypesService uploadFileTypes;
+
+	/**
+	 * The files a chat accepts as uploads: the ones read into the chat, then the ones
+	 * kept only for the tools of its agents' libraries. By the chat session when there
+	 * is one, else by the profile a chat is being created with (none for a free chat).
+	 */
+	@GetMapping(value = "acceptedFileTypes", produces = MediaType.APPLICATION_JSON_VALUE)
+	public GChatUploadFileTypes acceptedFileTypes(
+			@RequestParam(value = "userSessionCode", required = false) String userSessionCode,
+			@RequestParam(value = "chatProfileCode", required = false) String chatProfileCode) {
+		return uploadFileTypes.acceptedFileTypes(userSessionCode, chatProfileCode);
+	}
 
 	@PostMapping(value = "chatSessionUpload/{userSessionCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<List<UserUploadedContent>> chatSessionUpload(

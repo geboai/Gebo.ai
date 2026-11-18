@@ -9,7 +9,9 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,6 +132,44 @@ public class ChatAgentsToolsDescriberImpl implements IGChatAgentsToolsDescriber 
 					+ " agent(s)");
 		}
 		return infos;
+	}
+
+	@Override
+	public List<String> libraryTypeIds(GChatProfileConfiguration profile) {
+		if (!defaultNetworksService.isAgenticChatNetworksEnabled()) {
+			return List.of();
+		}
+		final PipelineType pipelineType = profile != null ? PipelineType.RAG_PIPELINE
+				: PipelineType.PURE_CHAT_PIPELINE;
+		final String profileNetwork = profile != null ? profile.getDefaultChatNetworkOfAgents() : null;
+		final GAgentsNetwork network = defaultNetworksService.resolveChatNetwork(pipelineType, profileNetwork);
+		if (network == null || network.getAgents() == null) {
+			return List.of();
+		}
+		final Set<String> ids = new LinkedHashSet<>();
+		for (AgentNetworkParticipant participant : network.getAgents()) {
+			final GAgentConfig config = participant != null && participant.getAgentConfigCode() != null
+					? agentConfigDao.findByCode(participant.getAgentConfigCode())
+					: null;
+			if (config == null) {
+				continue;
+			}
+			if (config.getLibraryTypeIds() != null) {
+				config.getLibraryTypeIds().stream().filter(id -> id != null && !id.isBlank()).forEach(ids::add);
+			}
+			final IGGenericAgentService service = config.getAgentServiceId() != null
+					? agentServicesDao.findByCode(config.getAgentServiceId())
+					: null;
+			if (service != null && service.getImpliedLibraryTypeIds() != null) {
+				service.getImpliedLibraryTypeIds().stream().filter(id -> id != null && !id.isBlank())
+						.forEach(ids::add);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("libraryTypeIds(...) profile:" + (profile != null ? profile.getCode() : null) + " network:"
+					+ network.getCode() + " libraries:" + ids);
+		}
+		return List.copyOf(ids);
 	}
 
 	private static boolean isLibraryTool(AgentMountedTools.MountedTool tool) {

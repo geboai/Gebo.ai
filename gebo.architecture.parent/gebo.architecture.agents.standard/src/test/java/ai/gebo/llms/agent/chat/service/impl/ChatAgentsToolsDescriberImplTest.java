@@ -155,4 +155,47 @@ class ChatAgentsToolsDescriberImplTest {
 		assertNull(infos.get(0).getAgentServiceId());
 		assertTrue(infos.get(0).getTools().isEmpty());
 	}
+
+	@Test
+	void theLibrariesOfTheNetworkAgentsConfiguredThenImpliedEachOnce() {
+		when(defaults.isAgenticChatNetworksEnabled()).thenReturn(true);
+		GChatProfileConfiguration profile = new GChatProfileConfiguration();
+		profile.setCode("docs-profile");
+		profile.setDefaultChatNetworkOfAgents("DOCS_NETWORK");
+		GAgentsNetwork network = new GAgentsNetwork();
+		network.setCode("DOCS_NETWORK");
+		AgentNetworkParticipant adapter = new AgentNetworkParticipant();
+		adapter.setAgentConfigCode("adapter");
+		AgentNetworkParticipant writer = new AgentNetworkParticipant();
+		writer.setAgentConfigCode("writer");
+		AgentNetworkParticipant ghost = new AgentNetworkParticipant();
+		ghost.setAgentConfigCode("ghost");
+		network.setAgents(List.of(adapter, writer, ghost));
+		when(defaults.resolveChatNetwork(PipelineType.RAG_PIPELINE, "DOCS_NETWORK")).thenReturn(network);
+		GAgentConfig adapterConfig = new GAgentConfig();
+		adapterConfig.setCode("adapter");
+		adapterConfig.setAgentServiceId("adapterService");
+		when(configs.findByCode("adapter")).thenReturn(adapterConfig);
+		GAgentConfig writerConfig = new GAgentConfig();
+		writerConfig.setCode("writer");
+		writerConfig.setAgentServiceId("loopService");
+		writerConfig.setLibraryTypeIds(List.of("text-documents-folder", "presentations-folder", " "));
+		when(configs.findByCode("writer")).thenReturn(writerConfig);
+		IGGenericAgentService loop = mock(IGGenericAgentService.class);
+		when(loop.getImpliedLibraryTypeIds()).thenReturn(List.of("user-questions", "text-documents-folder"));
+		when(services.findByCode("loopService")).thenReturn(loop);
+
+		assertEquals(List.of("text-documents-folder", "presentations-folder", "user-questions"),
+				describer.libraryTypeIds(profile), "configured first, then implied, each once; no blank; none for a"
+						+ " participant without configuration or service");
+	}
+
+	@Test
+	void noLibrariesWhenTheAgenticChatsAreOffOrNoNetworkResolves() {
+		when(defaults.isAgenticChatNetworksEnabled()).thenReturn(false);
+		assertTrue(describer.libraryTypeIds(null).isEmpty());
+		when(defaults.isAgenticChatNetworksEnabled()).thenReturn(true);
+		when(defaults.resolveChatNetwork(PipelineType.PURE_CHAT_PIPELINE, null)).thenReturn(null);
+		assertTrue(describer.libraryTypeIds(null).isEmpty());
+	}
 }

@@ -4650,6 +4650,7 @@
       "RemoveAll": { "help": "Remove all" },
       "UploadPending": { "label": "Pending for upload" },
       "CompletedData": { "label": "Completed" },
+      "ToolsOnlyFilesNote": { "label": "Also accepted for the agents' tools, which work on them: they are not read into the chat, and the models do not see pictures." },
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
         "summary": "OK!",
         "detail": "Operation done successfully"

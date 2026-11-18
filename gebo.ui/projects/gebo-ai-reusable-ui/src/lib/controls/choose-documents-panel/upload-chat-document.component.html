@@ -21,6 +21,12 @@
         <ng-container *ngTemplateOutlet="viewDocumentChips"></ng-container>
       </div>
 
+      @if (toolsExtensions.length > 0) {
+        <div class="card text-sm">
+          <span id="ToolsOnlyFilesNote" gebo-ai-text>Also accepted for the agents' tools, which work on them: they are not read into the chat, and the models do not see pictures.</span>
+          <span> {{ toolsExtensions.join(', ') }}</span>
+        </div>
+      }
       <div class="card" [formGroup]="formGroup">
 
 
