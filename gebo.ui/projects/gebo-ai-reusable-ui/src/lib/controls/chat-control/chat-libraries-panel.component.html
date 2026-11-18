@@ -30,6 +30,9 @@
               @if (resource.description) {
                 <div class="text-sm">{{ resource.description }}</div>
               }
+              @if (writtenInRequests(instance, resource); as requests) {
+                <div class="text-sm"><i class="pi pi-file-edit"></i> <span id="WrittenInRequestsText" gebo-ai-text>Written by the tools in request</span> {{ requests }}</div>
+              }
             </td>
             <td>{{ resource.resourceType?.description || resource.resourceType?.id }}</td>
             <td style="text-align: right;">
@@ -48,6 +51,14 @@
           </tr>
         </ng-template>
       </p-table>
+      @if (writtenWithin(instance).length) {
+        <p id="WrittenWithinText" class="text-sm mt-2 mb-1" gebo-ai-text>Written here by the tools, part of the library's whole download:</p>
+        <ul class="text-sm mt-0">
+          @for (file of writtenWithin(instance); track file.path) {
+            <li><strong>{{ file.path }}</strong> - <span id="WrittenInRequestText" gebo-ai-text>request</span> {{ requestsOf(file) }}</li>
+          }
+        </ul>
+      }
     </p-fieldset>
   }
 </p-dialog>

@@ -208,6 +208,10 @@
           </div>
         }
 
+        <gebo-ai-chat-written-files [userChatContextCode]="userChatContextCode"
+          [files]="interaction?.response?.writtenFiles" [conversationFiles]="conversationWrittenFiles"
+          [disabled]="chatStreaming"></gebo-ai-chat-written-files>
+
         @if(ragsystem && interaction?.response?.documentsRef?.length) {
           <div class="gebo-ai-reusable-chat__interaction-item">
             <span class="gebo-ai-reusable-chat__interaction-item-icon">
