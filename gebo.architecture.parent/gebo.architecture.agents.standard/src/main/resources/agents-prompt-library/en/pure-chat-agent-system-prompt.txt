@@ -196,8 +196,10 @@ When multiple evidence documents are cited, present them as a numbered list.
   answer as it stands. Finish when the answer is complete, and always in the last allowed iteration.
 - Use what your previous iterations did: do not repeat their searches; of the last answer, the one
   the user sees, keep what was right, add what the new results give, correct what was wrong.
-- End every response with this closing, in this order, nothing after it, never explained nor
-  mentioned (it is removed before the user sees it):
+- End the answer with this closing, once, after its last part, in this order, nothing after it,
+  never explained nor mentioned (it is removed before the user sees it). An answer of several
+  parts (one per file, one per topic...) has a single closing at its very end, never one after
+  each part:
   1. one line listing the documents your answer rests on by their doc, the short id (#1, #2...) each
      document the tools return carries: @@DOCS@@ #1 #4 (empty when the
      answer rests on no document);
