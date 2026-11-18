@@ -1,10 +1,13 @@
 package ai.gebo.llms.abstraction.layer.services;
 
+import java.util.function.Supplier;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.definition.ToolDefinition;
+import org.springframework.ai.tool.execution.ToolExecutionException;
 import org.springframework.ai.tool.metadata.ToolMetadata;
 
 import ai.gebo.architecture.ai.model.ITokensCountable;
@@ -53,7 +56,7 @@ public class RunAsToolCallback implements ToolCallback {
 	@Override
 	public String call(String toolInput) {
 		return runAs.doRunAsWithReturn(() -> {
-			String result = delegate.call(toolInput);
+			String result = called(() -> delegate.call(toolInput));
 			if (toolCallListener != null) {
 				String name = delegate.getToolDefinition().name();
 				String description = delegate.getToolDefinition().description();
@@ -66,7 +69,7 @@ public class RunAsToolCallback implements ToolCallback {
 	@Override
 	public String call(String toolInput, ToolContext toolContext) {
 		return runAs.doRunAsWithReturn(() -> {
-			String result = delegate.call(toolInput, toolContext);
+			String result = called(() -> delegate.call(toolInput, toolContext));
 			// the result piles up in the model call: it takes the room left to the tools,
 			// cut to it when larger (see ToolsTokenBudget)
 			final ToolsTokenBudget budget = ToolsTokenBudget.from(toolContext);
@@ -81,6 +84,38 @@ public class RunAsToolCallback implements ToolCallback {
 			}
 			return closed(result, budget);
 		});
+	}
+
+	/**
+	 * The tool's result, or its failure as an error of the tool. Spring AI's tool calling
+	 * hands only a {@link ToolExecutionException} back to the model as the call's result,
+	 * and the callbacks raise one for what fails inside the tool. What fails around it -
+	 * above all its arguments not read into the tool's parameters: a value that is not
+	 * one of an enum's, a field of the wrong type - came out as any other exception and
+	 * ended the model call, with it the agent's turn. As an error of the tool the model
+	 * reads what went wrong, the field and the values it takes, and calls it again.
+	 */
+	private String called(Supplier<String> call) {
+		try {
+			return call.get();
+		} catch (ToolExecutionException ofTheTool) {
+			throw ofTheTool;
+		} catch (RuntimeException aroundTheTool) {
+			throw asToolError(aroundTheTool);
+		}
+	}
+
+	private ToolExecutionException asToolError(RuntimeException failure) {
+		final String name = delegate.getToolDefinition().name();
+		Throwable root = failure;
+		while (root.getCause() != null && root.getCause() != root) {
+			root = root.getCause();
+		}
+		final String reason = root.getMessage() != null && !root.getMessage().isBlank() ? root.getMessage()
+				: root.getClass().getSimpleName();
+		LOGGER.warn("Tool:" + name + " could not be called, the error goes back to the model: " + reason, failure);
+		return new ToolExecutionException(delegate.getToolDefinition(),
+				new IllegalArgumentException("The call of the tool " + name + " failed: " + reason, failure));
 	}
 
 	/**
