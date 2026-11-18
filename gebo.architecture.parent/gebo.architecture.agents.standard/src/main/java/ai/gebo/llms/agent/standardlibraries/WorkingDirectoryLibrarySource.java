@@ -38,6 +38,10 @@ import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ai.gebo.architecture.ai.files.GFolderFilesLocation;
+import ai.gebo.architecture.ai.files.IGAILibraryFilesSource;
+import ai.gebo.architecture.ai.files.IGFilesLocation;
+import ai.gebo.architecture.ai.files.IGToolsHandledFiles;
 import ai.gebo.architecture.ai.model.AIResource;
 import ai.gebo.architecture.ai.model.AIResourceCategory;
 import ai.gebo.architecture.ai.model.AIResourceContent;
@@ -64,7 +68,7 @@ import lombok.Data;
  */
 @Service
 @ConditionalOnProperty(prefix = "ai.gebo.libraries.working-directory", name = "enabled", havingValue = "true", matchIfMissing = true)
-public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibrarySource {
+public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibrarySource, IGAILibraryFilesSource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WorkingDirectoryLibrarySource.class);
 	public static final String SOURCE_ID = "working-directories";
 	public static final String TYPE_ID = "working-directory";
@@ -268,6 +272,26 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 		}
 	}
 
+	// ------------------------------------------------------------ the files, for the other libraries
+
+	/**
+	 * The working directory as a files location, writable: the tools of other
+	 * libraries bound to the same agent - spreadsheets, documents - read and write
+	 * its files too, taking turns with these tools on the same per-file locks.
+	 * Files and folders whose names start with a dot are not part of it.
+	 */
+	@Override
+	public IGFilesLocation filesOf(AIToolsAndResourcesLibraryInstance instance) {
+		if (instance == null || instance.getId() == null) {
+			return null;
+		}
+		final Path folder = folderOf(instance.getId());
+		if (!Files.isDirectory(folder)) {
+			return null;
+		}
+		return new GFolderFilesLocation(TYPE_ID, "the working directory of this conversation", folder, true);
+	}
+
 	// ------------------------------------------------------------ the download
 
 	@Override
@@ -370,18 +394,36 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 	public record Done(String done) {
 	}
 
+	/** A listing, its files reported as handled by the run the call is part of. */
+	private static Listing reported(ToolContext context, Listing listing) {
+		if (listing != null && listing.entries() != null) {
+			IGToolsHandledFiles.report(context,
+					listing.entries().stream().filter(entry -> "file".equals(entry.kind())).map(Entry::path).toList());
+		}
+		return listing;
+	}
+
 	@Override
 	public List<ToolCallback> getToolCallbacks(AIToolsAndResourcesLibraryInstance instance) {
 		final Path folder = folderOf(instance.getId());
 		final List<ToolCallback> callbacks = new ArrayList<>();
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<ListParam, ToolContext, Listing>) (param, context) -> listFiles(folder, param),
+				(BiFunction<ListParam, ToolContext, Listing>) (param, context) -> reported(context,
+						listFiles(folder, param)),
 				LIST_FILES_TOOL, LIST_FILES_DESCRIPTION, ListParam.class, Listing.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<PathParam, ToolContext, String>) (param, context) -> readFile(folder, param), READ_FILE_TOOL,
+				(BiFunction<PathParam, ToolContext, String>) (param, context) -> {
+					final String read = readFile(folder, param);
+					IGToolsHandledFiles.report(context, param != null ? param.getPath() : null);
+					return read;
+				}, READ_FILE_TOOL,
 				READ_FILE_DESCRIPTION, PathParam.class, String.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<WriteParam, ToolContext, Done>) (param, context) -> writeFile(folder, param),
+				(BiFunction<WriteParam, ToolContext, Done>) (param, context) -> {
+					final Done written = writeFile(folder, param);
+					IGToolsHandledFiles.report(context, param != null ? param.getPath() : null);
+					return written;
+				},
 				WRITE_FILE_TOOL, WRITE_FILE_DESCRIPTION, WriteParam.class, Done.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
 				(BiFunction<PathParam, ToolContext, Done>) (param, context) -> createFolder(folder, param),
@@ -390,7 +432,12 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 				(BiFunction<PathParam, ToolContext, Done>) (param, context) -> deleteEntry(folder, param),
 				DELETE_ENTRY_TOOL, DELETE_ENTRY_DESCRIPTION, PathParam.class, Done.class));
 		callbacks.add(ToolCallbackDeclarationUtil.declare(
-				(BiFunction<MoveParam, ToolContext, Done>) (param, context) -> moveEntry(folder, param),
+				(BiFunction<MoveParam, ToolContext, Done>) (param, context) -> {
+					final Done moved = moveEntry(folder, param);
+					IGToolsHandledFiles.report(context, param != null ? param.getFrom() : null,
+							param != null ? param.getTo() : null);
+					return moved;
+				},
 				MOVE_ENTRY_TOOL, MOVE_ENTRY_DESCRIPTION, MoveParam.class, Done.class));
 		return callbacks;
 	}
@@ -410,6 +457,28 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 			throw new IllegalArgumentException("The path is reserved: " + given);
 		}
 		return resolved;
+	}
+
+	@FunctionalInterface
+	private interface IOAction<R> {
+		R run() throws IOException;
+	}
+
+	/** An action on a file under the lock every files location on the same file takes. */
+	private static <R> R locked(Path file, IOAction<R> action) throws IOException {
+		final IOException[] failed = new IOException[1];
+		final R done = GFolderFilesLocation.withLock(file, () -> {
+			try {
+				return action.run();
+			} catch (IOException io) {
+				failed[0] = io;
+				return null;
+			}
+		});
+		if (failed[0] != null) {
+			throw failed[0];
+		}
+		return done;
 	}
 
 	private static String relative(Path folder, Path path) {
@@ -448,7 +517,7 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 			throw new IllegalArgumentException("There is no such file: " + (param != null ? param.getPath() : null));
 		}
 		try {
-			final String content = Files.readString(file, StandardCharsets.UTF_8);
+			final String content = locked(file, () -> Files.readString(file, StandardCharsets.UTF_8));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug(READ_FILE_TOOL + " on " + folder.getFileName() + " path:" + relative(folder, file) + " -> "
 						+ content.length() + " character(s)");
@@ -473,8 +542,8 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 		try {
 			Files.createDirectories(file.getParent());
 			final boolean existed = Files.exists(file);
-			Files.writeString(file, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
-					StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE);
+			locked(file, () -> Files.writeString(file, content, StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+					StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.WRITE));
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug(WRITE_FILE_TOOL + " on " + folder.getFileName() + " path:" + relative(folder, file) + " "
 						+ (existed ? "replaced" : "created") + " with " + content.length() + " character(s)");
@@ -536,7 +605,10 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 		}
 		try {
 			Files.createDirectories(to.getParent());
-			Files.move(from, to, StandardCopyOption.REPLACE_EXISTING);
+			// both ends locked, in one order whoever moves: two moves never wait on each other
+			final Path first = from.compareTo(to) <= 0 ? from : to;
+			final Path second = first == from ? to : from;
+			locked(first, () -> locked(second, () -> Files.move(from, to, StandardCopyOption.REPLACE_EXISTING)));
 		} catch (IOException notMoved) {
 			throw new UncheckedIOException("Could not move " + param.getFrom() + " to " + param.getTo(), notMoved);
 		}

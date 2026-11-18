@@ -1413,4 +1413,33 @@ class AgenticLoopReactiveAgentServiceTest {
 		assertEquals(List.of(UserQuestionsLibrarySource.TYPE_ID), List.copyOf(asked.getValue()),
 				"the conversation's instance of the implied library is reclaimed as a named one's");
 	}
+
+	@org.junit.jupiter.api.Test
+	void anAnswerMayCiteTheFilesTheLibrariesToolsHandledInTheRun() {
+		final ai.gebo.llms.agent.standardtools.ToolsFoundDocuments run = new ai.gebo.llms.agent.standardtools.ToolsFoundDocuments();
+		run.addHandled(List.of("sales-total.ods", "out/budget 2026.xlsx"));
+		final String answer = "I copied sales.xlsx to sales-total.ods and changed budget 2026.xlsx; see also other.pdf.";
+		final List<String> unread = AgenticLoopReactiveAgentServiceImpl.unreadCitations(answer,
+				java.util.stream.Stream.concat(java.util.stream.Stream.of("sales.xlsx"), run.getHandledNames().stream()).toList());
+		assertEquals(List.of("other.pdf"), unread);
+	}
+
+	@org.junit.jupiter.api.Test
+	void theGateMadeBeforeTheToolsRanLetsTheAnswerCiteTheFilesTheyHandled() {
+		final ai.gebo.llms.agent.standardtools.ToolsFoundDocuments run = new ai.gebo.llms.agent.standardtools.ToolsFoundDocuments();
+		final ai.gebo.llms.abstraction.layer.model.IChatRequestContext context = org.mockito.Mockito
+				.mock(ai.gebo.llms.abstraction.layer.model.IChatRequestContext.class);
+		org.mockito.Mockito.when(context.getToolsContext()).thenReturn(
+				new java.util.HashMap<>(java.util.Map.of(ai.gebo.llms.agent.standardtools.ToolsFoundDocuments.TOOLS_CONTEXT_KEY, run)));
+		// the gate's names: the chat's documents, taken before the iteration ran its tools
+		final List<String> gateNames = List.of("sales.xlsx");
+		final String answer = "The totals of sales-total.ods, copied from sales.xlsx, are 54, 48 and 49.5.";
+		assertEquals(List.of("sales-total.ods"), AgenticLoopReactiveAgentServiceImpl.unreadCitations(answer,
+				AgenticLoopReactiveAgentServiceImpl.withHandledFiles(gateNames, context)));
+		// the iteration's library tool produced it
+		run.addHandled(List.of("sales-total.ods"));
+		assertEquals(List.of(), AgenticLoopReactiveAgentServiceImpl.unreadCitations(answer,
+				AgenticLoopReactiveAgentServiceImpl.withHandledFiles(gateNames, context)));
+		assertEquals(List.of("sales.xlsx"), AgenticLoopReactiveAgentServiceImpl.withHandledFiles(gateNames, null));
+	}
 }

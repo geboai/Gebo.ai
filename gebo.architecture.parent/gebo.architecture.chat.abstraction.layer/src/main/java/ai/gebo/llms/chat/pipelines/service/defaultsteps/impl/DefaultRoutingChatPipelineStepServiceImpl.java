@@ -546,8 +546,10 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 			int forcedDocumentsTotal = runtimeData.getRequestResources().getChatWithDocuments().getTokensSize()
 					+ runtimeData.getRequestResources().getUploadedDocuments().getTokensSize();
 			int threasholdForForcedDeepSearch = getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel);
-			if (requestCarriesForcedDocuments(currentRequest)) {
-				boolean heavy = forcedDocumentsTotal >= threasholdForForcedDeepSearch;
+			final boolean heavy = forcedDocumentsTotal >= threasholdForForcedDeepSearch;
+			if (answeredOverTheDocuments(requestCarriesForcedDocuments(currentRequest), heavy,
+					currentRequest != null ? currentRequest.getChatPipelineProcessId() : null,
+					this.chatAgentService.isDefaultPipelineStreamingDefined())) {
 				rd = createChatWithForcedDocumentsFixedRoute(emitter, heavy);
 			} else if (firstDecision.getUserIntent() == DeliverableIntent.IMAGE_GENERATION
 					&& isImageGenerationAvailable()) {
@@ -792,6 +794,29 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 		boolean codes = request.getForcedRequestDocuments() != null && !request.getForcedRequestDocuments().isEmpty();
 		boolean uploads = request.getUserUploadedContents() != null && !request.getUserUploadedContents().isEmpty();
 		return refs || codes || uploads;
+	}
+
+	/**
+	 * Whether a turn is answered over its documents (CHAT_WITH_FILES): when it
+	 * carries documents selected or uploaded on it, unless the user chose the
+	 * agents for them. "Agentic chat" picked again after the upload or selection
+	 * (which switches the chat to "Chat with file(s)") sends a blank route; with a
+	 * network of agents answering the agentic chat the documents go to it - its
+	 * agents read them as the chat's documents and, through their libraries, as
+	 * the conversation's uploads, to change them or make files from them. Heavy
+	 * documents are always answered over: their scan is a resource guard no choice
+	 * overrides.
+	 */
+	static boolean answeredOverTheDocuments(boolean carriesDocuments, boolean heavy, String chosenRoute,
+			boolean networkOfAgents) {
+		if (!carriesDocuments) {
+			return false;
+		}
+		if (heavy) {
+			return true;
+		}
+		final boolean agenticChatChosen = chosenRoute == null || chosenRoute.isBlank();
+		return !(agenticChatChosen && networkOfAgents);
 	}
 
 	private RoutingDecision createChatWithForcedDocumentsFixedRoute(ISinkUIEmitter emitter, boolean heavy) {

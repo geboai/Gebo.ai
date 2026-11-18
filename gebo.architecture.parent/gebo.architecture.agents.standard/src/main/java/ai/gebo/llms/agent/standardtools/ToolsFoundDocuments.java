@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.springframework.ai.chat.model.ToolContext;
 
+import ai.gebo.architecture.ai.files.IGToolsHandledFiles;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestContext;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRef;
 
@@ -36,13 +37,15 @@ import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GResponseDocumentRe
  * Without a collector in the tools context (an agent that does not share one) the
  * tools still answer, their documents being only cited in the answer.
  */
-public final class ToolsFoundDocuments {
+public final class ToolsFoundDocuments implements IGToolsHandledFiles {
 	/** Tools context key carrying the collector. */
 	public static final String TOOLS_CONTEXT_KEY = "geboToolsFoundDocuments";
 	/** The prefix of a document's id in the request: "#1", "#2"... */
 	public static final String ID_PREFIX = "#";
 	private final Map<String, GResponseDocumentRef> byCode = new LinkedHashMap<>();
 	private final Set<String> listedNames = new LinkedHashSet<>();
+	/** The paths of the files the libraries' tools handled in the request. */
+	private final Set<String> handledNames = new LinkedHashSet<>();
 	/** The id of each document in the request, by document code, in the order they came. */
 	private final Map<String, String> idsByCode = new LinkedHashMap<>();
 	/** The ids of the documents the answer says it rests on; null while it said none. */
@@ -142,6 +145,25 @@ public final class ToolsFoundDocuments {
 	/** The names of the documents listed so far without being read. */
 	public synchronized List<String> getListedNames() {
 		return new ArrayList<>(listedNames);
+	}
+
+	/** Records the files a library's tool handled: listed, read, written, copied or moved. */
+	@Override
+	public synchronized void addHandled(Collection<String> paths) {
+		if (paths == null) {
+			return;
+		}
+		for (String path : paths) {
+			if (path != null && !path.isBlank()) {
+				handledNames.add(path);
+			}
+		}
+	}
+
+	/** The paths of the files the libraries' tools handled so far. */
+	@Override
+	public synchronized List<String> getHandledNames() {
+		return new ArrayList<>(handledNames);
 	}
 
 	/** The documents collected so far. */

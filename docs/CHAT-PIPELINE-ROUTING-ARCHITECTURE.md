@@ -53,9 +53,9 @@ in this order:
 
 ```mermaid
 flowchart TD
-    A[execute] --> B{"chat-with-docs + uploads tokens >= deep-search threshold?"}
-    B -- yes --> C["createKnowledgeBaseSearchHeavyDocumentsFixedRoute: forced CHAT_WITH_FILES"]
-    B -- no --> D{"chatPipelineProcessId non-blank?"}
+    A[execute] --> B{"documents selected or uploaded on this turn?"}
+    B -- "yes: heavy, or not Agentic chat with a network of agents" --> C["createChatWithForcedDocumentsFixedRoute: forced CHAT_WITH_FILES"]
+    B -- "no, or Agentic chat with a network of agents and not heavy" --> D{"chatPipelineProcessId non-blank?"}
     D -- "yes (chat menu)" --> E["doHandleUserRequestedRouting: RespondingWith.valueOf(id)"]
     D -- "no (Agentic chat)" --> F[doDecideRoute]
     F --> G{"isDefaultPipelineStreamingDefined(): agents network registered?"}
@@ -67,13 +67,23 @@ flowchart TD
     I --> J
 ```
 
-### 3.1 Forced route — heavy documents
+### 3.1 Forced route — the turn's documents
 
-Checked **first**, and it overrides both other paths. When
+Checked **first**. A request carrying documents selected or uploaded on this turn
+(`forcedDocumentsRef`, `forcedRequestDocuments`, `userUploadedContents`) is pinned to
+`default-chat-with-docs-streaming` and reported as `CHAT_WITH_FILES`, with one
+exception: the user picked **Agentic chat** again after adding them (the UI switches
+to "Chat with file(s)" on an upload or a selection, so a blank
+`chatPipelineProcessId` with documents is that explicit choice) and a network of
+agents answers the agentic chat (`isDefaultPipelineStreamingDefined()`). Then the
+request goes on to §3.3 and the network gets the documents - as the chat's documents
+and, for libraries such as the spreadsheets, as the conversation's uploads - to change
+them or make files from them.
+
+The exception never applies to **heavy** documents: when
 `chatWithDocuments.tokensSize + uploadedDocuments.tokensSize` reaches the threshold
 from `getChatWithDocsAndUploadedSizeTriggersDeepSearchThreashold(chatModel)`, the
-request is pinned to `default-chat-with-docs-streaming` and reported as
-`CHAT_WITH_FILES`. The threshold derives from
+request is always pinned to `CHAT_WITH_FILES` (the heavy scan). The threshold derives from
 `ai.gebo.chatpipes.fixedDocumentsRequestRoutesDeepSearchTreasholdContextWindowCoeff`
 (default `0.5`, a fraction of the model context window) and the optional absolute cap
 `ai.gebo.chatpipes.fixedDocumentsRequestRoutesDeepSearchTokenThreashold`.

@@ -32,11 +32,15 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.ai.chat.model.ToolContext;
 import org.springframework.ai.tool.ToolCallback;
 
+import ai.gebo.architecture.ai.files.GLibraryFile;
+import ai.gebo.architecture.ai.files.IGFilesLocation;
 import ai.gebo.architecture.ai.model.AIResourceContent;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.architecture.ai.model.AIResourceType.ConsentActions;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolReference;
+import ai.gebo.llms.agent.standardtools.ToolsFoundDocuments;
 
 /**
  * A working directory: a folder of its own the agents build files in with the
@@ -182,5 +186,45 @@ class WorkingDirectoryLibrarySourceTest {
 		assertFalse(Files.exists(root.resolve(instance.getId())));
 		assertNull(source.getInstanceById(instance.getId(), "the-conversation"));
 		source.dropInstance(instance);
+	}
+
+	@Test
+	void theFolderIsAFilesLocationTheOtherLibrariesReadAndWrite() throws IOException {
+		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("the-conversation"));
+		List<ToolCallback> tools = source.getToolCallbacks(instance);
+		tool(tools, "writeFile").call("{\"path\":\"data/in.csv\",\"content\":\"a,b\"}");
+
+		IGFilesLocation location = source.filesOf(instance);
+		assertEquals(WorkingDirectoryLibrarySource.TYPE_ID, location.getId());
+		assertTrue(location.isWritable());
+		assertEquals(List.of("data/in.csv"), location.list(null, true).stream().map(GLibraryFile::path).toList(),
+				"the metadata file is not part of it");
+		assertEquals("a,b", new String(location.read("data/in.csv").content().getInputStream().readAllBytes(),
+				StandardCharsets.UTF_8));
+		location.write("data/out.csv", TypedInputStream.of(
+				new java.io.ByteArrayInputStream("c,d".getBytes(StandardCharsets.UTF_8)), "text/csv", ".csv"),
+				IGFilesLocation.ABSENT);
+		assertEquals("c,d", tool(tools, "readFile").call("{\"path\":\"data/out.csv\"}").replace("\"", ""));
+		assertThrows(IllegalArgumentException.class, () -> location.read(".gebo-working-directory.json"));
+
+		source.dropInstance(instance);
+		assertNull(source.filesOf(instance), "a folder gone holds no files");
+	}
+
+	@Test
+	void theFilesTheToolsHandleAreReportedToTheRunTheyArePartOf() {
+		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("the-conversation"));
+		List<ToolCallback> tools = source.getToolCallbacks(instance);
+		ToolsFoundDocuments run = new ToolsFoundDocuments();
+		ToolContext context = new ToolContext(Map.of(ToolsFoundDocuments.TOOLS_CONTEXT_KEY, run));
+		tool(tools, "writeFile").call("{\"path\":\"report/total.md\",\"content\":\"151.5\"}", context);
+		tool(tools, "readFile").call("{\"path\":\"report/total.md\"}", context);
+		tool(tools, "moveEntry").call("{\"from\":\"report/total.md\",\"to\":\"total.md\"}", context);
+		tool(tools, "createFolder").call("{\"path\":\"empty\"}", context);
+		tool(tools, "listFiles").call("{\"recursive\":true}", context);
+		assertEquals(List.of("report/total.md", "total.md"), run.getHandledNames(),
+				"files written, read, moved and listed, once each; no folder");
+		tool(tools, "readFile").call("{\"path\":\"total.md\"}");
+		assertEquals(2, run.getHandledNames().size(), "a call outside the run reports to nobody");
 	}
 }
