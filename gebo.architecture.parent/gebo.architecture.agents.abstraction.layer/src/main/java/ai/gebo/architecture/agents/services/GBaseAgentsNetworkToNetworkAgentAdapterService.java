@@ -27,6 +27,12 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGAgentsNetworkToNetworkAgentAdapterService<InputType, OutputType> {
 
+	/** The agents of the adapted network build the prompts, each with its own role. */
+	@Override
+	public boolean isRoleRequired() {
+		return false;
+	}
+
 	/** The adapted network answers with a RESPONSE, shared in the session context. */
 	@Override
 	public MessageSemantic getProducedMessageSemantic() {

@@ -74,15 +74,18 @@
                     </div>
                     <div class="col-6">
                       <gebo-ai-field id="agentRoleCode" label="Agent role"
-                        help="The role the agent plays, from the role library the prompts are built with. Mandatory." [required]="true" placeholder="Choose the role">
+                        help="The role the agent plays, from the role library the prompts are built with." [required]="isRoleRequired()" placeholder="Choose the role">
                         <p-select id="AgentRoleSelect" formControlName="agentRoleCode" [options]="roles" optionLabel="description" optionValue="code" dataKey="code"
-                          [required]="true" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
+                          [required]="isRoleRequired()" [showClear]="!isRoleRequired()" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
                           <ng-template #item let-role>
                             <span>{{role.description}}</span>
                             <span class="ml-2 text-xs text-muted-color font-monospace">{{role.code}}</span>
                           </ng-template>
                         </p-select>
                       </gebo-ai-field>
+                      @if (!isRoleRequired()) {
+                        <small class="text-muted-color"><span id="RoleNotNeededHint" gebo-ai-text>This agent builds no prompt of its own: it needs no role.</span></small>
+                      }
                     </div>
                     @if (isNetworkAdapterService(formGroup.controls['agentServiceId'].value)) {
                       <div class="col-6">

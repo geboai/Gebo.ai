@@ -35,7 +35,11 @@ public class GAgentConfig extends GBaseObject
 	private String mainLoopPromptUseCode = null;
 	private GPromptTemplateConfig customLoopPrompt = null;
 	private Boolean subscribeAllTools = null;
-	@NotNull
+	/**
+	 * The role the agent plays, from the role library its prompts are built with:
+	 * needed when its service builds prompts ({@code IGGenericAgentService#isRoleRequired()}),
+	 * which the agents admin controller checks on save.
+	 */
 	private String agentRoleCode = null;
 
 	private Boolean useDefaultChatModel = null;

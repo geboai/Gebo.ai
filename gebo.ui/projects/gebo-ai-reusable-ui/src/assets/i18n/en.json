@@ -5031,10 +5031,11 @@
       },
       "agentRoleCode": {
         "label": "Agent role",
-        "help": "The role the agent plays, from the role library the prompts are built with. Mandatory.",
+        "help": "The role the agent plays, from the role library the prompts are built with.",
         "placeholder": "Choose the role"
       },
       "AgentRoleSelect": { "placeholder": "Choose the role" },
+      "RoleNotNeededHint": { "label": "This agent builds no prompt of its own: it needs no role." },
       "adaptedAgentNetworkCode": {
         "label": "Delegates to network",
         "help": "The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service.",
@@ -6012,6 +6013,7 @@
       "CfgNoRoleWarning": {
         "label": "required: the backend refuses a configuration without a role"
       },
+      "CfgNoRoleNeeded": { "label": "not needed: this agent builds no prompt of its own" },
       "CfgPromptLabel": { "label": "Main loop prompt" },
       "CfgModelLabel": { "label": "Chat model" },
       "CfgDefaultModel": { "label": "system default" },

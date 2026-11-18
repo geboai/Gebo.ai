@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import ai.gebo.architecture.agents.model.GAgentConfig;
 import ai.gebo.architecture.agents.model.GAgentRole;
@@ -151,7 +153,10 @@ public class GeboAgentAdminController {
 		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
 				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENT_UPDATE,
 				SecurityAuditTaxonomy.ResourceType.AGENT, config != null ? config.getCode() : null, config,
-				() -> this.agentsConfigDao.update(config));
+				() -> {
+					refuseMissingRole(config);
+					return this.agentsConfigDao.update(config);
+				});
 	}
 
 	@PostMapping(value = "insertAgent", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -168,7 +173,38 @@ public class GeboAgentAdminController {
 		return ConfigurationAuditSupport.audited(securityAuditLoggerService, event,
 				SecurityAuditTaxonomy.EventType.AGENTS_CONFIGURATION, SecurityAuditTaxonomy.Action.AGENT_INSERT,
 				SecurityAuditTaxonomy.ResourceType.AGENT, config != null ? config.getCode() : null, config,
-				() -> this.agentsConfigDao.insert(config));
+				() -> {
+					refuseMissingRole(config);
+					return this.agentsConfigDao.insert(config);
+				});
+	}
+
+	/**
+	 * Refuses an agent without a role when its service builds its prompts with one
+	 * ({@link IGGenericAgentService#isRoleRequired()}), as an unknown service is taken
+	 * to; the services building no prompt (the chat input adapter, the network adapters,
+	 * the remote A2A agents) are saved without one. A missing service is left to the
+	 * validation of {@code agentServiceId}. Run inside the audited change: a refusal is
+	 * audited as a failure.
+	 */
+	private void refuseMissingRole(GAgentConfig config) {
+		if (config.getAgentServiceId() == null
+				|| (config.getAgentRoleCode() != null && !config.getAgentRoleCode().isBlank())) {
+			return;
+		}
+		final IGAgentServiceRuntimeDao services = runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
+		final IGGenericAgentService service = services != null ? services.findByCode(config.getAgentServiceId())
+				: null;
+		if (service == null || service.isRoleRequired()) {
+			LOGGER.warn("Refused the agent code:" + config.getCode() + " without a role, its service:"
+					+ config.getAgentServiceId() + (service == null ? " is unknown" : " builds prompts with one"));
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The agent needs a role: its service "
+					+ config.getAgentServiceId() + " builds its prompts with one");
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent code:" + config.getCode() + " saved without a role, its service:"
+					+ config.getAgentServiceId() + " builds no prompt");
+		}
 	}
 
 	/**

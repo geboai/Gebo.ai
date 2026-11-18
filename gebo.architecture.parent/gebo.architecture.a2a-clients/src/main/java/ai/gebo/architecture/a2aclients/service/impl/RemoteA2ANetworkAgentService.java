@@ -153,6 +153,15 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 	}
 
 	/**
+	 * The remote agent builds its own prompts: a role, when the configuration names one,
+	 * only tags the response, else {@link #resolveRole(GAgentConfig)} makes one up.
+	 */
+	@Override
+	public boolean isRoleRequired() {
+		return false;
+	}
+
+	/**
 	 * Resolves the role for the response message from the agent config, falling back
 	 * to a synthetic role bound to this service id when none is configured.
 	 */

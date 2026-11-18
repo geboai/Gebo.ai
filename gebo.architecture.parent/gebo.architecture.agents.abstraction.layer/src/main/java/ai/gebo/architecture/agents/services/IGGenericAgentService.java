@@ -58,6 +58,17 @@ public interface IGGenericAgentService {
 	}
 
 	/**
+	 * Whether a configuration of this agent must name a role
+	 * ({@link GAgentConfig#getAgentRoleCode()}), from the role library its prompts are
+	 * built with. True for every agent building prompts; the ones building none run
+	 * without a role: the chat input adapter, the network adapters (the agents of the
+	 * adapted network have their own) and the remote A2A agents.
+	 */
+	public default boolean isRoleRequired() {
+		return true;
+	}
+
+	/**
 	 * The chat model this agent runs with the given configuration, resolved by the
 	 * same rule the agent applies when it runs; null when it cannot tell.
 	 *
