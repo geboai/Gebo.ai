@@ -1239,6 +1239,35 @@ class AgenticLoopReactiveAgentServiceTest {
 	}
 
 	@Test
+	void aDocumentsLineWithBracketsLeavesNothingShown() {
+		ControlMarkerStripper empty = new ControlMarkerStripper();
+		assertEquals("Deck built.\n", strip(empty, "Deck built.\n@@DOCS@@ []\n", STOP));
+		assertEquals(List.of(), empty.getAnswerDocuments());
+
+		ControlMarkerStripper listed = new ControlMarkerStripper();
+		assertEquals("Deck built.\n", strip(listed, "Deck built.\n@@DOCS@@ [#1, ", "#3]", STOP));
+		assertEquals(List.of("#1", "#3"), listed.getAnswerDocuments());
+	}
+
+	@Test
+	void aDocumentsLineInTheMiddleOfTheAnswerKeepsTheTextAfterIt() {
+		// a model closing each section of its answer: the next section and its heading stay
+		ControlMarkerStripper bracketed = new ControlMarkerStripper();
+		assertEquals("## Deck\nBuilt.\n\n## Workbook\nBuilt.\n",
+				strip(bracketed, "## Deck\nBuilt.\n@@DOCS@@ []\n\n## Work", "book\nBuilt.\n@@DOCS@@ []", STOP));
+
+		ControlMarkerStripper bare = new ControlMarkerStripper();
+		assertEquals("## Deck\nBuilt.\n\n## Workbook\nBuilt.",
+				strip(bare, "## Deck\nBuilt.\n@@DOCS@@", "\n\n#", "# Workbook\nBuilt.", STOP));
+		assertEquals(List.of(), bare.getAnswerDocuments());
+
+		ControlMarkerStripper withIds = new ControlMarkerStripper();
+		assertEquals("## Deck\nBuilt.\n\n## Workbook\nBuilt.",
+				strip(withIds, "## Deck\nBuilt.\n@@DOCS@@ #2\n\n## Workbook\nBuilt.", STOP));
+		assertEquals(List.of("#2"), withIds.getAnswerDocuments());
+	}
+
+	@Test
 	void theWordInTheTextWithoutIdsIsText() {
 		ControlMarkerStripper stripper = new ControlMarkerStripper();
 		assertEquals("The ANSWER-DOCUMENTS line is internal. ",

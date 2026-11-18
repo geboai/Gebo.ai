@@ -42,6 +42,7 @@ import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
 import ai.gebo.architecture.agents.services.ConversationFilesRenderer;
+import ai.gebo.architecture.ai.files.GConversationFile;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -708,6 +709,15 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					warnAboutThinCoverage(answer, coverage);
 					warnAboutEmptyAnswer(answer);
 					warnAboutCutAnswer(answer, history);
+				}, answerText -> {
+					// the files the tools wrote in this request that the answer does not name
+					final String closing = unnamedWrittenFiles(answerText,
+							ConversationFilesRenderer.writtenInThisRequest(chatRequestContext));
+					if (!closing.isEmpty()) {
+						LOGGER.info("Agentic loop agent id:" + getId() + " the answer names not every file the tools"
+								+ " wrote in the request: the others are listed after it");
+					}
+					return closing;
 				});
 		return cycles.render(text);
 	}
@@ -775,6 +785,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		private final Consumer<GeboChatResponse> answerDocuments;
 		/** Completes the last answer with the warnings for the user. */
 		private final Consumer<GeboChatResponse> lastAnswer;
+		/** The text closing the last answer, given its text: empty for none (see {@link #unnamedWrittenFiles}). */
+		private final java.util.function.UnaryOperator<String> lastAnswerClosing;
 		private final StringBuilder cycleText = new StringBuilder();
 		/** The documents the answers of the cycles so far rest on, no one twice. */
 		private List<GResponseDocumentRef> documentsSoFar = null;
@@ -785,6 +797,13 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		CycleRenderer(int maxCycles, AgentNetworkParticipant persona, INotificationSink notificationSink,
 				ToolCallsListener callBacksListener, Consumer<GeboChatResponse> answerDocuments,
 				Consumer<GeboChatResponse> lastAnswer) {
+			this(maxCycles, persona, notificationSink, callBacksListener, answerDocuments, lastAnswer, text -> "");
+		}
+
+		CycleRenderer(int maxCycles, AgentNetworkParticipant persona, INotificationSink notificationSink,
+				ToolCallsListener callBacksListener, Consumer<GeboChatResponse> answerDocuments,
+				Consumer<GeboChatResponse> lastAnswer, java.util.function.UnaryOperator<String> lastAnswerClosing) {
+			this.lastAnswerClosing = lastAnswerClosing;
 			this.maxCycles = maxCycles;
 			this.persona = persona;
 			this.notificationSink = notificationSink;
@@ -816,8 +835,16 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			return out;
 		}
 
-		/** The messages ending the stream: the last cycle's answer, the agent's response. */
+		/**
+		 * The messages ending the stream: the text closing the last cycle's answer, when
+		 * any, streamed as the rest of it, then that answer, the agent's response.
+		 */
 		List<IGPartialOperation<GeboChatMessageEnvelope>> complete() {
+			final List<IGPartialOperation<GeboChatMessageEnvelope>> out = new ArrayList<>();
+			final String closing = lastAnswerClosing.apply(answerText());
+			if (closing != null && !closing.isEmpty()) {
+				streamed(closing, out);
+			}
 			final GeboChatResponse answer = answer();
 			lastAnswer.accept(answer);
 			notificationSink.next("Agent: " + persona.getNetworkAgentName() + " has finished",
@@ -834,7 +861,14 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				LOGGER.trace(String.valueOf(answer.getQueryResponse()));
 				LOGGER.trace("</AGENTIC_LOOP_FINAL_ANSWER>");
 			}
-			return List.of(IGPartialOperation.of(new GeboChatMessageEnvelope(answer), false));
+			out.add(IGPartialOperation.of(new GeboChatMessageEnvelope(answer), false));
+			return out;
+		}
+
+		/** The text of the cycle's answer as it stands: the one written again after a cut one. */
+		private String answerText() {
+			return restartAt >= 0 && restartAt <= cycleText.length() ? cycleText.substring(restartAt)
+					: cycleText.toString();
 		}
 
 		private void streamed(String piece, List<IGPartialOperation<GeboChatMessageEnvelope>> out) {
@@ -939,6 +973,44 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 		LOGGER.warn("Agentic loop agent id:" + getId() + " the answer was cut by the output limit: the user is told");
 		response.getBackendMessages().add(CutAnswer.incompleteWarning());
+	}
+
+	/** What introduces the files the tools wrote that the answer does not name. */
+	static final String UNNAMED_WRITTEN_FILES_LABEL = "Also written in this request: ";
+
+	/**
+	 * The line naming the files the tools wrote in the request that the answer does not
+	 * name, each as its location and path; empty when the answer names them all, or none
+	 * was written. A file is named when the answer holds its file name, in any case: a
+	 * model writing one part per file may leave some out.
+	 */
+	static String unnamedWrittenFiles(String answer, List<GConversationFile> written) {
+		if (written == null || written.isEmpty()) {
+			return "";
+		}
+		final String text = answer != null ? answer.toLowerCase(java.util.Locale.ROOT) : "";
+		final List<String> unnamed = new ArrayList<>();
+		for (GConversationFile file : written) {
+			if (file == null || file.getPath() == null || file.getPath().isBlank()) {
+				continue;
+			}
+			final String path = file.getPath();
+			final String name = path.substring(path.lastIndexOf('/') + 1);
+			if (!text.contains(name.toLowerCase(java.util.Locale.ROOT))) {
+				final String shown = "`" + (file.getLocation() != null ? file.getLocation() + "/" : "") + path + "`";
+				if (!unnamed.contains(shown)) {
+					unnamed.add(shown);
+				}
+			}
+		}
+		if (unnamed.isEmpty()) {
+			return "";
+		}
+		// a paragraph of its own after the answer
+		final String end = answer != null ? answer.stripTrailing() : "";
+		final String before = end.isEmpty() ? "" : answer.substring(end.length()).contains("\n\n") ? ""
+				: answer.endsWith("\n") ? "\n" : "\n\n";
+		return before + UNNAMED_WRITTEN_FILES_LABEL + String.join(", ", unnamed);
 	}
 
 	/**
@@ -2617,32 +2689,101 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		if (start < 0) {
 			return null;
 		}
+		final int length = text.length();
 		final int idsStart = start + token.length();
-		int end = idsStart;
-		while (end < text.length() && isDocumentsLineChar(text.charAt(end))) {
+		int idsFrom = idsStart;
+		while (idsFrom < length && isBlank(text.charAt(idsFrom))) {
+			idsFrom++;
+		}
+		if (idsFrom < length && isLineEnd(text.charAt(idsFrom))) {
+			// nothing after the start on its line: the ids may be on the next one, only
+			// when that line begins with an id (a heading "## ..." is the answer's text)
+			int next = idsFrom;
+			while (next < length && Character.isWhitespace(text.charAt(next))) {
+				next++;
+			}
+			final int id = idAt(text, next);
+			if (id < 0 && !ended) {
+				return new DocumentsLine(start, length, text.subSequence(idsStart, length).toString(), false, false);
+			}
+			if (id > 0) {
+				idsFrom = next;
+			}
+		}
+		int end = idsFrom;
+		while (end < length && isDocumentsLineChar(text.charAt(end))) {
 			end++;
 		}
 		final String ids = text.subSequence(idsStart, end).toString();
 		final boolean gaveIds = DOCUMENT_ID_NUMBER.matcher(ids).find();
 		final boolean marker = gaveIds || !token.equals("ANSWER-DOCUMENTS");
-		if (end < text.length() || ended) {
-			// the closing tag of the tag form goes with the line
-			if (end < text.length() && text.toString().regionMatches(true, end, ANSWER_DOCUMENTS_CLOSE, 0,
-					Math.min(ANSWER_DOCUMENTS_CLOSE.length(), text.length() - end))) {
-				if (text.length() - end < ANSWER_DOCUMENTS_CLOSE.length() && !ended) {
-					return new DocumentsLine(start, end, ids, marker, false);
-				}
-				end = Math.min(text.length(), end + ANSWER_DOCUMENTS_CLOSE.length());
-			}
-			return new DocumentsLine(start, end, ids, marker, true);
+		if (end == length && !ended) {
+			// the ids may go on in the next chunk
+			return new DocumentsLine(start, end, ids, marker, false);
 		}
-		return new DocumentsLine(start, end, ids, marker, false);
+		// the closing tag of the tag form goes with the line
+		if (end < length && text.toString().regionMatches(true, end, ANSWER_DOCUMENTS_CLOSE, 0,
+				Math.min(ANSWER_DOCUMENTS_CLOSE.length(), length - end))) {
+			if (length - end < ANSWER_DOCUMENTS_CLOSE.length() && !ended) {
+				return new DocumentsLine(start, end, ids, marker, false);
+			}
+			end = Math.min(length, end + ANSWER_DOCUMENTS_CLOSE.length());
+		}
+		if (!marker) {
+			return new DocumentsLine(start, end, ids, false, true);
+		}
+		// the line's end goes with it, and the blank lines after it when nothing follows
+		// them; when the answer goes on, only the line's own end
+		int after = end;
+		while (after < length && Character.isWhitespace(text.charAt(after))) {
+			after++;
+		}
+		if (after == length) {
+			return new DocumentsLine(start, after, ids, true, ended || after == end);
+		}
+		if (isLineEnd(text.charAt(end))) {
+			end += text.charAt(end) == '\r' && end + 1 < length && text.charAt(end + 1) == '\n' ? 2 : 1;
+		}
+		return new DocumentsLine(start, end, ids, true, true);
 	}
 
-	/** The ids of a documents line, their separators and line ends. */
+	/**
+	 * The ids of a documents line and their separators, on one line: numbers, "#", the
+	 * brackets of a list ("[]", "[#1, #2]"), the blanks between them.
+	 */
 	private static boolean isDocumentsLineChar(char c) {
-		return Character.isWhitespace(c) || Character.isDigit(c) || c == '#' || c == ',' || c == ';' || c == ':'
-				|| c == '>';
+		return isBlank(c) || Character.isDigit(c) || c == '#' || c == ',' || c == ';' || c == ':' || c == '>'
+				|| c == '[' || c == ']';
+	}
+
+	private static boolean isBlank(char c) {
+		return c == ' ' || c == '\t' || c == ' ';
+	}
+
+	private static boolean isLineEnd(char c) {
+		return c == '\n' || c == '\r';
+	}
+
+	/**
+	 * Whether an id starts at a position: 1 for a number, "#" and a number, or a
+	 * list's bracket; 0 for anything else (a heading's "##", text); -1 when the text
+	 * ends before it is known.
+	 */
+	private static int idAt(CharSequence text, int index) {
+		if (index >= text.length()) {
+			return -1;
+		}
+		final char c = text.charAt(index);
+		if (Character.isDigit(c) || c == '[') {
+			return 1;
+		}
+		if (c != '#') {
+			return 0;
+		}
+		if (index + 1 >= text.length()) {
+			return -1;
+		}
+		return Character.isDigit(text.charAt(index + 1)) ? 1 : 0;
 	}
 
 	private static final Pattern DOCUMENT_ID_NUMBER = Pattern.compile("\\d");
