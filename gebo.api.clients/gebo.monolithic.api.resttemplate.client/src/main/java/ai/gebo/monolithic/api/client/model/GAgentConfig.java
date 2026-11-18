@@ -28,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:49:47.391112550+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T13:26:14.222512202+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -466,7 +466,7 @@ public class GAgentConfig {
    * Get agentRoleCode
    * @return agentRoleCode
   **/
-  @Schema(required = true, description = "")
+  @Schema(description = "")
   public String getAgentRoleCode() {
     return agentRoleCode;
   }

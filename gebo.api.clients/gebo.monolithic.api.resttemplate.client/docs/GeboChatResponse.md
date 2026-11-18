@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **forcedDocumentsRef** | [**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md) |  |  [optional]
 **documentsRef** | [**List&lt;GResponseDocumentRef&gt;**](GResponseDocumentRef.md) |  |  [optional]
 **listedDocumentNames** | **List&lt;String&gt;** |  |  [optional]
+**writtenFiles** | [**List&lt;GConversationFile&gt;**](GConversationFile.md) |  |  [optional]
 **calledFunctions** | [**List&lt;CalledFunction&gt;**](CalledFunction.md) |  |  [optional]
 **contextWindowStats** | [**ChatModelRequestContextWindowStats**](ChatModelRequestContextWindowStats.md) |  |  [optional]
 **generatedResources** | [**List&lt;LLMGeneratedResource&gt;**](LLMGeneratedResource.md) |  |  [optional]

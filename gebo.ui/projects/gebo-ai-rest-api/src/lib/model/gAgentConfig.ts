@@ -27,7 +27,7 @@ export interface GAgentConfig {
     mainLoopPromptUseCode?: string;
     customLoopPrompt?: GPromptTemplateConfig;
     subscribeAllTools?: boolean;
-    agentRoleCode: string;
+    agentRoleCode?: string;
     useDefaultChatModel?: boolean;
     useChatModelWithUse?: GAgentConfig.UseChatModelWithUseEnum;
     chatModelReference?: GObjectRefGBaseChatModelConfig;

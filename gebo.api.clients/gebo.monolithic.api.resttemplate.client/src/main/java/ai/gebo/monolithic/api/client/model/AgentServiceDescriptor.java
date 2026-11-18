@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AgentServiceDescriptor
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T13:26:14.222512202+01:00[Europe/Rome]")
 
 public class AgentServiceDescriptor {
   @JsonProperty("serviceId")
@@ -122,6 +122,9 @@ public class AgentServiceDescriptor {
 
   }  @JsonProperty("kind")
   private KindEnum kind = null;
+
+  @JsonProperty("roleRequired")
+  private Boolean roleRequired = null;
 
   public AgentServiceDescriptor serviceId(String serviceId) {
     this.serviceId = serviceId;
@@ -321,6 +324,24 @@ public class AgentServiceDescriptor {
     this.kind = kind;
   }
 
+  public AgentServiceDescriptor roleRequired(Boolean roleRequired) {
+    this.roleRequired = roleRequired;
+    return this;
+  }
+
+   /**
+   * Get roleRequired
+   * @return roleRequired
+  **/
+  @Schema(description = "")
+  public Boolean isRoleRequired() {
+    return roleRequired;
+  }
+
+  public void setRoleRequired(Boolean roleRequired) {
+    this.roleRequired = roleRequired;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -341,12 +362,13 @@ public class AgentServiceDescriptor {
         Objects.equals(this.reactive, agentServiceDescriptor.reactive) &&
         Objects.equals(this.adaptable, agentServiceDescriptor.adaptable) &&
         Objects.equals(this.messageSemantic, agentServiceDescriptor.messageSemantic) &&
-        Objects.equals(this.kind, agentServiceDescriptor.kind);
+        Objects.equals(this.kind, agentServiceDescriptor.kind) &&
+        Objects.equals(this.roleRequired, agentServiceDescriptor.roleRequired);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind);
+    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind, roleRequired);
   }
 
 
@@ -366,6 +388,7 @@ public class AgentServiceDescriptor {
     sb.append("    adaptable: ").append(toIndentedString(adaptable)).append("\n");
     sb.append("    messageSemantic: ").append(toIndentedString(messageSemantic)).append("\n");
     sb.append("    kind: ").append(toIndentedString(kind)).append("\n");
+    sb.append("    roleRequired: ").append(toIndentedString(roleRequired)).append("\n");
     sb.append("}");
     return sb.toString();
   }
