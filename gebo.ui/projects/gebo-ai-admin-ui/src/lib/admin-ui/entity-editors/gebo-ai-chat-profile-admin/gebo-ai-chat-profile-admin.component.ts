@@ -18,7 +18,7 @@
  */
 
 import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup } from "@angular/forms";
 import { AgenticChatDefaultNetworksAdminControllerService, ChatModelsControllerService, EmbeddingModelsControllersService, GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GKnowledgeBase, KnowledgeBaseControllerService, PromptTemplatesControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponentAutoDeleteCheck, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "@openng/optimus-ui/api";
@@ -165,7 +165,8 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponentA
             if (userChooses === true) {
                 this.formGroup.controls["knowledgeBaseCodes"].setValue(undefined);
             }
-            this.setControlEnabledAndRequired("knowledgeBaseCodes", userChooses === false);
+            // fixed knowledge bases may be none: such a profile searches no knowledge base
+            this.setControlEnabled("knowledgeBaseCodes", userChooses === false);
 
         });
 
@@ -174,7 +175,7 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponentA
             x => {
                 if (x) {
                     this.isChooseChatModel = x === "CHOOSEMODEL";
-                    this.setControlEnabledAndRequired("chatModelReference", this.isChooseChatModel);
+                    this.setControlEnabled("chatModelReference", this.isChooseChatModel);
                 }
             }
         );
@@ -184,7 +185,7 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponentA
             x => {
                 if (x) {
                     this.isChooseEmbeddingModel = x === "CHOOSEMODEL";
-                    this.setControlEnabledAndRequired("embeddingModelReference", this.isChooseEmbeddingModel);
+                    this.setControlEnabled("embeddingModelReference", this.isChooseEmbeddingModel);
                 }
             }
         );
@@ -204,41 +205,19 @@ export class GeboAIChatProfileAdminComponent extends BaseEntityEditingComponentA
     }
 
     /**
-     * Adds or removes the required validator for a form control
-     * 
-     * @param ctrlName Name of the form control
-     * @param required Whether the control should be required
-     */
-    private setControlRequired(ctrlName: string, required: boolean) {
-        const ctrl = this.formGroup.controls[ctrlName];
-        if (required) {
-            if (ctrl.hasValidator(Validators.required)) {
-                ctrl.clearValidators();
-                this.formGroup.updateValueAndValidity();
-            }
-        } else {
-            if (!ctrl.hasValidator(Validators.required)) {
-                ctrl.setValidators(Validators.required);
-                this.formGroup.updateValueAndValidity();
-            }
-        }
-    }
-
-    /**
-     * Enables or disables a form control and sets its required status accordingly
-     * 
+     * Enables or disables a form control. Whether it is required is bound in the
+     * template: a disabled control is not validated.
+     *
      * @param ctrlName Name of the form control
      * @param enabled Whether the control should be enabled
      */
-    private setControlEnabledAndRequired(ctrlName: string, enabled: boolean) {
+    private setControlEnabled(ctrlName: string, enabled: boolean) {
         const ctrl = this.formGroup.controls[ctrlName];
         if (ctrl.enabled !== enabled) {
             if (enabled === true) {
                 ctrl.enable();
-                this.setControlRequired(ctrlName, true);
             } else {
                 ctrl.disable();
-                this.setControlRequired(ctrlName, false);
             }
         }
     }
