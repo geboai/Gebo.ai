@@ -298,6 +298,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			final ToolCallsListener toolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
 			resources.setToolCallsListener(toolCalls);
 			minimalChatContext.setToolCallsListener(toolCalls);
+			// and every file its tools write, as a chat's response keeps them
+			resources.setConversationFilesKeeper(
+					new ai.gebo.architecture.ai.files.GConversationFilesKeeper(response::setWrittenFiles));
 			final ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null,
 					chatModel.getContextLength(), resources, response, minimalChatContext, true, toolCallingOfThisRun);
 			final ReactiveIdentityUtil runAs = ReactiveIdentityUtil.create();
@@ -476,6 +479,9 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 			final ToolCallsListener toolCalls = ToolCallsListener.appendingTo(response.getCalledFunctions());
 			resources.setToolCallsListener(toolCalls);
 			minimalChatContext.setToolCallsListener(toolCalls);
+			// and every file its tools write, as a chat's response keeps them
+			resources.setConversationFilesKeeper(
+					new ai.gebo.architecture.ai.files.GConversationFilesKeeper(response::setWrittenFiles));
 			final ChatPipelineExecutionRuntimeData runtimeData = new ChatPipelineExecutionRuntimeData(null,
 					chatModel.getContextLength(), resources, response, minimalChatContext, true,
 					run.getToolCallingOfThisRun());

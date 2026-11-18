@@ -57,7 +57,16 @@ public final class AgentAdditionalRules {
 	 * or there are no rules, otherwise a copy with the slot closing its system template.
 	 */
 	public static GPromptTemplateConfig withSlot(GPromptTemplateConfig prompt, String rules) {
-		if (prompt == null || rules == null || rules.isBlank() || prompt.getPlaceholders()
+		return withSlot(prompt, rules, false);
+	}
+
+	/**
+	 * {@link #withSlot(GPromptTemplateConfig, String)}, the slot added also with no
+	 * rules when {@code filled} says something else goes in it (the files of the
+	 * conversation).
+	 */
+	public static GPromptTemplateConfig withSlot(GPromptTemplateConfig prompt, String rules, boolean filled) {
+		if (prompt == null || ((rules == null || rules.isBlank()) && !filled) || prompt.getPlaceholders()
 				.containsKey(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
 			return prompt;
 		}

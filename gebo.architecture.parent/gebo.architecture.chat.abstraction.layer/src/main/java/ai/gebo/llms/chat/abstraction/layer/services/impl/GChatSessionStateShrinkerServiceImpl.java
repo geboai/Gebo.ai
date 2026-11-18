@@ -42,6 +42,7 @@ import ai.gebo.llms.chat.abstraction.layer.repository.MinimalChatContextCacheIte
 import ai.gebo.llms.chat.abstraction.layer.repository.ShrinkedChatSessionStateRepository;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionStateShrinkerService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSWrittenFile;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSInteractionReferredContent;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSReferredContentList;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSRelevantShrinkedDocument;
@@ -294,6 +295,43 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 
 	}
 
+	/**
+	 * The files written by the requests a summary takes the place of - the
+	 * previous summary's and those of the interactions before the ones kept -
+	 * each once, at the last request that wrote it; null for none.
+	 */
+	static List<CSSWrittenFile> earlierWrittenFiles(CSSSimplifiedChatHistory value,
+			int leaveLastInteractionsOnHistoryConsolidation, CSSConsolidatedChatHistory oldVersion) {
+		final Map<String, CSSWrittenFile> files = new java.util.LinkedHashMap<>();
+		if (oldVersion != null && oldVersion.getEarlierWrittenFiles() != null) {
+			for (CSSWrittenFile file : oldVersion.getEarlierWrittenFiles()) {
+				if (file != null && file.getFile() != null) {
+					files.put(file.getFile().key(), file);
+				}
+			}
+		}
+		final int lastIndex = Math.max(value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation,
+				0);
+		for (int i = 0; i < lastIndex; i++) {
+			final CSSSimplefiedInteraction interaction = value.getInteractions().get(i);
+			if (interaction.getWrittenFiles() == null) {
+				continue;
+			}
+			final int index = interaction.getInteractionIndex() != null ? interaction.getInteractionIndex() : i;
+			for (ai.gebo.architecture.ai.files.GConversationFile file : interaction.getWrittenFiles()) {
+				if (file == null) {
+					continue;
+				}
+				final CSSWrittenFile known = files.get(file.key());
+				if (known == null || known.getInteractionIndex() == null || known.getInteractionIndex() <= index) {
+					files.remove(file.key());
+					files.put(file.key(), new CSSWrittenFile(index, file));
+				}
+			}
+		}
+		return files.isEmpty() ? null : new ArrayList<>(files.values());
+	}
+
 	private CSSSimplifiedChatHistory copyLatest(CSSSimplifiedChatHistory value,
 			int leaveLastInteractionsOnHistoryConsolidation) {
 		int lastIndex = value.getInteractions().size() - leaveLastInteractionsOnHistoryConsolidation;
@@ -497,6 +535,8 @@ public class GChatSessionStateShrinkerServiceImpl extends BaseLLMSInvokingAndPro
 		}
 		CSSConsolidatedChatHistory newConsolidation = new CSSConsolidatedChatHistory();
 		newConsolidation.setLatestEntries(copyLatest(value, leaveLastInteractionsOnHistoryConsolidation));
+		newConsolidation.setEarlierWrittenFiles(
+				earlierWrittenFiles(value, leaveLastInteractionsOnHistoryConsolidation, oldVersion));
 		if (lastIndex > firstIndex) {
 			for (int i = firstIndex; i < lastIndex; i++) {
 				StringBuffer new_messages = new StringBuffer();

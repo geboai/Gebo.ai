@@ -401,10 +401,40 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	protected GPromptTemplateConfig promptOfTheTurn(GPromptTemplateConfig prompt, AgentLibraries libraries,
 			AgentPrivateSessionContext<?, ?> mySessionContext) {
 		final String rules = libraries != null ? libraries.rules() : "";
+		// an agent holding libraries is told of the files their tools wrote in the conversation
+		final boolean holdsLibraries = libraries != null && libraries.tools() != null && !libraries.tools().isEmpty();
 		if (mySessionContext != null) {
 			mySessionContext.setAdditionalRules(rules);
+			mySessionContext.setConversationFilesContext(holdsLibraries ? libraries.context() : null);
 		}
-		return AgentAdditionalRules.withSlot(prompt, rules);
+		// where the prompt names no place for those files, the additional rules slot takes them
+		final boolean filesInTheSlot = holdsLibraries && prompt != null
+				&& !prompt.getPlaceholders().containsKey(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM);
+		return AgentAdditionalRules.withSlot(prompt, rules, filesInTheSlot);
+	}
+
+	/** Who tells the agents of the files of their conversation; null in an installation without it. */
+	protected ConversationFilesRenderer conversationFilesRenderer() {
+		try {
+			return runtimeBinder != null ? runtimeBinder.getImplementationOf(ConversationFilesRenderer.class) : null;
+		} catch (RuntimeException none) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("The agents are not told of the files of their conversation: " + none);
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * The files the tools of the conversation wrote, as the agent of this private
+	 * context is told of them within its budget of tokens; null when it holds no
+	 * library or there are none.
+	 */
+	protected String conversationFilesText(AgentPrivateSessionContext<?, ?> mySessionContext, int tokenBudget) {
+		final IChatRequestContext context = mySessionContext != null ? mySessionContext.getConversationFilesContext()
+				: null;
+		final ConversationFilesRenderer renderer = context != null ? conversationFilesRenderer() : null;
+		return renderer != null ? renderer.render(context, tokenBudget) : null;
 	}
 
 	/** Who keeps the library instances; null in an installation keeping none. */
@@ -1224,9 +1254,26 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 			remainingBudget -= ITokensCountable.stringsTokensSize(renderedInput);
 			tracePlaceholder(AgentPromptTemplateParams.INPUT_TEMPLATE_PARAM, renderedInput, remainingBudget);
 		}
+		// the files the conversation's tools wrote: where the prompt names them, else in the rules slot
+		final String conversationFiles = placeholders
+				.containsKey(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM)
+				|| placeholders.containsKey(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)
+						? conversationFilesText(mySessionContext, tokenBudget)
+						: null;
+		if (placeholders.containsKey(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM)) {
+			final String files = conversationFiles != null ? conversationFiles : "none";
+			constantParams.put(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM, files);
+			remainingBudget -= ITokensCountable.stringsTokensSize(files);
+			tracePlaceholder(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM, files, remainingBudget);
+		}
 		if (placeholders.containsKey(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM)) {
 			// always filled: an empty text when nothing is added to the prompt
 			String additionalRules = mySessionContext != null ? nullToEmpty(mySessionContext.getAdditionalRules()) : "";
+			if (conversationFiles != null
+					&& !placeholders.containsKey(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM)) {
+				additionalRules = additionalRules.isBlank() ? conversationFiles
+						: additionalRules + "\n\n" + conversationFiles;
+			}
 			constantParams.put(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM, additionalRules);
 			remainingBudget -= ITokensCountable.stringsTokensSize(additionalRules);
 			tracePlaceholder(AgentPromptTemplateParams.ADDITIONAL_RULES_SLOT_TEMPLATE_PARAM, additionalRules,

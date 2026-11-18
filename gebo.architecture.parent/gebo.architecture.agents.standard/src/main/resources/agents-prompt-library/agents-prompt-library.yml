@@ -78,6 +78,8 @@ ai.gebo.agents.prompts.uses:
         description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
       - placeholder: EARLIER_ANSWERS_DOCUMENTS
         description: For each earlier answer of the chat that had some, the request it answered, the documents it rested on (read then) and the ones it named from a list of the tools (only listed); "none" when no answer had any.
+      - placeholder: CONVERSATION_FILES
+        description: The files the tools of the chat wrote, in its earlier requests and in this one so far, the latest first, each with its location, path, the request that wrote it and an outline of it as it is now (slides, sheets, sections), within a share of the agent's tokens (ai.gebo.agents.conversation-files.*); "none" when there are none.
   - code: pure-chat-agent-prompt
     description: Main loop prompt of the single-agent chat agent of the chats without knowledge base (AgenticLoopPureChatNetworkAgentService), driving its iterate-until-done control loop; like default-chat-agent-prompt, it also tells the agent that the chat has no knowledge base.
     module: agents-standard
@@ -106,6 +108,8 @@ ai.gebo.agents.prompts.uses:
         description: The documents of the chat request (chosen or uploaded by the user, or found for it), between BEGIN_CONTEXT and END_CONTEXT; empty when there are none.
       - placeholder: EARLIER_ANSWERS_DOCUMENTS
         description: For each earlier answer of the chat that had some, the request it answered, the documents it rested on (read then) and the ones it named from a list of the tools (only listed); "none" when no answer had any.
+      - placeholder: CONVERSATION_FILES
+        description: The files the tools of the chat wrote, in its earlier requests and in this one so far, the latest first, each with its location, path, the request that wrote it and an outline of it as it is now (slides, sheets, sections), within a share of the agent's tokens (ai.gebo.agents.conversation-files.*); "none" when there are none.
   - code: controller-coordinator-agent-prompt
     description: Main loop prompt for the network's coordinator/controller agent, which turns the user's request into a routing plan dispatching the other agents in the network.
     module: agents-standard

@@ -75,6 +75,16 @@ public abstract class ForwardingChatRequestContext implements IChatRequestContex
 	}
 
 	@Override
+	public List<ai.gebo.architecture.ai.files.GConversationFilesText.Entry> getEarlierWrittenFiles() {
+		return delegate.getEarlierWrittenFiles();
+	}
+
+	@Override
+	public int getCurrentRequestIndex() {
+		return delegate.getCurrentRequestIndex();
+	}
+
+	@Override
 	public List<String> getRulesToFollow() {
 		return delegate.getRulesToFollow();
 	}

@@ -20,6 +20,7 @@ import ai.gebo.llms.abstraction.layer.model.IChatSessionEntry;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSConsolidatedChatHistory;
 import ai.gebo.llms.chat.abstraction.layer.session.model.CSSSimplefiedInteraction;
+import ai.gebo.llms.chat.abstraction.layer.session.model.CSSWrittenFile;
 import ai.gebo.llms.chat.abstraction.layer.session.model.IChatSessionEntryDocuments;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -47,6 +48,14 @@ public class LLMChatRequestResources implements ITokensCountable {
 	 */
 	@JsonIgnore
 	private transient ToolCallsListener toolCallsListener = null;
+
+	/**
+	 * The keeper of the files the tools of the current request write: one for
+	 * the whole request, handed to every tool through the request contexts;
+	 * what it kept goes with the answer. Never persisted.
+	 */
+	@JsonIgnore
+	private transient ai.gebo.architecture.ai.files.GConversationFilesKeeper conversationFilesKeeper = null;
 
 	// Request id -> note appended to that answer in the history shown to the model.
 	private Map<String, String> answerFeedbackNotes = new HashMap<String, String>();
@@ -138,7 +147,81 @@ public class LLMChatRequestResources implements ITokensCountable {
 		return size;
 	}
 
+	/** The keeper of the files the tools of the current request write (see {@link #conversationFilesKeeper}). */
+	@JsonIgnore
+	public synchronized ai.gebo.architecture.ai.files.GConversationFilesKeeper getConversationFilesKeeper() {
+		if (conversationFilesKeeper == null) {
+			conversationFilesKeeper = new ai.gebo.architecture.ai.files.GConversationFilesKeeper();
+		}
+		return conversationFilesKeeper;
+	}
+
+	/**
+	 * The files the tools of the earlier requests wrote, each at the last request
+	 * that wrote it: the summarized requests' first, then those of the history.
+	 */
+	List<ai.gebo.architecture.ai.files.GConversationFilesText.Entry> earlierWrittenFiles() {
+		final List<ai.gebo.architecture.ai.files.GConversationFilesText.Entry> entries = new ArrayList<>();
+		if (chathistory == null) {
+			return entries;
+		}
+		if (chathistory.getEarlierWrittenFiles() != null) {
+			for (CSSWrittenFile written : chathistory.getEarlierWrittenFiles()) {
+				if (written != null && written.getFile() != null) {
+					entries.add(new ai.gebo.architecture.ai.files.GConversationFilesText.Entry(
+							written.getInteractionIndex() != null ? written.getInteractionIndex() : 0,
+							written.getFile()));
+				}
+			}
+		}
+		final List<CSSSimplefiedInteraction> latest = chathistory.getLatestEntries() != null
+				? chathistory.getLatestEntries().getInteractions()
+				: List.of();
+		for (int position = 0; position < latest.size(); position++) {
+			final CSSSimplefiedInteraction interaction = latest.get(position);
+			if (interaction.getWrittenFiles() == null) {
+				continue;
+			}
+			for (ai.gebo.architecture.ai.files.GConversationFile file : interaction.getWrittenFiles()) {
+				if (file != null) {
+					entries.add(new ai.gebo.architecture.ai.files.GConversationFilesText.Entry(
+							interaction.getInteractionIndex() != null ? interaction.getInteractionIndex() : position,
+							file));
+				}
+			}
+		}
+		return entries;
+	}
+
+	/** The index of the current request: the one after the last the history holds; 0 for the first. */
+	int currentRequestIndex() {
+		int next = 0;
+		if (chathistory != null) {
+			if (chathistory.getLastInteractionPointer() != null) {
+				next = chathistory.getLastInteractionPointer();
+			}
+			final List<CSSSimplefiedInteraction> latest = chathistory.getLatestEntries() != null
+					? chathistory.getLatestEntries().getInteractions()
+					: List.of();
+			for (int position = 0; position < latest.size(); position++) {
+				final Integer index = latest.get(position).getInteractionIndex();
+				next = Math.max(next, (index != null ? index : next + position) + 1);
+			}
+		}
+		return next;
+	}
+
 	final class NestedChatRequestContext implements IChatRequestContext {
+		@Override
+		public List<ai.gebo.architecture.ai.files.GConversationFilesText.Entry> getEarlierWrittenFiles() {
+			return earlierWrittenFiles();
+		}
+
+		@Override
+		public int getCurrentRequestIndex() {
+			return currentRequestIndex();
+		}
+
 		@Override
 		public String getRequestID() {
 
@@ -208,6 +291,9 @@ public class LLMChatRequestResources implements ITokensCountable {
 			if (currentRequest != null && currentRequest.getId() != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.REQUEST_ID_CONTEXT_KEY, currentRequest.getId());
 			}
+			// the keeper of the files the request's tools write, the same for every tool of the request
+			toolsContext.put(ai.gebo.architecture.ai.files.IGConversationFilesKeeper.TOOLS_CONTEXT_KEY,
+					getConversationFilesKeeper());
 			// the conversation, whose files locations the tools working on files reach
 			if (currentRequest != null && currentRequest.getUserChatContextCode() != null) {
 				toolsContext.put(ToolCallbackDeclarationUtil.CHAT_SESSION_CONTEXT_KEY,

@@ -7,6 +7,11 @@
 # Documents of the chat's earlier answers (read then, or named from a list of the tools), if any
 {EARLIER_ANSWERS_DOCUMENTS}
 
+# Files the tools of this chat wrote, if any
+To change one of them, change it with the tools of its library (read the part you change first when
+its outline does not show enough), rather than writing it again from the start:
+{CONVERSATION_FILES}
+
 # Rules to follow for this chat, set by the user or by the administrators
 They take precedence over the defaults of the instructions (the language, the length, the style of
 the answer):

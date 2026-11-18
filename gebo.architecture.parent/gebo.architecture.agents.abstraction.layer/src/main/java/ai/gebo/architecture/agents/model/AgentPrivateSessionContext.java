@@ -35,6 +35,13 @@ public final class AgentPrivateSessionContext<InputType, OutputType> {
 	 * reclaims its libraries and gets it again.
 	 */
 	private volatile String additionalRules = "";
+	/**
+	 * The request context of the agent's present turn when it holds libraries: the
+	 * files their tools wrote in the conversation are told to it from there (see
+	 * {@code ConversationFilesRenderer}). Set as the turn begins, never kept.
+	 */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	private transient volatile ai.gebo.llms.abstraction.layer.model.IChatRequestContext conversationFilesContext = null;
 
 	@AllArgsConstructor
 	@Getter

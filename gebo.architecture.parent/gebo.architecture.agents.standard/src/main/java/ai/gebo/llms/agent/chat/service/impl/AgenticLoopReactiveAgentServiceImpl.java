@@ -38,8 +38,10 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentException;
+import ai.gebo.architecture.ai.model.ITokensCountable;
 import ai.gebo.architecture.agents.services.IAgentRoleDao;
 import ai.gebo.architecture.agents.services.AgentPromptTemplateParams;
+import ai.gebo.architecture.agents.services.ConversationFilesRenderer;
 import ai.gebo.architecture.agents.services.INotificationSink;
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
 import ai.gebo.architecture.ai.model.LLMtInteractionContextThreadLocal.CalledFunction;
@@ -127,6 +129,35 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 	 * after each answer, models copied them into their own.
 	 */
 	static final String EARLIER_ANSWERS_DOCUMENTS_PARAM = "EARLIER_ANSWERS_DOCUMENTS";
+	/** Where the iterations find the run's {@link ConversationFilesMemo}: never given to the prompt. */
+	static final String CONVERSATION_FILES_MEMO_PARAM = "geboConversationFilesMemo";
+
+	/**
+	 * The files of the conversation as the iterations of a run are told of them:
+	 * rendered again only when the tools of the request wrote a file since the last
+	 * time, else the same text.
+	 */
+	static final class ConversationFilesMemo {
+		private final java.util.function.Supplier<String> render;
+		private final java.util.function.Supplier<List<ai.gebo.architecture.ai.files.GConversationFile>> written;
+		private List<ai.gebo.architecture.ai.files.GConversationFile> lastWritten = null;
+		private String text = null;
+
+		ConversationFilesMemo(java.util.function.Supplier<String> render,
+				java.util.function.Supplier<List<ai.gebo.architecture.ai.files.GConversationFile>> written) {
+			this.render = render;
+			this.written = written;
+		}
+
+		synchronized String text() {
+			final List<ai.gebo.architecture.ai.files.GConversationFile> now = written.get();
+			if (lastWritten == null || !lastWritten.equals(now)) {
+				lastWritten = now;
+				text = render.get();
+			}
+			return text;
+		}
+	}
 	/** The language the answer is written in, named (see {@link #sessionUserLanguage}). */
 	static final String USER_LANGUAGE_PARAM = "userLanguage";
 	/** What the prompts say of the answer's language when the user's one was not detected. */
@@ -571,6 +602,19 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			LOGGER.debug("Agentic loop agent id:" + getId() + " shapes its answer for the deliverable:"
 					+ userIntent.name() + ", search requested:" + searchRequested + ", answer's language:"
 					+ deliverableParams.get(USER_LANGUAGE_PARAM));
+		}
+		// the files the conversation's tools wrote, told in every iteration as they are then
+		final IChatRequestContext filesContext = mySessionContext != null
+				? mySessionContext.getConversationFilesContext()
+				: null;
+		final ConversationFilesRenderer filesRenderer = filesContext != null && agentPrompt != null
+				&& agentPrompt.getPlaceholders().containsKey(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM)
+						? conversationFilesRenderer()
+						: null;
+		if (filesRenderer != null) {
+			deliverableParams.put(CONVERSATION_FILES_MEMO_PARAM,
+					new ConversationFilesMemo(() -> filesRenderer.render(filesContext, budget),
+							() -> ConversationFilesRenderer.writtenInThisRequest(filesContext)));
 		}
 		final List<LoopIteration> history = new ArrayList<>();
 		// The search and deep search tools called by the loop add their documents to this
@@ -1406,6 +1450,17 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			names.addAll(citableNames(ref));
 		}
 		names.addAll(earlierAnswersListedNames(chatRequestContext));
+		// the files the tools of the earlier requests wrote: the chat built them, an answer may name them
+		if (chatRequestContext != null && chatRequestContext.getEarlierWrittenFiles() != null) {
+			for (ai.gebo.architecture.ai.files.GConversationFilesText.Entry written : chatRequestContext
+					.getEarlierWrittenFiles()) {
+				if (written != null && written.file() != null && written.file().getPath() != null) {
+					final String path = written.file().getPath();
+					names.add(path);
+					names.add(path.substring(path.lastIndexOf('/') + 1));
+				}
+			}
+		}
 		return names;
 	}
 
@@ -1587,11 +1642,20 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) {
 		return Flux.defer(() -> {
 			final Map<String, Object> params = new HashMap<>(deliverableParams);
+			final String conversationFiles = params.remove(CONVERSATION_FILES_MEMO_PARAM) instanceof ConversationFilesMemo memo
+					? memo.text()
+					: null;
+			// what the files take is not left to the story of the iterations
+			final int storyBudget = conversationFiles != null
+					? Math.max(0, budget - ITokensCountable.stringsTokensSize(conversationFiles))
+					: budget;
+			params.put(AgentPromptTemplateParams.CONVERSATION_FILES_TEMPLATE_PARAM,
+					conversationFiles != null ? conversationFiles : "none");
 			params.put(CURRENT_ITERATION_PROMPT_PARAM, number);
 			params.put(MAX_ITERATIONS_PARAM, maxIterations);
 			params.put(AGENT_CONTROL_FINISHED_PROMPT_PARAM, AGENT_CONTROL_FINISHED);
 			params.put(AGENT_CONTROL_CONTINUE_PROMPT_PARAM, AGENT_CONTROL_MORE_TOOLS);
-			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, budget, collectorOf(chatRequestContext)));
+			params.put(AGENT_SESSION_STORY_PROMPT_PARAM, loopStory(history, storyBudget, collectorOf(chatRequestContext)));
 			params.put(RULES_TO_FOLLOW_PARAM, rulesToFollow(chatRequestContext));
 			params.put(EARLIER_ANSWERS_DOCUMENTS_PARAM, earlierAnswersDocumentsText(chatRequestContext));
 			// the prompts name the answer's language: never missing, whoever started the loop

@@ -72,6 +72,21 @@ public interface IChatRequestContext {
 	}
 
 	/**
+	 * The files the tools of the conversation's earlier requests wrote, each at
+	 * the request that last wrote it (by its index, 0 the first) - those of the
+	 * requests summarized away too. The current request's are its tools
+	 * context's keeper's ({@link ai.gebo.architecture.ai.files.IGConversationFilesKeeper}).
+	 */
+	public default List<ai.gebo.architecture.ai.files.GConversationFilesText.Entry> getEarlierWrittenFiles() {
+		return List.of();
+	}
+
+	/** The index of the request being answered in its conversation, 0 the first; -1 when not known. */
+	public default int getCurrentRequestIndex() {
+		return -1;
+	}
+
+	/**
 	 * The English name of the language the user's message is written in (e.g.
 	 * "English"), detected once for the request; null when not detected.
 	 */
