@@ -2617,32 +2617,101 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		if (start < 0) {
 			return null;
 		}
+		final int length = text.length();
 		final int idsStart = start + token.length();
-		int end = idsStart;
-		while (end < text.length() && isDocumentsLineChar(text.charAt(end))) {
+		int idsFrom = idsStart;
+		while (idsFrom < length && isBlank(text.charAt(idsFrom))) {
+			idsFrom++;
+		}
+		if (idsFrom < length && isLineEnd(text.charAt(idsFrom))) {
+			// nothing after the start on its line: the ids may be on the next one, only
+			// when that line begins with an id (a heading "## ..." is the answer's text)
+			int next = idsFrom;
+			while (next < length && Character.isWhitespace(text.charAt(next))) {
+				next++;
+			}
+			final int id = idAt(text, next);
+			if (id < 0 && !ended) {
+				return new DocumentsLine(start, length, text.subSequence(idsStart, length).toString(), false, false);
+			}
+			if (id > 0) {
+				idsFrom = next;
+			}
+		}
+		int end = idsFrom;
+		while (end < length && isDocumentsLineChar(text.charAt(end))) {
 			end++;
 		}
 		final String ids = text.subSequence(idsStart, end).toString();
 		final boolean gaveIds = DOCUMENT_ID_NUMBER.matcher(ids).find();
 		final boolean marker = gaveIds || !token.equals("ANSWER-DOCUMENTS");
-		if (end < text.length() || ended) {
-			// the closing tag of the tag form goes with the line
-			if (end < text.length() && text.toString().regionMatches(true, end, ANSWER_DOCUMENTS_CLOSE, 0,
-					Math.min(ANSWER_DOCUMENTS_CLOSE.length(), text.length() - end))) {
-				if (text.length() - end < ANSWER_DOCUMENTS_CLOSE.length() && !ended) {
-					return new DocumentsLine(start, end, ids, marker, false);
-				}
-				end = Math.min(text.length(), end + ANSWER_DOCUMENTS_CLOSE.length());
-			}
-			return new DocumentsLine(start, end, ids, marker, true);
+		if (end == length && !ended) {
+			// the ids may go on in the next chunk
+			return new DocumentsLine(start, end, ids, marker, false);
 		}
-		return new DocumentsLine(start, end, ids, marker, false);
+		// the closing tag of the tag form goes with the line
+		if (end < length && text.toString().regionMatches(true, end, ANSWER_DOCUMENTS_CLOSE, 0,
+				Math.min(ANSWER_DOCUMENTS_CLOSE.length(), length - end))) {
+			if (length - end < ANSWER_DOCUMENTS_CLOSE.length() && !ended) {
+				return new DocumentsLine(start, end, ids, marker, false);
+			}
+			end = Math.min(length, end + ANSWER_DOCUMENTS_CLOSE.length());
+		}
+		if (!marker) {
+			return new DocumentsLine(start, end, ids, false, true);
+		}
+		// the line's end goes with it, and the blank lines after it when nothing follows
+		// them; when the answer goes on, only the line's own end
+		int after = end;
+		while (after < length && Character.isWhitespace(text.charAt(after))) {
+			after++;
+		}
+		if (after == length) {
+			return new DocumentsLine(start, after, ids, true, ended || after == end);
+		}
+		if (isLineEnd(text.charAt(end))) {
+			end += text.charAt(end) == '\r' && end + 1 < length && text.charAt(end + 1) == '\n' ? 2 : 1;
+		}
+		return new DocumentsLine(start, end, ids, true, true);
 	}
 
-	/** The ids of a documents line, their separators and line ends. */
+	/**
+	 * The ids of a documents line and their separators, on one line: numbers, "#", the
+	 * brackets of a list ("[]", "[#1, #2]"), the blanks between them.
+	 */
 	private static boolean isDocumentsLineChar(char c) {
-		return Character.isWhitespace(c) || Character.isDigit(c) || c == '#' || c == ',' || c == ';' || c == ':'
-				|| c == '>';
+		return isBlank(c) || Character.isDigit(c) || c == '#' || c == ',' || c == ';' || c == ':' || c == '>'
+				|| c == '[' || c == ']';
+	}
+
+	private static boolean isBlank(char c) {
+		return c == ' ' || c == '\t' || c == ' ';
+	}
+
+	private static boolean isLineEnd(char c) {
+		return c == '\n' || c == '\r';
+	}
+
+	/**
+	 * Whether an id starts at a position: 1 for a number, "#" and a number, or a
+	 * list's bracket; 0 for anything else (a heading's "##", text); -1 when the text
+	 * ends before it is known.
+	 */
+	private static int idAt(CharSequence text, int index) {
+		if (index >= text.length()) {
+			return -1;
+		}
+		final char c = text.charAt(index);
+		if (Character.isDigit(c) || c == '[') {
+			return 1;
+		}
+		if (c != '#') {
+			return 0;
+		}
+		if (index + 1 >= text.length()) {
+			return -1;
+		}
+		return Character.isDigit(text.charAt(index + 1)) ? 1 : 0;
 	}
 
 	private static final Pattern DOCUMENT_ID_NUMBER = Pattern.compile("\\d");
