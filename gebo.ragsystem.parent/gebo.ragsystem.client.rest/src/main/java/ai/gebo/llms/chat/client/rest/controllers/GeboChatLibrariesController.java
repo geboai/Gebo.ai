@@ -27,6 +27,7 @@ import ai.gebo.architecture.ai.model.AIResourceContent;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import ai.gebo.llms.chat.abstraction.layer.repository.GUserChatSessionRepository;
+import ai.gebo.llms.chat.abstraction.layer.session.model.ChatWrittenFile;
 import ai.gebo.llms.chat.abstraction.layer.session.model.GUserChatSession;
 import ai.gebo.security.services.IGSecurityService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -69,6 +70,22 @@ public class GeboChatLibrariesController {
 			LOGGER.debug("getChatLibraryInstance(" + chatCode + ") -> " + held.size() + " instance(s)");
 		}
 		return held;
+	}
+
+	/**
+	 * The files the tools of the conversation wrote, each once, with the requests
+	 * that wrote them and whether the conversation still holds it as a resource
+	 * that can be downloaded on its own.
+	 */
+	@GetMapping(value = "getChatWrittenFiles", produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<ChatWrittenFile> getChatWrittenFiles(@RequestParam("chatCode") String chatCode) {
+		final GUserChatSession conversation = readable(chatCode);
+		final List<ChatWrittenFile> written = ChatWrittenFile.markDownloadable(ChatWrittenFile.of(conversation),
+				libraries.heldBy(chatCode).values());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("getChatWrittenFiles(" + chatCode + ") -> " + written.size() + " file(s)");
+		}
+		return written;
 	}
 
 	/**

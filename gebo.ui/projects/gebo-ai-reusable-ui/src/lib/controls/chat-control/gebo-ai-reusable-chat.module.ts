@@ -34,6 +34,7 @@ import { SkeletonModule } from '@openng/optimus-ui/skeleton';
 import { OverlayModule } from '@openng/optimus-ui/overlay';
 import { GeboChatUserInfoComponent } from "./chat-info.component";
 import { GeboAIChatLibrariesPanelComponent } from "./chat-libraries-panel.component";
+import { GeboAIChatWrittenFilesComponent } from "./chat-written-files.component";
 import { TableModule } from "@openng/optimus-ui/table";
 import { FieldsetModule } from "@openng/optimus-ui/fieldset";
 import { ScrollTopModule } from '@openng/optimus-ui/scrolltop';
@@ -109,7 +110,7 @@ import { GeboAIChatSuspensionAnswerModule } from "./chat-suspension-answer.modul
       }
     }
   }), ReactiveRagChatService],
-  declarations: [GeboAIChatLibrariesPanelComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
-  exports: [GeboAIChatLibrariesPanelComponent, GeboAIReusableChatComponent]
+  declarations: [GeboAIChatLibrariesPanelComponent, GeboAIChatWrittenFilesComponent, ChangeDescriptionComponent, DocumentRefComponent, GeboAISelectedChatDocumentsComponent, GeboChatUserInfoComponent, GeboAIUploadedDocumentRefComponent, GeboAIChatInputShellComponent, GeboAIGeneratedDocumentRefComponent, GeboAIReusableChatComponent,GeboAIExtensiblePipelineRouteDisplayComponent,GeboAIChatStreamEventsDisplayComponent],
+  exports: [GeboAIChatLibrariesPanelComponent, GeboAIChatWrittenFilesComponent, GeboAIReusableChatComponent]
 })
 export class GeboAIReusableChatModule { }

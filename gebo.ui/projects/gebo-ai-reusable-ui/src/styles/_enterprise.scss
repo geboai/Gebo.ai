@@ -962,6 +962,30 @@ body:has(.p-dialog-mask, .p-drawer-mask) :is(
 
 .gebo-ai-reusable-chat__called-function-name { font-weight: 600; }
 
+/* The files the tools wrote while answering: one per line, with a download when the file is one of its own. */
+.gebo-ai-reusable-chat__written-files {
+  margin: var(--gebo-space-2) 0 0;
+  padding-left: var(--gebo-space-4);
+  list-style: none;
+}
+
+.gebo-ai-reusable-chat__written-file {
+  display: flex;
+  align-items: center;
+  gap: var(--gebo-space-2);
+  min-height: 1.75rem;
+}
+
+.gebo-ai-reusable-chat__written-file-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.gebo-ai-reusable-chat__written-file-location {
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+}
+
 /* How many functions were called, next to the title of the closed list. */
 .gebo-ai-reusable-chat__called-functions-count {
   margin-left: var(--gebo-space-1);
