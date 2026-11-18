@@ -28,7 +28,7 @@ import java.util.List;
  * GAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T13:26:14.222512202+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T14:50:50.322192581+01:00[Europe/Rome]")
 
 public class GAgentConfig {
   @JsonProperty("code")
@@ -219,6 +219,12 @@ public class GAgentConfig {
 
   @JsonProperty("libraryTypeIds")
   private List<String> libraryTypeIds = null;
+
+  @JsonProperty("subscribeAllLibraries")
+  private Boolean subscribeAllLibraries = null;
+
+  @JsonProperty("excludedLibraryTypeIds")
+  private List<String> excludedLibraryTypeIds = null;
 
   @JsonProperty("toolsNeedingConfirmation")
   private List<String> toolsNeedingConfirmation = null;
@@ -837,6 +843,50 @@ public class GAgentConfig {
     this.libraryTypeIds = libraryTypeIds;
   }
 
+  public GAgentConfig subscribeAllLibraries(Boolean subscribeAllLibraries) {
+    this.subscribeAllLibraries = subscribeAllLibraries;
+    return this;
+  }
+
+   /**
+   * Get subscribeAllLibraries
+   * @return subscribeAllLibraries
+  **/
+  @Schema(description = "")
+  public Boolean isSubscribeAllLibraries() {
+    return subscribeAllLibraries;
+  }
+
+  public void setSubscribeAllLibraries(Boolean subscribeAllLibraries) {
+    this.subscribeAllLibraries = subscribeAllLibraries;
+  }
+
+  public GAgentConfig excludedLibraryTypeIds(List<String> excludedLibraryTypeIds) {
+    this.excludedLibraryTypeIds = excludedLibraryTypeIds;
+    return this;
+  }
+
+  public GAgentConfig addExcludedLibraryTypeIdsItem(String excludedLibraryTypeIdsItem) {
+    if (this.excludedLibraryTypeIds == null) {
+      this.excludedLibraryTypeIds = new ArrayList<>();
+    }
+    this.excludedLibraryTypeIds.add(excludedLibraryTypeIdsItem);
+    return this;
+  }
+
+   /**
+   * Get excludedLibraryTypeIds
+   * @return excludedLibraryTypeIds
+  **/
+  @Schema(description = "")
+  public List<String> getExcludedLibraryTypeIds() {
+    return excludedLibraryTypeIds;
+  }
+
+  public void setExcludedLibraryTypeIds(List<String> excludedLibraryTypeIds) {
+    this.excludedLibraryTypeIds = excludedLibraryTypeIds;
+  }
+
   public GAgentConfig toolsNeedingConfirmation(List<String> toolsNeedingConfirmation) {
     this.toolsNeedingConfirmation = toolsNeedingConfirmation;
     return this;
@@ -904,12 +954,14 @@ public class GAgentConfig {
         Objects.equals(this.excludedToolSources, gagentConfig.excludedToolSources) &&
         Objects.equals(this.additionalToolSources, gagentConfig.additionalToolSources) &&
         Objects.equals(this.libraryTypeIds, gagentConfig.libraryTypeIds) &&
+        Objects.equals(this.subscribeAllLibraries, gagentConfig.subscribeAllLibraries) &&
+        Objects.equals(this.excludedLibraryTypeIds, gagentConfig.excludedLibraryTypeIds) &&
         Objects.equals(this.toolsNeedingConfirmation, gagentConfig.toolsNeedingConfirmation);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds, toolsNeedingConfirmation);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, agentType, adaptedAgentNetworkCode, agentNetworkServiceCode, agentServiceId, mainLoopPromptUseCode, customLoopPrompt, subscribeAllTools, agentRoleCode, useDefaultChatModel, useChatModelWithUse, chatModelReference, aclAliases, defaultConfiguration, topP, temperature, thinking, readOnly, conditionsExpiry, accessibleGroups, accessibleUsers, accessibleToAll, enabledFunctions, excludedToolSources, additionalToolSources, libraryTypeIds, subscribeAllLibraries, excludedLibraryTypeIds, toolsNeedingConfirmation);
   }
 
 
@@ -949,6 +1001,8 @@ public class GAgentConfig {
     sb.append("    excludedToolSources: ").append(toIndentedString(excludedToolSources)).append("\n");
     sb.append("    additionalToolSources: ").append(toIndentedString(additionalToolSources)).append("\n");
     sb.append("    libraryTypeIds: ").append(toIndentedString(libraryTypeIds)).append("\n");
+    sb.append("    subscribeAllLibraries: ").append(toIndentedString(subscribeAllLibraries)).append("\n");
+    sb.append("    excludedLibraryTypeIds: ").append(toIndentedString(excludedLibraryTypeIds)).append("\n");
     sb.append("    toolsNeedingConfirmation: ").append(toIndentedString(toolsNeedingConfirmation)).append("\n");
     sb.append("}");
     return sb.toString();

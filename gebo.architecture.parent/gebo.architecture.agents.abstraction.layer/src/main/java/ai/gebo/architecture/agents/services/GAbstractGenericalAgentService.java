@@ -507,28 +507,20 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
-	 * The library types an agent mounts: the ones its configuration names, then the
-	 * ones this service implies for every agent running on it
+	 * The library types an agent mounts ({@link GAgentLibraryTypes#mountedBy}): the
+	 * ones its configuration names, every one the installation has when it mounts
+	 * every library, then the ones this service implies for every agent running on it
 	 * ({@link #getImpliedLibraryTypeIds()}), each once; empty when there are none.
 	 */
 	protected List<String> libraryTypeIdsOf(GAgentConfig agentConfig) {
-		final Set<String> ids = new LinkedHashSet<>();
-		if (agentConfig != null && agentConfig.getLibraryTypeIds() != null) {
-			for (String id : agentConfig.getLibraryTypeIds()) {
-				if (id != null && !id.isBlank()) {
-					ids.add(id);
-				}
-			}
+		final IGAIToolsLibraryInstancesService instances = agentConfig != null
+				&& Boolean.TRUE.equals(agentConfig.getSubscribeAllLibraries()) ? libraryInstances() : null;
+		final List<String> ids = libraryTypeIdsOf(agentConfig, instances != null ? instances.installedTypes() : null);
+		if (LOGGER.isDebugEnabled() && instances != null) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " mounts every library but "
+					+ agentConfig.getExcludedLibraryTypeIds() + ": " + ids);
 		}
-		final List<String> implied = getImpliedLibraryTypeIds();
-		if (implied != null) {
-			for (String id : implied) {
-				if (id != null && !id.isBlank()) {
-					ids.add(id);
-				}
-			}
-		}
-		return List.copyOf(ids);
+		return ids;
 	}
 
 	/**

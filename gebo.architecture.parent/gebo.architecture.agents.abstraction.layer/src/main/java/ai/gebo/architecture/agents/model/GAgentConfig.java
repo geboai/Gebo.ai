@@ -120,6 +120,24 @@ public class GAgentConfig extends GBaseObject
 	protected List<String> libraryTypeIds = null;
 
 	/**
+	 * Whether this agent mounts every library type the installation has, on top of the
+	 * ones it names ({@link #libraryTypeIds}): a library added to the installation
+	 * reaches it with no change to its configuration. The ones it leaves out
+	 * ({@link #excludedLibraryTypeIds}) and the ones mounted only on the agents naming
+	 * them ({@code AIToolsAndResourcesLibraryType.mountedOnlyWhenAsked}) are not
+	 * mounted: the counterpart of {@link #subscribeAllTools} for the libraries. Null
+	 * or false when the agent mounts only the libraries it names.
+	 */
+	private Boolean subscribeAllLibraries = null;
+
+	/**
+	 * The ids of the library types this agent leaves out when it mounts every library
+	 * ({@link #subscribeAllLibraries}); the ones it names ({@link #libraryTypeIds}) are
+	 * never affected. Null or empty when it leaves out none.
+	 */
+	protected List<String> excludedLibraryTypeIds = null;
+
+	/**
 	 * The names of the tools this agent runs only once a person allows each call: the
 	 * call, the tool and its arguments, is put to the conversation's user (or answered in
 	 * the processes area), the work waiting for the answer; a refused call is not run and

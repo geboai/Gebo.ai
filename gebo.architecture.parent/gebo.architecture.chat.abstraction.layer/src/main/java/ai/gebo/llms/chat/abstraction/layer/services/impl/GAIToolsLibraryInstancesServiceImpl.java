@@ -270,6 +270,11 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 	}
 
 	@Override
+	public List<AIToolsAndResourcesLibraryType> installedTypes() {
+		return managed().values().stream().map(Managed::type).toList();
+	}
+
+	@Override
 	public Map<String, AIToolsAndResourcesLibraryInstance> heldBy(String chatSessionCode) {
 		final Map<String, AIToolsAndResourcesLibraryInstance> instances = new LinkedHashMap<>();
 		final GChatLibraryInstances record = chatSessionCode != null ? held.findById(chatSessionCode).orElse(null)

@@ -15,6 +15,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.agents.model.AgentMountedTools;
@@ -25,7 +26,9 @@ import ai.gebo.architecture.agents.model.PipelineType;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
+import ai.gebo.architecture.agents.services.GAgentLibraryTypes;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.model.ToolReference;
 import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
@@ -47,14 +50,18 @@ public class ChatAgentsToolsDescriberImpl implements IGChatAgentsToolsDescriber 
 	private final IAgentConfigDao agentConfigDao;
 	private final IGAgentServiceRuntimeDao agentServicesDao;
 	private final IGToolCallbackSourceRepositoryPattern toolsRepository;
+	// who keeps the library instances, absent in an installation keeping none
+	private final ObjectProvider<IGAIToolsLibraryInstancesService> libraryInstances;
 
 	public ChatAgentsToolsDescriberImpl(IGAgenticChatDefaultNetworkOfAgentsService defaultNetworksService,
 			IAgentConfigDao agentConfigDao, IGAgentServiceRuntimeDao agentServicesDao,
-			IGToolCallbackSourceRepositoryPattern toolsRepository) {
+			IGToolCallbackSourceRepositoryPattern toolsRepository,
+			ObjectProvider<IGAIToolsLibraryInstancesService> libraryInstances) {
 		this.defaultNetworksService = defaultNetworksService;
 		this.agentConfigDao = agentConfigDao;
 		this.agentServicesDao = agentServicesDao;
 		this.toolsRepository = toolsRepository;
+		this.libraryInstances = libraryInstances;
 	}
 
 	@Override
@@ -147,6 +154,8 @@ public class ChatAgentsToolsDescriberImpl implements IGChatAgentsToolsDescriber 
 			return List.of();
 		}
 		final Set<String> ids = new LinkedHashSet<>();
+		// read once, and only when an agent mounts every library
+		List<AIToolsAndResourcesLibraryType> installed = null;
 		for (AgentNetworkParticipant participant : network.getAgents()) {
 			final GAgentConfig config = participant != null && participant.getAgentConfigCode() != null
 					? agentConfigDao.findByCode(participant.getAgentConfigCode())
@@ -154,16 +163,17 @@ public class ChatAgentsToolsDescriberImpl implements IGChatAgentsToolsDescriber 
 			if (config == null) {
 				continue;
 			}
-			if (config.getLibraryTypeIds() != null) {
-				config.getLibraryTypeIds().stream().filter(id -> id != null && !id.isBlank()).forEach(ids::add);
+			if (installed == null && Boolean.TRUE.equals(config.getSubscribeAllLibraries())) {
+				final IGAIToolsLibraryInstancesService instances = libraryInstances != null
+						? libraryInstances.getIfAvailable()
+						: null;
+				installed = instances != null ? instances.installedTypes() : List.of();
 			}
 			final IGGenericAgentService service = config.getAgentServiceId() != null
 					? agentServicesDao.findByCode(config.getAgentServiceId())
 					: null;
-			if (service != null && service.getImpliedLibraryTypeIds() != null) {
-				service.getImpliedLibraryTypeIds().stream().filter(id -> id != null && !id.isBlank())
-						.forEach(ids::add);
-			}
+			ids.addAll(GAgentLibraryTypes.mountedBy(config, service != null ? service.getImpliedLibraryTypeIds() : null,
+					installed));
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("libraryTypeIds(...) profile:" + (profile != null ? profile.getCode() : null) + " network:"

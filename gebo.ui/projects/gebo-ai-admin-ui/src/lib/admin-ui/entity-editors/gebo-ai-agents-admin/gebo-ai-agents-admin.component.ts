@@ -48,6 +48,9 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         // the tools this agent runs only once a person allows each call
         toolsNeedingConfirmation: new FormControl(),
         libraryTypeIds: new FormControl(),
+        // every library the installation has, but the ones left out
+        subscribeAllLibraries: new FormControl(),
+        excludedLibraryTypeIds: new FormControl(),
         aclAliases: new FormControl(),
         defaultConfiguration: new FormControl(),
         temperature: new FormControl(),
@@ -134,7 +137,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         });
         // a library's tool takes the place of a mounted tool of its name: the administrator
         // is told while editing what would be lost
-        merge(this.collisionsCheck, ...["agentServiceId", "libraryTypeIds", "enabledFunctions", "subscribeAllTools", "excludedToolSources"]
+        merge(this.collisionsCheck, ...["agentServiceId", "libraryTypeIds", "subscribeAllLibraries", "excludedLibraryTypeIds", "enabledFunctions", "subscribeAllTools", "excludedToolSources"]
             .map(name => this.formGroup.controls[name].valueChanges))
             .pipe(debounceTime(300), switchMap(() => this.checkToolCollisions()))
             .subscribe(collisions => this.toolCollisions = collisions);
@@ -158,10 +161,21 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         super.onLoadedPersistentData(actualValue);
         this.collisionsCheck.next();
     }
+    /** The libraries mounting every library adds: the ones mounted only when named are not among them. */
+    protected librariesMountedByEveryLibrary(): AIToolsAndResourcesLibraryType[] {
+        return this.libraryTypes.filter(type => type.mountedOnlyWhenAsked !== true);
+    }
+
+    /** The libraries an agent gets only by naming them, for the hint of mounting every library. */
+    protected librariesMountedOnlyWhenNamed(): string {
+        return this.libraryTypes.filter(type => type.mountedOnlyWhenAsked === true)
+            .map(type => type.description || type.id).join(", ");
+    }
+
     /** The collisions of the agent as the form stands, saved or not; none with no library. */
     private checkToolCollisions(): Observable<LibraryToolCollision[]> {
         const agent: GAgentConfig = { ...this.entity, ...this.formGroup.getRawValue() };
-        if (!agent.libraryTypeIds?.length || !agent.agentServiceId) {
+        if ((!agent.libraryTypeIds?.length && agent.subscribeAllLibraries !== true) || !agent.agentServiceId) {
             return of([]);
         }
         return this.agentsAdminService.checkAgentToolCollisions(agent).pipe(
