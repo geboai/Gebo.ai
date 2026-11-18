@@ -18,4 +18,5 @@ export interface AIToolsAndResourcesLibraryType {
     metaData?: { [key: string]: any; };
     resourcesTypes: Array<AIResourceType>;
     tools: Array<ToolReference>;
+    uploadFileTypes?: Array<string>;
 }

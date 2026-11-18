@@ -17,6 +17,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { GChatUploadFileTypes } from '../model/gChatUploadFileTypes';
 import { OperationStatusListUserUploadedContent } from '../model/operationStatusListUserUploadedContent';
 import { UserUploadedContent } from '../model/userUploadedContent';
 
@@ -55,6 +56,55 @@ export class GeboUserChatUploadsControllerService {
         return false;
     }
 
+
+    /**
+     * 
+     * 
+     * @param userSessionCode 
+     * @param chatProfileCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public acceptedFileTypes(userSessionCode?: string, chatProfileCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GChatUploadFileTypes>;
+    public acceptedFileTypes(userSessionCode?: string, chatProfileCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GChatUploadFileTypes>>;
+    public acceptedFileTypes(userSessionCode?: string, chatProfileCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GChatUploadFileTypes>>;
+    public acceptedFileTypes(userSessionCode?: string, chatProfileCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (userSessionCode !== undefined && userSessionCode !== null) {
+            queryParameters = queryParameters.set('userSessionCode', <any>userSessionCode);
+        }
+        if (chatProfileCode !== undefined && chatProfileCode !== null) {
+            queryParameters = queryParameters.set('chatProfileCode', <any>chatProfileCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GChatUploadFileTypes>('get',`${this.basePath}/api/users/GeboUserChatUploadsController/acceptedFileTypes`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
 
     /**
      * 

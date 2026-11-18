@@ -1,5 +1,6 @@
 package ai.gebo.architecture.ai.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,13 @@ public class AIToolsAndResourcesLibraryType {
 	 */
 	@JsonIgnore
 	private String agentRules = null;
+	/**
+	 * The files a user may upload to a chat for this library's tools to work on, by
+	 * their extension with the dot (.pptx, .png). The chats whose agents hold the
+	 * library accept them even when no content handler reads them: such an upload is
+	 * kept for the tools, which find it among the conversation's uploads, and is not
+	 * read into the chat - the models get no picture or sound of it. Empty when the
+	 * library works on no uploaded file.
+	 */
+	private List<String> uploadFileTypes = new ArrayList<>();
 }

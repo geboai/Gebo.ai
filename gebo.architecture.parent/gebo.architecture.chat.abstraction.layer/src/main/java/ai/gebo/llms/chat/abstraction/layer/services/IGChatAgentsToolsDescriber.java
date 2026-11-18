@@ -28,4 +28,16 @@ public interface IGChatAgentsToolsDescriber {
 	 *         or no network resolves.
 	 */
 	public List<AgentToolsInfo> describeAgentsTools(GChatProfileConfiguration profile);
+
+	/**
+	 * The library types the agents of the network the chats of the profile are handed
+	 * to mount: each agent's configured ones, then the ones its service implies, each
+	 * once. A null profile means a free chat, without knowledge bases.
+	 *
+	 * @return the library types in the network's order, empty when the agentic chats
+	 *         are off or no network resolves.
+	 */
+	public default List<String> libraryTypeIds(GChatProfileConfiguration profile) {
+		return List.of();
+	}
 }

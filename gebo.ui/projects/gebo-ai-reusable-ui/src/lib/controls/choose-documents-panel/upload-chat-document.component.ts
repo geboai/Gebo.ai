@@ -1,6 +1,6 @@
 import { Component, forwardRef, Input, OnChanges, OnInit, SimpleChanges, Output, EventEmitter, ChangeDetectionStrategy } from "@angular/core";
 import { ControlValueAccessor, FormControl, FormGroup, NG_VALUE_ACCESSOR } from "@angular/forms";
-import { GeboUserChatUploadsControllerService, IngestionFileTypesLibraryControllerService, UserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { GeboUserChatUploadsControllerService, UserUploadedContent, GUserMessage, GUserChatInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIFieldHost } from "../field-host-component-iface/field-host-component-iface";
 import { GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 
@@ -60,8 +60,13 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
 
     protected url!: string;
 
+    /**
+     * The files accepted only for the tools of the chat's agents: no content handler
+     * reads them, so they are not read into the chat, and the models get no picture of them.
+     */
+    protected toolsExtensions: string[] = [];
+
     constructor(
-        private contentTypeService: IngestionFileTypesLibraryControllerService,
         private messageService: GeboAIRootNotificationService,
         private geboAITranslatorService: GeboAITranslationService,
         private chatDocumentsUploadService: GeboUserChatUploadsControllerService,
@@ -72,25 +77,25 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
     }
     ngOnInit(): void {
         this.headers = getHttpHeaders();
+        this.loadAcceptedFileTypes();
+    }
+
+    /**
+     * The files this chat accepts: the ones read into the chat, then the ones its
+     * agents' libraries work on - by the chat session, else by the profile a RAG chat
+     * is being created with (none for a free chat).
+     */
+    private loadAcceptedFileTypes(): void {
+        const profile = !this.userSessionCode && this.ragChat === true ? this.chatProfileCode : undefined;
         this.loading = true;
-        this.contentTypeService.getAllFileTypes().subscribe({
+        this.chatDocumentsUploadService.acceptedFileTypes(this.userSessionCode, profile).subscribe({
             next: (value) => {
-                const extensions: string[] = [];
-                value.forEach(x => {
-                    if (x.extensions) {
-                        x.extensions.forEach(e => {
-                            extensions.push(e);
-                        });
-                    }
-                });
-                let extstring: string = "";
-                extensions.forEach((e, i) => {
-                    extstring += e;
-                    if (i < extensions.length - 1) {
-                        extstring += ",";
-                    }
-                });
-                this.filesExtensionsFlatList = extstring;
+                const chat = value?.chatExtensions ?? [];
+                this.toolsExtensions = value?.toolsExtensions ?? [];
+                this.filesExtensionsFlatList = [...chat, ...this.toolsExtensions].join(",");
+            },
+            error: () => {
+                this.loading = false;
             },
             complete: () => {
                 this.loading = false;
@@ -98,6 +103,11 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
         });
     }
     ngOnChanges(changes: SimpleChanges): void {
+        if ((changes['userSessionCode'] && !changes['userSessionCode'].firstChange)
+            || (changes['chatProfileCode'] && !changes['chatProfileCode'].firstChange)
+            || (changes['ragChat'] && !changes['ragChat'].firstChange)) {
+            this.loadAcceptedFileTypes();
+        }
 
         if (this.userSessionCode) {
             this.url = this.urlBulder.buildUrl(urlPostfix, this.userSessionCode);

@@ -28,7 +28,7 @@ import java.util.Map;
  * AIToolsAndResourcesLibraryType
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T10:46:55.252892997+01:00[Europe/Rome]")
 
 public class AIToolsAndResourcesLibraryType {
   @JsonProperty("id")
@@ -45,6 +45,9 @@ public class AIToolsAndResourcesLibraryType {
 
   @JsonProperty("tools")
   private List<ToolReference> tools = new ArrayList<>();
+
+  @JsonProperty("uploadFileTypes")
+  private List<String> uploadFileTypes = null;
 
   public AIToolsAndResourcesLibraryType id(String id) {
     this.id = id;
@@ -154,6 +157,32 @@ public class AIToolsAndResourcesLibraryType {
     this.tools = tools;
   }
 
+  public AIToolsAndResourcesLibraryType uploadFileTypes(List<String> uploadFileTypes) {
+    this.uploadFileTypes = uploadFileTypes;
+    return this;
+  }
+
+  public AIToolsAndResourcesLibraryType addUploadFileTypesItem(String uploadFileTypesItem) {
+    if (this.uploadFileTypes == null) {
+      this.uploadFileTypes = new ArrayList<>();
+    }
+    this.uploadFileTypes.add(uploadFileTypesItem);
+    return this;
+  }
+
+   /**
+   * Get uploadFileTypes
+   * @return uploadFileTypes
+  **/
+  @Schema(description = "")
+  public List<String> getUploadFileTypes() {
+    return uploadFileTypes;
+  }
+
+  public void setUploadFileTypes(List<String> uploadFileTypes) {
+    this.uploadFileTypes = uploadFileTypes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -168,12 +197,13 @@ public class AIToolsAndResourcesLibraryType {
         Objects.equals(this.description, aiToolsAndResourcesLibraryType.description) &&
         Objects.equals(this.metaData, aiToolsAndResourcesLibraryType.metaData) &&
         Objects.equals(this.resourcesTypes, aiToolsAndResourcesLibraryType.resourcesTypes) &&
-        Objects.equals(this.tools, aiToolsAndResourcesLibraryType.tools);
+        Objects.equals(this.tools, aiToolsAndResourcesLibraryType.tools) &&
+        Objects.equals(this.uploadFileTypes, aiToolsAndResourcesLibraryType.uploadFileTypes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, metaData, resourcesTypes, tools);
+    return Objects.hash(id, description, metaData, resourcesTypes, tools, uploadFileTypes);
   }
 
 
@@ -187,6 +217,7 @@ public class AIToolsAndResourcesLibraryType {
     sb.append("    metaData: ").append(toIndentedString(metaData)).append("\n");
     sb.append("    resourcesTypes: ").append(toIndentedString(resourcesTypes)).append("\n");
     sb.append("    tools: ").append(toIndentedString(tools)).append("\n");
+    sb.append("    uploadFileTypes: ").append(toIndentedString(uploadFileTypes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -217,7 +217,8 @@ public class AIDocumentsSet implements IAIContent, IJsonClonable<AIDocumentsSet>
 	public static AIDocumentsSet from(List<Document> documents) {
 
 		Map<String, AIDocumentReferenceItem> data = new HashMap<String, AIDocumentReferenceItem>();
-		for (Document document : documents) {
+		// none for an upload kept only for the agents' tools: it has no ingested text
+		for (Document document : documents != null ? documents : List.<Document>of()) {
 			AIDocumentFragment fragment = new AIDocumentFragment(document,
 					ExtractedDocumentMetaData.of(document.getMetadata()));
 			data.computeIfAbsent(fragment.getCode(), (code) -> {

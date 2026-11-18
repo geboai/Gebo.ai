@@ -15,14 +15,14 @@ export interface GJobStatusItem {
     description?: string;
     error?: boolean;
     code?: string;
-    workflowType?: string;
     workflowId?: string;
+    workflowType?: string;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
     startDateTime?: Date;
-    endDateTime?: Date;
-    finished?: boolean;
-    jobType?: GJobStatusItem.JobTypeEnum;
     processing?: boolean;
+    finished?: boolean;
+    endDateTime?: Date;
+    jobType?: GJobStatusItem.JobTypeEnum;
 }
 export namespace GJobStatusItem {
     export type JobTypeEnum = 'CONTENTS_READING' | 'VECTORIZING_CONTENTS' | 'CONTENTS_READING_VECTORIZING';

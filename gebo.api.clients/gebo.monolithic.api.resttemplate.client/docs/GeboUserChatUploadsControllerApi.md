@@ -4,9 +4,55 @@ All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
+[**acceptedFileTypes**](GeboUserChatUploadsControllerApi.md#acceptedFileTypes) | **GET** /api/users/GeboUserChatUploadsController/acceptedFileTypes | 
 [**chatSessionUpload**](GeboUserChatUploadsControllerApi.md#chatSessionUpload) | **POST** /api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode} | 
 [**deleteSessionUploads**](GeboUserChatUploadsControllerApi.md#deleteSessionUploads) | **DELETE** /api/users/GeboUserChatUploadsController/deleteSessionUploads/{userSessionCode} | 
 [**serveContent**](GeboUserChatUploadsControllerApi.md#serveContent) | **GET** /api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId} | 
+
+<a name="acceptedFileTypes"></a>
+# **acceptedFileTypes**
+> GChatUploadFileTypes acceptedFileTypes(userSessionCode, chatProfileCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
+
+
+GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
+String userSessionCode = "userSessionCode_example"; // String | 
+String chatProfileCode = "chatProfileCode_example"; // String | 
+try {
+    GChatUploadFileTypes result = apiInstance.acceptedFileTypes(userSessionCode, chatProfileCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatUploadsControllerApi#acceptedFileTypes");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **userSessionCode** | **String**|  | [optional]
+ **chatProfileCode** | **String**|  | [optional]
+
+### Return type
+
+[**GChatUploadFileTypes**](GChatUploadFileTypes.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
 
 <a name="chatSessionUpload"></a>
 # **chatSessionUpload**
