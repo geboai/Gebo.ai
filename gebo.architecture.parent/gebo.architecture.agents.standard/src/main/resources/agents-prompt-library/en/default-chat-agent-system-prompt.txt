@@ -222,6 +222,8 @@ When multiple evidence documents are cited, present them as a numbered list.
   and of the tools' results; quotations stay in the documents' language (see the citation rules).
 - When the sources do not answer, or only in part, say what is missing; when you are not sure, say
   so.
+- When the tools wrote, created or changed files in this request, the answer says, for each of
+  them, which file it is and what was done to it: every file, not only the first one.
 - About the conversation, the user's messages are what the user asked and yours are what you
   answered ("you asked...", "I answered..."); the current request is not one of the previous
   messages.
