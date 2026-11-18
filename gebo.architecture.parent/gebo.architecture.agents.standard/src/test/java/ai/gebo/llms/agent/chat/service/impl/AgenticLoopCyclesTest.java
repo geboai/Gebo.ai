@@ -222,4 +222,46 @@ class AgenticLoopCyclesTest {
 		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.DISCARDED_DRAFT + "A draft on a thin coverage."),
 				"the draft the user never saw, to build on: " + story);
 	}
+
+	// ---------------------------------------------------------------- the files the answer does not name
+
+	private static final List<ai.gebo.architecture.ai.files.GConversationFile> WRITTEN = List.of(
+			new ai.gebo.architecture.ai.files.GConversationFile("presentations-folder", "budget-2027.pptx", "v1"),
+			new ai.gebo.architecture.ai.files.GConversationFile("spreadsheets-folder", "q/sales-2027.xlsx", "v1"));
+
+	@Test
+	void theFilesTheAnswerDoesNotNameAreListedAfterIt() {
+		assertEquals("\n\n" + AgenticLoopReactiveAgentServiceImpl.UNNAMED_WRITTEN_FILES_LABEL
+				+ "`spreadsheets-folder/q/sales-2027.xlsx`",
+				AgenticLoopReactiveAgentServiceImpl.unnamedWrittenFiles("## Deck created: `Budget-2027.PPTX`  ", WRITTEN),
+				"the deck is named, in any case; the workbook is not");
+		assertEquals("", AgenticLoopReactiveAgentServiceImpl
+				.unnamedWrittenFiles("Built budget-2027.pptx and sales-2027.xlsx.\n", WRITTEN), "both named");
+		assertEquals("", AgenticLoopReactiveAgentServiceImpl.unnamedWrittenFiles("Nothing written.", List.of()));
+		assertEquals("\n" + AgenticLoopReactiveAgentServiceImpl.UNNAMED_WRITTEN_FILES_LABEL
+				+ "`presentations-folder/budget-2027.pptx`, `spreadsheets-folder/q/sales-2027.xlsx`",
+				AgenticLoopReactiveAgentServiceImpl.unnamedWrittenFiles("Done.\n", WRITTEN));
+		assertEquals(AgenticLoopReactiveAgentServiceImpl.UNNAMED_WRITTEN_FILES_LABEL
+				+ "`presentations-folder/budget-2027.pptx`, `spreadsheets-folder/q/sales-2027.xlsx`",
+				AgenticLoopReactiveAgentServiceImpl.unnamedWrittenFiles("", WRITTEN), "an empty answer: the line alone");
+	}
+
+	@Test
+	void theLastAnswersClosingStreamsAndIsPartOfTheResponse() {
+		ScriptedLoopAgent agent = new ScriptedLoopAgent(List.of(List.of("x")));
+		CycleRenderer renderer = agent.new CycleRenderer(5, persona(), mock(INotificationSink.class),
+				new ToolCallsListener(), answer -> {
+				}, answer -> {
+				}, text -> AgenticLoopReactiveAgentServiceImpl.unnamedWrittenFiles(text, WRITTEN));
+
+		List<GeboChatMessageEnvelope> out = messages(renderer, "Deck one" + END + "## Deck: budget-2027.pptx");
+
+		final String closing = "\n\n" + AgenticLoopReactiveAgentServiceImpl.UNNAMED_WRITTEN_FILES_LABEL
+				+ "`spreadsheets-folder/q/sales-2027.xlsx`";
+		assertEquals(closing, out.get(out.size() - 2).getContent(), "streamed as the rest of the answer");
+		assertEquals("## Deck: budget-2027.pptx" + closing,
+				((GeboChatResponse) out.get(out.size() - 1).getContent()).getQueryResponse(), "and kept with it");
+		assertEquals("Deck one", ((GeboChatResponse) out.get(0 + 1).getContent()).getQueryResponse(),
+				"a cycle's answer, written again by the next one, gets none");
+	}
 }
