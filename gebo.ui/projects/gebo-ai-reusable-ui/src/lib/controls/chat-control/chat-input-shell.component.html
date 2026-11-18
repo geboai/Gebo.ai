@@ -26,8 +26,6 @@
 
         <p-contextMenu #contextAddChatBehaviorMenu1 [model]="addBehaviorsMenu" appendTo="body">
         </p-contextMenu>
-        <gebo-ai-chat-libraries-panel [userChatContextCode]="userChatContextCode" [refreshKey]="$safeNavigationMigration(interactions?.length)"
-          [disabled]="loading"></gebo-ai-chat-libraries-panel>
       </div>
       <textarea id="QueryControl" gebo-ai-label rows="5" pTextarea class="chat-input-shell__frame-input" placeholder="Write a message for the chat bot"
         formControlName="query" [autoResize]="true" [required]="true" (keydown.enter)="onEnterKey($event)">
@@ -60,6 +58,9 @@
       </div>
     }
     <div class="chat-input-shell__frame_chip card flex items-center gap-2 flex-wrap">
+      <!-- under the text box, not over it: a labelled button there covered what the user writes -->
+      <gebo-ai-chat-libraries-panel [userChatContextCode]="userChatContextCode" [refreshKey]="$safeNavigationMigration(interactions?.length)"
+        [disabled]="loading"></gebo-ai-chat-libraries-panel>
       @if (choosedPipelineRoutingChip) {
         <p-chip #actualRoutingChoiceChip [icon]="choosedPipelineRoutingChip.icon"
           [label]="choosedPipelineRoutingChip.description" [removable]="choosedPipelineRoutingChip.defaultOption!==true"
