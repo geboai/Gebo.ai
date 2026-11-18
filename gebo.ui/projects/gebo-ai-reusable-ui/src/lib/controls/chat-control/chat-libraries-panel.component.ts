@@ -79,11 +79,6 @@ export class GeboAIChatLibrariesPanelComponent implements OnChanges {
         return this.instances.length > 0;
     }
 
-    /** How many resources the conversation's libraries hold: shown on the button, so new files are seen without opening it. */
-    public get resourcesCount(): number {
-        return this.instances.reduce((count, instance) => count + (instance.resources?.length ?? 0), 0);
-    }
-
     public resourcesOf(instance: AIToolsAndResourcesLibraryInstance): AIResource[] {
         return instance.resources || [];
     }
