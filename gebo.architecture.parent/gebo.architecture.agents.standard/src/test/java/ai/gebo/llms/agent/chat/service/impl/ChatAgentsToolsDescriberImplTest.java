@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 
 import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.GAgentConfig;
@@ -31,6 +32,7 @@ import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGAgenticChatDefaultNetworkOfAgentsService;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.architecture.ai.model.ToolCategoriesTree;
 import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
@@ -48,8 +50,11 @@ class ChatAgentsToolsDescriberImplTest {
 	private final IAgentConfigDao configs = mock(IAgentConfigDao.class);
 	private final IGAgentServiceRuntimeDao services = mock(IGAgentServiceRuntimeDao.class);
 	private final IGToolCallbackSourceRepositoryPattern tools = mock(IGToolCallbackSourceRepositoryPattern.class);
+	private final IGAIToolsLibraryInstancesService instances = mock(IGAIToolsLibraryInstancesService.class);
+	@SuppressWarnings("unchecked")
+	private final ObjectProvider<IGAIToolsLibraryInstancesService> instancesProvider = mock(ObjectProvider.class);
 	private final ChatAgentsToolsDescriberImpl describer = new ChatAgentsToolsDescriberImpl(defaults, configs,
-			services, tools);
+			services, tools, instancesProvider);
 
 	@Test
 	void nothingWhenTheAgenticChatsAreOff() {
@@ -188,6 +193,39 @@ class ChatAgentsToolsDescriberImplTest {
 		assertEquals(List.of("text-documents-folder", "presentations-folder", "user-questions"),
 				describer.libraryTypeIds(profile), "configured first, then implied, each once; no blank; none for a"
 						+ " participant without configuration or service");
+	}
+
+	@Test
+	void anAgentMountingEveryLibraryGetsTheInstalledOnesButTheExcludedAndTheOnesAskedForOnly() {
+		when(defaults.isAgenticChatNetworksEnabled()).thenReturn(true);
+		GAgentsNetwork network = new GAgentsNetwork();
+		network.setCode("LOOP");
+		AgentNetworkParticipant loopAgent = new AgentNetworkParticipant();
+		loopAgent.setAgentConfigCode("loop");
+		network.setAgents(List.of(loopAgent));
+		when(defaults.resolveChatNetwork(PipelineType.PURE_CHAT_PIPELINE, null)).thenReturn(network);
+		GAgentConfig loop = new GAgentConfig();
+		loop.setCode("loop");
+		loop.setAgentServiceId("loopService");
+		loop.setLibraryTypeIds(List.of("user-questions"));
+		loop.setSubscribeAllLibraries(true);
+		loop.setExcludedLibraryTypeIds(List.of("working-directory", "user-questions"));
+		when(configs.findByCode("loop")).thenReturn(loop);
+		when(instancesProvider.getIfAvailable()).thenReturn(instances);
+		when(instances.installedTypes()).thenReturn(List.of(type("user-questions", false),
+				type("working-directory", false), type("presentations-folder", false),
+				type("human-in-the-loop-requests", true), type("spreadsheets-folder", false)));
+
+		assertEquals(List.of("user-questions", "presentations-folder", "spreadsheets-folder"),
+				describer.libraryTypeIds(null), "named first, never excluded; then the installed ones, but the"
+						+ " excluded and the ones mounted only when asked");
+	}
+
+	private static AIToolsAndResourcesLibraryType type(String id, boolean onlyWhenAsked) {
+		AIToolsAndResourcesLibraryType type = new AIToolsAndResourcesLibraryType();
+		type.setId(id);
+		type.setMountedOnlyWhenAsked(onlyWhenAsked);
+		return type;
 	}
 
 	@Test

@@ -4997,8 +4997,17 @@
       },
       "libraryTypeIds": {
         "label": "Libraries of tools and resources",
-        "help": "The libraries this agent works with, whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a chosen library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available."
+        "help": "The libraries this agent names, mounted whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available."
       },
+      "subscribeAllLibraries": {
+        "label": "Every library of the installation",
+        "help": "Mount every library this installation has, the ones added later too, but the ones left out: the libraries named above are mounted in any case."
+      },
+      "excludedLibraryTypeIds": {
+        "label": "Libraries left out",
+        "help": "With every library mounted, these libraries are never mounted on this agent, unless named above."
+      },
+      "LibrariesOnlyWhenNamedHint": { "label": "Mounted only when named above:" },
       "temperature": {
         "label": "Temperature",
         "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"
@@ -6020,6 +6029,9 @@
       "CfgDefaultModel": { "label": "system default" },
       "CfgToolsLabel": { "label": "Tools" },
       "CfgAllTools": { "label": "every registered tool" },
+      "CfgLibrariesLabel": { "label": "Libraries" },
+      "CfgAllLibraries": { "label": "every library" },
+      "CfgExcludedLibrariesLabel": { "label": "left out" },
       "CfgExcludedSourcesLabel": {
         "label": "tool source(s) left out by this configuration"
       },

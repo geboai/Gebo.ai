@@ -165,12 +165,33 @@
 
                     <div class="col-12">
                       <gebo-ai-field id="libraryTypeIds" label="Libraries of tools and resources"
-                        help="The libraries this agent works with, whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a chosen library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available.">
+                        help="The libraries this agent names, mounted whole: a library is a bundle of tools and the resources they work on - a working directory with its file tools, a sandbox with its code tools. Every tool of a library is mounted, none is picked one by one, and the resources are those of the instance the run holds; in a run holding none, its tools say the library is not available.">
                         <p-multiSelect id="libraryTypeIds" formControlName="libraryTypeIds"
                           [options]="libraryTypes" optionLabel="description" optionValue="id" display="chip"
                           [maxSelectedLabels]="100" [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
                       </gebo-ai-field>
                     </div>
+
+                    <div class="col-12 md:col-4">
+                      <gebo-ai-field id="subscribeAllLibraries" label="Every library of the installation"
+                        help="Mount every library this installation has, the ones added later too, but the ones left out: the libraries named above are mounted in any case.">
+                        <p-check-box formControlName="subscribeAllLibraries" [binary]="true" [trueValue]="true" [falseValue]="false"
+                          gebo-ai-field-element></p-check-box>
+                      </gebo-ai-field>
+                    </div>
+                    @if (formGroup.controls['subscribeAllLibraries'].value) {
+                      <div class="col-12 md:col-8">
+                        <gebo-ai-field id="excludedLibraryTypeIds" label="Libraries left out"
+                          help="With every library mounted, these libraries are never mounted on this agent, unless named above.">
+                          <p-multiSelect id="excludedLibraryTypeIds" formControlName="excludedLibraryTypeIds"
+                            [options]="librariesMountedByEveryLibrary()" optionLabel="description" optionValue="id" display="chip"
+                            [maxSelectedLabels]="100" [showClear]="true" styleClass="w-full" appendTo="body" gebo-ai-field-element />
+                        </gebo-ai-field>
+                        @if (librariesMountedOnlyWhenNamed()) {
+                          <small class="text-muted-color"><span id="LibrariesOnlyWhenNamedHint" gebo-ai-text>Mounted only when named above:</span> {{librariesMountedOnlyWhenNamed()}}</small>
+                        }
+                      </div>
+                    }
 
                     @if (toolCollisions.length) {
                       <div class="col-12">

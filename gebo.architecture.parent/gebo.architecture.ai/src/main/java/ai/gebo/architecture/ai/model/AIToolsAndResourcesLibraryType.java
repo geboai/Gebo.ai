@@ -35,4 +35,15 @@ public class AIToolsAndResourcesLibraryType {
 	 * library works on no uploaded file.
 	 */
 	private List<String> uploadFileTypes = new ArrayList<>();
+	/**
+	 * Whether the library reaches an agent only when the agent names it
+	 * ({@code GAgentConfig.libraryTypeIds}), instead of being mounted on every agent
+	 * that mounts every library ({@code GAgentConfig.subscribeAllLibraries}), as all
+	 * but a few are. A library answers true when its tools belong to some agents and
+	 * to nobody else, as the requests a person answers as a process: on a chat agent
+	 * they would compete with what the chat already does. It is the library's own
+	 * nature, not an installation's choice: an agent leaves other libraries out with
+	 * {@code GAgentConfig.excludedLibraryTypeIds}.
+	 */
+	private boolean mountedOnlyWhenAsked = false;
 }

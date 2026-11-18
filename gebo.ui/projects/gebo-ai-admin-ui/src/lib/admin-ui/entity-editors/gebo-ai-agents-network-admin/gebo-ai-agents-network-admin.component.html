@@ -336,6 +336,10 @@
                                 <span><span id="CfgModelLabel" gebo-ai-text class="font-semibold text-muted-color">Chat model</span>&nbsp;
                                   @if (config.useDefaultChatModel !== false) { <span id="CfgDefaultModel" gebo-ai-text>system default</span> } @else { {{config.chatModelReference?.description || config.chatModelReference?.code || '—'}} }
                                 </span>
+                                <span><span id="CfgLibrariesLabel" gebo-ai-text class="font-semibold text-muted-color">Libraries</span>&nbsp;
+                                  @if (config.subscribeAllLibraries) { <span id="CfgAllLibraries" gebo-ai-text>every library</span>@if (config.excludedLibraryTypeIds?.length) { ({{config.excludedLibraryTypeIds!.length}} <span id="CfgExcludedLibrariesLabel" gebo-ai-text>left out</span>) }@if (config.libraryTypeIds?.length) { + {{config.libraryTypeIds!.join(', ')}} } }
+                                  @else { {{config.libraryTypeIds?.length ? config.libraryTypeIds!.join(', ') : '—'}} }
+                                </span>
                                 <span><span id="CfgToolsLabel" gebo-ai-text class="font-semibold text-muted-color">Tools</span>&nbsp;
                                   @if (config.subscribeAllTools) { <span id="CfgAllTools" gebo-ai-text>every registered tool</span>@if (config.excludedToolSources?.length) { ({{config.excludedToolSources!.length}} <span id="CfgExcludedSourcesLabel" gebo-ai-text>tool source(s) left out by this configuration</span>) } } @else { {{(config.enabledFunctions || []).length}} }
                                 </span>

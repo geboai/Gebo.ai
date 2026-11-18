@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.agents.services.GAgentLibraryTypes;
 import ai.gebo.architecture.agents.services.IAgentConfigDao;
 import ai.gebo.architecture.agents.services.IGAgentServiceRuntimeDao;
 import ai.gebo.architecture.agents.services.IGGenericAgentService;
@@ -86,10 +87,7 @@ public class AgentToolCollisionsStartupCheck {
 				continue;
 			}
 			final IGGenericAgentService service = services.findByCode(config.getAgentServiceId());
-			final boolean namesALibrary = config.getLibraryTypeIds() != null && !config.getLibraryTypeIds().isEmpty();
-			final boolean serviceImpliesOne = service != null && service.getImpliedLibraryTypeIds() != null
-					&& !service.getImpliedLibraryTypeIds().isEmpty();
-			if (service == null || (!namesALibrary && !serviceImpliesOne)) {
+			if (service == null || !GAgentLibraryTypes.mayMountAny(config, service.getImpliedLibraryTypeIds())) {
 				continue;
 			}
 			final AgentMountedTools mounted = service.getMountedTools(config);

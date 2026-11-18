@@ -77,6 +77,12 @@ public interface IGAIToolsLibraryInstancesService {
 	List<AIToolsAndResourcesLibraryType> typesOf(Collection<String> libraryTypeIds);
 
 	/**
+	 * Every library type this installation has, from its library sources: the ones an
+	 * agent mounting every library may get.
+	 */
+	List<AIToolsAndResourcesLibraryType> installedTypes();
+
+	/**
 	 * The instances the conversation holds now, by library type id, as they are:
 	 * nothing is created, an instance that is gone is left out. For whoever looks
 	 * at what a conversation has - its resources, which of them can be taken away.

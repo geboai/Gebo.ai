@@ -87,6 +87,9 @@ public class AgenticLoopAgentsInitialization {
 		// the agent answering the user may ask the user a question the work waits for:
 		// the tools are mounted only on the agents that name their library
 		config.setLibraryTypeIds(List.of(UserQuestionsLibrarySource.TYPE_ID));
+		// and it works with every library the installation has, the ones added later
+		// too, but the ones mounted only on the agents naming them
+		config.setSubscribeAllLibraries(true);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Declaring the agentic loop agent config code:" + code + " service:" + serviceId
 					+ " on prompt use:" + config.getMainLoopPromptUseCode());

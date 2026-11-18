@@ -177,6 +177,69 @@ class AgentLibraryTypesMountingTest {
 	}
 
 	@Test
+	void anAgentMountingEveryLibraryGetsTheInstalledOnesButTheExcludedAndTheOnesAskedForOnly() {
+		AIToolsAndResourcesLibraryType directory = aLibraryType(WORKING_DIRECTORY, "readFile");
+		AIToolsAndResourcesLibraryType slides = aLibraryType("presentations-folder", "addSlide");
+		AIToolsAndResourcesLibraryType sheets = aLibraryType("spreadsheets-folder", "appendRows");
+		AIToolsAndResourcesLibraryType requests = aLibraryType("human-in-the-loop-requests", "askForHumanInTheLoop");
+		requests.setMountedOnlyWhenAsked(true);
+		List<AIToolsAndResourcesLibraryType> installed = List.of(directory, slides, sheets, requests);
+		IGAIToolsLibraryInstancesService instances = mock(IGAIToolsLibraryInstancesService.class);
+		when(instances.installedTypes()).thenReturn(installed);
+		// as the installation answers: in the order asked, the ones it has
+		when(instances.typesOf(any())).thenAnswer(call -> {
+			java.util.Collection<String> ids = call.getArgument(0);
+			return ids.stream().flatMap(id -> installed.stream().filter(type -> type.getId().equals(id))).toList();
+		});
+		AnAgentService service = new AnAgentService(registryOf(), binderOf(instances));
+		GAgentConfig everyLibrary = new GAgentConfig();
+		everyLibrary.setCode("every-library");
+		everyLibrary.setSubscribeAllLibraries(true);
+		everyLibrary.setExcludedLibraryTypeIds(List.of("spreadsheets-folder"));
+
+		assertEquals(List.of("readFile", "addSlide"), names(service.getMountedTools(everyLibrary)),
+				"the excluded one and the one mounted only when asked are left out");
+
+		everyLibrary.setLibraryTypeIds(List.of("human-in-the-loop-requests", "spreadsheets-folder"));
+		assertEquals(List.of("askForHumanInTheLoop", "appendRows", "readFile", "addSlide"),
+				names(service.getMountedTools(everyLibrary)), "a library named is mounted, asked for only or excluded");
+	}
+
+	@Test
+	void anAgentNotMountingEveryLibraryNeverReadsTheInstallation() {
+		IGAIToolsLibraryInstancesService instances = anInstallationWith(aLibraryType(WORKING_DIRECTORY, "readFile"));
+		AnAgentService service = new AnAgentService(registryOf(), binderOf(instances));
+
+		service.getMountedTools(aCoder());
+
+		verify(instances, never()).installedTypes();
+	}
+
+	@Test
+	void theLibrariesOfAnAgentNamedThenInstalledThenImpliedEachOnce() {
+		AIToolsAndResourcesLibraryType asked = aLibraryType("asked");
+		asked.setMountedOnlyWhenAsked(true);
+		List<AIToolsAndResourcesLibraryType> installed = List.of(aLibraryType("a"), aLibraryType("b"), asked,
+				aLibraryType("c"));
+		GAgentConfig config = new GAgentConfig();
+		config.setLibraryTypeIds(List.of("c", " "));
+		config.setExcludedLibraryTypeIds(List.of("b", "c"));
+
+		assertEquals(List.of("c", "implied"), GAgentLibraryTypes.mountedBy(config, List.of("implied", "c"), installed),
+				"not mounting every library: the installation does not count, the exclusions neither");
+		config.setSubscribeAllLibraries(true);
+		assertEquals(List.of("c", "a", "implied", "b"), GAgentLibraryTypes.mountedBy(config,
+				List.of("implied", "b"), installed),
+				"named, then the installed ones but the excluded and the asked for only, then implied: an exclusion"
+						+ " removes only what mounting every library adds, so b comes back implied");
+		assertEquals(List.of("c"), GAgentLibraryTypes.mountedBy(config, null, null), "no installation known");
+		assertEquals(List.of("implied"), GAgentLibraryTypes.mountedBy(null, List.of("implied"), installed));
+		assertTrue(GAgentLibraryTypes.mayMountAny(config, null));
+		assertTrue(GAgentLibraryTypes.mayMountAny(null, List.of("implied")));
+		assertTrue(!GAgentLibraryTypes.mayMountAny(new GAgentConfig(), List.of()));
+	}
+
+	@Test
 	void aLibraryTypeNobodyManagesMountsNothing() {
 		AnAgentService service = new AnAgentService(registryOf(), binderOf(anInstallationWith()));
 

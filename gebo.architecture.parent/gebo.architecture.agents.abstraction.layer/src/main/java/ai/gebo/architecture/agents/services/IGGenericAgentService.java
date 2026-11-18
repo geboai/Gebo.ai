@@ -1,11 +1,13 @@
 package ai.gebo.architecture.agents.services;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import ai.gebo.architecture.agents.model.AgentCapabilities;
 import ai.gebo.architecture.agents.model.AgentMountedTools;
 import ai.gebo.architecture.agents.model.GAgentConfig;
+import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryType;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 
 public interface IGGenericAgentService {
@@ -30,6 +32,20 @@ public interface IGGenericAgentService {
 	 */
 	public default List<String> getImpliedLibraryTypeIds() {
 		return List.of();
+	}
+
+	/**
+	 * The library types an agent of this service mounts with the given configuration,
+	 * among the ones the installation has ({@link GAgentLibraryTypes#mountedBy}): the
+	 * ones it names, every installed one when it mounts every library, and the ones
+	 * this service implies.
+	 *
+	 * @param agentConfig the configuration
+	 * @param installed   the library types the installation has
+	 */
+	public default List<String> libraryTypeIdsOf(GAgentConfig agentConfig,
+			Collection<AIToolsAndResourcesLibraryType> installed) {
+		return GAgentLibraryTypes.mountedBy(agentConfig, getImpliedLibraryTypeIds(), installed);
 	}
 
 	/**
