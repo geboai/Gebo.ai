@@ -327,7 +327,10 @@
                                   @if (configService) { <span class="font-monospace">{{shortType(configService.inputType)}} → @if (isRouter(configService)) { <span id="CommandsLabel" gebo-ai-text>commands</span> } @else { {{shortType(configService.outputType)}} }</span> }
                                 </span>
                                 <span><span id="CfgRoleLabel" gebo-ai-text class="font-semibold text-muted-color">Role</span> {{config.agentRoleCode || '—'}}
-                                  @if (!config.agentRoleCode) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
+                                  @if (!config.agentRoleCode) {
+                                    @if (configService?.buildingPrompts !== false) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
+                                    @else { <span id="CfgNoRoleNeeded" gebo-ai-text class="text-muted-color">not needed: this agent builds no prompt of its own</span> }
+                                  }
                                 </span>
                                 <span><span id="CfgPromptLabel" gebo-ai-text class="font-semibold text-muted-color">Main loop prompt</span> {{config.mainLoopPromptUseCode || '—'}}</span>
                                 <span><span id="CfgModelLabel" gebo-ai-text class="font-semibold text-muted-color">Chat model</span>&nbsp;

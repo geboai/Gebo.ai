@@ -74,15 +74,18 @@
                     </div>
                     <div class="col-6">
                       <gebo-ai-field id="agentRoleCode" label="Agent role"
-                        help="The role the agent plays, from the role library the prompts are built with. Mandatory." [required]="true" placeholder="Choose the role">
+                        help="The role the agent plays, from the role library the prompts are built with." [required]="isBuildingPrompts()" placeholder="Choose the role">
                         <p-select id="AgentRoleSelect" formControlName="agentRoleCode" [options]="roles" optionLabel="description" optionValue="code" dataKey="code"
-                          [required]="true" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
+                          [required]="isBuildingPrompts()" [showClear]="!isBuildingPrompts()" styleClass="w-full" appendTo="body" [filter]="true" filterBy="code,description" gebo-ai-field-element>
                           <ng-template #item let-role>
                             <span>{{role.description}}</span>
                             <span class="ml-2 text-xs text-muted-color font-monospace">{{role.code}}</span>
                           </ng-template>
                         </p-select>
                       </gebo-ai-field>
+                      @if (!isBuildingPrompts()) {
+                        <small class="text-muted-color"><span id="RoleNotNeededHint" gebo-ai-text>This agent builds no prompt of its own: it needs no role.</span></small>
+                      }
                     </div>
                     @if (isNetworkAdapterService(formGroup.controls['agentServiceId'].value)) {
                       <div class="col-6">
@@ -248,11 +251,14 @@
                         <div class="grid standardTabDialogueHeight">
                           <div class="col-12 md:col-6">
                             <gebo-ai-field id="mainLoopPromptUseCode" label="Choose main loop prompt template"
-                              help="The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only." placeholder="Select the Prompt Template type">
-                              <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode" [required]="true" [readonly]="promptCustomized"
+                              help="The prompt template the agent runs its main loop with. Customize it to edit a copy of it for this agent only." [required]="isBuildingPrompts()" placeholder="Select the Prompt Template type">
+                              <geboai-editable-listbox-component formControlName="mainLoopPromptUseCode" [required]="isBuildingPrompts()" [readonly]="promptCustomized"
                                 [optionsObservable]="promptLoadingObservable" gebo-ai-field-element>
                               </geboai-editable-listbox-component>
                             </gebo-ai-field>
+                            @if (!isBuildingPrompts()) {
+                              <small class="text-muted-color"><span id="PromptNotNeededHint" gebo-ai-text>This agent builds no prompt of its own: it needs no prompt template.</span></small>
+                            }
                           </div>
                           <div class="col-12 md:col-6 flex align-items-start gap-2 pt-4">
                             <p-button id="CustomizePromptBtn" gebo-ai-label label="Customize prompt" icon="pi pi-pencil" [outlined]="true"

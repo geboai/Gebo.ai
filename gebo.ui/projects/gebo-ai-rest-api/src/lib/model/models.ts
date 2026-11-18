@@ -165,6 +165,7 @@ export * from './gContentManagementSystem';
 export * from './gContentManagementSystemType';
 export * from './gContentSelectionFilter';
 export * from './gContentSelectionFilterCriteria';
+export * from './gConversationFile';
 export * from './gCurrency';
 export * from './gDataFlowMetaInfos';
 export * from './gDataFlowReport';

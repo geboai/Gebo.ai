@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **mainLoopPromptUseCode** | **String** |  |  [optional]
 **customLoopPrompt** | [**GPromptTemplateConfig**](GPromptTemplateConfig.md) |  |  [optional]
 **subscribeAllTools** | **Boolean** |  |  [optional]
-**agentRoleCode** | **String** |  | 
+**agentRoleCode** | **String** |  |  [optional]
 **useDefaultChatModel** | **Boolean** |  |  [optional]
 **useChatModelWithUse** | [**UseChatModelWithUseEnum**](#UseChatModelWithUseEnum) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]

@@ -26,7 +26,9 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         dateModified: new FormControl(),
         dateCreated: new FormControl(),
         agentServiceId: new FormControl(),
-        agentRoleCode: new FormControl(null, Validators.required),
+        // required, as the main loop prompt, only when the service builds prompts: the
+        // template binds it (isBuildingPrompts)
+        agentRoleCode: new FormControl(),
         agentType: new FormControl(),
         adaptedAgentNetworkCode: new FormControl(),
         agentNetworkServiceCode: new FormControl(),
@@ -60,7 +62,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     });
     protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
     protected agentTypes: GBaseObject[] = [];
-    /** The roles an agent can take; the role is mandatory. */
+    /** The roles an agent can take: one is needed when the agent's service builds prompts. */
     protected roles: GAgentRole[] = [];
     /** The services with their types and kinds, by service id. */
     protected serviceDescriptors: AgentServiceDescriptor[] = [];
@@ -356,6 +358,16 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     protected selectedServiceDescriptor(): AgentServiceDescriptor | undefined {
         const serviceId = this.formGroup.controls["agentServiceId"].value;
         return serviceId ? this.serviceDescriptors.find(s => s.serviceId === serviceId) : undefined;
+    }
+
+    /**
+     * Whether the agent builds its own prompts, so it needs a role and a main loop
+     * prompt template (the backend checks the role on save): true for an unknown
+     * service. The chat input adapter, the network adapters and the remote A2A agents
+     * build none.
+     */
+    protected isBuildingPrompts(): boolean {
+        return this.selectedServiceDescriptor()?.buildingPrompts !== false;
     }
 
     protected isNetworkAdapterService(serviceId: string | null | undefined): boolean {

@@ -72,6 +72,12 @@ public class ChatRuntimeDataQueryAdapterAgentService
 		return false;
 	}
 
+	/** It builds no prompt: a role, when the configuration names one, only tags its messages. */
+	@Override
+	public boolean isBuildingPrompts() {
+		return false;
+	}
+
 	@Override
 	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 		AgentCapabilities capabilities = super.getAgentCapabilities(agentConfig);

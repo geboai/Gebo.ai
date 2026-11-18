@@ -20,6 +20,8 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
     internalPlaceholder!: string;
     internalHelp!: string;
     computedRequired: boolean = false;
+    // what the control's validators say, kept so that a change of [required] recomputes the mark
+    private requiredFromControl: boolean = false;
     constructor(private translationService: GeboAITranslationService, @Optional() @Inject(GEBO_AI_MODULE) private moduleId?: string, @Optional() @Inject(GEBO_AI_FIELD_HOST) private host?: GeboAIFieldHost) {
         if (this.host) {
             if (Array.isArray(this.host)) {
@@ -42,6 +44,10 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         }
         if (!this.internalPlaceholder && this.placeholder && changes["placeholder"]) {
             this.internalPlaceholder = this.placeholder;
+        }
+        // a field required by a binding that changes shows the mark as it stands
+        if (changes["required"] && !changes["required"].firstChange) {
+            this.computedRequired = this.requiredFromControl || this.required;
         }
     }
     async ngOnInit() {
@@ -117,6 +123,7 @@ export class GeboAIFieldContainerComponent implements OnInit, OnChanges {
         return `${this.id}-help`;
     }
     setRequiredFromControl(isRequired: boolean) {
+        this.requiredFromControl = isRequired;
         this.computedRequired = isRequired || this.required;
     }
 }

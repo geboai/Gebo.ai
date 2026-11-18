@@ -89,6 +89,12 @@ public class AgentServiceDescriptor {
 	/** The semantic of the messages the service produces, null when unknown. */
 	private MessageSemantic messageSemantic;
 	private AgentServiceKind kind;
+	/**
+	 * Whether the service builds its own prompts
+	 * ({@link IGGenericAgentService#isBuildingPrompts()}): its configurations need a
+	 * role and a main loop prompt template.
+	 */
+	private boolean buildingPrompts = true;
 
 	/**
 	 * Describes a network agent service; a reactive service is described without
@@ -140,6 +146,7 @@ public class AgentServiceDescriptor {
 				}
 			}
 		}
+		descriptor.setBuildingPrompts(service.isBuildingPrompts());
 		descriptor.setRoutingAgent(service instanceof IGRoutingNetworkAgentService);
 		descriptor.setNetworkAdapter(service instanceof IGAgentsNetworkToNetworkAgentAdapterService);
 		descriptor.setKind(kindOf(descriptor));
@@ -147,7 +154,8 @@ public class AgentServiceDescriptor {
 			LOGGER.debug("Described agent service id:" + descriptor.getServiceId() + " networkAgent:"
 					+ descriptor.isNetworkAgent() + " routingAgent:" + descriptor.isRoutingAgent() + " networkAdapter:"
 					+ descriptor.isNetworkAdapter() + " reactive:" + descriptor.isReactive() + " adaptable:"
-					+ descriptor.isAdaptable() + " semantic:" + descriptor.getMessageSemantic() + " kind:"
+					+ descriptor.isAdaptable() + " buildingPrompts:" + descriptor.isBuildingPrompts() + " semantic:"
+					+ descriptor.getMessageSemantic() + " kind:"
 					+ descriptor.getKind() + " inputType:" + descriptor.getInputType() + " outputType:"
 					+ descriptor.getOutputType());
 		}
