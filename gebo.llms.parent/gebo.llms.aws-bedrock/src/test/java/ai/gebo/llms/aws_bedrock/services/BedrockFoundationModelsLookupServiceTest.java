@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import software.amazon.awssdk.services.bedrock.model.FoundationModelLifecycle;
 import software.amazon.awssdk.services.bedrock.model.FoundationModelSummary;
@@ -52,6 +53,7 @@ class BedrockFoundationModelsLookupServiceTest {
 		GBaseChatModelChoice us = choices.stream().filter(c -> c.getCode().startsWith("us.")).findFirst().get();
 		assertEquals("Claude Sonnet 5.5 (Anthropic, us inference profile)", us.getDescription());
 		assertTrue(us.getMetaInfos().getSupportsVision());
+		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE), us.getMetaInfos().getInputModalities());
 	}
 
 	@Test

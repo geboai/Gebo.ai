@@ -5,6 +5,9 @@
 # the lifecycle, so the retirement dates come from
 # docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions (2026-10-11).
 # Only the chat models with an announced date are listed; "or later" dates are not.
+# The chat models are listed with what they accept as input (inputModalities) too, from
+# their Gemini API model pages (ai.google.dev/gemini-api/docs/models, 2026-11-18): the
+# Vertex models api does not tell it.
 ai.gebo.models.providers.google-vertex:
   parameterRules:
     # docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3
@@ -19,6 +22,7 @@ ai.gebo.models.providers.google-vertex:
   modelsInfo:
     - providerId: google-vertex
       modelId: gemini-2.5-pro
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       chatModel: true
       embeddingModel: false
       deprecated: true
@@ -27,6 +31,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-2.5-flash
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       chatModel: true
       embeddingModel: false
       deprecated: true
@@ -35,6 +40,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-2.5-flash-lite
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       chatModel: true
       embeddingModel: false
       deprecated: true
@@ -57,3 +63,21 @@ ai.gebo.models.providers.google-vertex:
       retirementDate: "2027-01-28"
       replacementModel: gemini-3.8-flash
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+    - providerId: google-vertex
+      modelId: gemini-3.8-flash
+      chatModel: true
+      embeddingModel: false
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
+      informativeUrl: https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash
+    - providerId: google-vertex
+      modelId: gemini-3.5-flash
+      chatModel: true
+      embeddingModel: false
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
+      informativeUrl: https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash
+    - providerId: google-vertex
+      modelId: gemini-3.1-flash-lite
+      chatModel: true
+      embeddingModel: false
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
+      informativeUrl: https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite

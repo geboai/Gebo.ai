@@ -22,6 +22,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
@@ -200,8 +201,10 @@ public class DeepseekModelsLookupService {
 		meta.setSupportsFunctionCalls(true);
 		meta.setContextLength(model.getContext_window());
 		meta.setMaxOutputToken(model.getMax_output_tokens());
-		if (model.getInput_modalities() != null)
+		if (model.getInput_modalities() != null) {
 			meta.setSupportsVision(model.getInput_modalities().contains("image"));
+			meta.setInputModalities(GModelInputModality.fromProvider(model.getInput_modalities()));
+		}
 		if (model.getEffort() != null) {
 			List<String> levels = model.getEffort().getSupported_levels() != null
 					? List.copyOf(model.getEffort().getSupported_levels())

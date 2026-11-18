@@ -12,8 +12,8 @@ Name | Type | Description | Notes
 **startDateTime** | [**Date**](Date.md) |  |  [optional]
 **processing** | **Boolean** |  |  [optional]
 **finished** | **Boolean** |  |  [optional]
-**endDateTime** | [**Date**](Date.md) |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
+**endDateTime** | [**Date**](Date.md) |  |  [optional]
 
 <a name="JobTypeEnum"></a>
 ## Enum: JobTypeEnum

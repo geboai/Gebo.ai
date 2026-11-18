@@ -63,7 +63,8 @@ export class GeboAIGoogleVertexChatModelAdminComponent extends BaseEntityEditing
         defaultModelPrompt:new FormControl(),
         forUses:new FormControl(),
         thinking: new FormControl(),
-        maxGeneratedTokens: new FormControl()
+        maxGeneratedTokens: new FormControl(),
+        inputModalities: new FormControl()
     });
     private oldValue:any={};
     modelChoicesData: GBaseChatModelChoice[] = [];

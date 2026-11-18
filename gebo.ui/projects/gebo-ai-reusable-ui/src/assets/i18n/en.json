@@ -3128,7 +3128,15 @@
       },
       "TemperatureRangeLabel": { "label": "Allowed range:" },
       "TopPRangeLabel": { "label": "Allowed range:" },
-      "ContextLengthDefaultLabel": { "label": "Used when not set:" }
+      "ContextLengthDefaultLabel": { "label": "Used when not set:" },
+      "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. It describes the model: Gebo does not send the models anything but text yet." },
+      "ModelInputModalitiesLabel": { "label": "The model's metadata says:" },
+      "UseModelInputModalities": { "label": "use these" },
+      "TextInputOption": { "label": "Text" },
+      "ImageInputOption": { "label": "Images" },
+      "AudioInputOption": { "label": "Audio" },
+      "VideoInputOption": { "label": "Video" },
+      "DocumentInputOption": { "label": "Documents (PDF)" }
     }
   },
   "GeboAIAdvancedChatModelModule": {

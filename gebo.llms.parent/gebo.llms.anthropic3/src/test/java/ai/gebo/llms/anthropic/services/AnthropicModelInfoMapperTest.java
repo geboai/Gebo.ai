@@ -1,5 +1,6 @@
 package ai.gebo.llms.anthropic.services;
 
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import com.anthropic.core.ObjectMappers;
 import com.anthropic.models.beta.models.BetaModelInfo;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.anthropic.model.AnthropicThinkingSupport;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 
@@ -65,6 +67,8 @@ class AnthropicModelInfoMapperTest {
 		assertTrue(choice.getSupportsFunctionCalls());
 		assertTrue(choice.getSupportsStructuredOutput());
 		assertTrue(choice.getMetaInfos().getSupportsVision());
+		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
+				choice.getMetaInfos().getInputModalities(), "image and pdf input from the capabilities");
 		assertTrue(choice.getMetaInfos().getSupportsReasoning());
 		assertFalse(choice.getMetaInfos().getDeprecated());
 		assertNull(choice.getMetaInfos().getRetirementDate());

@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelChoice;
@@ -210,6 +211,7 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 		}
 		if (model.getArchitecture() != null && model.getArchitecture().getInputModalities() != null) {
 			meta.setSupportsVision(model.getArchitecture().getInputModalities().contains("image"));
+			meta.setInputModalities(GModelInputModality.fromProvider(model.getArchitecture().getInputModalities()));
 		}
 		if (model.getExpirationDate() != null && !model.getExpirationDate().isBlank()) {
 			meta.setDeprecated(true);

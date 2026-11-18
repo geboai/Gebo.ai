@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.ollama.services.OllamaModelsLookupService.Model;
 
@@ -50,6 +51,7 @@ class OllamaModelsLookupServiceTest {
 		assertTrue(qwen.getSupportsFunctionCalls());
 		assertTrue(qwen.getSupportsReasoning());
 		assertFalse(qwen.getSupportsVision());
+		assertEquals(List.of(GModelInputModality.TEXT), qwen.getInputModalities(), "no vision capability: text only");
 		assertTrue(qwen.getChatModel());
 
 		ModelMetaInfo bge = OllamaModelsLookupService.metaInfos(model("bge-m3:latest"), BGE_M3);

@@ -20,6 +20,7 @@ export interface LLMModelPresetChoice {
     thinking?: LLMModelPresetChoice.ThinkingEnum;
     temperature?: number;
     internalServicesThinking?: LLMModelPresetChoice.InternalServicesThinkingEnum;
+    inputModalities?: Array<LLMModelPresetChoice.InputModalitiesEnum>;
 }
 export namespace LLMModelPresetChoice {
     export type UsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
@@ -42,5 +43,13 @@ export namespace LLMModelPresetChoice {
         MEDIUMTHINKING: 'MEDIUM_THINKING' as InternalServicesThinkingEnum,
         HIGHTHINKING: 'HIGH_THINKING' as InternalServicesThinkingEnum,
         AUTO: 'AUTO' as InternalServicesThinkingEnum
+    };
+    export type InputModalitiesEnum = 'TEXT' | 'IMAGE' | 'AUDIO' | 'VIDEO' | 'DOCUMENT';
+    export const InputModalitiesEnum = {
+        TEXT: 'TEXT' as InputModalitiesEnum,
+        IMAGE: 'IMAGE' as InputModalitiesEnum,
+        AUDIO: 'AUDIO' as InputModalitiesEnum,
+        VIDEO: 'VIDEO' as InputModalitiesEnum,
+        DOCUMENT: 'DOCUMENT' as InputModalitiesEnum
     };
 }

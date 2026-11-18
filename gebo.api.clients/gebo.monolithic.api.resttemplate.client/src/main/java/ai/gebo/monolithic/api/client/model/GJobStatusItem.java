@@ -24,7 +24,7 @@ import java.util.Date;
  * GJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T10:46:55.252892997+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T11:57:26.596330108+01:00[Europe/Rome]")
 
 public class GJobStatusItem {
   @JsonProperty("description")
@@ -53,9 +53,6 @@ public class GJobStatusItem {
 
   @JsonProperty("finished")
   private Boolean finished = null;
-
-  @JsonProperty("endDateTime")
-  private Date endDateTime = null;
 
   /**
    * Gets or Sets jobType
@@ -91,6 +88,9 @@ public class GJobStatusItem {
 
   }  @JsonProperty("jobType")
   private JobTypeEnum jobType = null;
+
+  @JsonProperty("endDateTime")
+  private Date endDateTime = null;
 
   public GJobStatusItem description(String description) {
     this.description = description;
@@ -254,24 +254,6 @@ public class GJobStatusItem {
     this.finished = finished;
   }
 
-  public GJobStatusItem endDateTime(Date endDateTime) {
-    this.endDateTime = endDateTime;
-    return this;
-  }
-
-   /**
-   * Get endDateTime
-   * @return endDateTime
-  **/
-  @Schema(description = "")
-  public Date getEndDateTime() {
-    return endDateTime;
-  }
-
-  public void setEndDateTime(Date endDateTime) {
-    this.endDateTime = endDateTime;
-  }
-
   public GJobStatusItem jobType(JobTypeEnum jobType) {
     this.jobType = jobType;
     return this;
@@ -288,6 +270,24 @@ public class GJobStatusItem {
 
   public void setJobType(JobTypeEnum jobType) {
     this.jobType = jobType;
+  }
+
+  public GJobStatusItem endDateTime(Date endDateTime) {
+    this.endDateTime = endDateTime;
+    return this;
+  }
+
+   /**
+   * Get endDateTime
+   * @return endDateTime
+  **/
+  @Schema(description = "")
+  public Date getEndDateTime() {
+    return endDateTime;
+  }
+
+  public void setEndDateTime(Date endDateTime) {
+    this.endDateTime = endDateTime;
   }
 
 
@@ -309,13 +309,13 @@ public class GJobStatusItem {
         Objects.equals(this.startDateTime, gjobStatusItem.startDateTime) &&
         Objects.equals(this.processing, gjobStatusItem.processing) &&
         Objects.equals(this.finished, gjobStatusItem.finished) &&
-        Objects.equals(this.endDateTime, gjobStatusItem.endDateTime) &&
-        Objects.equals(this.jobType, gjobStatusItem.jobType);
+        Objects.equals(this.jobType, gjobStatusItem.jobType) &&
+        Objects.equals(this.endDateTime, gjobStatusItem.endDateTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, error, code, workflowId, workflowType, projectEndpointReference, startDateTime, processing, finished, endDateTime, jobType);
+    return Objects.hash(description, error, code, workflowId, workflowType, projectEndpointReference, startDateTime, processing, finished, jobType, endDateTime);
   }
 
 
@@ -333,8 +333,8 @@ public class GJobStatusItem {
     sb.append("    startDateTime: ").append(toIndentedString(startDateTime)).append("\n");
     sb.append("    processing: ").append(toIndentedString(processing)).append("\n");
     sb.append("    finished: ").append(toIndentedString(finished)).append("\n");
-    sb.append("    endDateTime: ").append(toIndentedString(endDateTime)).append("\n");
     sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");
+    sb.append("    endDateTime: ").append(toIndentedString(endDateTime)).append("\n");
     sb.append("}");
     return sb.toString();
   }

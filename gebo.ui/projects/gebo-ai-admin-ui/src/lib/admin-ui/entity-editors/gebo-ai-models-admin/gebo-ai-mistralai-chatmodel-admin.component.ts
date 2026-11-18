@@ -66,7 +66,8 @@ export class GeboAIMistralAIChatModelAdminComponent extends BaseEntityEditingCom
         defaultModelPrompt:new FormControl(),
         forUses:new FormControl(),
         thinking: new FormControl(),
-        maxGeneratedTokens: new FormControl()
+        maxGeneratedTokens: new FormControl(),
+        inputModalities: new FormControl()
     });
     
     /** Keeps track of previous form values to detect changes */

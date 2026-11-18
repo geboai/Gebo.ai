@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
 import ai.gebo.llms.ollama.model.GOllamaChatModelChoice;
 import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
@@ -358,6 +359,7 @@ public class OllamaModelsLookupService {
 			meta.setEmbeddingModel(capabilities.contains(EMBEDDING_CAPABILITY));
 			meta.setSupportsFunctionCalls(capabilities.contains("tools"));
 			meta.setSupportsVision(capabilities.contains("vision"));
+			meta.setInputModalities(GModelInputModality.fromProvider(capabilities));
 			meta.setSupportsReasoning(capabilities.contains("thinking"));
 		}
 		return meta;
