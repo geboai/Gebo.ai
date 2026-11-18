@@ -11,10 +11,14 @@ package ai.gebo.llms.chat.client.rest.controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ai.gebo.acl.AclGrantType;
+import ai.gebo.architecture.ai.files.IGAILibraryFilesService;
+import ai.gebo.architecture.ai.files.IGFilesLocation;
 import ai.gebo.architecture.ai.model.AIResourceContent;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import ai.gebo.architecture.ai.service.IGAIToolsLibraryInstancesService;
@@ -50,6 +56,7 @@ public class GeboChatLibrariesController {
 	private final IGAIToolsLibraryInstancesService libraries;
 	private final GUserChatSessionRepository conversations;
 	private final IGSecurityService securityService;
+	private final ObjectProvider<IGAILibraryFilesService> files;
 
 	/** The conversation, once the current user may read it. */
 	private GUserChatSession readable(String chatCode) {
@@ -74,18 +81,51 @@ public class GeboChatLibrariesController {
 
 	/**
 	 * The files the tools of the conversation wrote, each once, with the requests
-	 * that wrote them and whether the conversation still holds it as a resource
-	 * that can be downloaded on its own.
+	 * that wrote them, whether the conversation still holds it as a resource
+	 * that can be downloaded on its own, and how it is now against what the
+	 * tools left (as the agents are told of it).
 	 */
 	@GetMapping(value = "getChatWrittenFiles", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ChatWrittenFile> getChatWrittenFiles(@RequestParam("chatCode") String chatCode) {
 		final GUserChatSession conversation = readable(chatCode);
 		final List<ChatWrittenFile> written = ChatWrittenFile.markDownloadable(ChatWrittenFile.of(conversation),
 				libraries.heldBy(chatCode).values());
+		if (!written.isEmpty()) {
+			ChatWrittenFile.markState(written, locationsOf(chatCode));
+		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("getChatWrittenFiles(" + chatCode + ") -> " + written.size() + " file(s)");
 		}
 		return written;
+	}
+
+	/**
+	 * The files locations the conversation holds, by id, read once: a location
+	 * no longer held is not there, so its files are gone; when they cannot be
+	 * read at all, every file's state is unknown.
+	 */
+	private Function<String, IGFilesLocation> locationsOf(String chatCode) {
+		final IGAILibraryFilesService service = files.getIfAvailable();
+		if (service == null) {
+			return id -> {
+				throw new IllegalStateException("No library files service");
+			};
+		}
+		try {
+			final Map<String, IGFilesLocation> byId = new HashMap<>();
+			for (IGFilesLocation location : service.locationsOf(chatCode)) {
+				if (location != null && location.getId() != null) {
+					byId.putIfAbsent(location.getId(), location);
+				}
+			}
+			return byId::get;
+		} catch (RuntimeException unreadable) {
+			LOGGER.warn("The files locations of conversation " + chatCode + " could not be read: "
+					+ unreadable.getMessage());
+			return id -> {
+				throw unreadable;
+			};
+		}
 	}
 
 	/**

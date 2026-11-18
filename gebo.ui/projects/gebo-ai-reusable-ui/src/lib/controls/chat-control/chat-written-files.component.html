@@ -7,10 +7,18 @@
     <span class="gebo-ai-reusable-chat__called-functions-count">({{written.length}})</span>
     <ul class="gebo-ai-reusable-chat__written-files">
       @for (file of written; track keyOf(file)) {
-        <li class="gebo-ai-reusable-chat__written-file" [title]="keyOf(file)">
+        <li class="gebo-ai-reusable-chat__written-file" [class.gebo-ai-reusable-chat__written-file--gone]="isGone(file)"
+          [title]="keyOf(file)">
           <i class="pi pi-file"></i>
           <span class="gebo-ai-reusable-chat__written-file-name">{{ nameOf(file) }}</span>
           <span class="gebo-ai-reusable-chat__written-file-location">{{ file.location }}</span>
+          @if (isChanged(file)) {
+            <span id="WrittenFileChangedText" class="gebo-ai-reusable-chat__written-file-note" gebo-ai-text
+              title="Something else than the tools changed it since">changed since</span>
+          }
+          @if (isGone(file)) {
+            <span id="WrittenFileGoneText" class="gebo-ai-reusable-chat__written-file-note" gebo-ai-text>no longer there</span>
+          }
           @if (isDownloadable(file)) {
             <p-button id="DownloadWrittenFileBtn" gebo-ai-label icon="pi pi-download" [text]="true" [rounded]="true"
               size="small" title="Download" [loading]="downloading === keyOf(file)"

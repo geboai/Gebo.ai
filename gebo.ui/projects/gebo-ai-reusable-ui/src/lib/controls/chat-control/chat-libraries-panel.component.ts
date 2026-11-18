@@ -105,15 +105,28 @@ export class GeboAIChatLibrariesPanelComponent implements OnChanges {
         return (this.writtenAs(instance, resource)?.requests || []).join(", ");
     }
 
-    /** The files the tools wrote in the library that are no resource of their own in it, like a working directory's. */
+    /** Whether something else than the tools changed the resource since they wrote it. */
+    public isChangedResource(instance: AIToolsAndResourcesLibraryInstance, resource: AIResource): boolean {
+        return this.isChanged(this.writtenAs(instance, resource));
+    }
+
+    /**
+     * The files the tools wrote in the library that are no resource of their own in it, like a working directory's;
+     * those no longer there are left out.
+     */
     public writtenWithin(instance: AIToolsAndResourcesLibraryInstance): ChatWrittenFile[] {
         const resources = new Set(this.resourcesOf(instance).map((resource) => GeboAIChatLibrariesPanelComponent.slashed(resource.id)));
         return this.written.filter((file) => file.location === instance.libraryType?.id
-            && !resources.has(GeboAIChatLibrariesPanelComponent.slashed(file.path)));
+            && !resources.has(GeboAIChatLibrariesPanelComponent.slashed(file.path))
+            && file.state !== ChatWrittenFile.StateEnum.GONE);
     }
 
     public requestsOf(file: ChatWrittenFile): string {
         return (file.requests || []).join(", ");
+    }
+
+    public isChanged(file: ChatWrittenFile | undefined): boolean {
+        return file?.state === ChatWrittenFile.StateEnum.CHANGED;
     }
 
     public get hasLibraries(): boolean {

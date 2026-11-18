@@ -999,6 +999,20 @@ gebo-ai-chat-written-files .gebo-ai-reusable-chat__interaction-item-icon {
   font-size: var(--gebo-font-size-sm);
 }
 
+/* What happened to the file since the tools wrote it. */
+.gebo-ai-reusable-chat__written-file-note {
+  padding: 0 var(--gebo-space-1);
+  border-radius: var(--gebo-radius-control);
+  background: var(--gebo-surface-muted);
+  color: var(--gebo-text-muted);
+  font-size: var(--gebo-font-size-sm);
+}
+
+.gebo-ai-reusable-chat__written-file--gone .gebo-ai-reusable-chat__written-file-name {
+  color: var(--gebo-text-muted);
+  font-weight: 400;
+}
+
 /* How many functions were called, next to the title of the closed list. */
 .gebo-ai-reusable-chat__called-functions-count {
   margin-left: var(--gebo-space-1);
