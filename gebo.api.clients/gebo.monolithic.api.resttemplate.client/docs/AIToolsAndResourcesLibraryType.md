@@ -8,3 +8,4 @@ Name | Type | Description | Notes
 **metaData** | **Map&lt;String, Object&gt;** |  |  [optional]
 **resourcesTypes** | [**List&lt;AIResourceType&gt;**](AIResourceType.md) |  | 
 **tools** | [**List&lt;ToolReference&gt;**](ToolReference.md) |  | 
+**uploadFileTypes** | **List&lt;String&gt;** |  |  [optional]

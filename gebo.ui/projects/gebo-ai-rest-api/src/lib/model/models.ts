@@ -158,6 +158,7 @@ export * from './gChatModelType';
 export * from './gChatProfileConfiguration';
 export * from './gChatRule';
 export * from './gChatRuleChange';
+export * from './gChatUploadFileTypes';
 export * from './gConfluenceProjectEndpoint';
 export * from './gConfluenceSystem';
 export * from './gContentManagementSystem';

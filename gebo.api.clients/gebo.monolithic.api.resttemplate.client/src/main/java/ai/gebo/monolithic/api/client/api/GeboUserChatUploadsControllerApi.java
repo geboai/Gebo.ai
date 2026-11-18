@@ -3,6 +3,7 @@ package ai.gebo.monolithic.api.client.api;
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
 import java.io.File;
+import ai.gebo.monolithic.api.client.model.GChatUploadFileTypes;
 import ai.gebo.monolithic.api.client.model.OperationStatusListUserUploadedContent;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 
@@ -24,7 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T10:46:55.252892997+01:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -44,6 +45,50 @@ public class GeboUserChatUploadsControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param userSessionCode  (optional)
+     * @param chatProfileCode  (optional)
+     * @return GChatUploadFileTypes
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GChatUploadFileTypes acceptedFileTypes(String userSessionCode, String chatProfileCode) throws RestClientException {
+        return acceptedFileTypesWithHttpInfo(userSessionCode, chatProfileCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param userSessionCode  (optional)
+     * @param chatProfileCode  (optional)
+     * @return ResponseEntity&lt;GChatUploadFileTypes&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GChatUploadFileTypes> acceptedFileTypesWithHttpInfo(String userSessionCode, String chatProfileCode) throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/acceptedFileTypes").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "userSessionCode", userSessionCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "chatProfileCode", chatProfileCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GChatUploadFileTypes> returnType = new ParameterizedTypeReference<GChatUploadFileTypes>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
