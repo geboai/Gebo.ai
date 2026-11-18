@@ -915,6 +915,9 @@ public class GeboLLMSSetupService {
 			if (choice.getTemperature() != null) {
 				md.setTemperature(choice.getTemperature());
 			}
+			if (choice.getInputModalities() != null) {
+				md.setInputModalities(choice.getInputModalities());
+			}
 		});
 		return md;
 	}
@@ -1130,6 +1133,9 @@ public class GeboLLMSSetupService {
 					if (config.getTemperature() == null && choice.getTemperature() != null) {
 						config.setTemperature(choice.getTemperature());
 					}
+					if (config.getInputModalities() == null && choice.getInputModalities() != null) {
+						config.setInputModalities(choice.getInputModalities());
+					}
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug(
 								"Model '{}' on {} for {} takes the setup library defaults contextWindow={} maxGeneratedTokens={} thinking={} temperature={}",
@@ -1177,6 +1183,14 @@ public class GeboLLMSSetupService {
 					}
 					if (config.getThinking() != null) {
 						configuration.setThinking(config.getThinking());
+					}
+					// what the model accepts as input: the preset's, else the chosen model's metadata
+					// (filled where the model is chosen, IGChatModelConfigurationSupportService)
+					if (config.getInputModalities() != null) {
+						configuration.setInputModalities(config.getInputModalities());
+					} else if (configuration.getInputModalities() == null) {
+						configuration.setInputModalities(
+								IGChatModelConfigurationSupportService.inputModalitiesOf(configuration.getChoosedModel()));
 					}
 					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {

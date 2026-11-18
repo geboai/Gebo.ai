@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -152,8 +153,10 @@ public class BedrockFoundationModelsLookupService {
 		meta.setInformativeUrl(INFORMATIVE_URL);
 		meta.setChatModel(summary.outputModalitiesAsStrings().contains("TEXT"));
 		meta.setEmbeddingModel(summary.outputModalitiesAsStrings().contains("EMBEDDING"));
-		if (summary.hasInputModalities())
+		if (summary.hasInputModalities()) {
 			meta.setSupportsVision(summary.inputModalitiesAsStrings().contains("IMAGE"));
+			meta.setInputModalities(GModelInputModality.fromProvider(summary.inputModalitiesAsStrings()));
+		}
 		FoundationModelLifecycle lifecycle = summary.modelLifecycle();
 		boolean legacy = lifecycle != null && "LEGACY".equals(lifecycle.statusAsString());
 		if (lifecycle != null && lifecycle.statusAsString() != null) {

@@ -9,6 +9,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
 import ai.gebo.llms.abstraction.layer.services.ILLMTypeFiltrerRepositoryPattern;
@@ -168,6 +169,12 @@ public class MistralModelsLookupService {
 		if (capabilities != null) {
 			meta.setSupportsFunctionCalls(capabilities.getFunction_calling());
 			meta.setSupportsVision(capabilities.getVision());
+			final java.util.List<String> inputs = new java.util.ArrayList<>();
+			if (Boolean.TRUE.equals(capabilities.getVision()))
+				inputs.add("image");
+			if (Boolean.TRUE.equals(capabilities.getAudio()))
+				inputs.add("audio");
+			meta.setInputModalities(GModelInputModality.fromProvider(inputs));
 			meta.setSupportsReasoning(capabilities.getReasoning());
 		}
 		if (card.getDeprecation() != null && !card.getDeprecation().isBlank()) {

@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling;
 import ai.gebo.llms.models.metainfos.GProviderModelsLibrary;
@@ -109,5 +110,16 @@ class OpenAIModelsLibrarySegmentTest {
 		ai.gebo.openai.integration.client.model.OpenAIModel bare = new ai.gebo.openai.integration.client.model.OpenAIModel();
 		bare.setId("gpt-4.1");
 		assertNull(ai.gebo.llms.openai.api.utils.impl.GOpenAIApiUtilImpl.liveMetaInfos(bare, "openai"));
+	}
+
+	@Test
+	void theInputModalitiesOfTheModelsWhoseProviderGivesNoneComeFromTheLibrary() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+		for (String id : List.of("gpt-6.1-sol", "gpt-6-luna", "gpt-5.2", "gpt-5.4-mini", "gpt-5", "gpt-4.1", "gpt-4o")) {
+			assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE),
+					library.findByProviderIdAndModelId("openai", id).getInputModalities(), id);
+		}
+		assertNull(library.findByProviderIdAndModelId("openai", "gpt-5.5").getInputModalities(),
+				"not confirmed by its model page: unknown, text only");
 	}
 }

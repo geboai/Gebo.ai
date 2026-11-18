@@ -71,7 +71,8 @@ export class GeboAIOpenAIChatModelAdminComponent extends BaseEntityEditingCompon
         defaultModelPrompt: new FormControl(),
         forUses: new FormControl(),
         thinking: new FormControl(),
-        maxGeneratedTokens: new FormControl()
+        maxGeneratedTokens: new FormControl(),
+        inputModalities: new FormControl()
     });
 
     /**

@@ -13,7 +13,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { GBaseChatModelConfig, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
-import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
+import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
  * This file defines a component for configuring standard chat model settings
@@ -63,6 +63,19 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     @Input() samplingSettings: boolean = true;
     @Input() thinking: boolean = true;
     @Input() maxGeneratedTokens: boolean = true;
+    // Shows what the model accepts as input
+    @Input() inputModalities: boolean = true;
+
+    /** What a model may accept as input, besides text. */
+    protected inputModalityOptions: { id: string, label: string, value: string }[] = [
+        { id: "TextInputOption", label: "Text", value: "TEXT" },
+        { id: "ImageInputOption", label: "Images", value: "IMAGE" },
+        { id: "AudioInputOption", label: "Audio", value: "AUDIO" },
+        { id: "VideoInputOption", label: "Video", value: "VIDEO" },
+        { id: "DocumentInputOption", label: "Documents (PDF)", value: "DOCUMENT" }];
+
+    /** What the chosen model's metadata says it accepts as input, when it says it. */
+    protected modelInputModalities?: string[];
 
     // The default context length for the selected model
     protected defaultContextLength?: number;
@@ -75,8 +88,31 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     /**
      * Lifecycle hook that is called after data-bound properties are initialized
      */
-    ngOnInit(): void {
+    constructor(private translations: GeboAITranslationService) {
+    }
 
+    ngOnInit(): void {
+        this.translations.translateMenuItems("GeboAIStandardChatModelModule", "GeboAIStandardChatModelSettings",
+            this.inputModalityOptions as any[])
+            .subscribe(items => this.inputModalityOptions = [...items] as { id: string, label: string, value: string }[]);
+    }
+
+    /** The labels of what the model's metadata says it accepts, in the options' order. */
+    protected get modelInputModalitiesText(): string {
+        return this.inputModalityOptions.filter(o => this.modelInputModalities?.includes(o.value)).map(o => o.label).join(", ");
+    }
+
+    /**
+     * Sets what the model accepts as input to what its metadata says: by hand, so that a
+     * configuration made before this field existed stays text only until someone edits it.
+     */
+    protected useModelInputModalities(event: Event): void {
+        event.preventDefault();
+        const control = this.formGroup?.controls["inputModalities"];
+        if (control && this.modelInputModalities) {
+            control.setValue([...this.modelInputModalities]);
+            control.markAsDirty();
+        }
     }
 
     /**
@@ -89,6 +125,9 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     private notifyChoosedModelChange(choosed?: { contextLength?: number, metaInfos?: ModelMetaInfo }) {
         this.defaultContextLength = standardDefaultContextLength;
         this.modelHaveNativeContextWindowSettings = false;
+        const meta: any = choosed?.metaInfos;
+        this.modelInputModalities = meta?.inputModalities?.length ? [...meta.inputModalities]
+            : meta?.supportsVision === true ? ["TEXT", "IMAGE"] : meta?.supportsVision === false ? ["TEXT"] : undefined;
         if (choosed) {
             if (choosed.contextLength) {
                 this.modelHaveNativeContextWindowSettings = true;

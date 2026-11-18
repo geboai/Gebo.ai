@@ -1,5 +1,6 @@
 package ai.gebo.llms.setup.config;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -29,6 +30,11 @@ public class LLMModelPresetChoice {
 	 * internal services. Null takes {@link #thinking}.
 	 */
 	ChatModelThinkingOption internalServicesThinking = null;
+	/**
+	 * What the model accepts as input, for a model whose provider's metadata and the
+	 * models library do not tell it; unset otherwise, the model's metadata decides.
+	 */
+	List<GModelInputModality> inputModalities = null;
 
 	/**
 	 * The thinking level of the model created for the uses: the internal services one

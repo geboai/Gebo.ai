@@ -10,6 +10,7 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.deepseek.api.DeepSeekApi.ChatCompletionRequest.ReasoningEffort;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.deepseek.model.GDeepseekChatModelChoice;
 import ai.gebo.llms.deepseek.services.DeepseekModelsLookupService.DeepseekModelsList;
 import tools.jackson.databind.json.JsonMapper;
@@ -39,6 +40,8 @@ class DeepseekModelsLookupServiceTest {
 		assertEquals(1048576, choice.getContextLength());
 		assertEquals(393216, choice.getMetaInfos().getMaxOutputToken());
 		assertTrue(choice.getMetaInfos().getSupportsVision());
+		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE),
+				choice.getMetaInfos().getInputModalities());
 		assertTrue(choice.getMetaInfos().getSupportsReasoning());
 		assertTrue(choice.getSupportsFunctionCalls());
 		assertEquals(List.of("low", "high", "max"), choice.getModelDetails().get(DeepseekModelsLookupService.EFFORT_LEVELS));

@@ -27,6 +27,7 @@ import com.anthropic.models.beta.models.BetaModelLine;
 import com.anthropic.models.beta.models.BetaThinkingCapability;
 import com.anthropic.models.beta.models.BetaThinkingTypes;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.anthropic.model.AnthropicThinkingSupport;
 import ai.gebo.llms.anthropic.model.GAnthropicChatModelChoice;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -73,6 +74,12 @@ final class AnthropicModelInfoMapper {
 		capabilities.ifPresent(c -> {
 			meta.setSupportsStructuredOutput(supported(c._structuredOutputs()));
 			meta.setSupportsVision(supported(c._imageInput()));
+			final java.util.List<String> inputs = new java.util.ArrayList<>();
+			if (Boolean.TRUE.equals(supported(c._imageInput())))
+				inputs.add("image");
+			if (Boolean.TRUE.equals(supported(c._pdfInput())))
+				inputs.add("pdf");
+			meta.setInputModalities(GModelInputModality.fromProvider(inputs));
 			meta.setSupportsReasoning(c._thinking().asKnown().map(BetaThinkingCapability::_supported)
 					.flatMap(JsonField::asKnown).orElse(null));
 		});

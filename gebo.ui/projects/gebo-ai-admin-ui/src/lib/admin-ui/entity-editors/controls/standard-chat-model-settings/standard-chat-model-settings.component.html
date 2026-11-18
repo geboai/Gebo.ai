@@ -55,6 +55,20 @@
                 </gebo-ai-field>
               </div>
             }
+            @if(inputModalities===true && formGroup.controls['inputModalities']) {
+              <div class="col-4">
+                <gebo-ai-field id="inputModalities" label="Accepts as input"
+                  help="What the model takes as input, as its provider or the models library tells; empty means text only. It describes the model: Gebo does not send the models anything but text yet.">
+                  <p-multiselect inputId="inputModalities" formControlName="inputModalities" [options]="inputModalityOptions"
+                    optionLabel="label" optionValue="value" display="chip" [showToggleAll]="false" styleClass="w-full" gebo-ai-field-element />
+                  @if (modelInputModalities?.length) {
+                    <small class="text-muted-color"><span id="ModelInputModalitiesLabel" gebo-ai-text>The model's metadata says:</span>
+                      {{ modelInputModalitiesText }} -
+                      <a href="#" id="UseModelInputModalities" (click)="useModelInputModalities($event)" gebo-ai-text>use these</a></small>
+                  }
+                </gebo-ai-field>
+              </div>
+            }
           </div>
         }
 

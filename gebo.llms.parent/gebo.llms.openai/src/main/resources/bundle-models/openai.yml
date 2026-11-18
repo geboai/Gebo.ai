@@ -4,10 +4,14 @@
 # A rule applies to its providerId only.
 # Rules: the first one covering a model applies, so specific models come before family
 # patterns ("*" stands for any characters); unset fields are unknown.
+# inputModalities, what a model accepts as input, comes from its model page
+# (developers.openai.com/api/docs/models, 2026-11-18): OpenAI's models api does not tell it.
+# A model whose page was not checked has none, which means text only.
 ai.gebo.models.providers.openai:
   modelsInfo:
     - providerId: openai
       modelId: gpt-4o
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -17,6 +21,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
       modelId: gpt-4o-2024-05-13
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -26,6 +31,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
       modelId: gpt-4o-2024-08-06
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -35,6 +41,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
       modelId: gpt-4.1
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1047576
@@ -44,6 +51,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
     - providerId: openai
       modelId: gpt-4o-mini
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -53,6 +61,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
     - providerId: openai
       modelId: gpt-4o-mini-2024-07-18
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -96,6 +105,7 @@ ai.gebo.models.providers.openai:
     # guide) and gpt-6-sol / gpt-6-luna only at reasoning effort none (their pages).
     - providerId: openai
       modelId: gpt-4.1-mini
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1047576
@@ -106,6 +116,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-4.1-mini
     - providerId: openai
       modelId: gpt-6.1-sol
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -136,6 +147,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-sol
     - providerId: openai
       modelId: gpt-6-luna
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -158,6 +170,7 @@ ai.gebo.models.providers.openai:
     # version 6; the gpt-5.4-mini page states 272,000 tokens of input in the window.
     - providerId: openai
       modelId: gpt-5.2
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -168,6 +181,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2
     - providerId: openai
       modelId: gpt-5.4-mini
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -178,6 +192,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-mini
     - providerId: openai
       modelId: gpt-5
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 400000

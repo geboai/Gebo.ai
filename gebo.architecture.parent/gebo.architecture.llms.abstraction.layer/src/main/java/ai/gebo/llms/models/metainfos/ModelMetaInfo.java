@@ -12,6 +12,11 @@
 
 package ai.gebo.llms.models.metainfos;
 
+import java.util.List;
+
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
+
+
 /**
  * AI generated comments
  * 
@@ -55,6 +60,10 @@ public class ModelMetaInfo {
 	// Indicates if the model accepts images as input
 	private Boolean supportsVision = null;
 
+	// What the model accepts as input, text first, as its provider's metadata or the models
+	// library tell; null when unknown
+	private List<GModelInputModality> inputModalities = null;
+
 	// Indicates if the model can reason (thinking) before answering
 	private Boolean supportsReasoning = null;
 
@@ -97,6 +106,7 @@ public class ModelMetaInfo {
 		copy.description = description;
 		copy.informativeUrl = informativeUrl;
 		copy.supportsVision = supportsVision;
+		copy.inputModalities = inputModalities;
 		copy.supportsReasoning = supportsReasoning;
 		copy.deprecated = deprecated;
 		copy.deprecationDate = deprecationDate;
@@ -139,6 +149,8 @@ public class ModelMetaInfo {
 			informativeUrl = other.informativeUrl;
 		if (supportsVision == null)
 			supportsVision = other.supportsVision;
+		if (inputModalities == null)
+			inputModalities = other.inputModalities;
 		if (supportsReasoning == null)
 			supportsReasoning = other.supportsReasoning;
 		if (deprecated == null)
@@ -351,6 +363,25 @@ public class ModelMetaInfo {
 
 	public Boolean getSupportsVision() {
 		return supportsVision;
+	}
+
+	public List<GModelInputModality> getInputModalities() {
+		return inputModalities;
+	}
+
+	/**
+	 * What the model accepts as input as far as known: its modalities when given, else
+	 * text and images by {@link #getSupportsVision()}; null when nothing is known.
+	 */
+	public List<GModelInputModality> knownInputModalities() {
+		if (inputModalities != null && !inputModalities.isEmpty()) {
+			return inputModalities;
+		}
+		return supportsVision != null ? GModelInputModality.textAndImages(supportsVision) : null;
+	}
+
+	public void setInputModalities(List<GModelInputModality> inputModalities) {
+		this.inputModalities = inputModalities;
 	}
 
 	public void setSupportsVision(Boolean supportsVision) {

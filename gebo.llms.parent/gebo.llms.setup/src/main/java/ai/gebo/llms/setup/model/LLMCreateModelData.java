@@ -1,5 +1,6 @@
 package ai.gebo.llms.setup.model;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import java.util.List;
 
 import ai.gebo.llms.abstraction.layer.model.ChatModelsUses;
@@ -25,6 +26,8 @@ public class LLMCreateModelData {
 	private List<ChatModelsUses> uses = null;
 	private Integer maxGeneratedTokens = null;
 	private ChatModelThinkingOption thinking = null;
+	/** What the chat model accepts as input; unset, it is taken from the model's metadata. */
+	private List<GModelInputModality> inputModalities = null;
 	/** The temperature the model is created with; null leaves it to its parameter rules. */
 	private Double temperature = null;
 

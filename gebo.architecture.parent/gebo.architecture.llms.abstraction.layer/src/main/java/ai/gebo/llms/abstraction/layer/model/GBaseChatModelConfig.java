@@ -68,4 +68,12 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	protected List<ChatModelFeatures> features = null;
 	protected ChatModelThinkingOption thinking = null;
 	protected Integer maxGeneratedTokens = null;
+	/**
+	 * What the model accepts as input (text, images, audio, video, documents), set at
+	 * setup from the presets or the model's metadata, or by hand. Null or empty means
+	 * text only: a configuration made before it existed stays text only until it is
+	 * edited. It characterizes the model; Gebo does not yet give the models anything
+	 * but text.
+	 */
+	protected List<GModelInputModality> inputModalities = null;
 }
