@@ -5036,6 +5036,7 @@
       },
       "AgentRoleSelect": { "placeholder": "Choose the role" },
       "RoleNotNeededHint": { "label": "This agent builds no prompt of its own: it needs no role." },
+      "PromptNotNeededHint": { "label": "This agent builds no prompt of its own: it needs no prompt template." },
       "adaptedAgentNetworkCode": {
         "label": "Delegates to network",
         "help": "The network of agents this agent runs as one agent: its contract must match the input and output of the adapter service.",

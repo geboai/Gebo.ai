@@ -27,9 +27,9 @@ public class GBaseAgentsNetworkToNetworkAgentAdapterService<InputType, OutputTyp
 		extends GAbstractGenericalNetworkAgentService<InputType, OutputType>
 		implements IGAgentsNetworkToNetworkAgentAdapterService<InputType, OutputType> {
 
-	/** The agents of the adapted network build the prompts, each with its own role. */
+	/** The agents of the adapted network build the prompts, each with its own role and template. */
 	@Override
-	public boolean isRoleRequired() {
+	public boolean isBuildingPrompts() {
 		return false;
 	}
 

@@ -181,7 +181,7 @@ public class GeboAgentAdminController {
 
 	/**
 	 * Refuses an agent without a role when its service builds its prompts with one
-	 * ({@link IGGenericAgentService#isRoleRequired()}), as an unknown service is taken
+	 * ({@link IGGenericAgentService#isBuildingPrompts()}), as an unknown service is taken
 	 * to; the services building no prompt (the chat input adapter, the network adapters,
 	 * the remote A2A agents) are saved without one. A missing service is left to the
 	 * validation of {@code agentServiceId}. Run inside the audited change: a refusal is
@@ -195,7 +195,7 @@ public class GeboAgentAdminController {
 		final IGAgentServiceRuntimeDao services = runtimeBinder.getImplementationOf(IGAgentServiceRuntimeDao.class);
 		final IGGenericAgentService service = services != null ? services.findByCode(config.getAgentServiceId())
 				: null;
-		if (service == null || service.isRoleRequired()) {
+		if (service == null || service.isBuildingPrompts()) {
 			LOGGER.warn("Refused the agent code:" + config.getCode() + " without a role, its service:"
 					+ config.getAgentServiceId() + (service == null ? " is unknown" : " builds prompts with one"));
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "The agent needs a role: its service "

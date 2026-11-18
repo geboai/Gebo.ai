@@ -90,10 +90,11 @@ public class AgentServiceDescriptor {
 	private MessageSemantic messageSemantic;
 	private AgentServiceKind kind;
 	/**
-	 * Whether a configuration of the service must name a role
-	 * ({@link IGGenericAgentService#isRoleRequired()}).
+	 * Whether the service builds its own prompts
+	 * ({@link IGGenericAgentService#isBuildingPrompts()}): its configurations need a
+	 * role and a main loop prompt template.
 	 */
-	private boolean roleRequired = true;
+	private boolean buildingPrompts = true;
 
 	/**
 	 * Describes a network agent service; a reactive service is described without
@@ -145,7 +146,7 @@ public class AgentServiceDescriptor {
 				}
 			}
 		}
-		descriptor.setRoleRequired(service.isRoleRequired());
+		descriptor.setBuildingPrompts(service.isBuildingPrompts());
 		descriptor.setRoutingAgent(service instanceof IGRoutingNetworkAgentService);
 		descriptor.setNetworkAdapter(service instanceof IGAgentsNetworkToNetworkAgentAdapterService);
 		descriptor.setKind(kindOf(descriptor));
@@ -153,7 +154,7 @@ public class AgentServiceDescriptor {
 			LOGGER.debug("Described agent service id:" + descriptor.getServiceId() + " networkAgent:"
 					+ descriptor.isNetworkAgent() + " routingAgent:" + descriptor.isRoutingAgent() + " networkAdapter:"
 					+ descriptor.isNetworkAdapter() + " reactive:" + descriptor.isReactive() + " adaptable:"
-					+ descriptor.isAdaptable() + " roleRequired:" + descriptor.isRoleRequired() + " semantic:"
+					+ descriptor.isAdaptable() + " buildingPrompts:" + descriptor.isBuildingPrompts() + " semantic:"
 					+ descriptor.getMessageSemantic() + " kind:"
 					+ descriptor.getKind() + " inputType:" + descriptor.getInputType() + " outputType:"
 					+ descriptor.getOutputType());

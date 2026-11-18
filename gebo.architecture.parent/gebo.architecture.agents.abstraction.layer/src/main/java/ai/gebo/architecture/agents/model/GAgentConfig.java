@@ -37,7 +37,7 @@ public class GAgentConfig extends GBaseObject
 	private Boolean subscribeAllTools = null;
 	/**
 	 * The role the agent plays, from the role library its prompts are built with:
-	 * needed when its service builds prompts ({@code IGGenericAgentService#isRoleRequired()}),
+	 * needed when its service builds prompts ({@code IGGenericAgentService#isBuildingPrompts()}),
 	 * which the agents admin controller checks on save.
 	 */
 	private String agentRoleCode = null;

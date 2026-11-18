@@ -26,7 +26,9 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         dateModified: new FormControl(),
         dateCreated: new FormControl(),
         agentServiceId: new FormControl(),
-        agentRoleCode: new FormControl(null, Validators.required),
+        // required, as the main loop prompt, only when the service builds prompts: the
+        // template binds it (isBuildingPrompts)
+        agentRoleCode: new FormControl(),
         agentType: new FormControl(),
         adaptedAgentNetworkCode: new FormControl(),
         agentNetworkServiceCode: new FormControl(),
@@ -60,7 +62,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     });
     protected chatModelsData: ConfigurationEntryGBaseChatModelConfig[] = [];
     protected agentTypes: GBaseObject[] = [];
-    /** The roles an agent can take: one is needed when the agent's service builds prompts with it. */
+    /** The roles an agent can take: one is needed when the agent's service builds prompts. */
     protected roles: GAgentRole[] = [];
     /** The services with their types and kinds, by service id. */
     protected serviceDescriptors: AgentServiceDescriptor[] = [];
@@ -110,7 +112,6 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 this.formGroup.controls["adaptedAgentNetworkCode"].setValue(null);
                 this.formGroup.controls["agentNetworkServiceCode"].setValue(null);
             }
-            this.applyRoleRequirement();
         });
         // the adapted network tells the network service (its factory) that runs it
         this.formGroup.controls["adaptedAgentNetworkCode"].valueChanges.subscribe(code => {
@@ -225,7 +226,6 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 this.agentTypes = values[1];
                 this.roles = values[2] || [];
                 this.serviceDescriptors = values[3] || [];
-                this.applyRoleRequirement();
                 this.networks = values[4] || [];
                 this.toolSources = [...(values[5] || [])].sort((a, b) => (a.description || a.id || "").localeCompare(b.description || b.id || ""));
                 this.libraryTypes = [...(values[6] || [])].sort((a, b) => (a.description || a.id || "").localeCompare(b.description || b.id || ""));
@@ -361,27 +361,13 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     }
 
     /**
-     * Whether the agent needs a role: when its service builds prompts with one, as
-     * an unknown service is taken to. The chat input adapter, the network adapters
-     * and the remote A2A agents build none.
+     * Whether the agent builds its own prompts, so it needs a role and a main loop
+     * prompt template (the backend checks the role on save): true for an unknown
+     * service. The chat input adapter, the network adapters and the remote A2A agents
+     * build none.
      */
-    protected isRoleRequired(): boolean {
-        return this.selectedServiceDescriptor()?.roleRequired !== false;
-    }
-
-    /** The role control is required as the chosen service tells, as the backend checks on save. */
-    private applyRoleRequirement(): void {
-        const ctrl = this.formGroup.controls["agentRoleCode"];
-        const required = this.isRoleRequired();
-        if (required !== ctrl.hasValidator(Validators.required)) {
-            console.debug("[agents-admin] service " + this.formGroup.controls["agentServiceId"].value + " makes the role " + (required ? "required" : "optional"));
-            if (required) {
-                ctrl.addValidators(Validators.required);
-            } else {
-                ctrl.removeValidators(Validators.required);
-            }
-            ctrl.updateValueAndValidity();
-        }
+    protected isBuildingPrompts(): boolean {
+        return this.selectedServiceDescriptor()?.buildingPrompts !== false;
     }
 
     protected isNetworkAdapterService(serviceId: string | null | undefined): boolean {

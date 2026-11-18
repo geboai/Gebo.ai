@@ -95,11 +95,11 @@ public class AgentRoleOnlyWhenNeededTest extends AbstractBaseIntegrationTest {
 	}
 
 	@Test
-	public void theEditorsAreToldWhichServicesNeedARole() {
-		final Map<String, Boolean> roleRequired = networkController.getAgentServices().stream().collect(
-				Collectors.toMap(AgentServiceDescriptor::getServiceId, AgentServiceDescriptor::isRoleRequired));
-		assertEquals(Boolean.FALSE, roleRequired.get(INPUT_ADAPTER));
-		assertEquals(Boolean.FALSE, roleRequired.get(NETWORK_ADAPTER));
-		assertEquals(Boolean.TRUE, roleRequired.get(TOOL_CALLING));
+	public void theEditorsAreToldWhichServicesBuildPrompts() {
+		final Map<String, Boolean> buildingPrompts = networkController.getAgentServices().stream().collect(
+				Collectors.toMap(AgentServiceDescriptor::getServiceId, AgentServiceDescriptor::isBuildingPrompts));
+		assertEquals(Boolean.FALSE, buildingPrompts.get(INPUT_ADAPTER));
+		assertEquals(Boolean.FALSE, buildingPrompts.get(NETWORK_ADAPTER));
+		assertEquals(Boolean.TRUE, buildingPrompts.get(TOOL_CALLING));
 	}
 }

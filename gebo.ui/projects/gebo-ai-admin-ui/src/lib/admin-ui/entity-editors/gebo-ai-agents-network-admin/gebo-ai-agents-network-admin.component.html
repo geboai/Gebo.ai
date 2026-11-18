@@ -328,7 +328,7 @@
                                 </span>
                                 <span><span id="CfgRoleLabel" gebo-ai-text class="font-semibold text-muted-color">Role</span> {{config.agentRoleCode || '—'}}
                                   @if (!config.agentRoleCode) {
-                                    @if (configService?.roleRequired !== false) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
+                                    @if (configService?.buildingPrompts !== false) { <span id="CfgNoRoleWarning" gebo-ai-text class="text-red-600">required: the backend refuses a configuration without a role</span> }
                                     @else { <span id="CfgNoRoleNeeded" gebo-ai-text class="text-muted-color">not needed: this agent builds no prompt of its own</span> }
                                   }
                                 </span>

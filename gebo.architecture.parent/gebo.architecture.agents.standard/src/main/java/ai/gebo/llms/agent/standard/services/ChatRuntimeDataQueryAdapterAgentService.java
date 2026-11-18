@@ -72,9 +72,9 @@ public class ChatRuntimeDataQueryAdapterAgentService
 		return false;
 	}
 
-	/** No prompt is built: the role, when the configuration names one, only tags its messages. */
+	/** It builds no prompt: a role, when the configuration names one, only tags its messages. */
 	@Override
-	public boolean isRoleRequired() {
+	public boolean isBuildingPrompts() {
 		return false;
 	}
 
