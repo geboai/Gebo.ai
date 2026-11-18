@@ -19,4 +19,5 @@ export interface AIToolsAndResourcesLibraryType {
     resourcesTypes: Array<AIResourceType>;
     tools: Array<ToolReference>;
     uploadFileTypes?: Array<string>;
+    mountedOnlyWhenAsked?: boolean;
 }

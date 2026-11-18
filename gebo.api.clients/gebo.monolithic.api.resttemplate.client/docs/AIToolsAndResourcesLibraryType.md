@@ -9,3 +9,4 @@ Name | Type | Description | Notes
 **resourcesTypes** | [**List&lt;AIResourceType&gt;**](AIResourceType.md) |  | 
 **tools** | [**List&lt;ToolReference&gt;**](ToolReference.md) |  | 
 **uploadFileTypes** | **List&lt;String&gt;** |  |  [optional]
+**mountedOnlyWhenAsked** | **Boolean** |  |  [optional]

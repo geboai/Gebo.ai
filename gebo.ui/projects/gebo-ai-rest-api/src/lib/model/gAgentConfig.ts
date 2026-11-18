@@ -45,6 +45,8 @@ export interface GAgentConfig {
     excludedToolSources?: Array<string>;
     additionalToolSources?: Array<string>;
     libraryTypeIds?: Array<string>;
+    subscribeAllLibraries?: boolean;
+    excludedLibraryTypeIds?: Array<string>;
     toolsNeedingConfirmation?: Array<string>;
 }
 export namespace GAgentConfig {

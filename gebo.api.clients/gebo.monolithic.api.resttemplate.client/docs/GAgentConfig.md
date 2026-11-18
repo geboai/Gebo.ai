@@ -34,6 +34,8 @@ Name | Type | Description | Notes
 **excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
 **additionalToolSources** | **List&lt;String&gt;** |  |  [optional]
 **libraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
+**subscribeAllLibraries** | **Boolean** |  |  [optional]
+**excludedLibraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
 **toolsNeedingConfirmation** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>
