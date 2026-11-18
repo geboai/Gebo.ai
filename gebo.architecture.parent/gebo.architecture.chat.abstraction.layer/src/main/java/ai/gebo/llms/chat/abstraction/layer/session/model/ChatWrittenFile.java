@@ -8,6 +8,8 @@
  */
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
+import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -15,8 +17,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import ai.gebo.architecture.ai.files.GConversationFile;
+import ai.gebo.architecture.ai.files.GLibraryFile;
+import ai.gebo.architecture.ai.files.IGFilesLocation;
 import ai.gebo.architecture.ai.model.AIResource;
 import ai.gebo.architecture.ai.model.AIToolsAndResourcesLibraryInstance;
 import lombok.Data;
@@ -45,6 +50,20 @@ public class ChatWrittenFile {
 	 * downloaded on its own; null when not asked.
 	 */
 	private Boolean downloadable = null;
+	/** How the file is now, against the version the tools left; null when not asked. */
+	private State state = null;
+
+	/** How a written file is now, against what the tools left. */
+	public static enum State {
+		/** There, at the version the tools left, or with no version to compare. */
+		AS_WRITTEN,
+		/** There, at another version: something else than the tools changed it since. */
+		CHANGED,
+		/** No longer there, or the conversation no longer holds its location. */
+		GONE,
+		/** Its location could not be read. */
+		UNKNOWN
+	}
 
 	/** The request that wrote it last, numbered from 1; null when none. */
 	public Integer lastRequest() {
@@ -117,6 +136,48 @@ public class ChatWrittenFile {
 			file.setDownloadable(downloadable.contains(file.getLocation() + ":" + slashed(file.getPath())));
 		}
 		return files;
+	}
+
+	/**
+	 * Says of each file how it is now, the way the agents are told of it: the
+	 * location (by its id) describes the file at its path, and its version is
+	 * compared with the one the tools left. A location the conversation no
+	 * longer holds, or a file not there, is gone; a location that fails to
+	 * describe it is unknown.
+	 */
+	public static List<ChatWrittenFile> markState(List<ChatWrittenFile> files,
+			Function<String, IGFilesLocation> locations) {
+		for (ChatWrittenFile file : files) {
+			file.setState(stateOf(file, locations));
+		}
+		return files;
+	}
+
+	private static State stateOf(ChatWrittenFile file, Function<String, IGFilesLocation> locations) {
+		final IGFilesLocation location;
+		try {
+			location = locations != null ? locations.apply(file.getLocation()) : null;
+		} catch (RuntimeException unreadable) {
+			return State.UNKNOWN;
+		}
+		if (location == null) {
+			return State.GONE;
+		}
+		final GLibraryFile now;
+		try {
+			now = location.describe(file.getPath());
+		} catch (NoSuchFileException deleted) {
+			return State.GONE;
+		} catch (IOException | RuntimeException unreadable) {
+			return State.UNKNOWN;
+		}
+		if (now == null) {
+			return State.GONE;
+		}
+		// the same rule as GConversationFilesText: changed only when both versions are known and differ
+		return file.getVersion() != null && now.version() != null && !file.getVersion().equals(now.version())
+				? State.CHANGED
+				: State.AS_WRITTEN;
 	}
 
 	private static String slashed(String path) {
