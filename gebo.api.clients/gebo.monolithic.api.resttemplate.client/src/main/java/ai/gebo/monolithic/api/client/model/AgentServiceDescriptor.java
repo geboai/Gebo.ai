@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AgentServiceDescriptor
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T13:26:14.222512202+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T13:42:01.464941846+01:00[Europe/Rome]")
 
 public class AgentServiceDescriptor {
   @JsonProperty("serviceId")
@@ -123,8 +123,8 @@ public class AgentServiceDescriptor {
   }  @JsonProperty("kind")
   private KindEnum kind = null;
 
-  @JsonProperty("roleRequired")
-  private Boolean roleRequired = null;
+  @JsonProperty("buildingPrompts")
+  private Boolean buildingPrompts = null;
 
   public AgentServiceDescriptor serviceId(String serviceId) {
     this.serviceId = serviceId;
@@ -324,22 +324,22 @@ public class AgentServiceDescriptor {
     this.kind = kind;
   }
 
-  public AgentServiceDescriptor roleRequired(Boolean roleRequired) {
-    this.roleRequired = roleRequired;
+  public AgentServiceDescriptor buildingPrompts(Boolean buildingPrompts) {
+    this.buildingPrompts = buildingPrompts;
     return this;
   }
 
    /**
-   * Get roleRequired
-   * @return roleRequired
+   * Get buildingPrompts
+   * @return buildingPrompts
   **/
   @Schema(description = "")
-  public Boolean isRoleRequired() {
-    return roleRequired;
+  public Boolean isBuildingPrompts() {
+    return buildingPrompts;
   }
 
-  public void setRoleRequired(Boolean roleRequired) {
-    this.roleRequired = roleRequired;
+  public void setBuildingPrompts(Boolean buildingPrompts) {
+    this.buildingPrompts = buildingPrompts;
   }
 
 
@@ -363,12 +363,12 @@ public class AgentServiceDescriptor {
         Objects.equals(this.adaptable, agentServiceDescriptor.adaptable) &&
         Objects.equals(this.messageSemantic, agentServiceDescriptor.messageSemantic) &&
         Objects.equals(this.kind, agentServiceDescriptor.kind) &&
-        Objects.equals(this.roleRequired, agentServiceDescriptor.roleRequired);
+        Objects.equals(this.buildingPrompts, agentServiceDescriptor.buildingPrompts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind, roleRequired);
+    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind, buildingPrompts);
   }
 
 
@@ -388,7 +388,7 @@ public class AgentServiceDescriptor {
     sb.append("    adaptable: ").append(toIndentedString(adaptable)).append("\n");
     sb.append("    messageSemantic: ").append(toIndentedString(messageSemantic)).append("\n");
     sb.append("    kind: ").append(toIndentedString(kind)).append("\n");
-    sb.append("    roleRequired: ").append(toIndentedString(roleRequired)).append("\n");
+    sb.append("    buildingPrompts: ").append(toIndentedString(buildingPrompts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

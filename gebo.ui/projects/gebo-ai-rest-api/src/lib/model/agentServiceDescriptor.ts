@@ -22,7 +22,7 @@ export interface AgentServiceDescriptor {
     adaptable?: boolean;
     messageSemantic?: AgentServiceDescriptor.MessageSemanticEnum;
     kind?: AgentServiceDescriptor.KindEnum;
-    roleRequired?: boolean;
+    buildingPrompts?: boolean;
 }
 export namespace AgentServiceDescriptor {
     export type MessageSemanticEnum = 'EXECUTE_AND_SHARE_RESULT' | 'RESPONSE';
