@@ -15,8 +15,19 @@ Name | Type | Description | Notes
 **description** | **String** |  |  [optional]
 **informativeUrl** | **String** |  |  [optional]
 **supportsVision** | **Boolean** |  |  [optional]
+**inputModalities** | [**List&lt;InputModalitiesEnum&gt;**](#List&lt;InputModalitiesEnum&gt;) |  |  [optional]
 **supportsReasoning** | **Boolean** |  |  [optional]
 **deprecated** | **Boolean** |  |  [optional]
 **deprecationDate** | **String** |  |  [optional]
 **retirementDate** | **String** |  |  [optional]
 **replacementModel** | **String** |  |  [optional]
+
+<a name="List<InputModalitiesEnum>"></a>
+## Enum: List&lt;InputModalitiesEnum&gt;
+Name | Value
+---- | -----
+TEXT | &quot;TEXT&quot;
+IMAGE | &quot;IMAGE&quot;
+AUDIO | &quot;AUDIO&quot;
+VIDEO | &quot;VIDEO&quot;
+DOCUMENT | &quot;DOCUMENT&quot;

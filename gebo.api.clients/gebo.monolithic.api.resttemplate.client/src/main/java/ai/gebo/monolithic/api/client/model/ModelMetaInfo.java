@@ -18,11 +18,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * ModelMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T11:57:26.596330108+01:00[Europe/Rome]")
 
 public class ModelMetaInfo {
   @JsonProperty("providerId")
@@ -60,6 +62,43 @@ public class ModelMetaInfo {
 
   @JsonProperty("supportsVision")
   private Boolean supportsVision = null;
+
+  /**
+   * Gets or Sets inputModalities
+   */
+  public enum InputModalitiesEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO"),
+    DOCUMENT("DOCUMENT");
+
+    private String value;
+
+    InputModalitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static InputModalitiesEnum fromValue(String input) {
+      for (InputModalitiesEnum b : InputModalitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("inputModalities")
+  private List<InputModalitiesEnum> inputModalities = null;
 
   @JsonProperty("supportsReasoning")
   private Boolean supportsReasoning = null;
@@ -292,6 +331,32 @@ public class ModelMetaInfo {
     this.supportsVision = supportsVision;
   }
 
+  public ModelMetaInfo inputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+    return this;
+  }
+
+  public ModelMetaInfo addInputModalitiesItem(InputModalitiesEnum inputModalitiesItem) {
+    if (this.inputModalities == null) {
+      this.inputModalities = new ArrayList<>();
+    }
+    this.inputModalities.add(inputModalitiesItem);
+    return this;
+  }
+
+   /**
+   * Get inputModalities
+   * @return inputModalities
+  **/
+  @Schema(description = "")
+  public List<InputModalitiesEnum> getInputModalities() {
+    return inputModalities;
+  }
+
+  public void setInputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+  }
+
   public ModelMetaInfo supportsReasoning(Boolean supportsReasoning) {
     this.supportsReasoning = supportsReasoning;
     return this;
@@ -404,6 +469,7 @@ public class ModelMetaInfo {
         Objects.equals(this.description, modelMetaInfo.description) &&
         Objects.equals(this.informativeUrl, modelMetaInfo.informativeUrl) &&
         Objects.equals(this.supportsVision, modelMetaInfo.supportsVision) &&
+        Objects.equals(this.inputModalities, modelMetaInfo.inputModalities) &&
         Objects.equals(this.supportsReasoning, modelMetaInfo.supportsReasoning) &&
         Objects.equals(this.deprecated, modelMetaInfo.deprecated) &&
         Objects.equals(this.deprecationDate, modelMetaInfo.deprecationDate) &&
@@ -413,7 +479,7 @@ public class ModelMetaInfo {
 
   @Override
   public int hashCode() {
-    return Objects.hash(providerId, modelId, chatModel, embeddingModel, supportsStructuredOutput, supportsFunctionCalls, contextLength, tokenizingThreashold, maxOutputToken, description, informativeUrl, supportsVision, supportsReasoning, deprecated, deprecationDate, retirementDate, replacementModel);
+    return Objects.hash(providerId, modelId, chatModel, embeddingModel, supportsStructuredOutput, supportsFunctionCalls, contextLength, tokenizingThreashold, maxOutputToken, description, informativeUrl, supportsVision, inputModalities, supportsReasoning, deprecated, deprecationDate, retirementDate, replacementModel);
   }
 
 
@@ -434,6 +500,7 @@ public class ModelMetaInfo {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    informativeUrl: ").append(toIndentedString(informativeUrl)).append("\n");
     sb.append("    supportsVision: ").append(toIndentedString(supportsVision)).append("\n");
+    sb.append("    inputModalities: ").append(toIndentedString(inputModalities)).append("\n");
     sb.append("    supportsReasoning: ").append(toIndentedString(supportsReasoning)).append("\n");
     sb.append("    deprecated: ").append(toIndentedString(deprecated)).append("\n");
     sb.append("    deprecationDate: ").append(toIndentedString(deprecationDate)).append("\n");

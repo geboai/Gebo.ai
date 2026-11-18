@@ -24,7 +24,7 @@ import java.util.List;
  * LLMCreateModelData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:00:30.875750714+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T11:57:26.596330108+01:00[Europe/Rome]")
 
 public class LLMCreateModelData {
   /**
@@ -160,6 +160,43 @@ public class LLMCreateModelData {
 
   }  @JsonProperty("thinking")
   private ThinkingEnum thinking = null;
+
+  /**
+   * Gets or Sets inputModalities
+   */
+  public enum InputModalitiesEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO"),
+    DOCUMENT("DOCUMENT");
+
+    private String value;
+
+    InputModalitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static InputModalitiesEnum fromValue(String input) {
+      for (InputModalitiesEnum b : InputModalitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("inputModalities")
+  private List<InputModalitiesEnum> inputModalities = null;
 
   @JsonProperty("temperature")
   private Double temperature = null;
@@ -370,6 +407,32 @@ public class LLMCreateModelData {
     this.thinking = thinking;
   }
 
+  public LLMCreateModelData inputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+    return this;
+  }
+
+  public LLMCreateModelData addInputModalitiesItem(InputModalitiesEnum inputModalitiesItem) {
+    if (this.inputModalities == null) {
+      this.inputModalities = new ArrayList<>();
+    }
+    this.inputModalities.add(inputModalitiesItem);
+    return this;
+  }
+
+   /**
+   * Get inputModalities
+   * @return inputModalities
+  **/
+  @Schema(description = "")
+  public List<InputModalitiesEnum> getInputModalities() {
+    return inputModalities;
+  }
+
+  public void setInputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+  }
+
   public LLMCreateModelData temperature(Double temperature) {
     this.temperature = temperature;
     return this;
@@ -409,12 +472,13 @@ public class LLMCreateModelData {
         Objects.equals(this.uses, llMCreateModelData.uses) &&
         Objects.equals(this.maxGeneratedTokens, llMCreateModelData.maxGeneratedTokens) &&
         Objects.equals(this.thinking, llMCreateModelData.thinking) &&
+        Objects.equals(this.inputModalities, llMCreateModelData.inputModalities) &&
         Objects.equals(this.temperature, llMCreateModelData.temperature);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking, temperature);
+    return Objects.hash(type, doModelsLookup, serviceHandler, setAsDefaultModel, secretId, modelCode, baseUrl, contextWindow, uses, maxGeneratedTokens, thinking, inputModalities, temperature);
   }
 
 
@@ -434,6 +498,7 @@ public class LLMCreateModelData {
     sb.append("    uses: ").append(toIndentedString(uses)).append("\n");
     sb.append("    maxGeneratedTokens: ").append(toIndentedString(maxGeneratedTokens)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
+    sb.append("    inputModalities: ").append(toIndentedString(inputModalities)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("}");
     return sb.toString();
