@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.client.rest.controllers;
 
+import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatSessionLifeCycleService;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -19,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
 import ai.gebo.llms.chat.abstraction.layer.services.IGChatService;
+import ai.gebo.llms.chat.abstraction.layer.model.GUserChatInfo;
 import ai.gebo.llms.chat.abstraction.layer.services.IGRagChatService;
 import ai.gebo.llms.chat.abstraction.layer.services.IGUserUploadContentHandler;
 import ai.gebo.llms.chat.abstraction.layer.model.GChatUploadFileTypes;
@@ -39,6 +42,7 @@ public class GeboUserChatUploadsController {
 	final IGChatService chatService;
 	final IGRagChatService ragChatService;
 	final IGChatUploadFileTypesService uploadFileTypes;
+	final IGChatSessionLifeCycleService sessionLifeCycle;
 
 	/**
 	 * The files a chat accepts as uploads: the ones read into the chat, then the ones
@@ -57,6 +61,42 @@ public class GeboUserChatUploadsController {
 			@PathVariable("userSessionCode") String userSessionCode, @RequestParam("files[]") List<MultipartFile> files)
 			throws IOException {
 		return uploadsHandler.chatSessionUpload(userSessionCode, files);
+	}
+
+	/** The files uploaded to a chat created for them, and the chat. */
+	@lombok.Data
+	@lombok.NoArgsConstructor
+	@lombok.AllArgsConstructor
+	public static class UploadsWithNewChat {
+		private List<UserUploadedContent> uploads = null;
+		private GUserChatInfo chatInfo = null;
+	}
+
+	/**
+	 * Uploads files to a chat with a model that does not exist yet - the first thing a
+	 * user does in a new chat may be an upload: the chat is created, then the files are
+	 * uploaded to it. A chat that got no file is kept: the user is in it already.
+	 */
+	@PostMapping(value = "chatSessionCreateWithUpload/{chatModelCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<UploadsWithNewChat> chatSessionCreateWithUpload(
+			@PathVariable("chatModelCode") String chatModelCode, @RequestParam("files[]") List<MultipartFile> files)
+			throws IOException, GeboPersistenceException {
+		return uploadedToNewChat(sessionLifeCycle.createCleanChatByModelCode(chatModelCode), files);
+	}
+
+	/** As {@link #chatSessionCreateWithUpload(String, List)}, for a chat with a chat profile. */
+	@PostMapping(value = "ragChatSessionCreateWithUpload/{chatProfileCode}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public OperationStatus<UploadsWithNewChat> ragChatSessionCreateWithUpload(
+			@PathVariable("chatProfileCode") String chatProfileCode,
+			@RequestParam("files[]") List<MultipartFile> files) throws IOException, GeboPersistenceException {
+		return uploadedToNewChat(sessionLifeCycle.createCleanChatByChatProfileCode(chatProfileCode), files);
+	}
+
+	private OperationStatus<UploadsWithNewChat> uploadedToNewChat(GUserChatInfo chat, List<MultipartFile> files)
+			throws IOException {
+		final OperationStatus<List<UserUploadedContent>> uploaded = uploadsHandler.chatSessionUpload(chat.getCode(),
+				files);
+		return OperationStatus.of(new UploadsWithNewChat(uploaded.getResult(), chat), uploaded.getMessages());
 	}
 
 	@DeleteMapping(value = "deleteSessionUploads/{userSessionCode}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
