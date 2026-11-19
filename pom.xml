@@ -45,7 +45,19 @@
 		     11.0.27 managed), netty (4.2.18.Final pinned, 4.2.19.Final managed) and
 		     jackson (3.1.7 / 2.21.7, now managed) pins, which are gone. The pins
 		     below are the exceptions, each with the condition under which it must go.
-		     MongoDB Java driver: Boot 4.1.2 still manages 5.8.1, affected by
+		     Jackson 2 (com.fasterxml.jackson:jackson-bom, property jackson-2-bom.version):
+		     Boot 4.1.2 manages 2.21.7, affected by CVE-2026-110879 (critical, CVSS 9.8:
+		     polymorphic type-ID validation bypass through generic type arguments - an
+		     incomplete fix of CVE-2026-54512), fixed in 2.21.8 / 2.22.4. 2.23.0 is the
+		     current release past that fix.
+		     DROP this property as soon as the parent manages 2.23.0 or later. -->
+		<jackson-2-bom.version>2.23.0</jackson-2-bom.version>
+		<!-- Jackson 3 (tools.jackson:jackson-bom, property jackson-bom.version):
+		     Boot 4.1.2 manages 3.1.7, affected by the same CVE-2026-110879 as the
+		     Jackson 2 line above, fixed in 3.1.8 / 3.2.4.
+		     DROP this property as soon as the parent manages 3.1.8 or later. -->
+		<jackson-bom.version>3.1.8</jackson-bom.version>
+		<!-- MongoDB Java driver: Boot 4.1.2 still manages 5.8.1, affected by
 		     CVE-2026-18710 (a credential could be written to log output, fixed in
 		     5.9.2) and by CVE-2026-88032 / CVE-2026-88033 (use-after-free in reactive
 		     client-side encryption, GridFS query injection), fixed only from 5.11.1 -
@@ -243,6 +255,16 @@
 				<version>2.0.0</version>
 				<type>pom</type>
 				<scope>import</scope>
+			</dependency>
+			<!-- org.json:json arrives transitively (Spring Boot does not manage it and no
+			     module declares it) at 20231013, affected by CVE-2026-59171
+			     (GHSA-ghc9-756g-vrcv: JSONTokener unbounded numeric-string
+			     resource-exhaustion DoS, moderate). 20260719 is the fix.
+			     DROP once a managed dependency brings 20260719 or later. -->
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>20260719</version>
 			</dependency>
 			<!-- Tika arrives transitively through io.github.twwch:markdown2office, which
 			     asks for 3.2.2 while dragging tika-langdetect-optimaize 3.2.3 — the family
