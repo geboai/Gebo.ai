@@ -1,5 +1,11 @@
 package ai.gebo.architecture.a2aclients.service.impl;
 
+import ai.gebo.architecture.ai.files.GLibraryFile;
+import ai.gebo.architecture.ai.files.IGConversationFilesKeeper;
+import ai.gebo.architecture.ai.files.IGConversationGeneratedFilesStore;
+import org.a2aproject.sdk.spec.FileWithUri;
+import org.a2aproject.sdk.spec.FileWithBytes;
+import org.a2aproject.sdk.spec.FilePart;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -135,7 +141,10 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 		}
 		try {
 			EventKind result = connector.sendMessage(remoteConfig, inputText, session.getId());
-			String outputText = extractText(result);
+			// as the user the network runs for: a file the agent sent is kept in their conversation
+			String outputText = runAs != null
+					? runAs.doRunAsWithReturn(() -> extractText(result, chatRequestContext))
+					: extractText(result, chatRequestContext);
 			GAgentRole role = resolveRole(config);
 			AgentsExchangeMessage<String> out = new AgentsExchangeMessage<>(session.getId(),
 					getProducedMessageSemantic(), contextAgentPersona.getNetworkAgentName(), role, msg.getFromAgent(),
@@ -180,15 +189,15 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 		return synthetic;
 	}
 
-	private String extractText(EventKind result) {
+	private String extractText(EventKind result, IChatRequestContext context) {
 		if (result instanceof Message message) {
-			return renderParts(message.parts());
+			return renderParts(message.parts(), context);
 		}
 		if (result instanceof Task task) {
 			if (task.artifacts() != null) {
 				StringBuilder sb = new StringBuilder();
 				for (Artifact artifact : task.artifacts()) {
-					String rendered = renderParts(artifact.parts());
+					String rendered = renderParts(artifact.parts(), context);
 					if (!rendered.isBlank()) {
 						if (sb.length() > 0) {
 							sb.append("\n");
@@ -201,31 +210,87 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 				}
 			}
 			if (task.status() != null && task.status().message() != null) {
-				String rendered = renderParts(task.status().message().parts());
+				String rendered = renderParts(task.status().message().parts(), context);
 				if (!rendered.isBlank()) {
 					return rendered;
 				}
 			}
 			if (task.history() != null && !task.history().isEmpty()) {
-				return renderParts(task.history().get(task.history().size() - 1).parts());
+				return renderParts(task.history().get(task.history().size() - 1).parts(), context);
 			}
 		}
 		return "";
 	}
 
-	private String renderParts(List<Part<?>> parts) {
+	/**
+	 * The parts of a remote agent's answer as the network reads them: the texts as
+	 * they are; a file sent as bytes is kept in the conversation and named in the
+	 * text, so that it is not lost - the user finds it among the conversation's files,
+	 * the tools working on files open it, a model that takes such files sees it on
+	 * the next requests; a file sent as an address is named with its address, it is
+	 * not fetched.
+	 */
+	private String renderParts(List<Part<?>> parts, IChatRequestContext context) {
 		if (parts == null) {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder();
 		for (Part<?> part : parts) {
+			String rendered = null;
 			if (part instanceof TextPart textPart) {
+				rendered = textPart.text();
+			} else if (part instanceof FilePart filePart && filePart.file() instanceof FileWithBytes file) {
+				rendered = keep(file, context);
+			} else if (part instanceof FilePart filePart && filePart.file() instanceof FileWithUri file) {
+				rendered = "[file " + (file.name() != null ? file.name() + " " : "") + file.uri()
+						+ (file.mimeType() != null ? " (" + file.mimeType() + ")" : "") + "]";
+			} else if (part != null && LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Remote A2A agent " + getId() + " sent a " + part.getClass().getSimpleName()
+						+ ", which is not read");
+			}
+			if (rendered != null) {
 				if (sb.length() > 0) {
 					sb.append("\n");
 				}
-				sb.append(textPart.text());
+				sb.append(rendered);
 			}
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Keeps a file a remote agent sent in the conversation the network works for and
+	 * tells where it is; when it cannot be kept - no conversation, no store, unreadable
+	 * bytes - it is named with its type.
+	 */
+	private String keep(FileWithBytes file, IChatRequestContext context) {
+		final String described = "[file " + (file.name() != null ? file.name() : "")
+				+ (file.mimeType() != null ? " (" + file.mimeType() + ")" : "") + "]";
+		final String session = context != null ? context.getSessionID() : null;
+		if (session == null || file.bytes() == null || file.bytes().isBlank()) {
+			return described;
+		}
+		try {
+			final IGConversationGeneratedFilesStore store = runtimeBinder
+					.getImplementationOf(IGConversationGeneratedFilesStore.class);
+			if (store == null) {
+				return described;
+			}
+			final byte[] data = java.util.Base64.getDecoder().decode(file.bytes().trim());
+			final GLibraryFile kept = store.store(session,
+					file.name() != null && !file.name().isBlank() ? file.name()
+							: remoteConfig.getExportingPrefix() + "-file",
+					file.mimeType(), data);
+			final IGConversationFilesKeeper keeper = IGConversationFilesKeeper.of(context.getToolsContext());
+			if (keeper != null) {
+				keeper.written(kept);
+			}
+			return "[file kept in this conversation as " + kept.location() + ":" + kept.path() + " ("
+					+ kept.contentType() + ", " + kept.size() + " bytes)]";
+		} catch (Exception e) {
+			LOGGER.error("The file " + file.name() + " sent by remote A2A agent " + getId()
+					+ " cannot be kept in session " + session, e);
+			return described;
+		}
 	}
 }

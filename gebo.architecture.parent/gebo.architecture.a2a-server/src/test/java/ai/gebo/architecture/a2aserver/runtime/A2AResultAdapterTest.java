@@ -152,4 +152,35 @@ class A2AResultAdapterTest {
 		assertFalse(kinds.isAllowed(A2AExportedAgent.Kind.NETWORK));
 		assertTrue(kinds.isAllowed(A2AExportedAgent.Kind.AGENT));
 	}
+
+	@Test
+	void thePicturesARunGeneratedTravelAsFileParts() throws Exception {
+		final ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource picture = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource();
+		picture.setCode("g1");
+		picture.setFileName("drawing.png");
+		picture.setContentType("image/png");
+		picture.setFileSize(3L);
+		final ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService storage = org.mockito.Mockito
+				.mock(ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService.class);
+		org.mockito.Mockito.when(storage.streamContent(picture))
+				.thenReturn(new java.io.ByteArrayInputStream(new byte[] { 1, 2, 3 }));
+		final A2AResultAdapter withStorage = new A2AResultAdapter();
+		withStorage.setStorageArea(storage);
+		final GeboChatResponse response = new GeboChatResponse();
+		response.setGeneratedResources(java.util.List.of(picture));
+
+		final java.util.List<org.a2aproject.sdk.spec.FilePart> files = withStorage.messageOf(response, "done", "ctx")
+				.parts().stream().filter(p -> p instanceof org.a2aproject.sdk.spec.FilePart)
+				.map(p -> (org.a2aproject.sdk.spec.FilePart) p).toList();
+
+		org.junit.jupiter.api.Assertions.assertEquals(1, files.size());
+		final org.a2aproject.sdk.spec.FileWithBytes file = (org.a2aproject.sdk.spec.FileWithBytes) files.get(0).file();
+		org.junit.jupiter.api.Assertions.assertEquals("image/png", file.mimeType());
+		org.junit.jupiter.api.Assertions.assertEquals("drawing.png", file.name());
+		org.junit.jupiter.api.Assertions.assertEquals(java.util.Base64.getEncoder().encodeToString(new byte[] { 1, 2, 3 }),
+				file.bytes());
+		// without the storage, as in a bare adapter, the answer has no file part and still its text
+		org.junit.jupiter.api.Assertions.assertTrue(adapter.messageOf(response, "done", "ctx").parts().stream()
+				.noneMatch(p -> p instanceof org.a2aproject.sdk.spec.FilePart));
+	}
 }

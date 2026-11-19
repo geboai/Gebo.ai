@@ -9,6 +9,11 @@
 
 package ai.gebo.architecture.a2aserver.runtime;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.a2aproject.sdk.spec.FileWithBytes;
+import org.a2aproject.sdk.spec.FilePart;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -60,6 +65,7 @@ public class A2AResultAdapter {
 				parts.add(citations);
 			}
 			parts.add(runInfoOf(response));
+			parts.addAll(filesOf(response));
 		}
 		final Message.Builder builder = Message.builder().role(Message.Role.ROLE_AGENT)
 				.messageId(UUID.randomUUID().toString()).parts(parts);
@@ -71,6 +77,52 @@ public class A2AResultAdapter {
 					+ (response != null ? documentsOf(response).size() : 0));
 		}
 		return builder.build();
+	}
+
+	/** The size in bytes a generated file may have to travel in the answer. */
+	static final long MAX_FILE_BYTES = 20L * 1024 * 1024;
+	/** Reads the files a run generated; absent in a unit test. */
+	@Autowired(required = false)
+	private IGChatStorageAreaService storageArea;
+
+	void setStorageArea(IGChatStorageAreaService storageArea) {
+		this.storageArea = storageArea;
+	}
+
+	/**
+	 * The files the run generated - the pictures its models drew - as file parts, bytes
+	 * included: the caller has no way to fetch them from Gebo. A file that cannot be
+	 * read, or is larger than {@link #MAX_FILE_BYTES}, is left out and logged.
+	 */
+	List<Part<?>> filesOf(GeboChatResponse response) {
+		final List<Part<?>> files = new ArrayList<>();
+		if (storageArea == null || response.getGeneratedResources() == null) {
+			return files;
+		}
+		for (LLMGeneratedResource generated : response.getGeneratedResources()) {
+			if (generated == null) {
+				continue;
+			}
+			if (generated.getFileSize() != null && generated.getFileSize() > MAX_FILE_BYTES) {
+				LOGGER.warn("The generated file " + generated.getFileName() + " (" + generated.getFileSize()
+						+ " bytes) is too large to travel in the A2A answer");
+				continue;
+			}
+			try (java.io.InputStream content = storageArea.streamContent(generated)) {
+				if (content == null) {
+					continue;
+				}
+				final byte[] bytes = content.readAllBytes();
+				final String type = generated.getContentType() != null && generated.getContentType().contains("/")
+						? generated.getContentType()
+						: "application/octet-stream";
+				final String name = generated.getFileName() != null ? generated.getFileName() : generated.getCode();
+				files.add(new FilePart(new FileWithBytes(type, name, bytes)));
+			} catch (Exception e) {
+				LOGGER.error("The generated file " + generated.getFileName() + " cannot be read into the A2A answer", e);
+			}
+		}
+		return files;
 	}
 
 	/** A streamed frame: the chunk of text it carries, or null when it carries none. */

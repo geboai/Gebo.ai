@@ -185,6 +185,32 @@ public class ChatUploadsForMultimodalModelsTest extends AbstractBaseTestLLmsInte
 		org.junit.jupiter.api.Assertions.assertArrayEquals(png(), media.get(0).readBytes());
 	}
 
+	@Autowired
+	private ai.gebo.architecture.ai.files.IGConversationGeneratedFilesStore generatedFiles;
+	@Autowired
+	private ai.gebo.llms.chat.abstraction.layer.services.impl.ChatGeneratedFilesProvider generatedLocation;
+
+	@Test
+	public void aFileAToolOrAnAgentReturnedIsKeptAndFoundAmongTheConversationsFiles() throws Exception {
+		final String chat = newSession("a chat whose tool returned a picture");
+		final byte[] png = png();
+		final ai.gebo.architecture.ai.files.GLibraryFile kept = generatedFiles.store(chat, "chart", "image/png", png);
+		assertEquals("generated", kept.location());
+		assertEquals("chart.png", kept.path(), "named with the extension of its type");
+		assertEquals("image/png", kept.contentType());
+		final ai.gebo.architecture.ai.files.GLibraryFile again = generatedFiles.store(chat, "chart.png", "image/png",
+				png);
+		assertEquals("chart (2).png", again.path(), "two files of one name stay apart");
+
+		final ai.gebo.architecture.ai.files.IGFilesLocation location = generatedLocation.filesOf(chat);
+		assertFalse(location.isWritable());
+		assertEquals(List.of("chart.png", "chart (2).png"),
+				location.list(null, false).stream().map(ai.gebo.architecture.ai.files.GLibraryFile::path).toList());
+		org.junit.jupiter.api.Assertions.assertArrayEquals(png,
+				location.read("chart.png").content().getInputStream().readAllBytes(), "the tools working on files open it");
+		assertEquals(2, storageArea.getSessionMedia(chat).size(), "and a model that sees gets it on the next requests");
+	}
+
 	private static org.springframework.ai.chat.messages.UserMessage lastUserMessage(
 			org.springframework.ai.chat.prompt.Prompt prompt) {
 		org.springframework.ai.chat.messages.UserMessage last = null;
