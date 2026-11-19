@@ -20,8 +20,8 @@ export interface DocumentReferenceView {
     parentProjectCode?: string;
     rootKnowledgebaseCode?: string;
     modificationDate?: Date;
-    relativePath?: string;
     parentVirtualFolderCode?: string;
+    relativePath?: string;
     creationDate?: Date;
     contentType?: string;
 }

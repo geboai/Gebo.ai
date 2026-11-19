@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **informativeUrl** | **String** |  |  [optional]
 **supportsVision** | **Boolean** |  |  [optional]
 **inputModalities** | [**List&lt;InputModalitiesEnum&gt;**](#List&lt;InputModalitiesEnum&gt;) |  |  [optional]
+**outputModalities** | [**List&lt;OutputModalitiesEnum&gt;**](#List&lt;OutputModalitiesEnum&gt;) |  |  [optional]
 **supportsReasoning** | **Boolean** |  |  [optional]
 **deprecated** | **Boolean** |  |  [optional]
 **deprecationDate** | **String** |  |  [optional]
@@ -24,6 +25,16 @@ Name | Type | Description | Notes
 
 <a name="List<InputModalitiesEnum>"></a>
 ## Enum: List&lt;InputModalitiesEnum&gt;
+Name | Value
+---- | -----
+TEXT | &quot;TEXT&quot;
+IMAGE | &quot;IMAGE&quot;
+AUDIO | &quot;AUDIO&quot;
+VIDEO | &quot;VIDEO&quot;
+DOCUMENT | &quot;DOCUMENT&quot;
+
+<a name="List<OutputModalitiesEnum>"></a>
+## Enum: List&lt;OutputModalitiesEnum&gt;
 Name | Value
 ---- | -----
 TEXT | &quot;TEXT&quot;

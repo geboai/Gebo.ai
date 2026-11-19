@@ -5,8 +5,10 @@ All URIs are relative to *http://localhost:13999*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**acceptedFileTypes**](GeboUserChatUploadsControllerApi.md#acceptedFileTypes) | **GET** /api/users/GeboUserChatUploadsController/acceptedFileTypes | 
+[**chatSessionCreateWithUpload**](GeboUserChatUploadsControllerApi.md#chatSessionCreateWithUpload) | **POST** /api/users/GeboUserChatUploadsController/chatSessionCreateWithUpload/{chatModelCode} | 
 [**chatSessionUpload**](GeboUserChatUploadsControllerApi.md#chatSessionUpload) | **POST** /api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode} | 
 [**deleteSessionUploads**](GeboUserChatUploadsControllerApi.md#deleteSessionUploads) | **DELETE** /api/users/GeboUserChatUploadsController/deleteSessionUploads/{userSessionCode} | 
+[**ragChatSessionCreateWithUpload**](GeboUserChatUploadsControllerApi.md#ragChatSessionCreateWithUpload) | **POST** /api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/{chatProfileCode} | 
 [**serveContent**](GeboUserChatUploadsControllerApi.md#serveContent) | **GET** /api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId} | 
 
 <a name="acceptedFileTypes"></a>
@@ -52,6 +54,51 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="chatSessionCreateWithUpload"></a>
+# **chatSessionCreateWithUpload**
+> OperationStatusUploadsWithNewChat chatSessionCreateWithUpload(chatModelCode, files)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
+
+
+GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
+String chatModelCode = "chatModelCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
+try {
+    OperationStatusUploadsWithNewChat result = apiInstance.chatSessionCreateWithUpload(chatModelCode, files);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatUploadsControllerApi#chatSessionCreateWithUpload");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **chatModelCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
+
+### Return type
+
+[**OperationStatusUploadsWithNewChat**](OperationStatusUploadsWithNewChat.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
  - **Accept**: application/json
 
 <a name="chatSessionUpload"></a>
@@ -142,6 +189,51 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="ragChatSessionCreateWithUpload"></a>
+# **ragChatSessionCreateWithUpload**
+> OperationStatusUploadsWithNewChat ragChatSessionCreateWithUpload(chatProfileCode, files)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboUserChatUploadsControllerApi;
+
+
+GeboUserChatUploadsControllerApi apiInstance = new GeboUserChatUploadsControllerApi();
+String chatProfileCode = "chatProfileCode_example"; // String | 
+List<File> files = Arrays.asList(new File("/path/to/file")); // List<File> | 
+try {
+    OperationStatusUploadsWithNewChat result = apiInstance.ragChatSessionCreateWithUpload(chatProfileCode, files);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboUserChatUploadsControllerApi#ragChatSessionCreateWithUpload");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **chatProfileCode** | **String**|  |
+ **files** | [**List&lt;File&gt;**](File.md)|  | [optional]
+
+### Return type
+
+[**OperationStatusUploadsWithNewChat**](OperationStatusUploadsWithNewChat.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: multipart/form-data
  - **Accept**: application/json
 
 <a name="serveContent"></a>

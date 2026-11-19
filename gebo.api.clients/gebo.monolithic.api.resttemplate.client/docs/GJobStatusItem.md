@@ -3,12 +3,12 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**description** | **String** |  |  [optional]
+**error** | **Boolean** |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
 **finished** | **Boolean** |  |  [optional]
 **processing** | **Boolean** |  |  [optional]
 **endDateTime** | [**Date**](Date.md) |  |  [optional]
-**description** | **String** |  |  [optional]
-**error** | **Boolean** |  |  [optional]
 **code** | **String** |  |  [optional]
 **workflowType** | **String** |  |  [optional]
 **workflowId** | **String** |  |  [optional]

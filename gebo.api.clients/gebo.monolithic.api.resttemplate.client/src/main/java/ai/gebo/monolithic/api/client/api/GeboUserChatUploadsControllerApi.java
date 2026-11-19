@@ -5,6 +5,7 @@ import ai.gebo.monolithic.api.client.invoker.ApiClient;
 import java.io.File;
 import ai.gebo.monolithic.api.client.model.GChatUploadFileTypes;
 import ai.gebo.monolithic.api.client.model.OperationStatusListUserUploadedContent;
+import ai.gebo.monolithic.api.client.model.OperationStatusUploadsWithNewChat;
 import ai.gebo.monolithic.api.client.model.UserUploadedContent;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-19T21:40:25.145757220+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-19T22:39:31.008494278+01:00[Europe/Rome]")
 
 public class GeboUserChatUploadsControllerApi {
     private ApiClient apiClient;
@@ -88,6 +89,59 @@ public class GeboUserChatUploadsControllerApi {
 
         ParameterizedTypeReference<GChatUploadFileTypes> returnType = new ParameterizedTypeReference<GChatUploadFileTypes>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param chatModelCode  (required)
+     * @param files  (optional)
+     * @return OperationStatusUploadsWithNewChat
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusUploadsWithNewChat chatSessionCreateWithUpload(String chatModelCode, List<File> files) throws RestClientException {
+        return chatSessionCreateWithUploadWithHttpInfo(chatModelCode, files).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param chatModelCode  (required)
+     * @param files  (optional)
+     * @return ResponseEntity&lt;OperationStatusUploadsWithNewChat&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusUploadsWithNewChat> chatSessionCreateWithUploadWithHttpInfo(String chatModelCode, List<File> files) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'chatModelCode' is set
+        if (chatModelCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'chatModelCode' when calling chatSessionCreateWithUpload");
+        }
+        // create path and map variables
+        final Map<String, Object> uriVariables = new HashMap<String, Object>();
+        uriVariables.put("chatModelCode", chatModelCode);
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/chatSessionCreateWithUpload/{chatModelCode}").buildAndExpand(uriVariables).toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        if (files != null)
+            formParams.add("files[]", files);
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "multipart/form-data"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusUploadsWithNewChat> returnType = new ParameterizedTypeReference<OperationStatusUploadsWithNewChat>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
@@ -196,6 +250,59 @@ public class GeboUserChatUploadsControllerApi {
 
         ParameterizedTypeReference<OperationStatusListUserUploadedContent> returnType = new ParameterizedTypeReference<OperationStatusListUserUploadedContent>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.DELETE, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param chatProfileCode  (required)
+     * @param files  (optional)
+     * @return OperationStatusUploadsWithNewChat
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusUploadsWithNewChat ragChatSessionCreateWithUpload(String chatProfileCode, List<File> files) throws RestClientException {
+        return ragChatSessionCreateWithUploadWithHttpInfo(chatProfileCode, files).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param chatProfileCode  (required)
+     * @param files  (optional)
+     * @return ResponseEntity&lt;OperationStatusUploadsWithNewChat&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusUploadsWithNewChat> ragChatSessionCreateWithUploadWithHttpInfo(String chatProfileCode, List<File> files) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'chatProfileCode' is set
+        if (chatProfileCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'chatProfileCode' when calling ragChatSessionCreateWithUpload");
+        }
+        // create path and map variables
+        final Map<String, Object> uriVariables = new HashMap<String, Object>();
+        uriVariables.put("chatProfileCode", chatProfileCode);
+        String localVarPath = UriComponentsBuilder.fromPath("/api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/{chatProfileCode}").buildAndExpand(uriVariables).toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        if (files != null)
+            formParams.add("files[]", files);
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "multipart/form-data"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusUploadsWithNewChat> returnType = new ParameterizedTypeReference<OperationStatusUploadsWithNewChat>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
