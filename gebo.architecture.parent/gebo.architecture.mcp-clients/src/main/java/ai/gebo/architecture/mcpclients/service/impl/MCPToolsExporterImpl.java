@@ -68,6 +68,8 @@ public class MCPToolsExporterImpl implements MCPToolsExporter {
 	private final McpClientConfigRepository repository;
 	private final IGSecurityService securityService;
 	private final McpClientPool clientPool;
+	/** Where the files the remote tools return are kept; absent outside a chat application. */
+	private final org.springframework.beans.factory.ObjectProvider<ai.gebo.architecture.ai.files.IGConversationGeneratedFilesStore> generatedFiles;
 
 	@Override
 	public String getId() {
@@ -162,7 +164,7 @@ public class MCPToolsExporterImpl implements MCPToolsExporter {
 		for (MCPTool tool : visibleTools) {
 			String exposedName = prefix + tool.getName();
 			callbacks.add(new McpRemoteToolCallback(clientPool, config, exposedName, tool.getName(),
-					tool.getDescription(), tool.getInputSchema()));
+					tool.getDescription(), tool.getInputSchema(), generatedFiles));
 		}
 	}
 
