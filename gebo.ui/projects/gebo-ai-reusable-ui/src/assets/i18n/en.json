@@ -4119,6 +4119,7 @@
       },
       "ModelTypePanel": { "label": "Add new models" },
       "ModelsChoices": { "label": "Models choices" },
+      "ChosenChatModelInputsLabel": { "label": "Accepts as input:" },
       "PresetsAccordionPanel": { "label": "Suggested models selection" },
       "embeddingPresetChoice": {
         "label": "Embedding model",

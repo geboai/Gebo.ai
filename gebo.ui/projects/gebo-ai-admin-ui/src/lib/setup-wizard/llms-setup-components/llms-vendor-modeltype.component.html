@@ -57,6 +57,10 @@
                   help="Select one of the predefined chat models. It is created as the default chat model.">
                   <geboai-editable-listbox-component formControlName="choosedModel" [data]="chatPresets"
                   gebo-ai-field-element></geboai-editable-listbox-component>
+                  @if (chosenChatModelInputs) {
+                    <small class="text-muted-color"><span id="ChosenChatModelInputsLabel" gebo-ai-text>Accepts as input:</span>
+                      {{ chosenChatModelInputs }}</small>
+                  }
                 </gebo-ai-field>
               </div>
             }
