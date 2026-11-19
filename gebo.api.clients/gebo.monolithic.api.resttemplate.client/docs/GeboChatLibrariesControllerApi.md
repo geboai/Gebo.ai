@@ -1,11 +1,12 @@
 # GeboChatLibrariesControllerApi
 
-All URIs are relative to *http://localhost:13999*
+All URIs are relative to *http://localhost:12999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**downloadChatLibraryResource**](GeboChatLibrariesControllerApi.md#downloadChatLibraryResource) | **GET** /api/users/GeboChatLibrariesController/downloadChatLibraryResource | 
 [**getChatLibraryInstance**](GeboChatLibrariesControllerApi.md#getChatLibraryInstance) | **GET** /api/users/GeboChatLibrariesController/getChatLibraryInstance | 
+[**getChatWrittenFiles**](GeboChatLibrariesControllerApi.md#getChatWrittenFiles) | **GET** /api/users/GeboChatLibrariesController/getChatWrittenFiles | 
 
 <a name="downloadChatLibraryResource"></a>
 # **downloadChatLibraryResource**
@@ -86,6 +87,49 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**List&lt;AIToolsAndResourcesLibraryInstance&gt;**](AIToolsAndResourcesLibraryInstance.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getChatWrittenFiles"></a>
+# **getChatWrittenFiles**
+> List&lt;ChatWrittenFile&gt; getChatWrittenFiles(chatCode)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.GeboChatLibrariesControllerApi;
+
+
+GeboChatLibrariesControllerApi apiInstance = new GeboChatLibrariesControllerApi();
+String chatCode = "chatCode_example"; // String | 
+try {
+    List<ChatWrittenFile> result = apiInstance.getChatWrittenFiles(chatCode);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling GeboChatLibrariesControllerApi#getChatWrittenFiles");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **chatCode** | **String**|  |
+
+### Return type
+
+[**List&lt;ChatWrittenFile&gt;**](ChatWrittenFile.md)
 
 ### Authorization
 
