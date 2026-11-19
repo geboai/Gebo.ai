@@ -45,7 +45,22 @@ class ProviderModelsLibrariesWiringTest {
 					assertThat(context.getBean(RegoloModelsLibrary.class).getParameterRules()).isEmpty();
 					assertThat(context.getBean(VllmModelsLibrary.class).getModelsInfo()).isEmpty();
 					IGModelsLibraryDao library = context.getBean(IGModelsLibraryDao.class);
-					assertThat(context.getBean(GroqModelsLibrary.class).getParameterRules()).hasSize(2);
+					assertThat(context.getBean(GroqModelsLibrary.class).getParameterRules()).hasSize(3);
+					// Groq's api tells nothing of the inputs: its vision models are declared by rule,
+					// one of them a rule stating the input modalities only
+					assertThat(library.findInputModalities("groq", "qwen/qwen3.8-27b")).containsExactly(
+							ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+							ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE);
+					assertThat(library.findInputModalities("groq", "meta-models/muse-spark-open")).containsExactly(
+							ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+							ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE);
+					assertThat(library.findParameterRules("groq", "meta-models/muse-spark-open")).isNull();
+					assertThat(library.findInputModalities("groq", "openai/gpt-oss-20b")).isNull();
+					assertThat(library.findByProviderIdAndModelId("xai", "grok-4.5").getInputModalities())
+							.containsExactly(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+									ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE);
+					assertThat(library.findByProviderIdAndModelId("nvidia", "adept/fuyu-8b").getInputModalities())
+							.contains(ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE);
 					assertThat(context.getBean(NvidiaModelsLibrary.class).getModelsInfo()).hasSize(4);
 					assertThat(library.findParameterRules("groq", "openai/gpt-oss-20b").getReasoningEfforts())
 							.containsExactly("low", "medium", "high");

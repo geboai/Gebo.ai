@@ -115,11 +115,27 @@ class OpenAIModelsLibrarySegmentTest {
 	@Test
 	void theInputModalitiesOfTheModelsWhoseProviderGivesNoneComeFromTheLibrary() throws Exception {
 		GModelsLibraryDaoImpl library = library();
-		for (String id : List.of("gpt-6.1-sol", "gpt-6-luna", "gpt-5.2", "gpt-5.4-mini", "gpt-5", "gpt-4.1", "gpt-4o")) {
-			assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE),
+		for (String id : List.of("gpt-6.1-sol", "gpt-6-luna", "gpt-6-sol", "gpt-6-astra", "gpt-5.5", "gpt-5.2",
+				"gpt-5.4-mini", "gpt-5", "gpt-4.1", "gpt-4o")) {
+			// images from the model's page; PDF files from the file inputs guide, which
+			// gives them to the models that take images
+			assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
 					library.findByProviderIdAndModelId("openai", id).getInputModalities(), id);
 		}
-		assertNull(library.findByProviderIdAndModelId("openai", "gpt-5.5").getInputModalities(),
-				"not confirmed by its model page: unknown, text only");
+	}
+
+	@Test
+	void aDatedVariantTakesItsModelsInputModalitiesFromARuleAndKeepsItsParameterRules() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+		assertNull(library.findByProviderIdAndModelId("openai", "gpt-5.2-2025-12-11"), "no entry of its own");
+		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
+				library.findInputModalities("openai", "gpt-5.2-2025-12-11"));
+		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
+				library.findInputModalities("openai", "gpt-4o-2024-11-20"));
+		// the rule telling the modalities never stands in for the parameter rules
+		assertEquals(library.findParameterRules("openai", "gpt-5.2").getSampling(),
+				library.findParameterRules("openai", "gpt-5.2-2025-12-11").getSampling());
+		assertNull(library.findInputModalities("openai", "text-embedding-3-large"));
+		assertNull(library.findInputModalities("openai", "gpt-5.2-pro"), "another model, not a dated variant");
 	}
 }

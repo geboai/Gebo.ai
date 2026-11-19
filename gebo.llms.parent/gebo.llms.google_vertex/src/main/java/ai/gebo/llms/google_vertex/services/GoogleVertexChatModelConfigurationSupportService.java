@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.google_vertex.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -104,6 +105,13 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 */
 	class GoogleVertexConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GGoogleVertexChatModelConfig, GoogleGenAiChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -339,5 +347,16 @@ public class GoogleVertexChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Spring AI's Google GenAI chat model sends any media of a user message as it is,
+	 * bytes or a uri, with no check of its type (GoogleGenAiChatModel, 2.1.0-RC2). What
+	 * is listed is what Gemini's models read: pictures, audio, video and PDF.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none().images("image/*").audio("audio/*").video("video/*")
+				.documents("application/pdf");
 	}
 }

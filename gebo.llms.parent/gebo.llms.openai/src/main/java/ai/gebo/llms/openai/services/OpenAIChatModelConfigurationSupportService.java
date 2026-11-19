@@ -15,6 +15,7 @@
  */
 package ai.gebo.llms.openai.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -93,6 +94,13 @@ public class OpenAIChatModelConfigurationSupportService
 	 * the creation and configuration of OpenAI chat models.
 	 */
 	class OpenAIConfigurableChatModel extends GAbstractConfigurableChatModel<GOpenAIChatModelConfig, ChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public OpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -351,5 +359,26 @@ public class OpenAIChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * What Spring AI's two OpenAI chat models carry (2.1.0-RC2), by the api the model
+	 * is called through, see {@link OpenAiApiRouting}:
+	 * <ul>
+	 * <li>chat completions (OpenAiChatModel): pictures, PDF as a file part, audio as
+	 * mp3 or wav bytes; any other type would be pasted into the prompt as base64
+	 * text;</li>
+	 * <li>the Responses api (OpenAiResponsesChatModel): pictures and PDF as input
+	 * files; audio raises "Audio input is not supported by the OpenAI Responses
+	 * API".</li>
+	 * </ul>
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		if (modelCode != null && OpenAiApiRouting.usesResponsesApi(modelCode)) {
+			return GModelCarriedMediaTypes.none().images("image/*").documents("application/pdf");
+		}
+		return GModelCarriedMediaTypes.none().images("image/*").documents("application/pdf").audio("audio/mp3",
+				"audio/mpeg", "audio/wav", "audio/x-wav", "audio/wave");
 	}
 }

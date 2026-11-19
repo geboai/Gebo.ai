@@ -51,4 +51,19 @@ public interface IGModelsLibraryDao {
     public default ModelParameterRules findParameterRules(String providerId, String modelId) {
         return null;
     }
+
+    /**
+     * What a model of a provider accepts as input by the library's rules: the input
+     * modalities of the first rule covering it that tells them, the installation's
+     * library first. It is what the library knows of a model that has no entry of its
+     * own, a dated variant ({@code gpt-5.2-2025-12-11}) or a whole family.
+     *
+     * @param providerId the provider of the model, as its type declares it
+     * @param modelId    the model id its requests name
+     * @return the modalities, or null when no rule tells them
+     */
+    public default java.util.List<ai.gebo.llms.abstraction.layer.model.GModelInputModality> findInputModalities(
+            String providerId, String modelId) {
+        return null;
+    }
 }

@@ -7,7 +7,10 @@
 # Only the chat models with an announced date are listed; "or later" dates are not.
 # The chat models are listed with what they accept as input (inputModalities) too, from
 # their Gemini API model pages (ai.google.dev/gemini-api/docs/models, 2026-11-18): the
-# Vertex models api does not tell it.
+# Vertex models api does not tell it. gemini-3.6-flash and gemini-3.7-flash from their
+# Vertex model pages (docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-6-flash
+# and 3-7-flash, 2026-11-19), which name image, audio and video input; documents were
+# not read there and are not declared.
 ai.gebo.models.providers.google-vertex:
   parameterRules:
     # docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3
@@ -49,6 +52,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-3.6-flash
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO]
       chatModel: true
       embeddingModel: false
       deprecated: true
@@ -57,6 +61,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-3.7-flash
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO]
       chatModel: true
       embeddingModel: false
       deprecated: true

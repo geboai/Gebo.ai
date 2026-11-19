@@ -165,6 +165,8 @@ public class XaiEmbeddingModelsListProviderService implements IGModelsListProvid
 							meta.setModelId(m.id);
 							meta.setChatModel(true);
 							meta.setSupportsVision(m.input_modalities.contains("image"));
+							meta.setInputModalities(
+									ai.gebo.llms.abstraction.layer.model.GModelInputModality.fromProvider(m.input_modalities));
 							entry.setMetaInfos(meta);
 						}
 						chatmodels.add(entry);

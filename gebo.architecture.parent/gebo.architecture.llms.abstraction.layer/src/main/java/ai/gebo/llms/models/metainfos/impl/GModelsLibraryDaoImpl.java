@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.models.metainfos.GProviderModelsLibrary;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
@@ -96,9 +97,23 @@ public class GModelsLibraryDaoImpl implements IGModelsLibraryDao {
 	public ModelParameterRules findParameterRules(String providerId, String modelId) {
 		final ModelParameterRules found = all(ModelsLibraryConfig::getParameterRules,
 				GProviderModelsLibrary::getParameterRules).stream().filter(Objects::nonNull)
+				.filter(ModelParameterRules::statesParameters)
 				.filter(rule -> rule.covers(providerId, modelId)).findFirst().orElse(null);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("findParameterRules(" + providerId + ", " + modelId + ") => " + found);
+		}
+		return found;
+	}
+
+	@Override
+	public List<GModelInputModality> findInputModalities(String providerId, String modelId) {
+		final List<GModelInputModality> found = all(ModelsLibraryConfig::getParameterRules,
+				GProviderModelsLibrary::getParameterRules).stream().filter(Objects::nonNull)
+				.filter(ModelParameterRules::knowsInputModalities)
+				.filter(rule -> rule.covers(providerId, modelId)).findFirst()
+				.map(rule -> List.copyOf(rule.getInputModalities())).orElse(null);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("findInputModalities(" + providerId + ", " + modelId + ") => " + found);
 		}
 		return found;
 	}

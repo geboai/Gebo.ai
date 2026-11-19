@@ -22,6 +22,9 @@ import org.springframework.ai.tool.ToolCallback;
 import org.springframework.ai.tool.resolution.ToolCallbackResolver;
 
 import ai.gebo.architecture.ai.model.GPromptTemplateConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
+import ai.gebo.llms.abstraction.layer.model.GModelMediaGuard;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.abstraction.layer.model.GChatAnswer;
@@ -67,6 +70,38 @@ public interface IGConfigurableChatModel<ModelConfig extends GBaseChatModelConfi
 	 *
 	 * @return True if supports structured output, false otherwise.
 	 */
+	/**
+	 * What the model's configuration declares it accepts as input; text only when it
+	 * declares nothing.
+	 */
+	public default List<GModelInputModality> getInputModalities() {
+		final ModelConfig config = getConfig();
+		return config != null && config.getInputModalities() != null && !config.getInputModalities().isEmpty()
+				? config.getInputModalities()
+				: List.of(GModelInputModality.TEXT);
+	}
+
+	/**
+	 * What the provider's integration can deliver to this model besides text; nothing
+	 * unless the provider states it.
+	 */
+	public default GModelCarriedMediaTypes getCarriedMediaTypes() {
+		return GModelCarriedMediaTypes.none();
+	}
+
+	/**
+	 * The MIME types of the files a request of this model may carry: what its
+	 * configuration declares and its integration carries, see {@link GModelMediaGuard}.
+	 */
+	public default List<String> getEffectiveInputMimeTypes() {
+		return GModelMediaGuard.effectiveMimeTypes(getInputModalities(), getCarriedMediaTypes());
+	}
+
+	/** Whether a file of this MIME type may be attached to a request of this model. */
+	public default boolean acceptsMedia(String mimeType) {
+		return GModelMediaGuard.sends(getInputModalities(), getCarriedMediaTypes(), mimeType);
+	}
+
 	public default boolean isSupportsStructuredOutput() {
 		return false;
 	}

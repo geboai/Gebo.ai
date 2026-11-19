@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.anthropic.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +109,13 @@ public class AnthropicChatModelConfigurationSupportService
 	 */
 	class AnthropicConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GAnthropicChatModelConfig, AnthropicChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public AnthropicConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -413,5 +421,15 @@ public class AnthropicChatModelConfigurationSupportService
 			return false;
 		String code = modelCode.toLowerCase();
 		return code.contains("-4-5") || code.contains("-4.5") || code.contains("claude-3");
+	}
+
+	/**
+	 * Spring AI's Anthropic chat model carries four picture types and PDF, and raises
+	 * "Unsupported media type" on any other (AnthropicChatModel, 2.1.0-RC2).
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none().images("image/png", "image/jpeg", "image/gif", "image/webp")
+				.documents("application/pdf");
 	}
 }

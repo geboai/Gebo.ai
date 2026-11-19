@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
@@ -101,6 +102,14 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 	private OperationStatus<ChatModelConfigType> insertInternal(ChatModelConfigType config) {
 		ChatModelConfigType out = null;
 		LOGGER.info("Begin chat model configuration insert");
+		// What the model accepts as input: when the request tells nothing, what the
+		// chosen model's metadata know, as the setup wizards do
+		// (IGChatModelConfigurationSupportService.insertAndConfigureModel). An update
+		// keeps what the form sends.
+		if (config != null && config.getInputModalities() == null) {
+			config.setInputModalities(
+					IGChatModelConfigurationSupportService.inputModalitiesOf(config.getChoosedModel()));
+		}
 		try {
 			out = persistentObjectManager.insert(config);
 		} catch (Throwable e) {

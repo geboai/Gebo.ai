@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.models.metainfos;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -83,6 +84,14 @@ public class ModelParameterRules {
 	 * mp3 asked by default.
 	 */
 	private String speechFormat = null;
+	/**
+	 * What the covered models accept as input, for the models whose provider's api does
+	 * not tell it and that have no entry of their own in the library: one rule covers a
+	 * family and its dated variants. Empty when the rule says nothing of it. Read
+	 * apart from the parameters, see
+	 * {@link IGModelsLibraryDao#findInputModalities(String, String)}.
+	 */
+	private List<GModelInputModality> inputModalities = new ArrayList<>();
 	/** Where the rule comes from: the provider page it was read on, and when. */
 	private String source = null;
 
@@ -119,6 +128,21 @@ public class ModelParameterRules {
 	}
 
 	/** Whether the effort is among the ones the rule lists; false when it lists none. */
+	/** Whether the rule tells what its models accept as input. */
+	public boolean knowsInputModalities() {
+		return inputModalities != null && !inputModalities.isEmpty();
+	}
+
+	/**
+	 * Whether the rule says anything of the request parameters. A rule that only tells
+	 * the input modalities does not, and is skipped when the parameter rules of a model
+	 * are looked for, so that it never hides the rule after it.
+	 */
+	public boolean statesParameters() {
+		return sampling != null || knowsEfforts() || queryInputType != null || documentInputType != null
+				|| speechFormat != null;
+	}
+
 	public boolean acceptsEffort(String effort) {
 		return effort != null && reasoningEfforts != null && reasoningEfforts.contains(effort);
 	}
@@ -181,6 +205,8 @@ public class ModelParameterRules {
 		merged.queryInputType = library.queryInputType;
 		merged.documentInputType = library.documentInputType;
 		merged.speechFormat = library.speechFormat;
+		merged.inputModalities = new ArrayList<>(live.knowsInputModalities() ? live.inputModalities
+				: library.inputModalities != null ? library.inputModalities : List.of());
 		merged.source = live.source + "; " + library.source;
 		return merged;
 	}
@@ -195,6 +221,7 @@ public class ModelParameterRules {
 	public String toString() {
 		return "ModelParameterRules[providerId=" + providerId + ", models=" + models + ", sampling=" + sampling
 				+ ", reasoningEfforts=" + reasoningEfforts + ", queryInputType=" + queryInputType
-				+ ", documentInputType=" + documentInputType + ", speechFormat=" + speechFormat + "]";
+				+ ", documentInputType=" + documentInputType + ", speechFormat=" + speechFormat
+				+ ", inputModalities=" + inputModalities + "]";
 	}
 }
