@@ -42,6 +42,42 @@ public class ChatWrittenFile {
   @JsonProperty("downloadable")
   private Boolean downloadable = null;
 
+  /**
+   * Gets or Sets state
+   */
+  public enum StateEnum {
+    AS_WRITTEN("AS_WRITTEN"),
+    CHANGED("CHANGED"),
+    GONE("GONE"),
+    UNKNOWN("UNKNOWN");
+
+    private String value;
+
+    StateEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static StateEnum fromValue(String input) {
+      for (StateEnum b : StateEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("state")
+  private StateEnum state = null;
+
   public ChatWrittenFile location(String location) {
     this.location = location;
     return this;
@@ -140,6 +176,24 @@ public class ChatWrittenFile {
     this.downloadable = downloadable;
   }
 
+  public ChatWrittenFile state(StateEnum state) {
+    this.state = state;
+    return this;
+  }
+
+   /**
+   * Get state
+   * @return state
+  **/
+  @Schema(description = "")
+  public StateEnum getState() {
+    return state;
+  }
+
+  public void setState(StateEnum state) {
+    this.state = state;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -154,12 +208,13 @@ public class ChatWrittenFile {
         Objects.equals(this.path, chatWrittenFile.path) &&
         Objects.equals(this.version, chatWrittenFile.version) &&
         Objects.equals(this.requests, chatWrittenFile.requests) &&
-        Objects.equals(this.downloadable, chatWrittenFile.downloadable);
+        Objects.equals(this.downloadable, chatWrittenFile.downloadable) &&
+        Objects.equals(this.state, chatWrittenFile.state);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, path, version, requests, downloadable);
+    return Objects.hash(location, path, version, requests, downloadable, state);
   }
 
 
@@ -173,6 +228,7 @@ public class ChatWrittenFile {
     sb.append("    version: ").append(toIndentedString(version)).append("\n");
     sb.append("    requests: ").append(toIndentedString(requests)).append("\n");
     sb.append("    downloadable: ").append(toIndentedString(downloadable)).append("\n");
+    sb.append("    state: ").append(toIndentedString(state)).append("\n");
     sb.append("}");
     return sb.toString();
   }
