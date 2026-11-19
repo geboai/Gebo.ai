@@ -849,3 +849,41 @@ Community repository paths are relative to its root. Pro paths start with `Gebo.
 - Web crawler: `Gebo.ai.pro/ai.gebo.pro.systems.parent/gebo.webcrawler.handler/src/main/java/ai/gebo/webcrawler/handler/impl/GWebCrawlingService.java`
 - Office libraries integration test: `Gebo.ai.pro/integration-tests/office-libraries-integration-tests/`
 - Add-ins (their own repositories): `Gebo.ai.microsoft-office-plugin`, `Gebo.ai.only-euro-officeplugin`, `Gebo.ai.libre-open-office-plugin`
+
+---
+
+## 13. Implementation status
+
+Branch `feature/moltimodality`. The decisions of section 9 were taken as recommended: an administrator action for the old configurations, the editor's insert filled on the server, a family's modalities in library rules, and the conversation's files sent on every turn within limits (as the text of an uploaded document is).
+
+### Done
+
+| Roadmap step | What was built | Where | Tests |
+|---|---|---|---|
+| 1 | Input modalities by library rule: `ModelParameterRules.inputModalities`, read apart from the parameters (`IGModelsLibraryDao.findInputModalities`), filled into the choices by the enricher when neither the api nor the model's own entry told them | `ModelParameterRules`, `GModelsLibraryDaoImpl`, `GModelChoiceMetaInfoEnricherServiceImpl` | `GModelChoiceMetaInfoEnricherServiceImplTest`, `OpenAIModelsLibrarySegmentTest`, `ProviderModelsLibrariesWiringTest` |
+| 1 | Libraries completed from the vendors' pages (2026-11-19): OpenAI (`gpt-6-astra`, `gpt-6-sol`, `gpt-5.5`; PDF for the models that take images; the dated variants by rule), Gemini 3.6 and 3.7 flash, the six xAI models, Groq's two vision models, NVIDIA `adept/fuyu-8b` | `bundle-models/*.yml` | the segment tests |
+| 1 | xAI keeps the api's modalities list; the editor's insert fills the modalities from the chosen model's metadata; `applyModelsMetadataInputModalities` gives the old configurations their stored metadata | `XaiEmbeddingModelsListProviderService`, `AbstractBaseChatModelsConfigurationCRUDController`, `ChatModelsController` | |
+| 2 | What each integration carries (`GModelCarriedMediaTypes`, `carriedMediaTypes` on every provider's support service) and the guard (`GModelMediaGuard`) | abstraction layer, every module under `gebo.llms.parent` | `GModelMediaGuardTest` |
+| 3 | Listings: `getChatModelsInputs`, `getCarriedMediaTypes`, `ModelProviderCapabilities.inputModalities` and `inputMimeTypes`, `GChatUploadFileTypes.modelMimeTypes`; Angular stubs and Java client regenerated | `ChatModelsController`, `IGGenericalChatService`, `GChatUploadFileTypesServiceImpl` | |
+| 3, 5 | UI: the upload box accepts and names the files the chat's model reads; the model editor shows the file types sent and the declared modalities not delivered; the models list has an "Accepts" column and the "Use the models' metadata" action | `upload-chat-document`, `standard-chat-model-settings`, `llms-systems` | template type-check |
+| 4 | Chat uploads to the answering model: `IChatRequestContext.getMedia` and `withoutMedia`, attachment in `createLastUserMessage` through the guard, the session's unread uploads as candidates within `ai.gebo.chat.media` limits (10 files, 20 MB a file, 40 MB a request), an upload the chat's model takes is accepted, the router, the rewriter and the image prompt writer get no file | `GAbstractConfigurableChatModel`, `GChatStorageAreaServiceImpl`, `LLMChatRequestResources`, `DefaultRoutingChatPipelineStepServiceImpl` | `ChatRequestMediaAttachmentTest`, `ChatUploadsForMultimodalModelsTest` |
+| 9 (part) | The pictures, recordings and videos a chat generated travel with its later requests | `GChatStorageAreaServiceImpl.getSessionMedia` | `ChatUploadsForMultimodalModelsTest` |
+| 0 (part) | Defect 1 (upload metadata) and defect 2 (generated files' type and size) fixed; defect 7 (xAI) fixed | `GChatStorageAreaServiceImpl` | |
+
+### Differences from the proposal
+
+- **Carried types are asked of the support service, not written on each choice** (section 4.9 point 9). A choice is stored with its configuration, so a value written on it would go stale; `getCarriedMediaTypes(modelTypeCode, modelCode)` answers it live.
+- **`GeboLLMSSetupService.createLLMS` :1191-1194 stays.** `ChatModelSetupInputModalitiesTest` shows the lines act when a provider's base configuration carries its model's metadata.
+- **Google's carried documents are PDF only**, although the integration sends any type: an office file would reach Gemini as a type it does not read.
+- **mp3 audio is sent as `audio/mp3`**, since Spring AI's OpenAI chat model declares a file MP3 only when its type contains "mp3".
+- **Bedrock DOCUMENT rules were not added.** AWS's page of supported features per model was replaced by per-model cards with no document row (read 2026-11-19), so nothing grounds them. An administrator can declare DOCUMENT on a Bedrock model by hand, and the integration then carries the nine document types.
+
+### Not done yet
+
+- **No request was sent to a real provider.** The provider behaviour is from Spring AI's bytecode; one live request per provider and type is still owed (section 5.1).
+- **No token estimate for media** in the context budget; only the limits above.
+- **Wizards** don't show what a preset model accepts (point 19); no preset choice sets `inputModalities` (point 8), since the library rules now cover the vendors that were checked.
+- **Id filters** hiding audio and image chat models (point 15), **output modalities** (point 6), and a **model named for reading media** (point 14).
+- **Defect 3** (upload from the admin "Test chat" before its first answer) and the removal of the unused code of defect 8.
+- **Compliance register:** the new flow of files to the providers is not described there yet.
+- **Steps 7, 8, 10, 11 and 12** of the roadmap: pictures for agents, MCP and A2A files, descriptions at ingestion, audio and video transcription, Office add-in and web pictures.
