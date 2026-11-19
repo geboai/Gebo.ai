@@ -8,6 +8,8 @@
  */
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.system.ingestion.media.impl.MediaIngestionHandler;
+import ai.gebo.system.ingestion.IGMediaTextExtractor;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import java.util.ArrayList;
@@ -54,13 +56,16 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 	private final ChatProfilesRepository profiles;
 	private final IGSecurityService securityService;
 	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels;
+	private final ObjectProvider<IGMediaTextExtractor> mediaExtractor;
 
 	public GChatUploadFileTypesServiceImpl(ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber,
 			ObjectProvider<IGAIToolsAndResourcesLibrarySourceRepositoryPattern> librarySources,
 			IGIngestionHandlerConfigDao contentHandlers, GUserChatSessionRepository sessions,
 			ChatProfilesRepository profiles, IGSecurityService securityService,
-			ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels) {
+			ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels,
+			ObjectProvider<IGMediaTextExtractor> mediaExtractor) {
 		this.chatModels = chatModels;
+		this.mediaExtractor = mediaExtractor;
 		this.agentsToolsDescriber = agentsToolsDescriber;
 		this.librarySources = librarySources;
 		this.contentHandlers = contentHandlers;
@@ -183,13 +188,20 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 
 	private Set<String> chatFileTypes() {
 		final Set<String> extensions = new LinkedHashSet<>();
+		final IGMediaTextExtractor media = mediaExtractor.getIfAvailable();
 		for (IngestionHandlerConfig handler : contentHandlers.getConfigurations()) {
 			if (handler.getFileTypes() == null) {
 				continue;
 			}
+			final boolean mediaReader = MediaIngestionHandler.CODE.equals(handler.getId());
 			for (IngestionFileType type : handler.getFileTypes()) {
 				if (type.getExtensions() != null) {
+					// pictures and recordings are read into the chat only while a model describes or
+					// transcribes them (ai.gebo.ingestion.media)
 					type.getExtensions().stream().map(GChatUploadFileTypesServiceImpl::extension).filter(x -> x != null)
+							.filter(x -> !mediaReader || (media != null && (MediaIngestionHandler.isPicture(x)
+									? media.describesPictures()
+									: media.transcribes())))
 							.forEach(extensions::add);
 				}
 			}

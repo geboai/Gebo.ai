@@ -31,6 +31,7 @@ import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.system.ingestion.DocumentTitles;
 import ai.gebo.system.ingestion.GeboIngestionException;
 import ai.gebo.system.ingestion.IGIngestionHandlerConfigDao;
+import ai.gebo.system.ingestion.IGMediaTextExtractor;
 import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
 
 /**
@@ -45,6 +46,25 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
     /** The title, the subject and the author in the PDF document information dictionary. */
     static final String PDF_INFO_TITLE = "Title", PDF_INFO_SUBJECT = "Subject", PDF_INFO_AUTHOR = "Author";
     private final PdfIngestionConfig config;
+    /** The resolution a page without text is rendered at to be described. */
+    static final float SCANNED_PAGE_DPI = 110f;
+    /** Describes the pages without text; absent where no model is deployed. */
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private org.springframework.beans.factory.ObjectProvider<IGMediaTextExtractor> mediaExtractor;
+
+    /** The extractor when picture descriptions are on, else null: the pages are read as before. */
+    private IGMediaTextExtractor mediaExtractor() {
+        try {
+            final IGMediaTextExtractor media = mediaExtractor != null ? mediaExtractor.getIfAvailable() : null;
+            return media != null && media.describesPictures() ? media : null;
+        } catch (RuntimeException unavailable) {
+            return null;
+        }
+    }
+
+    void setMediaExtractor(org.springframework.beans.factory.ObjectProvider<IGMediaTextExtractor> mediaExtractor) {
+        this.mediaExtractor = mediaExtractor;
+    }
 
     /**
      * Constructor for PdfIngestionHandler.
@@ -123,8 +143,13 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
     public Stream<Document> handleContent(GDocumentReference reference, InputStream is, Map<String, Object> metadata)
             throws GeboIngestionException, IOException {
         PdfReader pdfReader = null;
+        org.apache.pdfbox.pdmodel.PDDocument rendered = null;
         try {
-            pdfReader = new PdfReader(is);
+            // the bytes are kept: a page without text may have to be rendered to be described
+            final IGMediaTextExtractor media = mediaExtractor();
+            final byte[] pdf = media != null ? is.readAllBytes() : null;
+            pdfReader = pdf != null ? new PdfReader(pdf) : new PdfReader(is);
+            int describedPages = 0;
             enrichMetaData(reference, metadata);
             enrichPdfMetadata(pdfReader, metadata);
             int pages = pdfReader.getNumberOfPages();
@@ -141,12 +166,42 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
                 Map<String, Object> clonedMetaData = new HashMap<String, Object>(
                         metadata != null ? metadata : new HashMap());
                 clonedMetaData.put(DocumentMetaInfos.CONTENT_PAGE, "" + i);
+                // a page without text - a scan, a full page picture - is described by a model
+                // that reads pictures, when the installation turned that on
+                if (media != null && (text == null || text.trim().isEmpty())
+                        && describedPages < media.maxDescribedPagesPerDocument()) {
+                    try {
+                        if (rendered == null) {
+                            rendered = org.apache.pdfbox.Loader.loadPDF(pdf);
+                        }
+                        final java.awt.image.BufferedImage image = new org.apache.pdfbox.rendering.PDFRenderer(rendered)
+                                .renderImageWithDPI(i - 1, SCANNED_PAGE_DPI);
+                        final java.io.ByteArrayOutputStream png = new java.io.ByteArrayOutputStream();
+                        javax.imageio.ImageIO.write(image, "png", png);
+                        describedPages++;
+                        final String described = media.describePicture(reference.getName() + " page " + i,
+                                "image/png", png.toByteArray());
+                        if (described != null && !described.trim().isEmpty()) {
+                            text = described.trim();
+                            clonedMetaData.put(IGMediaTextExtractor.MODEL_WRITTEN_METADATA, "description");
+                        }
+                    } catch (IOException | RuntimeException unreadable) {
+                        LOGGER.warn("Page " + i + " of " + reference.getCode() + " has no text and could not be described: "
+                                + unreadable);
+                    }
+                }
                 Document document = new Document(text, clonedMetaData);
                 docs.add(document);
             }
 
             return docs.stream();
         } finally {
+            if (rendered != null) {
+                try {
+                    rendered.close();
+                } catch (Throwable th) {
+                }
+            }
             try {
                 pdfReader.close();
             } catch (Throwable t) {

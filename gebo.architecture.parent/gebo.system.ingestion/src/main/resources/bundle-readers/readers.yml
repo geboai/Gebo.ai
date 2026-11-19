@@ -44,6 +44,47 @@ ai.gebo.contents.reading.library:
           extensions:
             - .xls
           uiViewable: false
+    # Pictures, recordings and videos, read with a model (ai.gebo.ingestion.media): a
+    # picture is described, a recording or a video transcribed. The handler takes a file
+    # only while its capability is on; otherwise the file is, as before, one no reader takes.
+    - id: MediaIngestionHandler
+      fileTypeId: media
+      fileTypes:
+        - treatAs: picture
+          description: Picture, described by a model
+          contentTypes:
+            - image/png
+            - image/jpeg
+            - image/gif
+            - image/webp
+          extensions:
+            - .png
+            - .jpg
+            - .jpeg
+            - .gif
+            - .webp
+          uiViewable: false
+        - treatAs: recording
+          description: Recording or video, transcribed by a model
+          contentTypes:
+            - audio/mpeg
+            - audio/mp3
+            - audio/wav
+            - audio/x-wav
+            - audio/mp4
+            - audio/webm
+            - video/mp4
+            - video/webm
+            - video/mpeg
+          extensions:
+            - .mp3
+            - .wav
+            - .m4a
+            - .mpga
+            - .mp4
+            - .mpeg
+            - .webm
+          uiViewable: false
     - id: MSPowerPointIngestionHandler
       fileTypeId: powerpoint
       fileTypes:
