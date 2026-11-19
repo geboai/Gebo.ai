@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
+import ai.gebo.llms.chat.abstraction.layer.config.ChatMediaConfig;
 import ai.gebo.acl.AclGrantType;
 
 import java.io.IOException;
@@ -124,6 +126,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private ObjectProvider<IGChatSessionRemovalListener> removalListeners;
 	private final IGMessageBroker broker;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
+	private final ChatMediaConfig mediaConfig;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatSessionStateShrinkerService shrinkerService;
@@ -566,6 +569,19 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private LLMChatRequestResources budgetedResources(GeboChatRequest request, GUserChatSession context,
 			ChatFullSessionState state, ShrinkedChatSessionState shrinked, int budget,
 			LLMRequestGenerationPolicy policy) {
+		// the conversation's files that may go to the model as they are; each model call
+		// attaches the ones its model takes. Room is kept for them in the context: the
+		// text is sized to what is left
+		final List<IChatRequestMedia> media = this.chatAreaStorageSession.getSessionMedia(context.getCode());
+		if (!media.isEmpty() && mediaConfig != null) {
+			final int kept = media.size() * Math.max(0, mediaConfig.getEstimatedTokensPerFile());
+			final int reduced = Math.max(budget / 2, budget - kept);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Request {} of chat {} carries {} file(s): budget {} -> {} tokens for its text",
+						request.getId(), context.getCode(), media.size(), budget, reduced);
+			}
+			budget = reduced;
+		}
 		LLMChatRequestResources resources;
 		String source;
 		if (state.getTokensSize() < budget) {
@@ -581,9 +597,7 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		resources.setAnswerFeedbackNotes(answerFeedbackNotes(request.getUserChatContextCode()));
 		resources.setRulesToFollow(rulesToFollow(context));
 		resources.setAvailableKnowledgeBaseCodes(availableKnowledgeBaseCodes(request));
-		// the conversation's files that may go to the model as they are; each model call
-		// attaches the ones its model takes
-		resources.setMedia(this.chatAreaStorageSession.getSessionMedia(context.getCode()));
+		resources.setMedia(media);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Resources for request {} of chat {} from the {}: {} tokens of budget {}, feedback notes:{} rules:{}",
 					request.getId(), context.getCode(), source, resources.getTokensSize(), budget,

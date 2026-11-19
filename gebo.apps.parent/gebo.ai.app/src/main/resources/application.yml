@@ -520,6 +520,9 @@ ai.gebo.chat.media:
     max-files: 10
     max-file-bytes: 20971520
     max-total-bytes: 41943040
+    # the room kept in the context for each file, in tokens: an estimate, every provider
+    # counts a picture or a recording its own way
+    estimated-tokens-per-file: 1000
 # Reading pictures, scanned PDF pages, recordings and videos into the knowledge bases
 # with a model. Each file read this way costs a model call on every ingestion of it,
 # so both are off until turned on here.

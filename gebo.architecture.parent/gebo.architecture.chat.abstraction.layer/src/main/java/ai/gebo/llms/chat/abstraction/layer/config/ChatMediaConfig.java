@@ -29,4 +29,11 @@ public class ChatMediaConfig {
 	private long maxFileBytes = 20L * 1024 * 1024;
 	/** The bytes a request carries to the model at most, all files together. */
 	private long maxTotalBytes = 40L * 1024 * 1024;
+	/**
+	 * The room, in tokens, kept in the model's context for each file that travels with a
+	 * request. It is an estimate: every provider counts a picture, a PDF page or a
+	 * recording its own way and none is asked beforehand. The text of the request -
+	 * documents, history - is sized to what is left, never to less than half the budget.
+	 */
+	private int estimatedTokensPerFile = 1000;
 }
