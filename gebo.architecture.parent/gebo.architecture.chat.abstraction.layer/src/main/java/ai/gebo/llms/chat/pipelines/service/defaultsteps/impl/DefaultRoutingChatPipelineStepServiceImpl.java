@@ -215,7 +215,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 				createDeliverableTypesList());
 		GPromptTemplateConfig rewritePrompt = promptsDao
 				.findByPromptUse(GeboPromptsLibrary.DEFAULT_PIPELINE_QUERY_REWRITING_PROMPT);
-		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+		// a service call on the request's text: the files that go to the answering model stay out
+		IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext()
+				.withoutMedia();
 		final GeboToolCalling toolCalling = runtimeData.getToolCalling();
 		Map<String, List<String>> data = toolCalling != null
 				? callLLMRepeatableFieldEntryOutput(serviceModel, rewritePrompt, context, params,
@@ -387,7 +389,9 @@ public class DefaultRoutingChatPipelineStepServiceImpl extends BaseLLMSInvokingS
 					* BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
 			final int documentsTokenBudget = Math.min(remainingContext,
 					this.chatPipelinesConfig.getMaxRoutingDecisionDocumentsTokenBudget());
-			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+			// a service call on the request's text: the files that go to the answering model stay out
+			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext()
+					.withoutMedia();
 			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
 			decisionMap = toolCalling != null
 					? callLLMRepeatableFieldEntryOutput(serviceModel, _prompt, context, params,

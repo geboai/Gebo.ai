@@ -1,5 +1,8 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.llms.chat.abstraction.layer.config.ChatMediaConfig;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import ai.gebo.acl.AclGrantType;
 
 import java.io.IOException;
@@ -63,6 +66,7 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final LLMGeneratedResourceRepository llmGeneratedResourceRepository;
 	final IGChatUploadFileTypesService uploadFileTypes;
+	final ChatMediaConfig mediaConfig;
 	final static String SESSIONS_PATH_PREFIX = "SESSIONS_AREA";
 	final static ObjectMapper objectMapper = new ObjectMapper();
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -127,14 +131,19 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		IngestionHandlerData data = ingestionHandler.handleContent(reference, content);
 		if (data.isUnmanagedContent()) {
 			content.close();
-			if (serverSide.getExtension() == null
-					|| !uploadFileTypes.toolsFileTypesOfSession(userSessionCode).contains(serverSide.getExtension())) {
+			// no content handler reads it: it is kept when the chat's model takes it as it is
+			// (a picture, a PDF, a recording) or when the chat's agents' tools work on it
+			final boolean forTheModel = GModelCarriedMediaTypes
+					.matchesAny(uploadFileTypes.modelMimeTypesOfSession(userSessionCode), mimeTypeOf(serverSide));
+			final boolean forTheTools = serverSide.getExtension() != null
+					&& uploadFileTypes.toolsFileTypesOfSession(userSessionCode).contains(serverSide.getExtension());
+			if (!forTheModel && !forTheTools) {
 				// refused: it does not stay behind in the session's folder
 				Files.deleteIfExists(newPath);
 				return null;
 			}
-			// kept for the tools of the chat's agents only: no content handler reads it, so it has
-			// no ingested text, is not read into the chat and gives the models nothing of it
+			// it has no ingested text: it reaches a model as a file of the request
+			// (getSessionMedia) when that model takes it, and the tools by its location
 			serverSide.setTokensCount(0L);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("addUploadedFile(...) session:" + userSessionCode + " file:" + file.getOriginalFilename()
@@ -151,8 +160,9 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 				if (doc.getMetaData() == null) {
 					doc.setMetaData(new HashMap<>(commonMetaData));
 				} else {
-					HashMap newMeta = new HashMap<>(commonMetaData);
-					newMeta.putAll(newMeta);
+					// the handler's own metadata, with the upload's common ones over them
+					HashMap newMeta = new HashMap<>(doc.getMetaData());
+					newMeta.putAll(commonMetaData);
 					doc.setMetaData(newMeta);
 				}
 				if (doc.getContent() != null && !doc.getContent().trim().isEmpty()) {
@@ -384,4 +394,85 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		}
 	}
 
+
+	/**
+	 * The MIME type of an upload: the one it was sent with, else the one its name tells.
+	 */
+	static String mimeTypeOf(UserUploadedContent upload) {
+		String type = GModelCarriedMediaTypes.essence(upload.getContentType());
+		if (type == null || "application/octet-stream".equals(type)) {
+			final String byName = upload.getFileName() != null
+					? java.net.URLConnection.guessContentTypeFromName(upload.getFileName())
+					: null;
+			if (byName != null) {
+				type = GModelCarriedMediaTypes.essence(byName);
+			}
+		}
+		return type;
+	}
+
+	@Override
+	public List<IChatRequestMedia> getSessionMedia(String userSessionCode) {
+		if (userSessionCode == null) {
+			return List.of();
+		}
+		final Path sessionPath;
+		final List<UserUploadContentServerSide> uploads;
+		try {
+			sessionPath = getSessionPath(userSessionCode);
+			try (java.util.stream.Stream<UserUploadContentServerSide> all = uploadContentsRepository
+					.findByUserContextCode(userSessionCode)) {
+				// the uploads with no ingested text, newest first
+				uploads = all.filter(x -> x.getIngestedJsonPath() == null && x.getRelativeFilePath() != null)
+						.sorted(java.util.Comparator.comparing(UserUploadContentServerSide::getDateCreated,
+								java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder())).reversed())
+						.toList();
+			}
+		} catch (IOException | RuntimeException e) {
+			LOGGER.error("Cannot read the files of session " + userSessionCode + ", its requests go without them", e);
+			return List.of();
+		}
+		final List<IChatRequestMedia> media = new ArrayList<>();
+		long total = 0;
+		for (UserUploadContentServerSide upload : uploads) {
+			final String mimeType = mimeTypeOf(upload);
+			final Path file = Path.of(sessionPath.toString(), upload.getRelativeFilePath());
+			final long size = upload.getFileSize() != null ? upload.getFileSize() : -1;
+			if (mimeType == null || !Files.exists(file)) {
+				continue;
+			}
+			if (media.size() >= mediaConfig.getMaxFiles() || size > mediaConfig.getMaxFileBytes()
+					|| total + Math.max(size, 0) > mediaConfig.getMaxTotalBytes()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("getSessionMedia(...) session:" + userSessionCode + " file:" + upload.getFileName()
+							+ " (" + size + " bytes) is beyond the limits of ai.gebo.chat.media, it stays with the tools");
+				}
+				continue;
+			}
+			total += Math.max(size, 0);
+			final String name = upload.getFileName();
+			media.add(new IChatRequestMedia() {
+				@Override
+				public String getName() {
+					return name;
+				}
+
+				@Override
+				public String getMimeType() {
+					return mimeType;
+				}
+
+				@Override
+				public long getSize() {
+					return size;
+				}
+
+				@Override
+				public byte[] readBytes() throws IOException {
+					return Files.readAllBytes(file);
+				}
+			});
+		}
+		return media;
+	}
 }

@@ -9,6 +9,12 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
+import ai.gebo.llms.abstraction.layer.model.GModelMediaGuard;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
+import org.springframework.util.MimeTypeUtils;
+import org.springframework.ai.content.Media;
 import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 
 import java.io.IOException;
@@ -1093,7 +1099,78 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		allParams.put(IChatRequestContext.CONSOLIDATED_HISTORY_PROMPT_PARAM,
 				chatContext.getConsolidatedHistory() != null ? chatContext.getConsolidatedHistory() : "");
 		String content = promptTemplate.render(withUserLanguage(allParams, chatContext));
-		return new UserMessage(content);
+		List<Media> media = mediaToAttach(chatContext);
+		if (media.isEmpty()) {
+			return new UserMessage(content);
+		}
+		return UserMessage.builder().text(content).media(media).build();
+	}
+
+	/**
+	 * The files of the request that go to this model as they are: the ones its
+	 * configuration declares and its provider's integration carries
+	 * ({@link GModelMediaGuard}), as bytes. A file that stays out is logged with the
+	 * reason and never fails the call, and so does one that cannot be read.
+	 */
+	protected List<Media> mediaToAttach(IChatRequestContext chatContext) {
+		final List<IChatRequestMedia> candidates = chatContext != null ? chatContext.getMedia() : null;
+		if (candidates == null || candidates.isEmpty()) {
+			return List.of();
+		}
+		final List<GModelInputModality> declared = getInputModalities();
+		final GModelCarriedMediaTypes carried = getCarriedMediaTypes();
+		final List<Media> media = new ArrayList<>();
+		for (IChatRequestMedia candidate : candidates) {
+			if (candidate == null) {
+				continue;
+			}
+			final GModelMediaGuard.Outcome outcome = GModelMediaGuard.decide(declared, carried,
+					candidate.getMimeType());
+			if (outcome != GModelMediaGuard.Outcome.SENT) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model code=" + getCode() + " file " + candidate.getName() + " ("
+							+ candidate.getMimeType() + ") is not sent: " + outcome);
+				}
+				continue;
+			}
+			try {
+				final byte[] bytes = candidate.readBytes();
+				if (bytes == null || bytes.length == 0) {
+					continue;
+				}
+				media.add(Media.builder().mimeType(MimeTypeUtils.parseMimeType(sentMimeType(candidate.getMimeType())))
+						.data(bytes).name(mediaName(candidate.getName(), media.size())).build());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model code=" + getCode() + " file " + candidate.getName() + " ("
+							+ candidate.getMimeType() + ", " + bytes.length + " bytes) is sent to the model");
+				}
+			} catch (IOException | RuntimeException e) {
+				LOGGER.error("Chat model code=" + getCode() + " cannot read the file " + candidate.getName()
+						+ ", the request goes without it", e);
+			}
+		}
+		return media;
+	}
+
+	/**
+	 * The MIME type a file is sent with: its own without parameters, mp3 audio as
+	 * {@code audio/mp3} - Spring AI's OpenAI chat model declares an audio file MP3 only
+	 * when its type contains "mp3" and WAV otherwise, and {@code audio/mpeg} is the
+	 * registered name of mp3.
+	 */
+	static String sentMimeType(String mimeType) {
+		final String type = GModelCarriedMediaTypes.essence(mimeType);
+		return "audio/mpeg".equals(type) ? "audio/mp3" : type;
+	}
+
+	/**
+	 * A name for a file part: letters, digits, spaces, hyphens, parentheses and square
+	 * brackets only, as Bedrock's document names require; a position when nothing is left.
+	 */
+	static String mediaName(String name, int position) {
+		String cleaned = name != null ? name.replaceAll("[^A-Za-z0-9 \\-()\\[\\]]", "-").replaceAll("\\s+", " ").trim()
+				: "";
+		return cleaned.isEmpty() ? "file-" + (position + 1) : cleaned;
 	}
 
 	/**

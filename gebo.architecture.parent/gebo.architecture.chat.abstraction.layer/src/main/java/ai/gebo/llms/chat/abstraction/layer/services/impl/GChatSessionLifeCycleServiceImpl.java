@@ -581,6 +581,9 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		resources.setAnswerFeedbackNotes(answerFeedbackNotes(request.getUserChatContextCode()));
 		resources.setRulesToFollow(rulesToFollow(context));
 		resources.setAvailableKnowledgeBaseCodes(availableKnowledgeBaseCodes(request));
+		// the conversation's files that may go to the model as they are; each model call
+		// attaches the ones its model takes
+		resources.setMedia(this.chatAreaStorageSession.getSessionMedia(context.getCode()));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Resources for request {} of chat {} from the {}: {} tokens of budget {}, feedback notes:{} rules:{}",
 					request.getId(), context.getCode(), source, resources.getTokensSize(), budget,

@@ -247,7 +247,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
 				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 						supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
-						pipelineToolsTree(pipelineCode));
+						pipelineToolsTree(pipelineCode), model.getInputModalities(),
+						model.getEffectiveInputMimeTypes());
 				return cap;
 			}
 		}

@@ -35,4 +35,12 @@ public interface IGChatUploadFileTypesService {
 	 * being created with (null for a free chat).
 	 */
 	public GChatUploadFileTypes acceptedFileTypes(String userSessionCode, String chatProfileCode);
+
+	/**
+	 * The MIME types of the files the model of a chat takes as they are, see
+	 * {@link GChatUploadFileTypes#getModelMimeTypes()}: those of the chat's profile's
+	 * model, else of the chat's own model, else of the default one. Empty when the
+	 * model gets text only.
+	 */
+	public java.util.List<String> modelMimeTypesOfSession(String userSessionCode);
 }

@@ -30,4 +30,16 @@ public class GChatUploadFileTypes {
 	 * and the models get no picture or sound of them.
 	 */
 	private List<String> toolsExtensions = new ArrayList<>();
+	/**
+	 * The MIME types (exact ones or {@code family/*}) of the files the chat's model
+	 * takes as they are - pictures, PDF files, recordings: what its configuration
+	 * declares and its provider's integration carries. Such a file is accepted even
+	 * when no content handler reads it, and the model sees it.
+	 */
+	private List<String> modelMimeTypes = new ArrayList<>();
+
+	public GChatUploadFileTypes(List<String> chatExtensions, List<String> toolsExtensions) {
+		this.chatExtensions = chatExtensions;
+		this.toolsExtensions = toolsExtensions;
+	}
 }

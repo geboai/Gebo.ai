@@ -233,7 +233,9 @@ public class DefaultImageGenerationStreamingOutputChatPipelineServiceImpl extend
 			Map<String, Object> params = CommonChatPromptParamsUtil
 					.preparePromptParameters(runtimeData.getMinimalChatContext());
 			params.put(DefaultRoutingChatPipelineStepServiceImpl.REWRITTEN_QUERY_TEMPLATE_PARAM, actualQuery);
-			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext();
+			// a service call on the request's text: the files that go to the answering model stay out
+			IChatRequestContext context = runtimeData.getRequestResources().createChatRequestContext()
+					.withoutMedia();
 			final GeboToolCalling toolCalling = runtimeData.getToolCalling();
 			Map<String, List<String>> data = toolCalling != null
 					? callLLMRepeatableFieldEntryOutput(serviceModel, prompt, context, params, List.of(IMAGE_PROMPT_FIELD),
