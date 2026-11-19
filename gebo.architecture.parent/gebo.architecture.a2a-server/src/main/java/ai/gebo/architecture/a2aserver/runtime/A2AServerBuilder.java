@@ -297,21 +297,6 @@ public class A2AServerBuilder {
 		return skill != null ? skill.toString() : null;
 	}
 
-	private String renderParts(List<Part<?>> parts) {
-		if (parts == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (Part<?> part : parts) {
-			if (part instanceof TextPart textPart) {
-				if (sb.length() > 0) {
-					sb.append("\n");
-				}
-				sb.append(textPart.text());
-			}
-		}
-		return sb.toString();
-	}
 
 	private String absoluteBase(ServerRequest request, String base) {
 		URI uri = request.uri();

@@ -314,7 +314,10 @@ public class OpenAIChatModelConfigurationSupportService
 					return meta;
 				}, type);
 		if (result != null && result.getResult() != null) {
-			result.setResult(result.getResult().stream().filter(c -> isChatModel(c.getCode())).toList());
+			// by id, unless the models library knows the model as a chat model: one that listens
+			// or draws carries in its id the markers of the audio and image models
+			result.setResult(result.getResult().stream().filter(c -> isChatModel(c.getCode())
+					|| (modelsLibrary != null && modelsLibrary.knowsAsChatModel("openai", c.getCode()))).toList());
 		}
 		return result;
 	}

@@ -66,4 +66,23 @@ public interface IGModelsLibraryDao {
             String providerId, String modelId) {
         return null;
     }
+
+    /**
+     * Whether the library knows a model as a chat model: it has an entry of its own
+     * saying so, or a rule telling what it accepts as input. The lists of chat models
+     * that recognise the other kinds by markers in their ids ("audio", "image") keep
+     * such a model: a chat model that listens or draws carries those markers too.
+     */
+    public default boolean knowsAsChatModel(String providerId, String modelId) {
+        if (providerId == null || modelId == null) {
+            return false;
+        }
+        final ModelMetaInfo entry = findByProviderIdAndModelId(providerId, modelId);
+        if (entry != null && Boolean.TRUE.equals(entry.getChatModel())) {
+            return true;
+        }
+        final java.util.List<ai.gebo.llms.abstraction.layer.model.GModelInputModality> inputs = findInputModalities(
+                providerId, modelId);
+        return inputs != null && !inputs.isEmpty();
+    }
 }

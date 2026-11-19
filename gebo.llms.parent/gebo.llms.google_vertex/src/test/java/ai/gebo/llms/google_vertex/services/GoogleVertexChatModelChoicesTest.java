@@ -32,4 +32,15 @@ class GoogleVertexChatModelChoicesTest {
 				GoogleVertexChatModelConfigurationSupportService.choices.stream().map(c -> c.getCode()).distinct()
 						.count());
 	}
+
+	@org.junit.jupiter.api.Test
+	void aGeminiModelNamedAsAnotherKindIsKeptWhenTheLibraryKnowsItAsAChatModel() {
+		final Model drawing = Model.builder().name("publishers/google/models/gemini-3.1-flash-lite-image").build();
+		org.junit.jupiter.api.Assertions.assertNull(GoogleVertexChatModelConfigurationSupportService.toChoice(drawing));
+		org.junit.jupiter.api.Assertions.assertEquals("gemini-3.1-flash-lite-image",
+				GoogleVertexChatModelConfigurationSupportService.toChoice(drawing, id -> true).getCode());
+		// what is not a Gemini model stays out whatever the library says
+		org.junit.jupiter.api.Assertions.assertNull(GoogleVertexChatModelConfigurationSupportService.toChoice(
+				Model.builder().name("publishers/google/models/imagen-4.0-generate-001").build(), id -> true));
+	}
 }
