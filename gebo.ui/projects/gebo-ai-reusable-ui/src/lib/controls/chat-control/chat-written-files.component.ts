@@ -56,10 +56,25 @@ export class GeboAIChatWrittenFilesComponent {
         return path.substring(path.lastIndexOf("/") + 1) || path;
     }
 
-    public isDownloadable(file: GConversationFile): boolean {
+    /** What the conversation holds now of the file, if it was read. */
+    private heldAs(file: GConversationFile): ChatWrittenFile | undefined {
         const path = (file.path || "").replace(/\\/g, "/");
-        return (this.conversationFiles || []).some((held) => held.downloadable === true
-            && held.location === file.location && (held.path || "").replace(/\\/g, "/") === path);
+        return (this.conversationFiles || []).find((held) => held.location === file.location
+            && (held.path || "").replace(/\\/g, "/") === path);
+    }
+
+    public isDownloadable(file: GConversationFile): boolean {
+        return this.heldAs(file)?.downloadable === true && !this.isGone(file);
+    }
+
+    /** Something else than the tools changed it since. */
+    public isChanged(file: GConversationFile): boolean {
+        return this.heldAs(file)?.state === ChatWrittenFile.StateEnum.CHANGED;
+    }
+
+    /** No longer there: shown as written, but nothing to take away. */
+    public isGone(file: GConversationFile): boolean {
+        return this.heldAs(file)?.state === ChatWrittenFile.StateEnum.GONE;
     }
 
     public download(file: GConversationFile): void {

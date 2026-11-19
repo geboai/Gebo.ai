@@ -16,4 +16,14 @@ export interface ChatWrittenFile {
     version?: string;
     requests?: Array<number>;
     downloadable?: boolean;
+    state?: ChatWrittenFile.StateEnum;
+}
+export namespace ChatWrittenFile {
+    export type StateEnum = 'AS_WRITTEN' | 'CHANGED' | 'GONE' | 'UNKNOWN';
+    export const StateEnum = {
+        ASWRITTEN: 'AS_WRITTEN' as StateEnum,
+        CHANGED: 'CHANGED' as StateEnum,
+        GONE: 'GONE' as StateEnum,
+        UNKNOWN: 'UNKNOWN' as StateEnum
+    };
 }

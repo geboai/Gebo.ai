@@ -31,7 +31,7 @@
                 <div class="text-sm">{{ resource.description }}</div>
               }
               @if (writtenInRequests(instance, resource); as requests) {
-                <div class="text-sm"><i class="pi pi-file-edit"></i> <span id="WrittenInRequestsText" gebo-ai-text>Written by the tools in request</span> {{ requests }}</div>
+                <div class="text-sm"><i class="pi pi-file-edit"></i> <span id="WrittenInRequestsText" gebo-ai-text>Written by the tools in request</span> {{ requests }}@if (isChangedResource(instance, resource)) {<span>; </span><span id="WrittenChangedSinceText" gebo-ai-text>changed since by something else than the tools</span>}</div>
               }
             </td>
             <td>{{ resource.resourceType?.description || resource.resourceType?.id }}</td>
@@ -55,7 +55,7 @@
         <p id="WrittenWithinText" class="text-sm mt-2 mb-1" gebo-ai-text>Written here by the tools, part of the library's whole download:</p>
         <ul class="text-sm mt-0">
           @for (file of writtenWithin(instance); track file.path) {
-            <li><strong>{{ file.path }}</strong> - <span id="WrittenInRequestText" gebo-ai-text>request</span> {{ requestsOf(file) }}</li>
+            <li><strong>{{ file.path }}</strong> - <span id="WrittenInRequestText" gebo-ai-text>request</span> {{ requestsOf(file) }}@if (isChanged(file)) {<span>; </span><span id="WrittenWithinChangedText" gebo-ai-text>changed since by something else than the tools</span>}</li>
           }
         </ul>
       }
