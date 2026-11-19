@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.services.toolcalling.GToolShownFiles;
+import ai.gebo.architecture.ai.files.IGToolShownFiles;
 import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import ai.gebo.llms.abstraction.layer.model.GModelMediaGuard;
@@ -840,13 +842,21 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		if (!tools.isEmpty()) {
 			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
 		}
+		// the files the tools show to the model (a picture they extracted or received): only
+		// in the calls whose loop Gebo runs, and for a model that takes files at all
+		GToolShownFiles shownFiles = null;
+		if (toolCalling != null && !tools.isEmpty() && !getEffectiveInputMimeTypes().isEmpty()) {
+			shownFiles = new GToolShownFiles(this::acceptsMedia);
+			toolContext = toolContext != null ? new HashMap<>(toolContext) : new HashMap<>();
+			toolContext.put(IGToolShownFiles.TOOLS_CONTEXT_KEY, shownFiles);
+		}
 		if (toolContext != null) {
 			reqObject = reqObject.toolContext(toolContext);
 		}
 		if (toolCalling != null) {
 			// the call's own tool calling loop, in place of the one the chat client
 			// registers by default (see GeboToolCallingAdvisor)
-			reqObject = reqObject.advisors(toolCalling.advisor(observationRegistry));
+			reqObject = reqObject.advisors(toolCalling.advisor(observationRegistry, shownFiles));
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("End prepareCall(" + prompt.getPromptUse() + ", ...,...)");

@@ -103,4 +103,25 @@ class McpRemoteToolResultFilesTest {
 				.isError(true).build();
 		assertEquals("ERROR: no data", callback(true).renderResult(failed, null));
 	}
+
+	@Test
+	void aPictureIsShownToAModelThatTakesPictures() {
+		final List<String> shown = new ArrayList<>();
+		final ai.gebo.architecture.ai.files.IGToolShownFiles viewer = (name, mimeType, data) -> {
+			shown.add(name + " " + mimeType + " " + data.length);
+			return mimeType.startsWith("image/");
+		};
+		final ToolContext context = new ToolContext(Map.of(ToolCallbackDeclarationUtil.CHAT_SESSION_CONTEXT_KEY,
+				"chat-1", ai.gebo.architecture.ai.files.IGToolShownFiles.TOOLS_CONTEXT_KEY, viewer));
+		final McpSchema.CallToolResult result = McpSchema.CallToolResult.builder()
+				.addContent(new McpSchema.ImageContent(null, base64((byte) 1, (byte) 2), "image/png"))
+				.addContent(new McpSchema.AudioContent(null, base64((byte) 3), "audio/wav")).build();
+
+		final String rendered = callback(true).renderResult(result, context);
+
+		assertEquals(List.of("srv_chart-image-1 image/png 2", "srv_chart-audio-2 audio/wav 1"), shown);
+		assertEquals("[image kept in this conversation as generated:srv_chart-image-1.png (image/png, 2 bytes)"
+				+ "; it is shown to you in the next message]"
+				+ "[audio kept in this conversation as generated:srv_chart-audio-2.wav (audio/wav, 1 bytes)]", rendered);
+	}
 }

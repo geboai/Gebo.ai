@@ -8,6 +8,12 @@
  */
 package ai.gebo.llms.agent.standardlibraries;
 
+import ai.gebo.architecture.ai.files.IGToolShownFiles;
+import ai.gebo.architecture.ai.files.GLibraryFileContent;
+import ai.gebo.architecture.ai.files.GLibraryFile;
+import ai.gebo.architecture.ai.files.IGAILibraryFilesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.ObjectProvider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
@@ -87,13 +93,27 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 	private static final String WRITE_FILE_DESCRIPTION = "Writes a text file in the working directory with the given content, creating it and its folders when missing, replacing it when it exists.";
 	private static final String CREATE_FOLDER_DESCRIPTION = "Creates a folder in the working directory, and the folders leading to it.";
 	private static final String DELETE_ENTRY_DESCRIPTION = "Deletes a file, or a folder with everything in it, from the working directory.";
+	public static final String VIEW_FILE_TOOL = "viewFile";
+	private static final String VIEW_FILE_DESCRIPTION = "Shows you a picture (or another file you can take as it is, such as a PDF or a recording) so that you look at it instead of only knowing its name: a file of the working directory, or of another files location of this conversation such as uploads or generated. The file reaches you in the next message. Use it when what a picture shows matters to the task.";
+	/** The size in bytes a file may have to be shown to the model. */
+	static final long MAX_VIEWED_FILE_BYTES = 20L * 1024 * 1024;
 	private static final String MOVE_ENTRY_DESCRIPTION = "Moves or renames a file or a folder inside the working directory.";
 
 	private final WorkingDirectoriesConfig config;
 	private final ObjectMapper mapper = new ObjectMapper();
 	private final AIToolsAndResourcesLibraryType type;
 
+	/** The other files locations of a conversation (uploads, generated files); absent in a unit test. */
+	private final ObjectProvider<IGAILibraryFilesService> conversationFiles;
+
 	public WorkingDirectoryLibrarySource(WorkingDirectoriesConfig config) {
+		this(config, null);
+	}
+
+	@Autowired
+	public WorkingDirectoryLibrarySource(WorkingDirectoriesConfig config,
+			ObjectProvider<IGAILibraryFilesService> conversationFiles) {
+		this.conversationFiles = conversationFiles;
 		this.config = config;
 		this.type = declareType();
 		LOGGER.info("Working directories of the agents live under: " + config.rootPath());
@@ -121,7 +141,8 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 				reference(WRITE_FILE_TOOL, WRITE_FILE_DESCRIPTION, "Write a file", WriteParam.class),
 				reference(CREATE_FOLDER_TOOL, CREATE_FOLDER_DESCRIPTION, "Create a folder", PathParam.class),
 				reference(DELETE_ENTRY_TOOL, DELETE_ENTRY_DESCRIPTION, "Delete a file or a folder", PathParam.class),
-				reference(MOVE_ENTRY_TOOL, MOVE_ENTRY_DESCRIPTION, "Move or rename", MoveParam.class)));
+				reference(MOVE_ENTRY_TOOL, MOVE_ENTRY_DESCRIPTION, "Move or rename", MoveParam.class),
+				reference(VIEW_FILE_TOOL, VIEW_FILE_DESCRIPTION, "Look at a picture or a file", ViewParam.class)));
 		return declared;
 	}
 
@@ -365,6 +386,15 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 		private String path;
 	}
 
+	@JsonClassDescription("A file to look at")
+	@Data
+	public static class ViewParam {
+		@JsonPropertyDescription("Optional: the files location of the conversation holding the file, e.g. uploads or generated; empty for the working directory itself")
+		private String location;
+		@JsonPropertyDescription("The path of the file in that location, e.g. charts/sales.png")
+		private String path;
+	}
+
 	@JsonClassDescription("A text file to write")
 	@Data
 	public static class WriteParam {
@@ -461,7 +491,75 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 					return moved;
 				},
 				MOVE_ENTRY_TOOL, MOVE_ENTRY_DESCRIPTION, MoveParam.class, Done.class));
+		callbacks.add(ToolCallbackDeclarationUtil.declare(
+				(BiFunction<ViewParam, ToolContext, String>) (param, context) -> viewFile(folder, param, context),
+				VIEW_FILE_TOOL, VIEW_FILE_DESCRIPTION, ViewParam.class, String.class));
 		return callbacks;
+	}
+
+	/**
+	 * Shows a file to the model that asked for it: a file of the working directory, or
+	 * of another files location of the conversation. The model is told whether it will
+	 * see it - it does when it takes files of that type - and why not otherwise.
+	 */
+	String viewFile(Path folder, ViewParam param, ToolContext context) {
+		final String path = param != null && param.getPath() != null ? param.getPath().trim() : "";
+		if (path.isEmpty()) {
+			throw new IllegalArgumentException("Give the path of the file to look at");
+		}
+		final String location = param.getLocation() != null ? param.getLocation().trim() : "";
+		final byte[] data;
+		final String contentType;
+		try {
+			if (location.isEmpty() || location.equals(TYPE_ID)) {
+				final Path file = inside(folder, path);
+				if (!Files.isRegularFile(file)) {
+					throw new IllegalArgumentException("There is no such file: " + path);
+				}
+				if (Files.size(file) > MAX_VIEWED_FILE_BYTES) {
+					return path + " is too large to be shown (" + Files.size(file) + " bytes).";
+				}
+				data = locked(file, () -> Files.readAllBytes(file));
+				contentType = GFolderFilesLocation.contentTypeOf(file.getFileName().toString());
+			} else {
+				final String session = ToolCallbackDeclarationUtil.chatSessionCode(context);
+				final IGAILibraryFilesService files = conversationFiles != null ? conversationFiles.getIfAvailable()
+						: null;
+				final IGFilesLocation other = session != null && files != null ? files.locationOf(session, location)
+						: null;
+				if (other == null) {
+					throw new IllegalArgumentException("This conversation has no files location named " + location);
+				}
+				final GLibraryFile described = other.describe(path);
+				if (described == null) {
+					throw new IllegalArgumentException("There is no file " + path + " in " + location);
+				}
+				if (described.size() > MAX_VIEWED_FILE_BYTES) {
+					return path + " is too large to be shown (" + described.size() + " bytes).";
+				}
+				final GLibraryFileContent content = other.read(path);
+				try (java.io.InputStream in = content.content().getInputStream()) {
+					data = in.readAllBytes();
+				}
+				contentType = described.contentType() != null ? described.contentType()
+						: GFolderFilesLocation.contentTypeOf(path);
+			}
+		} catch (IOException unreadable) {
+			throw new UncheckedIOException("The file could not be read: " + path, unreadable);
+		}
+		final String name = path.replace('\\', '/').substring(path.replace('\\', '/').lastIndexOf('/') + 1);
+		final Boolean shown = IGToolShownFiles.show(context, name, contentType, data);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(VIEW_FILE_TOOL + " location:" + location + " path:" + path + " type:" + contentType + " -> "
+					+ shown);
+		}
+		if (Boolean.TRUE.equals(shown)) {
+			return name + " (" + contentType + ", " + data.length + " bytes) is shown to you in the next message.";
+		}
+		return name + " (" + contentType + ", " + data.length + " bytes) cannot be shown: "
+				+ (shown == null ? "files cannot be shown in this call"
+						: "the model answering does not take files of this type, or this round already shows as many files as it may")
+				+ ". Work on it with the tools that read it.";
 	}
 
 	/**

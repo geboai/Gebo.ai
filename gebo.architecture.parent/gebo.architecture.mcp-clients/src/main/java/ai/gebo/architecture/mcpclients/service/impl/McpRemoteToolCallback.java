@@ -12,6 +12,7 @@ package ai.gebo.architecture.mcpclients.service.impl;
 import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
 import ai.gebo.architecture.ai.files.GLibraryFile;
 import ai.gebo.architecture.ai.files.IGConversationFilesKeeper;
+import ai.gebo.architecture.ai.files.IGToolShownFiles;
 import ai.gebo.architecture.ai.files.IGConversationGeneratedFilesStore;
 import org.springframework.beans.factory.ObjectProvider;
 import org.slf4j.Logger;
@@ -164,29 +165,41 @@ class McpRemoteToolCallback implements IGExternalToolCallback {
 	private String keep(String kind, String uri, String mimeType, String base64, int position,
 			ToolContext toolContext) {
 		final String described = "[" + kind + (mimeType != null ? " " + mimeType : "") + " content]";
-		final String session = ToolCallbackDeclarationUtil.chatSessionCode(toolContext);
-		final IGConversationGeneratedFilesStore store = generatedFiles != null ? generatedFiles.getIfAvailable() : null;
-		if (session == null || store == null || isBlank(base64)) {
+		if (isBlank(base64)) {
 			return described;
 		}
+		final byte[] data;
 		try {
-			final byte[] data = java.util.Base64.getDecoder().decode(base64.trim());
-			String name = null;
-			if (!isBlank(uri)) {
-				final String path = uri.contains("?") ? uri.substring(0, uri.indexOf('?')) : uri;
-				name = path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf(':')) + 1);
-			}
-			if (isBlank(name)) {
-				name = toolDefinition.name() + "-" + kind + "-" + position;
-			}
+			data = java.util.Base64.getDecoder().decode(base64.trim());
+		} catch (IllegalArgumentException unreadable) {
+			LOGGER.warn("The " + kind + " returned by MCP tool '" + remoteToolName + "' is not base64: " + unreadable);
+			return described;
+		}
+		String name = null;
+		if (!isBlank(uri)) {
+			final String path = uri.contains("?") ? uri.substring(0, uri.indexOf('?')) : uri;
+			name = path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf(':')) + 1);
+		}
+		if (isBlank(name)) {
+			name = toolDefinition.name() + "-" + kind + "-" + position;
+		}
+		// the model looks at it right after this round of tool calls, when it takes such files
+		final boolean shown = Boolean.TRUE.equals(IGToolShownFiles.show(toolContext, name, mimeType, data));
+		final String seen = shown ? "; it is shown to you in the next message" : "";
+		final String session = ToolCallbackDeclarationUtil.chatSessionCode(toolContext);
+		final IGConversationGeneratedFilesStore store = generatedFiles != null ? generatedFiles.getIfAvailable() : null;
+		if (session == null || store == null) {
+			return shown ? "[" + kind + (mimeType != null ? " " + mimeType : "") + " content" + seen + "]" : described;
+		}
+		try {
 			final GLibraryFile file = store.store(session, name, mimeType, data);
 			IGConversationFilesKeeper.report(toolContext, file);
 			return "[" + kind + " kept in this conversation as " + file.location() + ":" + file.path() + " ("
-					+ file.contentType() + ", " + file.size() + " bytes)]";
+					+ file.contentType() + ", " + file.size() + " bytes)" + seen + "]";
 		} catch (Exception e) {
 			LOGGER.error("The " + kind + " returned by MCP tool '" + remoteToolName + "' cannot be kept in session "
 					+ session, e);
-			return described;
+			return shown ? "[" + kind + (mimeType != null ? " " + mimeType : "") + " content" + seen + "]" : described;
 		}
 	}
 
