@@ -205,6 +205,9 @@ public class DeepseekModelsLookupService {
 			meta.setSupportsVision(model.getInput_modalities().contains("image"));
 			meta.setInputModalities(GModelInputModality.fromProvider(model.getInput_modalities()));
 		}
+		if (model.getOutput_modalities() != null) {
+			meta.setOutputModalities(GModelInputModality.fromProvider(model.getOutput_modalities()));
+		}
 		if (model.getEffort() != null) {
 			List<String> levels = model.getEffort().getSupported_levels() != null
 					? List.copyOf(model.getEffort().getSupported_levels())

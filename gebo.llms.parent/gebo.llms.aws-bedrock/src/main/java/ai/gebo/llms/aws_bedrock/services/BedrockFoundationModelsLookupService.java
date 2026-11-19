@@ -153,6 +153,10 @@ public class BedrockFoundationModelsLookupService {
 		meta.setInformativeUrl(INFORMATIVE_URL);
 		meta.setChatModel(summary.outputModalitiesAsStrings().contains("TEXT"));
 		meta.setEmbeddingModel(summary.outputModalitiesAsStrings().contains("EMBEDDING"));
+		if (summary.hasOutputModalities() && summary.outputModalitiesAsStrings().contains("TEXT")) {
+			// what a chat model answers with: text, and the pictures or speech Bedrock lists with it
+			meta.setOutputModalities(GModelInputModality.fromProvider(summary.outputModalitiesAsStrings()));
+		}
 		if (summary.hasInputModalities()) {
 			meta.setSupportsVision(summary.inputModalitiesAsStrings().contains("IMAGE"));
 			meta.setInputModalities(GModelInputModality.fromProvider(summary.inputModalitiesAsStrings()));

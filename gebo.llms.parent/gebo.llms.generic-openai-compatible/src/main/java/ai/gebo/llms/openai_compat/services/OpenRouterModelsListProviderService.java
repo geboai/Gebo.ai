@@ -213,6 +213,9 @@ public class OpenRouterModelsListProviderService implements IGModelsListProvider
 			meta.setSupportsVision(model.getArchitecture().getInputModalities().contains("image"));
 			meta.setInputModalities(GModelInputModality.fromProvider(model.getArchitecture().getInputModalities()));
 		}
+		if (model.getArchitecture() != null && model.getArchitecture().getOutputModalities() != null) {
+			meta.setOutputModalities(GModelInputModality.fromProvider(model.getArchitecture().getOutputModalities()));
+		}
 		if (model.getExpirationDate() != null && !model.getExpirationDate().isBlank()) {
 			meta.setDeprecated(true);
 			meta.setRetirementDate(model.getExpirationDate());
