@@ -5,7 +5,7 @@ FROM ${PLATFORM_IMAGE}
 LABEL mantainer=paolo.zavalloni@gebo.ai
 LABEL org.opencontainers.image.authors="paolo.zavalloni@gebo.ai"
 LABEL org.opencontainers.image.title="Gebo.ai"
-LABEL org.opencontainers.image.version="1.0.6.0"
+LABEL org.opencontainers.image.version="1.0.6.1"
 LABEL org.opencontainers.image.description="Gebo.ai enterprise rag & agents/chatbot platform"
 LABEL org.opencontainers.image.vendor="Gebo.ai"
 LABEL org.opencontainers.image.source="https://github.com/geboai/Gebo.ai"
@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.sbom="/opt/gebo.ai/sbom.cdx.json"
 # in the base image now - the /opt/gebo.ai layout (owned by uid 10001) and
 # /usr/bin/tini. The COPYs below stay root-owned and read-only to the app on
 # purpose: the jar and the baked config are not the application's to modify.
-COPY gebo.ai.app-1.0.6.0-bootable.jar /opt/gebo.ai
+COPY gebo.ai.app-1.0.6.1-bootable.jar /opt/gebo.ai
 COPY application.cdx.json  /opt/gebo.ai/sbom.cdx.json
 COPY config/application.yml /opt/gebo.ai/config
 
@@ -77,4 +77,4 @@ WORKDIR /opt/gebo.ai
 # then shuts down gracefully instead of being SIGKILLed at the stop timeout) and
 # reaps the orphaned children of the processes the application starts (stdio MCP
 # servers).
-ENTRYPOINT ["/usr/bin/tini", "--", "java", "-jar", "/opt/gebo.ai/gebo.ai.app-1.0.6.0-bootable.jar"]
+ENTRYPOINT ["/usr/bin/tini", "--", "java", "-jar", "/opt/gebo.ai/gebo.ai.app-1.0.6.1-bootable.jar"]

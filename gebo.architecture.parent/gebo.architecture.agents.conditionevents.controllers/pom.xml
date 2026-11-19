@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>ai.gebo.architecture</groupId>
 		<artifactId>gebo.architecture.parent</artifactId>
-		<version>1.0.6.0</version>
+		<version>1.0.6.1</version>
 	</parent>
 	<!--
 	  The REST entry of gebo.architecture.agents.conditionevents, kept apart so that
