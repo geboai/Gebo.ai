@@ -10,4 +10,7 @@ public interface LLMGeneratedResourceRepository extends IGBaseMongoDBRepository<
 		return LLMGeneratedResource.class;
 	}
 	public void deleteByUserContextCode(String userContextCode);
+
+	/** The files the models generated in a conversation. */
+	public java.util.stream.Stream<LLMGeneratedResource> findByUserContextCode(String userContextCode);
 }

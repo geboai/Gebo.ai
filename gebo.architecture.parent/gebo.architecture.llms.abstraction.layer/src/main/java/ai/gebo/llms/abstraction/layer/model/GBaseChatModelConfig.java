@@ -72,8 +72,9 @@ public class GBaseChatModelConfig<ModelChoice extends GBaseChatModelChoice> exte
 	 * What the model accepts as input (text, images, audio, video, documents), set at
 	 * setup from the presets or the model's metadata, or by hand. Null or empty means
 	 * text only: a configuration made before it existed stays text only until it is
-	 * edited. It characterizes the model; Gebo does not yet give the models anything
-	 * but text.
+	 * edited or given its model's metadata. A file of a request goes to the model as it
+	 * is only when its modality is declared here and the provider's integration
+	 * carries its type, see {@link GModelMediaGuard}.
 	 */
 	protected List<GModelInputModality> inputModalities = null;
 }

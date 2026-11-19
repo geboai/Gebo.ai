@@ -70,6 +70,8 @@ public class ChatUploadsForMultimodalModelsTest extends AbstractBaseTestLLmsInte
 	@Autowired
 	private IGChatSessionLifeCycleService lifeCycleService;
 	@Autowired
+	private ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService storageArea;
+	@Autowired
 	private ShrinkedChatSessionStateRepository shrinkedRepository;
 	@Autowired
 	private ChatFullSessionStateRepository fullRepository;
@@ -166,6 +168,21 @@ public class ChatUploadsForMultimodalModelsTest extends AbstractBaseTestLLmsInte
 		final OperationStatus<List<UserUploadedContent>> uploaded = uploadsController.chatSessionUpload(chat,
 				List.of(new MockMultipartFile("files[]", "chart.png", "image/png", png())));
 		assertNull(uploaded.getResult(), "neither the model nor an agent of this chat takes pictures");
+	}
+
+	@Test
+	public void aPictureTheChatGeneratedTravelsWithTheNextRequests() throws Exception {
+		final String chat = newSession("a chat that generated a picture");
+		final ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource generated = storageArea
+				.addMedia(org.springframework.ai.content.Media.builder()
+						.mimeType(org.springframework.util.MimeTypeUtils.IMAGE_PNG).data(png()).name("drawing").build(),
+						chat);
+		assertEquals("image/png", generated.getContentType(), "the whole type, as the file is served");
+		assertTrue(generated.getFileSize() > 0);
+		final List<ai.gebo.llms.abstraction.layer.model.IChatRequestMedia> media = storageArea.getSessionMedia(chat);
+		assertEquals(1, media.size(), "a later question about the picture can reach a model that sees");
+		assertEquals("image/png", media.get(0).getMimeType());
+		org.junit.jupiter.api.Assertions.assertArrayEquals(png(), media.get(0).readBytes());
 	}
 
 	private static org.springframework.ai.chat.messages.UserMessage lastUserMessage(
