@@ -44,6 +44,32 @@ ai.gebo.contents.reading.library:
           extensions:
             - .xls
           uiViewable: false
+    - id: MSPowerPointIngestionHandler
+      fileTypeId: powerpoint
+      fileTypes:
+        - treatAs: word
+          description: MS PowerPoint 97/2003 .ppt presentation
+          contentTypes: application/vnd.ms-powerpoint
+          extensions:
+            - .ppt
+          uiViewable: false
+        - treatAs: word
+          description: MS PowerPoint .pptx presentation
+          contentTypes: application/vnd.openxmlformats-officedocument.presentationml.presentation
+          extensions:
+            - .pptx
+          uiViewable: false
+    - id: RtfIngestionHandler
+      fileTypeId: rtf
+      fileTypes:
+        - treatAs: word
+          description: Rich text format .rtf document
+          contentTypes:
+            - application/rtf
+            - text/rtf
+          extensions:
+            - .rtf
+          uiViewable: false
     - id: OdtIngestionHandler
       fileTypeId: odt
       fileTypes:
