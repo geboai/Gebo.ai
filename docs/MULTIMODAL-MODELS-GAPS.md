@@ -870,6 +870,12 @@ Branch `feature/moltimodality`. The decisions of section 9 were taken as recomme
 | 9 (part) | The pictures, recordings and videos a chat generated travel with its later requests | `GChatStorageAreaServiceImpl.getSessionMedia` | `ChatUploadsForMultimodalModelsTest` |
 | 6 | Knowledge base readers for .pptx and .ppt (one document per slide: title, texts, tables, speaker notes, with the slide number) and .rtf (Tika's RTF parser); a chat upload of these types is now read into the chat too | `MSPowerPointIngestionHandler`, `RtfIngestionHandler`, `readers.yml` | `MSPowerPointIngestionHandlerTest`, `RtfIngestionHandlerTest` (speaker notes of a .ppt not covered: POI can't write them) |
 | 8 | Files from outside are kept in the conversation: a read-only `generated` files location (what the conversation generated or received) and `IGConversationGeneratedFilesStore`. An MCP tool's image, audio and blob contents are kept there, listed among the files the request wrote and named to the model; its structured content is given as JSON when it has no text. A remote A2A agent's file parts sent as bytes are kept the same way. The A2A server sends the pictures a run generated as file parts and advertises `image/png` | `ChatGeneratedFilesProvider`, `McpRemoteToolCallback`, `RemoteA2ANetworkAgentService`, `A2AResultAdapter`, `A2AAgentCardBuilder` | `McpRemoteToolResultFilesTest`, `A2AResultAdapterTest`, `ChatUploadsForMultimodalModelsTest` |
+| 7 | Tools show files to the model that called them: `IGToolShownFiles` in the tools context of the calls whose loop Gebo runs; what a round's tools showed reaches the model in a user message after the tools' results, when the model takes that type. A `viewFile` tool in the working directory library (a file of the directory, or of `uploads`, `generated` or another location). A picture an MCP tool returns is shown at once | `GToolShownFiles`, `GeboToolCallingAdvisor`, `WorkingDirectoryLibrarySource`, `McpRemoteToolCallback` | `ToolShownFilesTest`, `WorkingDirectoryLibrarySourceTest`, `McpRemoteToolResultFilesTest` |
+| 10 | Pictures and the pages without text of PDF files described by a chat model that reads pictures, off until `ai.gebo.ingestion.media.describe-pictures` is turned on; the model is the one named, else the default when it reads pictures, else the first that does; 30 pages a document at most; the text is marked `gebo_model_written` | `IGMediaTextExtractor`, `MediaIngestionHandler`, `PdfIngestionHandler`, `GMediaTextExtractorImpl` | `MediaIngestionHandlerTest`, `GMediaTextExtractorImplTest` |
+| 11 | Recordings and videos (.mp3, .wav, .m4a, .mpga, .mp4, .mpeg, .webm) transcribed by the default transcription model, off until `ai.gebo.ingestion.media.transcribe-recordings` is turned on | same classes | same tests |
+| 4 | The context budget keeps room for the files a request carries (`ai.gebo.chat.media.estimated-tokens-per-file`, an estimate) | `GChatSessionLifeCycleServiceImpl` | |
+| 4.9 points 6, 15, 19 | Output modalities recorded where the api tells them (OpenRouter, Bedrock, DeepSeek); a chat model the library knows is kept in the OpenAI and Vertex lists although its id names another kind; the setup wizard tells what the chosen chat model accepts | `ModelMetaInfo`, `IGModelsLibraryDao.knowsAsChatModel`, `llms-vendor-modeltype` | `GoogleVertexChatModelChoicesTest` |
+| 0 | Defect 3: the two endpoints the upload box posts to before a chat exists are back (`chatSessionCreateWithUpload`, `ragChatSessionCreateWithUpload`). Five methods without callers removed (`ClientChatCallUtil`, `A2AServerBuilder.renderParts`) | `GeboUserChatUploadsController` | not run in the browser |
 | 0 (part) | Defect 1 (upload metadata) and defect 2 (generated files' type and size) fixed; defect 7 (xAI) fixed | `GChatStorageAreaServiceImpl` | |
 
 ### Differences from the proposal
@@ -882,12 +888,20 @@ Branch `feature/moltimodality`. The decisions of section 9 were taken as recomme
 
 ### Not done yet
 
-- **No request was sent to a real provider.** The provider behaviour is from Spring AI's bytecode; one live request per provider and type is still owed (section 5.1).
-- **No token estimate for media** in the context budget; only the limits above.
-- **Wizards** don't show what a preset model accepts (point 19); no preset choice sets `inputModalities` (point 8), since the library rules now cover the vendors that were checked.
-- **Id filters** hiding audio and image chat models (point 15), **output modalities** (point 6), and a **model named for reading media** (point 14).
-- **Defect 3** (upload from the admin "Test chat" before its first answer) and the removal of the unused code of defect 8.
-- **Compliance register:** the flow of a chat profile to its responder model now names the file types sent as they are (`GStandardChatPipelineDataFlowComponent`). The agents' own models and the free chat with a model are not described this way yet.
-- **Left of step 8:** the A2A server doesn't send the files a run's tools wrote (they live in the libraries' own locations), a file a remote agent gives by address isn't fetched, the caller of the A2A server isn't told which of its parts were not taken, and MCP server tools still answer text only. The remote A2A path has no test with a file part.
-- **Steps 7, 10, 11 and 12** of the roadmap: pictures for agents, descriptions at ingestion, audio and video transcription, Office add-in and web pictures.
-  - Step 11 was not started on purpose: a reader that calls the transcription model has to live where the transcription models are, while the readers' registry is in `gebo.system.ingestion`, and in the microservices layout ingestion runs in services whose model wiring was not checked. It needs that design settled first.
+- **No request was sent to a real provider.** Everything that reaches a provider was tested against fake models. Owed, per provider and file type:
+  - a file in the last user message (section 3.5 is from bytecode);
+  - **a user message with a picture right after the tools' results** (step 7). The fake-model test proves the message is built; whether each provider accepts that order is not known. OpenAI, Anthropic and Google have to be tried before agents are given `viewFile` in production.
+  - a picture description and a transcription at ingestion.
+- **Nothing was looked at in the browser:** the upload box, the model editor, the models list, the wizard line and the upload before a chat's first message.
+- **Choices taken without asking, to revisit:**
+  - descriptions and transcription are switched for the whole installation, not per knowledge base, and no cost estimate is shown before a run;
+  - the model that describes pictures is found by a setting or by what the models declare, not by a new model use;
+  - a chat upload the chat's model takes as it is (picture, recording, video) goes to the model and is not described or transcribed, even when the readers are on;
+  - the room kept for a file in the context is a fixed estimate.
+- **Not built:**
+  - MCP server tools still answer text only; a file a remote A2A agent gives by address isn't fetched; the A2A server doesn't send the files a run's tools wrote, nor tell its caller which parts were not taken;
+  - the compliance register describes the files only for a chat profile's responder model, not for the agents' own models, the free chat with a model, or the ingestion calls;
+  - pictures inside Word, Excel, ODF and HTML documents are still dropped (only standalone pictures and PDF pages without text are described);
+  - `ChatModelFeatures`, `GBaseChatModelConfig.features`, `GTikaFailBackContentHandler`, `addLLMGenerated` and the chat UI's `modelMetaInfos` were left: the first two are persisted and exposed, the others span interfaces;
+  - step 12: Office add-in pictures (three other repositories), web pictures, multimodal embeddings.
+- **Pro:** the text documents library's agent rules still say an uploaded picture is not seen, and `extractImages` / `extractSlideImages` don't show what they extract. Both can now use `IGToolShownFiles`.
