@@ -58,13 +58,21 @@
             @if(inputModalities===true && formGroup.controls['inputModalities']) {
               <div class="col-4">
                 <gebo-ai-field id="inputModalities" label="Accepts as input"
-                  help="What the model takes as input, as its provider or the models library tells; empty means text only. It describes the model: Gebo does not send the models anything but text yet.">
+                  help="What the model takes as input, as its provider or the models library tells; empty means text only. A file goes to the model as it is when the model accepts its kind here and this provider's integration can deliver its type.">
                   <p-multiselect inputId="inputModalities" formControlName="inputModalities" [options]="inputModalityOptions"
                     optionLabel="label" optionValue="value" display="chip" [showToggleAll]="false" styleClass="w-full" gebo-ai-field-element />
                   @if (modelInputModalities?.length) {
                     <small class="text-muted-color"><span id="ModelInputModalitiesLabel" gebo-ai-text>The model's metadata says:</span>
                       {{ modelInputModalitiesText }} -
                       <a href="#" id="UseModelInputModalities" (click)="useModelInputModalities($event)" gebo-ai-text>use these</a></small>
+                  }
+                  @if (sentFileTypes.length) {
+                    <small class="text-muted-color block"><span id="SentFileTypesLabel" gebo-ai-text>Files sent to this model as they are:</span>
+                      {{ sentFileTypes.join(', ') }}</small>
+                  }
+                  @if (declaredNotCarriedText) {
+                    <small class="text-muted-color block"><span id="DeclaredNotCarriedLabel" gebo-ai-text>Not delivered through this provider's integration:</span>
+                      {{ declaredNotCarriedText }}</small>
                   }
                 </gebo-ai-field>
               </div>

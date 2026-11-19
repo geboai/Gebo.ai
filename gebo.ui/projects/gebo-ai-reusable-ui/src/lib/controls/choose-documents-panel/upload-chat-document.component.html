@@ -23,8 +23,14 @@
 
       @if (toolsExtensions.length > 0) {
         <div class="card text-sm">
-          <span id="ToolsOnlyFilesNote" gebo-ai-text>Also accepted for the agents' tools, which work on them: they are not read into the chat, and the models do not see pictures.</span>
+          <span id="ToolsOnlyFilesNote" gebo-ai-text>Also accepted for the agents' tools, which work on them:</span>
           <span> {{ toolsExtensions.join(', ') }}</span>
+        </div>
+      }
+      @if (modelMimeTypes.length > 0) {
+        <div class="card text-sm">
+          <span id="ModelFilesNote" gebo-ai-text>This chat's model also reads these files as they are:</span>
+          <span> {{ modelMimeTypes.join(', ') }}</span>
         </div>
       }
       <div class="card" [formGroup]="formGroup">
@@ -50,7 +56,7 @@
                     <div class="col-9">
                       <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full"
                         styleClass="w-full h-full">
-                        <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>
+                        <span class="whitespace-nowrap">{{ totalSize }}B / 10Mb</span>
                       </p-progressbar>
                     </div>
                   </div>

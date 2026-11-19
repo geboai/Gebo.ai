@@ -10,9 +10,9 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { GBaseChatModelConfig, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, GBaseChatModelConfig, GModelCarriedMediaTypes, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
@@ -88,7 +88,55 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     /**
      * Lifecycle hook that is called after data-bound properties are initialized
      */
-    constructor(private translations: GeboAITranslationService) {
+    constructor(private translations: GeboAITranslationService,
+        private chatModelsController: ChatModelsControllerService,
+        private changeDetector: ChangeDetectorRef) {
+    }
+
+    /**
+     * What the provider's integration can deliver to the chosen model besides text: the
+     * MIME types of the files a request may carry, by modality.
+     */
+    protected carriedMediaTypes?: GModelCarriedMediaTypes;
+    private carriedMediaTypesOf?: string;
+
+    /** The file types Gebo sends to the model: the carried ones of the modalities the form declares. */
+    protected get sentFileTypes(): string[] {
+        const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
+        const carried = this.carriedMediaTypes;
+        if (!carried) return [];
+        return [
+            ...(declared.includes("IMAGE") ? carried.image ?? [] : []),
+            ...(declared.includes("AUDIO") ? carried.audio ?? [] : []),
+            ...(declared.includes("VIDEO") ? carried.video ?? [] : []),
+            ...(declared.includes("DOCUMENT") ? carried.document ?? [] : [])];
+    }
+
+    /** The labels of the declared modalities this provider's integration carries nothing for. */
+    protected get declaredNotCarriedText(): string {
+        const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
+        const carried = this.carriedMediaTypes;
+        if (!carried) return "";
+        const of: { [key: string]: string[] | undefined } = { IMAGE: carried.image, AUDIO: carried.audio, VIDEO: carried.video, DOCUMENT: carried.document };
+        return this.inputModalityOptions.filter(o => o.value !== "TEXT" && declared.includes(o.value) && !(of[o.value]?.length))
+            .map(o => o.label).join(", ");
+    }
+
+    private loadCarriedMediaTypes(modelCode?: string): void {
+        const modelTypeCode: string | undefined = this.formGroup?.controls["modelTypeCode"]?.value;
+        const key = modelTypeCode + "|" + modelCode;
+        if (!modelTypeCode || key === this.carriedMediaTypesOf) return;
+        this.carriedMediaTypesOf = key;
+        this.chatModelsController.getCarriedMediaTypes(modelTypeCode, modelCode).subscribe({
+            next: (carried) => {
+                this.carriedMediaTypes = carried;
+                this.changeDetector.markForCheck();
+            },
+            error: () => {
+                this.carriedMediaTypes = undefined;
+                this.carriedMediaTypesOf = undefined;
+            }
+        });
     }
 
     ngOnInit(): void {
@@ -122,7 +170,8 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
      * 
      * @param choosed - The selected model object containing context length information
      */
-    private notifyChoosedModelChange(choosed?: { contextLength?: number, metaInfos?: ModelMetaInfo }) {
+    private notifyChoosedModelChange(choosed?: { code?: string, contextLength?: number, metaInfos?: ModelMetaInfo }) {
+        this.loadCarriedMediaTypes(choosed?.code);
         this.defaultContextLength = standardDefaultContextLength;
         this.modelHaveNativeContextWindowSettings = false;
         const meta: any = choosed?.metaInfos;

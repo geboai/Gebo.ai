@@ -105,6 +105,13 @@
       @if (chatModels && chatModels.length) {
         <p-panel id="ChatmodelsZone" gebo-ai-label header="Configured chat models"
           >
+          @if (someModelsCanTakeTheirMetadataInputs) {
+            <div class="mb-2 text-sm">
+              <span id="ApplyModelsMetadataInputsNote" gebo-ai-text>Some models are set to text only although their metadata say they accept more.</span>
+              <p-button id="ApplyModelsMetadataInputsBtn" gebo-ai-label (onClick)="applyModelsMetadataInputs()" [text]="true"
+                label="Use the models' metadata" icon="pi pi-images"></p-button>
+            </div>
+          }
           <p-table [value]="chatModels">
             <ng-template pTemplate="header">
               <tr>
@@ -112,6 +119,7 @@
                 <th id="DescriptionHeader" gebo-ai-text>Description</th>
                 <th id="ModelProviderHeader" gebo-ai-text>Model provider</th>
                 <th id="ModelHeader" gebo-ai-text>Model </th>
+                <th id="AcceptsHeader" gebo-ai-text>Accepts</th>
                 <th id="RoleHeader" gebo-ai-text>Role</th>
                 <th></th>
                 <th></th>
@@ -123,6 +131,13 @@
                 <td>{{ model.configuration?.description }}</td>
                 <td>{{ model.configuration?.modelTypeCode }}</td>
                 <td>{{ model.configuration?.choosedModel?.code }}</td>
+                <td>
+                  <span class="text-sm">{{ declaredInputs(model.configuration?.code).join(', ') | lowercase }}</span>
+                  @if (undeclaredMetadataInputs(model.configuration?.code).length) {
+                    <small class="text-muted-color block"><span id="MetadataInputsLabel" gebo-ai-text>metadata:</span>
+                      {{ undeclaredMetadataInputs(model.configuration?.code).join(', ') | lowercase }}</small>
+                  }
+                </td>
                 <td>
                   @switch (chatModelRole(model.configuration)) {
                     @case ('DEFAULT_CHAT') { <span id="RoleDefaultChat" gebo-ai-text class="gebo-model-role gebo-model-role--default">Default chat model</span> }

@@ -1399,6 +1399,10 @@
       "RoleDefaultChat": { "label": "Default chat model" },
       "RoleService": { "label": "Default service model" },
       "RoleChat": { "label": "Chat model" },
+      "AcceptsHeader": { "label": "Accepts" },
+      "MetadataInputsLabel": { "label": "metadata:" },
+      "ApplyModelsMetadataInputsNote": { "label": "Some models are set to text only although their metadata say they accept more." },
+      "ApplyModelsMetadataInputsBtn": { "label": "Use the models' metadata" },
       "RoleDefault": { "label": "Default model" },
       "NewEmbeddingModelConfigurationBtn": {
         "label": "New embedding model configuration"
@@ -3129,7 +3133,9 @@
       "TemperatureRangeLabel": { "label": "Allowed range:" },
       "TopPRangeLabel": { "label": "Allowed range:" },
       "ContextLengthDefaultLabel": { "label": "Used when not set:" },
-      "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. It describes the model: Gebo does not send the models anything but text yet." },
+      "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. A file goes to the model as it is when the model accepts its kind here and this provider's integration can deliver its type." },
+      "SentFileTypesLabel": { "label": "Files sent to this model as they are:" },
+      "DeclaredNotCarriedLabel": { "label": "Not delivered through this provider's integration:" },
       "ModelInputModalitiesLabel": { "label": "The model's metadata says:" },
       "UseModelInputModalities": { "label": "use these" },
       "TextInputOption": { "label": "Text" },
@@ -4658,7 +4664,8 @@
       "RemoveAll": { "help": "Remove all" },
       "UploadPending": { "label": "Pending for upload" },
       "CompletedData": { "label": "Completed" },
-      "ToolsOnlyFilesNote": { "label": "Also accepted for the agents' tools, which work on them: they are not read into the chat, and the models do not see pictures." },
+      "ToolsOnlyFilesNote": { "label": "Also accepted for the agents' tools, which work on them:" },
+      "ModelFilesNote": { "label": "This chat's model also reads these files as they are:" },
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
         "summary": "OK!",
         "detail": "Operation done successfully"
