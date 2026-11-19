@@ -239,13 +239,22 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			flow.getDataEndpoints().add(query);
 
 			// Responder (CHAT) model - gets the query plus retrieved KB content.
-			DataEndpoint responder = describeChatModel("chat", responderModel(profile, chatProfileModelsDao),
-					"Responder chat model");
+			final IGConfigurableChatModel responderChatModel = responderModel(profile, chatProfileModelsDao);
+			DataEndpoint responder = describeChatModel("chat", responderChatModel, "Responder chat model");
 			if (responder != null) {
 				addUnique(flow, responder);
 				processed(flow, "answer", profileCode, "RAG answer generation (query + retrieved content)",
 						MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
 						flow.qualifiedId(responder.getId()));
+				// the conversation's files this model takes as they are (pictures, PDF files,
+				// recordings): they leave for the model's provider as content, not as text
+				final List<String> files = sentFileTypes(responderChatModel);
+				if (!files.isEmpty()) {
+					processed(flow, "files", profileCode,
+							"Conversation files sent to the model as they are (" + String.join(", ", files) + ")",
+							MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT,
+							flow.qualifiedId(query.getId()), flow.qualifiedId(responder.getId()));
+				}
 			}
 			if (serviceModel != null) {
 				processed(flow, "rewrite", profileCode, "Query rewriting / tool calls", MetaEndpointType.CHAT_SESSION,
@@ -431,6 +440,21 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			return null;
 		}
 		return DataFlowEndpoints.embeddingModel(model);
+	}
+
+	/**
+	 * The MIME types of the files a chat model receives as they are: what its
+	 * configuration declares and its provider's integration carries; none for a model
+	 * that gets text only.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static List<String> sentFileTypes(IGConfigurableChatModel model) {
+		try {
+			final List<String> types = model != null ? model.getEffectiveInputMimeTypes() : null;
+			return types != null ? types : List.of();
+		} catch (RuntimeException e) {
+			return List.of();
+		}
 	}
 
 	private IGConfigurableChatModel responderModel(GChatProfileConfiguration profile,

@@ -887,7 +887,7 @@ Branch `feature/moltimodality`. The decisions of section 9 were taken as recomme
 - **Wizards** don't show what a preset model accepts (point 19); no preset choice sets `inputModalities` (point 8), since the library rules now cover the vendors that were checked.
 - **Id filters** hiding audio and image chat models (point 15), **output modalities** (point 6), and a **model named for reading media** (point 14).
 - **Defect 3** (upload from the admin "Test chat" before its first answer) and the removal of the unused code of defect 8.
-- **Compliance register:** the new flow of files to the providers is not described there yet.
+- **Compliance register:** the flow of a chat profile to its responder model now names the file types sent as they are (`GStandardChatPipelineDataFlowComponent`). The agents' own models and the free chat with a model are not described this way yet.
 - **Left of step 8:** the A2A server doesn't send the files a run's tools wrote (they live in the libraries' own locations), a file a remote agent gives by address isn't fetched, the caller of the A2A server isn't told which of its parts were not taken, and MCP server tools still answer text only. The remote A2A path has no test with a file part.
 - **Steps 7, 10, 11 and 12** of the roadmap: pictures for agents, descriptions at ingestion, audio and video transcription, Office add-in and web pictures.
   - Step 11 was not started on purpose: a reader that calls the transcription model has to live where the transcription models are, while the readers' registry is in `gebo.system.ingestion`, and in the microservices layout ingestion runs in services whose model wiring was not checked. It needs that design settled first.
