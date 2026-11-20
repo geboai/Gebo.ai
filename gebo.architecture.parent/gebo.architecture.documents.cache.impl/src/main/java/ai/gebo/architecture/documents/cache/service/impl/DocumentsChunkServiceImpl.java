@@ -94,6 +94,8 @@ public class DocumentsChunkServiceImpl
 	private static final String CANNOT_SERIALIZE_SEARCH_RESULT = "Cannot serialize searchResult";
 	private final DocumentChunkOperationRepository documentChunkOperationRepository;
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
+	/** The bytes of media a chunk set holds before it is written and another begun. */
+	static final long MEDIA_BYTES_PER_CHUNK_SET = 8L * 1024 * 1024;
 	private final static Map<String, TokenTextSplitter> splittersCache = new Hashtable<String, TokenTextSplitter>();
 	static {
 		get(TextChunkingSpecs.DEFAULT_SPECS);
@@ -228,12 +230,15 @@ public class DocumentsChunkServiceImpl
 		// if no chunking specification is added than is an invalid call
 		if (chunkingSpecs == null || chunkingSpecs.isEmpty())
 			throw new DocumentCacheAccessException("No chunking specs");
-		// if there is an imaging chunking request we do not handle it actually (but we
-		// will in the future)
-		Optional<AbstractChunkingSpecs> imageConfig = chunkingSpecs.stream()
-				.filter(x -> x.getChunkType() == DocumentChunkType.IMAGE).findFirst();
-		if (imageConfig.isPresent())
-			throw new MethodNotFoundException("The images chunking is not yet implemented");
+		// the media asked beside the texts (images, recordings, videos): the ones the readers
+		// give are returned as they are, whole, each a chunk of its kind; none asked, none
+		// returned. A sample of a document, and the chunks picked by keywords, are text only
+		final java.util.Set<DocumentChunkType> mediaAsked = new java.util.HashSet<>();
+		if (!samplingMode && (params.getChunkingPolicy() == null
+				|| params.getChunkingPolicy() == ChunkingPolicy.SPLIT_CHUNKS)) {
+			chunkingSpecs.stream().filter(x -> x.getChunkType() != null && x.getChunkType().isMedia())
+					.forEach(x -> mediaAsked.add(x.getChunkType()));
+		}
 		// the chunks already made of this document version with the same parameters, by any
 		// session, whose files are here: reused, the session recording its own record
 		final DocumentChunkingResponse reused = reuse(document, params, chunkSessionId);
@@ -275,7 +280,8 @@ public class DocumentsChunkServiceImpl
 
 				if (!content.isUnmanagedContent()) {
 					// if we have an handled content from the ingestion layer we proceed
-					Stream<Document> docsStream = content.getStream();
+					Stream<Document> docsStream = mediaAsked.isEmpty() ? content.getStream()
+							: content.getStreamWithImages();
 					// We use streaming so huge files or huge datasets are streamed directly to the
 					// disk in chunks without heavy memory use
 					// Start filling the chunkOperation to remain saved in mongodb for later use and
@@ -307,6 +313,68 @@ public class DocumentsChunkServiceImpl
 							return;
 						if (contentHash != null && doc.isText()) {
 							contentHash.add(doc.getText());
+						}
+						if (!doc.isText()) {
+							// a media of the document: returned as it is, whole, when its kind was asked
+							try {
+								final org.springframework.ai.content.Media media = doc.getMedia();
+								final String mediaType = media != null && media.getMimeType() != null
+										? media.getMimeType().toString()
+										: null;
+								final DocumentChunkType kind = DocumentChunkType.ofMediaMimeType(mediaType);
+								if (kind == null || !mediaAsked.contains(kind)) {
+									return;
+								}
+								final byte[] bytes = media.getDataAsByteArray();
+								final DocumentChunk chunk = DocumentChunk.ofMedia(document.getCode(), mediaType, bytes,
+										doc.getMetadata());
+								if (chunk == null) {
+									return;
+								}
+								if (contentHash != null) {
+									// a changed image changes the document, as a changed text does
+									contentHash.add(mediaType + ":" + bytes.length + ":" + java.util.Arrays.hashCode(bytes));
+								}
+								chunk.setChunkPosition(atomicLong.incrementAndGet());
+								chunk.setBytesSize((long) bytes.length);
+								chunk.setTokensSize(0l);
+								chunk.setChunkingSessionId(chunkSessionId);
+								chunk.getMetaData().put(DocumentMetaInfos.GEBO_BYTES_LENGTH, bytes.length);
+								response.setEmpty(false);
+								chunkOperation.setTotalBytesSize(chunkOperation.getTotalBytesSize() + bytes.length);
+								chunkOperation.setTotalChunks(chunkOperation.getTotalChunks() + 1);
+								DocumentChunksSet currentChunkSet = null;
+								if (chunkSets.isEmpty()) {
+									currentChunkSet = new DocumentChunksSet();
+									currentChunkSet.setChunkingSessionId(chunkSessionId);
+									chunkSets.add(currentChunkSet);
+									chunkOperation.getChunkSetsList().add(currentChunkSet.getId());
+								} else {
+									currentChunkSet = chunkSets.get(0);
+								}
+								currentChunkSet.getChunks().add(chunk);
+								currentChunkSet.setTotalBytes(currentChunkSet.getTotalBytes() + chunk.getBytesSize());
+								// a set holding media is written once it weighs enough: its files stay of a
+								// size that is read and sent in one piece
+								if (currentChunkSet.getTotalBytes() > MEDIA_BYTES_PER_CHUNK_SET) {
+									Path writtenFile = Path.of(workDirectory, CHUNKS_CACHE_DIRECTORY_NAME,
+											currentChunkSet.getId());
+									objectMapper.writeValue(writtenFile.toFile(), currentChunkSet);
+									chunkSets.clear();
+								}
+								if (response.getCurrentChunkSet() == null) {
+									response.setCurrentChunkSet(currentChunkSet);
+								}
+								if (LOGGER.isDebugEnabled()) {
+									LOGGER.debug("document " + document.getCode() + " media chunk " + kind + " "
+											+ mediaType + " of " + bytes.length + " byte(s) at position "
+											+ chunk.getChunkPosition());
+								}
+							} catch (Throwable th) {
+								LOGGER.error("Exception in taking a media of file " + document.getCode(), th);
+								exceptions.add(th);
+							}
+							return;
 						}
 						try {
 							MetaDataHeaderInfos metaDataHeader = null;
