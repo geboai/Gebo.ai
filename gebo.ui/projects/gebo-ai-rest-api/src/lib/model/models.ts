@@ -346,8 +346,6 @@ export * from './handShakeToken';
 export * from './hasRunningJobs';
 export * from './ingestionFileType';
 export * from './ingestionHandlerConfig';
-export * from './ingestionMediaCapabilities';
-export * from './ingestionMediaText';
 export * from './insertUserParam';
 export * from './integrationDocumentEnvelop';
 export * from './integrationInputControllerSpoolDocumentBody';
