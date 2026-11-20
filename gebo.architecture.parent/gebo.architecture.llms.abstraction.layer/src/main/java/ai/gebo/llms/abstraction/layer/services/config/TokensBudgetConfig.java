@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import ai.gebo.architecture.ai.service.ToolsTokenBudget;
 import ai.gebo.llms.abstraction.layer.services.BaseLLMSInvokingService;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
@@ -25,6 +26,11 @@ import lombok.Data;
  * factor of {@link BaseLLMSInvokingService#computeFragmentBudget}, the one budget
  * formula of the consolidations and of the deep searches. Set via
  * ai.gebo.llms.tokens-budget.factor, 0 &lt; factor &lt;= 1.
+ * <p>
+ * Also the tokens up to which a tool's result reaches its model call whole even over
+ * the room the call leaves to the tools' results
+ * (ai.gebo.llms.tokens-budget.always-admitted-result-tokens, see
+ * {@link ToolsTokenBudget#alwaysAdmittedResultTokens()}).
  */
 @Configuration
 @ConfigurationProperties(value = "ai.gebo.llms.tokens-budget")
@@ -33,6 +39,7 @@ public class TokensBudgetConfig {
 	private static final Logger LOGGER = LoggerFactory.getLogger(TokensBudgetConfig.class);
 	public static final double DEFAULT_FACTOR = 0.7d;
 	private double factor = DEFAULT_FACTOR;
+	private int alwaysAdmittedResultTokens = ToolsTokenBudget.DEFAULT_ALWAYS_ADMITTED_RESULT_TOKENS;
 
 	@PostConstruct
 	public void apply() {
@@ -43,8 +50,16 @@ public class TokensBudgetConfig {
 					+ " is used");
 			BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF = DEFAULT_FACTOR;
 		}
+		if (alwaysAdmittedResultTokens >= 0) {
+			ToolsTokenBudget.setAlwaysAdmittedResultTokens(alwaysAdmittedResultTokens);
+		} else {
+			LOGGER.warn("ai.gebo.llms.tokens-budget.always-admitted-result-tokens=" + alwaysAdmittedResultTokens
+					+ " is negative: " + ToolsTokenBudget.DEFAULT_ALWAYS_ADMITTED_RESULT_TOKENS + " is used");
+			ToolsTokenBudget.setAlwaysAdmittedResultTokens(ToolsTokenBudget.DEFAULT_ALWAYS_ADMITTED_RESULT_TOKENS);
+		}
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("apply() tokens budget factor:" + BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF);
+			LOGGER.debug("apply() tokens budget factor:" + BaseLLMSInvokingService.ERRONEUS_TOKEN_LENGTH_ERROR_COEFF
+					+ " always admitted result tokens:" + ToolsTokenBudget.alwaysAdmittedResultTokens());
 		}
 	}
 }

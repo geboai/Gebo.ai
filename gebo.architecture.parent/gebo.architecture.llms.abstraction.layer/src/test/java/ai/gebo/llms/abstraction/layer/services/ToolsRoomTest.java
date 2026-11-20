@@ -114,6 +114,30 @@ class ToolsRoomTest {
 	}
 
 	@Test
+	void aShortResultReachesTheModelWholeEvenWithNoRoomLeft() {
+		ToolsTokenBudget budget = new ToolsTokenBudget(0);
+		String outcome = "Created acme-budget.xlsx from the template \"ACME workbook\" with the sheets [Budget]";
+
+		assertSame(outcome, budget.admit("createWorkbook", "{\"workbook\":\"acme-budget.xlsx\"}", outcome),
+				"the outcome of an action is not hidden from the model");
+		assertEquals(0, budget.left());
+		assertTrue(budget.admit("readUrl", "{}", words(2000)).startsWith("The result of the tool readUrl"),
+				"a long result is still replaced");
+	}
+
+	@Test
+	void noShortResultIsAdmittedOverTheRoomWhenTheLimitIsZero() {
+		final int before = ToolsTokenBudget.alwaysAdmittedResultTokens();
+		ToolsTokenBudget.setAlwaysAdmittedResultTokens(0);
+		try {
+			String admitted = new ToolsTokenBudget(0).admit("createWorkbook", null, "Created acme-budget.xlsx");
+			assertTrue(admitted.startsWith("The result of the tool createWorkbook"), admitted);
+		} finally {
+			ToolsTokenBudget.setAlwaysAdmittedResultTokens(before);
+		}
+	}
+
+	@Test
 	void concurrentResultsNeverTakeMoreThanTheRoom() throws Exception {
 		ToolsTokenBudget budget = new ToolsTokenBudget(2000);
 		ExecutorService pool = Executors.newFixedThreadPool(8);
