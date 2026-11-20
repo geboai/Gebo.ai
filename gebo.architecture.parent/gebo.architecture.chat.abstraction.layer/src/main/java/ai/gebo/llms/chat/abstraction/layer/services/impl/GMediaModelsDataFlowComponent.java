@@ -64,13 +64,6 @@ public class GMediaModelsDataFlowComponent implements IGMessageEmitter {
 	private final ObjectProvider<IGTranscriptModelRuntimeConfigurationDao> transcriptModelsDaoProvider;
 	private final ObjectProvider<IGTextToSpeechModelRuntimeConfigurationDao> textToSpeechModelsDaoProvider;
 	private final ObjectProvider<IGImageModelRuntimeConfigurationDao> imageModelsDaoProvider;
-	/** What reads pictures and recordings while the documents are ingested; absent in a unit test. */
-	@Autowired(required = false)
-	private ObjectProvider<GMediaTextExtractorImpl> ingestionMediaProvider;
-
-	void setIngestionMediaProvider(ObjectProvider<GMediaTextExtractorImpl> ingestionMediaProvider) {
-		this.ingestionMediaProvider = ingestionMediaProvider;
-	}
 
 	public GMediaModelsDataFlowComponent(
 			@Autowired ObjectProvider<IGTranscriptModelRuntimeConfigurationDao> transcriptModelsDaoProvider,
@@ -116,34 +109,6 @@ public class GMediaModelsDataFlowComponent implements IGMessageEmitter {
 		any |= addMediaFlow(flow, "image", "Image generation prompt", "Image generation model", "Image generation",
 				defaultConfig(imageModelsDaoProvider));
 
-		// what the ingestion gives to the models when the installation turned it on: the
-		// pictures (standalone, inside the documents, the pages without text) to a chat
-		// model that reads pictures, the recordings and videos to the transcription model
-		final GMediaTextExtractorImpl ingestion = ingestionMediaProvider != null
-				? ingestionMediaProvider.getIfAvailable()
-				: null;
-		if (ingestion != null) {
-			try {
-				if (ingestion.describesPictures()) {
-					final ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel<?> pictures = ingestion
-							.pictureModel();
-					any |= addMediaFlow(flow, "ingestion-pictures",
-							"Pictures of the ingested documents (picture files, pictures inside the documents, pages without text)",
-							"Picture describing chat model", "Pictures described for the knowledge bases",
-							pictures != null ? pictures.getConfig() : null, "Ingested documents",
-							MetaEndpointType.DOCUMENTS);
-				}
-				if (ingestion.transcribes()) {
-					any |= addMediaFlow(flow, "ingestion-recordings",
-							"Recordings and videos among the ingested documents", "Speech-to-text model",
-							"Recordings transcribed for the knowledge bases", defaultConfig(transcriptModelsDaoProvider),
-							"Ingested documents", MetaEndpointType.DOCUMENTS);
-				}
-			} catch (RuntimeException unreadable) {
-				// the register is told what can be read
-			}
-		}
-
 		return any ? flow : null;
 	}
 
@@ -170,13 +135,6 @@ public class GMediaModelsDataFlowComponent implements IGMessageEmitter {
 	 */
 	private boolean addMediaFlow(GDataFlowMetaInfos flow, String key, String inputDescription, String modelLabel,
 			String engineDescription, GBaseModelConfig config) {
-		return addMediaFlow(flow, key, inputDescription, modelLabel, engineDescription, config, "User media request",
-				MetaEndpointType.CHAT_SESSION);
-	}
-
-	/** The same, for an input that is not a user's request: what it is and of which kind. */
-	private boolean addMediaFlow(GDataFlowMetaInfos flow, String key, String inputDescription, String modelLabel,
-			String engineDescription, GBaseModelConfig config, String inputProduct, MetaEndpointType inputType) {
 		if (config == null) {
 			return false;
 		}
@@ -184,10 +142,10 @@ public class GMediaModelsDataFlowComponent implements IGMessageEmitter {
 		DataEndpoint input = new DataEndpoint();
 		input.setId("media-input-" + key);
 		input.setDescription(inputDescription);
-		input.setProduct(inputProduct);
+		input.setProduct("User media request");
 		input.setEndpoint("media-request", key, null, null);
 		input.setInput(true);
-		input.setTypes(list(inputType));
+		input.setTypes(list(MetaEndpointType.CHAT_SESSION));
 		input.setPersonalData(false);
 		input.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
 		flow.getDataEndpoints().add(input);
@@ -208,7 +166,7 @@ public class GMediaModelsDataFlowComponent implements IGMessageEmitter {
 		flow.getDataEndpoints().add(model);
 
 		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of(key + "-engine", engineDescription,
-				list(inputType), list(MetaEndpointType.LLM_ENDPOINT));
+				list(MetaEndpointType.CHAT_SESSION), list(MetaEndpointType.LLM_ENDPOINT));
 		flow.getEngines().add(engine);
 		flow.getTransformations().add(DataTransformationInfo.of(key + "-flow", engineDescription, engine,
 				flow.qualifiedId(input.getId()), flow.qualifiedId(model.getId())));
