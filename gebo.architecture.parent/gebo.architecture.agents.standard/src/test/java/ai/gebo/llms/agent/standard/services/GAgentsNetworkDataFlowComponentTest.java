@@ -98,6 +98,8 @@ class GAgentsNetworkDataFlowComponentTest {
 	private IGAgentServiceRuntimeDao agentServices;
 	private IGToolCallbackSourceRepositoryPattern toolSources;
 	private IGChatModelRuntimeConfigurationDao chatModelsDao;
+	/** The chat model every agent of these networks calls. */
+	private IGConfigurableChatModel gpt;
 	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
 	private IGRankerModelRuntimeConfigurationDao rankerModelsDao;
 	private ISearchServiceRepositoryPattern searchServices;
@@ -176,7 +178,7 @@ class GAgentsNetworkDataFlowComponentTest {
 		GBaseChatModelConfig chatConfig = new GBaseChatModelConfig();
 		chatConfig.setModelTypeCode("openai");
 		chatConfig.setBaseUrl("https://api.openai.com/v1");
-		IGConfigurableChatModel gpt = mock(IGConfigurableChatModel.class);
+		gpt = mock(IGConfigurableChatModel.class);
 		when(gpt.getCode()).thenReturn("gpt");
 		when(gpt.getConfig()).thenReturn(chatConfig);
 
@@ -355,6 +357,21 @@ class GAgentsNetworkDataFlowComponentTest {
 		DataTransformationInfo rowsRead = flow.getTransformations().stream()
 				.filter(x -> database.equals(x.getDataSourceId())).findFirst().orElseThrow();
 		assertEquals("Queries sent, rows read (tools: searchArchive)", rowsRead.getDescription());
+	}
+
+	@Test
+	void anAgentWhoseModelTakesFilesIsReportedSendingThemAsTheyAre() {
+		// a model that gets text only: no step about files
+		assertTrue(flowOf(network(FREE_CHAT, "adapter-config", "free-config")).getTransformations().stream()
+				.noneMatch(x -> x.getId().contains("agent-files-")));
+
+		when(gpt.getEffectiveInputMimeTypes()).thenReturn(List.of("image/*", "application/pdf"));
+		GDataFlowMetaInfos flow = flowOf(network(FREE_CHAT, "adapter-config", "free-config"));
+		DataTransformationInfo files = flow.getTransformations().stream()
+				.filter(x -> x.getId().contains("agent-files-")).findFirst().orElseThrow();
+		assertEquals(flow.qualifiedId("agent-model-gpt"), files.getDataDestinationId());
+		assertEquals(DataTransformationInfo.Carried.PROCESSED, files.getCarried());
+		assertTrue(files.getDescription().endsWith("as they are (image/*, application/pdf)"), files.getDescription());
 	}
 
 	@Test

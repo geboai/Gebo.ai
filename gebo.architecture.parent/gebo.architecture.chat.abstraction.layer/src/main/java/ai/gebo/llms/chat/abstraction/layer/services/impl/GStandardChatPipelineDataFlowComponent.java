@@ -248,7 +248,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 						flow.qualifiedId(responder.getId()));
 				// the conversation's files this model takes as they are (pictures, PDF files,
 				// recordings): they leave for the model's provider as content, not as text
-				final List<String> files = sentFileTypes(responderChatModel);
+				final List<String> files = DataFlowEndpoints.sentFileTypes(responderChatModel);
 				if (!files.isEmpty()) {
 					processed(flow, "files", profileCode,
 							"Conversation files sent to the model as they are (" + String.join(", ", files) + ")",
@@ -440,21 +440,6 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 			return null;
 		}
 		return DataFlowEndpoints.embeddingModel(model);
-	}
-
-	/**
-	 * The MIME types of the files a chat model receives as they are: what its
-	 * configuration declares and its provider's integration carries; none for a model
-	 * that gets text only.
-	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static List<String> sentFileTypes(IGConfigurableChatModel model) {
-		try {
-			final List<String> types = model != null ? model.getEffectiveInputMimeTypes() : null;
-			return types != null ? types : List.of();
-		} catch (RuntimeException e) {
-			return List.of();
-		}
 	}
 
 	private IGConfigurableChatModel responderModel(GChatProfileConfiguration profile,
