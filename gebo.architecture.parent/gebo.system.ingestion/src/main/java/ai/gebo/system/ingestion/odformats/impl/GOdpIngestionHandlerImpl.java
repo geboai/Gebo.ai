@@ -138,9 +138,11 @@ public class GOdpIngestionHandlerImpl extends GAbstractConfiguredHandler {
 	 * @return A stream of Document objects extracted from the ODP
 	 * @throws Exception If an error occurs during processing
 	 */
-	private static Stream<Document> streamContent(InputStream is, Map<String, Object> manageMetaInfo) throws Exception {
+	private static Stream<Document> streamContent(InputStream is, Map<String, Object> manageMetaInfo,
+			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) throws Exception {
 		Stream<Document> documents = Stream.of();
 		OdfPresentationDocument document = OdfPresentationDocument.loadDocument(is);
+		OdfPictures.collect(document, pictures);
 		OfficePresentationElement presentation = document.getContentRoot();
 		DrawPageElement element = OdfElement.findFirstChildNode(DrawPageElement.class, presentation);
 		enrichOdpMetadata(document, manageMetaInfo);
@@ -206,7 +208,10 @@ public class GOdpIngestionHandlerImpl extends GAbstractConfiguredHandler {
 			Map<String, Object> manageMetaInfo) throws GeboIngestionException {
 		try {
 			enrichMetaData(reference, manageMetaInfo);
-			return streamContent(is, manageMetaInfo);
+			// the pictures are collected only when a model is there to describe them
+			final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = describesEmbeddedPictures() ? new ArrayList<>() : null;
+			return Stream.concat(streamContent(is, manageMetaInfo, pictures),
+					describedPictures(reference, pictures, manageMetaInfo).stream());
 		} catch (Exception exc) {
 			throw new GeboIngestionException("Exception reading ODP presentation document", exc);
 		} finally {
