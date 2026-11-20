@@ -79,6 +79,28 @@ public class HtmlIngestionHandler extends GAbstractConfiguredHandler {
 			DocumentTitles.fromHtml(page, metadata);
 			String text = page.select("body").text();
 			docs.add(new Document(text, metadata));
+			if (ingestsImages()) {
+				// only the pictures the page carries in itself: one named by an address is
+				// not in the file being read
+				final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = new ArrayList<>();
+				for (org.jsoup.nodes.Element img : page.select("img[src^=data:image/]")) {
+					final String src = img.attr("src");
+					final int comma = src.indexOf(',');
+					final String header = comma > 0 ? src.substring("data:".length(), comma) : "";
+					if (!header.endsWith(";base64")) {
+						continue;
+					}
+					try {
+						final String alt = img.attr("alt");
+						pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(alt.isBlank() ? null : alt,
+								header.substring(0, header.indexOf(';')),
+								java.util.Base64.getMimeDecoder().decode(src.substring(comma + 1))));
+					} catch (IllegalArgumentException notBase64) {
+						// not a readable picture: the page's text is read all the same
+					}
+				}
+				docs.addAll(imageDocuments(reference, pictures, metadata));
+			}
 			return docs.stream();
 		} finally {
 			try {

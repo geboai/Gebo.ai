@@ -128,7 +128,8 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
      * @return Stream of Document objects containing the extracted content
      * @throws IOException If there's an error reading the input stream
      */
-	private static Stream<Document> streamDOCXContent(InputStream is, Map<String, Object> metadata) throws IOException {
+	private static Stream<Document> streamDOCXContent(InputStream is, Map<String, Object> metadata,
+			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) throws IOException {
 		XWPFDocument document = null;
 		XWPFWordExtractor extractor = null;
 
@@ -142,6 +143,13 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 			String text = extractor.getText();
 			if (text != null && !text.isEmpty()) {
 				outlist.add(new Document(text, metadata));
+			}
+			if (pictures != null) {
+				for (org.apache.poi.xwpf.usermodel.XWPFPictureData picture : document.getAllPictures()) {
+					pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(picture.getFileName(),
+							picture.getPackagePart() != null ? picture.getPackagePart().getContentType() : null,
+							picture.getData()));
+				}
 			}
 		} finally {
 			try {
@@ -168,7 +176,8 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
      * @return Stream of Document objects containing the extracted content
      * @throws IOException If there's an error reading the input stream
      */
-	private static Stream<Document> streamDOCContent(InputStream is, Map<String, Object> metadata) throws IOException {
+	private static Stream<Document> streamDOCContent(InputStream is, Map<String, Object> metadata,
+			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) throws IOException {
 		List<Document> outlist = new ArrayList<Document>();
 		HWPFDocument document = null;
 		WordExtractor extractor = null;
@@ -180,6 +189,12 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 			String text = extractor.getText();
 			if (text != null && !text.isEmpty()) {
 				outlist.add(new Document(text, metadata));
+			}
+			if (pictures != null && document.getPicturesTable() != null) {
+				for (org.apache.poi.hwpf.usermodel.Picture picture : document.getPicturesTable().getAllPictures()) {
+					pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(picture.suggestFullFileName(),
+							picture.getMimeType(), picture.getContent()));
+				}
 			}
 		} finally {
 			try {
@@ -237,12 +252,18 @@ public class MSWordIngestionHandler extends GAbstractConfiguredHandler {
 			throws GeboIngestionException, IOException {
 		List<Document> outlist = new ArrayList<Document>();
 		enrichMetaData(reference, metadata);
+		// the pictures are collected only when images are taken
+		final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = ingestsImages()
+				? new ArrayList<>()
+				: null;
 		if (isDocx(reference)) {
 			// Process DOCX document
-			return streamDOCXContent(is, metadata);
+			return Stream.concat(streamDOCXContent(is, metadata, pictures),
+					imageDocuments(reference, pictures, metadata).stream());
 		} else if (isDoc(reference)) {
 			// Process DOC document
-			return streamDOCContent(is, metadata);
+			return Stream.concat(streamDOCContent(is, metadata, pictures),
+					imageDocuments(reference, pictures, metadata).stream());
 		}
 		return outlist.stream();
 	}

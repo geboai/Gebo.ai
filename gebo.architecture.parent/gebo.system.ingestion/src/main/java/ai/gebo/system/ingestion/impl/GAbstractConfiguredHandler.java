@@ -153,6 +153,73 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 	 * @param reference The document reference to get the file type for
 	 * @return The matching IngestionFileType or null if not found
 	 */
+	/** Whether the images of the documents are taken, and within which limits; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig;
+
+	public void setImagesConfig(ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig) {
+		this.imagesConfig = imagesConfig;
+	}
+
+	/** Whether the images of the documents are taken (ai.gebo.images.ingestion-enabled); else they are passed over as before. */
+	protected boolean ingestsImages() {
+		return imagesConfig != null && imagesConfig.isIngestionEnabled();
+	}
+
+	/**
+	 * The images found in a document, each as a document of its own holding the
+	 * image as media, with the metadata of the document's texts, the page or slide it
+	 * is on when known and its name. Nothing when images are not taken. No model is
+	 * called here: the image is given as it is. An image is passed over when it is
+	 * not a PNG, JPEG, GIF or WebP picture, is smaller or larger than the limits, was
+	 * already taken in this document (a logo on every page), or comes after the most
+	 * images taken of one document.
+	 */
+	protected List<org.springframework.ai.document.Document> imageDocuments(GDocumentReference reference,
+			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures, Map<String, Object> metadata) {
+		final List<org.springframework.ai.document.Document> images = new ArrayList<>();
+		if (pictures == null || pictures.isEmpty() || !ingestsImages()) {
+			return images;
+		}
+		final java.util.Set<String> seen = new java.util.HashSet<>();
+		int passedOver = 0;
+		for (ai.gebo.system.ingestion.EmbeddedPicture picture : pictures) {
+			final String type = picture != null ? picture.readableType() : null;
+			if (type == null || picture.data() == null || picture.data().length < imagesConfig.getMinImageBytes()
+					|| picture.data().length > imagesConfig.getMaxImageBytes()
+					|| !seen.add(picture.data().length + ":" + java.util.Arrays.hashCode(picture.data()))) {
+				continue;
+			}
+			if (images.size() >= imagesConfig.getMaxImagesPerDocument()) {
+				passedOver++;
+				continue;
+			}
+			final Map<String, Object> cloned = new java.util.HashMap<>(
+					metadata != null ? metadata : new java.util.HashMap<>());
+			if (picture.page() != null) {
+				cloned.put(ai.gebo.model.DocumentMetaInfos.CONTENT_PAGE, "" + picture.page());
+			}
+			if (picture.name() != null && !picture.name().isBlank()) {
+				cloned.put(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA, picture.name());
+			}
+			images.add(org.springframework.ai.document.Document.builder()
+					.media(org.springframework.ai.content.Media.builder()
+							.mimeType(org.springframework.util.MimeTypeUtils.parseMimeType(type)).data(picture.data())
+							.name("image").build())
+					.metadata(cloned).build());
+		}
+		final String of = reference != null ? reference.getCode() : "a document";
+		if (passedOver > 0) {
+			LOGGER.warn(passedOver + " image(s) of " + of + " were not taken: only "
+					+ imagesConfig.getMaxImagesPerDocument() + " of a document are");
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("imageDocuments(" + of + ") -> " + images.size() + " of " + pictures.size()
+					+ " picture(s) found");
+		}
+		return images;
+	}
+
 	protected IngestionFileType getFileType(GDocumentReference reference) {
 		Optional<IngestionFileType> found = config.getFileTypes().stream().filter(x -> {
 			if (reference.getExtension() != null) {

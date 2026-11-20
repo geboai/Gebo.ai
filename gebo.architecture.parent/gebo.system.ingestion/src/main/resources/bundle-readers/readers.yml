@@ -70,6 +70,25 @@ ai.gebo.contents.reading.library:
           extensions:
             - .rtf
           uiViewable: false
+    # Image files, taken only while ai.gebo.images.ingestion-enabled is on: the image is
+    # given as it is, as a document holding it; otherwise an image is a file no reader takes.
+    - id: ImageIngestionHandler
+      fileTypeId: image
+      fileTypes:
+        - treatAs: picture
+          description: Image
+          contentTypes:
+            - image/png
+            - image/jpeg
+            - image/gif
+            - image/webp
+          extensions:
+            - .png
+            - .jpg
+            - .jpeg
+            - .gif
+            - .webp
+          uiViewable: false
     - id: OdtIngestionHandler
       fileTypeId: odt
       fileTypes:
