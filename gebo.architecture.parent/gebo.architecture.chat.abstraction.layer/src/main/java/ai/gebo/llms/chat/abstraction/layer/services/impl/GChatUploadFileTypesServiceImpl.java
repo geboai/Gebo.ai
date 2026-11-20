@@ -187,6 +187,14 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 			if (handler.getFileTypes() == null) {
 				continue;
 			}
+			// the readers of image, recording and video files give the file as it is, for the
+			// knowledge bases' vectorization: they read no text into a chat, where such a file
+			// goes to the model that takes it (see modelMimeTypes)
+			if (ai.gebo.system.ingestion.media.impl.ImageIngestionHandler.CODE.equals(handler.getId())
+					|| ai.gebo.system.ingestion.media.impl.RecordingsAndVideosIngestionHandler.CODE
+							.equals(handler.getId())) {
+				continue;
+			}
 			for (IngestionFileType type : handler.getFileTypes()) {
 				if (type.getExtensions() != null) {
 					type.getExtensions().stream().map(GChatUploadFileTypesServiceImpl::extension).filter(x -> x != null)

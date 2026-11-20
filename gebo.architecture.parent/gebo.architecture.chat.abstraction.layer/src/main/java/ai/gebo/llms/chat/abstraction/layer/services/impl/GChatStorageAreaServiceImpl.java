@@ -129,8 +129,14 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		file.transferTo(newPath);
 		GDocumentReference reference = documentReferenceFactory.createReference(newPath);
 		final InputStream content = Files.newInputStream(newPath);
-		IngestionHandlerData data = ingestionHandler.handleContent(reference, content);
-		if (data.isUnmanagedContent()) {
+		// an image, a recording or a video has no text to read into a chat, whatever the
+		// ingestion of the knowledge bases takes of them: it is handled as a file no reader
+		// takes, kept when the chat's model or its agents' tools take it
+		final GModelInputModality fileKind = GModelInputModality.ofMimeType(mimeTypeOf(serverSide));
+		final boolean mediaFile = fileKind == GModelInputModality.IMAGE || fileKind == GModelInputModality.AUDIO
+				|| fileKind == GModelInputModality.VIDEO;
+		IngestionHandlerData data = mediaFile ? null : ingestionHandler.handleContent(reference, content);
+		if (data == null || data.isUnmanagedContent()) {
 			content.close();
 			// no content handler reads it: it is kept when the chat's model takes it as it is
 			// (a picture, a PDF, a recording) or when the chat's agents' tools work on it

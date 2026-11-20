@@ -444,6 +444,32 @@ ai.gebo.ingestion.pdf.column-aware-extraction: true
 # caller is told the attachment was not taken). The fetch is a plain GET, without
 # credentials of this installation and without following redirects.
 ai.gebo.a2a.server.linked-files-hosts:
+# Images, recordings and videos into the knowledge bases. Two steps, each with its switch.
+# 1) Ingestion: with a switch on, the readers give each media as it is, beside the texts -
+#    an image file, the pictures inside Word, PowerPoint, Excel, OpenDocument and web page
+#    files, a PDF page without text (rendered); a recording file; a video file. No model is
+#    called while reading or chunking. All off when not set.
+ai.gebo.images.ingestion-enabled: false
+# the images of one document taken at most, and the size of one image, in megabytes
+ai.gebo.images.max-images-per-document: 30
+ai.gebo.images.max-image-mb: 20
+ai.gebo.recordings.ingestion-enabled: false
+ai.gebo.recordings.max-recording-mb: 20
+ai.gebo.videos.ingestion-enabled: false
+ai.gebo.videos.max-video-mb: 20
+# 2) Vectorization: with a switch on and a model for it configured, each media is turned
+#    into text - an image described by a chat model that reads pictures, a recording or a
+#    video transcribed by the default transcription model - and that text is embedded as
+#    the document's texts are. Each costs a model call at every vectorization of its
+#    document. All off when not set: the media are then left out.
+ai.gebo.vectorizator.embed-images: false
+ai.gebo.vectorizator.embed-recordings: false
+ai.gebo.vectorizator.embed-videos: false
+# the chat model configuration describing images; unset: the default chat model when it
+# reads pictures, else the first configured one that does
+ai.gebo.vectorizator.image-model-code:
+# a media larger than this, in megabytes, is not given to a model
+ai.gebo.vectorizator.max-media-mb: 20
 # Languages whose stop words the chunks' keyword filter ignores when neither the
 # keywords' nor the chunk's language is detected with confidence (it,en when not set)
 ai.gebo.search.keyword-stop-words.fallback-languages: it,en
