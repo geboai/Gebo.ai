@@ -305,6 +305,7 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 
 		addDeepSearch(flow, legs, serviceModel, rankerModel, responders,
 				DataFlowEndpoints.embeddingModel(defaultEmbeddingModel(embeddingModelsDao)));
+		addDirectChat(flow, chatModelsDao);
 
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
 	}
@@ -459,6 +460,57 @@ public class GStandardChatPipelineDataFlowComponent implements IGMessageEmitter 
 	private DataEndpoint describeDecisionModel() {
 		return DataFlowEndpoints.decisionModel(
 				decisionModelsDaoProvider != null ? decisionModelsDaoProvider.getIfAvailable() : null);
+	}
+
+	/**
+	 * The chat with a model directly, without a profile: the conversation - and the
+	 * files of it the model takes as they are - goes to the model the user picked, any
+	 * of the configured ones. No knowledge base is read on this path.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void addDirectChat(GDataFlowMetaInfos flow, IGChatModelRuntimeConfigurationDao chatModelsDao) {
+		if (chatModelsDao == null) {
+			return;
+		}
+		final List<IGConfigurableChatModel> models;
+		try {
+			models = chatModelsDao.getConfigurations();
+		} catch (RuntimeException unreadable) {
+			return;
+		}
+		if (models == null || models.isEmpty()) {
+			return;
+		}
+		DataEndpoint query = null;
+		for (IGConfigurableChatModel model : models) {
+			final DataEndpoint reached = describeChatModel("chat", model, "Responder chat model");
+			if (reached == null) {
+				continue;
+			}
+			if (query == null) {
+				query = new DataEndpoint();
+				query.setId("direct-chat-query");
+				query.setDescription("Chat query - directly with a model, without a profile");
+				query.setProduct("Chat");
+				query.setEndpoint("direct-chat", "any-model", null, null);
+				query.setInput(true);
+				query.setTypes(list(MetaEndpointType.CHAT_SESSION));
+				query.setPersonalData(false);
+				query.setLocality(DataEndpointLocality.LOCAL_DEPLOYMENT);
+				flow.getDataEndpoints().add(query);
+			}
+			addUnique(flow, reached);
+			processed(flow, "direct-answer", model.getCode(), "Direct chat answer generation (the conversation)",
+					MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
+					flow.qualifiedId(reached.getId()));
+			final List<String> files = DataFlowEndpoints.sentFileTypes(model);
+			if (!files.isEmpty()) {
+				processed(flow, "direct-files", model.getCode(),
+						"Conversation files sent to the model as they are (" + String.join(", ", files) + ")",
+						MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, flow.qualifiedId(query.getId()),
+						flow.qualifiedId(reached.getId()));
+			}
+		}
 	}
 
 	private IGConfigurableChatModel utilityModel(IGChatModelRuntimeConfigurationDao chatModelsDao) {

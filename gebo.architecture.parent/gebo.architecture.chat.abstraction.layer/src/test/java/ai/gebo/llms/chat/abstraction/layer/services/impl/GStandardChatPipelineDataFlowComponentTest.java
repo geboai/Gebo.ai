@@ -156,6 +156,25 @@ class GStandardChatPipelineDataFlowComponentTest {
 	}
 
 	@Test
+	void theChatWithAModelDirectlyReachesEveryConfiguredModelWithTheFilesItTakes() {
+		IGConfigurableChatModel plain = chatModel("plain", "http://localhost:11434");
+		IGConfigurableChatModel seeing = chatModel("seeing", "https://api.openai.com/v1");
+		when(seeing.getEffectiveInputMimeTypes()).thenReturn(List.of("image/*"));
+		when(chatModels.getConfigurations()).thenReturn((List) List.of(plain, seeing));
+
+		GDataFlowMetaInfos flow = flow();
+
+		List<String> reached = destinationsFrom(flow, "direct-chat-query");
+		assertTrue(reached.contains(flow.qualifiedId("chat-model-plain")), reached.toString());
+		assertTrue(reached.contains(flow.qualifiedId("chat-model-seeing")), reached.toString());
+		List<DataTransformationInfo> files = flow.getTransformations().stream()
+				.filter(x -> x.getId().startsWith("direct-files-")).toList();
+		assertEquals(1, files.size(), "only the model that takes files");
+		assertEquals(flow.qualifiedId("chat-model-seeing"), files.get(0).getDataDestinationId());
+		assertTrue(files.get(0).getDescription().endsWith("(image/*)"), files.get(0).getDescription());
+	}
+
+	@Test
 	void aSemanticOnlyInstallationReadsTheVectorStoreOnly() {
 		GDataFlowMetaInfos flow = flow();
 
