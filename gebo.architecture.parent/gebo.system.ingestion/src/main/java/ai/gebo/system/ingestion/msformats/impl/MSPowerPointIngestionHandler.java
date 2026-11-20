@@ -257,15 +257,11 @@ public class MSPowerPointIngestionHandler extends GAbstractConfiguredHandler {
 	 * @param metadata  Map with the document metadata, copied on every slide
 	 * @return The documents of the slides, in the order of the presentation
 	 */
-	private static List<Document> slidesOf(SlideShow<?, ?> slideShow, Map<String, Object> metadata,
-			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) {
+	private static List<Document> slidesOf(SlideShow<?, ?> slideShow, Map<String, Object> metadata) {
 		List<Document> outlist = new ArrayList<Document>();
 		int number = 0;
 		for (Slide<?, ?> slide : slideShow.getSlides()) {
 			number++;
-			if (pictures != null) {
-				picturesOf(slide, number, pictures);
-			}
 			String text = textOf(slide);
 			if (text != null && !text.isEmpty()) {
 				Map<String, Object> clonedMetaData = new HashMap<String, Object>(
@@ -285,36 +281,13 @@ public class MSPowerPointIngestionHandler extends GAbstractConfiguredHandler {
 	 * @return Stream of Document objects, one per slide with some text
 	 * @throws IOException If there's an error reading the input stream
 	 */
-	/**
-	 * The pictures placed on a slide, those inside its groups included; the ones of
-	 * its layout and master (a logo, a background) are not the slide's own.
-	 */
-	private static void picturesOf(org.apache.poi.sl.usermodel.ShapeContainer<?, ?> container, int slideNumber,
-			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) {
-		for (Object shape : container.getShapes()) {
-			try {
-				if (shape instanceof org.apache.poi.sl.usermodel.PictureShape<?, ?> pictureShape) {
-					final org.apache.poi.sl.usermodel.PictureData data = pictureShape.getPictureData();
-					if (data != null) {
-						pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(pictureShape.getShapeName(),
-								data.getContentType(), data.getData(), slideNumber));
-					}
-				} else if (shape instanceof org.apache.poi.sl.usermodel.GroupShape<?, ?> group) {
-					picturesOf(group, slideNumber, pictures);
-				}
-			} catch (RuntimeException unreadable) {
-				// a linked or broken picture: the slide's text is read all the same
-			}
-		}
-	}
-
-	private static Stream<Document> streamPPTXContent(InputStream is, Map<String, Object> metadata,
-			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) throws IOException {
+	private static Stream<Document> streamPPTXContent(InputStream is, Map<String, Object> metadata)
+			throws IOException {
 		XMLSlideShow slideShow = null;
 		try {
 			slideShow = new XMLSlideShow(is);
 			enrichPptxMetadata(slideShow, metadata);
-			return slidesOf(slideShow, metadata, pictures).stream();
+			return slidesOf(slideShow, metadata).stream();
 		} finally {
 			try {
 				slideShow.close();
@@ -335,13 +308,12 @@ public class MSPowerPointIngestionHandler extends GAbstractConfiguredHandler {
 	 * @return Stream of Document objects, one per slide with some text
 	 * @throws IOException If there's an error reading the input stream
 	 */
-	private static Stream<Document> streamPPTContent(InputStream is, Map<String, Object> metadata,
-			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) throws IOException {
+	private static Stream<Document> streamPPTContent(InputStream is, Map<String, Object> metadata) throws IOException {
 		HSLFSlideShow slideShow = null;
 		try {
 			slideShow = new HSLFSlideShow(is);
 			enrichPptMetadata(slideShow, metadata);
-			return slidesOf(slideShow, metadata, pictures).stream();
+			return slidesOf(slideShow, metadata).stream();
 		} finally {
 			try {
 				slideShow.close();
@@ -392,18 +364,12 @@ public class MSPowerPointIngestionHandler extends GAbstractConfiguredHandler {
 		List<Document> outlist = new ArrayList<Document>();
 		enrichMetaData(reference, metadata);
 		try {
-			// the pictures are collected only when a model is there to describe them
-			final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = describesEmbeddedPictures()
-					? new ArrayList<>()
-					: null;
 			if (isPptx(reference)) {
 				// Process PPTX presentation
-				return Stream.concat(streamPPTXContent(is, metadata, pictures),
-						describedPictures(reference, pictures, metadata).stream());
+				return streamPPTXContent(is, metadata);
 			} else if (isPpt(reference)) {
 				// Process PPT presentation
-				return Stream.concat(streamPPTContent(is, metadata, pictures),
-						describedPictures(reference, pictures, metadata).stream());
+				return streamPPTContent(is, metadata);
 			}
 		} catch (RuntimeException exc) {
 			// POI tells a broken or unreadable presentation with unchecked exceptions

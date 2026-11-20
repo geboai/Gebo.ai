@@ -85,17 +85,13 @@ public class MsExcellIngestionHandler extends GAbstractConfiguredHandler {
 		try {
 			List<AbstractTableData> tableDatas = null;
 			enrichMetaData(reference, manageMetaInfo);
-			// the pictures are collected only when a model is there to describe them
-			final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = describesEmbeddedPictures()
-					? new ArrayList<>()
-					: null;
-			tableDatas = readExcelTables(reference, is, manageMetaInfo, pictures);
+			tableDatas = readExcelTables(reference, is, manageMetaInfo);
 
 			Stream<Document> docstream = Stream.of();
 			for (AbstractTableData abstractTableData : tableDatas) {
 				docstream = Stream.concat(docstream, tableHandler.handleContent(abstractTableData, manageMetaInfo));
 			}
-			return Stream.concat(docstream, describedPictures(reference, pictures, manageMetaInfo).stream());
+			return docstream;
 		} finally {
 			try {
 				is.close();
@@ -136,8 +132,7 @@ public class MsExcellIngestionHandler extends GAbstractConfiguredHandler {
 	 * @throws IOException If there's an error reading the input stream
 	 */
 	private List<AbstractTableData> readExcelTables(GDocumentReference reference, InputStream is,
-			Map<String, Object> manageMetaInfo, List<ai.gebo.system.ingestion.EmbeddedPicture> pictures)
-			throws EncryptedDocumentException, IOException {
+			Map<String, Object> manageMetaInfo) throws EncryptedDocumentException, IOException {
 		List<AbstractTableData> tables = new ArrayList<AbstractTableData>();
 		BufferedInputStream bis = new BufferedInputStream(is);
 		try {
@@ -149,16 +144,6 @@ public class MsExcellIngestionHandler extends GAbstractConfiguredHandler {
 			for (int i = 0; i < nsheets; i++) {
 				Sheet sheet = workbook.getSheetAt(i);
 				tables.add(new MsExcelTableData(sheet));
-			}
-			if (pictures != null) {
-				try {
-					for (org.apache.poi.ss.usermodel.PictureData picture : workbook.getAllPictures()) {
-						pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(null, picture.getMimeType(),
-								picture.getData()));
-					}
-				} catch (RuntimeException unreadable) {
-					// the sheets are read all the same
-				}
 			}
 		} finally {
 			try {

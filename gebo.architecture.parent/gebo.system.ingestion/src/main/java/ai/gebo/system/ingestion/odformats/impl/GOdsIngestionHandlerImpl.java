@@ -74,13 +74,12 @@ public class GOdsIngestionHandlerImpl extends GAbstractConfiguredHandler {
 	 * @return List of extracted table data objects
 	 * @throws GeboIngestionException If there is an error reading the spreadsheet
 	 */
-	private static List<OpenDocumentTableData> readTables(InputStream is, Map<String, Object> manageMetaInfo,
-			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures) throws GeboIngestionException {
+	private static List<OpenDocumentTableData> readTables(InputStream is, Map<String, Object> manageMetaInfo)
+			throws GeboIngestionException {
 		ArrayList<OpenDocumentTableData> docs = new ArrayList<OpenDocumentTableData>();
 		try {
 			OdfSpreadsheetDocument odfSpreadSheet = OdfSpreadsheetDocument.loadDocument(is);
 			DocumentTitles.fromOdfDocument(odfSpreadSheet, manageMetaInfo, "ods meta");
-			OdfPictures.collect(odfSpreadSheet, pictures);
 			OfficeSpreadsheetElement root = odfSpreadSheet.getContentRoot();
 			List<TableTableElement> tables = odfSpreadSheet.getTables();
 			for (TableTableElement tableTableElement : tables) {
@@ -109,14 +108,11 @@ public class GOdsIngestionHandlerImpl extends GAbstractConfiguredHandler {
 		Stream<Document> stream = Stream.of();
 		try {
 			enrichMetaData(reference, manageMetaInfo);
-			// the pictures are collected only when a model is there to describe them
-			final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = describesEmbeddedPictures() ? new ArrayList<>() : null;
-			List<OpenDocumentTableData> tables = readTables(is, manageMetaInfo, pictures);
+			List<OpenDocumentTableData> tables = readTables(is, manageMetaInfo);
 			for (OpenDocumentTableData oftTableData : tables) {
 				Stream<Document> thisData = tableRenderer.handleContent(oftTableData, manageMetaInfo);
 				stream = Stream.concat(stream, thisData);
 			}
-			stream = Stream.concat(stream, describedPictures(reference, pictures, manageMetaInfo).stream());
 		} catch (Exception e) {
 			throw new GeboIngestionException("Cannot read odf spreadsheet", e);
 		}
