@@ -80,6 +80,9 @@ class A2AClientConnectorIntegrationTest {
 			}
 		});
 
+		server.createContext("/files/chart.png", exchange -> respond(exchange, 200, "image/png; charset=binary",
+				new byte[] { 1, 2, 3, 4 }));
+
 		server.start();
 		baseUrl = "http://127.0.0.1:" + server.getAddress().getPort();
 	}
@@ -119,6 +122,23 @@ class A2AClientConnectorIntegrationTest {
 		assertNotNull(params);
 		assertEquals("ping", firstText(params.message()));
 		assertEquals(Message.Role.ROLE_USER, params.message().role());
+	}
+
+	/** A file the agent names at an address of its own is fetched; one elsewhere is not. */
+	@Test
+	void fetchesAFileOnlyFromTheAgentsOwnAddress() throws Exception {
+		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null, null);
+
+		A2AClientConnector.LinkedFile own = connector.fetchLinkedFile(config(), baseUrl + "/files/chart.png");
+		assertNotNull(own);
+		assertEquals(4, own.bytes().length);
+		assertEquals("image/png", own.contentType());
+
+		// another host, another port of the same host, another scheme: none is the agent's
+		assertEquals(null, connector.fetchLinkedFile(config(), "http://example.invalid/files/chart.png"));
+		assertEquals(null, connector.fetchLinkedFile(config(), "http://127.0.0.1:1/files/chart.png"));
+		assertEquals(null, connector.fetchLinkedFile(config(), "file:///etc/hostname"));
+		assertTrue(connector.isOwnAddress(config(), baseUrl + "/anything"));
 	}
 
 	// ---------------------------------------------------------------------

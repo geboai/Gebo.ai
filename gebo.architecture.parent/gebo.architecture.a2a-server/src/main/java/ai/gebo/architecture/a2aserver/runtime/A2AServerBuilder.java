@@ -131,7 +131,7 @@ public class A2AServerBuilder {
 				try {
 					GeboChatResponse response = lastResponseOf(run);
 					Message result = resultAdapter.messageOf(response, null,
-							contextId != null ? contextId : chatContextOf(response));
+							contextId != null ? contextId : chatContextOf(response), received.getNotTaken());
 					return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
 							.body(JsonUtil.toJson(new SendMessageResponse(id, result)));
 				} finally {
@@ -194,7 +194,7 @@ public class A2AServerBuilder {
 			prepareError = new A2AError(JSONRPC_INTERNAL_ERROR, t.getMessage(), null);
 		}
 		if (prepareError == null && streamed != null) {
-			return streamFrames(id, contextId, streamed);
+			return streamFrames(id, contextId, streamed, received.getNotTaken());
 		}
 		if (prepareError != null) {
 			return singleFrame(id, prepareError, null, contextId);
@@ -218,7 +218,7 @@ public class A2AServerBuilder {
 	 * with the documents it rests on.
 	 */
 	private ServerResponse streamFrames(Object id, String contextId,
-			ChatEnvironmentRun run) {
+			ChatEnvironmentRun run, List<String> notTaken) {
 		return ServerResponse.sse(sse -> {
 			final AtomicInteger written = new AtomicInteger();
 			try {
@@ -227,7 +227,7 @@ public class A2AServerBuilder {
 						GeboChatResponse carried = resultAdapter.responseOf(frame);
 						if (carried != null) {
 							Message message = resultAdapter.messageOf(carried, null,
-									contextId != null ? contextId : carried.getUserChatContextCode());
+									contextId != null ? contextId : carried.getUserChatContextCode(), notTaken);
 							sse.data(JsonUtil.toJson(new SendStreamingMessageResponse(id, message)));
 							written.incrementAndGet();
 							return;
@@ -246,7 +246,7 @@ public class A2AServerBuilder {
 					// A run that produced no frame still owes the caller an answer.
 					GeboChatResponse response = run.getResponse();
 					sse.data(JsonUtil.toJson(new SendStreamingMessageResponse(id,
-							resultAdapter.messageOf(response, null, contextId))));
+							resultAdapter.messageOf(response, null, contextId, notTaken))));
 				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("A2A message/stream wrote " + written.get() + " frame(s)");

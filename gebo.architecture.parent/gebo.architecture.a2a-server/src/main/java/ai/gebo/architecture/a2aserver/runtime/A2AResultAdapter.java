@@ -56,6 +56,16 @@ public class A2AResultAdapter {
 	 * documents it rests on, and the account of the run.
 	 */
 	public Message messageOf(GeboChatResponse response, String text, String contextId) {
+		return messageOf(response, text, contextId, null);
+	}
+
+	/**
+	 * The same, telling the caller what it sent that was not taken in (an attachment
+	 * named by a link, a part of a kind this export does not read): it stands in the
+	 * run's account under {@code notTaken}, so that a caller does not believe the
+	 * answer rests on something the run never saw.
+	 */
+	public Message messageOf(GeboChatResponse response, String text, String contextId, List<String> notTaken) {
 		final List<Part<?>> parts = new ArrayList<>();
 		final String answer = text != null ? text : answerTextOf(response);
 		parts.add(new TextPart(answer != null ? answer : ""));
@@ -64,8 +74,13 @@ public class A2AResultAdapter {
 			if (citations != null) {
 				parts.add(citations);
 			}
-			parts.add(runInfoOf(response));
+			parts.add(runInfoOf(response, notTaken));
 			parts.addAll(filesOf(response));
+		} else if (notTaken != null && !notTaken.isEmpty()) {
+			final Map<String, Object> data = new LinkedHashMap<>();
+			data.put("kind", RUN_INFO_KIND);
+			data.put("notTaken", new ArrayList<>(notTaken));
+			parts.add(new DataPart(data));
 		}
 		final Message.Builder builder = Message.builder().role(Message.Role.ROLE_AGENT)
 				.messageId(UUID.randomUUID().toString()).parts(parts);
@@ -81,6 +96,16 @@ public class A2AResultAdapter {
 
 	/** The size in bytes a generated file may have to travel in the answer. */
 	static final long MAX_FILE_BYTES = 20L * 1024 * 1024;
+	/** The size in bytes the files of one answer may have together. */
+	static final long MAX_ANSWER_FILES_BYTES = 40L * 1024 * 1024;
+	/** Reads the files the run's tools wrote, from where they wrote them; absent in a unit test. */
+	@Autowired(required = false)
+	private ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles;
+
+	void setLibraryFiles(ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles) {
+		this.libraryFiles = libraryFiles;
+	}
+
 	/** Reads the files a run generated; absent in a unit test. */
 	@Autowired(required = false)
 	private IGChatStorageAreaService storageArea;
@@ -90,15 +115,91 @@ public class A2AResultAdapter {
 	}
 
 	/**
-	 * The files the run generated - the pictures its models drew - as file parts, bytes
-	 * included: the caller has no way to fetch them from Gebo. A file that cannot be
-	 * read, or is larger than {@link #MAX_FILE_BYTES}, is left out and logged.
+	 * The files of the run as file parts, bytes included, since the caller has no way
+	 * to fetch them from Gebo: what its models generated (the pictures they drew) and
+	 * what its tools wrote (a document, a spreadsheet, a file of the working
+	 * directory). A file that cannot be read, is larger than {@link #MAX_FILE_BYTES},
+	 * or would take the answer over {@link #MAX_ANSWER_FILES_BYTES} is left out and
+	 * logged.
 	 */
 	List<Part<?>> filesOf(GeboChatResponse response) {
 		final List<Part<?>> files = new ArrayList<>();
-		if (storageArea == null || response.getGeneratedResources() == null) {
-			return files;
+		final java.util.Set<String> names = new java.util.HashSet<>();
+		long total = 0;
+		if (storageArea != null && response.getGeneratedResources() != null) {
+			total = generatedFilesOf(response, files, names);
 		}
+		writtenFilesOf(response, files, names, total);
+		return files;
+	}
+
+	/**
+	 * The files the run's tools wrote, read from the location each was written to,
+	 * as the conversation holds it now. A file of the location of generated files
+	 * already sent as a generated one is not sent twice.
+	 */
+	private void writtenFilesOf(GeboChatResponse response, List<Part<?>> files, java.util.Set<String> names,
+			long total) {
+		final List<ai.gebo.architecture.ai.files.GConversationFile> written = response.getWrittenFiles();
+		final String chatCode = response.getUserChatContextCode();
+		if (libraryFiles == null || written == null || written.isEmpty() || chatCode == null) {
+			return;
+		}
+		for (ai.gebo.architecture.ai.files.GConversationFile file : written) {
+			if (file == null || file.getLocation() == null || file.getPath() == null) {
+				continue;
+			}
+			final String name = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
+			if (names.contains(name)) {
+				continue;
+			}
+			try {
+				final ai.gebo.architecture.ai.files.IGFilesLocation location = libraryFiles.locationOf(chatCode,
+						file.getLocation());
+				if (location == null) {
+					LOGGER.warn("The written file " + file.key() + " is in a location the conversation no longer holds");
+					continue;
+				}
+				final ai.gebo.architecture.ai.files.GLibraryFile described = location.describe(file.getPath());
+				if (described == null) {
+					continue;
+				}
+				if (described.size() > MAX_FILE_BYTES || total + described.size() > MAX_ANSWER_FILES_BYTES) {
+					LOGGER.warn("The written file " + file.key() + " (" + described.size()
+							+ " bytes) is too large to travel in the A2A answer");
+					continue;
+				}
+				final ai.gebo.architecture.ai.files.GLibraryFileContent content = location.read(file.getPath());
+				if (content == null || content.content() == null) {
+					continue;
+				}
+				final byte[] bytes;
+				try (java.io.InputStream in = content.content().getInputStream()) {
+					bytes = in.readAllBytes();
+				}
+				if (bytes.length > MAX_FILE_BYTES || total + bytes.length > MAX_ANSWER_FILES_BYTES) {
+					LOGGER.warn("The written file " + file.key() + " (" + bytes.length
+							+ " bytes) is too large to travel in the A2A answer");
+					continue;
+				}
+				String type = content.content().getContentType();
+				if (type == null || !type.contains("/")) {
+					type = described.contentType() != null && described.contentType().contains("/")
+							? described.contentType()
+							: "application/octet-stream";
+				}
+				files.add(new FilePart(new FileWithBytes(type, name, bytes)));
+				names.add(name);
+				total += bytes.length;
+			} catch (Exception e) {
+				LOGGER.error("The written file " + file.key() + " cannot be read into the A2A answer", e);
+			}
+		}
+	}
+
+	/** The generated files, added to the list; answers the bytes they take. */
+	private long generatedFilesOf(GeboChatResponse response, List<Part<?>> files, java.util.Set<String> names) {
+		long total = 0;
 		for (LLMGeneratedResource generated : response.getGeneratedResources()) {
 			if (generated == null) {
 				continue;
@@ -117,12 +218,18 @@ public class A2AResultAdapter {
 						? generated.getContentType()
 						: "application/octet-stream";
 				final String name = generated.getFileName() != null ? generated.getFileName() : generated.getCode();
+				if (total + bytes.length > MAX_ANSWER_FILES_BYTES) {
+					LOGGER.warn("The generated file " + name + " would take the A2A answer over its size");
+					continue;
+				}
 				files.add(new FilePart(new FileWithBytes(type, name, bytes)));
+				names.add(name);
+				total += bytes.length;
 			} catch (Exception e) {
 				LOGGER.error("The generated file " + generated.getFileName() + " cannot be read into the A2A answer", e);
 			}
 		}
-		return files;
+		return total;
 	}
 
 	/** A streamed frame: the chunk of text it carries, or null when it carries none. */
@@ -198,9 +305,12 @@ public class A2AResultAdapter {
 	}
 
 	/** How the answer was reached: the model that wrote it and the tools operated. */
-	private DataPart runInfoOf(GeboChatResponse response) {
+	private DataPart runInfoOf(GeboChatResponse response, List<String> notTaken) {
 		final Map<String, Object> data = new LinkedHashMap<>();
 		data.put("kind", RUN_INFO_KIND);
+		if (notTaken != null && !notTaken.isEmpty()) {
+			data.put("notTaken", new ArrayList<>(notTaken));
+		}
 		put(data, "chatContextCode", response.getUserChatContextCode());
 		put(data, "chatModelCode", response.getUsedChatModelCode());
 		put(data, "chatModelProvider", response.getUsedChatModelProvider());

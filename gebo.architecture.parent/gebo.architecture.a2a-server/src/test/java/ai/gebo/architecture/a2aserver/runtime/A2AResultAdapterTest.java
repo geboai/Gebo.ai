@@ -183,4 +183,66 @@ class A2AResultAdapterTest {
 		org.junit.jupiter.api.Assertions.assertTrue(adapter.messageOf(response, "done", "ctx").parts().stream()
 				.noneMatch(p -> p instanceof org.a2aproject.sdk.spec.FilePart));
 	}
+
+	/** A file the run's tools wrote travels as a file part, read from where it was written. */
+	@org.junit.jupiter.api.Test
+	void aFileTheToolsWroteTravelsWithTheAnswer() throws Exception {
+		final ai.gebo.architecture.ai.files.IGFilesLocation location = org.mockito.Mockito
+				.mock(ai.gebo.architecture.ai.files.IGFilesLocation.class);
+		final ai.gebo.architecture.ai.files.GLibraryFile described = new ai.gebo.architecture.ai.files.GLibraryFile(
+				"workingDirectory", "reports/summary.docx", 4, null, "v1",
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+		org.mockito.Mockito.when(location.describe("reports/summary.docx")).thenReturn(described);
+		org.mockito.Mockito.when(location.read("reports/summary.docx"))
+				.thenReturn(new ai.gebo.architecture.ai.files.GLibraryFileContent(described,
+						ai.gebo.model.base.TypedInputStream.of(new java.io.ByteArrayInputStream(new byte[] { 9, 8, 7, 6 }),
+								null, "docx")));
+		final ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles = org.mockito.Mockito
+				.mock(ai.gebo.architecture.ai.files.IGAILibraryFilesService.class);
+		org.mockito.Mockito.when(libraryFiles.locationOf("chat-1", "workingDirectory")).thenReturn(location);
+		final A2AResultAdapter withFiles = new A2AResultAdapter();
+		withFiles.setLibraryFiles(libraryFiles);
+		final GeboChatResponse response = new GeboChatResponse();
+		response.setUserChatContextCode("chat-1");
+		final ai.gebo.architecture.ai.files.GConversationFile written = new ai.gebo.architecture.ai.files.GConversationFile();
+		written.setLocation("workingDirectory");
+		written.setPath("reports/summary.docx");
+		final ai.gebo.architecture.ai.files.GConversationFile gone = new ai.gebo.architecture.ai.files.GConversationFile();
+		gone.setLocation("sandbox");
+		gone.setPath("lost.txt");
+		response.setWrittenFiles(java.util.List.of(written, gone));
+
+		final java.util.List<org.a2aproject.sdk.spec.FilePart> files = withFiles.messageOf(response, "done", "ctx")
+				.parts().stream().filter(p -> p instanceof org.a2aproject.sdk.spec.FilePart)
+				.map(p -> (org.a2aproject.sdk.spec.FilePart) p).toList();
+
+		org.junit.jupiter.api.Assertions.assertEquals(1, files.size());
+		final org.a2aproject.sdk.spec.FileWithBytes file = (org.a2aproject.sdk.spec.FileWithBytes) files.get(0).file();
+		org.junit.jupiter.api.Assertions.assertEquals("summary.docx", file.name());
+		org.junit.jupiter.api.Assertions.assertEquals(
+				"application/vnd.openxmlformats-officedocument.wordprocessingml.document", file.mimeType());
+		org.junit.jupiter.api.Assertions.assertEquals(
+				java.util.Base64.getEncoder().encodeToString(new byte[] { 9, 8, 7, 6 }), file.bytes());
+	}
+
+	/** What the caller sent and was not taken in is told in the run's account. */
+	@org.junit.jupiter.api.Test
+	void whatWasNotTakenIsToldToTheCaller() {
+		final GeboChatResponse response = new GeboChatResponse();
+		final java.util.List<String> notTaken = java.util.List.of("the attachment a.png, which names a link");
+		final java.util.List<org.a2aproject.sdk.spec.DataPart> withResponse = new A2AResultAdapter()
+				.messageOf(response, "done", "ctx", notTaken).parts().stream()
+				.filter(p -> p instanceof org.a2aproject.sdk.spec.DataPart).map(p -> (org.a2aproject.sdk.spec.DataPart) p)
+				.toList();
+		org.junit.jupiter.api.Assertions.assertTrue(withResponse.stream().anyMatch(
+				d -> d.data() instanceof java.util.Map<?, ?> m && notTaken.equals(m.get("notTaken"))));
+		// and when the run left no response at all
+		org.junit.jupiter.api.Assertions.assertTrue(new A2AResultAdapter().messageOf(null, "done", "ctx", notTaken)
+				.parts().stream().anyMatch(p -> p instanceof org.a2aproject.sdk.spec.DataPart d
+						&& d.data() instanceof java.util.Map<?, ?> m && notTaken.equals(m.get("notTaken"))));
+		// nothing is said when everything was taken
+		org.junit.jupiter.api.Assertions.assertTrue(new A2AResultAdapter().messageOf(response, "done", "ctx").parts()
+				.stream().noneMatch(p -> p instanceof org.a2aproject.sdk.spec.DataPart d
+						&& d.data() instanceof java.util.Map<?, ?> m && m.containsKey("notTaken")));
+	}
 }

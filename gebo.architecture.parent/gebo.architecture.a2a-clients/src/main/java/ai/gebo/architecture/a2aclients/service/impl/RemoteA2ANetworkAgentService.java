@@ -227,8 +227,8 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 	 * they are; a file sent as bytes is kept in the conversation and named in the
 	 * text, so that it is not lost - the user finds it among the conversation's files,
 	 * the tools working on files open it, a model that takes such files sees it on
-	 * the next requests; a file sent as an address is named with its address, it is
-	 * not fetched.
+	 * the next requests; a file sent as an address of the agent's own is fetched and
+	 * kept the same way, one at an address elsewhere is named with its address.
 	 */
 	private String renderParts(List<Part<?>> parts, IChatRequestContext context) {
 		if (parts == null) {
@@ -242,8 +242,7 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			} else if (part instanceof FilePart filePart && filePart.file() instanceof FileWithBytes file) {
 				rendered = keep(file, context);
 			} else if (part instanceof FilePart filePart && filePart.file() instanceof FileWithUri file) {
-				rendered = "[file " + (file.name() != null ? file.name() + " " : "") + file.uri()
-						+ (file.mimeType() != null ? " (" + file.mimeType() + ")" : "") + "]";
+				rendered = fetchAndKeep(file, context);
 			} else if (part != null && LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Remote A2A agent " + getId() + " sent a " + part.getClass().getSimpleName()
 						+ ", which is not read");
@@ -266,8 +265,59 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 	private String keep(FileWithBytes file, IChatRequestContext context) {
 		final String described = "[file " + (file.name() != null ? file.name() : "")
 				+ (file.mimeType() != null ? " (" + file.mimeType() + ")" : "") + "]";
+		if (file.bytes() == null || file.bytes().isBlank()) {
+			return described;
+		}
+		final byte[] data;
+		try {
+			data = java.util.Base64.getDecoder().decode(file.bytes().trim());
+		} catch (IllegalArgumentException notBase64) {
+			LOGGER.error("The file " + file.name() + " sent by remote A2A agent " + getId() + " is not readable",
+					notBase64);
+			return described;
+		}
+		return keep(file.name(), file.mimeType(), data, described, context);
+	}
+
+	/**
+	 * A file the remote agent names by address: fetched and kept when the address
+	 * is the agent's own, else - or when it cannot be fetched or kept - named with
+	 * its address, as the agent gave it.
+	 */
+	private String fetchAndKeep(FileWithUri file, IChatRequestContext context) {
+		final String described = "[file " + (file.name() != null ? file.name() + " " : "") + file.uri()
+				+ (file.mimeType() != null ? " (" + file.mimeType() + ")" : "") + "]";
+		if (connector == null || context == null || context.getSessionID() == null) {
+			return described;
+		}
+		try {
+			final A2AClientConnector.LinkedFile fetched = connector.fetchLinkedFile(remoteConfig, file.uri());
+			if (fetched == null) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Remote A2A agent " + getId() + " named a file at " + file.uri()
+							+ ", which is not an address of its own: it is not fetched");
+				}
+				return described;
+			}
+			String name = file.name();
+			if (name == null || name.isBlank()) {
+				final String path = java.net.URI.create(file.uri()).getPath();
+				name = path != null && path.lastIndexOf('/') < path.length() - 1
+						? path.substring(path.lastIndexOf('/') + 1)
+						: null;
+			}
+			return keep(name, file.mimeType() != null ? file.mimeType() : fetched.contentType(), fetched.bytes(),
+					described, context);
+		} catch (Exception e) {
+			LOGGER.error("The file " + file.uri() + " named by remote A2A agent " + getId() + " cannot be fetched", e);
+			return described;
+		}
+	}
+
+	/** Keeps the bytes in the conversation and tells where; {@code described} when it cannot. */
+	private String keep(String name, String mimeType, byte[] data, String described, IChatRequestContext context) {
 		final String session = context != null ? context.getSessionID() : null;
-		if (session == null || file.bytes() == null || file.bytes().isBlank()) {
+		if (session == null) {
 			return described;
 		}
 		try {
@@ -276,11 +326,9 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			if (store == null) {
 				return described;
 			}
-			final byte[] data = java.util.Base64.getDecoder().decode(file.bytes().trim());
 			final GLibraryFile kept = store.store(session,
-					file.name() != null && !file.name().isBlank() ? file.name()
-							: remoteConfig.getExportingPrefix() + "-file",
-					file.mimeType(), data);
+					name != null && !name.isBlank() ? name : remoteConfig.getExportingPrefix() + "-file", mimeType,
+					data);
 			final IGConversationFilesKeeper keeper = IGConversationFilesKeeper.of(context.getToolsContext());
 			if (keeper != null) {
 				keeper.written(kept);
@@ -288,7 +336,7 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			return "[file kept in this conversation as " + kept.location() + ":" + kept.path() + " ("
 					+ kept.contentType() + ", " + kept.size() + " bytes)]";
 		} catch (Exception e) {
-			LOGGER.error("The file " + file.name() + " sent by remote A2A agent " + getId()
+			LOGGER.error("The file " + name + " sent by remote A2A agent " + getId()
 					+ " cannot be kept in session " + session, e);
 			return described;
 		}

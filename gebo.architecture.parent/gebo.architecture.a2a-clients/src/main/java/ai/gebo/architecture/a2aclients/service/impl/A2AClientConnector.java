@@ -199,6 +199,79 @@ public class A2AClientConnector {
 	}
 
 	// ---------------------------------------------------------------------
+	// files an answer names by address
+	// ---------------------------------------------------------------------
+
+	/** The size in bytes a file named by address may have to be fetched. */
+	static final long MAX_LINKED_FILE_BYTES = 20L * 1024 * 1024;
+
+	/** A file fetched from the remote agent: its bytes and the type its server told. */
+	public record LinkedFile(byte[] bytes, String contentType) {
+	}
+
+	/**
+	 * Whether an address a remote agent's answer names is the agent's own: same
+	 * scheme, host and port as its Agent Card or as the endpoint its calls go to.
+	 * Only such an address is fetched, with the credentials the agent is called
+	 * with: an address elsewhere would have this installation call, and hand its
+	 * credentials to, whatever host an answer names.
+	 */
+	public boolean isOwnAddress(A2ARemoteAgentConfig config, String uri) {
+		if (config == null || isBlank(uri) || isBlank(config.getAgentCardUrl())) {
+			return false;
+		}
+		final String origin = originOf(uri);
+		if (origin == null || !(origin.startsWith("http://") || origin.startsWith("https://"))) {
+			return false;
+		}
+		if (origin.equalsIgnoreCase(originOf(config.getAgentCardUrl()))) {
+			return true;
+		}
+		try {
+			return origin.equalsIgnoreCase(originOf(resolveRpcEndpointUrl(config)));
+		} catch (Exception e) {
+			LOGGER.warn("The endpoint of remote A2A agent " + config.getExportingPrefix()
+					+ " cannot be resolved to compare an address with: " + e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Fetches a file the remote agent's answer names by an address of its own (see
+	 * {@link #isOwnAddress}); null when the address is not the agent's. Redirects are
+	 * not followed, and a file larger than {@link #MAX_LINKED_FILE_BYTES} is refused.
+	 */
+	public LinkedFile fetchLinkedFile(A2ARemoteAgentConfig config, String uri) throws Exception {
+		if (!isOwnAddress(config, uri)) {
+			return null;
+		}
+		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(uri)).timeout(REQUEST_TIMEOUT).GET();
+		applyAuth(builder, resolveAuthorizationHeader(config));
+		HttpResponse<java.io.InputStream> response = newHttpClient().send(builder.build(),
+				BodyHandlers.ofInputStream());
+		try (java.io.InputStream body = response.body()) {
+			if (response.statusCode() / 100 != 2) {
+				throw new IllegalStateException("The file fetch failed with HTTP " + response.statusCode());
+			}
+			final long declared = response.headers().firstValueAsLong("Content-Length").orElse(-1);
+			if (declared > MAX_LINKED_FILE_BYTES) {
+				throw new IllegalStateException("The file is of " + declared + " bytes, more than "
+						+ MAX_LINKED_FILE_BYTES + " that are fetched");
+			}
+			final byte[] bytes = body.readNBytes((int) MAX_LINKED_FILE_BYTES + 1);
+			if (bytes.length > MAX_LINKED_FILE_BYTES) {
+				throw new IllegalStateException(
+						"The file is of more than " + MAX_LINKED_FILE_BYTES + " bytes that are fetched");
+			}
+			String type = response.headers().firstValue("Content-Type").orElse(null);
+			if (type != null && type.contains(";")) {
+				type = type.substring(0, type.indexOf(';')).trim();
+			}
+			return new LinkedFile(bytes, type);
+		}
+	}
+
+	// ---------------------------------------------------------------------
 	// helpers
 	// ---------------------------------------------------------------------
 

@@ -44,9 +44,10 @@ public class A2AAgentCardBuilder {
 	private static final List<String> TEXT_MODES = List.of("text/plain");
 	/**
 	 * What an answer may carry: its text and, as file parts, the files the run
-	 * generated - today the pictures of the image models, stored as PNG.
+	 * generated (the pictures of the image models, stored as PNG) and the files its
+	 * tools wrote, which are of whatever type the tools write.
 	 */
-	private static final List<String> OUTPUT_MODES = List.of("text/plain", "image/png");
+	private static final List<String> OUTPUT_MODES = List.of("text/plain", "image/png", "application/octet-stream");
 	private static final String BEARER_SCHEME = "bearer";
 
 	private final IGRuntimeBinder runtimeBinder;
