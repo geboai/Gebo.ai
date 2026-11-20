@@ -65,6 +65,8 @@ public class A2AServerBuilder {
 	/** Turns what the platform answers into what an A2A caller receives. */
 	private final A2AResultAdapter resultAdapter;
 	private final A2AAccessChecker accessChecker;
+	/** Fetches the files a caller names by link, from the hosts this installation listed. */
+	private final A2ALinkedFilesFetcher linkedFiles;
 
 	public A2AServerInstance build(A2AServerConfig config) {
 		final String base = ENDPOINT_PREFIX + config.getExportedRelativeUrl();
@@ -98,7 +100,8 @@ public class A2AServerBuilder {
 		Object id = parsed.getId();
 		MessageSendParams params = parsed.getParams();
 		Message inbound = params != null ? params.message() : null;
-		A2AInboundResources received = A2AInboundResources.of(inbound != null ? inbound.parts() : null);
+		A2AInboundResources received = A2AInboundResources.of(inbound != null ? inbound.parts() : null,
+				linkedFiles);
 		String text = received.getText();
 		if (!received.getNotTaken().isEmpty()) {
 			LOGGER.warn("The caller sent things this export cannot take in: " + received.getNotTaken());

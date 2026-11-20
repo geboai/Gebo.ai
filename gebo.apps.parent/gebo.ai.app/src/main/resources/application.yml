@@ -439,6 +439,11 @@ ai.gebo.deepsearch.chunk-filling-factor: 0.25
 # line, in the page's own text direction) is read one column after the other; any other page
 # is read as before. Takes effect on the documents ingested afterwards (true when not set)
 ai.gebo.ingestion.pdf.column-aware-extraction: true
+# A2A servers: the hosts a file an A2A caller names by a link (instead of sending its
+# bytes) is fetched from, comma separated (none when not set: no link is fetched and the
+# caller is told the attachment was not taken). The fetch is a plain GET, without
+# credentials of this installation and without following redirects.
+ai.gebo.a2a.server.linked-files-hosts:
 # Languages whose stop words the chunks' keyword filter ignores when neither the
 # keywords' nor the chunk's language is detected with confidence (it,en when not set)
 ai.gebo.search.keyword-stop-words.fallback-languages: it,en

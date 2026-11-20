@@ -86,6 +86,15 @@ public final class A2AInboundResources {
 	 * @param parts the parts as the caller sent them
 	 */
 	public static A2AInboundResources of(List<Part<?>> parts) {
+		return of(parts, null);
+	}
+
+	/**
+	 * The same, with what fetches the files named by a link from the hosts this
+	 * installation listed; without it, or for a link elsewhere, such a file is not
+	 * taken and the caller is told.
+	 */
+	public static A2AInboundResources of(List<Part<?>> parts, A2ALinkedFilesFetcher linkedFiles) {
 		final StringBuilder text = new StringBuilder();
 		final List<MultipartFile> files = new ArrayList<>();
 		final List<String> knowledgeBases = new ArrayList<>();
@@ -101,7 +110,7 @@ public final class A2AInboundResources {
 				}
 				text.append(textPart.text());
 			} else if (part instanceof FilePart filePart) {
-				readFile(filePart, files, notTaken);
+				readFile(filePart, files, notTaken, linkedFiles);
 			} else if (part instanceof DataPart dataPart) {
 				readData(dataPart, knowledgeBases, documents, notTaken);
 			} else if (part != null) {
@@ -117,11 +126,13 @@ public final class A2AInboundResources {
 	}
 
 	/**
-	 * A file the caller attached. Only the bytes it sent are taken: a file named by
-	 * a link would have this installation fetch whatever that link points at, which
-	 * is a decision for whoever runs it and not something to do quietly.
+	 * A file the caller attached. The bytes it sent are taken; a file named by a
+	 * link would have this installation fetch whatever that link points at, which
+	 * is a decision for whoever runs it: it is fetched only from the hosts they
+	 * listed (see {@link A2ALinkedFilesFetcher}), else not taken, and the caller told.
 	 */
-	private static void readFile(FilePart part, List<MultipartFile> files, List<String> notTaken) {
+	private static void readFile(FilePart part, List<MultipartFile> files, List<String> notTaken,
+			A2ALinkedFilesFetcher linkedFiles) {
 		final FileContent content = part.file();
 		if (content instanceof FileWithBytes withBytes) {
 			try {
@@ -135,6 +146,24 @@ public final class A2AInboundResources {
 			} catch (IllegalArgumentException notBase64) {
 				LOGGER.warn("An A2A attachment was not readable: its bytes are not base64", notBase64);
 				notTaken.add("the attachment " + withBytes.name() + ", whose bytes could not be read");
+			}
+		} else if (content instanceof FileWithUri withUri && linkedFiles != null
+				&& linkedFiles.fetches(withUri.uri())) {
+			try {
+				final A2ALinkedFilesFetcher.Fetched fetched = linkedFiles.fetch(withUri.uri());
+				String name = withUri.name();
+				if (name == null || name.isBlank()) {
+					final String path = java.net.URI.create(withUri.uri()).getPath();
+					name = path != null && path.lastIndexOf('/') < path.length() - 1
+							? path.substring(path.lastIndexOf('/') + 1)
+							: "a2a-attachment";
+				}
+				files.add(new InMemoryMultipartFile(name,
+						withUri.mimeType() != null ? withUri.mimeType() : fetched.contentType(), fetched.bytes()));
+			} catch (Exception notFetched) {
+				LOGGER.warn("The A2A attachment at " + withUri.uri() + " could not be fetched", notFetched);
+				notTaken.add("the attachment " + withUri.name() + ", whose link could not be fetched: "
+						+ notFetched.getMessage());
 			}
 		} else if (content instanceof FileWithUri withUri) {
 			LOGGER.warn("An A2A attachment names a link rather than sending its bytes: " + withUri.uri()
