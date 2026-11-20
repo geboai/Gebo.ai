@@ -33,6 +33,10 @@ public class ImagesIngestionConfig {
 	private int maxImagesPerDocument = 30;
 	/** An image smaller than this is taken for a decoration (a bullet, a rule, an icon) and passed over. */
 	private long minImageBytes = 2048;
-	/** An image larger than this is passed over. */
-	private long maxImageBytes = 20L * 1024 * 1024;
+	/** An image larger than this, in megabytes, is passed over. */
+	private int maxImageMb = 20;
+
+	public long getMaxImageBytes() {
+		return Math.max(0, maxImageMb) * 1024L * 1024L;
+	}
 }

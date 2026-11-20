@@ -281,7 +281,7 @@ public class DocumentsChunkServiceImpl
 				if (!content.isUnmanagedContent()) {
 					// if we have an handled content from the ingestion layer we proceed
 					Stream<Document> docsStream = mediaAsked.isEmpty() ? content.getStream()
-							: content.getStreamWithImages();
+							: content.getStreamWithMedia();
 					// We use streaming so huge files or huge datasets are streamed directly to the
 					// disk in chunks without heavy memory use
 					// Start filling the chunkOperation to remain saved in mongodb for later use and

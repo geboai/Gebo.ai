@@ -232,6 +232,33 @@ class EmbeddedPicturesIngestionTest {
 	}
 
 	@Test
+	void aRecordingAndAVideoAreTakenEachByItsOwnSwitch() throws Exception {
+		final IngestionFileType type = new IngestionFileType();
+		type.setExtensions(List.of(".mp3", ".mp4"));
+		type.setContentTypes(List.of("audio/mpeg", "video/mp4"));
+		final IngestionHandlerConfig config = new IngestionHandlerConfig();
+		config.setFileTypes(List.of(type));
+		final IGIngestionHandlerConfigDao dao = mock(IGIngestionHandlerConfigDao.class);
+		when(dao.findByCode(anyString())).thenReturn(config);
+		final ai.gebo.system.ingestion.media.impl.RecordingsAndVideosIngestionHandler handler = new ai.gebo.system.ingestion.media.impl.RecordingsAndVideosIngestionHandler(
+				dao);
+		final GDocumentReference talk = reference("talk.mp3", ".mp3");
+		final GDocumentReference film = reference("film.mp4", ".mp4");
+		org.junit.jupiter.api.Assertions.assertFalse(handler.canManageContent(talk), "off: a file no reader takes");
+		org.junit.jupiter.api.Assertions.assertFalse(handler.canManageContent(film));
+
+		handler.setSwitches(true, false);
+		assertTrue(handler.canManageContent(talk));
+		org.junit.jupiter.api.Assertions.assertFalse(handler.canManageContent(film), "videos have their own switch");
+		assertEquals(List.of(".mp3"), handler.getHandledExtensions());
+		final List<Document> documents = handler
+				.handleContent(talk, new ByteArrayInputStream(new byte[] { 1, 2, 3 }), new HashMap<>()).toList();
+		assertEquals(1, documents.size());
+		assertEquals("audio/mpeg", documents.get(0).getMedia().getMimeType().toString());
+		assertArrayEquals(new byte[] { 1, 2, 3 }, documents.get(0).getMedia().getDataAsByteArray());
+	}
+
+	@Test
 	void whoReadsTextsGetsTextsWhoPassesImagesOnGetsBoth() throws Exception {
 		final List<Document> all = with(new MSWordIngestionHandler(dao()), images(true, 30))
 				.handleContent(reference("sales.docx", ".docx"), new ByteArrayInputStream(docx()), new HashMap<>())
@@ -240,7 +267,7 @@ class EmbeddedPicturesIngestionTest {
 		data.setStream(all.stream());
 		assertEquals(1, data.getStream().count());
 		data.setStream(all.stream());
-		assertEquals(3, data.getStreamWithImages().count());
+		assertEquals(3, data.getStreamWithMedia().count());
 	}
 
 	@Test

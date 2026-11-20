@@ -115,7 +115,9 @@ public class GraphextractionProcessorBatchReceiver implements IGBatchMessagesRec
 
 						while (current != null && !current.isEmpty()) {
 							// Stream the chunks in this group
-							Stream<DocumentChunk> chunks = current.getCurrentChunkSet().getChunks().stream();
+							// the extraction reads text: a chunk holding a media as it is is not for it
+							Stream<DocumentChunk> chunks = current.getCurrentChunkSet().getChunks().stream()
+									.filter(DocumentChunk::holdsText);
 							// Transform to Documents
 							Stream<Document> documentsStream = chunks
 									.map(x -> new Document(x.getId(), x.getChunkData(), x.getMetaData()));
