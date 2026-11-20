@@ -95,6 +95,7 @@ import { GoogleWorkspaceAccessHandshakeControllerService } from './api/googleWor
 import { GraphRagConfigurationControllerService } from './api/graphRagConfigurationController.service';
 import { ImageModelsControllerService } from './api/imageModelsController.service';
 import { IngestionFileTypesLibraryControllerService } from './api/ingestionFileTypesLibraryController.service';
+import { IngestionMediaControllerService } from './api/ingestionMediaController.service';
 import { IntegrationInputControllerService } from './api/integrationInputController.service';
 import { IntegrationSystemsControllerService } from './api/integrationSystemsController.service';
 import { JiraBrowsingControllerService } from './api/jiraBrowsingController.service';
@@ -256,6 +257,7 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GraphRagConfigurationControllerService,
     ImageModelsControllerService,
     IngestionFileTypesLibraryControllerService,
+    IngestionMediaControllerService,
     IntegrationInputControllerService,
     IntegrationSystemsControllerService,
     JiraBrowsingControllerService,

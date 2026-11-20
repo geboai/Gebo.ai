@@ -23,7 +23,7 @@ import java.util.Date;
  * GUserChatInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-19T22:39:31.008494278+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-20T06:19:25.937202091+01:00[Europe/Rome]")
 
 public class GUserChatInfo {
   @JsonProperty("description")
@@ -31,9 +31,6 @@ public class GUserChatInfo {
 
   @JsonProperty("username")
   private String username = null;
-
-  @JsonProperty("chatCreationDateTime")
-  private Date chatCreationDateTime = null;
 
   @JsonProperty("code")
   private String code = null;
@@ -52,6 +49,9 @@ public class GUserChatInfo {
 
   @JsonProperty("ragChat")
   private Boolean ragChat = null;
+
+  @JsonProperty("chatCreationDateTime")
+  private Date chatCreationDateTime = null;
 
   public GUserChatInfo description(String description) {
     this.description = description;
@@ -87,24 +87,6 @@ public class GUserChatInfo {
 
   public void setUsername(String username) {
     this.username = username;
-  }
-
-  public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
-    this.chatCreationDateTime = chatCreationDateTime;
-    return this;
-  }
-
-   /**
-   * Get chatCreationDateTime
-   * @return chatCreationDateTime
-  **/
-  @Schema(description = "")
-  public Date getChatCreationDateTime() {
-    return chatCreationDateTime;
-  }
-
-  public void setChatCreationDateTime(Date chatCreationDateTime) {
-    this.chatCreationDateTime = chatCreationDateTime;
   }
 
   public GUserChatInfo code(String code) {
@@ -215,6 +197,24 @@ public class GUserChatInfo {
     this.ragChat = ragChat;
   }
 
+  public GUserChatInfo chatCreationDateTime(Date chatCreationDateTime) {
+    this.chatCreationDateTime = chatCreationDateTime;
+    return this;
+  }
+
+   /**
+   * Get chatCreationDateTime
+   * @return chatCreationDateTime
+  **/
+  @Schema(description = "")
+  public Date getChatCreationDateTime() {
+    return chatCreationDateTime;
+  }
+
+  public void setChatCreationDateTime(Date chatCreationDateTime) {
+    this.chatCreationDateTime = chatCreationDateTime;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -227,18 +227,18 @@ public class GUserChatInfo {
     GUserChatInfo guserChatInfo = (GUserChatInfo) o;
     return Objects.equals(this.description, guserChatInfo.description) &&
         Objects.equals(this.username, guserChatInfo.username) &&
-        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime) &&
         Objects.equals(this.code, guserChatInfo.code) &&
         Objects.equals(this.contextCode, guserChatInfo.contextCode) &&
         Objects.equals(this.chatProfileCode, guserChatInfo.chatProfileCode) &&
         Objects.equals(this.chatModelCode, guserChatInfo.chatModelCode) &&
         Objects.equals(this.pipelineCode, guserChatInfo.pipelineCode) &&
-        Objects.equals(this.ragChat, guserChatInfo.ragChat);
+        Objects.equals(this.ragChat, guserChatInfo.ragChat) &&
+        Objects.equals(this.chatCreationDateTime, guserChatInfo.chatCreationDateTime);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, username, chatCreationDateTime, code, contextCode, chatProfileCode, chatModelCode, pipelineCode, ragChat);
+    return Objects.hash(description, username, code, contextCode, chatProfileCode, chatModelCode, pipelineCode, ragChat, chatCreationDateTime);
   }
 
 
@@ -249,13 +249,13 @@ public class GUserChatInfo {
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
-    sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    contextCode: ").append(toIndentedString(contextCode)).append("\n");
     sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("    chatModelCode: ").append(toIndentedString(chatModelCode)).append("\n");
     sb.append("    pipelineCode: ").append(toIndentedString(pipelineCode)).append("\n");
     sb.append("    ragChat: ").append(toIndentedString(ragChat)).append("\n");
+    sb.append("    chatCreationDateTime: ").append(toIndentedString(chatCreationDateTime)).append("\n");
     sb.append("}");
     return sb.toString();
   }

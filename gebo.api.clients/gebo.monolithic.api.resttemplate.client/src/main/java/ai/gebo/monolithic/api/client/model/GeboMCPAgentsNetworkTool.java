@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GeboMCPAgentsNetworkTool
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-19T22:39:31.008494278+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-20T06:19:25.937202091+01:00[Europe/Rome]")
 
 public class GeboMCPAgentsNetworkTool {
   @JsonProperty("agentsNetworkCode")
@@ -30,6 +30,9 @@ public class GeboMCPAgentsNetworkTool {
 
   @JsonProperty("toolName")
   private String toolName = null;
+
+  @JsonProperty("chatProfileCode")
+  private String chatProfileCode = null;
 
   public GeboMCPAgentsNetworkTool agentsNetworkCode(String agentsNetworkCode) {
     this.agentsNetworkCode = agentsNetworkCode;
@@ -67,6 +70,24 @@ public class GeboMCPAgentsNetworkTool {
     this.toolName = toolName;
   }
 
+  public GeboMCPAgentsNetworkTool chatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
+    return this;
+  }
+
+   /**
+   * Get chatProfileCode
+   * @return chatProfileCode
+  **/
+  @Schema(description = "")
+  public String getChatProfileCode() {
+    return chatProfileCode;
+  }
+
+  public void setChatProfileCode(String chatProfileCode) {
+    this.chatProfileCode = chatProfileCode;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -78,12 +99,13 @@ public class GeboMCPAgentsNetworkTool {
     }
     GeboMCPAgentsNetworkTool geboMCPAgentsNetworkTool = (GeboMCPAgentsNetworkTool) o;
     return Objects.equals(this.agentsNetworkCode, geboMCPAgentsNetworkTool.agentsNetworkCode) &&
-        Objects.equals(this.toolName, geboMCPAgentsNetworkTool.toolName);
+        Objects.equals(this.toolName, geboMCPAgentsNetworkTool.toolName) &&
+        Objects.equals(this.chatProfileCode, geboMCPAgentsNetworkTool.chatProfileCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(agentsNetworkCode, toolName);
+    return Objects.hash(agentsNetworkCode, toolName, chatProfileCode);
   }
 
 
@@ -94,6 +116,7 @@ public class GeboMCPAgentsNetworkTool {
     
     sb.append("    agentsNetworkCode: ").append(toIndentedString(agentsNetworkCode)).append("\n");
     sb.append("    toolName: ").append(toIndentedString(toolName)).append("\n");
+    sb.append("    chatProfileCode: ").append(toIndentedString(chatProfileCode)).append("\n");
     sb.append("}");
     return sb.toString();
   }

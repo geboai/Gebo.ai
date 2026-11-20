@@ -15,6 +15,6 @@ import { UploadsWithNewChat } from './uploadsWithNewChat';
 export interface OperationStatusUploadsWithNewChat { 
     result?: UploadsWithNewChat;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

@@ -15,6 +15,6 @@ import { GenericOpenAIAPIDecisionModelChoice } from './genericOpenAIAPIDecisionM
 export interface OperationStatusListGenericOpenAIAPIDecisionModelChoice { 
     result?: Array<GenericOpenAIAPIDecisionModelChoice>;
     messages?: Array<GUserMessage>;
-    hasErrorMessages?: boolean;
     hasWarnMessages?: boolean;
+    hasErrorMessages?: boolean;
 }

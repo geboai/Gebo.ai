@@ -129,8 +129,8 @@ export class GeboAIMCPServerAdminComponent extends BaseEntityEditingComponent<Ge
             entry.toolName = entry.agentsNetworkCode;
         }
         // a network runs in a conversation only when a chat profile is named
-        (entry as any).chatProfileCode = (entry as any).chatProfileCode && (entry as any).chatProfileCode.trim()
-            ? (entry as any).chatProfileCode.trim() : undefined;
+        entry.chatProfileCode = entry.chatProfileCode && entry.chatProfileCode.trim()
+            ? entry.chatProfileCode.trim() : undefined;
         this.networkTools = [...this.networkTools, entry];
         this.formGroup.patchValue({ agentNetworkAsTools: this.networkTools });
         this.formGroup.markAsDirty();

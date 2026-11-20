@@ -23,7 +23,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * DefaultPromptForChatModelReferenceParam
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-19T22:39:31.008494278+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-20T06:19:25.937202091+01:00[Europe/Rome]")
 
 public class DefaultPromptForChatModelReferenceParam {
   @JsonProperty("chatModelConfigReference")

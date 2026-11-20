@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusUploadsWithNewChat
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-19T22:39:31.008494278+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-20T06:19:25.937202091+01:00[Europe/Rome]")
 
 public class OperationStatusUploadsWithNewChat {
   @JsonProperty("result")
@@ -35,11 +35,11 @@ public class OperationStatusUploadsWithNewChat {
   @JsonProperty("messages")
   private List<GUserMessage> messages = null;
 
-  @JsonProperty("hasErrorMessages")
-  private Boolean hasErrorMessages = null;
-
   @JsonProperty("hasWarnMessages")
   private Boolean hasWarnMessages = null;
+
+  @JsonProperty("hasErrorMessages")
+  private Boolean hasErrorMessages = null;
 
   public OperationStatusUploadsWithNewChat result(UploadsWithNewChat result) {
     this.result = result;
@@ -85,24 +85,6 @@ public class OperationStatusUploadsWithNewChat {
     this.messages = messages;
   }
 
-  public OperationStatusUploadsWithNewChat hasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-    return this;
-  }
-
-   /**
-   * Get hasErrorMessages
-   * @return hasErrorMessages
-  **/
-  @Schema(description = "")
-  public Boolean isHasErrorMessages() {
-    return hasErrorMessages;
-  }
-
-  public void setHasErrorMessages(Boolean hasErrorMessages) {
-    this.hasErrorMessages = hasErrorMessages;
-  }
-
   public OperationStatusUploadsWithNewChat hasWarnMessages(Boolean hasWarnMessages) {
     this.hasWarnMessages = hasWarnMessages;
     return this;
@@ -121,6 +103,24 @@ public class OperationStatusUploadsWithNewChat {
     this.hasWarnMessages = hasWarnMessages;
   }
 
+  public OperationStatusUploadsWithNewChat hasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+    return this;
+  }
+
+   /**
+   * Get hasErrorMessages
+   * @return hasErrorMessages
+  **/
+  @Schema(description = "")
+  public Boolean isHasErrorMessages() {
+    return hasErrorMessages;
+  }
+
+  public void setHasErrorMessages(Boolean hasErrorMessages) {
+    this.hasErrorMessages = hasErrorMessages;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -133,13 +133,13 @@ public class OperationStatusUploadsWithNewChat {
     OperationStatusUploadsWithNewChat operationStatusUploadsWithNewChat = (OperationStatusUploadsWithNewChat) o;
     return Objects.equals(this.result, operationStatusUploadsWithNewChat.result) &&
         Objects.equals(this.messages, operationStatusUploadsWithNewChat.messages) &&
-        Objects.equals(this.hasErrorMessages, operationStatusUploadsWithNewChat.hasErrorMessages) &&
-        Objects.equals(this.hasWarnMessages, operationStatusUploadsWithNewChat.hasWarnMessages);
+        Objects.equals(this.hasWarnMessages, operationStatusUploadsWithNewChat.hasWarnMessages) &&
+        Objects.equals(this.hasErrorMessages, operationStatusUploadsWithNewChat.hasErrorMessages);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(result, messages, hasErrorMessages, hasWarnMessages);
+    return Objects.hash(result, messages, hasWarnMessages, hasErrorMessages);
   }
 
 
@@ -150,8 +150,8 @@ public class OperationStatusUploadsWithNewChat {
     
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("    messages: ").append(toIndentedString(messages)).append("\n");
-    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("    hasWarnMessages: ").append(toIndentedString(hasWarnMessages)).append("\n");
+    sb.append("    hasErrorMessages: ").append(toIndentedString(hasErrorMessages)).append("\n");
     sb.append("}");
     return sb.toString();
   }

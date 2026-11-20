@@ -5,7 +5,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **name** | **String** |  |  [optional]
 **extension** | **String** |  |  [optional]
+**contentType** | **String** |  |  [optional]
 **description** | **String** |  |  [optional]
+**creationDate** | [**Date**](Date.md) |  |  [optional]
 **code** | **String** |  |  [optional]
 **messagingModuleId** | **String** |  |  [optional]
 **deleted** | **Boolean** |  |  [optional]
@@ -14,5 +16,3 @@ Name | Type | Description | Notes
 **modificationDate** | [**Date**](Date.md) |  |  [optional]
 **parentVirtualFolderCode** | **String** |  |  [optional]
 **relativePath** | **String** |  |  [optional]
-**creationDate** | [**Date**](Date.md) |  |  [optional]
-**contentType** | **String** |  |  [optional]
