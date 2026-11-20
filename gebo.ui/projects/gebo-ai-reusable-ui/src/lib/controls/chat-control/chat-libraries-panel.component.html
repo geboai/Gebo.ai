@@ -5,7 +5,7 @@
 }
 
 <p-dialog id="LibrariesDialog" gebo-ai-label header="Files built by the agents" [(visible)]="visible" [modal]="true"
-  [style]="{ width: '40rem', maxWidth: '95vw' }" appendTo="body">
+  [style]="{ width: '90vw', maxHeight: '90vh' }" [contentStyle]="{ overflow: 'auto' }" appendTo="body">
   <p id="LibrariesHint" gebo-ai-text>What the agents of this conversation work on: each library and the resources it holds. A resource that can be taken away as a file has a download button; the file is what the library holds at this moment.</p>
   @if (loading) {
     <p-progressSpinner styleClass="w-2rem h-2rem"></p-progressSpinner>

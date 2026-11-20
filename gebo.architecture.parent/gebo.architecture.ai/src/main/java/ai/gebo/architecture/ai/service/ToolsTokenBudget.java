@@ -49,6 +49,17 @@ public final class ToolsTokenBudget {
 	public static final int MIN_USEFUL_TOKENS = 500;
 	/** Below this room a result is not cut but replaced by a message saying so. */
 	static final int MIN_TRUNCATED_RESULT_TOKENS = 64;
+	/** The default of {@link #alwaysAdmittedResultTokens}. */
+	public static final int DEFAULT_ALWAYS_ADMITTED_RESULT_TOKENS = 256;
+	/**
+	 * A result of up to this many tokens reaches the model whole even over the room left:
+	 * the outcome of an action - a file created, replaced or deleted, a call refused and
+	 * why - which replaced by a message the model takes for a failure, and acts again
+	 * on it blind (it created, replaced and deleted files over and over, then said they
+	 * were made). Set via ai.gebo.llms.tokens-budget.always-admitted-result-tokens; 0
+	 * admits no result over the room.
+	 */
+	private static volatile int alwaysAdmittedResultTokens = DEFAULT_ALWAYS_ADMITTED_RESULT_TOKENS;
 	/** The cuts tried to bring a text in its room. */
 	static final int MAX_TRUNCATION_ATTEMPTS = 4;
 
@@ -106,6 +117,16 @@ public final class ToolsTokenBudget {
 		return budget != null && budget.left() < MIN_USEFUL_TOKENS;
 	}
 
+	/** The tokens up to which a result reaches the model whole even over the room left. */
+	public static int alwaysAdmittedResultTokens() {
+		return alwaysAdmittedResultTokens;
+	}
+
+	/** Sets the tokens up to which a result reaches the model whole even over the room left (0 or more). */
+	public static void setAlwaysAdmittedResultTokens(int tokens) {
+		alwaysAdmittedResultTokens = Math.max(0, tokens);
+	}
+
 	public int left() {
 		return left.get();
 	}
@@ -144,6 +165,12 @@ public final class ToolsTokenBudget {
 		final int room = left.get() - inputTokens;
 		if (resultTokens <= room) {
 			consume(inputTokens + resultTokens);
+			return result;
+		}
+		if (result != null && resultTokens <= alwaysAdmittedResultTokens) {
+			consume(inputTokens + resultTokens);
+			LOGGER.warn("The result of the tool " + toolName + " (" + resultTokens + " tokens) is over the "
+					+ Math.max(0, room) + " token(s) left in its model call's context: returned whole, being short");
 			return result;
 		}
 		final String truncated = room >= MIN_TRUNCATED_RESULT_TOKENS ? truncate(result, room, resultTokens) : null;

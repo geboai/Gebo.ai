@@ -237,6 +237,12 @@ ai.gebo.deepsearch.sufficiency-check-enabled: true
 # budget) takes this share of it; the rest is left to the token estimation error and to what
 # the model writes (0.7 when not set; 0 < factor <= 1)
 ai.gebo.llms.tokens-budget.factor: 0.7
+# A tool's result of up to this many tokens reaches the model whole even when the room its
+# model call leaves to the tools' results is used up: the outcome of an action (a file created,
+# replaced or deleted, a call refused and why), which replaced by a "does not fit" message the
+# model takes for a failure and acts again on blind. Longer results are cut or replaced as
+# before (256 when not set; 0 admits none over the room)
+ai.gebo.llms.tokens-budget.always-admitted-result-tokens: 256
 # The release of what the chunking sessions leave behind: the cached chunks whose session no
 # longer exists, and the cache files no record names, are deleted once older than this many
 # seconds, which is also the interval between two checks
