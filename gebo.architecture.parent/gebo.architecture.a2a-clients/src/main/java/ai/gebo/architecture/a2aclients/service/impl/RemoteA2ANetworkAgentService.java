@@ -140,7 +140,8 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 					NotificationType.INFO);
 		}
 		try {
-			EventKind result = connector.sendMessage(remoteConfig, inputText, session.getId());
+			EventKind result = connector.sendMessage(remoteConfig, inputText, session.getId(),
+					filesFor(chatRequestContext));
 			// as the user the network runs for: a file the agent sent is kept in their conversation
 			String outputText = runAs != null
 					? runAs.doRunAsWithReturn(() -> extractText(result, chatRequestContext))
@@ -187,6 +188,54 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 		synthetic.setDescription(getDescription());
 		synthetic.setLongExplanation("Remote A2A agent reached over the Agent2Agent protocol");
 		return synthetic;
+	}
+
+	/** The size in bytes a file may have, and the files of one message together, to travel to a remote agent. */
+	static final long MAX_OUTBOUND_FILE_BYTES = 20L * 1024 * 1024;
+	static final long MAX_OUTBOUND_FILES_BYTES = 40L * 1024 * 1024;
+
+	/**
+	 * The conversation's files the remote agent says it takes - the pictures, PDF
+	 * files and recordings the request carries for the models, of a type among the
+	 * input modes of the agent's card - with their bytes: the agent has no other way
+	 * to see them. None for an agent taking text only. A file that cannot be read or
+	 * is too large is left out and logged.
+	 */
+	List<A2AClientConnector.OutboundFile> filesFor(IChatRequestContext context) {
+		final List<A2AClientConnector.OutboundFile> files = new java.util.ArrayList<>();
+		final List<ai.gebo.llms.abstraction.layer.model.IChatRequestMedia> media = context != null ? context.getMedia()
+				: null;
+		if (media == null || media.isEmpty()) {
+			return files;
+		}
+		final java.util.Set<String> modes = connector.acceptedInputModes(remoteConfig);
+		long total = 0;
+		for (ai.gebo.llms.abstraction.layer.model.IChatRequestMedia file : media) {
+			if (file == null || !A2AClientConnector.takes(modes, file.getMimeType())) {
+				continue;
+			}
+			if (file.getSize() > MAX_OUTBOUND_FILE_BYTES || total + file.getSize() > MAX_OUTBOUND_FILES_BYTES) {
+				LOGGER.warn("The file " + file.getName() + " (" + file.getSize()
+						+ " bytes) is too large to be sent to remote A2A agent " + getId());
+				continue;
+			}
+			try {
+				final byte[] bytes = file.readBytes();
+				if (bytes == null || bytes.length == 0 || total + bytes.length > MAX_OUTBOUND_FILES_BYTES) {
+					continue;
+				}
+				files.add(new A2AClientConnector.OutboundFile(file.getName(), file.getMimeType(), bytes));
+				total += bytes.length;
+			} catch (java.io.IOException | RuntimeException unreadable) {
+				LOGGER.error("The file " + file.getName() + " cannot be read to be sent to remote A2A agent " + getId(),
+						unreadable);
+			}
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Remote A2A agent " + getId() + " takes " + modes + ": " + files.size() + " of " + media.size()
+					+ " file(s) of the conversation sent");
+		}
+		return files;
 	}
 
 	private String extractText(EventKind result, IChatRequestContext context) {

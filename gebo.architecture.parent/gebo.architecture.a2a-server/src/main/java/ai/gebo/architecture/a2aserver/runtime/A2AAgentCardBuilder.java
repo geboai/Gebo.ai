@@ -43,6 +43,14 @@ public class A2AAgentCardBuilder {
 
 	private static final List<String> TEXT_MODES = List.of("text/plain");
 	/**
+	 * What a network takes besides text: the files a caller attaches with their bytes
+	 * become the uploads of the conversation the run works in, where the pictures, the
+	 * recordings, the videos and the PDF files are what the models are given as they
+	 * are.
+	 */
+	private static final List<String> NETWORK_INPUT_MODES = List.of("text/plain", "image/*", "audio/*", "video/*",
+			"application/pdf");
+	/**
 	 * What an answer may carry: its text and, as file parts, the files the run
 	 * generated (the pictures of the image models, stored as PNG) and the files its
 	 * tools wrote, which are of whatever type the tools write.
@@ -118,7 +126,7 @@ public class A2AAgentCardBuilder {
 			appendMemberCapabilities(network, tags);
 		}
 		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).examples(List.of())
-				.inputModes(TEXT_MODES).outputModes(OUTPUT_MODES).securityRequirements(List.of()).build();
+				.inputModes(NETWORK_INPUT_MODES).outputModes(OUTPUT_MODES).securityRequirements(List.of()).build();
 	}
 
 	private AgentSkill buildAgentSkill(A2AExportedAgent exported) {

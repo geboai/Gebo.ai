@@ -95,141 +95,30 @@ public class A2AResultAdapter {
 	}
 
 	/** The size in bytes a generated file may have to travel in the answer. */
-	static final long MAX_FILE_BYTES = 20L * 1024 * 1024;
-	/** The size in bytes the files of one answer may have together. */
-	static final long MAX_ANSWER_FILES_BYTES = 40L * 1024 * 1024;
-	/** Reads the files the run's tools wrote, from where they wrote them; absent in a unit test. */
+	static final long MAX_FILE_BYTES = ai.gebo.llms.agent.standard.services.ChatRunFiles.MAX_FILE_BYTES;
+	/** Reads the files of a run; a bare one, reading nothing, in a unit test. */
 	@Autowired(required = false)
-	private ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles;
-
-	void setLibraryFiles(ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles) {
-		this.libraryFiles = libraryFiles;
-	}
-
-	/** Reads the files a run generated; absent in a unit test. */
-	@Autowired(required = false)
-	private IGChatStorageAreaService storageArea;
+	private ai.gebo.llms.agent.standard.services.ChatRunFiles runFiles = new ai.gebo.llms.agent.standard.services.ChatRunFiles();
 
 	void setStorageArea(IGChatStorageAreaService storageArea) {
-		this.storageArea = storageArea;
+		this.runFiles.setStorageArea(storageArea);
+	}
+
+	void setLibraryFiles(ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles) {
+		this.runFiles.setLibraryFiles(libraryFiles);
 	}
 
 	/**
 	 * The files of the run as file parts, bytes included, since the caller has no way
-	 * to fetch them from Gebo: what its models generated (the pictures they drew) and
-	 * what its tools wrote (a document, a spreadsheet, a file of the working
-	 * directory). A file that cannot be read, is larger than {@link #MAX_FILE_BYTES},
-	 * or would take the answer over {@link #MAX_ANSWER_FILES_BYTES} is left out and
-	 * logged.
+	 * to fetch them from Gebo: what its models generated and what its tools wrote
+	 * (see {@link ai.gebo.llms.agent.standard.services.ChatRunFiles}).
 	 */
 	List<Part<?>> filesOf(GeboChatResponse response) {
 		final List<Part<?>> files = new ArrayList<>();
-		final java.util.Set<String> names = new java.util.HashSet<>();
-		long total = 0;
-		if (storageArea != null && response.getGeneratedResources() != null) {
-			total = generatedFilesOf(response, files, names);
+		for (ai.gebo.llms.agent.standard.services.ChatRunFiles.RunFile file : runFiles.of(response)) {
+			files.add(new FilePart(new FileWithBytes(file.mimeType(), file.name(), file.bytes())));
 		}
-		writtenFilesOf(response, files, names, total);
 		return files;
-	}
-
-	/**
-	 * The files the run's tools wrote, read from the location each was written to,
-	 * as the conversation holds it now. A file of the location of generated files
-	 * already sent as a generated one is not sent twice.
-	 */
-	private void writtenFilesOf(GeboChatResponse response, List<Part<?>> files, java.util.Set<String> names,
-			long total) {
-		final List<ai.gebo.architecture.ai.files.GConversationFile> written = response.getWrittenFiles();
-		final String chatCode = response.getUserChatContextCode();
-		if (libraryFiles == null || written == null || written.isEmpty() || chatCode == null) {
-			return;
-		}
-		for (ai.gebo.architecture.ai.files.GConversationFile file : written) {
-			if (file == null || file.getLocation() == null || file.getPath() == null) {
-				continue;
-			}
-			final String name = file.getPath().substring(file.getPath().lastIndexOf('/') + 1);
-			if (names.contains(name)) {
-				continue;
-			}
-			try {
-				final ai.gebo.architecture.ai.files.IGFilesLocation location = libraryFiles.locationOf(chatCode,
-						file.getLocation());
-				if (location == null) {
-					LOGGER.warn("The written file " + file.key() + " is in a location the conversation no longer holds");
-					continue;
-				}
-				final ai.gebo.architecture.ai.files.GLibraryFile described = location.describe(file.getPath());
-				if (described == null) {
-					continue;
-				}
-				if (described.size() > MAX_FILE_BYTES || total + described.size() > MAX_ANSWER_FILES_BYTES) {
-					LOGGER.warn("The written file " + file.key() + " (" + described.size()
-							+ " bytes) is too large to travel in the A2A answer");
-					continue;
-				}
-				final ai.gebo.architecture.ai.files.GLibraryFileContent content = location.read(file.getPath());
-				if (content == null || content.content() == null) {
-					continue;
-				}
-				final byte[] bytes;
-				try (java.io.InputStream in = content.content().getInputStream()) {
-					bytes = in.readAllBytes();
-				}
-				if (bytes.length > MAX_FILE_BYTES || total + bytes.length > MAX_ANSWER_FILES_BYTES) {
-					LOGGER.warn("The written file " + file.key() + " (" + bytes.length
-							+ " bytes) is too large to travel in the A2A answer");
-					continue;
-				}
-				String type = content.content().getContentType();
-				if (type == null || !type.contains("/")) {
-					type = described.contentType() != null && described.contentType().contains("/")
-							? described.contentType()
-							: "application/octet-stream";
-				}
-				files.add(new FilePart(new FileWithBytes(type, name, bytes)));
-				names.add(name);
-				total += bytes.length;
-			} catch (Exception e) {
-				LOGGER.error("The written file " + file.key() + " cannot be read into the A2A answer", e);
-			}
-		}
-	}
-
-	/** The generated files, added to the list; answers the bytes they take. */
-	private long generatedFilesOf(GeboChatResponse response, List<Part<?>> files, java.util.Set<String> names) {
-		long total = 0;
-		for (LLMGeneratedResource generated : response.getGeneratedResources()) {
-			if (generated == null) {
-				continue;
-			}
-			if (generated.getFileSize() != null && generated.getFileSize() > MAX_FILE_BYTES) {
-				LOGGER.warn("The generated file " + generated.getFileName() + " (" + generated.getFileSize()
-						+ " bytes) is too large to travel in the A2A answer");
-				continue;
-			}
-			try (java.io.InputStream content = storageArea.streamContent(generated)) {
-				if (content == null) {
-					continue;
-				}
-				final byte[] bytes = content.readAllBytes();
-				final String type = generated.getContentType() != null && generated.getContentType().contains("/")
-						? generated.getContentType()
-						: "application/octet-stream";
-				final String name = generated.getFileName() != null ? generated.getFileName() : generated.getCode();
-				if (total + bytes.length > MAX_ANSWER_FILES_BYTES) {
-					LOGGER.warn("The generated file " + name + " would take the A2A answer over its size");
-					continue;
-				}
-				files.add(new FilePart(new FileWithBytes(type, name, bytes)));
-				names.add(name);
-				total += bytes.length;
-			} catch (Exception e) {
-				LOGGER.error("The generated file " + generated.getFileName() + " cannot be read into the A2A answer", e);
-			}
-		}
-		return total;
 	}
 
 	/** A streamed frame: the chunk of text it carries, or null when it carries none. */
