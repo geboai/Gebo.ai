@@ -117,4 +117,20 @@ public class MicroserviceDocumentsAccessClientConfiguration {
 		return new GMicroserviceDocumentContentStreamerClient(documentsAccessClientWebClient, urlResolver,
 				tokenPropagator);
 	}
+
+	/**
+	 * The pictures and recordings of the documents read here are given to the service
+	 * holding the models (the brain, unless
+	 * {@code ai.gebo.documents.access.client.models-microservice-id} names another);
+	 * only where no model is deployed in this service itself.
+	 */
+	@Bean
+	@ConditionalOnMissingBean(ai.gebo.system.ingestion.IGMediaTextExtractor.class)
+	public ai.gebo.system.ingestion.IGMediaTextExtractor microserviceMediaTextExtractor(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient documentsAccessClientWebClient,
+			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
+			@org.springframework.beans.factory.annotation.Value("${ai.gebo.documents.access.client.models-microservice-id:brain.gebo.ai}") String modelsMicroserviceId) {
+		return new ai.gebo.architecture.microservices.documents.access.GMicroserviceMediaTextExtractorClient(
+				documentsAccessClientWebClient, urlResolver, tokenPropagator, modelsMicroserviceId);
+	}
 }
