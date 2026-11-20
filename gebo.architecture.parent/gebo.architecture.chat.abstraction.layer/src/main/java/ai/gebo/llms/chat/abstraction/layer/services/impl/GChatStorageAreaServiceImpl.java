@@ -128,19 +128,14 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 
 		file.transferTo(newPath);
 		GDocumentReference reference = documentReferenceFactory.createReference(newPath);
-		final boolean forTheModel = GModelCarriedMediaTypes
-				.matchesAny(uploadFileTypes.modelMimeTypesOfSession(userSessionCode), mimeTypeOf(serverSide));
-		// a picture, a recording or a video the chat's model takes as it is goes to the model
-		// itself: it is not described or transcribed first, the model sees or hears it
-		final GModelInputModality modality = GModelInputModality.ofMimeType(mimeTypeOf(serverSide));
-		final boolean straightToTheModel = forTheModel && (modality == GModelInputModality.IMAGE
-				|| modality == GModelInputModality.AUDIO || modality == GModelInputModality.VIDEO);
 		final InputStream content = Files.newInputStream(newPath);
-		IngestionHandlerData data = straightToTheModel ? null : ingestionHandler.handleContent(reference, content);
-		if (data == null || data.isUnmanagedContent()) {
+		IngestionHandlerData data = ingestionHandler.handleContent(reference, content);
+		if (data.isUnmanagedContent()) {
 			content.close();
 			// no content handler reads it: it is kept when the chat's model takes it as it is
 			// (a picture, a PDF, a recording) or when the chat's agents' tools work on it
+			final boolean forTheModel = GModelCarriedMediaTypes
+					.matchesAny(uploadFileTypes.modelMimeTypesOfSession(userSessionCode), mimeTypeOf(serverSide));
 			final boolean forTheTools = serverSide.getExtension() != null
 					&& uploadFileTypes.toolsFileTypesOfSession(userSessionCode).contains(serverSide.getExtension());
 			if (!forTheModel && !forTheTools) {

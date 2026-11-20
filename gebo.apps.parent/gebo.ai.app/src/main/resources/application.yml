@@ -528,16 +528,3 @@ ai.gebo.chat.media:
     # the room kept in the context for each file, in tokens: an estimate, every provider
     # counts a picture or a recording its own way
     estimated-tokens-per-file: 1000
-# Reading pictures, scanned PDF pages, recordings and videos into the knowledge bases
-# with a model. Each file read this way costs a model call on every ingestion of it,
-# so both are off until turned on here.
-ai.gebo.ingestion.media:
-    # pictures and PDF pages without text are described by a chat model that reads pictures
-    describe-pictures: false
-    # recordings and videos are transcribed by the default transcription model
-    transcribe-recordings: false
-    # the chat model configuration that describes pictures; unset: the default chat model
-    # when it reads pictures, else the first configured one that does
-    picture-model-code:
-    max-described-pages-per-document: 30
-    max-file-bytes: 20971520
