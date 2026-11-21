@@ -1901,7 +1901,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			// the coverage the deep searches of this iteration ask to complete, re-read as calls arrive
 			final CoverageWatch coverageWatch = new CoverageWatch(gate != null ? gate.coverage() : null,
 					callBacksListener, callsBefore);
-			Flux<String> visible = modelText.map(chunk -> {
+			// once a tool of the iteration stopped the loop (see stopsTheLoop), what still arrives
+			// is the word of the tools that ended the model's call, returned in its place: the
+			// model did not write it, so it is neither shown nor kept as what the iteration wrote
+			Flux<String> visible = modelText.filter(chunk -> stopsTheLoop(number, toolCalling) == null).map(chunk -> {
 				String out = stripper.accept(chunk);
 				text.append(out);
 				return passed(out, held, open, callBacksListener, callsBefore, gate.tools(), coverageWatch);

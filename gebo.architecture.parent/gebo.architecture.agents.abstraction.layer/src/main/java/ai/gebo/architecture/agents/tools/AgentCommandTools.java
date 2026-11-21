@@ -56,6 +56,8 @@ public final class AgentCommandTools {
 	static final String HOW_TO_ASK = " The agent sees nothing of this conversation nor of what you found: write in the"
 			+ " request everything it needs - the content to use, word for word when it matters, the name and format"
 			+ " of what to produce, the files and templates to use, what to leave as it is."
+			+ " Ask only for what the user asked: add no style, layout, wording or place to save of your own; what"
+			+ " the user left open, the agent decides."
 			+ " You will not see what this tool returns: your work stops here, and you are executed again when the"
 			+ " agent answered, told its answer. To hand work to several agents at once, call their tools together"
 			+ " in the same step.";

@@ -285,12 +285,9 @@ class LoopControllerNetworkRunTest {
 		assertEquals(1, dispatches(INPUT));
 		assertEquals(REQUEST, requestsGiven.get(0), "nothing to tell at the first execution");
 		assertEquals(
-				"You asked the agent presentations: A deck of three slides on Q3.\n"
-						+ "The agent presentations said: done: A deck of three slides on Q3.\n\n" + REQUEST,
+				"The agent presentations said: done: A deck of three slides on Q3.\n\n" + REQUEST,
 				requestsGiven.get(1));
-		assertEquals("You asked the agent presentations: A deck of three slides on Q3.\n"
-				+ "The agent presentations said: done: A deck of three slides on Q3.\n\n"
-				+ "You asked the agent presentations: Add a fourth slide with the outlook.\n"
+		assertEquals("The agent presentations said: done: A deck of three slides on Q3.\n\n"
 				+ "The agent presentations said: done: Add a fourth slide with the outlook.\n\n" + REQUEST,
 				requestsGiven.get(2), "executed again, the controller is told everything the specialist said so far");
 		assertEquals(requestsGiven, requestsInTheContext, "the loop's model reads the request from the context");

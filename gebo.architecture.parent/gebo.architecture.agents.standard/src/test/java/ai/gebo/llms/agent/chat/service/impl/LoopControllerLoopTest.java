@@ -65,7 +65,10 @@ class LoopControllerLoopTest {
 		}
 	};
 
-	/** One scripted iteration: what the model writes, and what its tools do while it does. */
+	/** What the engine gives back in place of the model's text when a tool ended the model's call. */
+	private static final String TOOLS_WORD = "The work was handed to the agent: your work stops here.";
+
+	/** One scripted iteration: what the model writes, and what its tools do after it wrote. */
 	private record Step(List<String> text, Consumer<GeboToolCalling> tools) {
 		static Step writes(String... text) {
 			return new Step(List.of(text), toolCalling -> {
@@ -93,10 +96,13 @@ class LoopControllerLoopTest {
 				GeboToolCalling toolCalling) {
 			receivedParams.add(params);
 			final Step step = script.get(Math.min(receivedParams.size() - 1, script.size() - 1));
-			return Flux.defer(() -> {
+			// as the engine: the model's text, then its tool calls, then, when a tool ended the
+			// call, the word of the tools in place of what the model would have written next
+			return Flux.fromIterable(step.text()).concatWith(Flux.defer(() -> {
 				step.tools().accept(toolCalling);
-				return Flux.fromIterable(step.text());
-			}).map(text -> new GChatAnswerChunk(text, "", false, null, List.of(), null));
+				return stopsTheLoop(receivedParams.size(), toolCalling) != null ? Flux.just(TOOLS_WORD)
+						: Flux.<String>empty();
+			})).map(text -> new GChatAnswerChunk(text, "", false, null, List.of(), null));
 		}
 
 		String storyOfCall(int call) {
@@ -189,9 +195,10 @@ class LoopControllerLoopTest {
 
 		String shown = run(agent, 1, 5, anExecution(new GAgentCommandsSink(List.of("presentations"))));
 
-		assertEquals("The answer so far." + END, shown, "an iteration that wrote nothing ends no cycle");
+		assertEquals("The answer so far." + END, shown,
+				"an iteration that wrote nothing ends no cycle, and the word of its tools is not shown");
 		assertTrue(history.get(1).stopped());
-		assertEquals("", history.get(1).text());
+		assertEquals("", history.get(1).text(), "the word of the tools is not what the iteration wrote");
 
 		run(agent, 3, 5, anExecution(new GAgentCommandsSink(List.of("presentations"))));
 
@@ -200,6 +207,7 @@ class LoopControllerLoopTest {
 				"the answer the user sees is still the one to write again: " + story);
 		assertFalse(story.contains(AgenticLoopReactiveAgentServiceImpl.SUPERSEDED_ANSWER), story);
 		assertTrue(story.contains(AgenticLoopReactiveAgentServiceImpl.STOPPED_HERE), story);
+		assertFalse(story.contains(TOOLS_WORD), "the word of the tools is no answer of the agent: " + story);
 	}
 
 	@Test

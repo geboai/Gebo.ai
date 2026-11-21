@@ -99,6 +99,8 @@ class AgentCommandToolsTest {
 		assertTrue(description.startsWith("Hands a piece of work to the agent presentations: Writes presentations."
 				+ " It can: Create and edit pptx, ppt and odp files."), description);
 		assertTrue(description.endsWith(AgentCommandTools.HOW_TO_ASK), "the model is told what the agent needs");
+		assertTrue(description.contains("Ask only for what the user asked"),
+				"and to add nothing of its own to what the user asked");
 		assertTrue(tools.get(0).getToolDefinition().inputSchema().contains("request"));
 	}
 

@@ -45,7 +45,7 @@ public final class LoopControllerRun {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoopControllerRun.class);
 	private final AgenticLoopReactiveAgentServiceImpl.LoopRun loop = new AgenticLoopReactiveAgentServiceImpl.LoopRun();
 	private ToolCallsListener calls = null;
-	/** What the controller asked each agent, by its name, in the order it did: for the answers to be told with it. */
+	/** What the controller asked each agent, by its name, in the order it did: to tell which requests got no answer. */
 	private final Map<String, List<String>> asked = new HashMap<String, List<String>>();
 
 	/**
@@ -92,7 +92,7 @@ public final class LoopControllerRun {
 		return calls;
 	}
 
-	/** The commands the agent gave in an execution: what it asked is remembered, to be told with the answers. */
+	/** The commands the agent gave in an execution: remembered, to tell which of them got no answer. */
 	synchronized void commanded(List<IGAgentCommands.Command> commands) {
 		if (commands == null) {
 			return;
@@ -106,8 +106,9 @@ public final class LoopControllerRun {
 	/**
 	 * What the agents the controller reaches answered so far, as an execution going on
 	 * is told: read in the shared session from the first turn the controller made in the
-	 * run, which its private session keeps, with what it asked when this service
-	 * remembers it. The loop is also made to go on after as many iterations as the turns
+	 * run, which its private session keeps. What it asked is not told again: the story
+	 * of its loop already gives it, with the call that asked. The loop is also made to
+	 * go on after as many iterations as the turns
 	 * the private session says the controller made, when it ran fewer here: what a
 	 * respawned run finds.
 	 */
@@ -119,8 +120,9 @@ public final class LoopControllerRun {
 					+ loop.iterations() + " iteration(s) in this service: its loop goes on after " + turns);
 			loop.startAfter(turns);
 		}
-		final List<AgentAnswer> answers = AgentAnswersText.answersIn(session,
-				AgentAnswersText.firstTurnOf(privateSession), reachable, asked);
+		final List<AgentAnswer> answers = AgentAnswersText
+				.answersIn(session, AgentAnswersText.firstTurnOf(privateSession), reachable, asked).stream()
+				.map(x -> new AgentAnswer(x.agent(), null, x.answer())).toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("The loop controller is told " + answers.stream().filter(x -> x.answer() != null).count()
 					+ " answer(s) of the agents " + reachable + " read in the session, "

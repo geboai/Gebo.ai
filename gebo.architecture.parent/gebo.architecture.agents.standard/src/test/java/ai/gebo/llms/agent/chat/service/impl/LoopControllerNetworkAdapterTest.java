@@ -170,9 +170,8 @@ class LoopControllerNetworkAdapterTest {
 
 		List<AgentsExchangeMessage<GeboChatMessageEnvelope>> second = turn(6);
 
-		String told = "You asked the agent presentations: A deck of three slides on Q3.\n"
-				+ "The agent presentations said: q3.pptx written, three slides.\n\n"
-				+ "You asked the agent spreadsheets: The Q3 figures as a workbook.\n"
+		// what it asked is in the story of its loop: here only what each agent said, or that it did not
+		String told = "The agent presentations said: q3.pptx written, three slides.\n\n"
 				+ "The agent spreadsheets gave no answer: it failed, or is still waiting for something\n\n"
 				+ REQUEST;
 		assertEquals(3, AgentAnswersText.firstTurnOf(mine), "the answers are read after the controller's first turn");
