@@ -49,6 +49,28 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 	private final IGAIToolsAndResourcesLibrarySourceRepositoryPattern libraries;
 	private final GUserChatSessionRepository conversations;
 	private final ChatLibraryInstancesRepository held;
+	/**
+	 * One lock for the conversations falling on it: what a conversation holds is read,
+	 * changed and saved whole, so two agents of a conversation working at the same
+	 * time - each having its library created - would each save a record without the
+	 * other's library, and the files the loser wrote would be in a folder no later
+	 * request finds. A fixed number of locks, shared by the conversations: none is
+	 * kept per conversation.
+	 */
+	private final Object[] conversationLocks = locks(64);
+
+	private static Object[] locks(int howMany) {
+		final Object[] locks = new Object[howMany];
+		for (int i = 0; i < howMany; i++) {
+			locks[i] = new Object();
+		}
+		return locks;
+	}
+
+	/** The lock under which what the conversation holds is read and written. */
+	private Object lockOf(String chatSessionCode) {
+		return conversationLocks[Math.floorMod(chatSessionCode.hashCode(), conversationLocks.length)];
+	}
 
 	/** A managed type and the source managing it. */
 	private record Managed(AIToolsAndResourcesLibraryType type, IGAIToolsAndResourcesLibrarySource source) {
@@ -97,10 +119,18 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 	@Override
 	public Map<String, AIToolsAndResourcesLibraryInstance> reclaim(String chatSessionCode,
 			Collection<String> libraryTypeIds) {
-		final Map<String, AIToolsAndResourcesLibraryInstance> reclaimed = new LinkedHashMap<>();
 		if (chatSessionCode == null || libraryTypeIds == null || libraryTypeIds.isEmpty()) {
-			return reclaimed;
+			return new LinkedHashMap<>();
 		}
+		// one agent of the conversation at a time: see conversationLocks
+		synchronized (lockOf(chatSessionCode)) {
+			return reclaimHoldingTheLock(chatSessionCode, libraryTypeIds);
+		}
+	}
+
+	private Map<String, AIToolsAndResourcesLibraryInstance> reclaimHoldingTheLock(String chatSessionCode,
+			Collection<String> libraryTypeIds) {
+		final Map<String, AIToolsAndResourcesLibraryInstance> reclaimed = new LinkedHashMap<>();
 		final GUserChatSession conversation = conversations.findById(chatSessionCode).orElse(null);
 		if (conversation == null) {
 			LOGGER.warn("There is no conversation:" + chatSessionCode + " to hold library instances");
@@ -344,6 +374,13 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 		if (chatSessionCode == null) {
 			return;
 		}
+		// not while an agent of the conversation has a library created: see conversationLocks
+		synchronized (lockOf(chatSessionCode)) {
+			dropHeldByHoldingTheLock(chatSessionCode);
+		}
+	}
+
+	private void dropHeldByHoldingTheLock(String chatSessionCode) {
 		final GChatLibraryInstances record = held.findById(chatSessionCode).orElse(null);
 		final Map<String, String> ids = record != null ? record.getInstanceIds() : null;
 		if (ids == null || ids.isEmpty()) {
