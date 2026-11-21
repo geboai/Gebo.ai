@@ -190,10 +190,10 @@ class ReactiveAgentAdapterTurnAdditionsTest {
 				new AgentAnswer("the-writer", "Write the summary.", "summary.docx written."),
 				new AgentAnswer("the-painter", "Draw the cover.", null)), answers);
 		assertEquals(
-				"You asked the agent the-writer: Write the report.\nThe agent the-writer answered: report.docx written."
-						+ "\n\nYou asked the agent the-writer: Write the summary.\nThe agent the-writer answered: "
+				"You asked the agent the-writer: Write the report.\nThe agent the-writer said: report.docx written."
+						+ "\n\nYou asked the agent the-writer: Write the summary.\nThe agent the-writer said: "
 						+ "summary.docx written."
-						+ "\n\nYou asked the agent the-painter: Draw the cover.\nThe agent the-painter answered: "
+						+ "\n\nYou asked the agent the-painter: Draw the cover.\nThe agent the-painter"
 						+ AgentAnswersText.NO_ANSWER + "\n\nWhat is new?",
 				AgentAnswersText.prepend(answers, "What is new?"));
 		assertEquals("What is new?", AgentAnswersText.prepend(List.of(), "What is new?"));
@@ -204,8 +204,8 @@ class ReactiveAgentAdapterTurnAdditionsTest {
 
 		assertEquals(List.of(new AgentAnswer("the-writer", null, "report.docx written."),
 				new AgentAnswer("the-writer", null, "summary.docx written.")), respawned);
-		assertEquals("The agent the-writer answered: report.docx written.\n\n"
-				+ "The agent the-writer answered: summary.docx written.\n\nWhat is new?",
+		assertEquals("The agent the-writer said: report.docx written.\n\n"
+				+ "The agent the-writer said: summary.docx written.\n\nWhat is new?",
 				AgentAnswersText.prepend(respawned, "What is new?"));
 	}
 }

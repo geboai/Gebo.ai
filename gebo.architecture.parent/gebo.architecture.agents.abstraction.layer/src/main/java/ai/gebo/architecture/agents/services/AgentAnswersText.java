@@ -31,7 +31,7 @@ import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
  * them back whole - so an agent executed again after one is told the same answers.
  */
 public final class AgentAnswersText {
-	static final String NO_ANSWER = "(no answer: the agent failed, or is still waiting for something)";
+	static final String NO_ANSWER = " gave no answer: it failed, or is still waiting for something";
 
 	private AgentAnswersText() {
 	}
@@ -113,10 +113,15 @@ public final class AgentAnswersText {
 		return data == null || String.valueOf(data).isBlank() ? null : String.valueOf(data).strip();
 	}
 
-	/** One answer as the agent is told of it. */
+	/**
+	 * One answer as the agent is told of it: what the agent said, since not everything
+	 * an agent contributes to the session is the outcome of the work it was handed (a
+	 * respawned run also keeps there, under its name, what it waited for and got).
+	 */
 	public static String render(AgentAnswer answer) {
 		return (answer.request() != null ? "You asked the agent " + answer.agent() + ": " + answer.request() + "\n" : "")
-				+ "The agent " + answer.agent() + " answered: " + (answer.answer() != null ? answer.answer() : NO_ANSWER);
+				+ "The agent " + answer.agent()
+				+ (answer.answer() != null ? " said: " + answer.answer() : NO_ANSWER);
 	}
 
 	/** The message an agent is executed again on, the answers of the agents it asked told first. */

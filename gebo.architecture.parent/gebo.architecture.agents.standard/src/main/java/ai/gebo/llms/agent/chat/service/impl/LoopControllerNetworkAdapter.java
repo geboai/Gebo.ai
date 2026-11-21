@@ -41,8 +41,9 @@ import reactor.core.publisher.Sinks;
  * agent's text to the user and giving the network its answer, that also lets the
  * agent command the agents of its communication list.
  * <p>
- * At each turn of an agent that is the controller of its network and reaches some
- * agent, it loads in the turn's tool calling one tool for each agent reached (see
+ * At each turn of an agent that is the controller of its network, is allowed to
+ * delegate to other agents ({@code canCallOtherAgents}) and reaches some agent, it
+ * loads in the turn's tool calling one tool for each agent reached (see
  * {@link AgentCommandTools}), the sink their commands go to and the
  * {@link LoopControllerRun} of the run, for the agent to find. When the turn ended on commands, it gives the
  * network the commands, in place of the agent's answer, and a message executing the
@@ -52,8 +53,8 @@ import reactor.core.publisher.Sinks;
  * run suspended and respawned, whose adapter is a new one, has both sessions back
  * and its agent is told the same answers.
  * <p>
- * An agent that is not the controller, or reaches no agent taking a text, is
- * adapted as the report writer is.
+ * An agent that is not the controller, is not allowed to delegate, or reaches no
+ * agent taking a text, is adapted as the report writer is.
  */
 public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServiceNetworkAdapter {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoopControllerNetworkAdapter.class);
@@ -80,6 +81,16 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 			return super.turnAdditions(msg, actualContributionNr, network, contextAgentPersona, session,
 					mySessionContext, agentsDao);
 		}
+		if (!contextAgentPersona.isCanCallOtherAgents()) {
+			// the participant's own switch, the one the network editor shows as "delegates"
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Loop controller adapter id:" + getId() + " agent:"
+						+ contextAgentPersona.getNetworkAgentName()
+						+ " is not allowed to delegate to other agents: it commands none");
+			}
+			return super.turnAdditions(msg, actualContributionNr, network, contextAgentPersona, session,
+					mySessionContext, agentsDao);
+		}
 		final List<String> reachable = AgentCommandTools.reachable(contextAgentPersona, agentsDao);
 		if (reachable.isEmpty()) {
 			if (LOGGER.isDebugEnabled()) {
@@ -90,6 +101,8 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 					mySessionContext, agentsDao);
 		}
 		final String self = contextAgentPersona.getNetworkAgentName();
+		// executed again on the message it sent itself after handing work over
+		final boolean executedAgain = self.equals(msg.getFromAgent());
 		// what the agents answered so far is read in the two sessions: a respawned run has them back
 		final List<AgentAnswer> answers = run.answersSoFar(session, mySessionContext, reachable);
 		final GAgentCommandsSink commands = new GAgentCommandsSink(reachable);
@@ -111,10 +124,16 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 				return AgentAnswersText.prepend(answers, ofTheTurn);
 			}
 
-			/** The loop's model reads the request from the context: the answers are told there too. */
+			/**
+			 * The loop's model reads the request from the context: what it is told goes
+			 * there too. An agent executed again is always given its request there, answers
+			 * or not: in a respawned run the context's own is what the user answered to a
+			 * question, not what they asked.
+			 */
 			@Override
 			public IChatRequestContext context(IChatRequestContext ofTheTurn, String request) {
-				return answers.isEmpty() || ofTheTurn == null ? ofTheTurn : ofTheTurn.withActualUserRequest(request);
+				return ofTheTurn == null || (answers.isEmpty() && !executedAgain) ? ofTheTurn
+						: ofTheTurn.withActualUserRequest(request);
 			}
 
 			@Override

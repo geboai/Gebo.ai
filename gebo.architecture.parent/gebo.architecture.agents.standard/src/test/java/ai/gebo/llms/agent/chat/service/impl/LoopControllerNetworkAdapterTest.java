@@ -92,6 +92,7 @@ class LoopControllerNetworkAdapterTest {
 	private void controllerReaching(String... agents) {
 		me.setAgentConfigCode("loopController");
 		me.setController(true);
+		me.setCanCallOtherAgents(true);
 		me.setOutputNode(true);
 		me.setCommunicationList(List.of(agents));
 		for (String name : agents) {
@@ -170,9 +171,9 @@ class LoopControllerNetworkAdapterTest {
 		List<AgentsExchangeMessage<GeboChatMessageEnvelope>> second = turn(6);
 
 		String told = "You asked the agent presentations: A deck of three slides on Q3.\n"
-				+ "The agent presentations answered: q3.pptx written, three slides.\n\n"
+				+ "The agent presentations said: q3.pptx written, three slides.\n\n"
 				+ "You asked the agent spreadsheets: The Q3 figures as a workbook.\n"
-				+ "The agent spreadsheets answered: (no answer: the agent failed, or is still waiting for something)\n\n"
+				+ "The agent spreadsheets gave no answer: it failed, or is still waiting for something\n\n"
 				+ REQUEST;
 		assertEquals(3, AgentAnswersText.firstTurnOf(mine), "the answers are read after the controller's first turn");
 		assertEquals(told, executions.get(1)[2]);
@@ -216,7 +217,7 @@ class LoopControllerNetworkAdapterTest {
 
 		List<AgentsExchangeMessage<GeboChatMessageEnvelope>> out = turn(6);
 
-		String told = "The agent presentations answered: q3.pptx written, in the corporate template the user chose."
+		String told = "The agent presentations said: q3.pptx written, in the corporate template the user chose."
 				+ "\n\n" + REQUEST;
 		assertEquals(told, executions.get(1)[2], "the answer is told, though what was asked is not remembered");
 		assertEquals(told, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest());
@@ -225,6 +226,32 @@ class LoopControllerNetworkAdapterTest {
 				"the loop goes on after the turn the private session keeps: its iterations are not counted again");
 		assertEquals(1, out.size());
 		assertEquals(MessageSemantic.RESPONSE, out.get(0).getMessageSemantic());
+	}
+
+	@Test
+	void executedAgainTheControllerIsGivenItsRequestEvenWhenNoAgentSaidAnything() throws Exception {
+		controllerReaching("presentations");
+		theAgent(toolCalling -> "The answer.");
+		// its own message, delivered in a respawned run: the request of that run is what the
+		// user answered to a question, and no agent contributed anything
+		final AgentsExchangeMessage<String> again = AgentsExchangeMessage.of(session, me.getNetworkAgentName(),
+				me.getNetworkAgentName(), REQUEST, MessageSemantic.EXECUTE_AND_SHARE_RESULT);
+
+		adapter.onMessage(IChatRequestContext.of("corporate"), config, again, 4, network, me, state -> {
+		}, session, mine, null, IGAgentsNetworkRuntimeDao.of(allocated), RUN_TOOL_CALLING, handler);
+
+		assertEquals(REQUEST, executions.get(0)[2]);
+		assertEquals(REQUEST, ((IChatRequestContext) executions.get(0)[0]).getActualUserRequest(),
+				"the loop's model reads the request from the context: not the user's answer to the question");
+
+		// the first execution of a run, on the input's message, is left its context
+		final AgentsExchangeMessage<String> first = AgentsExchangeMessage.of(session, "the-input",
+				me.getNetworkAgentName(), "The rewritten request.", MessageSemantic.EXECUTE_AND_SHARE_RESULT);
+
+		adapter.onMessage(IChatRequestContext.of(REQUEST), config, first, 5, network, me, state -> {
+		}, session, mine, null, IGAgentsNetworkRuntimeDao.of(allocated), RUN_TOOL_CALLING, handler);
+
+		assertEquals(REQUEST, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest());
 	}
 
 	@Test
@@ -246,6 +273,14 @@ class LoopControllerNetworkAdapterTest {
 		turn(2);
 
 		assertNull(toolCallingOf(2).getProvider().get(IGAgentCommands.class), "a controller reaching nobody");
+
+		me.setCommunicationList(List.of("presentations"));
+		me.setCanCallOtherAgents(false);
+		turn(3);
+
+		assertNull(toolCallingOf(3).getProvider().get(IGAgentCommands.class),
+				"a controller the network does not allow to delegate, whoever it reaches");
+		assertTrue(toolCallingOf(3).getMandatoryTools().isEmpty());
 	}
 
 	@Test
