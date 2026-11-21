@@ -247,12 +247,25 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		int cycle = 1;
 		List<GResponseDocumentRef> documentsSoFar = null;
 
+		/** The iterations made before the ones of the story, by a loop whose story was lost (see {@link #startAfter}). */
+		private int startedAfter = 0;
+
 		public LoopRun() {
 		}
 
 		/** The iterations run so far: none in a loop not yet executed. */
 		public int iterations() {
-			return history.isEmpty() ? 0 : history.get(history.size() - 1).number();
+			return history.isEmpty() ? startedAfter : Math.max(startedAfter, history.get(history.size() - 1).number());
+		}
+
+		/**
+		 * Makes a loop not yet executed here go on after the given number of iterations:
+		 * what a loop does whose earlier executions ran elsewhere, their story lost, so
+		 * that it does not count again the iterations they took. A loop that ran more
+		 * iterations here is left as it is.
+		 */
+		public void startAfter(int iterations) {
+			startedAfter = Math.max(startedAfter, iterations);
 		}
 
 		/** Whether the last iteration stopped the loop before its answer. */

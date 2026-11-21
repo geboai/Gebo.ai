@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallback;
 
+import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
@@ -46,7 +47,10 @@ import reactor.core.publisher.Sinks;
  * {@link LoopControllerRun} of the run, for the agent to find. When the turn ended on commands, it gives the
  * network the commands, in place of the agent's answer, and a message executing the
  * agent again after them, on the message of the turn: the agent is then told what
- * each agent answered, before that message.
+ * each agent answered, before that message. The answers are read in the shared
+ * session, from the first turn the agent made, which its private session keeps: a
+ * run suspended and respawned, whose adapter is a new one, has both sessions back
+ * and its agent is told the same answers.
  * <p>
  * An agent that is not the controller, or reaches no agent taking a text, is
  * adapted as the report writer is.
@@ -64,14 +68,17 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 	@Override
 	protected TurnAdditions<String, GeboChatMessageEnvelope> turnAdditions(AgentsExchangeMessage<String> msg,
 			int actualContributionNr, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session, IGAgentsNetworkRuntimeDao agentsDao) throws AgentException {
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
+			IGAgentsNetworkRuntimeDao agentsDao) throws AgentException {
 		if (contextAgentPersona == null || !contextAgentPersona.isController()) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Loop controller adapter id:" + getId() + " agent:"
 						+ (contextAgentPersona != null ? contextAgentPersona.getNetworkAgentName() : null)
 						+ " is not the controller of the network: it commands no agent");
 			}
-			return super.turnAdditions(msg, actualContributionNr, network, contextAgentPersona, session, agentsDao);
+			return super.turnAdditions(msg, actualContributionNr, network, contextAgentPersona, session,
+					mySessionContext, agentsDao);
 		}
 		final List<String> reachable = AgentCommandTools.reachable(contextAgentPersona, agentsDao);
 		if (reachable.isEmpty()) {
@@ -79,10 +86,12 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 				LOGGER.debug("Loop controller adapter id:" + getId() + " agent:"
 						+ contextAgentPersona.getNetworkAgentName() + " reaches no agent taking a text: it commands none");
 			}
-			return super.turnAdditions(msg, actualContributionNr, network, contextAgentPersona, session, agentsDao);
+			return super.turnAdditions(msg, actualContributionNr, network, contextAgentPersona, session,
+					mySessionContext, agentsDao);
 		}
 		final String self = contextAgentPersona.getNetworkAgentName();
-		final List<AgentAnswer> answers = run.answersSoFar(session);
+		// what the agents answered so far is read in the two sessions: a respawned run has them back
+		final List<AgentAnswer> answers = run.answersSoFar(session, mySessionContext, reachable);
 		final GAgentCommandsSink commands = new GAgentCommandsSink(reachable);
 		final List<ToolCallback> tools = AgentCommandTools.of(contextAgentPersona, agentsDao);
 		if (LOGGER.isDebugEnabled()) {
@@ -126,7 +135,7 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 						MessageSemantic.EXECUTE_AND_SHARE_RESULT);
 				again.setExecutionOrder(2);
 				out.add(again);
-				run.commanded(given, actualContributionNr);
+				run.commanded(given);
 				LOGGER.info("Loop controller adapter id:" + getId() + " agent:" + self + " turn " + actualContributionNr
 						+ " hands work to " + given.stream().map(IGAgentCommands.Command::toAgent).toList()
 						+ " and is executed again after them");

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
-import ai.gebo.architecture.agents.model.AgentProducedSessionContribution;
+import java.util.Map;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
@@ -71,7 +71,8 @@ class ReactiveAgentAdapterTurnAdditionsTest {
 		@Override
 		protected TurnAdditions<String, String> turnAdditions(AgentsExchangeMessage<String> msg,
 				int actualContributionNr, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-				AgentsCollaborationSessionContext session, IGAgentsNetworkRuntimeDao agentsDao) {
+				AgentsCollaborationSessionContext session, AgentPrivateSessionContext<String, String> mySessionContext,
+				IGAgentsNetworkRuntimeDao agentsDao) {
 			return new TurnAdditions<String, String>() {
 				@Override
 				public GeboToolCalling toolCalling(GeboToolCalling ofTheTurn) {
@@ -158,32 +159,53 @@ class ReactiveAgentAdapterTurnAdditionsTest {
 	}
 
 	@Test
-	void theAnswersToTheCommandsAreReadInTheSessionAfterTheTurnThatGaveThem() {
-		// turn 3 gave the commands; what the writer said before it is not an answer to them
+	void theAnswersAreReadInTheSharedSessionFromTheFirstTurnThePrivateSessionKeeps() {
+		// the agent's first turn of this run is turn 3: the session remembers an earlier run of
+		// the conversation, whose contributions answer nothing asked in this one
 		session.addContribution(AgentsExchangeMessage.of(session, "the-writer", "the-agent", "An older report.",
 				MessageSemantic.RESPONSE), 2);
 		session.addContribution(AgentsExchangeMessage.of(session, "the-writer", "the-agent", "report.docx written.",
 				MessageSemantic.RESPONSE), 4);
+		session.addContribution(AgentsExchangeMessage.of(session, "someone-else", "the-agent", "Not asked by me.",
+				MessageSemantic.RESPONSE), 4);
 		session.addContribution(AgentsExchangeMessage.of(session, "the-writer", "the-agent", "summary.docx written.",
 				MessageSemantic.RESPONSE), 5);
-		List<IGAgentCommands.Command> commands = List.of(new IGAgentCommands.Command("the-writer", "Write the report."),
-				new IGAgentCommands.Command("the-painter", "Draw the cover."),
-				new IGAgentCommands.Command("the-writer", "Write the summary."));
+		AgentPrivateSessionContext<String, String> mine = new AgentPrivateSessionContext<String, String>();
+		assertNull(AgentAnswersText.firstTurnOf(mine), "no turn made yet");
+		assertEquals(List.of(), AgentAnswersText.answersIn(session, AgentAnswersText.firstTurnOf(mine),
+				List.of("the-writer", "the-painter"), Map.of()), "an agent that asked nothing has no answer");
+		// the network records each message of a turn in the agent's private session
+		mine.addInteraction(null, 3, "Write the report.");
+		mine.addInteraction(null, 3, "Draw the cover.");
+		mine.addInteraction(null, 3, "Write the summary.");
+		assertEquals(3, AgentAnswersText.firstTurnOf(mine));
+		assertEquals(1, AgentAnswersText.turnsOf(mine));
 
-		List<AgentAnswer> answers = AgentAnswersText.answersTo(commands, session, 3);
+		// what the agent asked is known in the run that asked it
+		List<AgentAnswer> answers = AgentAnswersText.answersIn(session, AgentAnswersText.firstTurnOf(mine),
+				List.of("the-writer", "the-painter"), Map.of("the-writer",
+						List.of("Write the report.", "Write the summary."), "the-painter", List.of("Draw the cover.")));
 
 		assertEquals(List.of(new AgentAnswer("the-writer", "Write the report.", "report.docx written."),
-				new AgentAnswer("the-painter", "Draw the cover.", null),
-				new AgentAnswer("the-writer", "Write the summary.", "summary.docx written.")), answers);
+				new AgentAnswer("the-writer", "Write the summary.", "summary.docx written."),
+				new AgentAnswer("the-painter", "Draw the cover.", null)), answers);
 		assertEquals(
 				"You asked the agent the-writer: Write the report.\nThe agent the-writer answered: report.docx written."
-						+ "\n\nYou asked the agent the-painter: Draw the cover.\nThe agent the-painter answered: "
-						+ AgentAnswersText.NO_ANSWER
 						+ "\n\nYou asked the agent the-writer: Write the summary.\nThe agent the-writer answered: "
-						+ "summary.docx written.\n\nWhat is new?",
+						+ "summary.docx written."
+						+ "\n\nYou asked the agent the-painter: Draw the cover.\nThe agent the-painter answered: "
+						+ AgentAnswersText.NO_ANSWER + "\n\nWhat is new?",
 				AgentAnswersText.prepend(answers, "What is new?"));
 		assertEquals("What is new?", AgentAnswersText.prepend(List.of(), "What is new?"));
-		assertEquals(3, session.getSampledContributions().stream().map(AgentProducedSessionContribution::getAgentName)
-				.filter("the-writer"::equals).count());
+
+		// a respawned run has the two sessions back, not what the agent asked: the answers are told all the same
+		List<AgentAnswer> respawned = AgentAnswersText.answersIn(session, AgentAnswersText.firstTurnOf(mine),
+				List.of("the-writer", "the-painter"), null);
+
+		assertEquals(List.of(new AgentAnswer("the-writer", null, "report.docx written."),
+				new AgentAnswer("the-writer", null, "summary.docx written.")), respawned);
+		assertEquals("The agent the-writer answered: report.docx written.\n\n"
+				+ "The agent the-writer answered: summary.docx written.\n\nWhat is new?",
+				AgentAnswersText.prepend(respawned, "What is new?"));
 	}
 }

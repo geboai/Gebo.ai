@@ -36,6 +36,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.model.RuntimeAgentInfos;
+import ai.gebo.architecture.agents.services.AgentAnswersText;
 import ai.gebo.architecture.agents.services.IGAgentCommands;
 import ai.gebo.architecture.agents.services.IGAgentsNetworkRuntimeDao;
 import ai.gebo.architecture.agents.services.IGNetworkAgentService;
@@ -65,7 +66,9 @@ class LoopControllerNetworkAdapterTest {
 	private final IGNetworkOfAgentsSuspensionHandler handler = mock(IGNetworkOfAgentsSuspensionHandler.class);
 	private final Sinks.Many<IGPartialOperation<GeboChatMessageEnvelope>> sink = Sinks.many().unicast()
 			.onBackpressureBuffer();
-	private final LoopControllerNetworkAdapter adapter = new LoopControllerNetworkAdapter(agent, sink);
+	private LoopControllerNetworkAdapter adapter = new LoopControllerNetworkAdapter(agent, sink);
+	/** The controller's private session: the network records each of its turns in it, and a respawn restores it. */
+	private final AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mine = new AgentPrivateSessionContext<String, GeboChatMessageEnvelope>();
 	private final AgentNetworkParticipant me = new AgentNetworkParticipant();
 	private final GAgentConfig config = new GAgentConfig();
 	private final GAgentsNetwork network = new GAgentsNetwork();
@@ -113,13 +116,17 @@ class LoopControllerNetworkAdapterTest {
 				});
 	}
 
+	/** A turn of the controller, as the network runs it: what it sends is recorded in its private session. */
 	private List<AgentsExchangeMessage<GeboChatMessageEnvelope>> turn(int contributionNr) throws Exception {
-		return adapter.onMessage(IChatRequestContext.of(REQUEST), config,
-				AgentsExchangeMessage.of(session, "the-input", me.getNetworkAgentName(), REQUEST,
-						MessageSemantic.EXECUTE_AND_SHARE_RESULT),
-				contributionNr, network, me, state -> {
-				}, session, new AgentPrivateSessionContext<String, GeboChatMessageEnvelope>(), null,
-				IGAgentsNetworkRuntimeDao.of(allocated), RUN_TOOL_CALLING, handler);
+		final AgentsExchangeMessage<String> message = AgentsExchangeMessage.of(session, "the-input",
+				me.getNetworkAgentName(), REQUEST, MessageSemantic.EXECUTE_AND_SHARE_RESULT);
+		final List<AgentsExchangeMessage<GeboChatMessageEnvelope>> sent = adapter.onMessage(
+				IChatRequestContext.of(REQUEST), config, message, contributionNr, network, me, state -> {
+				}, session, mine, null, IGAgentsNetworkRuntimeDao.of(allocated), RUN_TOOL_CALLING, handler);
+		for (AgentsExchangeMessage out : sent) {
+			((AgentPrivateSessionContext) mine).addInteraction(message, contributionNr, out.getPayload());
+		}
+		return sent;
 	}
 
 	private GeboToolCalling toolCallingOf(int execution) {
@@ -167,6 +174,7 @@ class LoopControllerNetworkAdapterTest {
 				+ "You asked the agent spreadsheets: The Q3 figures as a workbook.\n"
 				+ "The agent spreadsheets answered: (no answer: the agent failed, or is still waiting for something)\n\n"
 				+ REQUEST;
+		assertEquals(3, AgentAnswersText.firstTurnOf(mine), "the answers are read after the controller's first turn");
 		assertEquals(told, executions.get(1)[2]);
 		assertEquals(told, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest(),
 				"the loop's model reads the request from the context");
@@ -180,6 +188,43 @@ class LoopControllerNetworkAdapterTest {
 		assertEquals(MessageSemantic.RESPONSE, second.get(0).getMessageSemantic());
 		assertEquals("The deck q3.pptx and the workbook q3.xlsx are ready.",
 				((GeboChatResponse) second.get(0).getPayload().getContent()).getQueryResponse());
+	}
+
+	@Test
+	void aRespawnedRunTellsTheControllerTheAnswersItsSessionsKeep() throws Exception {
+		controllerReaching("presentations", "spreadsheets");
+		// what an earlier run of the conversation left in the session answers nothing asked in this one
+		session.addContribution(AgentsExchangeMessage.of(session, "presentations", "loopController",
+				"An older deck, of another request.", MessageSemantic.RESPONSE), 1);
+		theAgent(toolCalling -> {
+			if (executions.size() == 1) {
+				assertNull(toolCalling.getProvider().get(IGAgentCommands.class).command("presentations",
+						"A deck of three slides on Q3."));
+				return "I asked the presentations agent.";
+			}
+			return "The deck q3.pptx is ready.";
+		});
+
+		turn(3);
+
+		// the presentations agent asks the user a question: the run is suspended, then respawned
+		// in another service - another adapter, nothing in memory - with the shared session, where
+		// the agent's answer is, and the controller's private session, where its turn is
+		session.addContribution(AgentsExchangeMessage.of(session, "presentations", "loopController",
+				"q3.pptx written, in the corporate template the user chose.", MessageSemantic.RESPONSE), 5);
+		adapter = new LoopControllerNetworkAdapter(agent, Sinks.many().unicast().onBackpressureBuffer());
+
+		List<AgentsExchangeMessage<GeboChatMessageEnvelope>> out = turn(6);
+
+		String told = "The agent presentations answered: q3.pptx written, in the corporate template the user chose."
+				+ "\n\n" + REQUEST;
+		assertEquals(told, executions.get(1)[2], "the answer is told, though what was asked is not remembered");
+		assertEquals(told, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest());
+		LoopControllerRun respawned = toolCallingOf(2).getProvider().get(LoopControllerRun.Execution.class).run();
+		assertEquals(1, respawned.loop().iterations(),
+				"the loop goes on after the turn the private session keeps: its iterations are not counted again");
+		assertEquals(1, out.size());
+		assertEquals(MessageSemantic.RESPONSE, out.get(0).getMessageSemantic());
 	}
 
 	@Test

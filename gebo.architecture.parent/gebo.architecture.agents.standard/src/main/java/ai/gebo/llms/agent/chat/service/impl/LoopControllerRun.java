@@ -10,11 +10,15 @@
 package ai.gebo.llms.agent.chat.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.services.AgentAnswersText;
 import ai.gebo.architecture.agents.services.AgentAnswersText.AgentAnswer;
@@ -23,23 +27,26 @@ import ai.gebo.architecture.agents.services.IGAgentCommands;
 import ai.gebo.llms.abstraction.layer.services.ToolCallsListener;
 
 /**
- * What a loop controller keeps over one run of its network, from an execution to the
- * next: the run of its loop (the story of its iterations, its documents, its cycle),
- * the recorder of its tool calls, the commands it gave and is waiting the answers
- * of, the answers it got so far. Made by its adapter, one for each run, and loaded
- * in the tool calling of each execution with the sink of that execution's commands
+ * What a loop controller keeps in memory from an execution to the next, while the
+ * service running its network lives: the run of its loop (the story of its
+ * iterations, its documents, its cycle), the recorder of its tool calls, what it
+ * asked each agent. Made by its adapter, one for each service, and loaded in the
+ * tool calling of each execution with the sink of the commands of that execution
  * ({@link Execution}), where the agent finds it.
  * <p>
- * It lives as long as the run: a run suspended for a person's answer and respawned
- * is another run, whose controller starts its loop over, told what it waited for.
+ * What the agents answered is not kept here: it is read, at each execution, in the
+ * shared session of the network, from the first turn the controller made, which its
+ * private session keeps. A run suspended for a person's answer is respawned in
+ * another service, with those two sessions given back whole: the controller is then
+ * told the same answers, and its loop, whose story was in memory, starts again after
+ * as many iterations as the turns its private session says it made.
  */
 public final class LoopControllerRun {
 	private static final Logger LOGGER = LoggerFactory.getLogger(LoopControllerRun.class);
 	private final AgenticLoopReactiveAgentServiceImpl.LoopRun loop = new AgenticLoopReactiveAgentServiceImpl.LoopRun();
 	private ToolCallsListener calls = null;
-	private final List<AgentAnswer> answers = new ArrayList<AgentAnswer>();
-	private List<IGAgentCommands.Command> pending = List.of();
-	private int pendingSince = -1;
+	/** What the controller asked each agent, by its name, in the order it did: for the answers to be told with it. */
+	private final Map<String, List<String>> asked = new HashMap<String, List<String>>();
 
 	/**
 	 * What the adapter loads in the tool calling of one execution of the agent, for the
@@ -85,31 +92,40 @@ public final class LoopControllerRun {
 		return calls;
 	}
 
-	/** The commands the agent gave in the turn of the given number: their answers are waited. */
-	synchronized void commanded(List<IGAgentCommands.Command> commands, int atTurn) {
-		pending = commands != null ? List.copyOf(commands) : List.of();
-		pendingSince = atTurn;
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("The loop controller waits the answers to " + pending.size() + " command(s) given at turn "
-					+ atTurn);
+	/** The commands the agent gave in an execution: what it asked is remembered, to be told with the answers. */
+	synchronized void commanded(List<IGAgentCommands.Command> commands) {
+		if (commands == null) {
+			return;
+		}
+		for (IGAgentCommands.Command command : commands) {
+			asked.computeIfAbsent(command.toAgent(), k -> new ArrayList<String>())
+					.add(String.valueOf(command.commandData()));
 		}
 	}
 
 	/**
-	 * The answers the agent got so far in the run, the ones to the commands it is
-	 * waiting on read in the session first: every execution going on is told them all.
+	 * What the agents the controller reaches answered so far, as an execution going on
+	 * is told: read in the shared session from the first turn the controller made in the
+	 * run, which its private session keeps, with what it asked when this service
+	 * remembers it. The loop is also made to go on after as many iterations as the turns
+	 * the private session says the controller made, when it ran fewer here: what a
+	 * respawned run finds.
 	 */
-	synchronized List<AgentAnswer> answersSoFar(AgentsCollaborationSessionContext session) {
-		if (!pending.isEmpty()) {
-			final List<AgentAnswer> got = AgentAnswersText.answersTo(pending, session, pendingSince);
-			answers.addAll(got);
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("The loop controller got " + got.stream().filter(x -> x.answer() != null).count()
-						+ " answer(s) to the " + pending.size() + " command(s) given at turn " + pendingSince + ", "
-						+ answers.size() + " so far in the run");
-			}
-			pending = List.of();
+	synchronized List<AgentAnswer> answersSoFar(AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<?, ?> privateSession, Collection<String> reachable) {
+		final int turns = AgentAnswersText.turnsOf(privateSession);
+		if (loop.iterations() < turns) {
+			LOGGER.info("The loop controller made " + turns + " turn(s) in the run its private session keeps and "
+					+ loop.iterations() + " iteration(s) in this service: its loop goes on after " + turns);
+			loop.startAfter(turns);
 		}
-		return List.copyOf(answers);
+		final List<AgentAnswer> answers = AgentAnswersText.answersIn(session,
+				AgentAnswersText.firstTurnOf(privateSession), reachable, asked);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("The loop controller is told " + answers.stream().filter(x -> x.answer() != null).count()
+					+ " answer(s) of the agents " + reachable + " read in the session, "
+					+ answers.stream().filter(x -> x.answer() == null).count() + " request(s) not answered");
+		}
+		return answers;
 	}
 }

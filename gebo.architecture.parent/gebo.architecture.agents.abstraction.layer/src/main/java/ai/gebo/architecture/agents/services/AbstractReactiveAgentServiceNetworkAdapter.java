@@ -96,7 +96,7 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 				suspensionHandler, contextAgentPersona, config);
 		// what the adapter itself adds to the turn: nothing, unless a subclass does
 		final TurnAdditions<RequestType, ResponseType> additions = turnAdditions(msg, actualContributionNr, network,
-				contextAgentPersona, session, agentsDao);
+				contextAgentPersona, session, mySessionContext, agentsDao);
 		final GeboToolCalling callToolCalling = additions.toolCalling(turn.toolCalling());
 		final RequestType request = additions.request(turn.toldInput(msg.getPayload()));
 		Flux<IGPartialOperation<ResponseType>> flux = service.execute(
@@ -195,7 +195,9 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	 */
 	protected TurnAdditions<RequestType, ResponseType> turnAdditions(AgentsExchangeMessage<RequestType> msg,
 			int actualContributionNr, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
-			AgentsCollaborationSessionContext session, IGAgentsNetworkRuntimeDao agentsDao) throws AgentException {
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGAgentsNetworkRuntimeDao agentsDao)
+			throws AgentException {
 		return new TurnAdditions<RequestType, ResponseType>();
 	}
 
