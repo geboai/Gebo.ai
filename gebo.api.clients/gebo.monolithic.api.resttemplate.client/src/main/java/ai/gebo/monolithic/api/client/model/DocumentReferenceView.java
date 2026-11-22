@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-20T06:19:25.937202091+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("name")
@@ -35,11 +35,11 @@ public class DocumentReferenceView {
   @JsonProperty("contentType")
   private String contentType = null;
 
-  @JsonProperty("description")
-  private String description = null;
-
   @JsonProperty("creationDate")
   private Date creationDate = null;
+
+  @JsonProperty("description")
+  private String description = null;
 
   @JsonProperty("code")
   private String code = null;
@@ -119,24 +119,6 @@ public class DocumentReferenceView {
     this.contentType = contentType;
   }
 
-  public DocumentReferenceView description(String description) {
-    this.description = description;
-    return this;
-  }
-
-   /**
-   * Get description
-   * @return description
-  **/
-  @Schema(description = "")
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
   public DocumentReferenceView creationDate(Date creationDate) {
     this.creationDate = creationDate;
     return this;
@@ -153,6 +135,24 @@ public class DocumentReferenceView {
 
   public void setCreationDate(Date creationDate) {
     this.creationDate = creationDate;
+  }
+
+  public DocumentReferenceView description(String description) {
+    this.description = description;
+    return this;
+  }
+
+   /**
+   * Get description
+   * @return description
+  **/
+  @Schema(description = "")
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
   }
 
   public DocumentReferenceView code(String code) {
@@ -312,8 +312,8 @@ public class DocumentReferenceView {
     return Objects.equals(this.name, documentReferenceView.name) &&
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.contentType, documentReferenceView.contentType) &&
-        Objects.equals(this.description, documentReferenceView.description) &&
         Objects.equals(this.creationDate, documentReferenceView.creationDate) &&
+        Objects.equals(this.description, documentReferenceView.description) &&
         Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
         Objects.equals(this.deleted, documentReferenceView.deleted) &&
@@ -326,7 +326,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, extension, contentType, description, creationDate, code, messagingModuleId, deleted, parentProjectCode, rootKnowledgebaseCode, modificationDate, parentVirtualFolderCode, relativePath);
+    return Objects.hash(name, extension, contentType, creationDate, description, code, messagingModuleId, deleted, parentProjectCode, rootKnowledgebaseCode, modificationDate, parentVirtualFolderCode, relativePath);
   }
 
 
@@ -338,8 +338,8 @@ public class DocumentReferenceView {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
-    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    creationDate: ").append(toIndentedString(creationDate)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("    deleted: ").append(toIndentedString(deleted)).append("\n");

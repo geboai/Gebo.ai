@@ -85,6 +85,26 @@ import ai.gebo.security.services.IGeboSystemUserService;
  */
 class GAgentsNetworkDataFlowComponentTest {
 
+	private java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> limitsBefore;
+
+	/** The register names the files sent to the models for the kinds the installation sends: here, all. */
+	@org.junit.jupiter.api.BeforeEach
+	void filesAreSentToTheModels() {
+		limitsBefore = ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.get();
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> on = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		for (ai.gebo.llms.abstraction.layer.model.GModelInputModality kind : ai.gebo.llms.abstraction.layer.model.GModelInputModality
+				.values()) {
+			on.put(kind, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 2, 2, 4, 1500));
+		}
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(on);
+	}
+
+	@org.junit.jupiter.api.AfterEach
+	void limitsAsBefore() {
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(limitsBefore);
+	}
+
 	private static final String AGENTIC = "AGENTIC";
 	private static final String FREE_CHAT = "FREE_CHAT";
 	private static final String MULTI = "MULTI";
@@ -372,6 +392,21 @@ class GAgentsNetworkDataFlowComponentTest {
 		assertEquals(flow.qualifiedId("agent-model-gpt"), files.getDataDestinationId());
 		assertEquals(DataTransformationInfo.Carried.PROCESSED, files.getCarried());
 		assertTrue(files.getDescription().endsWith("as they are (image/*, application/pdf)"), files.getDescription());
+
+		// the installation sends images only: the register names images only
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> imagesOnly = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		imagesOnly.put(ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE,
+				ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 2, 2, 4, 1500));
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(imagesOnly);
+		assertTrue(flowOf(network(FREE_CHAT, "adapter-config", "free-config")).getTransformations().stream()
+				.filter(x -> x.getId().contains("agent-files-")).findFirst().orElseThrow().getDescription()
+				.endsWith("as they are (image/*)"));
+
+		// as shipped, no kind of file is sent: the register has no step about files
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(null);
+		assertTrue(flowOf(network(FREE_CHAT, "adapter-config", "free-config")).getTransformations().stream()
+				.noneMatch(x -> x.getId().contains("agent-files-")));
 	}
 
 	@Test

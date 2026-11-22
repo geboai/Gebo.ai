@@ -10,8 +10,8 @@ Name | Type | Description | Notes
 **workflowId** | **String** |  |  [optional]
 **projectEndpointReference** | [**GObjectRefGProjectEndpoint**](GObjectRefGProjectEndpoint.md) |  |  [optional]
 **startDateTime** | [**Date**](Date.md) |  |  [optional]
-**finished** | **Boolean** |  |  [optional]
 **endDateTime** | [**Date**](Date.md) |  |  [optional]
+**finished** | **Boolean** |  |  [optional]
 **jobType** | [**JobTypeEnum**](#JobTypeEnum) |  |  [optional]
 **processing** | **Boolean** |  |  [optional]
 

@@ -56,6 +56,26 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatMode
  */
 class GStandardChatPipelineDataFlowComponentTest {
 
+	private java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> limitsBefore;
+
+	/** The register names the files sent to the models for the kinds the installation sends: here, all. */
+	@org.junit.jupiter.api.BeforeEach
+	void filesAreSentToTheModels() {
+		limitsBefore = ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.get();
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> on = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		for (ai.gebo.llms.abstraction.layer.model.GModelInputModality kind : ai.gebo.llms.abstraction.layer.model.GModelInputModality
+				.values()) {
+			on.put(kind, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 2, 2, 4, 1500));
+		}
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(on);
+	}
+
+	@org.junit.jupiter.api.AfterEach
+	void limitsAsBefore() {
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(limitsBefore);
+	}
+
 	private ChatProfilesRepository profiles;
 	private IGRuntimeChatProfileChatModelDao profileModels;
 	private IGChatModelRuntimeConfigurationDao chatModels;

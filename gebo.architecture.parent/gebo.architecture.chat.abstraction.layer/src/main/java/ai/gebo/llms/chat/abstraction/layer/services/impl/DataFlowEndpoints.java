@@ -74,8 +74,10 @@ public final class DataFlowEndpoints {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static List<String> sentFileTypes(IGConfigurableChatModel model) {
 		try {
+			// of what the model takes, the kinds of file the installation sends to its models:
+			// with a kind off nothing of it leaves, and the register says nothing of it
 			final List<String> types = model != null ? model.getEffectiveInputMimeTypes() : null;
-			return types != null ? types : List.of();
+			return types != null ? ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(types) : List.of();
 		} catch (RuntimeException e) {
 			return List.of();
 		}

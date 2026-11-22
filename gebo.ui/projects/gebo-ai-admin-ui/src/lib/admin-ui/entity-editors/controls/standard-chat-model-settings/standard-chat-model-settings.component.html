@@ -70,6 +70,10 @@
                     <small class="text-muted-color block"><span id="SentFileTypesLabel" gebo-ai-text>Files sent to this model as they are:</span>
                       {{ sentFileTypes.join(', ') }}</small>
                   }
+                  @if (declaredNotSentText) {
+                    <small class="text-muted-color block"><span id="DeclaredNotSentLabel" gebo-ai-text>Not sent, this installation does not send these kinds of file to its models (settings ai.gebo.*.chat-enabled):</span>
+                      {{ declaredNotSentText }}</small>
+                  }
                   @if (declaredNotCarriedText) {
                     <small class="text-muted-color block"><span id="DeclaredNotCarriedLabel" gebo-ai-text>Not delivered through this provider's integration:</span>
                       {{ declaredNotCarriedText }}</small>

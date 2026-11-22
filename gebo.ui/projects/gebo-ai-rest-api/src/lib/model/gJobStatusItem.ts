@@ -19,8 +19,8 @@ export interface GJobStatusItem {
     workflowId?: string;
     projectEndpointReference?: GObjectRefGProjectEndpoint;
     startDateTime?: Date;
-    finished?: boolean;
     endDateTime?: Date;
+    finished?: boolean;
     jobType?: GJobStatusItem.JobTypeEnum;
     processing?: boolean;
 }

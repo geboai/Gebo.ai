@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGGoogleDriveSystem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-20T06:19:25.937202091+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class OperationStatusGGoogleDriveSystem {
   @JsonProperty("result")

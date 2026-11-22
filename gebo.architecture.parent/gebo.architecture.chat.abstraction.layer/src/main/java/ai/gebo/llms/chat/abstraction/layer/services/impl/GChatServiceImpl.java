@@ -205,7 +205,8 @@ public class GChatServiceImpl extends AbstractChatService implements IGChatServi
 			ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 					supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
 					pipelineCode != null ? pipelineToolsTree(pipelineCode) : List.of(), model.getInputModalities(),
-					model.getEffectiveInputMimeTypes());
+					// the files a request may carry to it: of the kinds the installation sends
+					ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(model.getEffectiveInputMimeTypes()));
 			return cap;
 		}
 		return null;

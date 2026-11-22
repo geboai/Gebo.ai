@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**getCarriedMediaTypes**](ChatModelsControllerApi.md#getCarriedMediaTypes) | **GET** /api/admin/ChatModelsController/getCarriedMediaTypes | 
 [**getChatModelTypes**](ChatModelsControllerApi.md#getChatModelTypes) | **GET** /api/admin/ChatModelsController/getChatModelTypes | 
 [**getChatModelsInputs**](ChatModelsControllerApi.md#getChatModelsInputs) | **GET** /api/admin/ChatModelsController/getChatModelsInputs | 
+[**getFileKindsSentToModels**](ChatModelsControllerApi.md#getFileKindsSentToModels) | **GET** /api/admin/ChatModelsController/getFileKindsSentToModels | 
 [**getRuntimeConfiguredChatModels**](ChatModelsControllerApi.md#getRuntimeConfiguredChatModels) | **GET** /api/admin/ChatModelsController/getRuntimeConfiguredChatModels | 
 
 <a name="applyModelsMetadataInputModalities"></a>
@@ -162,6 +163,45 @@ This endpoint does not need any parameter.
 ### Return type
 
 [**List&lt;ChatModelInputs&gt;**](ChatModelInputs.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getFileKindsSentToModels"></a>
+# **getFileKindsSentToModels**
+> List&lt;String&gt; getFileKindsSentToModels()
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.ChatModelsControllerApi;
+
+
+ChatModelsControllerApi apiInstance = new ChatModelsControllerApi();
+try {
+    List<String> result = apiInstance.getFileKindsSentToModels();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling ChatModelsControllerApi#getFileKindsSentToModels");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**List&lt;String&gt;**
 
 ### Authorization
 

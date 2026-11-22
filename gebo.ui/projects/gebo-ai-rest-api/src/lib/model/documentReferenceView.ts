@@ -14,8 +14,8 @@ export interface DocumentReferenceView {
     name?: string;
     extension?: string;
     contentType?: string;
-    description?: string;
     creationDate?: Date;
+    description?: string;
     code?: string;
     messagingModuleId?: string;
     deleted?: boolean;

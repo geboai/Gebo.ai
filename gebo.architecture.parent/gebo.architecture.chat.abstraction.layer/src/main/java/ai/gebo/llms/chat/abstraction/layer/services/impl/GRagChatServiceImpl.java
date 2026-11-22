@@ -248,7 +248,8 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 						supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
 						pipelineToolsTree(pipelineCode), model.getInputModalities(),
-						model.getEffectiveInputMimeTypes());
+						// the files a request may carry to it: of the kinds the installation sends
+						ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(model.getEffectiveInputMimeTypes()));
 				return cap;
 			}
 		}

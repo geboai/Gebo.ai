@@ -105,11 +105,26 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
         const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
         const carried = this.carriedMediaTypes;
         if (!carried) return [];
+        const sent = (kind: string) => declared.includes(kind) && this.kindsSentToModels.includes(kind);
         return [
-            ...(declared.includes("IMAGE") ? carried.image ?? [] : []),
-            ...(declared.includes("AUDIO") ? carried.audio ?? [] : []),
-            ...(declared.includes("VIDEO") ? carried.video ?? [] : []),
-            ...(declared.includes("DOCUMENT") ? carried.document ?? [] : [])];
+            ...(sent("IMAGE") ? carried.image ?? [] : []),
+            ...(sent("AUDIO") ? carried.audio ?? [] : []),
+            ...(sent("VIDEO") ? carried.video ?? [] : []),
+            ...(sent("DOCUMENT") ? carried.document ?? [] : [])];
+    }
+
+    /** The kinds of file the installation sends to its chat models (its settings): a file of another kind reaches no model. */
+    protected kindsSentToModels: string[] = [];
+
+    /** The labels of the declared modalities the integration carries but the installation does not send. */
+    protected get declaredNotSentText(): string {
+        const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
+        const carried = this.carriedMediaTypes;
+        if (!carried) return "";
+        const of: { [key: string]: string[] | undefined } = { IMAGE: carried.image, AUDIO: carried.audio, VIDEO: carried.video, DOCUMENT: carried.document };
+        return this.inputModalityOptions.filter(o => o.value !== "TEXT" && declared.includes(o.value) && !!(of[o.value]?.length)
+            && !this.kindsSentToModels.includes(o.value))
+            .map(o => o.label).join(", ");
     }
 
     /** The labels of the declared modalities this provider's integration carries nothing for. */
@@ -143,6 +158,13 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
         this.translations.translateMenuItems("GeboAIStandardChatModelModule", "GeboAIStandardChatModelSettings",
             this.inputModalityOptions as any[])
             .subscribe(items => this.inputModalityOptions = [...items] as { id: string, label: string, value: string }[]);
+        this.chatModelsController.getFileKindsSentToModels().subscribe({
+            next: (kinds) => {
+                this.kindsSentToModels = [...(kinds ?? [])];
+                this.changeDetector.markForCheck();
+            },
+            error: () => { this.kindsSentToModels = []; }
+        });
     }
 
     /** The labels of what the model's metadata says it accepts, in the options' order. */

@@ -3136,6 +3136,7 @@
       "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. A file goes to the model as it is when the model accepts its kind here and this provider's integration can deliver its type." },
       "SentFileTypesLabel": { "label": "Files sent to this model as they are:" },
       "DeclaredNotCarriedLabel": { "label": "Not delivered through this provider's integration:" },
+      "DeclaredNotSentLabel": { "label": "Not sent, this installation does not send these kinds of file to its models (settings ai.gebo.*.chat-enabled):" },
       "ModelInputModalitiesLabel": { "label": "The model's metadata says:" },
       "UseModelInputModalities": { "label": "use these" },
       "TextInputOption": { "label": "Text" },

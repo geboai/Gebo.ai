@@ -140,6 +140,24 @@ public class ChatModelsController {
     }
 
     /**
+     * The kinds of file the installation sends to its chat models as they are (the
+     * settings ai.gebo.images.chat-enabled, ai.gebo.recordings.chat-enabled,
+     * ai.gebo.videos.chat-enabled, ai.gebo.documents.chat-enabled): a file of another
+     * kind reaches no model, whatever the model accepts.
+     */
+    @GetMapping(value = "getFileKindsSentToModels", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<GModelInputModality> getFileKindsSentToModels() {
+        List<GModelInputModality> kinds = new ArrayList<GModelInputModality>();
+        for (GModelInputModality kind : GModelInputModality.values()) {
+            if (kind != GModelInputModality.TEXT && ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.of(kind).enabled()
+                    && ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.of(kind).maxFiles() > 0) {
+                kinds.add(kind);
+            }
+        }
+        return kinds;
+    }
+
+    /**
      * Gives the configurations that declare no input modalities what the metadata stored
      * with their model know: a configuration made before the modalities existed is text
      * only until someone acts, and this is that act, once for all of them. A
@@ -185,7 +203,8 @@ public class ChatModelsController {
         inputs.setMetadataInputModalities(
                 IGChatModelConfigurationSupportService.inputModalitiesOf(config.getChoosedModel()));
         inputs.setCarriedMediaTypes(model.getCarriedMediaTypes());
-        inputs.setEffectiveInputMimeTypes(model.getEffectiveInputMimeTypes());
+        // what a request may actually carry: carried, declared, and of a kind the installation sends
+        inputs.setEffectiveInputMimeTypes(ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(model.getEffectiveInputMimeTypes()));
         inputs.setDeclaredNotCarried(
                 GModelMediaGuard.declaredNotCarried(model.getInputModalities(), model.getCarriedMediaTypes()));
         return inputs;

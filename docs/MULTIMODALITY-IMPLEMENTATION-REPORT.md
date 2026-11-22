@@ -58,7 +58,7 @@ Two readers were added independently of the switches: PowerPoint (`.ppt`, `.pptx
 
 ### 1.6 The compliance register
 
-The data-flow register names the new movements of data: the files sent as they are to the responder model of a chat profile, to the models of a direct chat (a new entry), to the models of the agents of a network, and the models that images, recordings and videos leave the installation for during vectorization.
+The data-flow register names the new movements of data: the files sent as they are to the responder model of a chat profile, to the models of a direct chat (a new entry), to the models of the agents of a network, and the models that images, recordings and videos leave the installation for during vectorization. The files sent to chat models are named only for the kinds the installation sends: with every switch off the register has no such step. The same holds for the file types a chat reports for its model and for the effective input types the administration shows.
 
 ---
 
@@ -289,10 +289,11 @@ The administrator can see, for every configured chat model, what it takes as inp
 Three endpoints are added, with an injected `IGPersistentObjectManager` and a logger.
 
 - `GET getChatModelsInputs` returns a `ChatModelInputs` for every configured chat model that has a configuration.
+- `GET getFileKindsSentToModels` returns the kinds of file (`IMAGE`, `AUDIO`, `VIDEO`, `DOCUMENT`) the installation sends to its chat models, read from `GModelFilesDelivery`; the model editor uses it.
 - `GET getCarriedMediaTypes` takes `modelTypeCode` and an optional `modelCode`, finds the support service of that model type and returns its `carriedMediaTypes(modelCode)`, or `GModelCarriedMediaTypes.none()` when the type is unknown.
 - `POST applyModelsMetadataInputModalities` goes through the configured chat models; it skips a configuration that already declares something and one whose metadata know nothing; for the others it sets the known modalities and updates the configuration. A failure on one configuration is logged and reported as an error message without stopping the others. It returns an `OperationStatus` holding the configurations changed, as they are now.
 
-The private method `inputsOf(model)` fills a `ChatModelInputs` from the configuration and the running model, using `GModelMediaGuard.declaredNotCarried` for the last field.
+The private method `inputsOf(model)` fills a `ChatModelInputs` from the configuration and the running model, using `GModelMediaGuard.declaredNotCarried` for the last field. The effective input MIME types are those of `GModelFilesDelivery.delivered(..)`, so they are empty while the installation sends no kind of file.
 
 #### `ChatModelInputs` (new) — gebo.architecture.parent/gebo.architecture.llms.abstraction.layer.controllers/src/main/java/ai/gebo/llms/abstraction/layer/controllers/model/ChatModelInputs.java
 
@@ -462,10 +463,10 @@ A `@Service` with `@Order(110)` implementing two interfaces of `gebo.architectur
 The inner `GeneratedLocation` is read-only (`isWritable()` false; `write` throws `UnsupportedOperationException` telling to write into a writable library). `byName()` lists the conversation's generated resources in order of creation under unique names: the file name without folders, with the stored extension appended when missing, or an extension derived from the MIME type for resources stored without one; a duplicate name becomes `name (2).ext`, `name (3).ext` and so on. `list` accepts only the root folder (the location has no folders); `describe` and `read` resolve a name through `byName()`; `read` throws an `IllegalArgumentException` that lists the existing names when the file is unknown. `fileOf` refuses a path that would leave the conversation's folder. The version string of a described file is built from size and modification time.
 
 #### `DataFlowEndpoints` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/DataFlowEndpoints.java
-A static helper `sentFileTypes(IGConfigurableChatModel)` was added. It returns `model.getEffectiveInputMimeTypes()`, or an empty list for a null model, a null answer or a runtime exception. The three data-flow components (profile chats, direct chats, agents networks) use it to decide whether to register a "files sent as they are" step.
+A static helper `sentFileTypes(IGConfigurableChatModel)` was added. It returns `model.getEffectiveInputMimeTypes()` filtered by `GModelFilesDelivery.delivered(..)` (only the kinds the installation sends), or an empty list for a null model, a null answer or a runtime exception. The three data-flow components (profile chats, direct chats, agents networks) use it to decide whether to register a "files sent as they are" step.
 
 #### `GChatServiceImpl` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/GChatServiceImpl.java
-The `ModelProviderCapabilities` it builds for a direct chat now uses the new constructor, passing `model.getInputModalities()` and `model.getEffectiveInputMimeTypes()`.
+The `ModelProviderCapabilities` it builds for a direct chat now uses the new constructor, passing `model.getInputModalities()` and `model.getEffectiveInputMimeTypes()`. The MIME types are filtered by `GModelFilesDelivery.delivered(..)`.
 
 #### `GRagChatServiceImpl` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/GRagChatServiceImpl.java
 The same change as in `GChatServiceImpl`, for a chat with a profile.
@@ -917,7 +918,7 @@ Path: `gebo.ui/projects/gebo-ai-admin-ui`
 Changes the `help` text of the `inputModalities` field and adds two conditional `<small>` lines: `SentFileTypesLabel` followed by `sentFileTypes.join(', ')` and `DeclaredNotCarriedLabel` followed by `declaredNotCarriedText`.
 
 #### `standard-chat-model-settings.component.ts` (modified) — `src/lib/admin-ui/entity-editors/controls/standard-chat-model-settings/standard-chat-model-settings.component.ts`
-`GeboAIStandardChatModelSettings` now injects `ChatModelsControllerService` and `ChangeDetectorRef`. The field `carriedMediaTypes` (`GModelCarriedMediaTypes`) holds what the provider's integration delivers by modality. The getter `sentFileTypes` returns the carried MIME types of the modalities the form declares (`IMAGE`, `AUDIO`, `VIDEO`, `DOCUMENT`); the getter `declaredNotCarriedText` returns the labels of the declared non-text modalities with no carried type. `loadCarriedMediaTypes(modelCode)` calls `getCarriedMediaTypes(modelTypeCode, modelCode)` once per model type and model pair and marks the view for check; on error it clears the value. `notifyChoosedModelChange(..)` now also receives the model `code` and triggers that load.
+`GeboAIStandardChatModelSettings` now injects `ChatModelsControllerService` and `ChangeDetectorRef`. The field `carriedMediaTypes` (`GModelCarriedMediaTypes`) holds what the provider's integration delivers by modality. The getter `sentFileTypes` returns the carried MIME types of the modalities the form declares (`IMAGE`, `AUDIO`, `VIDEO`, `DOCUMENT`); the getter `declaredNotCarriedText` returns the labels of the declared non-text modalities with no carried type. `loadCarriedMediaTypes(modelCode)` calls `getCarriedMediaTypes(modelTypeCode, modelCode)` once per model type and model pair and marks the view for check; on error it clears the value. `notifyChoosedModelChange(..)` now also receives the model `code` and triggers that load. It also loads `kindsSentToModels` once with `getFileKindsSentToModels()`: `sentFileTypes` lists only the kinds sent, and the getter `declaredNotSentText` names the declared kinds the integration carries but the installation does not send, shown under the label `DeclaredNotSentLabel`.
 
 #### `gebo-ai-mcp-server-admin.component.html` (modified) — `src/lib/admin-ui/entity-editors/gebo-ai-mcp-server-admin/gebo-ai-mcp-server-admin.component.html`
 The description paragraph of the network tools gains the sentence on chat profiles; the table gets the header `NetworkToolChatProfileHeader` and a cell showing `item.chatProfileCode`; the empty-message cell spans four columns; the add row is re-proportioned (columns 4, 3, 3, 2) to fit a new `gebo-ai-field` `newNetworkToolChatProfile` bound to `newNetworkTool.chatProfileCode`, with a help text explaining the behaviour.
@@ -981,7 +982,7 @@ Both generated clients were regenerated from the backend's OpenAPI description a
 
 **New operations:**
 
-- `ChatModelsController`: `getChatModelsInputs` (GET `/api/admin/ChatModelsController/getChatModelsInputs`), `getCarriedMediaTypes(modelTypeCode, modelCode)` (GET `.../getCarriedMediaTypes`), `applyModelsMetadataInputModalities` (POST `.../applyModelsMetadataInputModalities`).
+- `ChatModelsController`: `getChatModelsInputs` (GET `/api/admin/ChatModelsController/getChatModelsInputs`), `getCarriedMediaTypes(modelTypeCode, modelCode)` (GET `.../getCarriedMediaTypes`), `applyModelsMetadataInputModalities` (POST `.../applyModelsMetadataInputModalities`), `getFileKindsSentToModels` (GET `.../getFileKindsSentToModels`).
 - `GeboUserChatUploadsController`: `chatSessionCreateWithUpload(chatModelCode, files)` and `ragChatSessionCreateWithUpload(chatProfileCode, files)` (POST under `/api/users/GeboUserChatUploadsController/`), both answering `OperationStatusUploadsWithNewChat`.
 
 **New properties on existing models:** `GChatUploadFileTypes.modelMimeTypes`; `GeboMCPAgentsNetworkTool.chatProfileCode`; `ModelMetaInfo.outputModalities`; `ModelProviderCapabilities.inputModalities` and `inputMimeTypes`.
