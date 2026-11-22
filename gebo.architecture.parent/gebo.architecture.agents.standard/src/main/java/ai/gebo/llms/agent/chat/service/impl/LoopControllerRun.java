@@ -114,6 +114,17 @@ public final class LoopControllerRun {
 	 */
 	synchronized List<AgentAnswer> answersSoFar(AgentsCollaborationSessionContext session,
 			AgentPrivateSessionContext<?, ?> privateSession, Collection<String> reachable) {
+		return answersSoFar(session, privateSession, reachable, null);
+	}
+
+	/**
+	 * The same, with what the controller itself settled with the user in the run: after
+	 * a respawn it goes on from its request, which may still say to ask.
+	 *
+	 * @param self the network name of the controller
+	 */
+	synchronized List<AgentAnswer> answersSoFar(AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<?, ?> privateSession, Collection<String> reachable, String self) {
 		final int turns = AgentAnswersText.turnsOf(privateSession);
 		if (loop.iterations() < turns) {
 			LOGGER.info("The loop controller made " + turns + " turn(s) in the run its private session keeps and "
@@ -121,7 +132,7 @@ public final class LoopControllerRun {
 			loop.startAfter(turns);
 		}
 		final List<AgentAnswer> answers = AgentAnswersText
-				.answersIn(session, AgentAnswersText.firstTurnOf(privateSession), reachable, asked).stream()
+				.answersIn(session, AgentAnswersText.firstTurnOf(privateSession), reachable, asked, self).stream()
 				.map(x -> new AgentAnswer(x.agent(), null, x.answer())).toList();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("The loop controller is told " + answers.stream().filter(x -> x.answer() != null).count()

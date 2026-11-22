@@ -228,6 +228,40 @@ class LoopControllerNetworkAdapterTest {
 	}
 
 	@Test
+	void aControllerThatAskedTheUserIsToldAtItsLaterTurnsWhatWasSettled() throws Exception {
+		controllerReaching("presentations");
+		theAgent(toolCalling -> {
+			if (executions.size() == 1) {
+				assertNull(toolCalling.getProvider().get(IGAgentCommands.class).command("presentations",
+						"A deck of three slides on Q3."));
+				return "I asked the presentations agent.";
+			}
+			return "The deck q3.pptx is ready.";
+		});
+
+		turn(3);
+
+		// the run had been respawned on the user's answer to a question of the controller: the
+		// platform keeps in the session, under the controller's name, that it is settled
+		final String settled = "Already settled, do not ask for it again. Agent " + me.getNetworkAgentName()
+				+ " waited for: Which template?\nThe corporate one.";
+		session.addContribution(AgentsExchangeMessage.of(session, me.getNetworkAgentName(), null, settled,
+				MessageSemantic.RESPONSE), 4);
+		// something the controller said of its work is not a settled note: not told back to it
+		session.addContribution(AgentsExchangeMessage.of(session, me.getNetworkAgentName(), null,
+				"Something I said before.", MessageSemantic.RESPONSE), 5);
+		session.addContribution(AgentsExchangeMessage.of(session, "presentations", me.getNetworkAgentName(),
+				"q3.pptx written.", MessageSemantic.RESPONSE), 6);
+
+		turn(7);
+
+		String told = settled + "\n\n" + "The agent presentations said: q3.pptx written." + "\n\n" + REQUEST;
+		assertEquals(told, executions.get(1)[2],
+				"its request may still say to ask: it is told the question was asked and answered");
+		assertEquals(told, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest());
+	}
+
+	@Test
 	void executedAgainTheControllerIsGivenItsRequestEvenWhenNoAgentSaidAnything() throws Exception {
 		controllerReaching("presentations");
 		theAgent(toolCalling -> "The answer.");

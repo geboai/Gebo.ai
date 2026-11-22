@@ -103,8 +103,9 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 		final String self = contextAgentPersona.getNetworkAgentName();
 		// executed again on the message it sent itself after handing work over
 		final boolean executedAgain = self.equals(msg.getFromAgent());
-		// what the agents answered so far is read in the two sessions: a respawned run has them back
-		final List<AgentAnswer> answers = run.answersSoFar(session, mySessionContext, reachable);
+		// what the agents answered so far is read in the two sessions: a respawned run has them
+		// back, with what the controller itself settled with the user
+		final List<AgentAnswer> answers = run.answersSoFar(session, mySessionContext, reachable, self);
 		final GAgentCommandsSink commands = new GAgentCommandsSink(reachable);
 		final List<ToolCallback> tools = AgentCommandTools.of(contextAgentPersona, agentsDao);
 		if (LOGGER.isDebugEnabled()) {
