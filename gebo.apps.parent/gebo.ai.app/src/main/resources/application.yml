@@ -455,6 +455,11 @@ ai.gebo.a2a.server.linked-files-hosts:
 #    an image file, the pictures inside Word, PowerPoint, Excel, OpenDocument and web page
 #    files, a PDF page without text (rendered); a recording file; a video file. No model is
 #    called while reading or chunking. All off when not set.
+#    The same switches make a Gebo document (GeboDocument) complete of its media: a source read
+#    into one carries its images, recordings and videos as fragments with their content type and
+#    their bytes in BASE64, and a Gebo document holding such fragments is ingested with them.
+#    A web page also gives the media it names by an address (img, audio, video): each is fetched
+#    with a plain GET, and one that is not reachable is omitted - the page is read all the same.
 ai.gebo.images.ingestion-enabled: false
 # the images of one document taken at most, and the size of one image, in megabytes
 ai.gebo.images.max-images-per-document: 30

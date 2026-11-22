@@ -105,21 +105,56 @@ public final class GeboDocument implements JSonDuplicableObject<GeboDocument> {
 	private List<CatalogingLabel> catalogingLabel = new ArrayList<>();
 
 	/**
-	 * Attempts to add media to the document, throwing an exception since it's not
-	 * implemented.
-	 * 
-	 * @param name            Name of the media.
-	 * @param type            Type of the media.
-	 * @param subtype         Subtype of the media.
-	 * @param subtypeSuffix   Suffix for the media subtype.
-	 * @param charset
-	 * @param dataAsByteArray Byte array of the media data.
-	 * @throws MethodNotFoundException when called, as implementation is missing.
+	 * Adds a media to the document by the parts of its MIME type; see
+	 * {@link #addMedia(String, String, byte[])}.
 	 */
 	public void tryAddMedia(String name, String type, String subtype, String subtypeSuffix, Charset charset,
 			byte[] dataAsByteArray) {
-		// throw new MethodNotFoundException("The method tryAddMedia have to be
-		// implemented");
+		if (type == null || subtype == null) {
+			return;
+		}
+		addMedia(name, type + "/" + subtype, dataAsByteArray);
+	}
+
+	/**
+	 * Adds a media to the document as a fragment of its kind - an image among the
+	 * images, a recording among the audios, a video among the videos, anything else
+	 * among the media - holding its bytes encoded in BASE64 and its content type.
+	 *
+	 * @param name        the name of the media in the document, may be null
+	 * @param contentType the MIME type of the media, as image/png
+	 * @param data        the bytes of the media
+	 * @return the fragment added, or null when there is no type or no bytes
+	 */
+	public GeboBinaryDocumentFragment addMedia(String name, String contentType, byte[] data) {
+		if (contentType == null || contentType.isBlank() || data == null || data.length == 0) {
+			return null;
+		}
+		String type = contentType.trim().toLowerCase(java.util.Locale.ROOT);
+		if (type.indexOf(';') > 0) {
+			type = type.substring(0, type.indexOf(';')).trim();
+		}
+		final GeboBinaryDocumentFragment fragment;
+		if (type.startsWith("image/")) {
+			final GeboImageDocumentFragment image = new GeboImageDocumentFragment();
+			images.add(image);
+			fragment = image;
+		} else if (type.startsWith("audio/")) {
+			final GeboAudioDocumentFragment audio = new GeboAudioDocumentFragment();
+			audios.add(audio);
+			fragment = audio;
+		} else if (type.startsWith("video/")) {
+			final GeboVideoDocumentFragment video = new GeboVideoDocumentFragment(
+					AbstractGeboDocumentFragment.DocumentFragmentType.VIDEO);
+			videos.add(video);
+			fragment = video;
+		} else {
+			final GeboMediaDocumentFragment other = new GeboMediaDocumentFragment();
+			media.add(other);
+			fragment = other;
+		}
+		fragment.setBytes(name, type, data);
+		return fragment;
 	}
 
 	static public GeboDocument of(String text) {

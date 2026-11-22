@@ -54,6 +54,8 @@ public class GeboBinaryDocumentFragment extends AbstractGeboDocumentFragment {
             throws IOException {
         this(docType);
         this.name = name;
+        // the type of the media: without it nobody knows how to read the bytes
+        this.contentType = contentType;
         Base64.Encoder encoder = Base64.getEncoder();
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         // Copy content from InputStream to ByteArrayOutputStream
@@ -70,6 +72,15 @@ public class GeboBinaryDocumentFragment extends AbstractGeboDocumentFragment {
      * @return an InputStream of the decoded document content.
      * @throws IOException if the content is not available or decoding fails.
      */
+    /**
+     * Sets the bytes of the media, kept encoded in BASE64, with their type and name.
+     */
+    public void setBytes(String name, String contentType, byte[] data) {
+        this.name = name;
+        this.contentType = contentType;
+        this.content = data != null ? Base64.getEncoder().encodeToString(data) : null;
+    }
+
     @Override
     public InputStream streamContent() throws IOException {
         if (content == null || content.trim().length() == 0)

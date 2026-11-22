@@ -166,6 +166,133 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 		return imagesConfig != null && imagesConfig.isIngestionEnabled();
 	}
 
+	/** The settings of the images taken, null when images are not configured (a unit test). */
+	protected ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig() {
+		return imagesConfig;
+	}
+
+	/** The switches and limits of recordings and videos; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig;
+
+	public void setMediaConfig(ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig) {
+		this.mediaConfig = mediaConfig;
+	}
+
+	protected ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig() {
+		return mediaConfig;
+	}
+
+	/** Whether the recordings met inside a document are given as media. */
+	protected boolean ingestsRecordings() {
+		return mediaConfig != null && mediaConfig.isRecordingsEnabled();
+	}
+
+	/** Whether the videos met inside a document are given as media. */
+	protected boolean ingestsVideos() {
+		return mediaConfig != null && mediaConfig.isVideosEnabled();
+	}
+
+	/** Whether any kind of media is given beside the texts. */
+	protected boolean ingestsAnyMedia() {
+		return ingestsImages() || ingestsRecordings() || ingestsVideos();
+	}
+
+	/**
+	 * The whole document: its texts and, for the kinds of media the installation
+	 * ingests (ai.gebo.images.ingestion-enabled, ai.gebo.recordings.ingestion-enabled,
+	 * ai.gebo.videos.ingestion-enabled), its media as fragments of their kind, each with
+	 * its content type and its bytes encoded in BASE64, within the same limits as the
+	 * ingestion. With every kind off it is the text only document, as it always was.
+	 */
+	@Override
+	public GeboDocument handleDocument(GDocumentReference reference, InputStream is,
+			Map<String, Object> manageMetainfo) throws GeboIngestionException, IOException {
+		if (!ingestsAnyMedia()) {
+			return handleTextOnlyContent(reference, is, manageMetainfo);
+		}
+		if (hasItsOwnTextOnlyForm()) {
+			// a reader that gives its text in a form of its own (a web page, a JSON file):
+			// that form is kept, and the media the reader finds are added to it
+			final byte[] bytes = is.readAllBytes();
+			try {
+				is.close();
+			} catch (IOException ignored) {
+				// already read
+			}
+			final GeboDocument doc = handleTextOnlyContent(reference, new java.io.ByteArrayInputStream(bytes),
+					manageMetainfo);
+			if (doc != null) {
+				try (Stream<Document> stream = handleContent(reference, new java.io.ByteArrayInputStream(bytes),
+						new java.util.HashMap<>(manageMetainfo != null ? manageMetainfo : new java.util.HashMap<>()))) {
+					if (stream != null) {
+						stream.filter(x -> !x.isText()).forEach(x -> addMediaFragment(doc, x));
+					}
+				} catch (RuntimeException unreadable) {
+					LOGGER.warn("The media of " + reference.getCode() + " could not be read, its text is given: "
+							+ unreadable);
+				}
+			}
+			return doc;
+		}
+		final GeboDocument doc = toDocument(reference, manageMetainfo);
+		final Stream<Document> stream = handleContent(reference, is, manageMetainfo);
+		if (stream != null) {
+			stream.forEach(x -> {
+				if (x.isText()) {
+					if (x.getText() != null && x.getText().trim().length() > 0) {
+						doc.getTexts().add(GeboTextDocumentFragment.plainText(x.getText()));
+					}
+				} else {
+					addMediaFragment(doc, x);
+				}
+			});
+		}
+		return doc;
+	}
+
+	/** Whether this reader overrides the text only form of the document. */
+	private boolean hasItsOwnTextOnlyForm() {
+		try {
+			return getClass().getMethod("handleTextOnlyContent", GDocumentReference.class, InputStream.class, Map.class)
+					.getDeclaringClass() != GAbstractConfiguredHandler.class;
+		} catch (NoSuchMethodException | SecurityException e) {
+			return false;
+		}
+	}
+
+	/** A media document of the reader as a fragment of the document, with what tells where it was. */
+	private void addMediaFragment(GeboDocument doc, Document mediaDocument) {
+		try {
+			final org.springframework.ai.content.Media media = mediaDocument.getMedia();
+			if (media == null || media.getMimeType() == null) {
+				return;
+			}
+			final Map<String, Object> meta = mediaDocument.getMetadata();
+			final Object givenName = meta != null
+					? meta.get(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA)
+					: null;
+			final ai.gebo.document.model.GeboBinaryDocumentFragment fragment = doc.addMedia(
+					givenName != null ? givenName.toString() : null,
+					media.getMimeType().getType() + "/" + media.getMimeType().getSubtype(),
+					media.getDataAsByteArray());
+			if (fragment == null) {
+				return;
+			}
+			fragment.setUniqueCode(mediaDocument.getId());
+			if (meta != null && meta.get(DocumentMetaInfos.CONTENT_PAGE) != null) {
+				fragment.getCustomMetaData().put(DocumentMetaInfos.CONTENT_PAGE,
+						meta.get(DocumentMetaInfos.CONTENT_PAGE));
+			}
+			if (givenName != null) {
+				fragment.getCustomMetaData()
+						.put(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA, givenName);
+			}
+		} catch (RuntimeException unreadable) {
+			LOGGER.warn("A media of " + doc.getId() + " could not be added to its document: " + unreadable);
+		}
+	}
+
 	/**
 	 * The images found in a document, each as a document of its own holding the
 	 * image as media, with the metadata of the document's texts, the page or slide it
