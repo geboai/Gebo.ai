@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.ToolCallback;
 
 import ai.gebo.architecture.agents.model.AgentPrivateSessionContext;
+import ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition;
 import ai.gebo.architecture.agents.model.AgentsCollaborationSessionContext;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage;
 import ai.gebo.architecture.agents.model.AgentsExchangeMessage.MessageSemantic;
@@ -24,6 +25,7 @@ import ai.gebo.architecture.agents.model.GAgentsNetwork;
 import ai.gebo.architecture.agents.model.GAgentsNetwork.AgentNetworkParticipant;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.AgentAnswersText;
+import ai.gebo.architecture.agents.services.ResolvedConditionText;
 import ai.gebo.architecture.agents.services.AgentAnswersText.AgentAnswer;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.architecture.agents.services.GAgentCommandsSink;
@@ -105,11 +107,17 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 		final boolean executedAgain = self.equals(msg.getFromAgent());
 		// what the agents answered so far is read in the two sessions: a respawned run has them back
 		final List<AgentAnswer> answers = run.answersSoFar(session, mySessionContext, reachable);
+		// what the controller itself settled with the user in the run, as its private session
+		// keeps it. The platform tells it so at the turn it is re-executed on with the answer;
+		// at the turns after that one it goes on from its request, which may still say to
+		// ask, and with nothing said it asked again once the agents had answered
+		final List<AgentSuspendedWaitingCondition> settled = executedAgain ? settledBy(mySessionContext) : List.of();
 		final GAgentCommandsSink commands = new GAgentCommandsSink(reachable);
 		final List<ToolCallback> tools = AgentCommandTools.of(contextAgentPersona, agentsDao);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Loop controller adapter id:" + getId() + " agent:" + self + " turn " + actualContributionNr
-					+ " may command " + reachable + ", told " + answers.size() + " answer(s) of the run so far");
+					+ " may command " + reachable + ", told " + answers.size() + " answer(s) of the run so far and "
+					+ settled.size() + " condition(s) it settled with the user");
 		}
 		return new TurnAdditions<String, GeboChatMessageEnvelope>() {
 			@Override
@@ -121,7 +129,7 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 
 			@Override
 			public String request(String ofTheTurn) {
-				return AgentAnswersText.prepend(answers, ofTheTurn);
+				return ResolvedConditionText.prepend(settled, AgentAnswersText.prepend(answers, ofTheTurn));
 			}
 
 			/**
@@ -161,5 +169,13 @@ public class LoopControllerNetworkAdapter extends ReportWriterReactiveAgentServi
 				return out;
 			}
 		};
+	}
+
+	/** What the agent waited for and got in the run, as its private session keeps it. */
+	@SuppressWarnings("rawtypes")
+	private static List<AgentSuspendedWaitingCondition> settledBy(AgentPrivateSessionContext<?, ?> privateSession) {
+		return privateSession != null && privateSession.getSolvedConditions() != null
+				? new ArrayList<AgentSuspendedWaitingCondition>(privateSession.getSolvedConditions())
+				: List.of();
 	}
 }

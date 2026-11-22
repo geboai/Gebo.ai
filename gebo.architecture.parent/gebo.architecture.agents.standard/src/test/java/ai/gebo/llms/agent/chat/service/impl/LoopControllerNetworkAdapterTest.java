@@ -228,6 +228,45 @@ class LoopControllerNetworkAdapterTest {
 	}
 
 	@Test
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	void aControllerThatAskedTheUserIsToldAtItsLaterTurnsWhatWasSettled() throws Exception {
+		controllerReaching("presentations");
+		theAgent(toolCalling -> {
+			if (executions.size() == 1) {
+				assertNull(toolCalling.getProvider().get(IGAgentCommands.class).command("presentations",
+						"A deck of three slides on Q3."));
+				return "I asked the presentations agent.";
+			}
+			return "The deck q3.pptx is ready.";
+		});
+		// the run was respawned on the user's answer to a question of the controller: its private
+		// session keeps what it waited for and got
+		final ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object> settled = new ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "which template?", "the deck needs one", null, true);
+		settled.setInstanceValue("the corporate one");
+		((AgentPrivateSessionContext) mine).addSolvedConditions(List.of(settled));
+
+		// re-executed on the message it asked on, with the answer: the platform tells it there
+		turn(3);
+		assertEquals(REQUEST, executions.get(0)[2], "nothing added by the adapter at that turn");
+
+		session.addContribution(AgentsExchangeMessage.of(session, "presentations", me.getNetworkAgentName(),
+				"q3.pptx written.", MessageSemantic.RESPONSE), 5);
+		// executed again on its own message once the agent answered: its request may still say to ask
+		final AgentsExchangeMessage<String> again = AgentsExchangeMessage.of(session, me.getNetworkAgentName(),
+				me.getNetworkAgentName(), REQUEST, MessageSemantic.EXECUTE_AND_SHARE_RESULT);
+		adapter.onMessage(IChatRequestContext.of("the corporate one"), config, again, 6, network, me, state -> {
+		}, session, mine, null, IGAgentsNetworkRuntimeDao.of(allocated), RUN_TOOL_CALLING, handler);
+
+		final String told = ai.gebo.architecture.agents.services.ResolvedConditionText.prepend(
+				List.of((ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition) settled),
+				"The agent presentations said: q3.pptx written." + "\n\n" + REQUEST);
+		assertTrue(told.contains("which template?") && told.contains("the corporate one"), told);
+		assertEquals(told, executions.get(1)[2], "it is told the question was asked and what was answered");
+		assertEquals(told, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest());
+	}
+
+	@Test
 	void executedAgainTheControllerIsGivenItsRequestEvenWhenNoAgentSaidAnything() throws Exception {
 		controllerReaching("presentations");
 		theAgent(toolCalling -> "The answer.");
