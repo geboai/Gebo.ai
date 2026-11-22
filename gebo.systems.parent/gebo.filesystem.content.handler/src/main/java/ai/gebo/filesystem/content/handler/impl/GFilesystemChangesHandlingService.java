@@ -51,11 +51,18 @@ public class GFilesystemChangesHandlingService
 		implements ApplicationListener<ContextRefreshedEvent>, FileChangeListener {
 	private static Logger LOGGER = LoggerFactory.getLogger(GFilesystemChangesHandlingService.class);
 	boolean started = false;
-	/** File system watcher configured to check for changes every 30 seconds with a 5-second quiet period */
-	FileSystemWatcher watcher = new FileSystemWatcher(true, Duration.ofSeconds(30), Duration.ofSeconds(5),
-			SnapshotStateRepository.STATIC);
-	/** List of monitored endpoints and their corresponding filesystem folders */
-	List<EndpointFolderEntries> handledEndpoints = new ArrayList<EndpointFolderEntries>();
+	/**
+	 * File system watcher configured to check for changes every 30 seconds with a
+	 * 5-second quiet period. A FileSystemWatcher cannot be started again once stopped
+	 * (stop sets its count of remaining scans to zero and start keeps it): when the
+	 * watched folders change after the start, it is replaced by a new one.
+	 */
+	volatile FileSystemWatcher watcher = newWatcher();
+	/**
+	 * List of monitored endpoints and their corresponding filesystem folders; read by the
+	 * watcher's thread while the endpoints are added and removed.
+	 */
+	List<EndpointFolderEntries> handledEndpoints = new java.util.concurrent.CopyOnWriteArrayList<EndpointFolderEntries>();
 	/** Runtime binder for dependency resolution */
 	IGRuntimeBinder runtimeBinder = null;
 
@@ -101,15 +108,50 @@ public class GFilesystemChangesHandlingService
 				File file = new File(path);
 				if (file.exists() && file.isDirectory()) {
 					handledEndpoints.add(new EndpointFolderEntries(file, endpoint));
-					if (started)
-						watcher.stop();
-					watcher.addSourceDirectory(file);
-					if (started)
-						watcher.start();
+					if (!started) {
+						watcher.addSourceDirectory(file);
+					}
 				}
+			}
+			if (started) {
+				rewatch();
 			}
 		}
 
+	}
+
+	/**
+	 * A new watcher, not yet started: its source folders, its listener and its start are
+	 * given by the caller.
+	 */
+	protected FileSystemWatcher newWatcher() {
+		return new FileSystemWatcher(true, Duration.ofSeconds(30), Duration.ofSeconds(5),
+				SnapshotStateRepository.STATIC);
+	}
+
+	/**
+	 * Replaces the running watcher by a new one on the folders handled now: a stopped
+	 * FileSystemWatcher does not scan again when started. The snapshots of the folders
+	 * already watched are kept in the shared state repository, so a change made while
+	 * the watchers are swapped is still seen.
+	 */
+	synchronized void rewatch() {
+		final FileSystemWatcher fresh = newWatcher();
+		final java.util.Set<String> folders = new java.util.HashSet<>();
+		for (EndpointFolderEntries e : handledEndpoints) {
+			if (folders.add(e.folder.getAbsolutePath()) && e.folder.isDirectory()) {
+				fresh.addSourceDirectory(e.folder);
+			}
+		}
+		fresh.addListener(this);
+		final FileSystemWatcher old = watcher;
+		try {
+			old.stop();
+		} catch (RuntimeException stopping) {
+			LOGGER.warn("The previous filesystem watcher did not stop cleanly: " + stopping);
+		}
+		watcher = fresh;
+		fresh.start();
 	}
 
 	/**
@@ -118,14 +160,11 @@ public class GFilesystemChangesHandlingService
 	 * @param endpoint The project endpoint to stop monitoring
 	 */
 	public void removeHandling(GFilesystemProjectEndpoint endpoint) {
-		EndpointFolderEntries f = null;
-		for (EndpointFolderEntries e : handledEndpoints) {
-			if (e.endpoint.getCode().equals(endpoint.getCode())) {
-				f = e;
-			}
-		}
-		if (f != null) {
-			handledEndpoints.remove(f);
+		// every folder of the endpoint, not only one of them
+		final boolean removed = handledEndpoints
+				.removeIf(e -> e.endpoint.getCode() != null && e.endpoint.getCode().equals(endpoint.getCode()));
+		if (removed && started) {
+			rewatch();
 		}
 	}
 
