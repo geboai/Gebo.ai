@@ -300,12 +300,17 @@ public class GFilesystemContentManagementSystemHandlerImpl extends
 	}
 
 	/**
-	 * Creates and returns the parent virtual folder for a given file path. Creates
-	 * the entire folder hierarchy if it doesn't exist.
+	 * The virtual folder a changed file belongs to, built as the publish builds it
+	 * ({@link #consumeImplementation}): the root item of the endpoint, then one child
+	 * item for each folder between the watched folder and the file, each consumed. A
+	 * file directly in the watched folder belongs to the root item. So a file the
+	 * watcher reports gets the same code as the publish gave it, and a modification or
+	 * a deletion reaches the document the publish registered.
 	 * 
 	 * @param endpoint The filesystem project endpoint
-	 * @param path     The base path
-	 * @param file     The file path
+	 * @param path     The watched folder the change was reported for: one of the
+	 *                 endpoint's folders
+	 * @param file     The changed file
 	 * @param consumer The content consumer
 	 * @return The parent virtual folder for the given file
 	 * @throws GeboContentHandlerSystemException If an error occurs during folder
@@ -316,34 +321,47 @@ public class GFilesystemContentManagementSystemHandlerImpl extends
 		GVirtualFolder rootItem = createRootItem(getSystem(endpoint), endpoint);
 		consumer.accept(rootItem);
 		GVirtualFolder parentFolder = rootItem;
-		for (VFilesystemReference _path : endpoint.getPath()) {
-			Path parentPath = Path.of(VFilesystemReference.absolutePathOf(_path));
-			if (path.startsWith(parentPath)) {
-				Path relative = path.relativize(parentPath);
-				int NPATHS = relative.getNameCount();
-				for (int i = 0; i < NPATHS; i++) {
-					Path thisPathPart = relative.getName(i);
-					if (thisPathPart.toFile().isDirectory()) {
-						GVirtualFolder folderlItem = new GVirtualFolder();
-						File folder = thisPathPart.toFile();
-						folderlItem.setCode(parentFolder.getCode() + "/" + folder.getName());
-						folderlItem.setUri(parentFolder.getUri() + "/" + folder.getName());
-						folderlItem.setName(folder.getName());
-						folderlItem.setParentVirtualFolderCode(parentFolder.getCode());
-						folderlItem.setDescription(folder.getName());
-						folderlItem.setAbsolutePath(folder.getAbsolutePath());
-						folderlItem.setModificationDate(new Date(folder.lastModified()));
-						folderlItem.setRootKnowledgebaseCode(parentFolder.getRootKnowledgebaseCode());
-						folderlItem.setParentProjectCode(parentFolder.getParentProjectCode());
-						folderlItem.setProjectEndpointReference(GObjectRef.of(endpoint));
-						consumer.accept(folderlItem);
-						parentFolder = folderlItem;
-					}
+		Path folder = path.toAbsolutePath().normalize();
+		for (String name : foldersBetween(path, file)) {
+			folder = folder.resolve(name);
+			GVirtualFolder folderItem = createChildItem(parentFolder, endpoint, name, name, name);
+			folderItem.setAbsolutePath(folder.toString());
+			// a folder of a deleted file may be gone already
+			if (Files.isDirectory(folder)) {
+				try {
+					folderItem.setModificationDate(new Date(Files.getLastModifiedTime(folder).toMillis()));
+				} catch (Throwable t) {
 				}
 			}
+			consumer.accept(folderItem);
+			parentFolder = folderItem;
 		}
 		return parentFolder;
+	}
 
+	/**
+	 * The names of the folders between a watched folder and a file in it, outermost
+	 * first: none for a file directly in the watched folder, and none for a file
+	 * outside it. Never an empty name: relativizing a folder to itself gives an empty
+	 * path, which some Java versions count as an existing directory.
+	 */
+	static List<String> foldersBetween(Path watched, Path file) {
+		final List<String> names = new ArrayList<String>();
+		if (watched == null || file == null) {
+			return names;
+		}
+		final Path base = watched.toAbsolutePath().normalize();
+		final Path parent = file.toAbsolutePath().normalize().getParent();
+		if (parent == null || !parent.startsWith(base)) {
+			return names;
+		}
+		for (Path part : base.relativize(parent)) {
+			final String name = part.toString();
+			if (!name.isEmpty()) {
+				names.add(name);
+			}
+		}
+		return names;
 	}
 
 	/**
