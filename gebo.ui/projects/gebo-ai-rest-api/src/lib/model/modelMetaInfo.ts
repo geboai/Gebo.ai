@@ -24,6 +24,7 @@ export interface ModelMetaInfo {
     informativeUrl?: string;
     supportsVision?: boolean;
     inputModalities?: Array<ModelMetaInfo.InputModalitiesEnum>;
+    outputModalities?: Array<ModelMetaInfo.OutputModalitiesEnum>;
     supportsReasoning?: boolean;
     deprecated?: boolean;
     deprecationDate?: string;
@@ -38,5 +39,13 @@ export namespace ModelMetaInfo {
         AUDIO: 'AUDIO' as InputModalitiesEnum,
         VIDEO: 'VIDEO' as InputModalitiesEnum,
         DOCUMENT: 'DOCUMENT' as InputModalitiesEnum
+    };
+    export type OutputModalitiesEnum = 'TEXT' | 'IMAGE' | 'AUDIO' | 'VIDEO' | 'DOCUMENT';
+    export const OutputModalitiesEnum = {
+        TEXT: 'TEXT' as OutputModalitiesEnum,
+        IMAGE: 'IMAGE' as OutputModalitiesEnum,
+        AUDIO: 'AUDIO' as OutputModalitiesEnum,
+        VIDEO: 'VIDEO' as OutputModalitiesEnum,
+        DOCUMENT: 'DOCUMENT' as OutputModalitiesEnum
     };
 }

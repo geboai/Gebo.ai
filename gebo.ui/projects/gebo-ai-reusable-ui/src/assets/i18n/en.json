@@ -1399,6 +1399,10 @@
       "RoleDefaultChat": { "label": "Default chat model" },
       "RoleService": { "label": "Default service model" },
       "RoleChat": { "label": "Chat model" },
+      "AcceptsHeader": { "label": "Accepts" },
+      "MetadataInputsLabel": { "label": "metadata:" },
+      "ApplyModelsMetadataInputsNote": { "label": "Some models are set to text only although their metadata say they accept more." },
+      "ApplyModelsMetadataInputsBtn": { "label": "Use the models' metadata" },
       "RoleDefault": { "label": "Default model" },
       "NewEmbeddingModelConfigurationBtn": {
         "label": "New embedding model configuration"
@@ -3129,7 +3133,10 @@
       "TemperatureRangeLabel": { "label": "Allowed range:" },
       "TopPRangeLabel": { "label": "Allowed range:" },
       "ContextLengthDefaultLabel": { "label": "Used when not set:" },
-      "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. It describes the model: Gebo does not send the models anything but text yet." },
+      "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. A file goes to the model as it is when the model accepts its kind here and this provider's integration can deliver its type." },
+      "SentFileTypesLabel": { "label": "Files sent to this model as they are:" },
+      "DeclaredNotCarriedLabel": { "label": "Not delivered through this provider's integration:" },
+      "DeclaredNotSentLabel": { "label": "Not sent, this installation does not send these kinds of file to its models (settings ai.gebo.*.chat-enabled):" },
       "ModelInputModalitiesLabel": { "label": "The model's metadata says:" },
       "UseModelInputModalities": { "label": "use these" },
       "TextInputOption": { "label": "Text" },
@@ -4113,6 +4120,7 @@
       },
       "ModelTypePanel": { "label": "Add new models" },
       "ModelsChoices": { "label": "Models choices" },
+      "ChosenChatModelInputsLabel": { "label": "Accepts as input:" },
       "PresetsAccordionPanel": { "label": "Suggested models selection" },
       "embeddingPresetChoice": {
         "label": "Embedding model",
@@ -4658,7 +4666,8 @@
       "RemoveAll": { "help": "Remove all" },
       "UploadPending": { "label": "Pending for upload" },
       "CompletedData": { "label": "Completed" },
-      "ToolsOnlyFilesNote": { "label": "Also accepted for the agents' tools, which work on them: they are not read into the chat, and the models do not see pictures." },
+      "ToolsOnlyFilesNote": { "label": "Also accepted for the agents' tools, which work on them:" },
+      "ModelFilesNote": { "label": "This chat's model also reads these files as they are:" },
       "d8f96632c90e4cff48e942f0c17690b6c00956ba98d6d7897f7b7d955f2d299f": {
         "summary": "OK!",
         "detail": "Operation done successfully"
@@ -5651,7 +5660,25 @@
       "GeneralSettingsTab": { "label": "General settings" },
       "SecurityAccessSettingsTab": { "label": "Security access settings" },
       "ToolsTab": { "label": "Exported Tools" },
-      "ResourcesTab": { "label": "Exported Resources" }
+      "ResourcesTab": { "label": "Exported Resources" },
+      "AgentToolsHeader": { "label": "Agents exported as tools" },
+      "AgentToolsDescription": { "label": "Each agent becomes a tool that takes a request in natural language and answers with the agent's text, run as the caller over the knowledge bases the caller can see." },
+      "AgentToolAgentHeader": { "label": "Agent code" },
+      "AgentToolNameHeader": { "label": "Tool name" },
+      "NoAgentToolsText": { "label": "No agent exported as a tool." },
+      "newAgentToolCode": { "label": "Agent code", "help": "The code of the agent configuration to export." },
+      "newAgentToolName": { "label": "Tool name", "help": "The name MCP clients see (defaults to the agent code)." },
+      "AddAgentToolBtn": { "label": "Add" },
+      "NetworkToolsHeader": { "label": "Networks of agents exported as tools" },
+      "NetworkToolsDescription": { "label": "Each network becomes a tool that takes a request in natural language and answers with the text the network produced, run as the caller. A network given a chat profile runs in a conversation of the caller and answers with the files it produced too." },
+      "NetworkToolNetworkHeader": { "label": "Network code" },
+      "NetworkToolNameHeader": { "label": "Tool name" },
+      "NetworkToolChatProfileHeader": { "label": "Chat profile" },
+      "NoNetworkToolsText": { "label": "No network of agents exported as a tool." },
+      "newNetworkToolCode": { "label": "Network code", "help": "The code of the network of agents to export." },
+      "newNetworkToolName": { "label": "Tool name", "help": "The name MCP clients see (defaults to the network code)." },
+      "newNetworkToolChatProfile": { "label": "Chat profile", "help": "The code of the chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call then runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. Left empty the network runs outside any conversation and answers with text." },
+      "AddNetworkToolBtn": { "label": "Add" }
     }
   },
   "GeboAIA2AClientAdminModule": {

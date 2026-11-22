@@ -153,6 +153,200 @@ public abstract class GAbstractConfiguredHandler implements IGSpecializedDocumen
 	 * @param reference The document reference to get the file type for
 	 * @return The matching IngestionFileType or null if not found
 	 */
+	/** Whether the images of the documents are taken, and within which limits; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig;
+
+	public void setImagesConfig(ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig) {
+		this.imagesConfig = imagesConfig;
+	}
+
+	/** Whether the images of the documents are taken (ai.gebo.images.ingestion-enabled); else they are passed over as before. */
+	protected boolean ingestsImages() {
+		return imagesConfig != null && imagesConfig.isIngestionEnabled();
+	}
+
+	/** The settings of the images taken, null when images are not configured (a unit test). */
+	protected ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig() {
+		return imagesConfig;
+	}
+
+	/** The switches and limits of recordings and videos; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig;
+
+	public void setMediaConfig(ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig) {
+		this.mediaConfig = mediaConfig;
+	}
+
+	protected ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig() {
+		return mediaConfig;
+	}
+
+	/** Whether the recordings met inside a document are given as media. */
+	protected boolean ingestsRecordings() {
+		return mediaConfig != null && mediaConfig.isRecordingsEnabled();
+	}
+
+	/** Whether the videos met inside a document are given as media. */
+	protected boolean ingestsVideos() {
+		return mediaConfig != null && mediaConfig.isVideosEnabled();
+	}
+
+	/** Whether any kind of media is given beside the texts. */
+	protected boolean ingestsAnyMedia() {
+		return ingestsImages() || ingestsRecordings() || ingestsVideos();
+	}
+
+	/**
+	 * The whole document: its texts and, for the kinds of media the installation
+	 * ingests (ai.gebo.images.ingestion-enabled, ai.gebo.recordings.ingestion-enabled,
+	 * ai.gebo.videos.ingestion-enabled), its media as fragments of their kind, each with
+	 * its content type and its bytes encoded in BASE64, within the same limits as the
+	 * ingestion. With every kind off it is the text only document, as it always was.
+	 */
+	@Override
+	public GeboDocument handleDocument(GDocumentReference reference, InputStream is,
+			Map<String, Object> manageMetainfo) throws GeboIngestionException, IOException {
+		if (!ingestsAnyMedia()) {
+			return handleTextOnlyContent(reference, is, manageMetainfo);
+		}
+		if (hasItsOwnTextOnlyForm()) {
+			// a reader that gives its text in a form of its own (a web page, a JSON file):
+			// that form is kept, and the media the reader finds are added to it
+			final byte[] bytes = is.readAllBytes();
+			try {
+				is.close();
+			} catch (IOException ignored) {
+				// already read
+			}
+			final GeboDocument doc = handleTextOnlyContent(reference, new java.io.ByteArrayInputStream(bytes),
+					manageMetainfo);
+			if (doc != null) {
+				try (Stream<Document> stream = handleContent(reference, new java.io.ByteArrayInputStream(bytes),
+						new java.util.HashMap<>(manageMetainfo != null ? manageMetainfo : new java.util.HashMap<>()))) {
+					if (stream != null) {
+						stream.filter(x -> !x.isText()).forEach(x -> addMediaFragment(doc, x));
+					}
+				} catch (RuntimeException unreadable) {
+					LOGGER.warn("The media of " + reference.getCode() + " could not be read, its text is given: "
+							+ unreadable);
+				}
+			}
+			return doc;
+		}
+		final GeboDocument doc = toDocument(reference, manageMetainfo);
+		final Stream<Document> stream = handleContent(reference, is, manageMetainfo);
+		if (stream != null) {
+			stream.forEach(x -> {
+				if (x.isText()) {
+					if (x.getText() != null && x.getText().trim().length() > 0) {
+						doc.getTexts().add(GeboTextDocumentFragment.plainText(x.getText()));
+					}
+				} else {
+					addMediaFragment(doc, x);
+				}
+			});
+		}
+		return doc;
+	}
+
+	/** Whether this reader overrides the text only form of the document. */
+	private boolean hasItsOwnTextOnlyForm() {
+		try {
+			return getClass().getMethod("handleTextOnlyContent", GDocumentReference.class, InputStream.class, Map.class)
+					.getDeclaringClass() != GAbstractConfiguredHandler.class;
+		} catch (NoSuchMethodException | SecurityException e) {
+			return false;
+		}
+	}
+
+	/** A media document of the reader as a fragment of the document, with what tells where it was. */
+	private void addMediaFragment(GeboDocument doc, Document mediaDocument) {
+		try {
+			final org.springframework.ai.content.Media media = mediaDocument.getMedia();
+			if (media == null || media.getMimeType() == null) {
+				return;
+			}
+			final Map<String, Object> meta = mediaDocument.getMetadata();
+			final Object givenName = meta != null
+					? meta.get(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA)
+					: null;
+			final ai.gebo.document.model.GeboBinaryDocumentFragment fragment = doc.addMedia(
+					givenName != null ? givenName.toString() : null,
+					media.getMimeType().getType() + "/" + media.getMimeType().getSubtype(),
+					media.getDataAsByteArray());
+			if (fragment == null) {
+				return;
+			}
+			fragment.setUniqueCode(mediaDocument.getId());
+			if (meta != null && meta.get(DocumentMetaInfos.CONTENT_PAGE) != null) {
+				fragment.getCustomMetaData().put(DocumentMetaInfos.CONTENT_PAGE,
+						meta.get(DocumentMetaInfos.CONTENT_PAGE));
+			}
+			if (givenName != null) {
+				fragment.getCustomMetaData()
+						.put(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA, givenName);
+			}
+		} catch (RuntimeException unreadable) {
+			LOGGER.warn("A media of " + doc.getId() + " could not be added to its document: " + unreadable);
+		}
+	}
+
+	/**
+	 * The images found in a document, each as a document of its own holding the
+	 * image as media, with the metadata of the document's texts, the page or slide it
+	 * is on when known and its name. Nothing when images are not taken. No model is
+	 * called here: the image is given as it is. An image is passed over when it is
+	 * not a PNG, JPEG, GIF or WebP picture, is smaller or larger than the limits, was
+	 * already taken in this document (a logo on every page), or comes after the most
+	 * images taken of one document.
+	 */
+	protected List<org.springframework.ai.document.Document> imageDocuments(GDocumentReference reference,
+			List<ai.gebo.system.ingestion.EmbeddedPicture> pictures, Map<String, Object> metadata) {
+		final List<org.springframework.ai.document.Document> images = new ArrayList<>();
+		if (pictures == null || pictures.isEmpty() || !ingestsImages()) {
+			return images;
+		}
+		final java.util.Set<String> seen = new java.util.HashSet<>();
+		int passedOver = 0;
+		for (ai.gebo.system.ingestion.EmbeddedPicture picture : pictures) {
+			final String type = picture != null ? picture.readableType() : null;
+			if (type == null || picture.data() == null || picture.data().length < imagesConfig.getMinImageBytes()
+					|| picture.data().length > imagesConfig.getMaxImageBytes()
+					|| !seen.add(picture.data().length + ":" + java.util.Arrays.hashCode(picture.data()))) {
+				continue;
+			}
+			if (images.size() >= imagesConfig.getMaxImagesPerDocument()) {
+				passedOver++;
+				continue;
+			}
+			final Map<String, Object> cloned = new java.util.HashMap<>(
+					metadata != null ? metadata : new java.util.HashMap<>());
+			if (picture.page() != null) {
+				cloned.put(ai.gebo.model.DocumentMetaInfos.CONTENT_PAGE, "" + picture.page());
+			}
+			if (picture.name() != null && !picture.name().isBlank()) {
+				cloned.put(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA, picture.name());
+			}
+			images.add(org.springframework.ai.document.Document.builder()
+					.media(org.springframework.ai.content.Media.builder()
+							.mimeType(org.springframework.util.MimeTypeUtils.parseMimeType(type)).data(picture.data())
+							.name("image").build())
+					.metadata(cloned).build());
+		}
+		final String of = reference != null ? reference.getCode() : "a document";
+		if (passedOver > 0) {
+			LOGGER.warn(passedOver + " image(s) of " + of + " were not taken: only "
+					+ imagesConfig.getMaxImagesPerDocument() + " of a document are");
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("imageDocuments(" + of + ") -> " + images.size() + " of " + pictures.size()
+					+ " picture(s) found");
+		}
+		return images;
+	}
+
 	protected IngestionFileType getFileType(GDocumentReference reference) {
 		Optional<IngestionFileType> found = config.getFileTypes().stream().filter(x -> {
 			if (reference.getExtension() != null) {

@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.aws_bedrock.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
+import org.springframework.ai.content.Media;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -80,6 +82,13 @@ public class BedrockChatModelConfigurationSupportService
 
 	class BedrockConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GBedrockChatModelConfig, BedrockProxyChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public BedrockConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -214,5 +223,28 @@ public class BedrockChatModelConfigurationSupportService
 	public OperationStatus<GBedrockChatModelConfig> insertAndConfigure(GBedrockChatModelConfig config)
 			throws GeboPersistenceException, LLMConfigException {
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Spring AI's Bedrock chat model carries the picture, document and video types of
+	 * its format maps and raises "Unsupported media format" on any other, audio
+	 * included (BedrockMediaFormat, 2.1.0-RC2). The types are read from the same
+	 * constants its maps are keyed by.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none()
+				.images(types(Media.Format.IMAGE_JPEG, Media.Format.IMAGE_PNG, Media.Format.IMAGE_GIF,
+						Media.Format.IMAGE_WEBP))
+				.documents(types(Media.Format.DOC_PDF, Media.Format.DOC_CSV, Media.Format.DOC_DOC,
+						Media.Format.DOC_DOCX, Media.Format.DOC_XLS, Media.Format.DOC_XLSX, Media.Format.DOC_HTML,
+						Media.Format.DOC_TXT, Media.Format.DOC_MD))
+				.video(types(Media.Format.VIDEO_MKV, Media.Format.VIDEO_MOV, Media.Format.VIDEO_MP4,
+						Media.Format.VIDEO_WEBM, Media.Format.VIDEO_FLV, Media.Format.VIDEO_MPEG,
+						Media.Format.VIDEO_WMV, Media.Format.VIDEO_THREE_GP));
+	}
+
+	private static String[] types(org.springframework.util.MimeType... types) {
+		return java.util.Arrays.stream(types).map(t -> t.getType() + "/" + t.getSubtype()).toArray(String[]::new);
 	}
 }

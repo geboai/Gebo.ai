@@ -12,7 +12,7 @@
 
 import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseDecisionModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, DecisionModelsControllerService, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GDecisionModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelInputs, ChatModelsControllerService, ConfigurationEntryGBaseChatModelConfig, ConfigurationEntryGBaseDecisionModelConfig, ConfigurationEntryGBaseEmbeddingModelConfig, ConfigurationEntryGBaseImageModelConfig, ConfigurationEntryGBaseRankerModelConfig, ConfigurationEntryGBaseTextToSpeachModelConfig, ConfigurationEntryGBaseTranscriptModelConfig, DecisionModelsControllerService, EmbeddingModelsControllersService, GBaseChatModelConfig, GChatModelType, GDecisionModelType, GEmbeddingModelType, GImageModelType, GRankerModelType, GTextToSpeechModelType, GTranscriptModelType, ImageModelsControllerService, RankerModelsControllerService, TextToSpeechModelsControllerService, TranscriptModelsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboActionPerformedEvent, GeboActionType, GeboUIActionRequest, GeboUIActionRoutingService } from "@Gebo.ai/reusable-ui";
 import { forkJoin } from "rxjs";
 import { ChatModelRole, chatModelRoleOf } from "../../entity-editors/controls/chat-model-role/chat-model-role.component";
@@ -401,6 +401,7 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
         ]).subscribe({
             next: (cfgs) => {
                 this.chatModels = cfgs[0];
+                this.loadChatModelsInputs();
                 this.embeddingModels = cfgs[1];
                 this.chatModelsTypes = cfgs[2];
                 this.embeddingModelsTypes = cfgs[3];
@@ -433,6 +434,50 @@ export class LlmsSystemsComponent extends AncestorPanelComponent implements OnIn
      * system default service model or a chat model, as the model editor's role panel
      * names them. The other model kinds only show whether they are the default.
      */
+    /** What each configured chat model takes as input, by configuration code. */
+    protected chatModelsInputs: { [code: string]: ChatModelInputs } = {};
+
+    private loadChatModelsInputs(): void {
+        this.chatModelsControllerService.getChatModelsInputs().subscribe({
+            next: (inputs) => {
+                const byCode: { [code: string]: ChatModelInputs } = {};
+                (inputs ?? []).forEach(x => { if (x.code) byCode[x.code] = x; });
+                this.chatModelsInputs = byCode;
+            }
+        });
+    }
+
+    /** What a configuration declares its model accepts; text only when it declares nothing. */
+    protected declaredInputs(code?: string): string[] {
+        const declared = code ? this.chatModelsInputs[code]?.inputModalities : undefined;
+        return declared?.length ? declared : ["TEXT"];
+    }
+
+    /**
+     * What the model's stored metadata know of a configuration that declares nothing:
+     * such a model is text only until the administrator gives it its metadata's inputs.
+     */
+    protected undeclaredMetadataInputs(code?: string): string[] {
+        const inputs = code ? this.chatModelsInputs[code] : undefined;
+        if (!inputs || inputs.inputModalities != null) return [];
+        return (inputs.metadataInputModalities ?? []).filter(x => x !== "TEXT");
+    }
+
+    /** Whether some configuration declares nothing while its model's metadata know more than text. */
+    protected get someModelsCanTakeTheirMetadataInputs(): boolean {
+        return Object.keys(this.chatModelsInputs).some(code => this.undeclaredMetadataInputs(code).length > 0);
+    }
+
+    /** Gives every configuration that declares nothing its model's metadata inputs. */
+    protected applyModelsMetadataInputs(): void {
+        this.loading = true;
+        this.chatModelsControllerService.applyModelsMetadataInputModalities().subscribe({
+            next: () => this.loadChatModelsInputs(),
+            error: () => { this.loading = false; },
+            complete: () => { this.loading = false; }
+        });
+    }
+
     protected chatModelRole(config?: GBaseChatModelConfig): ChatModelRole {
         return chatModelRoleOf(config?.forUses, config?.defaultModel);
     }

@@ -16,11 +16,33 @@ import java.util.Set;
 
 /**
  * What a chat model accepts as input: text always, and what else its provider says.
- * It characterizes the model only: Gebo does not yet give the models anything but
- * text.
+ * It characterizes the model. A file reaches a model only when its configuration
+ * declares the file's modality and the provider's integration carries its type, see
+ * {@link GModelMediaGuard}.
  */
 public enum GModelInputModality {
 	TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT;
+
+	/**
+	 * The modality of a file by its MIME type: images, audio and video by their family,
+	 * any other file a document; null when there is no type.
+	 */
+	public static GModelInputModality ofMimeType(String mimeType) {
+		if (mimeType == null || mimeType.isBlank()) {
+			return null;
+		}
+		final String type = mimeType.trim().toLowerCase(Locale.ROOT);
+		if (type.startsWith("image/")) {
+			return IMAGE;
+		}
+		if (type.startsWith("audio/")) {
+			return AUDIO;
+		}
+		if (type.startsWith("video/")) {
+			return VIDEO;
+		}
+		return DOCUMENT;
+	}
 
 	/**
 	 * A modality as the providers' model metadata name it - text, image, audio,

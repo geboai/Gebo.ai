@@ -334,12 +334,24 @@ public class GAgentsNetworkDataFlowComponent implements IGMessageEmitter {
 			}
 			DataEndpoint model = null;
 			if (service.isCallingChatModel()) {
-				model = DataFlowEndpoints.chatModel("agent", service.resolveAgentChatModel(config), "Agent chat model");
+				final var agentChatModel = service.resolveAgentChatModel(config);
+				model = DataFlowEndpoints.chatModel("agent", agentChatModel, "Agent chat model");
 				if (model != null) {
 					addUnique(flow, model);
 					processed(flow, "agent-model", key, "Agent " + member + ": the network's messages to its chat model",
 							MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId,
 							flow.qualifiedId(model.getId()));
+					// the files this model takes as they are: the conversation's (pictures, PDF
+					// files, recordings) and the ones the member's tools show it; they leave for
+					// the model's provider as content, not as text
+					final List<String> files = DataFlowEndpoints.sentFileTypes(agentChatModel);
+					if (!files.isEmpty()) {
+						processed(flow, "agent-files", key,
+								"Agent " + member + ": conversation files, and files its tools show, sent to its chat model"
+										+ " as they are (" + String.join(", ", files) + ")",
+								MetaEndpointType.CHAT_SESSION, MetaEndpointType.LLM_ENDPOINT, queryId,
+								flow.qualifiedId(model.getId()));
+					}
 				}
 			}
 			reportSearch(flow, member, key, queryId, config.getAgentServiceId(), searchServices, legs);

@@ -247,7 +247,9 @@ public class GRagChatServiceImpl extends AbstractChatService implements IGRagCha
 				boolean supportsSpeech = ttsModelsDao.defaultHandler() != null;
 				ModelProviderCapabilities cap = new ModelProviderCapabilities(model.getCode(), supportsTranscript,
 						supportsSpeech, model.isSupportsStructuredOutput(), model.isSupportsFunctionsCall(),
-						pipelineToolsTree(pipelineCode));
+						pipelineToolsTree(pipelineCode), model.getInputModalities(),
+						// the files a request may carry to it: of the kinds the installation sends
+						ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(model.getEffectiveInputMimeTypes()));
 				return cap;
 			}
 		}

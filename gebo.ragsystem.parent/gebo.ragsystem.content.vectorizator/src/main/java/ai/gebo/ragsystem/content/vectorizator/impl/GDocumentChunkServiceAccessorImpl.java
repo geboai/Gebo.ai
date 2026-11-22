@@ -84,10 +84,15 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 			String chunkingSession = chunkingService.retrieveChunkingSession("job:" + envelope.getPayload().getJobId());
 			DocumentChunkingResponse chunkResponse = chunkingService.getCachedChunkSet(docref, chunkingSession);
 			while (chunkResponse != null && !chunkResponse.isEmpty()) {
+				// a chunk holding a media as it is (an image, a recording, a video) becomes a
+				// document holding that media, when this service reads that kind; else it is
+				// left out here, its bytes not carried further
 				List<Document> fragmentsSet = chunkResponse.getCurrentChunkSet().getChunks().stream()
-						.map(currentChunk -> new Document(currentChunk.getId(), currentChunk.getChunkData(),
-								currentChunk.getMetaData()))
-						.toList();
+						.map(currentChunk -> currentChunk.holdsText()
+								? new Document(currentChunk.getId(), currentChunk.getChunkData(),
+										currentChunk.getMetaData())
+								: mediaDocument(currentChunk))
+						.filter(java.util.Objects::nonNull).toList();
 				fragments.addAll(fragmentsSet);
 				if (chunkResponse.getNextChunkSetId() != null) {
 					chunkResponse = chunkingService.getNextChunkSet(docref, chunkResponse.getId(),
@@ -146,5 +151,34 @@ public class GDocumentChunkServiceAccessorImpl implements IGDocumentChunkService
 			LOGGER.debug("End access(...)");
 		}
 		return new DocumentAccessResult(successfullStream, emptyContent, ingested, envelope, errorMessage);
+	}
+
+	/** Reads the media of the documents with this service's models; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private VectorizatorMediaReader mediaReader;
+
+	void setMediaReader(VectorizatorMediaReader mediaReader) {
+		this.mediaReader = mediaReader;
+	}
+
+	/** A media chunk as a document holding the media, or null when its kind is not read here. */
+	private Document mediaDocument(ai.gebo.architecture.documents.cache.model.DocumentChunk chunk) {
+		try {
+			if (mediaReader == null || !mediaReader.reads(chunk.getChunkType()) || chunk.getMimeType() == null) {
+				return null;
+			}
+			final byte[] data = chunk.mediaBytes();
+			if (data == null || data.length == 0) {
+				return null;
+			}
+			return Document.builder().id(chunk.getId())
+					.media(org.springframework.ai.content.Media.builder()
+							.mimeType(org.springframework.util.MimeTypeUtils.parseMimeType(chunk.getMimeType()))
+							.data(data).name("media").build())
+					.metadata(chunk.getMetaData() != null ? chunk.getMetaData() : new java.util.HashMap<>()).build();
+		} catch (RuntimeException unreadable) {
+			LOGGER.warn("A media chunk of " + chunk.getOriginalDocumentCode() + " could not be read: " + unreadable);
+			return null;
+		}
 	}
 }

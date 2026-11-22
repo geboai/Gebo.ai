@@ -17,8 +17,11 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 
 import { Observable }                                        from 'rxjs';
 
+import { ChatModelInputs } from '../model/chatModelInputs';
 import { ConfigurationEntryGBaseChatModelConfig } from '../model/configurationEntryGBaseChatModelConfig';
 import { GChatModelType } from '../model/gChatModelType';
+import { GModelCarriedMediaTypes } from '../model/gModelCarriedMediaTypes';
+import { OperationStatusListChatModelInputs } from '../model/operationStatusListChatModelInputs';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -62,6 +65,94 @@ export class ChatModelsControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public applyModelsMetadataInputModalities(observe?: 'body', reportProgress?: boolean): Observable<OperationStatusListChatModelInputs>;
+    public applyModelsMetadataInputModalities(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<OperationStatusListChatModelInputs>>;
+    public applyModelsMetadataInputModalities(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<OperationStatusListChatModelInputs>>;
+    public applyModelsMetadataInputModalities(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<OperationStatusListChatModelInputs>('post',`${this.basePath}/api/admin/ChatModelsController/applyModelsMetadataInputModalities`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param modelTypeCode 
+     * @param modelCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getCarriedMediaTypes(modelTypeCode: string, modelCode?: string, observe?: 'body', reportProgress?: boolean): Observable<GModelCarriedMediaTypes>;
+    public getCarriedMediaTypes(modelTypeCode: string, modelCode?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GModelCarriedMediaTypes>>;
+    public getCarriedMediaTypes(modelTypeCode: string, modelCode?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GModelCarriedMediaTypes>>;
+    public getCarriedMediaTypes(modelTypeCode: string, modelCode?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (modelTypeCode === null || modelTypeCode === undefined) {
+            throw new Error('Required parameter modelTypeCode was null or undefined when calling getCarriedMediaTypes.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (modelTypeCode !== undefined && modelTypeCode !== null) {
+            queryParameters = queryParameters.set('modelTypeCode', <any>modelTypeCode);
+        }
+        if (modelCode !== undefined && modelCode !== null) {
+            queryParameters = queryParameters.set('modelCode', <any>modelCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<GModelCarriedMediaTypes>('get',`${this.basePath}/api/admin/ChatModelsController/getCarriedMediaTypes`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
     public getChatModelTypes(observe?: 'body', reportProgress?: boolean): Observable<Array<GChatModelType>>;
     public getChatModelTypes(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<GChatModelType>>>;
     public getChatModelTypes(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<GChatModelType>>>;
@@ -83,6 +174,78 @@ export class ChatModelsControllerService {
         ];
 
         return this.httpClient.request<Array<GChatModelType>>('get',`${this.basePath}/api/admin/ChatModelsController/getChatModelTypes`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getChatModelsInputs(observe?: 'body', reportProgress?: boolean): Observable<Array<ChatModelInputs>>;
+    public getChatModelsInputs(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ChatModelInputs>>>;
+    public getChatModelsInputs(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ChatModelInputs>>>;
+    public getChatModelsInputs(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<ChatModelInputs>>('get',`${this.basePath}/api/admin/ChatModelsController/getChatModelsInputs`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getFileKindsSentToModels(observe?: 'body', reportProgress?: boolean): Observable<Array<string>>;
+    public getFileKindsSentToModels(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<string>>>;
+    public getFileKindsSentToModels(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<string>>>;
+    public getFileKindsSentToModels(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<string>>('get',`${this.basePath}/api/admin/ChatModelsController/getFileKindsSentToModels`,
             {
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

@@ -47,7 +47,21 @@ public interface IGDocumentReferenceIngestionHandler {
 		 * Returns the stream of documents.
 		 * @return Stream of processed documents
 		 */
+		/**
+		 * The texts read of the document. The media documents the readers give while
+		 * images, recordings or videos are taken (ai.gebo.images.ingestion-enabled and
+		 * its like) are left out here: who reads texts gets texts, as always.
+		 */
 		public Stream<Document> getStream() {
+			return stream != null ? stream.filter(Document::isText) : null;
+		}
+
+		/**
+		 * Everything read of the document: its texts and, while they are taken, each
+		 * image, recording or video as a document of its own holding it as media. For
+		 * who passes the media on (the chunking, towards the vectorization).
+		 */
+		public Stream<Document> getStreamWithMedia() {
 			return stream;
 		}
 

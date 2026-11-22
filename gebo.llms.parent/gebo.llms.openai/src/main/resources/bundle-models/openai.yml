@@ -6,12 +6,19 @@
 # patterns ("*" stands for any characters); unset fields are unknown.
 # inputModalities, what a model accepts as input, comes from its model page
 # (developers.openai.com/api/docs/models, 2026-11-18): OpenAI's models api does not tell it.
+# gpt-6-astra, gpt-6-sol and gpt-5.5 read on their pages 2026-11-19 ("Input modalities:
+# text, image"). DOCUMENT is not a field of the model pages: the file inputs guide
+# (developers.openai.com/api/docs/guides/file-inputs, 2026-11-19) says "PDF parsing with
+# text and page images requires a model that accepts image inputs", so the models that
+# take images take PDF files too.
 # A model whose page was not checked has none, which means text only.
+# The dated variants of a model have no entry of their own: the parameter rules at the
+# end of the file that state inputModalities only cover them by pattern.
 ai.gebo.models.providers.openai:
   modelsInfo:
     - providerId: openai
       modelId: gpt-4o
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -21,7 +28,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
       modelId: gpt-4o-2024-05-13
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -31,7 +38,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
       modelId: gpt-4o-2024-08-06
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -41,7 +48,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
       modelId: gpt-4.1
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1047576
@@ -51,7 +58,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
     - providerId: openai
       modelId: gpt-4o-mini
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -61,7 +68,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o-mini
     - providerId: openai
       modelId: gpt-4o-mini-2024-07-18
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -105,7 +112,7 @@ ai.gebo.models.providers.openai:
     # guide) and gpt-6-sol / gpt-6-luna only at reasoning effort none (their pages).
     - providerId: openai
       modelId: gpt-4.1-mini
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1047576
@@ -116,7 +123,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-4.1-mini
     - providerId: openai
       modelId: gpt-6.1-sol
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -127,6 +134,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.1-sol
     - providerId: openai
       modelId: gpt-6-astra
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -137,6 +145,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-astra
     - providerId: openai
       modelId: gpt-6-sol
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -147,7 +156,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-sol
     - providerId: openai
       modelId: gpt-6-luna
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -158,6 +167,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-luna
     - providerId: openai
       modelId: gpt-5.5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -170,7 +180,7 @@ ai.gebo.models.providers.openai:
     # version 6; the gpt-5.4-mini page states 272,000 tokens of input in the window.
     - providerId: openai
       modelId: gpt-5.2
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -181,7 +191,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2
     - providerId: openai
       modelId: gpt-5.4-mini
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -192,7 +202,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-mini
     - providerId: openai
       modelId: gpt-5
-      inputModalities: [TEXT, IMAGE]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -249,3 +259,10 @@ ai.gebo.models.providers.openai:
       models: ["o1*", "o3*", "o4*"]
       sampling: REJECTED
       source: temperature refused by o3 and o4-mini, tested 2026-10-11
+    # Input modalities of the dated variants of the models above (a snapshot shares its
+    # model's page). These rules state nothing of the parameters and are read apart.
+    - providerId: openai
+      models: ["gpt-4o-20*", "gpt-4o-mini-20*", "gpt-4.1-20*", "gpt-4.1-mini-20*", "gpt-5-20*", "gpt-5.2-20*",
+        "gpt-5.4-mini-20*", "gpt-5.5-20*", "gpt-6-sol-20*", "gpt-6-luna-20*", "gpt-6-astra-20*", "gpt-6.1-sol-20*"]
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      source: the model pages and the file inputs guide named at the top of this file

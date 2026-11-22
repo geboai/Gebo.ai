@@ -368,6 +368,14 @@ public final class GeboToolCalling {
 		return new GeboToolCallingAdvisor(this, manager(observationRegistry));
 	}
 
+	/**
+	 * The advisor of a call whose tools can show files to the model: what they showed in
+	 * a round reaches the model after the round's results.
+	 */
+	public GeboToolCallingAdvisor advisor(ObservationRegistry observationRegistry, GToolShownFiles shownFiles) {
+		return new GeboToolCallingAdvisor(this, manager(observationRegistry), shownFiles);
+	}
+
 	// ---- what the last call left behind
 
 	/**

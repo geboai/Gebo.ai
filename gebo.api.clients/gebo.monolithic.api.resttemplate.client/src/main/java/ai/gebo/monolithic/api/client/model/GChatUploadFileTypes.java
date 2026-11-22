@@ -24,7 +24,7 @@ import java.util.List;
  * GChatUploadFileTypes
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T10:46:55.252892997+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class GChatUploadFileTypes {
   @JsonProperty("chatExtensions")
@@ -32,6 +32,9 @@ public class GChatUploadFileTypes {
 
   @JsonProperty("toolsExtensions")
   private List<String> toolsExtensions = null;
+
+  @JsonProperty("modelMimeTypes")
+  private List<String> modelMimeTypes = null;
 
   public GChatUploadFileTypes chatExtensions(List<String> chatExtensions) {
     this.chatExtensions = chatExtensions;
@@ -85,6 +88,32 @@ public class GChatUploadFileTypes {
     this.toolsExtensions = toolsExtensions;
   }
 
+  public GChatUploadFileTypes modelMimeTypes(List<String> modelMimeTypes) {
+    this.modelMimeTypes = modelMimeTypes;
+    return this;
+  }
+
+  public GChatUploadFileTypes addModelMimeTypesItem(String modelMimeTypesItem) {
+    if (this.modelMimeTypes == null) {
+      this.modelMimeTypes = new ArrayList<>();
+    }
+    this.modelMimeTypes.add(modelMimeTypesItem);
+    return this;
+  }
+
+   /**
+   * Get modelMimeTypes
+   * @return modelMimeTypes
+  **/
+  @Schema(description = "")
+  public List<String> getModelMimeTypes() {
+    return modelMimeTypes;
+  }
+
+  public void setModelMimeTypes(List<String> modelMimeTypes) {
+    this.modelMimeTypes = modelMimeTypes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -96,12 +125,13 @@ public class GChatUploadFileTypes {
     }
     GChatUploadFileTypes gchatUploadFileTypes = (GChatUploadFileTypes) o;
     return Objects.equals(this.chatExtensions, gchatUploadFileTypes.chatExtensions) &&
-        Objects.equals(this.toolsExtensions, gchatUploadFileTypes.toolsExtensions);
+        Objects.equals(this.toolsExtensions, gchatUploadFileTypes.toolsExtensions) &&
+        Objects.equals(this.modelMimeTypes, gchatUploadFileTypes.modelMimeTypes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatExtensions, toolsExtensions);
+    return Objects.hash(chatExtensions, toolsExtensions, modelMimeTypes);
   }
 
 
@@ -112,6 +142,7 @@ public class GChatUploadFileTypes {
     
     sb.append("    chatExtensions: ").append(toIndentedString(chatExtensions)).append("\n");
     sb.append("    toolsExtensions: ").append(toIndentedString(toolsExtensions)).append("\n");
+    sb.append("    modelMimeTypes: ").append(toIndentedString(modelMimeTypes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.chat.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -56,6 +57,19 @@ public interface IGGenericalChatService {
 		public final List<ToolCategoriesTree> functionsTreeList;
 
 		/**
+		 * What the chat model's configuration declares it accepts as input; text only
+		 * when it declares nothing.
+		 */
+		public final List<GModelInputModality> inputModalities;
+
+		/**
+		 * The MIME types (exact ones or {@code family/*}) of the files a request may
+		 * carry to the chat model as they are: what its configuration declares and its
+		 * provider's integration carries. Empty when the model gets text only.
+		 */
+		public final List<String> inputMimeTypes;
+
+		/**
 		 * Constructs a ModelProviderCapabilities instance with specified
 		 * characteristics.
 		 *
@@ -75,6 +89,28 @@ public interface IGGenericalChatService {
 			this.supportsTranscript = supportsTranscript;
 			this.functionsTreeList = functionsTreeList;
 			this.supportsStructuredOutput = supportsStructuredOutput;
+			this.inputModalities = List.of(GModelInputModality.TEXT);
+			this.inputMimeTypes = List.of();
+		}
+
+		/**
+		 * The capabilities with what the model takes as input.
+		 *
+		 * @param inputModalities what the model's configuration declares it accepts
+		 * @param inputMimeTypes  the MIME types of the files a request may carry to it
+		 */
+		public ModelProviderCapabilities(String configurationCode, boolean supportsTranscript, boolean supportsSpeech,
+				boolean supportsStructuredOutput, boolean supportsFunctionCalls,
+				List<ToolCategoriesTree> functionsTreeList, List<GModelInputModality> inputModalities,
+				List<String> inputMimeTypes) {
+			this.configurationCode = configurationCode;
+			this.supportsFunctionCalls = supportsFunctionCalls;
+			this.supportsSpeech = supportsSpeech;
+			this.supportsTranscript = supportsTranscript;
+			this.functionsTreeList = functionsTreeList;
+			this.supportsStructuredOutput = supportsStructuredOutput;
+			this.inputModalities = inputModalities != null ? inputModalities : List.of(GModelInputModality.TEXT);
+			this.inputMimeTypes = inputMimeTypes != null ? inputMimeTypes : List.of();
 		}
 
 	}

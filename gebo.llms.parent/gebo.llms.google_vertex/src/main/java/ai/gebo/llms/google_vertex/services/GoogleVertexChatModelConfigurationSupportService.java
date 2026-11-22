@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.google_vertex.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -104,6 +105,13 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 */
 	class GoogleVertexConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GGoogleVertexChatModelConfig, GoogleGenAiChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public GoogleVertexConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -241,7 +249,8 @@ public class GoogleVertexChatModelConfigurationSupportService
 			List<GGoogleVertexChatModelChoice> live = new java.util.ArrayList<>();
 			for (com.google.genai.types.Model model : client.models
 					.list(com.google.genai.types.ListModelsConfig.builder().queryBase(true).pageSize(100).build())) {
-				GGoogleVertexChatModelChoice choice = toChoice(model);
+				GGoogleVertexChatModelChoice choice = toChoice(model, id -> modelsLibrary != null
+						&& modelsLibrary.knowsAsChatModel(type.getProviderId(), id));
 				if (choice != null) {
 					// the api's values win, the library fills what it does not tell
 					enricherService.enrichChatModelMetaInfos(type.getProviderId(), choice, x -> null);
@@ -277,6 +286,16 @@ public class GoogleVertexChatModelConfigurationSupportService
 	 * them.
 	 */
 	static GGoogleVertexChatModelChoice toChoice(com.google.genai.types.Model model) {
+		return toChoice(model, id -> false);
+	}
+
+	/**
+	 * As {@link #toChoice(com.google.genai.types.Model)}, keeping a Gemini model whose
+	 * id carries the marker of another kind ("audio", "image", "live") when the models
+	 * library knows it as a chat model: one that listens or draws is named that way too.
+	 */
+	static GGoogleVertexChatModelChoice toChoice(com.google.genai.types.Model model,
+			java.util.function.Predicate<String> knownAsChatModel) {
 		String name = model.name().orElse(null);
 		if (name == null)
 			return null;
@@ -285,7 +304,7 @@ public class GoogleVertexChatModelConfigurationSupportService
 		if (!lower.startsWith("gemini-"))
 			return null;
 		for (String excluded : List.of("embedding", "image", "live", "tts", "audio")) {
-			if (lower.contains(excluded))
+			if (lower.contains(excluded) && !knownAsChatModel.test(id))
 				return null;
 		}
 		GGoogleVertexChatModelChoice choice = new GGoogleVertexChatModelChoice();
@@ -339,5 +358,16 @@ public class GoogleVertexChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Spring AI's Google GenAI chat model sends any media of a user message as it is,
+	 * bytes or a uri, with no check of its type (GoogleGenAiChatModel, 2.1.0-RC2). What
+	 * is listed is what Gemini's models read: pictures, audio, video and PDF.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none().images("image/*").audio("audio/*").video("video/*")
+				.documents("application/pdf");
 	}
 }

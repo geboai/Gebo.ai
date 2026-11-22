@@ -1,5 +1,9 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
+import ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery;
+import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import ai.gebo.acl.AclGrantType;
 
 import java.io.IOException;
@@ -124,17 +128,28 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		file.transferTo(newPath);
 		GDocumentReference reference = documentReferenceFactory.createReference(newPath);
 		final InputStream content = Files.newInputStream(newPath);
-		IngestionHandlerData data = ingestionHandler.handleContent(reference, content);
-		if (data.isUnmanagedContent()) {
+		// an image, a recording or a video has no text to read into a chat, whatever the
+		// ingestion of the knowledge bases takes of them: it is handled as a file no reader
+		// takes, kept when the chat's model or its agents' tools take it
+		final GModelInputModality fileKind = GModelInputModality.ofMimeType(mimeTypeOf(serverSide));
+		final boolean mediaFile = fileKind == GModelInputModality.IMAGE || fileKind == GModelInputModality.AUDIO
+				|| fileKind == GModelInputModality.VIDEO;
+		IngestionHandlerData data = mediaFile ? null : ingestionHandler.handleContent(reference, content);
+		if (data == null || data.isUnmanagedContent()) {
 			content.close();
-			if (serverSide.getExtension() == null
-					|| !uploadFileTypes.toolsFileTypesOfSession(userSessionCode).contains(serverSide.getExtension())) {
+			// no content handler reads it: it is kept when the chat's model takes it as it is
+			// (a picture, a PDF, a recording) or when the chat's agents' tools work on it
+			final boolean forTheModel = GModelCarriedMediaTypes
+					.matchesAny(uploadFileTypes.modelMimeTypesOfSession(userSessionCode), mimeTypeOf(serverSide));
+			final boolean forTheTools = serverSide.getExtension() != null
+					&& uploadFileTypes.toolsFileTypesOfSession(userSessionCode).contains(serverSide.getExtension());
+			if (!forTheModel && !forTheTools) {
 				// refused: it does not stay behind in the session's folder
 				Files.deleteIfExists(newPath);
 				return null;
 			}
-			// kept for the tools of the chat's agents only: no content handler reads it, so it has
-			// no ingested text, is not read into the chat and gives the models nothing of it
+			// it has no ingested text: it reaches a model as a file of the request
+			// (getSessionMedia) when that model takes it, and the tools by its location
 			serverSide.setTokensCount(0L);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("addUploadedFile(...) session:" + userSessionCode + " file:" + file.getOriginalFilename()
@@ -151,8 +166,9 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 				if (doc.getMetaData() == null) {
 					doc.setMetaData(new HashMap<>(commonMetaData));
 				} else {
-					HashMap newMeta = new HashMap<>(commonMetaData);
-					newMeta.putAll(newMeta);
+					// the handler's own metadata, with the upload's common ones over them
+					HashMap newMeta = new HashMap<>(doc.getMetaData());
+					newMeta.putAll(commonMetaData);
 					doc.setMetaData(newMeta);
 				}
 				if (doc.getContent() != null && !doc.getContent().trim().isEmpty()) {
@@ -309,15 +325,20 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		resource.setDescription(media.getName());
 		resource.setFileName(media.getName());
 		resource.setUserContextCode(userSessionCode);
-		resource.setContentType(media.getMimeType() != null ? media.getMimeType().getType() : null);
+		// the whole type, image/png and not image: it is the Content-Type the file is served with
+		resource.setContentType(media.getMimeType() != null
+				? media.getMimeType().getType() + "/" + media.getMimeType().getSubtype()
+				: null);
 		String extension = getExtension(media);
 		resource.setExtension(extension);
 		Path path = getSessionPath(userSessionCode);
 		Path out = Path.of(path.toString(), getGeneratedResourceRelativeFilePath(resource));
+		final byte[] bytes = media.getDataAsByteArray();
 		try (OutputStream os = Files.newOutputStream(out)) {
-			IOUtils.write(media.getDataAsByteArray(), os);
+			IOUtils.write(bytes, os);
 			os.flush();
 		}
+		resource.setFileSize(bytes != null ? (long) bytes.length : null);
 		resource = llmGeneratedResourceRepository.insert(resource);
 		return resource;
 	}
@@ -384,4 +405,130 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 		}
 	}
 
+
+	/**
+	 * The MIME type of an upload: the one it was sent with, else the one its name tells.
+	 */
+	static String mimeTypeOf(UserUploadedContent upload) {
+		String type = GModelCarriedMediaTypes.essence(upload.getContentType());
+		if (type == null || "application/octet-stream".equals(type)) {
+			final String byName = upload.getFileName() != null
+					? java.net.URLConnection.guessContentTypeFromName(upload.getFileName())
+					: null;
+			if (byName != null) {
+				type = GModelCarriedMediaTypes.essence(byName);
+			}
+		}
+		return type;
+	}
+
+	/** A file of a conversation that may go to a model as it is. */
+	private record MediaFile(String name, String mimeType, long size, Path file, Date created) {
+	}
+
+	@Override
+	public List<IChatRequestMedia> getSessionMedia(String userSessionCode) {
+		// no kind of file is sent to the models: nothing is gathered, nothing is read
+		if (userSessionCode == null || !GModelFilesDelivery.deliversAnything()) {
+			return List.of();
+		}
+		final List<MediaFile> files = new ArrayList<>();
+		try {
+			final Path sessionPath = getSessionPath(userSessionCode);
+			// the uploads with no ingested text
+			try (java.util.stream.Stream<UserUploadContentServerSide> all = uploadContentsRepository
+					.findByUserContextCode(userSessionCode)) {
+				all.filter(x -> x.getIngestedJsonPath() == null && x.getRelativeFilePath() != null)
+						.forEach(x -> files.add(new MediaFile(x.getFileName(), mimeTypeOf(x),
+								x.getFileSize() != null ? x.getFileSize() : -1,
+								Path.of(sessionPath.toString(), x.getRelativeFilePath()), x.getDateCreated())));
+			}
+			// the pictures, recordings and videos the models generated in the conversation, so
+			// that a later question about one reaches a model that can look at it
+			try (java.util.stream.Stream<LLMGeneratedResource> all = llmGeneratedResourceRepository
+					.findByUserContextCode(userSessionCode)) {
+				all.forEach(x -> {
+					final String mimeType = mimeTypeOf(x);
+					final GModelInputModality modality = GModelInputModality.ofMimeType(mimeType);
+					if (modality == GModelInputModality.IMAGE || modality == GModelInputModality.AUDIO
+							|| modality == GModelInputModality.VIDEO) {
+						files.add(new MediaFile(x.getFileName(), mimeType, x.getFileSize() != null ? x.getFileSize() : -1,
+								Path.of(sessionPath.toString(), getGeneratedResourceRelativeFilePath(x)),
+								x.getDateCreated()));
+					}
+				});
+			}
+		} catch (IOException | RuntimeException e) {
+			LOGGER.error("Cannot read the files of session " + userSessionCode + ", its requests go without them", e);
+			return List.of();
+		}
+		// newest first: the limits keep the latest files
+		files.sort(java.util.Comparator
+				.comparing(MediaFile::created, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder()))
+				.reversed());
+		final List<IChatRequestMedia> media = new ArrayList<>();
+		final GModelFilesDelivery.Admission admission = new GModelFilesDelivery.Admission();
+		for (MediaFile candidate : files) {
+			final String mimeType = candidate.mimeType();
+			final Path file = candidate.file();
+			long known = candidate.size();
+			if (mimeType == null || !GModelFilesDelivery.delivers(mimeType) || !Files.exists(file)) {
+				continue;
+			}
+			if (known < 0) {
+				try {
+					known = Files.size(file);
+				} catch (IOException e) {
+					continue;
+				}
+			}
+			final long size = known;
+			if (!admission.admit(mimeType, size)) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("getSessionMedia(...) session:" + userSessionCode + " file:" + candidate.name() + " ("
+							+ size + " bytes) is beyond the limits of its kind, it stays with the tools");
+				}
+				continue;
+			}
+			final String name = candidate.name();
+			media.add(new IChatRequestMedia() {
+				@Override
+				public String getName() {
+					return name;
+				}
+
+				@Override
+				public String getMimeType() {
+					return mimeType;
+				}
+
+				@Override
+				public long getSize() {
+					return size;
+				}
+
+				@Override
+				public byte[] readBytes() throws IOException {
+					return Files.readAllBytes(file);
+				}
+			});
+		}
+		return media;
+	}
+
+	/**
+	 * The MIME type of a generated file: its stored one when whole, else the one its
+	 * name or extension tells (the files stored before the whole type was kept have the
+	 * family only, as "image").
+	 */
+	static String mimeTypeOf(LLMGeneratedResource generated) {
+		String type = GModelCarriedMediaTypes.essence(generated.getContentType());
+		if (type == null) {
+			final String name = generated.getExtension() != null ? "file" + generated.getExtension()
+					: generated.getFileName();
+			final String byName = name != null ? java.net.URLConnection.guessContentTypeFromName(name) : null;
+			type = GModelCarriedMediaTypes.essence(byName);
+		}
+		return type;
+	}
 }

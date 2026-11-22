@@ -24,7 +24,7 @@ import java.util.List;
  * LLMModelPresetChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T11:57:26.596330108+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class LLMModelPresetChoice {
   @JsonProperty("code")

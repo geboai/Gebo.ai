@@ -42,6 +42,20 @@ public class A2AAgentCardBuilder {
 	private static final Logger LOGGER = LoggerFactory.getLogger(A2AAgentCardBuilder.class);
 
 	private static final List<String> TEXT_MODES = List.of("text/plain");
+	/**
+	 * What a network takes besides text: the files a caller attaches with their bytes
+	 * become the uploads of the conversation the run works in, where the pictures, the
+	 * recordings, the videos and the PDF files are what the models are given as they
+	 * are.
+	 */
+	private static final List<String> NETWORK_INPUT_MODES = List.of("text/plain", "image/*", "audio/*", "video/*",
+			"application/pdf");
+	/**
+	 * What an answer may carry: its text and, as file parts, the files the run
+	 * generated (the pictures of the image models, stored as PNG) and the files its
+	 * tools wrote, which are of whatever type the tools write.
+	 */
+	private static final List<String> OUTPUT_MODES = List.of("text/plain", "image/png", "application/octet-stream");
 	private static final String BEARER_SCHEME = "bearer";
 
 	private final IGRuntimeBinder runtimeBinder;
@@ -74,7 +88,7 @@ public class A2AAgentCardBuilder {
 				.version("1.0.0").url(cardUrl).preferredTransport("JSONRPC")
 				.capabilities(org.a2aproject.sdk.spec.AgentCapabilities.builder().streaming(true)
 						.pushNotifications(false).extendedAgentCard(false).extensions(List.of()).build())
-				.defaultInputModes(TEXT_MODES).defaultOutputModes(TEXT_MODES).skills(skills)
+				.defaultInputModes(TEXT_MODES).defaultOutputModes(OUTPUT_MODES).skills(skills)
 				// Advertise that callers must present a Bearer token; the platform security
 				// chain (self-issued JWT / API key, or OAuth2 resource server) validates it,
 				// and the exported network runs impersonating the resolved caller. Both modes
@@ -112,7 +126,7 @@ public class A2AAgentCardBuilder {
 			appendMemberCapabilities(network, tags);
 		}
 		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).examples(List.of())
-				.inputModes(TEXT_MODES).outputModes(TEXT_MODES).securityRequirements(List.of()).build();
+				.inputModes(NETWORK_INPUT_MODES).outputModes(OUTPUT_MODES).securityRequirements(List.of()).build();
 	}
 
 	private AgentSkill buildAgentSkill(A2AExportedAgent exported) {
@@ -136,7 +150,7 @@ public class A2AAgentCardBuilder {
 			description = "Exported Gebo agent " + exported.getAgentConfigCode();
 		}
 		return AgentSkill.builder().id(id).name(name).description(description).tags(tags).examples(List.of())
-				.inputModes(TEXT_MODES).outputModes(TEXT_MODES).securityRequirements(List.of()).build();
+				.inputModes(TEXT_MODES).outputModes(OUTPUT_MODES).securityRequirements(List.of()).build();
 	}
 
 	private void appendMemberCapabilities(GAgentsNetwork network, List<String> tags) {

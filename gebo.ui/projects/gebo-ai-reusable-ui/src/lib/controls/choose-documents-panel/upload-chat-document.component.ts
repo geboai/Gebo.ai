@@ -62,9 +62,15 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
 
     /**
      * The files accepted only for the tools of the chat's agents: no content handler
-     * reads them, so they are not read into the chat, and the models get no picture of them.
+     * reads them, so they are not read into the chat.
      */
     protected toolsExtensions: string[] = [];
+    /**
+     * The MIME types of the files the chat's model takes as they are (pictures, PDF
+     * files, recordings): what its configuration declares and its provider's
+     * integration carries. The model sees these files.
+     */
+    protected modelMimeTypes: string[] = [];
 
     constructor(
         private messageService: GeboAIRootNotificationService,
@@ -92,7 +98,8 @@ export class GeboAIUploadChatDocumentComponent implements OnInit, OnChanges, Con
             next: (value) => {
                 const chat = value?.chatExtensions ?? [];
                 this.toolsExtensions = value?.toolsExtensions ?? [];
-                this.filesExtensionsFlatList = [...chat, ...this.toolsExtensions].join(",");
+                this.modelMimeTypes = value?.modelMimeTypes ?? [];
+                this.filesExtensionsFlatList = [...chat, ...this.toolsExtensions, ...this.modelMimeTypes].join(",");
             },
             error: () => {
                 this.loading = false;

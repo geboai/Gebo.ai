@@ -119,12 +119,22 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
      * @throws GeboIngestionException If there's an error during ingestion
      * @throws IOException If there's an error reading the PDF
      */
+    /** The resolution a page without text is rendered at to be given as an image. */
+    static final float PAGE_AS_IMAGE_DPI = 110f;
+    /** The pages of one document rendered at most: the limit of images of a document is applied after. */
+    static final int MAX_RENDERED_PAGES = 200;
+
     @Override
     public Stream<Document> handleContent(GDocumentReference reference, InputStream is, Map<String, Object> metadata)
             throws GeboIngestionException, IOException {
         PdfReader pdfReader = null;
+        org.apache.pdfbox.pdmodel.PDDocument rendered = null;
         try {
-            pdfReader = new PdfReader(is);
+            // while images are taken the bytes are kept: a page without text (a scan, a full
+            // page picture) is rendered and given as an image, like any picture of a document
+            final byte[] pdf = ingestsImages() ? is.readAllBytes() : null;
+            final List<ai.gebo.system.ingestion.EmbeddedPicture> pagesAsImages = new ArrayList<>();
+            pdfReader = pdf != null ? new PdfReader(pdf) : new PdfReader(is);
             enrichMetaData(reference, metadata);
             enrichPdfMetadata(pdfReader, metadata);
             int pages = pdfReader.getNumberOfPages();
@@ -143,10 +153,34 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
                 clonedMetaData.put(DocumentMetaInfos.CONTENT_PAGE, "" + i);
                 Document document = new Document(text, clonedMetaData);
                 docs.add(document);
+                if (pdf != null && (text == null || text.trim().isEmpty())
+                        && pagesAsImages.size() < MAX_RENDERED_PAGES) {
+                    try {
+                        if (rendered == null) {
+                            rendered = org.apache.pdfbox.Loader.loadPDF(pdf);
+                        }
+                        final java.awt.image.BufferedImage image = new org.apache.pdfbox.rendering.PDFRenderer(rendered)
+                                .renderImageWithDPI(i - 1, PAGE_AS_IMAGE_DPI);
+                        final java.io.ByteArrayOutputStream png = new java.io.ByteArrayOutputStream();
+                        javax.imageio.ImageIO.write(image, "png", png);
+                        pagesAsImages.add(new ai.gebo.system.ingestion.EmbeddedPicture(null, "image/png",
+                                png.toByteArray(), i));
+                    } catch (IOException | RuntimeException unreadable) {
+                        LOGGER.warn("Page " + i + " of " + reference.getCode()
+                                + " has no text and could not be rendered as an image: " + unreadable);
+                    }
+                }
             }
-
+            docs.addAll(imageDocuments(reference, pagesAsImages, metadata));
             return docs.stream();
         } finally {
+            try {
+                if (rendered != null) {
+                    rendered.close();
+                }
+            } catch (Throwable t) {
+                // Silent close
+            }
             try {
                 pdfReader.close();
             } catch (Throwable t) {

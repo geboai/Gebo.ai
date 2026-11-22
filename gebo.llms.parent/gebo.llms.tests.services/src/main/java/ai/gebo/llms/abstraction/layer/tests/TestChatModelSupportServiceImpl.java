@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.abstraction.layer.tests;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -62,6 +63,11 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 	 */
 	static class TestConfigurableChatModel
 			extends GAbstractConfigurableChatModel<TestChatModelConfiguration, TestChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return CARRIED;
+		}
 
 		public TestConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -166,4 +172,16 @@ public class TestChatModelSupportServiceImpl extends AbstractTestingBusinessLogi
 		return null;
 	}
 
+
+	/**
+	 * The fake model takes every picture, audio and video and PDF, so that a test sees
+	 * in the prompt exactly what the configuration's input modalities let through.
+	 */
+	static final GModelCarriedMediaTypes CARRIED = GModelCarriedMediaTypes.none().images("image/*")
+			.audio("audio/*").video("video/*").documents("application/pdf");
+
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return CARRIED;
+	}
 }

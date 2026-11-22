@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.mistralai.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -93,6 +94,13 @@ public class MistralChatModelConfigurationSupportService
 	 */
 	class MistralConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GMistralChatModelConfig, MistralAiChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public MistralConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -311,5 +319,15 @@ public class MistralChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Spring AI's Mistral chat model sends every media of a user message as an image
+	 * url chunk, whatever its type (MistralAiChatModel, 2.1.0-RC2): pictures only, an
+	 * audio file or a PDF would reach Mistral as a picture.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none().images("image/*");
 	}
 }

@@ -65,6 +65,8 @@ public class A2AServerBuilder {
 	/** Turns what the platform answers into what an A2A caller receives. */
 	private final A2AResultAdapter resultAdapter;
 	private final A2AAccessChecker accessChecker;
+	/** Fetches the files a caller names by link, from the hosts this installation listed. */
+	private final A2ALinkedFilesFetcher linkedFiles;
 
 	public A2AServerInstance build(A2AServerConfig config) {
 		final String base = ENDPOINT_PREFIX + config.getExportedRelativeUrl();
@@ -98,7 +100,8 @@ public class A2AServerBuilder {
 		Object id = parsed.getId();
 		MessageSendParams params = parsed.getParams();
 		Message inbound = params != null ? params.message() : null;
-		A2AInboundResources received = A2AInboundResources.of(inbound != null ? inbound.parts() : null);
+		A2AInboundResources received = A2AInboundResources.of(inbound != null ? inbound.parts() : null,
+				linkedFiles);
 		String text = received.getText();
 		if (!received.getNotTaken().isEmpty()) {
 			LOGGER.warn("The caller sent things this export cannot take in: " + received.getNotTaken());
@@ -131,7 +134,7 @@ public class A2AServerBuilder {
 				try {
 					GeboChatResponse response = lastResponseOf(run);
 					Message result = resultAdapter.messageOf(response, null,
-							contextId != null ? contextId : chatContextOf(response));
+							contextId != null ? contextId : chatContextOf(response), received.getNotTaken());
 					return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON)
 							.body(JsonUtil.toJson(new SendMessageResponse(id, result)));
 				} finally {
@@ -194,7 +197,7 @@ public class A2AServerBuilder {
 			prepareError = new A2AError(JSONRPC_INTERNAL_ERROR, t.getMessage(), null);
 		}
 		if (prepareError == null && streamed != null) {
-			return streamFrames(id, contextId, streamed);
+			return streamFrames(id, contextId, streamed, received.getNotTaken());
 		}
 		if (prepareError != null) {
 			return singleFrame(id, prepareError, null, contextId);
@@ -218,7 +221,7 @@ public class A2AServerBuilder {
 	 * with the documents it rests on.
 	 */
 	private ServerResponse streamFrames(Object id, String contextId,
-			ChatEnvironmentRun run) {
+			ChatEnvironmentRun run, List<String> notTaken) {
 		return ServerResponse.sse(sse -> {
 			final AtomicInteger written = new AtomicInteger();
 			try {
@@ -227,7 +230,7 @@ public class A2AServerBuilder {
 						GeboChatResponse carried = resultAdapter.responseOf(frame);
 						if (carried != null) {
 							Message message = resultAdapter.messageOf(carried, null,
-									contextId != null ? contextId : carried.getUserChatContextCode());
+									contextId != null ? contextId : carried.getUserChatContextCode(), notTaken);
 							sse.data(JsonUtil.toJson(new SendStreamingMessageResponse(id, message)));
 							written.incrementAndGet();
 							return;
@@ -246,7 +249,7 @@ public class A2AServerBuilder {
 					// A run that produced no frame still owes the caller an answer.
 					GeboChatResponse response = run.getResponse();
 					sse.data(JsonUtil.toJson(new SendStreamingMessageResponse(id,
-							resultAdapter.messageOf(response, null, contextId))));
+							resultAdapter.messageOf(response, null, contextId, notTaken))));
 				}
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("A2A message/stream wrote " + written.get() + " frame(s)");
@@ -297,21 +300,6 @@ public class A2AServerBuilder {
 		return skill != null ? skill.toString() : null;
 	}
 
-	private String renderParts(List<Part<?>> parts) {
-		if (parts == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (Part<?> part : parts) {
-			if (part instanceof TextPart textPart) {
-				if (sb.length() > 0) {
-					sb.append("\n");
-				}
-				sb.append(textPart.text());
-			}
-		}
-		return sb.toString();
-	}
 
 	private String absoluteBase(ServerRequest request, String base) {
 		URI uri = request.uri();

@@ -56,6 +56,26 @@ import ai.gebo.llms.chat.abstraction.layer.services.IGRuntimeChatProfileChatMode
  */
 class GStandardChatPipelineDataFlowComponentTest {
 
+	private java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> limitsBefore;
+
+	/** The register names the files sent to the models for the kinds the installation sends: here, all. */
+	@org.junit.jupiter.api.BeforeEach
+	void filesAreSentToTheModels() {
+		limitsBefore = ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.get();
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> on = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		for (ai.gebo.llms.abstraction.layer.model.GModelInputModality kind : ai.gebo.llms.abstraction.layer.model.GModelInputModality
+				.values()) {
+			on.put(kind, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 2, 2, 4, 1500));
+		}
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(on);
+	}
+
+	@org.junit.jupiter.api.AfterEach
+	void limitsAsBefore() {
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(limitsBefore);
+	}
+
 	private ChatProfilesRepository profiles;
 	private IGRuntimeChatProfileChatModelDao profileModels;
 	private IGChatModelRuntimeConfigurationDao chatModels;
@@ -153,6 +173,25 @@ class GStandardChatPipelineDataFlowComponentTest {
 		return flow.getTransformations().stream()
 				.filter(x -> from.equals(x.getDataSourceId()) && to.equals(x.getDataDestinationId())).findFirst()
 				.orElseThrow();
+	}
+
+	@Test
+	void theChatWithAModelDirectlyReachesEveryConfiguredModelWithTheFilesItTakes() {
+		IGConfigurableChatModel plain = chatModel("plain", "http://localhost:11434");
+		IGConfigurableChatModel seeing = chatModel("seeing", "https://api.openai.com/v1");
+		when(seeing.getEffectiveInputMimeTypes()).thenReturn(List.of("image/*"));
+		when(chatModels.getConfigurations()).thenReturn((List) List.of(plain, seeing));
+
+		GDataFlowMetaInfos flow = flow();
+
+		List<String> reached = destinationsFrom(flow, "direct-chat-query");
+		assertTrue(reached.contains(flow.qualifiedId("chat-model-plain")), reached.toString());
+		assertTrue(reached.contains(flow.qualifiedId("chat-model-seeing")), reached.toString());
+		List<DataTransformationInfo> files = flow.getTransformations().stream()
+				.filter(x -> x.getId().startsWith("direct-files-")).toList();
+		assertEquals(1, files.size(), "only the model that takes files");
+		assertEquals(flow.qualifiedId("chat-model-seeing"), files.get(0).getDataDestinationId());
+		assertTrue(files.get(0).getDescription().endsWith("(image/*)"), files.get(0).getDescription());
 	}
 
 	@Test

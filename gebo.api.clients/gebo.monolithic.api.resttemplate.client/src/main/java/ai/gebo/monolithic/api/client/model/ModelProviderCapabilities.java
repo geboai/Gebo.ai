@@ -25,7 +25,7 @@ import java.util.List;
  * ModelProviderCapabilities
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class ModelProviderCapabilities {
   @JsonProperty("configurationCode")
@@ -45,6 +45,46 @@ public class ModelProviderCapabilities {
 
   @JsonProperty("functionsTreeList")
   private List<ToolCategoriesTree> functionsTreeList = null;
+
+  /**
+   * Gets or Sets inputModalities
+   */
+  public enum InputModalitiesEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO"),
+    DOCUMENT("DOCUMENT");
+
+    private String value;
+
+    InputModalitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static InputModalitiesEnum fromValue(String input) {
+      for (InputModalitiesEnum b : InputModalitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("inputModalities")
+  private List<InputModalitiesEnum> inputModalities = null;
+
+  @JsonProperty("inputMimeTypes")
+  private List<String> inputMimeTypes = null;
 
   public ModelProviderCapabilities configurationCode(String configurationCode) {
     this.configurationCode = configurationCode;
@@ -162,6 +202,58 @@ public class ModelProviderCapabilities {
     this.functionsTreeList = functionsTreeList;
   }
 
+  public ModelProviderCapabilities inputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+    return this;
+  }
+
+  public ModelProviderCapabilities addInputModalitiesItem(InputModalitiesEnum inputModalitiesItem) {
+    if (this.inputModalities == null) {
+      this.inputModalities = new ArrayList<>();
+    }
+    this.inputModalities.add(inputModalitiesItem);
+    return this;
+  }
+
+   /**
+   * Get inputModalities
+   * @return inputModalities
+  **/
+  @Schema(description = "")
+  public List<InputModalitiesEnum> getInputModalities() {
+    return inputModalities;
+  }
+
+  public void setInputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+  }
+
+  public ModelProviderCapabilities inputMimeTypes(List<String> inputMimeTypes) {
+    this.inputMimeTypes = inputMimeTypes;
+    return this;
+  }
+
+  public ModelProviderCapabilities addInputMimeTypesItem(String inputMimeTypesItem) {
+    if (this.inputMimeTypes == null) {
+      this.inputMimeTypes = new ArrayList<>();
+    }
+    this.inputMimeTypes.add(inputMimeTypesItem);
+    return this;
+  }
+
+   /**
+   * Get inputMimeTypes
+   * @return inputMimeTypes
+  **/
+  @Schema(description = "")
+  public List<String> getInputMimeTypes() {
+    return inputMimeTypes;
+  }
+
+  public void setInputMimeTypes(List<String> inputMimeTypes) {
+    this.inputMimeTypes = inputMimeTypes;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -177,12 +269,14 @@ public class ModelProviderCapabilities {
         Objects.equals(this.supportsSpeech, modelProviderCapabilities.supportsSpeech) &&
         Objects.equals(this.supportsStructuredOutput, modelProviderCapabilities.supportsStructuredOutput) &&
         Objects.equals(this.supportsFunctionCalls, modelProviderCapabilities.supportsFunctionCalls) &&
-        Objects.equals(this.functionsTreeList, modelProviderCapabilities.functionsTreeList);
+        Objects.equals(this.functionsTreeList, modelProviderCapabilities.functionsTreeList) &&
+        Objects.equals(this.inputModalities, modelProviderCapabilities.inputModalities) &&
+        Objects.equals(this.inputMimeTypes, modelProviderCapabilities.inputMimeTypes);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(configurationCode, supportsTranscript, supportsSpeech, supportsStructuredOutput, supportsFunctionCalls, functionsTreeList);
+    return Objects.hash(configurationCode, supportsTranscript, supportsSpeech, supportsStructuredOutput, supportsFunctionCalls, functionsTreeList, inputModalities, inputMimeTypes);
   }
 
 
@@ -197,6 +291,8 @@ public class ModelProviderCapabilities {
     sb.append("    supportsStructuredOutput: ").append(toIndentedString(supportsStructuredOutput)).append("\n");
     sb.append("    supportsFunctionCalls: ").append(toIndentedString(supportsFunctionCalls)).append("\n");
     sb.append("    functionsTreeList: ").append(toIndentedString(functionsTreeList)).append("\n");
+    sb.append("    inputModalities: ").append(toIndentedString(inputModalities)).append("\n");
+    sb.append("    inputMimeTypes: ").append(toIndentedString(inputMimeTypes)).append("\n");
     sb.append("}");
     return sb.toString();
   }

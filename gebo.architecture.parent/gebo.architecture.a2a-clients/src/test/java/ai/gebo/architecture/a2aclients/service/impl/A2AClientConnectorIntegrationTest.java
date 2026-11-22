@@ -80,6 +80,9 @@ class A2AClientConnectorIntegrationTest {
 			}
 		});
 
+		server.createContext("/files/chart.png", exchange -> respond(exchange, 200, "image/png; charset=binary",
+				new byte[] { 1, 2, 3, 4 }));
+
 		server.start();
 		baseUrl = "http://127.0.0.1:" + server.getAddress().getPort();
 	}
@@ -119,6 +122,47 @@ class A2AClientConnectorIntegrationTest {
 		assertNotNull(params);
 		assertEquals("ping", firstText(params.message()));
 		assertEquals(Message.Role.ROLE_USER, params.message().role());
+	}
+
+	/** The files travel as file parts with their bytes, and the card tells which types the agent takes. */
+	@Test
+	void sendsTheFilesTheAgentTakes() throws Exception {
+		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null, null);
+		java.util.Set<String> modes = connector.acceptedInputModes(config());
+		assertEquals(java.util.Set.of("text/plain"), modes);
+		assertTrue(A2AClientConnector.takes(java.util.Set.of("image/*"), "image/PNG; q=1"));
+		assertTrue(A2AClientConnector.takes(java.util.Set.of("*/*"), "application/pdf"));
+		assertTrue(!A2AClientConnector.takes(modes, "image/png"));
+
+		connector.sendMessage(config(), "look", null,
+				List.of(new A2AClientConnector.OutboundFile("chart.png", "image/png", new byte[] { 1, 2, 3 })));
+		SendMessageRequest sent = JsonUtil.fromJson(lastRequestBody, SendMessageRequest.class);
+		List<org.a2aproject.sdk.spec.FilePart> files = sent.getParams().message().parts().stream()
+				.filter(p -> p instanceof org.a2aproject.sdk.spec.FilePart).map(p -> (org.a2aproject.sdk.spec.FilePart) p)
+				.toList();
+		assertEquals(1, files.size());
+		org.a2aproject.sdk.spec.FileWithBytes file = (org.a2aproject.sdk.spec.FileWithBytes) files.get(0).file();
+		assertEquals("chart.png", file.name());
+		assertEquals("image/png", file.mimeType());
+		assertEquals(java.util.Base64.getEncoder().encodeToString(new byte[] { 1, 2, 3 }), file.bytes());
+		assertEquals("look", firstText(sent.getParams().message()));
+	}
+
+	/** A file the agent names at an address of its own is fetched; one elsewhere is not. */
+	@Test
+	void fetchesAFileOnlyFromTheAgentsOwnAddress() throws Exception {
+		A2AClientConnector connector = new A2AClientConnector(null, null, null, null, null, null);
+
+		A2AClientConnector.LinkedFile own = connector.fetchLinkedFile(config(), baseUrl + "/files/chart.png");
+		assertNotNull(own);
+		assertEquals(4, own.bytes().length);
+		assertEquals("image/png", own.contentType());
+
+		// another host, another port of the same host, another scheme: none is the agent's
+		assertEquals(null, connector.fetchLinkedFile(config(), "http://example.invalid/files/chart.png"));
+		assertEquals(null, connector.fetchLinkedFile(config(), "http://127.0.0.1:1/files/chart.png"));
+		assertEquals(null, connector.fetchLinkedFile(config(), "file:///etc/hostname"));
+		assertTrue(connector.isOwnAddress(config(), baseUrl + "/anything"));
 	}
 
 	// ---------------------------------------------------------------------

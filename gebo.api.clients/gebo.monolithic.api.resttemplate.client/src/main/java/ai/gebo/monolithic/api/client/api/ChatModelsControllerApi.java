@@ -2,8 +2,11 @@ package ai.gebo.monolithic.api.client.api;
 
 import ai.gebo.monolithic.api.client.invoker.ApiClient;
 
+import ai.gebo.monolithic.api.client.model.ChatModelInputs;
 import ai.gebo.monolithic.api.client.model.ConfigurationEntryGBaseChatModelConfig;
 import ai.gebo.monolithic.api.client.model.GChatModelType;
+import ai.gebo.monolithic.api.client.model.GModelCarriedMediaTypes;
+import ai.gebo.monolithic.api.client.model.OperationStatusListChatModelInputs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +26,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T14:56:16.329181134+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class ChatModelsControllerApi {
     private ApiClient apiClient;
@@ -43,6 +46,92 @@ public class ChatModelsControllerApi {
         this.apiClient = apiClient;
     }
 
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return OperationStatusListChatModelInputs
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public OperationStatusListChatModelInputs applyModelsMetadataInputModalities() throws RestClientException {
+        return applyModelsMetadataInputModalitiesWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;OperationStatusListChatModelInputs&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<OperationStatusListChatModelInputs> applyModelsMetadataInputModalitiesWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/applyModelsMetadataInputModalities").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<OperationStatusListChatModelInputs> returnType = new ParameterizedTypeReference<OperationStatusListChatModelInputs>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param modelTypeCode  (required)
+     * @param modelCode  (optional)
+     * @return GModelCarriedMediaTypes
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GModelCarriedMediaTypes getCarriedMediaTypes(String modelTypeCode, String modelCode) throws RestClientException {
+        return getCarriedMediaTypesWithHttpInfo(modelTypeCode, modelCode).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param modelTypeCode  (required)
+     * @param modelCode  (optional)
+     * @return ResponseEntity&lt;GModelCarriedMediaTypes&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GModelCarriedMediaTypes> getCarriedMediaTypesWithHttpInfo(String modelTypeCode, String modelCode) throws RestClientException {
+        Object postBody = null;
+        // verify the required parameter 'modelTypeCode' is set
+        if (modelTypeCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'modelTypeCode' when calling getCarriedMediaTypes");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getCarriedMediaTypes").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "modelTypeCode", modelTypeCode));
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "modelCode", modelCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GModelCarriedMediaTypes> returnType = new ParameterizedTypeReference<GModelCarriedMediaTypes>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
     /**
      * 
      * 
@@ -79,6 +168,82 @@ public class ChatModelsControllerApi {
         String[] authNames = new String[] {  };
 
         ParameterizedTypeReference<List<GChatModelType>> returnType = new ParameterizedTypeReference<List<GChatModelType>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;ChatModelInputs&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<ChatModelInputs> getChatModelsInputs() throws RestClientException {
+        return getChatModelsInputsWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;ChatModelInputs&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<ChatModelInputs>> getChatModelsInputsWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getChatModelsInputs").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<ChatModelInputs>> returnType = new ParameterizedTypeReference<List<ChatModelInputs>>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return List&lt;String&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public List<String> getFileKindsSentToModels() throws RestClientException {
+        return getFileKindsSentToModelsWithHttpInfo().getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @return ResponseEntity&lt;List&lt;String&gt;&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<List<String>> getFileKindsSentToModelsWithHttpInfo() throws RestClientException {
+        Object postBody = null;
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getFileKindsSentToModels").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<List<String>> returnType = new ParameterizedTypeReference<List<String>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**

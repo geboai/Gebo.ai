@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -124,10 +125,81 @@ public class A2AClientConnector {
 	 * @throws Exception on transport failure or a JSON-RPC error response
 	 */
 	public EventKind sendMessage(A2ARemoteAgentConfig config, String text, String contextId) throws Exception {
+		return sendMessage(config, text, contextId, null);
+	}
+
+	/** A file sent to a remote agent with a message, bytes included. */
+	public record OutboundFile(String name, String mimeType, byte[] bytes) {
+	}
+
+	/**
+	 * The media types the remote agent says it takes as input: its card's default
+	 * input modes and those of its skills, lower case. Read with the card and held as
+	 * long as the endpoint is; empty when the card cannot be read or tells none.
+	 */
+	public java.util.Set<String> acceptedInputModes(A2ARemoteAgentConfig config) {
+		if (config == null || isBlank(config.getAgentCardUrl())) {
+			return java.util.Set.of();
+		}
+		final long now = System.currentTimeMillis();
+		final CachedModes cached = inputModesCache.get(config.getAgentCardUrl());
+		if (cached != null && cached.expiresAt > now) {
+			return cached.modes;
+		}
+		final java.util.Set<String> modes = new java.util.LinkedHashSet<>();
+		try {
+			final AgentCard card = fetchAgentCard(config);
+			if (card.defaultInputModes() != null) {
+				card.defaultInputModes().forEach(mode -> addMode(modes, mode));
+			}
+			if (card.skills() != null) {
+				card.skills().forEach(skill -> {
+					if (skill != null && skill.inputModes() != null) {
+						skill.inputModes().forEach(mode -> addMode(modes, mode));
+					}
+				});
+			}
+		} catch (Exception e) {
+			LOGGER.warn("The card of remote A2A agent " + config.getExportingPrefix()
+					+ " cannot be read to know the files it takes: " + e.getMessage());
+			return java.util.Set.of();
+		}
+		inputModesCache.put(config.getAgentCardUrl(),
+				new CachedModes(java.util.Collections.unmodifiableSet(modes), now + ENDPOINT_CACHE_TTL.toMillis()));
+		return modes;
+	}
+
+	private static void addMode(java.util.Set<String> modes, String mode) {
+		if (mode != null && !mode.isBlank()) {
+			modes.add(mode.trim().toLowerCase(java.util.Locale.ROOT));
+		}
+	}
+
+	/** Whether a file of this type is among the input modes: the type itself, its family (image/*) or anything. */
+	public static boolean takes(java.util.Set<String> inputModes, String mimeType) {
+		if (inputModes == null || mimeType == null || !mimeType.contains("/")) {
+			return false;
+		}
+		String type = mimeType.trim().toLowerCase(java.util.Locale.ROOT);
+		if (type.contains(";")) {
+			type = type.substring(0, type.indexOf(';')).trim();
+		}
+		return inputModes.contains(type) || inputModes.contains(type.substring(0, type.indexOf('/')) + "/*")
+				|| inputModes.contains("*/*");
+	}
+
+	private final java.util.Map<String, CachedModes> inputModesCache = new java.util.concurrent.ConcurrentHashMap<>();
+
+	private record CachedModes(java.util.Set<String> modes, long expiresAt) {
+	}
+
+	/** The same, with files the remote agent's card says it takes, sent as file parts with their bytes. */
+	public EventKind sendMessage(A2ARemoteAgentConfig config, String text, String contextId,
+			List<OutboundFile> files) throws Exception {
 		requireJsonRpcTransport(config);
 		requireAgentCardUrl(config);
 		String authorization = resolveAuthorizationHeader(config);
-		MessageSendParams params = buildParams(text, contextId);
+		MessageSendParams params = buildParams(text, contextId, files);
 		SendMessageRequest request = new SendMessageRequest(UUID.randomUUID().toString(), params);
 		String requestBody = JsonUtil.toJson(request);
 		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(resolveRpcEndpointUrl(config)))
@@ -199,6 +271,79 @@ public class A2AClientConnector {
 	}
 
 	// ---------------------------------------------------------------------
+	// files an answer names by address
+	// ---------------------------------------------------------------------
+
+	/** The size in bytes a file named by address may have to be fetched. */
+	static final long MAX_LINKED_FILE_BYTES = 20L * 1024 * 1024;
+
+	/** A file fetched from the remote agent: its bytes and the type its server told. */
+	public record LinkedFile(byte[] bytes, String contentType) {
+	}
+
+	/**
+	 * Whether an address a remote agent's answer names is the agent's own: same
+	 * scheme, host and port as its Agent Card or as the endpoint its calls go to.
+	 * Only such an address is fetched, with the credentials the agent is called
+	 * with: an address elsewhere would have this installation call, and hand its
+	 * credentials to, whatever host an answer names.
+	 */
+	public boolean isOwnAddress(A2ARemoteAgentConfig config, String uri) {
+		if (config == null || isBlank(uri) || isBlank(config.getAgentCardUrl())) {
+			return false;
+		}
+		final String origin = originOf(uri);
+		if (origin == null || !(origin.startsWith("http://") || origin.startsWith("https://"))) {
+			return false;
+		}
+		if (origin.equalsIgnoreCase(originOf(config.getAgentCardUrl()))) {
+			return true;
+		}
+		try {
+			return origin.equalsIgnoreCase(originOf(resolveRpcEndpointUrl(config)));
+		} catch (Exception e) {
+			LOGGER.warn("The endpoint of remote A2A agent " + config.getExportingPrefix()
+					+ " cannot be resolved to compare an address with: " + e.getMessage());
+			return false;
+		}
+	}
+
+	/**
+	 * Fetches a file the remote agent's answer names by an address of its own (see
+	 * {@link #isOwnAddress}); null when the address is not the agent's. Redirects are
+	 * not followed, and a file larger than {@link #MAX_LINKED_FILE_BYTES} is refused.
+	 */
+	public LinkedFile fetchLinkedFile(A2ARemoteAgentConfig config, String uri) throws Exception {
+		if (!isOwnAddress(config, uri)) {
+			return null;
+		}
+		HttpRequest.Builder builder = HttpRequest.newBuilder().uri(URI.create(uri)).timeout(REQUEST_TIMEOUT).GET();
+		applyAuth(builder, resolveAuthorizationHeader(config));
+		HttpResponse<java.io.InputStream> response = newHttpClient().send(builder.build(),
+				BodyHandlers.ofInputStream());
+		try (java.io.InputStream body = response.body()) {
+			if (response.statusCode() / 100 != 2) {
+				throw new IllegalStateException("The file fetch failed with HTTP " + response.statusCode());
+			}
+			final long declared = response.headers().firstValueAsLong("Content-Length").orElse(-1);
+			if (declared > MAX_LINKED_FILE_BYTES) {
+				throw new IllegalStateException("The file is of " + declared + " bytes, more than "
+						+ MAX_LINKED_FILE_BYTES + " that are fetched");
+			}
+			final byte[] bytes = body.readNBytes((int) MAX_LINKED_FILE_BYTES + 1);
+			if (bytes.length > MAX_LINKED_FILE_BYTES) {
+				throw new IllegalStateException(
+						"The file is of more than " + MAX_LINKED_FILE_BYTES + " bytes that are fetched");
+			}
+			String type = response.headers().firstValue("Content-Type").orElse(null);
+			if (type != null && type.contains(";")) {
+				type = type.substring(0, type.indexOf(';')).trim();
+			}
+			return new LinkedFile(bytes, type);
+		}
+	}
+
+	// ---------------------------------------------------------------------
 	// helpers
 	// ---------------------------------------------------------------------
 
@@ -215,8 +360,23 @@ public class A2AClientConnector {
 	}
 
 	private MessageSendParams buildParams(String text, String contextId) {
+		return buildParams(text, contextId, null);
+	}
+
+	private MessageSendParams buildParams(String text, String contextId, List<OutboundFile> files) {
+		final List<org.a2aproject.sdk.spec.Part<?>> parts = new java.util.ArrayList<>();
+		parts.add(new TextPart(text != null ? text : ""));
+		if (files != null) {
+			for (OutboundFile file : files) {
+				if (file != null && file.bytes() != null && file.bytes().length > 0) {
+					parts.add(new org.a2aproject.sdk.spec.FilePart(new org.a2aproject.sdk.spec.FileWithBytes(
+							file.mimeType() != null ? file.mimeType() : "application/octet-stream", file.name(),
+							file.bytes())));
+				}
+			}
+		}
 		Message.Builder messageBuilder = Message.builder().role(Message.Role.ROLE_USER)
-				.messageId(UUID.randomUUID().toString()).parts(new TextPart(text != null ? text : ""));
+				.messageId(UUID.randomUUID().toString()).parts(parts);
 		if (contextId != null && !contextId.isBlank()) {
 			messageBuilder.contextId(contextId);
 		}
@@ -291,6 +451,7 @@ public class A2AClientConnector {
 	/** Drops any cached endpoint for a remote, so the next call re-resolves from the card. */
 	public void invalidateEndpointCache(A2ARemoteAgentConfig config) {
 		if (config != null && config.getAgentCardUrl() != null) {
+			inputModesCache.remove(config.getAgentCardUrl());
 			endpointCache.remove(config.getAgentCardUrl());
 		}
 	}

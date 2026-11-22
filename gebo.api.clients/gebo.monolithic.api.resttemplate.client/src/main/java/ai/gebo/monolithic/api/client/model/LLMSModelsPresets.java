@@ -25,7 +25,7 @@ import java.util.List;
  * LLMSModelsPresets
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-15T16:00:30.875750714+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class LLMSModelsPresets {
   @JsonProperty("doModelsLookup")

@@ -17,7 +17,10 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.services.IGModelChoiceMetaInfoEnricherService;
@@ -45,6 +48,7 @@ public class GModelChoiceMetaInfoEnricherServiceImpl implements IGModelChoiceMet
             ModelChoiceType choice, Function<ModelChoiceType, ModelMetaInfo> defaultMetainfoFactory) {
         // Invoke general metadata enrichment method
         this.enrichMetaInfos(providerId, choice, defaultMetainfoFactory);
+        this.fillInputModalitiesByRule(providerId, choice);
 
         // Set additional properties based on metadata
         if (choice.getMetaInfos() != null && choice.getSupportsFunctionCalls() == null) {
@@ -119,4 +123,33 @@ public class GModelChoiceMetaInfoEnricherServiceImpl implements IGModelChoiceMet
         }
     }
 
+
+    /**
+     * What the library's rules say a model accepts as input, for a model neither its
+     * provider's api nor an entry of its own told it of: the dated variants of a
+     * model and the families of the providers whose api tells nothing. What the api
+     * or the model's own entry said is kept as it is.
+     */
+    private <ModelChoiceType extends GBaseChatModelChoice> void fillInputModalitiesByRule(String providerId,
+            ModelChoiceType choice) {
+        if (choice == null || choice.getCode() == null) {
+            return;
+        }
+        ModelMetaInfo meta = choice.getMetaInfos();
+        if (meta != null && meta.knownInputModalities() != null) {
+            return;
+        }
+        List<GModelInputModality> byRule = dao.findInputModalities(providerId, choice.getCode());
+        if (byRule == null || byRule.isEmpty()) {
+            return;
+        }
+        if (meta == null) {
+            meta = new ModelMetaInfo();
+            meta.setProviderId(providerId);
+            meta.setModelId(choice.getCode());
+            meta.setChatModel(true);
+            choice.setMetaInfos(meta);
+        }
+        meta.setInputModalities(byRule);
+    }
 }

@@ -118,4 +118,39 @@ class A2AInboundResourcesTest {
 		assertFalse(read.hasResources());
 		assertEquals(1, read.getNotTaken().size());
 	}
+
+	/** A file named by a link is fetched only from a host this installation listed. */
+	@org.junit.jupiter.api.Test
+	void aLinkedFileIsFetchedOnlyFromAListedHost() throws Exception {
+		final com.sun.net.httpserver.HttpServer server = com.sun.net.httpserver.HttpServer
+				.create(new java.net.InetSocketAddress("127.0.0.1", 0), 0);
+		server.createContext("/files/chart.png", exchange -> {
+			exchange.getResponseHeaders().add("Content-Type", "image/png");
+			exchange.sendResponseHeaders(200, 3);
+			try (java.io.OutputStream out = exchange.getResponseBody()) {
+				out.write(new byte[] { 1, 2, 3 });
+			}
+		});
+		server.start();
+		try {
+			final String link = "http://127.0.0.1:" + server.getAddress().getPort() + "/files/chart.png";
+			final List<org.a2aproject.sdk.spec.Part<?>> parts = List
+					.of(new org.a2aproject.sdk.spec.FilePart(new org.a2aproject.sdk.spec.FileWithUri(null, null, link)));
+
+			final A2AInboundResources listed = A2AInboundResources.of(parts,
+					new A2ALinkedFilesFetcher(List.of("127.0.0.1")));
+			org.junit.jupiter.api.Assertions.assertEquals(1, listed.getFiles().size());
+			org.junit.jupiter.api.Assertions.assertEquals("chart.png", listed.getFiles().get(0).getOriginalFilename());
+			org.junit.jupiter.api.Assertions.assertEquals("image/png", listed.getFiles().get(0).getContentType());
+			org.junit.jupiter.api.Assertions.assertArrayEquals(new byte[] { 1, 2, 3 }, listed.getFiles().get(0).getBytes());
+			org.junit.jupiter.api.Assertions.assertTrue(listed.getNotTaken().isEmpty());
+
+			// no host listed, as an installation is at first: the link is not called
+			final A2AInboundResources unlisted = A2AInboundResources.of(parts, new A2ALinkedFilesFetcher(List.of()));
+			org.junit.jupiter.api.Assertions.assertTrue(unlisted.getFiles().isEmpty());
+			org.junit.jupiter.api.Assertions.assertEquals(1, unlisted.getNotTaken().size());
+		} finally {
+			server.stop(0);
+		}
+	}
 }

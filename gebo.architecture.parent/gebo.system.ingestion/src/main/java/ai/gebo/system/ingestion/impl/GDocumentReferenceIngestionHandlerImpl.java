@@ -358,6 +358,112 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 		return m;
 	}
 
+	/** The settings of the images taken; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig;
+	/** The settings of the recordings and videos taken; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig;
+
+	public void setMediaIngestion(ai.gebo.system.ingestion.config.ImagesIngestionConfig imagesConfig,
+			ai.gebo.system.ingestion.config.RecordingsAndVideosIngestionConfig mediaConfig) {
+		this.imagesConfig = imagesConfig;
+		this.mediaConfig = mediaConfig;
+	}
+
+	/**
+	 * The media fragments of a Gebo document as documents holding them as media: the
+	 * images, the recordings and the videos, each kind only while the installation
+	 * ingests it and within the same limits the readers apply. A fragment that cannot be
+	 * read is omitted.
+	 */
+	private List<Document> mediaOf(GDocumentReference reference, GeboDocument geboDocument,
+			Map<String, Object> joined) {
+		final List<Document> out = new java.util.ArrayList<>();
+		final boolean images = imagesConfig != null && imagesConfig.isIngestionEnabled();
+		final boolean recordings = mediaConfig != null && mediaConfig.isRecordingsEnabled();
+		final boolean videos = mediaConfig != null && mediaConfig.isVideosEnabled();
+		if (images && geboDocument.getImages() != null) {
+			int taken = 0;
+			for (ai.gebo.document.model.GeboImageDocumentFragment fragment : geboDocument.getImages()) {
+				if (taken >= imagesConfig.getMaxImagesPerDocument()) {
+					LOGGER.warn("Some images of " + reference.getCode() + " were not taken: only "
+							+ imagesConfig.getMaxImagesPerDocument() + " of a document are");
+					break;
+				}
+				final ai.gebo.system.ingestion.EmbeddedPicture picture = new ai.gebo.system.ingestion.EmbeddedPicture(
+						fragment.getName(), fragment.getContentType(), bytesOf(fragment));
+				final String type = picture.readableType();
+				if (type == null || picture.data() == null || picture.data().length < imagesConfig.getMinImageBytes()
+						|| picture.data().length > imagesConfig.getMaxImageBytes()) {
+					continue;
+				}
+				if (addMedia(out, fragment, type, picture.data(), "image", joined)) {
+					taken++;
+				}
+			}
+		}
+		if (recordings && geboDocument.getAudios() != null) {
+			for (ai.gebo.document.model.GeboAudioDocumentFragment fragment : geboDocument.getAudios()) {
+				final byte[] data = bytesOf(fragment);
+				if (startsWith(fragment.getContentType(), "audio/") && data != null && data.length > 0
+						&& data.length <= mediaConfig.getMaxRecordingBytes()) {
+					addMedia(out, fragment, fragment.getContentType(), data, "media", joined);
+				}
+			}
+		}
+		if (videos && geboDocument.getVideos() != null) {
+			for (ai.gebo.document.model.GeboVideoDocumentFragment fragment : geboDocument.getVideos()) {
+				final byte[] data = bytesOf(fragment);
+				if (startsWith(fragment.getContentType(), "video/") && data != null && data.length > 0
+						&& data.length <= mediaConfig.getMaxVideoBytes()) {
+					addMedia(out, fragment, fragment.getContentType(), data, "media", joined);
+				}
+			}
+		}
+		return out;
+	}
+
+	private static boolean startsWith(String contentType, String family) {
+		return contentType != null && contentType.trim().toLowerCase().startsWith(family);
+	}
+
+	private byte[] bytesOf(ai.gebo.document.model.AbstractGeboDocumentFragment fragment) {
+		try (InputStream is = fragment.streamContent()) {
+			return is.readAllBytes();
+		} catch (IOException | RuntimeException unreadable) {
+			LOGGER.warn("A media fragment of a Gebo document could not be read: " + unreadable);
+			return null;
+		}
+	}
+
+	private boolean addMedia(List<Document> out, ai.gebo.document.model.AbstractGeboDocumentFragment fragment,
+			String contentType, byte[] data, String mediaName, Map<String, Object> joined) {
+		try {
+			String type = contentType.trim().toLowerCase();
+			if (type.indexOf(';') > 0) {
+				type = type.substring(0, type.indexOf(';')).trim();
+			}
+			final Map<String, Object> meta = add(joined, fragment.getCustomMetaData());
+			if (fragment.getName() != null && !fragment.getName().isBlank()) {
+				meta.put(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA, fragment.getName());
+			}
+			final Document.Builder builder = Document.builder()
+					.media(org.springframework.ai.content.Media.builder()
+							.mimeType(org.springframework.util.MimeTypeUtils.parseMimeType(type)).data(data)
+							.name(mediaName).build())
+					.metadata(meta);
+			if (fragment.getUniqueCode() != null && !fragment.getUniqueCode().isBlank()) {
+				builder.id(fragment.getUniqueCode());
+			}
+			out.add(builder.build());
+			return true;
+		} catch (RuntimeException unreadable) {
+			LOGGER.warn("A media fragment of a Gebo document could not be read: " + unreadable);
+			return false;
+		}
+	}
+
 	@Override
 	public IngestionHandlerData handleContent(GDocumentReference reference, GeboDocument geboDocument) {
 		IngestionHandlerData out = new IngestionHandlerData();
@@ -369,10 +475,17 @@ public class GDocumentReferenceIngestionHandlerImpl implements IGDocumentReferen
 			Map<String, Object> additional = geboDocument.getAdditionalAttributes();
 			Map<String, Object> custom = geboDocument.getCustomMetaData();
 			final Map<String, Object> joined = add(metainfos, additional, custom);
-			out.setStream(geboDocument.getTexts().stream()
+			// the texts first, then the media of the kinds the installation ingests, each as a
+			// document holding it as media: getStream() gives the texts, getStreamWithMedia() all
+			out.setStream(Stream.concat(geboDocument.getTexts().stream()
 					.filter(x -> x.getContent() != null && x.getContent().trim().length() > 0)
-					.map(fragment -> new Document(fragment.getUniqueCode(), fragment.getContent(),
-							add(joined, fragment.getCustomMetaData()))));
+					// a fragment with no code of its own takes a generated one: a document
+					// cannot have an empty id
+					.map(fragment -> fragment.getUniqueCode() != null && !fragment.getUniqueCode().isBlank()
+							? new Document(fragment.getUniqueCode(), fragment.getContent(),
+									add(joined, fragment.getCustomMetaData()))
+							: new Document(fragment.getContent(), add(joined, fragment.getCustomMetaData()))),
+					mediaOf(reference, geboDocument, joined).stream()));
 		} else
 			out.setStream(Stream.of());
 		return out;

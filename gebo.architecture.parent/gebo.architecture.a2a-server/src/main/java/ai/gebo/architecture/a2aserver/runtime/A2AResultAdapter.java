@@ -9,6 +9,11 @@
 
 package ai.gebo.architecture.a2aserver.runtime;
 
+import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.LLMGeneratedResource;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatStorageAreaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.a2aproject.sdk.spec.FileWithBytes;
+import org.a2aproject.sdk.spec.FilePart;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -51,6 +56,16 @@ public class A2AResultAdapter {
 	 * documents it rests on, and the account of the run.
 	 */
 	public Message messageOf(GeboChatResponse response, String text, String contextId) {
+		return messageOf(response, text, contextId, null);
+	}
+
+	/**
+	 * The same, telling the caller what it sent that was not taken in (an attachment
+	 * named by a link, a part of a kind this export does not read): it stands in the
+	 * run's account under {@code notTaken}, so that a caller does not believe the
+	 * answer rests on something the run never saw.
+	 */
+	public Message messageOf(GeboChatResponse response, String text, String contextId, List<String> notTaken) {
 		final List<Part<?>> parts = new ArrayList<>();
 		final String answer = text != null ? text : answerTextOf(response);
 		parts.add(new TextPart(answer != null ? answer : ""));
@@ -59,7 +74,13 @@ public class A2AResultAdapter {
 			if (citations != null) {
 				parts.add(citations);
 			}
-			parts.add(runInfoOf(response));
+			parts.add(runInfoOf(response, notTaken));
+			parts.addAll(filesOf(response));
+		} else if (notTaken != null && !notTaken.isEmpty()) {
+			final Map<String, Object> data = new LinkedHashMap<>();
+			data.put("kind", RUN_INFO_KIND);
+			data.put("notTaken", new ArrayList<>(notTaken));
+			parts.add(new DataPart(data));
 		}
 		final Message.Builder builder = Message.builder().role(Message.Role.ROLE_AGENT)
 				.messageId(UUID.randomUUID().toString()).parts(parts);
@@ -71,6 +92,33 @@ public class A2AResultAdapter {
 					+ (response != null ? documentsOf(response).size() : 0));
 		}
 		return builder.build();
+	}
+
+	/** The size in bytes a generated file may have to travel in the answer. */
+	static final long MAX_FILE_BYTES = ai.gebo.llms.agent.standard.services.ChatRunFiles.MAX_FILE_BYTES;
+	/** Reads the files of a run; a bare one, reading nothing, in a unit test. */
+	@Autowired(required = false)
+	private ai.gebo.llms.agent.standard.services.ChatRunFiles runFiles = new ai.gebo.llms.agent.standard.services.ChatRunFiles();
+
+	void setStorageArea(IGChatStorageAreaService storageArea) {
+		this.runFiles.setStorageArea(storageArea);
+	}
+
+	void setLibraryFiles(ai.gebo.architecture.ai.files.IGAILibraryFilesService libraryFiles) {
+		this.runFiles.setLibraryFiles(libraryFiles);
+	}
+
+	/**
+	 * The files of the run as file parts, bytes included, since the caller has no way
+	 * to fetch them from Gebo: what its models generated and what its tools wrote
+	 * (see {@link ai.gebo.llms.agent.standard.services.ChatRunFiles}).
+	 */
+	List<Part<?>> filesOf(GeboChatResponse response) {
+		final List<Part<?>> files = new ArrayList<>();
+		for (ai.gebo.llms.agent.standard.services.ChatRunFiles.RunFile file : runFiles.of(response)) {
+			files.add(new FilePart(new FileWithBytes(file.mimeType(), file.name(), file.bytes())));
+		}
+		return files;
 	}
 
 	/** A streamed frame: the chunk of text it carries, or null when it carries none. */
@@ -146,9 +194,12 @@ public class A2AResultAdapter {
 	}
 
 	/** How the answer was reached: the model that wrote it and the tools operated. */
-	private DataPart runInfoOf(GeboChatResponse response) {
+	private DataPart runInfoOf(GeboChatResponse response, List<String> notTaken) {
 		final Map<String, Object> data = new LinkedHashMap<>();
 		data.put("kind", RUN_INFO_KIND);
+		if (notTaken != null && !notTaken.isEmpty()) {
+			data.put("notTaken", new ArrayList<>(notTaken));
+		}
 		put(data, "chatContextCode", response.getUserChatContextCode());
 		put(data, "chatModelCode", response.getUsedChatModelCode());
 		put(data, "chatModelProvider", response.getUsedChatModelProvider());

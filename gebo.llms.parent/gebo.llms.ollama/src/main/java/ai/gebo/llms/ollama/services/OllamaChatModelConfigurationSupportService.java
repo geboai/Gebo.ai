@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.ollama.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 import java.util.Map;
 
@@ -108,6 +109,13 @@ public class OllamaChatModelConfigurationSupportService
 	 * Inner class that implements the configurable chat model for Ollama
 	 */
 	class OllamaConfigurableChatModel extends GAbstractConfigurableChatModel<GOllamaChatModelConfig, OllamaChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public OllamaConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -365,5 +373,14 @@ public class OllamaChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Spring AI's Ollama chat model sends every media of a user message in the
+	 * message's images, whatever its type (OllamaChatModel, 2.1.0-RC2): pictures only.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none().images("image/*");
 	}
 }

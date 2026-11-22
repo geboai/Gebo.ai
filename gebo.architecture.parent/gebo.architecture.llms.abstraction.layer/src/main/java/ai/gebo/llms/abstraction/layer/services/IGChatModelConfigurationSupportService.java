@@ -17,6 +17,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.model.OperationStatus;
 import jakarta.validation.constraints.NotNull;
@@ -72,4 +73,16 @@ public interface IGChatModelConfigurationSupportService<ModelChoice extends GBas
 		return choice != null && choice.getMetaInfos() != null ? choice.getMetaInfos().knownInputModalities() : null;
 	}
 
+
+	/**
+	 * What this provider's integration can deliver to a model besides text, see
+	 * {@link GModelCarriedMediaTypes}: the MIME types a request of the model may carry.
+	 * It may depend on the model, when the provider calls its models through different
+	 * apis. Nothing by default, so a provider that states nothing never receives a file.
+	 *
+	 * @param modelCode the model the requests name, may be null when none is chosen yet
+	 */
+	public default GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none();
+	}
 }

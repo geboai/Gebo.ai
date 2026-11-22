@@ -63,6 +63,7 @@ public class ModelMetaInfo {
 	// What the model accepts as input, text first, as its provider's metadata or the models
 	// library tell; null when unknown
 	private List<GModelInputModality> inputModalities = null;
+	private List<GModelInputModality> outputModalities = null;
 
 	// Indicates if the model can reason (thinking) before answering
 	private Boolean supportsReasoning = null;
@@ -107,6 +108,7 @@ public class ModelMetaInfo {
 		copy.informativeUrl = informativeUrl;
 		copy.supportsVision = supportsVision;
 		copy.inputModalities = inputModalities;
+		copy.outputModalities = outputModalities;
 		copy.supportsReasoning = supportsReasoning;
 		copy.deprecated = deprecated;
 		copy.deprecationDate = deprecationDate;
@@ -151,6 +153,8 @@ public class ModelMetaInfo {
 			supportsVision = other.supportsVision;
 		if (inputModalities == null)
 			inputModalities = other.inputModalities;
+		if (outputModalities == null)
+			outputModalities = other.outputModalities;
 		if (supportsReasoning == null)
 			supportsReasoning = other.supportsReasoning;
 		if (deprecated == null)
@@ -378,6 +382,19 @@ public class ModelMetaInfo {
 			return inputModalities;
 		}
 		return supportsVision != null ? GModelInputModality.textAndImages(supportsVision) : null;
+	}
+
+	/**
+	 * What the model answers with besides text - pictures, audio - where its provider's
+	 * models api tells it; null when it tells nothing. It characterizes the model: the
+	 * media a model answers with are kept among the conversation's generated files.
+	 */
+	public List<GModelInputModality> getOutputModalities() {
+		return outputModalities;
+	}
+
+	public void setOutputModalities(List<GModelInputModality> outputModalities) {
+		this.outputModalities = outputModalities;
 	}
 
 	public void setInputModalities(List<GModelInputModality> inputModalities) {

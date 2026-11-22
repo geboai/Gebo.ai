@@ -23,6 +23,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import ai.gebo.architecture.persistence.IGPersistentObjectManager;
+import ai.gebo.model.GUserMessage;
+import ai.gebo.model.OperationStatus;
+import ai.gebo.llms.abstraction.layer.controllers.model.ChatModelInputs;
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
+import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
+import ai.gebo.llms.abstraction.layer.model.GModelMediaGuard;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.controllers.model.ConfigurationEntry;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -48,6 +57,9 @@ public class ChatModelsController {
     // Injecting the runtime configuration DAO
     @Autowired
     IGChatModelRuntimeConfigurationDao runtimeDao;
+    @Autowired
+    IGPersistentObjectManager persistentObjectManager;
+    private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ChatModelsController.class);
 
     /**
      * Default constructor for ChatModelsController.
@@ -99,5 +111,102 @@ public class ChatModelsController {
                 return new ConfigurationEntry(x.getConfig());
             }).toList());
         }
+    }
+
+    /**
+     * What every configured chat model takes as input: declared, known by its model's
+     * metadata, carried by its provider's integration, and effective.
+     */
+    @GetMapping(value = "getChatModelsInputs", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ChatModelInputs> getChatModelsInputs() {
+        List<ChatModelInputs> inputs = new ArrayList<ChatModelInputs>();
+        for (IGConfigurableChatModel model : this.runtimeDao.getConfigurations()) {
+            if (model.getConfig() != null) {
+                inputs.add(inputsOf(model));
+            }
+        }
+        return inputs;
+    }
+
+    /**
+     * What the integration of a chat model type can deliver to one of its models besides
+     * text, for the editor to show while a model is being chosen.
+     */
+    @GetMapping(value = "getCarriedMediaTypes", produces = MediaType.APPLICATION_JSON_VALUE)
+    public GModelCarriedMediaTypes getCarriedMediaTypes(@RequestParam(name = "modelTypeCode") String modelTypeCode,
+            @RequestParam(name = "modelCode", required = false) String modelCode) {
+        IGChatModelConfigurationSupportService handler = chatModelsTypesRepo.findByCode(modelTypeCode);
+        return handler != null ? handler.carriedMediaTypes(modelCode) : GModelCarriedMediaTypes.none();
+    }
+
+    /**
+     * The kinds of file the installation sends to its chat models as they are (the
+     * settings ai.gebo.images.chat-enabled, ai.gebo.recordings.chat-enabled,
+     * ai.gebo.videos.chat-enabled, ai.gebo.documents.chat-enabled): a file of another
+     * kind reaches no model, whatever the model accepts.
+     */
+    @GetMapping(value = "getFileKindsSentToModels", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<GModelInputModality> getFileKindsSentToModels() {
+        List<GModelInputModality> kinds = new ArrayList<GModelInputModality>();
+        for (GModelInputModality kind : GModelInputModality.values()) {
+            if (kind != GModelInputModality.TEXT && ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.of(kind).enabled()
+                    && ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.of(kind).maxFiles() > 0) {
+                kinds.add(kind);
+            }
+        }
+        return kinds;
+    }
+
+    /**
+     * Gives the configurations that declare no input modalities what the metadata stored
+     * with their model know: a configuration made before the modalities existed is text
+     * only until someone acts, and this is that act, once for all of them. A
+     * configuration that declares something, and one whose metadata know nothing, are
+     * left as they are.
+     *
+     * @return the configurations changed, as they are now
+     */
+    @PostMapping(value = "applyModelsMetadataInputModalities", produces = MediaType.APPLICATION_JSON_VALUE)
+    public OperationStatus<List<ChatModelInputs>> applyModelsMetadataInputModalities() {
+        List<ChatModelInputs> changed = new ArrayList<ChatModelInputs>();
+        List<GUserMessage> messages = new ArrayList<GUserMessage>();
+        for (IGConfigurableChatModel model : this.runtimeDao.getConfigurations()) {
+            GBaseChatModelConfig config = (GBaseChatModelConfig) model.getConfig();
+            if (config == null || config.getInputModalities() != null) {
+                continue;
+            }
+            List<GModelInputModality> known = IGChatModelConfigurationSupportService
+                    .inputModalitiesOf(config.getChoosedModel());
+            if (known == null) {
+                continue;
+            }
+            try {
+                config.setInputModalities(new ArrayList<GModelInputModality>(known));
+                persistentObjectManager.update(config);
+                changed.add(inputsOf(model));
+            } catch (Throwable e) {
+                LOGGER.error("Cannot give chat model code=" + config.getCode() + " its model's input modalities", e);
+                messages.add(GUserMessage.errorMessage("Chat model " + config.getDescription(), e));
+            }
+        }
+        return OperationStatus.of(changed, messages);
+    }
+
+    private ChatModelInputs inputsOf(IGConfigurableChatModel model) {
+        GBaseChatModelConfig config = (GBaseChatModelConfig) model.getConfig();
+        ChatModelInputs inputs = new ChatModelInputs();
+        inputs.setCode(config.getCode());
+        inputs.setDescription(config.getDescription());
+        inputs.setModelTypeCode(config.getModelTypeCode());
+        inputs.setModelCode(config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null);
+        inputs.setInputModalities(config.getInputModalities());
+        inputs.setMetadataInputModalities(
+                IGChatModelConfigurationSupportService.inputModalitiesOf(config.getChoosedModel()));
+        inputs.setCarriedMediaTypes(model.getCarriedMediaTypes());
+        // what a request may actually carry: carried, declared, and of a kind the installation sends
+        inputs.setEffectiveInputMimeTypes(ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(model.getEffectiveInputMimeTypes()));
+        inputs.setDeclaredNotCarried(
+                GModelMediaGuard.declaredNotCarried(model.getInputModalities(), model.getCarriedMediaTypes()));
+        return inputs;
     }
 }

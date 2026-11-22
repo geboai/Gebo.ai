@@ -68,6 +68,10 @@ public class GEmbedderImpl implements IGEmbedder {
 	/**
 	 * Default constructor for GTokenizatorAndEmbedderImpl.
 	 */
+	/** Reads the media of the documents with this service's models; absent in a unit test. */
+	@Autowired(required = false)
+	VectorizatorMediaReader mediaReader;
+
 	public GEmbedderImpl() {
 
 	}
@@ -87,6 +91,23 @@ public class GEmbedderImpl implements IGEmbedder {
 		long startTimestamp = System.currentTimeMillis();
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin tokenizeAndEmbed(....) ndocs:" + messagesList.size());
+		}
+		// the media among the documents' fragments (images, recordings, videos) are turned
+		// into text by the models of this service before anything else: from here on the
+		// fragments are texts, embedded and recorded exactly as the document's texts are
+		if (mediaReader != null) {
+			for (GMessageEnvelope<GDocumentMessageFragmentPayload> x : messagesList) {
+				if (x == null || x.getPayload() == null || x.getPayload().getDocuments() == null) {
+					continue;
+				}
+				final String name = x.getPayload().getDocumentReference() != null
+						? x.getPayload().getDocumentReference().getName()
+						: null;
+				final List<Document> asTexts = mediaReader.withMediaAsText(name, x.getPayload().getDocuments());
+				if (asTexts != x.getPayload().getDocuments()) {
+					x.getPayload().setDocuments(asTexts);
+				}
+			}
 		}
 		boolean sendHandshake = true;
 		final List<String> ids = new ArrayList<String>();

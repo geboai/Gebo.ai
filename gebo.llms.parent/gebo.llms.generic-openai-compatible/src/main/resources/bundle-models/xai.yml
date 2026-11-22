@@ -9,9 +9,12 @@ ai.gebo.models.providers.xai:
   # come from docs.x.ai/developers/models (fetched 2026-10-11: 500k for grok 4.5 to 4.7,
   # 1M for grok-4.3 and the grok-4.20 models) and grok-4.3's own page ("Context window:
   # 1,000,000 tokens", "Function calling: Yes").
+  # inputModalities from each model's page (docs.x.ai/docs/models/<id>, 2026-11-19:
+  # "Modalities: text, image -> text"); the lookup's own list wins when it gives one.
   modelsInfo:
     - providerId: xai
       modelId: grok-4.7
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 500000
@@ -19,6 +22,7 @@ ai.gebo.models.providers.xai:
       informativeUrl: https://docs.x.ai/developers/models
     - providerId: xai
       modelId: grok-4.6
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 500000
@@ -26,6 +30,7 @@ ai.gebo.models.providers.xai:
       informativeUrl: https://docs.x.ai/developers/models
     - providerId: xai
       modelId: grok-4.5
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 500000
@@ -33,6 +38,7 @@ ai.gebo.models.providers.xai:
       informativeUrl: https://docs.x.ai/developers/models
     - providerId: xai
       modelId: grok-4.3
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -41,12 +47,14 @@ ai.gebo.models.providers.xai:
       informativeUrl: https://docs.x.ai/developers/models/grok-4.3
     - providerId: xai
       modelId: grok-4.20-0309-reasoning
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
       informativeUrl: https://docs.x.ai/developers/models
     - providerId: xai
       modelId: grok-4.20-0309-non-reasoning
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000

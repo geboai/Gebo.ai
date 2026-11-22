@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.deepseek.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +109,13 @@ public class DeepseekChatModelConfigurationSupportService
 	 */
 	class DeepseekConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GDeepseekChatModelConfig, DeepSeekChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public DeepseekConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -347,5 +355,15 @@ public class DeepseekChatModelConfigurationSupportService
 		if (list.contains("high"))
 			return DeepSeekApi.ChatCompletionRequest.ReasoningEffort.HIGH;
 		return null;
+	}
+
+	/**
+	 * Spring AI's DeepSeek chat model builds its messages from their text and drops
+	 * the media of a user message without a word (DeepSeekChatModel, 2.1.0-RC2):
+	 * nothing is carried, also for a model whose api declares image input.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none();
 	}
 }

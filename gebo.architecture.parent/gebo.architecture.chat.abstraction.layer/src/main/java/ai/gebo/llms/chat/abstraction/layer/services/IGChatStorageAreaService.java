@@ -97,4 +97,16 @@ public interface IGChatStorageAreaService {
 	public List<Document> getIngestedContentsOf(LLMGeneratedResource uploaded)
 			throws IOException, GeboContentHandlerSystemException, GeboIngestionException;
 
+
+	/**
+	 * The files of a conversation that may go to the model as they are: its uploads no
+	 * content handler turned into text - pictures, recordings, scanned or unread files -
+	 * newest first, of the kinds the installation sends to its models and within the
+	 * limits of each kind (ai.gebo.images.chat-*, ai.gebo.recordings.chat-*,
+	 * ai.gebo.videos.chat-*, ai.gebo.documents.chat-*); none while every kind is off. They are
+	 * candidates: each model call attaches the ones its model takes. Their bytes are
+	 * read when they are attached.
+	 */
+	public java.util.List<ai.gebo.llms.abstraction.layer.model.IChatRequestMedia> getSessionMedia(
+			String userSessionCode);
 }

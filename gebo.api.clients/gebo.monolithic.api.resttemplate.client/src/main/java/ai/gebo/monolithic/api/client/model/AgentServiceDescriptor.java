@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AgentServiceDescriptor
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-18T13:42:01.464941846+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
 
 public class AgentServiceDescriptor {
   @JsonProperty("serviceId")

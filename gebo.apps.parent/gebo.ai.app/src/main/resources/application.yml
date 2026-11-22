@@ -445,6 +445,44 @@ ai.gebo.deepsearch.chunk-filling-factor: 0.25
 # line, in the page's own text direction) is read one column after the other; any other page
 # is read as before. Takes effect on the documents ingested afterwards (true when not set)
 ai.gebo.ingestion.pdf.column-aware-extraction: true
+# A2A servers: the hosts a file an A2A caller names by a link (instead of sending its
+# bytes) is fetched from, comma separated (none when not set: no link is fetched and the
+# caller is told the attachment was not taken). The fetch is a plain GET, without
+# credentials of this installation and without following redirects.
+ai.gebo.a2a.server.linked-files-hosts:
+# Images, recordings and videos into the knowledge bases. Two steps, each with its switch.
+# 1) Ingestion: with a switch on, the readers give each media as it is, beside the texts -
+#    an image file, the pictures inside Word, PowerPoint, Excel, OpenDocument and web page
+#    files, a PDF page without text (rendered); a recording file; a video file. No model is
+#    called while reading or chunking. All off when not set.
+#    The same switches make a Gebo document (GeboDocument) complete of its media: a source read
+#    into one carries its images, recordings and videos as fragments with their content type and
+#    their bytes in BASE64, and a Gebo document holding such fragments is ingested with them.
+#    A web page also gives the media it names by an address (img, audio, video): each is fetched
+#    with a plain GET, and one that is not reachable is omitted - the page is read all the same.
+ai.gebo.images.ingestion-enabled: false
+# the images of one document taken at most, and the size of one image, in megabytes
+ai.gebo.images.max-images-per-document: 30
+ai.gebo.images.max-image-mb: 20
+# an image smaller than this, in bytes, is taken for a decoration (a bullet, a rule) and passed over
+ai.gebo.images.min-image-bytes: 2048
+ai.gebo.recordings.ingestion-enabled: false
+ai.gebo.recordings.max-recording-mb: 20
+ai.gebo.videos.ingestion-enabled: false
+ai.gebo.videos.max-video-mb: 20
+# 2) Vectorization: with a switch on and a model for it configured, each media is turned
+#    into text - an image described by a chat model that reads pictures, a recording or a
+#    video transcribed by the default transcription model - and that text is embedded as
+#    the document's texts are. Each costs a model call at every vectorization of its
+#    document. All off when not set: the media are then left out.
+ai.gebo.vectorizator.embed-images: false
+ai.gebo.vectorizator.embed-recordings: false
+ai.gebo.vectorizator.embed-videos: false
+# the chat model configuration describing images; unset: the default chat model when it
+# reads pictures, else the first configured one that does
+ai.gebo.vectorizator.image-model-code:
+# a media larger than this, in megabytes, is not given to a model
+ai.gebo.vectorizator.max-media-mb: 20
 # Languages whose stop words the chunks' keyword filter ignores when neither the
 # keywords' nor the chunk's language is detected with confidence (it,en when not set)
 ai.gebo.search.keyword-stop-words.fallback-languages: it,en
@@ -519,3 +557,40 @@ ai:
       mail-password:
       mail-sender: no-reply@gebo.ai
       gebo-reachable-base-address: http://localhost:12999
+
+# The files that go to a chat model as they are, when the model takes them: with a request
+# of a conversation (the uploads no reader turned into text, the pictures generated before)
+# and when a tool shows a file to its model. One switch and one set of limits for each kind
+# of file; every kind is off when not set, and then no file of that kind reaches a model and
+# such an upload is accepted or refused as if the model took text only. The limits count for
+# one request, and for one round of tool calls. The estimated tokens are the room kept in
+# the context for each file: an estimate, every provider counts a picture, a recording or a
+# page its own way and none is asked beforehand - raise the limits knowing the context length
+# of the models that answer.
+ai.gebo.images.chat-enabled: false
+ai.gebo.images.chat-max-images: 2
+ai.gebo.images.chat-max-image-mb: 2
+ai.gebo.images.chat-max-total-mb: 4
+ai.gebo.images.chat-estimated-tokens-per-image: 1500
+ai.gebo.recordings.chat-enabled: false
+ai.gebo.recordings.chat-max-recordings: 1
+ai.gebo.recordings.chat-max-recording-mb: 5
+ai.gebo.recordings.chat-max-total-mb: 5
+ai.gebo.recordings.chat-estimated-tokens-per-recording: 5000
+ai.gebo.videos.chat-enabled: false
+ai.gebo.videos.chat-max-videos: 1
+ai.gebo.videos.chat-max-video-mb: 10
+ai.gebo.videos.chat-max-total-mb: 10
+ai.gebo.videos.chat-estimated-tokens-per-video: 10000
+# any other file a model takes as it is (a PDF no reader turned into text, an office file)
+ai.gebo.documents.chat-enabled: false
+ai.gebo.documents.chat-max-documents: 1
+ai.gebo.documents.chat-max-document-mb: 2
+ai.gebo.documents.chat-max-total-mb: 2
+ai.gebo.documents.chat-estimated-tokens-per-document: 5000
+# The conversation's files sent to the remote A2A agents a network calls, when the agent's
+# card says it takes them: off when not set. They are among the files above, so the kinds
+# switched on there apply first; these are the megabytes of one file and of one message.
+ai.gebo.a2a.clients.send-files-enabled: false
+ai.gebo.a2a.clients.send-max-file-mb: 2
+ai.gebo.a2a.clients.send-max-total-mb: 4

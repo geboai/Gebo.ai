@@ -38,6 +38,15 @@ class GModelChoiceMetaInfoEnricherServiceImplTest {
 			public ModelMetaInfo findByProviderIdAndModelId(String providerId, String modelId) {
 				return "acme".equals(providerId) ? findByModelId(modelId) : null;
 			}
+
+			@Override
+			public java.util.List<ai.gebo.llms.abstraction.layer.model.GModelInputModality> findInputModalities(
+					String providerId, String modelId) {
+				return "acme".equals(providerId) && modelId.startsWith("acme-vision")
+						? java.util.List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+								ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE)
+						: null;
+			}
 		};
 	}
 
@@ -94,5 +103,39 @@ class GModelChoiceMetaInfoEnricherServiceImplTest {
 
 		assertEquals("other-2", choice.getDescription());
 		assertEquals("https://acme.example/other", choice.getInformativeUrl());
+	}
+
+	@Test
+	void aLibraryRuleTellsTheInputModalitiesOfAModelNobodyElseDescribed() {
+		GBaseChatModelChoice choice = choice("acme-vision-2026-01-01");
+
+		enricher.enrichChatModelMetaInfos("acme", choice, c -> null);
+
+		assertEquals(
+				java.util.List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+						ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE),
+				choice.getMetaInfos().knownInputModalities());
+	}
+
+	@Test
+	void whatTheProvidersApiToldOfTheInputsWinsOverTheRule() {
+		GBaseChatModelChoice choice = choice("acme-vision-text");
+		ModelMetaInfo live = new ModelMetaInfo();
+		live.setSupportsVision(false);
+		choice.setMetaInfos(live);
+
+		enricher.enrichChatModelMetaInfos("acme", choice, c -> new ModelMetaInfo());
+
+		assertEquals(java.util.List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT),
+				choice.getMetaInfos().knownInputModalities());
+	}
+
+	@Test
+	void aModelNoRuleCoversStaysUnknown() {
+		GBaseChatModelChoice choice = choice("other-2");
+
+		enricher.enrichChatModelMetaInfos("acme", choice, c -> new ModelMetaInfo());
+
+		org.junit.jupiter.api.Assertions.assertNull(choice.getMetaInfos().knownInputModalities());
 	}
 }

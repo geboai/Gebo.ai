@@ -35,11 +35,34 @@ import reactor.core.publisher.Flux;
  */
 public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 	private final GeboToolCalling toolCalling;
+	private final GToolShownFiles shownFiles;
 	private volatile CallRecord record;
 
 	GeboToolCallingAdvisor(GeboToolCalling toolCalling, ToolCallingManager toolCallingManager) {
+		this(toolCalling, toolCallingManager, null);
+	}
+
+	GeboToolCallingAdvisor(GeboToolCalling toolCalling, ToolCallingManager toolCallingManager,
+			GToolShownFiles shownFiles) {
 		super(toolCallingManager, DEFAULT_TOOL_EXECUTION_ELIGIBILITY_CHECKER, DEFAULT_ORDER, true);
 		this.toolCalling = toolCalling;
+		this.shownFiles = shownFiles;
+	}
+
+	/**
+	 * The messages of the next round with the files the round's tools showed: a tool's
+	 * result is text, so a picture travels in a user message of its own, after the
+	 * results of the tools.
+	 */
+	private List<Message> withShownFiles(List<Message> next) {
+		final org.springframework.ai.chat.messages.UserMessage shown = shownFiles != null ? shownFiles.takeMessage()
+				: null;
+		if (shown == null) {
+			return next;
+		}
+		final List<Message> messages = new java.util.ArrayList<>(next);
+		messages.add(shown);
+		return messages;
 	}
 
 	public GeboToolCalling getToolCalling() {
@@ -87,7 +110,8 @@ public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 	protected List<Message> doGetNextInstructionsForToolCall(ChatClientRequest chatClientRequest,
 			ChatClientResponse chatClientResponse, ToolExecutionResult toolExecutionResult) {
 		record().turnContinued(toolExecutionResult);
-		return super.doGetNextInstructionsForToolCall(chatClientRequest, chatClientResponse, toolExecutionResult);
+		return withShownFiles(
+				super.doGetNextInstructionsForToolCall(chatClientRequest, chatClientResponse, toolExecutionResult));
 	}
 
 	@Override
@@ -126,8 +150,8 @@ public class GeboToolCallingAdvisor extends ToolCallingAdvisor {
 	protected List<Message> doGetNextInstructionsForToolCallStream(ChatClientRequest chatClientRequest,
 			ChatClientResponse chatClientResponse, ToolExecutionResult toolExecutionResult) {
 		record().turnContinued(toolExecutionResult);
-		return super.doGetNextInstructionsForToolCallStream(chatClientRequest, chatClientResponse,
-				toolExecutionResult);
+		return withShownFiles(super.doGetNextInstructionsForToolCallStream(chatClientRequest, chatClientResponse,
+				toolExecutionResult));
 	}
 
 	@Override

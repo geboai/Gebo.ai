@@ -64,7 +64,10 @@ public class FullTextIndexingBatchMessageReceiver implements IGBatchMessagesRece
 					ftDoc.setCode(KBSOURCE + docref.getCode());
 					ingestionService.deleteDocuments(List.of(ftDoc));
 					while (chunkResponse != null && !chunkResponse.isEmpty()) {
-						List<DocumentChunk> fragmentsSet = chunkResponse.getCurrentChunkSet().getChunks();
+						// the full-text index takes text: a chunk holding an image, a recording or a
+						// video as it is (see DocumentChunkType) is not for it
+						List<DocumentChunk> fragmentsSet = chunkResponse.getCurrentChunkSet().getChunks().stream()
+								.filter(DocumentChunk::holdsText).toList();
 
 						if (!fragmentsSet.isEmpty()) {
 							for (DocumentChunk f : fragmentsSet) {

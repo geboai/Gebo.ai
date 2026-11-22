@@ -10,9 +10,9 @@
 
 
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { GBaseChatModelConfig, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
+import { ChatModelsControllerService, GBaseChatModelConfig, GModelCarriedMediaTypes, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
 /**
  * AI generated comments
@@ -88,13 +88,83 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     /**
      * Lifecycle hook that is called after data-bound properties are initialized
      */
-    constructor(private translations: GeboAITranslationService) {
+    constructor(private translations: GeboAITranslationService,
+        private chatModelsController: ChatModelsControllerService,
+        private changeDetector: ChangeDetectorRef) {
+    }
+
+    /**
+     * What the provider's integration can deliver to the chosen model besides text: the
+     * MIME types of the files a request may carry, by modality.
+     */
+    protected carriedMediaTypes?: GModelCarriedMediaTypes;
+    private carriedMediaTypesOf?: string;
+
+    /** The file types Gebo sends to the model: the carried ones of the modalities the form declares. */
+    protected get sentFileTypes(): string[] {
+        const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
+        const carried = this.carriedMediaTypes;
+        if (!carried) return [];
+        const sent = (kind: string) => declared.includes(kind) && this.kindsSentToModels.includes(kind);
+        return [
+            ...(sent("IMAGE") ? carried.image ?? [] : []),
+            ...(sent("AUDIO") ? carried.audio ?? [] : []),
+            ...(sent("VIDEO") ? carried.video ?? [] : []),
+            ...(sent("DOCUMENT") ? carried.document ?? [] : [])];
+    }
+
+    /** The kinds of file the installation sends to its chat models (its settings): a file of another kind reaches no model. */
+    protected kindsSentToModels: string[] = [];
+
+    /** The labels of the declared modalities the integration carries but the installation does not send. */
+    protected get declaredNotSentText(): string {
+        const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
+        const carried = this.carriedMediaTypes;
+        if (!carried) return "";
+        const of: { [key: string]: string[] | undefined } = { IMAGE: carried.image, AUDIO: carried.audio, VIDEO: carried.video, DOCUMENT: carried.document };
+        return this.inputModalityOptions.filter(o => o.value !== "TEXT" && declared.includes(o.value) && !!(of[o.value]?.length)
+            && !this.kindsSentToModels.includes(o.value))
+            .map(o => o.label).join(", ");
+    }
+
+    /** The labels of the declared modalities this provider's integration carries nothing for. */
+    protected get declaredNotCarriedText(): string {
+        const declared: string[] = this.formGroup?.controls["inputModalities"]?.value ?? [];
+        const carried = this.carriedMediaTypes;
+        if (!carried) return "";
+        const of: { [key: string]: string[] | undefined } = { IMAGE: carried.image, AUDIO: carried.audio, VIDEO: carried.video, DOCUMENT: carried.document };
+        return this.inputModalityOptions.filter(o => o.value !== "TEXT" && declared.includes(o.value) && !(of[o.value]?.length))
+            .map(o => o.label).join(", ");
+    }
+
+    private loadCarriedMediaTypes(modelCode?: string): void {
+        const modelTypeCode: string | undefined = this.formGroup?.controls["modelTypeCode"]?.value;
+        const key = modelTypeCode + "|" + modelCode;
+        if (!modelTypeCode || key === this.carriedMediaTypesOf) return;
+        this.carriedMediaTypesOf = key;
+        this.chatModelsController.getCarriedMediaTypes(modelTypeCode, modelCode).subscribe({
+            next: (carried) => {
+                this.carriedMediaTypes = carried;
+                this.changeDetector.markForCheck();
+            },
+            error: () => {
+                this.carriedMediaTypes = undefined;
+                this.carriedMediaTypesOf = undefined;
+            }
+        });
     }
 
     ngOnInit(): void {
         this.translations.translateMenuItems("GeboAIStandardChatModelModule", "GeboAIStandardChatModelSettings",
             this.inputModalityOptions as any[])
             .subscribe(items => this.inputModalityOptions = [...items] as { id: string, label: string, value: string }[]);
+        this.chatModelsController.getFileKindsSentToModels().subscribe({
+            next: (kinds) => {
+                this.kindsSentToModels = [...(kinds ?? [])];
+                this.changeDetector.markForCheck();
+            },
+            error: () => { this.kindsSentToModels = []; }
+        });
     }
 
     /** The labels of what the model's metadata says it accepts, in the options' order. */
@@ -122,7 +192,8 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
      * 
      * @param choosed - The selected model object containing context length information
      */
-    private notifyChoosedModelChange(choosed?: { contextLength?: number, metaInfos?: ModelMetaInfo }) {
+    private notifyChoosedModelChange(choosed?: { code?: string, contextLength?: number, metaInfos?: ModelMetaInfo }) {
+        this.loadCarriedMediaTypes(choosed?.code);
         this.defaultContextLength = standardDefaultContextLength;
         this.modelHaveNativeContextWindowSettings = false;
         const meta: any = choosed?.metaInfos;

@@ -13,4 +13,5 @@
 export interface GeboMCPAgentsNetworkTool { 
     agentsNetworkCode: string;
     toolName: string;
+    chatProfileCode?: string;
 }

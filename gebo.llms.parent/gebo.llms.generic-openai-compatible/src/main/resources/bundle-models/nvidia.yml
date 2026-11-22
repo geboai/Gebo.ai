@@ -8,6 +8,8 @@ ai.gebo.models.providers.nvidia:
   # Only models integrate.api.nvidia.com/v1/models still lists (checked 2026-10-11, 80
   # models; its entries carry id, object, created and owned_by only): llama-3.1-405b,
   # jamba-1.5-mini, bge-m3, baichuan2-13b and starcoder2-7b were dropped with the models.
+  # adept/fuyu-8b takes images (docs.api.nvidia.com/nim/reference/adept-fuyu-8b, 2026-11-19:
+  # input "Red, Green, Blue (RGB) Image + Text").
   modelsInfo:
     - providerId: nvidia
       modelId: 01-ai/yi-large
@@ -20,6 +22,7 @@ ai.gebo.models.providers.nvidia:
       informativeUrl:
     - providerId: nvidia
       modelId: adept/fuyu-8b
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength:

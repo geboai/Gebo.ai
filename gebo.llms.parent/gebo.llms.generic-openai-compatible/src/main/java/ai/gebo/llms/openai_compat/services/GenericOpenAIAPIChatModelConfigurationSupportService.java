@@ -16,6 +16,7 @@
  */
 package ai.gebo.llms.openai_compat.services;
 
+import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -138,6 +139,13 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 	 */
 	class GenericOpenAIConfigurableChatModel
 			extends GAbstractConfigurableChatModel<GenericOpenAIAPIChatModelConfig, OpenAiChatModel> {
+
+		@Override
+		public GModelCarriedMediaTypes getCarriedMediaTypes() {
+			return carriedMediaTypes(getConfig() != null && getConfig().getChoosedModel() != null
+					? getConfig().getChoosedModel().getCode()
+					: null);
+		}
 
 		public GenericOpenAIConfigurableChatModel(IGDocumentContentRendererProvider rendererFactory,
 				IGToolCallbackSourceRepositoryPattern toolCallbacksRepository,
@@ -416,4 +424,17 @@ public class GenericOpenAIAPIChatModelConfigurationSupportService implements
 		return configureHandler.insertAndConfigure(config, type);
 	}
 
+
+	/**
+	 * The OpenAI compatible providers are called through chat completions, where
+	 * Spring AI's OpenAI chat model carries pictures, PDF as a file part and audio as
+	 * mp3 or wav bytes, and pastes any other type into the prompt as base64 text
+	 * (OpenAiChatModel, 2.1.0-RC2). What the backend reads of them is the model's
+	 * matter, told by the configuration's input modalities.
+	 */
+	@Override
+	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
+		return GModelCarriedMediaTypes.none().images("image/*").documents("application/pdf").audio("audio/mp3",
+				"audio/mpeg", "audio/wav", "audio/x-wav", "audio/wave");
+	}
 }

@@ -68,7 +68,8 @@ class WorkingDirectoryLibrarySourceTest {
 	@Test
 	void theTypeDeclaresItsToolsWithTheirSchemasAndADownloadableResource() {
 		assertEquals(WorkingDirectoryLibrarySource.TYPE_ID, type.getId());
-		assertEquals(List.of("listFiles", "readFile", "writeFile", "createFolder", "deleteEntry", "moveEntry"),
+		assertEquals(List.of("listFiles", "readFile", "writeFile", "createFolder", "deleteEntry", "moveEntry",
+				"viewFile"),
 				type.getTools().stream().map(ToolReference::getName).toList());
 		for (ToolReference reference : type.getTools()) {
 			assertTrue(reference.getInputSchema() != null && reference.getInputSchema().contains("\"properties\""),
@@ -248,5 +249,36 @@ class WorkingDirectoryLibrarySourceTest {
 				"files written, read, moved and listed, once each; no folder");
 		tool(tools, "readFile").call("{\"path\":\"total.md\"}");
 		assertEquals(2, run.getHandledNames().size(), "a call outside the run reports to nobody");
+	}
+
+	@Test
+	void aPictureOfTheWorkingDirectoryIsShownToAModelThatTakesPictures() throws Exception {
+		AIToolsAndResourcesLibraryInstance instance = source.createInstance(type, List.of("the-conversation"));
+		Path folder = root.resolve(instance.getId());
+		Files.createDirectories(folder.resolve("charts"));
+		Files.write(folder.resolve("charts/sales.png"), new byte[] { 1, 2, 3 });
+		WorkingDirectoryLibrarySource.ViewParam param = new WorkingDirectoryLibrarySource.ViewParam();
+		param.setPath("charts/sales.png");
+
+		List<String> shown = new ArrayList<>();
+		ai.gebo.architecture.ai.files.IGToolShownFiles viewer = (name, mimeType, data) -> {
+			shown.add(name + " " + mimeType + " " + data.length);
+			return true;
+		};
+		String told = source.viewFile(folder, param, new ToolContext(
+				Map.of(ai.gebo.architecture.ai.files.IGToolShownFiles.TOOLS_CONTEXT_KEY, viewer)));
+		assertEquals(List.of("sales.png image/png 3"), shown);
+		assertTrue(told.contains("is shown to you in the next message"), told);
+
+		// a model that does not take pictures, and a call with no way to show files, are told so
+		ai.gebo.architecture.ai.files.IGToolShownFiles blind = (name, mimeType, data) -> false;
+		assertTrue(source.viewFile(folder, param, new ToolContext(
+				Map.of(ai.gebo.architecture.ai.files.IGToolShownFiles.TOOLS_CONTEXT_KEY, blind)))
+				.contains("cannot be shown"));
+		assertTrue(source.viewFile(folder, param, new ToolContext(Map.of())).contains("cannot be shown in this call"));
+
+		// nothing outside the working directory is reached
+		param.setPath("../outside.png");
+		assertThrows(IllegalArgumentException.class, () -> source.viewFile(folder, param, new ToolContext(Map.of())));
 	}
 }

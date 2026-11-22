@@ -13,4 +13,5 @@
 export interface GChatUploadFileTypes { 
     chatExtensions?: Array<string>;
     toolsExtensions?: Array<string>;
+    modelMimeTypes?: Array<string>;
 }

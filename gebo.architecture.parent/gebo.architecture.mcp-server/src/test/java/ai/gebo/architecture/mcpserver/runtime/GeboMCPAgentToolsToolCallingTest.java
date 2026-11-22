@@ -130,4 +130,62 @@ class GeboMCPAgentToolsToolCallingTest {
 		assertNotSame(toolCalling.getAllValues().get(0), toolCalling.getAllValues().get(1),
 				"a run's records are its own");
 	}
+
+	/** A network exported with a chat profile runs in a conversation and answers with the files of its run. */
+	@Test
+	void aNetworkWithAChatProfileAnswersWithTheFilesOfItsRun() throws Exception {
+		runningInPlace();
+		IAgentsNetworkDao networks = mock(IAgentsNetworkDao.class);
+		when(networks.findByCode("the-network")).thenReturn(new GAgentsNetwork());
+		GeboMCPAgentsNetworkTool export = new GeboMCPAgentsNetworkTool();
+		export.setAgentsNetworkCode("the-network");
+		export.setToolName("askSales");
+		export.setChatProfileCode("sales-profile");
+		GeboMCPServerConfig config = server();
+		config.setAgentNetworkAsTools(List.of(export));
+
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse();
+		response.setQueryResponse("Here is the chart.");
+		ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun run = mock(
+				ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun.class);
+		when(run.getFrames()).thenReturn(reactor.core.publisher.Flux.empty());
+		when(run.getResponse()).thenReturn(response);
+		when(run.getChatContextCode()).thenReturn("chat-1");
+		ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner chatRunner = mock(
+				ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.class);
+		ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest request = new ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest();
+		when(chatRunner.requestOf("draw the sales", "sales-profile", null)).thenReturn(request);
+		when(chatRunner.run(eq("the-network"), eq(request), any(), any(), any())).thenReturn(run);
+		ai.gebo.llms.agent.standard.services.ChatRunFiles runFiles = mock(
+				ai.gebo.llms.agent.standard.services.ChatRunFiles.class);
+		when(runFiles.of(response)).thenReturn(List.of(
+				new ai.gebo.llms.agent.standard.services.ChatRunFiles.RunFile("chart.png", "image/png", new byte[] { 1, 2 }),
+				new ai.gebo.llms.agent.standard.services.ChatRunFiles.RunFile("report.docx",
+						"application/vnd.openxmlformats-officedocument.wordprocessingml.document", new byte[] { 3 })));
+
+		GeboMCPAgentsNetworkAsToolsProvider provider = new GeboMCPAgentsNetworkAsToolsProvider(networks, runner,
+				security, environment, factory);
+		provider.setChatRunner(chatRunner);
+		provider.setRunFiles(runFiles);
+		var specification = provider.buildTools(config).get(0);
+		assertEquals("askSales", specification.tool().name());
+		var result = specification.callHandler().apply(null,
+				new io.modelcontextprotocol.spec.McpSchema.CallToolRequest("askSales", Map.of("request", "draw the sales")));
+
+		assertEquals(3, result.content().size());
+		assertEquals("Here is the chart.",
+				((io.modelcontextprotocol.spec.McpSchema.TextContent) result.content().get(0)).text());
+		var picture = (io.modelcontextprotocol.spec.McpSchema.ImageContent) result.content().get(1);
+		assertEquals("image/png", picture.mimeType());
+		assertEquals(java.util.Base64.getEncoder().encodeToString(new byte[] { 1, 2 }), picture.data());
+		var document = (io.modelcontextprotocol.spec.McpSchema.EmbeddedResource) result.content().get(2);
+		assertEquals("gebo://conversation/chat-1/report.docx", document.resource().uri());
+		verify(run).dispose();
+		// the text runner was not asked: the run was the conversation's
+		verify(runner, times(0)).runNetwork(any(String.class), any(), any(), any());
+
+		// without the conversation runner, as where it is not deployed, the tool is the plain one
+		provider.setChatRunner(null);
+		assertEquals("askSales", provider.buildTools(config).get(0).tool().name());
+	}
 }

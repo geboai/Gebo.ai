@@ -75,10 +75,58 @@ public class HtmlIngestionHandler extends GAbstractConfiguredHandler {
 		try {
 			enrichMetaData(reference, metadata);
 			List<Document> docs = new ArrayList<Document>();
-			final org.jsoup.nodes.Document page = Jsoup.parse(is, "UTF-8", "");
+			// the page's own address, when it has one on the web: the addresses the page
+			// names relative to itself are resolved against it
+			final String pageAddress = reference != null && reference.getUri() != null
+					&& reference.getUri().toLowerCase().startsWith("http") ? reference.getUri() : "";
+			final org.jsoup.nodes.Document page = Jsoup.parse(is, "UTF-8", pageAddress);
 			DocumentTitles.fromHtml(page, metadata);
 			String text = page.select("body").text();
 			docs.add(new Document(text, metadata));
+			if (ingestsImages()) {
+				// the pictures the page carries in itself, and the ones it names by an address:
+				// one that is not reachable is omitted and the page is read all the same
+				final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = new ArrayList<>();
+				final long deadline = System.currentTimeMillis() + LINKED_MEDIA_MILLIS_PER_PAGE;
+				final int mostFetched = 2 * Math.max(0, imagesConfig().getMaxImagesPerDocument());
+				final java.util.Set<String> asked = new java.util.HashSet<>();
+				int fetched = 0;
+				for (org.jsoup.nodes.Element img : page.select("img[src]")) {
+					final String src = img.attr("src");
+					final String alt = img.attr("alt");
+					if (src.startsWith("data:")) {
+						final int comma = src.indexOf(',');
+						final String header = comma > 0 ? src.substring("data:".length(), comma) : "";
+						if (!header.startsWith("image/") || !header.endsWith(";base64")) {
+							continue;
+						}
+						try {
+							pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(alt.isBlank() ? null : alt,
+									header.substring(0, header.indexOf(';')),
+									java.util.Base64.getMimeDecoder().decode(src.substring(comma + 1))));
+						} catch (IllegalArgumentException notBase64) {
+							// not a readable picture: the page's text is read all the same
+						}
+						continue;
+					}
+					final String address = img.absUrl("src");
+					if (address.isBlank() || !asked.add(address) || fetched >= mostFetched
+							|| System.currentTimeMillis() > deadline) {
+						continue;
+					}
+					fetched++;
+					final LinkedMediaFetcher.Fetched picture = LinkedMediaFetcher.fetch(address,
+							imagesConfig().getMaxImageBytes());
+					if (picture != null) {
+						pictures.add(new ai.gebo.system.ingestion.EmbeddedPicture(
+								alt.isBlank() ? lastSegment(address) : alt, picture.contentType(), picture.data()));
+					}
+				}
+				docs.addAll(imageDocuments(reference, pictures, metadata));
+			}
+			if (ingestsRecordings() || ingestsVideos()) {
+				docs.addAll(linkedRecordingsAndVideos(reference, page, metadata));
+			}
 			return docs.stream();
 		} finally {
 			try {
@@ -87,6 +135,64 @@ public class HtmlIngestionHandler extends GAbstractConfiguredHandler {
                 // Silently ignore exceptions on close
 			}
 		}
+	}
+
+	/** The time, in milliseconds, the media a page names by an address may take all together. */
+	static final long LINKED_MEDIA_MILLIS_PER_PAGE = 60_000L;
+	/** The recordings and videos of one page fetched at most. */
+	static final int MAX_LINKED_RECORDINGS_AND_VIDEOS = 10;
+
+	private static String lastSegment(String address) {
+		final String path = address.contains("?") ? address.substring(0, address.indexOf('?')) : address;
+		final String name = path.substring(path.lastIndexOf('/') + 1);
+		return name.isBlank() ? null : name;
+	}
+
+	/**
+	 * The recordings and the videos a page names by an address (audio, video and their
+	 * source elements), each given as a media document when its kind is ingested and it
+	 * is within the size of its kind. One that is not reachable is omitted.
+	 */
+	private List<Document> linkedRecordingsAndVideos(GDocumentReference reference, org.jsoup.nodes.Document page,
+			Map<String, Object> metadata) {
+		final List<Document> out = new ArrayList<>();
+		final long deadline = System.currentTimeMillis() + LINKED_MEDIA_MILLIS_PER_PAGE;
+		final java.util.Set<String> asked = new java.util.HashSet<>();
+		for (org.jsoup.nodes.Element element : page.select("audio[src], video[src], audio source[src], video source[src]")) {
+			final org.jsoup.nodes.Element owner = element.tagName().equals("source") ? element.parent() : element;
+			final boolean video = owner != null && owner.tagName().equals("video");
+			if (video ? !ingestsVideos() : !ingestsRecordings()) {
+				continue;
+			}
+			final String address = element.absUrl("src");
+			if (address.isBlank() || !asked.add(address) || asked.size() > MAX_LINKED_RECORDINGS_AND_VIDEOS
+					|| System.currentTimeMillis() > deadline) {
+				continue;
+			}
+			final LinkedMediaFetcher.Fetched media = LinkedMediaFetcher.fetch(address,
+					video ? mediaConfig().getMaxVideoBytes() : mediaConfig().getMaxRecordingBytes());
+			final String type = media != null ? media.contentType() : null;
+			// the kind the server declares must be the kind of the element
+			if (type == null || !type.startsWith(video ? "video/" : "audio/")) {
+				continue;
+			}
+			try {
+				final Map<String, Object> cloned = new java.util.HashMap<>(
+						metadata != null ? metadata : new java.util.HashMap<>());
+				final String name = lastSegment(address);
+				if (name != null) {
+					cloned.put(ai.gebo.system.ingestion.config.ImagesIngestionConfig.IMAGE_NAME_METADATA, name);
+				}
+				out.add(Document.builder()
+						.media(org.springframework.ai.content.Media.builder()
+								.mimeType(org.springframework.util.MimeTypeUtils.parseMimeType(type)).data(media.data())
+								.name("media").build())
+						.metadata(cloned).build());
+			} catch (RuntimeException unreadable) {
+				// a type that cannot be read: omitted
+			}
+		}
+		return out;
 	}
 
     /**

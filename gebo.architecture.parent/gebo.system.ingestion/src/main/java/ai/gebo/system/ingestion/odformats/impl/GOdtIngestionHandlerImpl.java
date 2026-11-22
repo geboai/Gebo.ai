@@ -121,6 +121,9 @@ public class GOdtIngestionHandlerImpl extends GAbstractConfiguredHandler {
 		List<Document> documents = new ArrayList<Document>();
 		try {
 			OdfTextDocument odfdocument = OdfTextDocument.loadDocument(is);
+			// the pictures are collected only when images are taken
+			final List<ai.gebo.system.ingestion.EmbeddedPicture> pictures = ingestsImages() ? new ArrayList<>() : null;
+			OdfPictures.collect(odfdocument, pictures);
 			// https://odftoolkit.org/api/odfdom/index.html
 			OfficeTextElement officeText = odfdocument.getContentRoot();
 			OdfStylableElement firstChild = OdfElement.findFirstChildNode(OdfStylableElement.class, officeText);
@@ -164,6 +167,7 @@ public class GOdtIngestionHandlerImpl extends GAbstractConfiguredHandler {
 					documents.add(new Document(stringBuffer.toString(), metadata));
 				}
 			}
+			documents.addAll(imageDocuments(reference, pictures, metadata));
 			return documents.stream();
 		} finally {
 			try {

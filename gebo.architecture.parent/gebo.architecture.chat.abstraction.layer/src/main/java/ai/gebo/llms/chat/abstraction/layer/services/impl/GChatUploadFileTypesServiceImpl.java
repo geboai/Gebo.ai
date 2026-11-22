@@ -8,6 +8,8 @@
  */
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
+import ai.gebo.llms.abstraction.layer.services.IGChatModelRuntimeConfigurationDao;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -51,11 +53,14 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 	private final GUserChatSessionRepository sessions;
 	private final ChatProfilesRepository profiles;
 	private final IGSecurityService securityService;
+	private final ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels;
 
 	public GChatUploadFileTypesServiceImpl(ObjectProvider<IGChatAgentsToolsDescriber> agentsToolsDescriber,
 			ObjectProvider<IGAIToolsAndResourcesLibrarySourceRepositoryPattern> librarySources,
 			IGIngestionHandlerConfigDao contentHandlers, GUserChatSessionRepository sessions,
-			ChatProfilesRepository profiles, IGSecurityService securityService) {
+			ChatProfilesRepository profiles, IGSecurityService securityService,
+			ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels) {
+		this.chatModels = chatModels;
 		this.agentsToolsDescriber = agentsToolsDescriber;
 		this.librarySources = librarySources;
 		this.contentHandlers = contentHandlers;
@@ -112,6 +117,7 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 	@Override
 	public GChatUploadFileTypes acceptedFileTypes(String userSessionCode, String chatProfileCode) {
 		final Set<String> tools;
+		final List<String> model;
 		if (userSessionCode != null && !userSessionCode.isBlank()) {
 			final Optional<GUserChatSession> session = sessions.findById(userSessionCode);
 			if (session.isEmpty()) {
@@ -119,8 +125,10 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 			}
 			securityService.checkBeingCreatorOrGranted(session.get(), AclGrantType.WRITE);
 			tools = toolsFileTypes(profileOf(session.get().getChatProfileCode()));
+			model = modelMimeTypes(session.get().getChatProfileCode(), session.get().getChatModelCode());
 		} else {
 			tools = toolsFileTypes(profileOf(chatProfileCode));
+			model = modelMimeTypes(chatProfileCode, null);
 		}
 		final Set<String> chat = chatFileTypes();
 		final List<String> toolsOnly = new ArrayList<>();
@@ -129,14 +137,66 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 				toolsOnly.add(extension);
 			}
 		}
-		return new GChatUploadFileTypes(new ArrayList<>(chat), toolsOnly);
+		return new GChatUploadFileTypes(new ArrayList<>(chat), toolsOnly, model);
 	}
 
 	/** The extensions the content handlers read, with the dot, lower case. */
+	@Override
+	public List<String> modelMimeTypesOfSession(String userSessionCode) {
+		final Optional<GUserChatSession> session = userSessionCode != null ? sessions.findById(userSessionCode)
+				: Optional.empty();
+		if (session.isEmpty()) {
+			return List.of();
+		}
+		return modelMimeTypes(session.get().getChatProfileCode(), session.get().getChatModelCode());
+	}
+
+	/**
+	 * What the model answering a chat takes besides text: the profile's model, else the
+	 * chat's own, else the default one, as the session's requests resolve it.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private List<String> modelMimeTypes(String chatProfileCode, String chatModelCode) {
+		final IGChatModelRuntimeConfigurationDao dao = chatModels.getIfAvailable();
+		if (dao == null) {
+			return List.of();
+		}
+		try {
+			IGConfigurableChatModel model = null;
+			final GChatProfileConfiguration profile = profileOf(chatProfileCode);
+			if (profile != null && profile.getChatModelReference() != null) {
+				model = dao.findByModelReference(profile.getChatModelReference());
+			}
+			if (model == null && chatModelCode != null) {
+				model = dao.findByCode(chatModelCode);
+			}
+			if (model == null) {
+				model = dao.defaultHandler();
+			}
+			// of what the model takes, the kinds of file the installation sends to its models:
+			// with a kind off its files are not accepted for the model, as before it existed
+			final List<String> types = model != null ? model.getEffectiveInputMimeTypes() : null;
+			return types != null
+					? new ArrayList<>(ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(types))
+					: List.of();
+		} catch (RuntimeException unreadable) {
+			LOGGER.warn("What the chat's model takes as input could not be read: " + unreadable);
+			return List.of();
+		}
+	}
+
 	private Set<String> chatFileTypes() {
 		final Set<String> extensions = new LinkedHashSet<>();
 		for (IngestionHandlerConfig handler : contentHandlers.getConfigurations()) {
 			if (handler.getFileTypes() == null) {
+				continue;
+			}
+			// the readers of image, recording and video files give the file as it is, for the
+			// knowledge bases' vectorization: they read no text into a chat, where such a file
+			// goes to the model that takes it (see modelMimeTypes)
+			if (ai.gebo.system.ingestion.media.impl.ImageIngestionHandler.CODE.equals(handler.getId())
+					|| ai.gebo.system.ingestion.media.impl.RecordingsAndVideosIngestionHandler.CODE
+							.equals(handler.getId())) {
 				continue;
 			}
 			for (IngestionFileType type : handler.getFileTypes()) {

@@ -17,4 +17,13 @@ ai.gebo.models.providers.groq:
       models: ["qwen/qwen3.8-27b"]
       sampling: ACCEPTED
       reasoningEfforts: [none, default, low, medium, high]
-      source: console.groq.com/docs/reasoning, 2026-10-11
+      # console.groq.com/docs/vision, 2026-11-19: "processes both text and image inputs".
+      inputModalities: [TEXT, IMAGE]
+      source: console.groq.com/docs/reasoning, 2026-10-11; console.groq.com/docs/vision, 2026-11-19
+    # Groq's models api tells nothing of the inputs: the models of its vision page
+    # (console.groq.com/docs/vision, 2026-11-19) are declared here. This rule states the
+    # input modalities only.
+    - providerId: groq
+      models: ["meta-models/muse-spark-open"]
+      inputModalities: [TEXT, IMAGE]
+      source: console.groq.com/docs/model/meta-models/muse-spark-open (input "Text, images"), 2026-11-19

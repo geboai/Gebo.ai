@@ -66,6 +66,23 @@ public final class DataFlowEndpoints {
 	}
 
 	/** An embedding model as an LLM endpoint, null when it has no configuration. */
+	/**
+	 * The MIME types of the files a chat model receives as they are: what its
+	 * configuration declares and its provider's integration carries; none for a model
+	 * that gets text only.
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static List<String> sentFileTypes(IGConfigurableChatModel model) {
+		try {
+			// of what the model takes, the kinds of file the installation sends to its models:
+			// with a kind off nothing of it leaves, and the register says nothing of it
+			final List<String> types = model != null ? model.getEffectiveInputMimeTypes() : null;
+			return types != null ? ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(types) : List.of();
+		} catch (RuntimeException e) {
+			return List.of();
+		}
+	}
+
 	public static DataEndpoint embeddingModel(IGConfigurableEmbeddingModel model) {
 		if (model == null || model.getConfig() == null) {
 			return null;

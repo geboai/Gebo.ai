@@ -112,6 +112,24 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
     protected ttsPresets: LLMModelPresetChoice[] = [];;
     protected decisionPresets: LLMModelPresetChoice[] = [];
     protected lookedUpChatModels: GBaseModelChoice[] = [];
+
+    /**
+     * What the chat model chosen among the suggested ones accepts as input: what its
+     * preset tells, else what the provider or the models library told of the model
+     * when the models were looked up; empty when nobody knows.
+     */
+    protected get chosenChatModelInputs(): string {
+        const code: string | undefined = this.chatModelPresetsFormGroup?.controls["choosedModel"]?.value;
+        if (!code) return "";
+        const preset = this.chatPresets.find(x => x.code === code);
+        let inputs: string[] | undefined = preset?.inputModalities?.length ? [...preset.inputModalities] : undefined;
+        if (!inputs) {
+            const meta: any = (this.lookedUpChatModels.find(x => x.code === code) as any)?.metaInfos;
+            inputs = meta?.inputModalities?.length ? [...meta.inputModalities]
+                : meta?.supportsVision === true ? ["TEXT", "IMAGE"] : meta?.supportsVision === false ? ["TEXT"] : undefined;
+        }
+        return inputs ? inputs.join(", ").toLowerCase() : "";
+    }
     protected lookedUpEmbeddingModels: GBaseModelChoice[] = [];
     protected lookedUpRankingModels: GBaseModelChoice[] = [];
     protected lookedUpImagesModels: GBaseModelChoice[] = [];

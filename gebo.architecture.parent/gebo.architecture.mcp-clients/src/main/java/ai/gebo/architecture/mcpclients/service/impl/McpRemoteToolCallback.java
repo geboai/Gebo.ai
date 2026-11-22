@@ -9,6 +9,12 @@
 
 package ai.gebo.architecture.mcpclients.service.impl;
 
+import ai.gebo.architecture.ai.service.ToolCallbackDeclarationUtil;
+import ai.gebo.architecture.ai.files.GLibraryFile;
+import ai.gebo.architecture.ai.files.IGConversationFilesKeeper;
+import ai.gebo.architecture.ai.files.IGToolShownFiles;
+import ai.gebo.architecture.ai.files.IGConversationGeneratedFilesStore;
+import org.springframework.beans.factory.ObjectProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.model.ToolContext;
@@ -42,17 +48,24 @@ class McpRemoteToolCallback implements IGExternalToolCallback {
 	private final String remoteToolName;
 	private final ToolDefinition toolDefinition;
 
+	private final ObjectProvider<IGConversationGeneratedFilesStore> generatedFiles;
+
 	McpRemoteToolCallback(McpClientPool clientPool, MCPClientConfig config, String exposedName, String remoteToolName,
 			String description, String inputSchema) {
+		this(clientPool, config, exposedName, remoteToolName, description, inputSchema, null);
+	}
+
+	McpRemoteToolCallback(McpClientPool clientPool, MCPClientConfig config, String exposedName, String remoteToolName,
+			String description, String inputSchema, ObjectProvider<IGConversationGeneratedFilesStore> generatedFiles) {
 		this.clientPool = clientPool;
 		this.config = config;
 		this.remoteToolName = remoteToolName;
+		this.generatedFiles = generatedFiles;
 		this.toolDefinition = ToolDefinition.builder().name(exposedName)
 				.description(description != null ? description : exposedName)
 				.inputSchema(isBlank(inputSchema) ? EMPTY_OBJECT_SCHEMA : inputSchema).build();
 	}
 
-	/** The MCP server configuration this tool is called on. */
 	MCPClientConfig getConfig() {
 		return config;
 	}
@@ -76,7 +89,7 @@ class McpRemoteToolCallback implements IGExternalToolCallback {
 					// Let the MCP json mapper parse the raw JSON arguments produced by the LLM.
 					requestBuilder.arguments(McpJsonDefaults.getMapper(), toolInput);
 				}
-				return renderResult(client.callTool(requestBuilder.build()));
+				return renderResult(client.callTool(requestBuilder.build()), toolContext);
 			});
 		} catch (Throwable t) {
 			LOGGER.error("Error calling MCP tool '" + remoteToolName + "' on client '" + config.getCode() + "'", t);
@@ -89,18 +102,52 @@ class McpRemoteToolCallback implements IGExternalToolCallback {
 	 * LLM: concatenated text contents, with non-text contents described by type, and
 	 * an explicit error marker when the server flagged the call as failed.
 	 */
-	private String renderResult(McpSchema.CallToolResult result) {
+	/**
+	 * The result of a remote tool as the model reads it. Its texts are given as they
+	 * are. A picture, a recording or a file it returns is kept in the conversation
+	 * the tool was called for and named in the text, so that it is not lost: the user
+	 * finds it among the conversation's files, the tools working on files open it,
+	 * and a model that takes such files sees it on the next requests. Outside a
+	 * conversation it is named by its kind and type only. The structured content of a
+	 * result that has no text is given as JSON.
+	 */
+	String renderResult(McpSchema.CallToolResult result, ToolContext toolContext) {
 		if (result == null) {
 			return "(no result)";
 		}
 		StringBuilder sb = new StringBuilder();
+		boolean hasText = false;
+		int files = 0;
 		if (result.content() != null) {
 			for (McpSchema.Content content : result.content()) {
 				if (content instanceof McpSchema.TextContent textContent) {
 					sb.append(textContent.text());
+					hasText = hasText || !isBlank(textContent.text());
+				} else if (content instanceof McpSchema.ImageContent image) {
+					sb.append(keep("image", null, image.mimeType(), image.data(), ++files, toolContext));
+				} else if (content instanceof McpSchema.AudioContent audio) {
+					sb.append(keep("audio", null, audio.mimeType(), audio.data(), ++files, toolContext));
+				} else if (content instanceof McpSchema.EmbeddedResource embedded
+						&& embedded.resource() instanceof McpSchema.TextResourceContents text) {
+					sb.append(text.text());
+					hasText = hasText || !isBlank(text.text());
+				} else if (content instanceof McpSchema.EmbeddedResource embedded
+						&& embedded.resource() instanceof McpSchema.BlobResourceContents blob) {
+					sb.append(keep("file", blob.uri(), blob.mimeType(), blob.blob(), ++files, toolContext));
+				} else if (content instanceof McpSchema.ResourceLink link) {
+					sb.append("[resource ").append(link.name() != null ? link.name() + " " : "").append(link.uri())
+							.append(link.mimeType() != null ? " (" + link.mimeType() + ")" : "").append("]");
 				} else if (content != null) {
 					sb.append("[").append(content.getClass().getSimpleName()).append(" content]");
 				}
+			}
+		}
+		if (!hasText && result.structuredContent() != null) {
+			try {
+				sb.append(McpJsonDefaults.getMapper().writeValueAsString(result.structuredContent()));
+			} catch (Exception unreadable) {
+				LOGGER.warn("The structured content of MCP tool '" + remoteToolName + "' cannot be rendered: "
+						+ unreadable);
 			}
 		}
 		String rendered = sb.length() > 0 ? sb.toString() : "(no content)";
@@ -108,6 +155,52 @@ class McpRemoteToolCallback implements IGExternalToolCallback {
 			return "ERROR: " + rendered;
 		}
 		return rendered;
+	}
+
+	/**
+	 * Keeps a file a remote tool returned in the conversation and tells the model where
+	 * it is; when it cannot be kept - no conversation, no store, unreadable data - the
+	 * model is told its kind and type, as before.
+	 */
+	private String keep(String kind, String uri, String mimeType, String base64, int position,
+			ToolContext toolContext) {
+		final String described = "[" + kind + (mimeType != null ? " " + mimeType : "") + " content]";
+		if (isBlank(base64)) {
+			return described;
+		}
+		final byte[] data;
+		try {
+			data = java.util.Base64.getDecoder().decode(base64.trim());
+		} catch (IllegalArgumentException unreadable) {
+			LOGGER.warn("The " + kind + " returned by MCP tool '" + remoteToolName + "' is not base64: " + unreadable);
+			return described;
+		}
+		String name = null;
+		if (!isBlank(uri)) {
+			final String path = uri.contains("?") ? uri.substring(0, uri.indexOf('?')) : uri;
+			name = path.substring(Math.max(path.lastIndexOf('/'), path.lastIndexOf(':')) + 1);
+		}
+		if (isBlank(name)) {
+			name = toolDefinition.name() + "-" + kind + "-" + position;
+		}
+		// the model looks at it right after this round of tool calls, when it takes such files
+		final boolean shown = Boolean.TRUE.equals(IGToolShownFiles.show(toolContext, name, mimeType, data));
+		final String seen = shown ? "; it is shown to you in the next message" : "";
+		final String session = ToolCallbackDeclarationUtil.chatSessionCode(toolContext);
+		final IGConversationGeneratedFilesStore store = generatedFiles != null ? generatedFiles.getIfAvailable() : null;
+		if (session == null || store == null) {
+			return shown ? "[" + kind + (mimeType != null ? " " + mimeType : "") + " content" + seen + "]" : described;
+		}
+		try {
+			final GLibraryFile file = store.store(session, name, mimeType, data);
+			IGConversationFilesKeeper.report(toolContext, file);
+			return "[" + kind + " kept in this conversation as " + file.location() + ":" + file.path() + " ("
+					+ file.contentType() + ", " + file.size() + " bytes)" + seen + "]";
+		} catch (Exception e) {
+			LOGGER.error("The " + kind + " returned by MCP tool '" + remoteToolName + "' cannot be kept in session "
+					+ session, e);
+			return shown ? "[" + kind + (mimeType != null ? " " + mimeType : "") + " content" + seen + "]" : described;
+		}
 	}
 
 	private static boolean isBlank(String value) {

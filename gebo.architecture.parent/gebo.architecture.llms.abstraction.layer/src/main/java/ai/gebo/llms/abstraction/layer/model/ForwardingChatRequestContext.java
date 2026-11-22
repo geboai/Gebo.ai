@@ -103,4 +103,9 @@ public abstract class ForwardingChatRequestContext implements IChatRequestContex
 	public Map<String, Object> getRunEnvironment() {
 		return delegate.getRunEnvironment();
 	}
+
+	@Override
+	public List<IChatRequestMedia> getMedia() {
+		return delegate.getMedia();
+	}
 }

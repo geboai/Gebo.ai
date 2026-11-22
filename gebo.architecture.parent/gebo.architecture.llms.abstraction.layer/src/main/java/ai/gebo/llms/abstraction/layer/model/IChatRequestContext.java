@@ -81,6 +81,34 @@ public interface IChatRequestContext {
 		return List.of();
 	}
 
+
+	/**
+	 * The files of the request that may go to the model as they are, besides its text:
+	 * the pictures, PDF files and recordings of the conversation no content handler
+	 * turned into text. They are candidates: each model call attaches the ones its
+	 * model declares and its provider's integration carries, see
+	 * {@link GModelMediaGuard}. None by default.
+	 */
+	public default List<IChatRequestMedia> getMedia() {
+		return List.of();
+	}
+
+	/**
+	 * This context without its media, for the calls that work on the request's text
+	 * only - the router, the query rewriter, the image prompt writer - so that a
+	 * picture is sent, and paid, once: to the model that answers.
+	 */
+	public default IChatRequestContext withoutMedia() {
+		if (getMedia() == null || getMedia().isEmpty()) {
+			return this;
+		}
+		return new ForwardingChatRequestContext(this) {
+			@Override
+			public List<IChatRequestMedia> getMedia() {
+				return List.of();
+			}
+		};
+	}
 	/** The index of the request being answered in its conversation, 0 the first; -1 when not known. */
 	public default int getCurrentRequestIndex() {
 		return -1;

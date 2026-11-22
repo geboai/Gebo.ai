@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +72,13 @@ public class LLMChatRequestResources implements ITokensCountable {
 	 */
 	@JsonIgnore
 	private transient Map<String, Object> runEnvironment = null;
+	/**
+	 * The files of the conversation that may go to the model as they are, see
+	 * {@link IChatRequestContext#getMedia()}; set where the request's resources are
+	 * assembled, never serialized.
+	 */
+	@JsonIgnore
+	private transient List<IChatRequestMedia> media = null;
 
 	public LLMChatRequestResources(AIDocumentsSet chatWithDocuments, AIDocumentsSet retrievedDocuments,
 			AIDocumentsSet uploadedDocuments, AIDocumentsSet llmGeneratedDocuments,
@@ -103,6 +111,7 @@ public class LLMChatRequestResources implements ITokensCountable {
 		this.toolCallsListener = request.toolCallsListener;
 		this.availableKnowledgeBaseCodes = request.availableKnowledgeBaseCodes;
 		this.runEnvironment = request.runEnvironment;
+		this.media = request.media;
 	}
 
 	@AllArgsConstructor
@@ -220,6 +229,11 @@ public class LLMChatRequestResources implements ITokensCountable {
 		@Override
 		public int getCurrentRequestIndex() {
 			return currentRequestIndex();
+		}
+
+		@Override
+		public List<IChatRequestMedia> getMedia() {
+			return media != null ? media : List.of();
 		}
 
 		@Override

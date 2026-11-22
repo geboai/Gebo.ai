@@ -135,7 +135,74 @@ public class GContentVectorizationMessagesReceiverFactoryComponent extends GAbst
 							flow.qualifiedId(model.getId())));
 		}
 
+		addMediaReading(flow);
 		return flow.getDataEndpoints().isEmpty() ? null : flow;
+	}
+
+	/** Reads the media of the documents with this service's models; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private VectorizatorMediaReader mediaReader;
+
+	/**
+	 * The media of the documents this component gives to a model to be turned into
+	 * text, while that is turned on and a model for it is configured: the images to
+	 * the chat model describing them, the recordings and the videos to the
+	 * transcription model. The media come with the chunks, from the chunk cache.
+	 */
+	@SuppressWarnings("rawtypes")
+	private void addMediaReading(GDataFlowMetaInfos flow) {
+		if (mediaReader == null) {
+			return;
+		}
+		try {
+			if (mediaReader.reads(ai.gebo.architecture.documents.cache.model.DocumentChunkType.IMAGE)) {
+				final ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel model = mediaReader.imageModel();
+				addMediaModel(flow, "image-describing-model", "Image describing chat model",
+						model != null ? model.getCode() : null, model != null ? model.getConfig() : null,
+						"The images of the documents leave this installation for the model describing them");
+			}
+			final boolean recordings = mediaReader
+					.reads(ai.gebo.architecture.documents.cache.model.DocumentChunkType.AUDIO);
+			final boolean videos = mediaReader.reads(ai.gebo.architecture.documents.cache.model.DocumentChunkType.VIDEO);
+			if (recordings || videos) {
+				final ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel model = mediaReader
+						.transcriptModel();
+				addMediaModel(flow, "media-transcribing-model", "Speech-to-text model",
+						model != null ? model.getCode() : null, model != null ? model.getConfig() : null,
+						"The " + (recordings && videos ? "recordings and videos" : recordings ? "recordings" : "videos")
+								+ " of the documents leave this installation for the model transcribing them");
+			}
+		} catch (RuntimeException unreadable) {
+			LOGGER.debug("The media reading of the vectorization could not be described", unreadable);
+		}
+	}
+
+	private void addMediaModel(GDataFlowMetaInfos flow, String id, String label, String code, Object configuration,
+			String description) {
+		if (!(configuration instanceof ai.gebo.llms.abstraction.layer.model.GBaseModelConfig config)) {
+			return;
+		}
+		DataEndpoint endpoint = new DataEndpoint();
+		endpoint.setId(id + "-" + code);
+		endpoint.setDescription(label + " (" + code + ")");
+		endpoint.setProduct(config.getModelTypeCode() != null ? config.getModelTypeCode() : label);
+		endpoint.setEndpoint(config.getBaseUrl());
+		endpoint.setTypes(new ArrayList<MetaEndpointType>(List.of(MetaEndpointType.LLM_ENDPOINT)));
+		endpoint.setInput(true);
+		endpoint.setOutput(true);
+		endpoint.setPersonalData(false);
+		if (config.getApiSecretCode() != null && !config.getApiSecretCode().isEmpty()) {
+			endpoint.setSecretReference(config.getApiSecretCode());
+		}
+		DataEndpointLocality hint = DataEndpointLocality.hintFromLocator(endpoint.getEndpoint());
+		endpoint.setLocality(hint == DataEndpointLocality.LOCAL_DEPLOYMENT ? DataEndpointLocality.LOCAL_DEPLOYMENT
+				: DataEndpointLocality.EXTERNAL_PROVIDER);
+		flow.getDataEndpoints().add(endpoint);
+		DataTransformationMetaInfo engine = DataTransformationMetaInfo.of("media-reading-" + endpoint.getId(), description,
+				List.of(MetaEndpointType.CHUNK), List.of(MetaEndpointType.LLM_ENDPOINT));
+		flow.getEngines().add(engine);
+		flow.getTransformations().add(DataTransformationInfo.of("media-submission-" + endpoint.getId(), description,
+				engine, GStandardDataFlowEndpoints.chunkCacheRef(), flow.qualifiedId(endpoint.getId())));
 	}
 
 	/**
