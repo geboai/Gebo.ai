@@ -14,6 +14,8 @@ The report has two levels. Sections 1 to 4 are the functional view of the whole 
 
 Before the branch every model received text only: a picture uploaded in a chat was either turned into text by a reader or kept for the tools. Now a file reaches a model as it is when two things agree:
 
+A third condition was added on 2026-11-22: the installation must send that kind of file to its models. Each kind (images, recordings, videos, other documents) has its own switch, **off by default**, and its own low limits (section 2). With every switch off no file reaches a model, a picture upload is accepted or refused exactly as before the branch, and no context room is reserved: the standard path is unchanged. The reason is that no provider is asked what a file costs in the context, so what an installation sends is what it chose to.
+
 - the configuration of the chat model declares the kind of the file among its input modalities (text, image, audio, video, document);
 - the integration of the provider can deliver that MIME type (each provider module states it, see the table in Part A).
 
@@ -24,21 +26,21 @@ The administrator sees this in three places: the chat model editor (which file t
 ### 1.2 The files of a conversation travel with the requests
 
 - An upload that no reader turns into text is accepted when the chat's model takes its type. The upload box tells the user which types those are.
-- On every request the candidates are gathered: such uploads, plus the pictures, recordings and videos generated earlier in the same conversation. They are cut by the limits of `ai.gebo.chat.media` and room is kept for them in the context budget.
+- On every request the candidates are gathered: such uploads, plus the pictures, recordings and videos generated earlier in the same conversation. Only the kinds switched on are gathered, each cut by the limits of its kind, and room is kept for them in the context budget.
 - Only the model that answers receives them. The calls that work on the text of the request (query rewriting, routing, the prompt of an image generation) are made without files.
 - Files can be uploaded as the first action of a new chat (two new endpoints create the chat and take the files in one request).
 
 ### 1.3 Files that arrive from tools and agents are kept, and can be shown to the model
 
 - A read-only files location named `generated` holds, per conversation, what the models generated and what arrived from outside: the picture an MCP tool returned, the file a remote A2A agent sent back. The user finds these files in the conversation and the file tools can open them.
-- A tool can show a file to the model that called it: the model receives it in a message right after the tool results of that round (at most 6 files and 20 MB per round). The new agent tool `viewFile` uses this to let an agent look at a picture of its working directory or of another files location; the Pro tools `extractImages` and `extractSlideImages` show the pictures they extract.
+- A tool can show a file to the model that called it: the model receives it in a message right after the tool results of that round (only the kinds switched on, each within the limits of its kind per round). The new agent tool `viewFile` uses this to let an agent look at a picture of its working directory or of another files location; the Pro tools `extractImages` and `extractSlideImages` show the pictures they extract.
 
 ### 1.4 Gebo.ai exchanges files with other systems
 
 - **MCP client:** pictures, recordings and binary resources in a tool result are kept in the conversation instead of being flattened to a placeholder.
 - **MCP server:** a network exported as a tool can be given a chat profile; it then runs in a conversation and answers with the files of its run as image, audio or embedded-resource content.
 - **A2A server:** an exported network answers with the files its models generated and its tools wrote, declares the input types it takes, tells the caller what it did not take (`notTaken`), and fetches a file named by a link only from hosts the administrator listed.
-- **A2A client:** the conversation's files are sent to a remote agent when its card says it takes them; a file the remote agent returns is kept, and one named by an address is fetched only from the agent's own address.
+- **A2A client:** the conversation's files are sent to a remote agent when its card says it takes them and `ai.gebo.a2a.clients.send-files-enabled` is on (off by default); a file the remote agent returns is kept, and one named by an address is fetched only from the agent's own address.
 
 ### 1.5 Images, recordings and videos in the knowledge base
 
@@ -62,10 +64,19 @@ The data-flow register names the new movements of data: the files sent as they a
 
 | Property | Default | Meaning |
 |---|---|---|
-| `ai.gebo.chat.media.max-files` | `10` | Files a request carries to the model at most. |
-| `ai.gebo.chat.media.max-file-bytes` | `20971520` (20 MB) | Largest single file carried. |
-| `ai.gebo.chat.media.max-total-bytes` | `41943040` (40 MB) | All files of one request together. |
-| `ai.gebo.chat.media.estimated-tokens-per-file` | `1000` | Context room kept per carried file. |
+| `ai.gebo.images.chat-enabled` | `false` | Images go to the chat models that take them, with a request and when a tool shows one. |
+| `ai.gebo.images.chat-max-images` | `2` | Images carried by one request, or shown in one round of tool calls, at most. |
+| `ai.gebo.images.chat-max-image-mb` | `2` | Largest image carried. |
+| `ai.gebo.images.chat-max-total-mb` | `4` | All images of one request or round together. |
+| `ai.gebo.images.chat-estimated-tokens-per-image` | `1500` | Context room kept per image. |
+| `ai.gebo.recordings.chat-enabled` | `false` | The same switch for recordings. |
+| `ai.gebo.recordings.chat-max-recordings` / `chat-max-recording-mb` / `chat-max-total-mb` / `chat-estimated-tokens-per-recording` | `1` / `5` / `5` / `5000` | The limits of recordings. |
+| `ai.gebo.videos.chat-enabled` | `false` | The same switch for videos. |
+| `ai.gebo.videos.chat-max-videos` / `chat-max-video-mb` / `chat-max-total-mb` / `chat-estimated-tokens-per-video` | `1` / `10` / `10` / `10000` | The limits of videos. |
+| `ai.gebo.documents.chat-enabled` | `false` | The same switch for any other file a model takes as it is. |
+| `ai.gebo.documents.chat-max-documents` / `chat-max-document-mb` / `chat-max-total-mb` / `chat-estimated-tokens-per-document` | `1` / `2` / `2` / `5000` | The limits of those files. |
+| `ai.gebo.a2a.clients.send-files-enabled` | `false` | The conversation's files are sent to the remote A2A agents whose card takes them. |
+| `ai.gebo.a2a.clients.send-max-file-mb` / `send-max-total-mb` | `2` / `4` | Largest file, and all files of one message, sent to a remote agent. |
 | `ai.gebo.a2a.server.linked-files-hosts` | empty | Hosts from which a file an A2A caller names by a link is fetched; empty means none. |
 | `ai.gebo.images.ingestion-enabled` | `false` | The readers give images as media documents. |
 | `ai.gebo.images.max-images-per-document` | `30` | Images taken of one document at most. |
@@ -81,7 +92,7 @@ The data-flow register names the new movements of data: the files sent as they a
 | `ai.gebo.vectorizator.image-model-code` | empty | The chat model that describes images; empty means the default chat model when it reads pictures, else the first configured one that does. |
 | `ai.gebo.vectorizator.max-media-mb` | `20` | A larger media is not given to a model. |
 
-Fixed in code, not settings: 6 files and 20 MB shown by tools per round (`GToolShownFiles`), 20 MB per file and 40 MB per answer for the files of a run sent over A2A and MCP (`ChatRunFiles`), 20 MB for a linked file fetched over A2A, 20 MB for a file shown by `viewFile`, 200 PDF pages rendered at 110 DPI, 8 MB of media per chunk set.
+Fixed in code, not settings: 20 MB per file and 40 MB per answer for the files of a run sent over A2A and MCP (`ChatRunFiles`), 20 MB for a linked file fetched over A2A, 20 MB for a file shown by `viewFile`, 200 PDF pages rendered at 110 DPI, 8 MB of media per chunk set.
 
 ---
 
@@ -143,7 +154,7 @@ The contract a tool uses to show a file to the model. The constant `TOOLS_CONTEX
 
 **The files of a request are attached to the answering model's last user message.** The request context can now carry candidate files (`getMedia()`). When the last user message is built, each candidate is checked by the guard; the files that pass are read and attached, the others are logged at debug level with the reason and never fail the call. A file that cannot be read is logged as an error and the request goes without it. The calls that work on the text of the request only can ask for the context without its files (`withoutMedia()`), so that a picture is sent, and paid for, once.
 
-**A tool can show a file to the model that called it.** In the calls where Gebo runs the tool loop itself, where there are tools, and where the model takes files at all, a collector is placed in the tools context. What the tools show during a round reaches the model in a user message of its own, right after the results of that round. A round may show at most 6 files and 20 MB in total (`GToolShownFiles.MAX_FILES_PER_ROUND`, `GToolShownFiles.MAX_BYTES_PER_ROUND`); these are constants, not settings.
+**A tool can show a file to the model that called it.** In the calls where Gebo runs the tool loop itself, where there are tools, and where the model takes files at all, a collector is placed in the tools context. What the tools show during a round reaches the model in a user message of its own, right after the results of that round. A collector exists only while the installation sends some kind of file the model takes, and a round shows each kind within the limits of that kind (`GModelFilesDelivery`).
 
 There is no new configuration property in this module.
 
@@ -169,6 +180,10 @@ Describes what the integration of a provider can deliver to its models besides t
 
 The enumeration `TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT`. It gains the static `ofMimeType(mimeType)`, which gives the modality of a file: `IMAGE`, `AUDIO` and `VIDEO` by the family of the type, `DOCUMENT` for any other file, and `null` when there is no type. The class documentation is updated in the same sense as `GBaseChatModelConfig`.
 
+#### `GModelFilesDelivery` (new) — .../llms/abstraction/layer/model/GModelFilesDelivery.java
+
+Whether, and how much, files go to the chat models as they are: one switch and one set of limits per kind of file. The record `Limits(enabled, maxFiles, maxFileBytes, maxTotalBytes, estimatedTokensPerFile)` describes a kind; `Limits.off()` is a kind switched off and `Limits.of(..)` builds one from megabytes. The current limits are a static map, empty (every kind off) until `set(..)` is called; `get()` returns a copy, used by tests to set them back. `of(kind)` and `ofMimeType(mimeType)` give the limits of a kind, never null. `delivers(mimeType)` says whether files of that kind go to the models; `deliversAnything()` whether any kind does; `delivered(mimeTypes)` keeps, of the MIME types a model takes, those of the kinds switched on; `estimatedTokens(mimeType)` is the context room of one file of that kind. The nested class `Admission` counts the files of one request or one round of tool calls: `admit(mimeType, size)` accepts a file when its kind is on and it stays within the number of files, the size of one file and the total bytes of its kind.
+
 #### `GModelMediaGuard` (new) — .../llms/abstraction/layer/model/GModelMediaGuard.java
 
 The single place that decides whether a file may go to a model as media. The nested enumeration `Outcome` has four values: `SENT`, `MODEL_DOES_NOT_READ_IT` (the configuration does not declare the modality), `INTEGRATION_DOES_NOT_CARRY_IT` (the modality is declared but the provider's integration does not carry the type) and `UNKNOWN_TYPE`. `decide(declared, carried, mimeType)` applies those checks in that order. `sends(...)` is the boolean form. `effectiveMimeTypes(declared, carried)` lists the MIME types a model effectively takes, that is, the carried types of the declared modalities, without duplicates; it is empty for a text-only model and for an integration that carries nothing. `declaredNotCarried(declared, carried)` lists the declared modalities, other than text, for which the integration carries nothing, which is what a configuration promises and Gebo cannot deliver through that provider.
@@ -185,6 +200,10 @@ One candidate file of a request: `getName()`, `getMimeType()`, `getSize()` (minu
 
 Four static methods are removed: `createPromptAndContext(Prompt, IChatRequestContext)`, `createHistoryFragment(IChatRequestContext)`, `createPromptContextHistory(Prompt, IChatRequestContext)` and `createLastUserMessage(GPromptTemplateConfig, Map, IChatRequestContext)`. The last one was a stub that returned `null`. Nothing is added to the class.
 
+#### `ModelFilesDeliveryConfig` (new) — .../llms/abstraction/layer/services/config/ModelFilesDeliveryConfig.java
+
+A `@Configuration` whose `@Value` fields read the switch and the limits of each kind (`ai.gebo.images.chat-*`, `ai.gebo.recordings.chat-*`, `ai.gebo.videos.chat-*`, `ai.gebo.documents.chat-*`; defaults in section 2). Its `@PostConstruct` method `apply()` builds the four `Limits` and hands them to `GModelFilesDelivery.set(..)`, logging them at start. It follows the pattern of `TokensBudgetConfig` in the same package.
+
 #### `GAbstractConfigurableChatModel` (modified) — .../llms/abstraction/layer/services/GAbstractConfigurableChatModel.java
 
 The common base of every configured chat model. Three changes:
@@ -194,6 +213,8 @@ The common base of every configured chat model. Three changes:
 - The new protected method `mediaToAttach(chatContext)` walks the candidates of `chatContext.getMedia()`, asks `GModelMediaGuard.decide` with the model's `getInputModalities()` and `getCarriedMediaTypes()`, skips (with a debug log naming the outcome) every file that is not `SENT`, reads the bytes of the others and builds a Spring AI `Media` for each. Empty files are skipped. An `IOException` or runtime exception while reading is logged as an error and the request goes without that file.
 
 Two package-private static helpers support it. `sentMimeType(mimeType)` returns the type without parameters and turns `audio/mpeg` into `audio/mp3`; the comment explains that Spring AI's OpenAI chat model declares an audio file as MP3 only when its type contains "mp3" and as WAV otherwise. `mediaName(name, position)` keeps only letters, digits, spaces, hyphens, parentheses and square brackets in a file name (the comment cites Bedrock's rule for document names) and answers `file-<position+1>` when nothing is left.
+
+Since 2026-11-22 the kinds of file the installation sends are checked too. In `prepareCall` the collector of the files shown by tools is created only when `GModelFilesDelivery.delivered(getEffectiveInputMimeTypes())` is not empty. In `mediaToAttach` a candidate whose kind is off is skipped before it is read, and a `GModelFilesDelivery.Admission` applies the limits of each kind after the bytes are read, so the last gate before the provider holds whoever gathered the candidates.
 
 #### `IGChatModelConfigurationSupportService` (modified) — .../llms/abstraction/layer/services/IGChatModelConfigurationSupportService.java
 
@@ -209,7 +230,7 @@ The service that completes the metadata of a model choice from the library. `enr
 
 #### `GToolShownFiles` (new) — .../llms/abstraction/layer/services/toolcalling/GToolShownFiles.java
 
-The implementation of `IGToolShownFiles` for one model call. It is built with a predicate saying whether the model takes a MIME type. `show(name, mimeType, data)` refuses (returns `false`) a file with no readable type, with no bytes, of a type the model does not take, or one that would exceed `MAX_FILES_PER_ROUND` (6) or `MAX_BYTES_PER_ROUND` (20 MB); otherwise it keeps the file as a `Media` (with `audio/mpeg` sent as `audio/mp3` and the name cleaned the same way as `mediaName`) and returns `true`. `takeMessage()` returns a `UserMessage` whose text is "These are the files the tools just showed you:" followed by the names, with the files attached, and then empties the collector; it returns `null` when nothing was shown. Both methods are synchronized.
+The implementation of `IGToolShownFiles` for one model call. It is built with a predicate saying whether the model takes a MIME type. `show(name, mimeType, data)` refuses (returns `false`) a file with no readable type, with no bytes, of a type the model does not take, or one whose kind is switched off or that is beyond the limits of its kind for the round (`GModelFilesDelivery.Admission`); otherwise it keeps the file as a `Media` (with `audio/mpeg` sent as `audio/mp3` and the name cleaned the same way as `mediaName`) and returns `true`. `takeMessage()` returns a `UserMessage` whose text is "These are the files the tools just showed you:" followed by the names, with the files attached, and then empties the collector; it returns `null` when nothing was shown. Both methods are synchronized.
 
 #### `GeboToolCalling` (modified) — .../llms/abstraction/layer/services/toolcalling/GeboToolCalling.java
 
@@ -241,7 +262,7 @@ Seven tests on the guard. They assert that a file is sent when declared and carr
 
 #### `ChatRequestMediaAttachmentTest` (new) — .../src/test/java/ai/gebo/llms/abstraction/layer/services/ChatRequestMediaAttachmentTest.java
 
-Five tests on `createLastUserMessage`, using a small subclass of `GAbstractConfigurableChatModel` with chosen declared modalities and carried types. They assert that of a PNG, a PDF and a TIFF only the PNG is attached to a model declaring text and image with an integration carrying PNG, JPEG and PDF, and that the files left out are never read; that a model declaring nothing, an empty list or text only gets a plain message; that an integration carrying nothing gets nothing whatever the model declares; that a view of the context (`withRulesToFollow`) keeps the files while `withoutMedia()` removes them; and that `audio/mpeg` is sent as `audio/mp3`, with `mediaName` giving `file-1` for an empty name and `chart 1-png` for `chart 1.png`.
+Seven tests on `createLastUserMessage`, using a small subclass of `GAbstractConfigurableChatModel` with chosen declared modalities and carried types. They assert that of a PNG, a PDF and a TIFF only the PNG is attached to a model declaring text and image with an integration carrying PNG, JPEG and PDF, and that the files left out are never read; that a model declaring nothing, an empty list or text only gets a plain message; that an integration carrying nothing gets nothing whatever the model declares; that a view of the context (`withRulesToFollow`) keeps the files while `withoutMedia()` removes them; and that `audio/mpeg` is sent as `audio/mp3`, with `mediaName` giving `file-1` for an empty name and `chart 1-png` for `chart 1.png`. Two more assert that with every kind off no file is attached or even read, and that a second image beyond the number allowed for its kind stays out. The tests switch every kind on before each test and set the limits back after.
 
 #### `GModelChoiceMetaInfoEnricherServiceImplTest` (modified) — .../src/test/java/ai/gebo/llms/abstraction/layer/services/impl/GModelChoiceMetaInfoEnricherServiceImplTest.java
 
@@ -249,7 +270,7 @@ The test library double now answers `findInputModalities` for identifiers starti
 
 #### `ToolShownFilesTest` (new) — .../src/test/java/ai/gebo/llms/abstraction/layer/services/toolcalling/ToolShownFilesTest.java
 
-Four tests run a real `ChatClient` with a fake model that calls a `viewPicture` tool once. They assert that the file the tool shows reaches the model in the second prompt as a `UserMessage` placed right after the `ToolResponseMessage`, with the PNG bytes attached and the file name in its text; that when the model does not take the file the tool is told `false` and no message is added; that a call with no collector answers `null` to the tool and adds no media; and that a round accepts exactly `MAX_FILES_PER_ROUND` files, hands them over once, and accepts files again in the next round.
+Five tests run a real `ChatClient` with a fake model that calls a `viewPicture` tool once. They assert that the file the tool shows reaches the model in the second prompt as a `UserMessage` placed right after the `ToolResponseMessage`, with the PNG bytes attached and the file name in its text; that when the model does not take the file the tool is told `false` and no message is added; that a call with no collector answers `null` to the tool and adds no media; and that a round accepts exactly the number of files of its kind, hands them over once, and accepts files again in the next round. The fifth asserts that a kind switched off is not shown, that an image beyond the size or the number of its kind is refused, and that with every kind off nothing is shown. The tests switch every kind on before each test and set the limits back after.
 
 ---
 
@@ -399,7 +420,7 @@ Module paths are under `gebo.architecture.parent/` unless the heading says other
 
 A conversation's files can now reach the chat model as files, not only as extracted text. When a user uploads a picture, a recording, a video or any other file that no content handler turns into text, the upload is accepted if the model answering the chat declares that it takes that type; before this branch such a file was kept only when one of the chat's agent tools worked on its extension, otherwise it was refused. The model that decides is the chat profile's model, else the chat's own model, else the default model. The answer to "which files does this chat accept" now carries a third list, `modelMimeTypes`, beside the extensions read into the chat and the extensions kept for the tools.
 
-On every request the conversation's candidate files are gathered: the uploads that have no ingested text, plus the pictures, recordings and videos the models generated earlier in the same conversation. They are ordered newest first and cut by the settings under `ai.gebo.chat.media`: `max-files` (default 10), `max-file-bytes` (default 20 MB), `max-total-bytes` (default 40 MB). Files beyond a limit are not attached and remain reachable by the tools. Each model call later attaches only the candidates its own model takes. Room is kept in the context budget for these files: `ai.gebo.chat.media.estimated-tokens-per-file` (default 1000) is multiplied by the number of candidate files and subtracted from the budget for the text of the request, never taking the text below half of the budget.
+On every request the conversation's candidate files are gathered, when the installation sends some kind of file to its models: the uploads that have no ingested text, plus the pictures, recordings and videos the models generated earlier in the same conversation. They are ordered newest first; a file is kept only when its kind is switched on and it stays within the limits of its kind (`ai.gebo.images.chat-*`, `ai.gebo.recordings.chat-*`, `ai.gebo.videos.chat-*`, `ai.gebo.documents.chat-*`; see section 2). Files beyond a limit are not attached and remain reachable by the tools. Each model call later attaches only the candidates its own model takes. Room is kept in the context budget for these files: the estimated tokens of each file's kind are added up and subtracted from the budget for the text of the request, never taking the text below half of the budget. With every kind off nothing is gathered and the budget is untouched. The upload acceptance follows the same switches: the model's MIME types reported for a chat are only those of the kinds switched on.
 
 Image, recording and video uploads are no longer passed to the ingestion readers in a chat, even when the knowledge-base ingestion has readers for such files; they follow the "file no reader takes" path described above. Likewise the two media readers of the ingestion (`ImageIngestionHandler`, `RecordingsAndVideosIngestionHandler`) do not contribute their extensions to the list of file types that are "read into the chat".
 
@@ -415,8 +436,6 @@ A defect was also corrected in the upload path: the metadata of an ingested uplo
 
 ### Class by class
 
-#### `ChatMediaConfig` (new) — src/main/java/ai/gebo/llms/chat/abstraction/layer/config/ChatMediaConfig.java
-A Spring `@Configuration` bound with `@ConfigurationProperties(prefix = "ai.gebo.chat.media")`. It holds four values: `maxFiles` (10), the number of files a request carries to the model at most; `maxFileBytes` (20 × 1024 × 1024), the largest single file carried; `maxTotalBytes` (40 × 1024 × 1024), the bytes of all files of one request together; and `estimatedTokensPerFile` (1000), the context room reserved per carried file, documented as an estimate because no provider is asked beforehand. It is read by `GChatStorageAreaServiceImpl.getSessionMedia` (the three limits) and by `GChatSessionLifeCycleServiceImpl.budgetedResources` (the token estimate).
 
 #### `LLMChatRequestResources` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/llmexchange/model/LLMChatRequestResources.java
 The object that carries the resources of one chat request gained a transient, `@JsonIgnore` field `media` of type `List<IChatRequestMedia>`: the conversation's files that may go to the model as they are. The copy constructor copies it. The inner chat request context it creates now implements `getMedia()`, returning that list or an empty list when it is null. This is how the candidates gathered by the session life cycle reach the model layer.
@@ -428,7 +447,7 @@ The answer to "which files does this chat accept" gained the field `modelMimeTyp
 A derived query `findByUserContextCode(String)` returning a `Stream<LLMGeneratedResource>` was added: the files the models generated in one conversation. It is used by `GChatStorageAreaServiceImpl.getSessionMedia` and by `ChatGeneratedFilesProvider`.
 
 #### `IGChatStorageAreaService` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/IGChatStorageAreaService.java
-The interface gained `getSessionMedia(String userSessionCode)`, returning the conversation's files that may go to the model as they are, newest first and within the limits of `ai.gebo.chat.media`. The contract says they are candidates (each model call attaches the ones its model takes) and that their bytes are read only when they are attached.
+The interface gained `getSessionMedia(String userSessionCode)`, returning the conversation's files that may go to the model as they are, newest first and of the kinds switched on and within the limits of each kind. The contract says they are candidates (each model call attaches the ones its model takes) and that their bytes are read only when they are attached.
 
 #### `IGChatUploadFileTypesService` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/IGChatUploadFileTypesService.java
 The interface gained `modelMimeTypesOfSession(String userSessionCode)`: the MIME types the model of an existing chat takes as they are, empty when the model gets text only.
@@ -450,17 +469,16 @@ The `ModelProviderCapabilities` it builds for a direct chat now uses the new con
 The same change as in `GChatServiceImpl`, for a chat with a profile.
 
 #### `GChatSessionLifeCycleServiceImpl` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/GChatSessionLifeCycleServiceImpl.java
-A `ChatMediaConfig mediaConfig` field was added. In `budgetedResources`, before the request's resources are sized, the candidates are read with `chatAreaStorageSession.getSessionMedia(context.getCode())`. When there are some, the token budget for the text becomes `max(budget / 2, budget − files × estimatedTokensPerFile)`, and a debug line records the reduction. After the resources are built, `resources.setMedia(media)` attaches the candidates to the request.
+In `budgetedResources`, before the request's resources are sized, the candidates are read with `chatAreaStorageSession.getSessionMedia(context.getCode())`. When there are some, the token budget for the text becomes `max(budget / 2, budget − estimate)`, where the estimate is the sum of `GModelFilesDelivery.estimatedTokens(mimeType)` over the candidates, and a debug line records the reduction. After the resources are built, `resources.setMedia(media)` attaches the candidates to the request.
 
 #### `GChatStorageAreaServiceImpl` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/GChatStorageAreaServiceImpl.java
-A `ChatMediaConfig mediaConfig` field was added.
 In `addUploadedFile`, the kind of the file is derived from its MIME type with `GModelInputModality.ofMimeType`; an image, audio or video file is not given to the ingestion handler at all (`data` stays null). For a file with no reader, the decision to keep it now has two grounds: `forTheModel`, when `GModelCarriedMediaTypes.matchesAny(uploadFileTypes.modelMimeTypesOfSession(...), mimeType)` holds, and `forTheTools`, the earlier rule on the extension. The file is deleted and refused only when neither holds. The metadata merge of ingested documents was corrected: the handler's own metadata first, the common upload metadata over it.
 In `addMedia`, the stored content type is now the whole type (`type/subtype`), and the file size is recorded on the `LLMGeneratedResource`.
 New static `mimeTypeOf(UserUploadedContent)` returns the type the upload was sent with, or, when that is missing or `application/octet-stream`, the type its file name suggests. New static `mimeTypeOf(LLMGeneratedResource)` returns the stored type when whole, else the type suggested by its extension or name (older resources stored only the family, such as `image`).
-New `getSessionMedia(userSessionCode)` collects, into a private record `MediaFile(name, mimeType, size, file, created)`, the uploads with no ingested JSON path and a relative file path, and the generated resources whose modality is image, audio or video. Any failure reading them is logged and yields an empty list. The candidates are sorted newest first; each is skipped when it has no MIME type or its file is missing; its size is read from disk when unknown; a candidate that would exceed `maxFiles`, `maxFileBytes` or `maxTotalBytes` is skipped with a debug line saying it stays with the tools. Each kept candidate is returned as an anonymous `IChatRequestMedia` whose `readBytes()` reads the file only when called.
+New `getSessionMedia(userSessionCode)` collects, into a private record `MediaFile(name, mimeType, size, file, created)`, the uploads with no ingested JSON path and a relative file path, and the generated resources whose modality is image, audio or video. Any failure reading them is logged and yields an empty list. The candidates are sorted newest first; each is skipped when it has no MIME type or its file is missing; its size is read from disk when unknown; a candidate whose kind is switched off, or that `GModelFilesDelivery.Admission` does not admit within the limits of its kind, is skipped with a debug line saying it stays with the tools. Each kept candidate is returned as an anonymous `IChatRequestMedia` whose `readBytes()` reads the file only when called. The method returns an empty list at once while `GModelFilesDelivery.deliversAnything()` is false.
 
 #### `GChatUploadFileTypesServiceImpl` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/GChatUploadFileTypesServiceImpl.java
-The constructor takes one more dependency, `ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels`. `acceptedFileTypes` now also computes the model's MIME types (from the session's profile and model code, or from the profile code given for a chat not yet created) and returns them as the third list. New `modelMimeTypesOfSession` looks up the session and delegates. The private `modelMimeTypes(chatProfileCode, chatModelCode)` resolves the model in the order profile's model reference, chat's model code, default model, and returns its `getEffectiveInputMimeTypes()`; a missing DAO or a runtime exception yields an empty list (the exception is logged as a warning). `chatFileTypes()` now skips the handlers whose identifier equals `ImageIngestionHandler.CODE` or `RecordingsAndVideosIngestionHandler.CODE`, so the media readers of the knowledge-base ingestion do not declare their extensions as "read into the chat".
+The constructor takes one more dependency, `ObjectProvider<IGChatModelRuntimeConfigurationDao> chatModels`. `acceptedFileTypes` now also computes the model's MIME types (from the session's profile and model code, or from the profile code given for a chat not yet created) and returns them as the third list. New `modelMimeTypesOfSession` looks up the session and delegates. The private `modelMimeTypes(chatProfileCode, chatModelCode)` resolves the model in the order profile's model reference, chat's model code, default model, and returns its `getEffectiveInputMimeTypes()` filtered by `GModelFilesDelivery.delivered(..)`, so only the kinds the installation sends are accepted for the model; a missing DAO or a runtime exception yields an empty list (the exception is logged as a warning). `chatFileTypes()` now skips the handlers whose identifier equals `ImageIngestionHandler.CODE` or `RecordingsAndVideosIngestionHandler.CODE`, so the media readers of the knowledge-base ingestion do not declare their extensions as "read into the chat".
 
 #### `GStandardChatPipelineDataFlowComponent` (modified) — src/main/java/ai/gebo/llms/chat/abstraction/layer/services/impl/GStandardChatPipelineDataFlowComponent.java
 For each chat profile, after the "answer" step towards the responder model, a "files" step is registered when `DataFlowEndpoints.sentFileTypes(responderChatModel)` is not empty; its description names the types. A new package-visible method `addDirectChat(flow, chatModelsDao)`, called at the end of the flow's construction, registers the chat with a model directly: one input endpoint `direct-chat-query` (created on the first reachable model), then for every configured chat model a "direct-answer" step and, for models that take files, a "direct-files" step. A null DAO, an unreadable or empty list of models leaves the flow unchanged.
@@ -583,14 +601,17 @@ In the other direction, a file the remote agent sends back is no longer dropped.
 
 ### Class by class
 
+#### `A2AOutboundFilesConfig` (new) — src/main/java/ai/gebo/architecture/a2aclients/service/impl/A2AOutboundFilesConfig.java
+A `@Configuration` with three `@Value` fields: `ai.gebo.a2a.clients.send-files-enabled` (false), `ai.gebo.a2a.clients.send-max-file-mb` (2) and `ai.gebo.a2a.clients.send-max-total-mb` (4). Its `@PostConstruct` method `apply()` hands them to `RemoteA2ANetworkAgentService.setOutboundFiles(..)` and logs them.
+
 #### `A2AClientConnector` (modified) — src/main/java/ai/gebo/architecture/a2aclients/service/impl/A2AClientConnector.java
 New record `OutboundFile(name, mimeType, bytes)`. New overload `sendMessage(config, text, contextId, files)`; the three-argument one delegates with null. `buildParams` builds the message from a list of parts: the text part, then a `FilePart` with `FileWithBytes` for each non-empty outbound file (type defaulting to `application/octet-stream`).
 `acceptedInputModes(config)` fetches the agent card and returns, lower case, its `defaultInputModes()` and each skill's `inputModes()`; the answer is cached per card address for the endpoint cache's time to live, and an unreadable card yields an empty set with a warning. The static `takes(inputModes, mimeType)` strips parameters from the type and matches it exactly, by family or against `*/*`. `invalidateEndpointCache` now also clears the cached modes.
 `MAX_LINKED_FILE_BYTES` is 20 MB. Record `LinkedFile(bytes, contentType)`. `isOwnAddress(config, uri)` is true only for an `http` or `https` address whose origin equals that of the card address or of the resolved RPC endpoint. `fetchLinkedFile(config, uri)` returns null for an address that is not the agent's own; otherwise it sends a GET with the agent's authorization, throws on a non-2xx status, on a declared length over the limit or on a body over the limit, and returns the bytes with the content type stripped of parameters.
 
 #### `RemoteA2ANetworkAgentService` (modified) — src/main/java/ai/gebo/architecture/a2aclients/service/impl/RemoteA2ANetworkAgentService.java
-The call now sends `filesFor(chatRequestContext)` and reads the answer with `extractText(result, chatRequestContext)`, run as the user the network works for when `runAs` is set, so that a kept file belongs to that user's conversation. Constants `MAX_OUTBOUND_FILE_BYTES` (20 MB) and `MAX_OUTBOUND_FILES_BYTES` (40 MB).
-`filesFor(context)` takes `context.getMedia()`, asks the connector for the remote agent's accepted modes, and for each file that the agent takes and that fits the limits reads its bytes into an `OutboundFile`; unreadable or oversized files are logged and left out.
+The call now sends `filesFor(chatRequestContext)` and reads the answer with `extractText(result, chatRequestContext)`, run as the user the network works for when `runAs` is set, so that a kept file belongs to that user's conversation. Whether files are sent at all, the largest file and the total of one message are static settings applied by `A2AOutboundFilesConfig` through `setOutboundFiles(..)`: off, 2 MB and 4 MB until the installation says otherwise.
+`filesFor(context)` returns nothing while sending is off. Otherwise: `filesFor(context)` takes `context.getMedia()`, asks the connector for the remote agent's accepted modes, and for each file that the agent takes and that fits the limits reads its bytes into an `OutboundFile`; unreadable or oversized files are logged and left out.
 `extractText` and `renderParts` take the request context. `renderParts` now handles `FilePart` with `FileWithBytes` (through `keep`) and with `FileWithUri` (through `fetchAndKeep`); other part kinds are logged at debug level as not read. `keep(FileWithBytes, context)` decodes the base64 bytes, falling back to a description `[file name (type)]`. `fetchAndKeep` calls `connector.fetchLinkedFile`; a null answer means the address is not the agent's own and the description with the address is returned. The final `keep(name, mimeType, data, described, context)` obtains `IGConversationGeneratedFilesStore` through the runtime binder, stores the file in the session of the request context, reports it to the `IGConversationFilesKeeper` of the tools context, and returns `[file kept in this conversation as <location>:<path> (<type>, <size> bytes)]`; any failure returns the description.
 
 #### `A2AClientConnectorIntegrationTest` (modified) — src/test/java/ai/gebo/architecture/a2aclients/service/impl/A2AClientConnectorIntegrationTest.java
@@ -825,17 +846,18 @@ The monolith's `application.yml` lists, with comments, the new settings of this 
 - `ai.gebo.a2a.server.linked-files-hosts:` (empty) — the hosts from which a file that an A2A caller names by a link is fetched; none means no link is fetched.
 - Ingestion of media: `ai.gebo.images.ingestion-enabled: false`, `ai.gebo.images.max-images-per-document: 30`, `ai.gebo.images.max-image-mb: 20`, `ai.gebo.images.min-image-bytes: 2048`, `ai.gebo.recordings.ingestion-enabled: false`, `ai.gebo.recordings.max-recording-mb: 20`, `ai.gebo.videos.ingestion-enabled: false`, `ai.gebo.videos.max-video-mb: 20`.
 - Vectorization of media: `ai.gebo.vectorizator.embed-images: false`, `ai.gebo.vectorizator.embed-recordings: false`, `ai.gebo.vectorizator.embed-videos: false`, `ai.gebo.vectorizator.image-model-code:` (empty), `ai.gebo.vectorizator.max-media-mb: 20`.
-- Files of a conversation sent to its model as they are, block `ai.gebo.chat.media`: `max-files: 10`, `max-file-bytes: 20971520` (20 MB), `max-total-bytes: 41943040` (40 MB), `estimated-tokens-per-file: 1000`.
+- Files sent to the chat models as they are, one switch and one set of limits per kind, all off: `ai.gebo.images.chat-*`, `ai.gebo.recordings.chat-*`, `ai.gebo.videos.chat-*`, `ai.gebo.documents.chat-*` (values in section 2).
+- Conversation files sent to remote A2A agents: `ai.gebo.a2a.clients.send-files-enabled: false`, `send-max-file-mb: 2`, `send-max-total-mb: 4`.
 
 A new integration test covers chat uploads for models that take files.
 
 ### Class by class
 
 #### `application.yml` (modified) — `src/main/resources/application.yml`
-Adds the properties listed above in two places: the A2A, ingestion and vectorization properties after `ai.gebo.ingestion.pdf.column-aware-extraction`, and the `ai.gebo.chat.media` block at the end of the file. The comments explain the two steps (ingestion gives the media as they are and calls no model; vectorization turns them into text with a model and embeds the text) and that every switch is off when not set.
+Adds the properties listed above in two places: the A2A, ingestion and vectorization properties after `ai.gebo.ingestion.pdf.column-aware-extraction`, and the per-kind chat settings and the A2A client settings at the end of the file. The comments explain the two steps (ingestion gives the media as they are and calls no model; vectorization turns them into text with a model and embeds the text) and that every switch is off when not set.
 
 #### `ChatUploadsForMultimodalModelsTest` (new) — `src/test/java/ai/gebo/ai/app/tests/ChatUploadsForMultimodalModelsTest.java`
-An integration test extending `AbstractBaseTestLLmsIntegrationTests`, observing the prompts the test chat model receives. `aPictureReachesTheModelThatDeclaresPictures` declares the default model as taking text and images, then asserts that the accepted file types of the chat report `image/*` as model MIME types, that a PNG upload is accepted, that the request context carries the picture as media, that the model receives it in its last user message with the bytes unchanged, that a call made with `context.withoutMedia()` carries no media, and that the same request to a model declaring text only carries none. `aTextOnlyModelsChatRefusesAPictureNobodyReads` asserts that with a text-only model the upload of a PNG gives no result. `aPictureTheChatGeneratedTravelsWithTheNextRequests` asserts that a picture stored with `storageArea.addMedia(..)` has its full content type and a size, and is returned by `getSessionMedia(chat)` with the bytes unchanged. `aFileAToolOrAnAgentReturnedIsKeptAndFoundAmongTheConversationsFiles` asserts that `IGConversationGeneratedFilesStore.store(..)` keeps a file in the `generated` location named with the extension of its type, keeps two files of one name apart (`chart.png`, `chart (2).png`), that the location is read-only and lists and reads them, and that both appear among the session media.
+An integration test extending `AbstractBaseTestLLmsIntegrationTests`, observing the prompts the test chat model receives. `aPictureReachesTheModelThatDeclaresPictures` declares the default model as taking text and images, then asserts that the accepted file types of the chat report `image/*` as model MIME types, that a PNG upload is accepted, that the request context carries the picture as media, that the model receives it in its last user message with the bytes unchanged, that a call made with `context.withoutMedia()` carries no media, and that the same request to a model declaring text only carries none. `aTextOnlyModelsChatRefusesAPictureNobodyReads` asserts that with a text-only model the upload of a PNG gives no result. `aPictureTheChatGeneratedTravelsWithTheNextRequests` asserts that a picture stored with `storageArea.addMedia(..)` has its full content type and a size, and is returned by `getSessionMedia(chat)` with the bytes unchanged. `aFileAToolOrAnAgentReturnedIsKeptAndFoundAmongTheConversationsFiles` asserts that `IGConversationGeneratedFilesStore.store(..)` keeps a file in the `generated` location named with the extension of its type, keeps two files of one name apart (`chart.png`, `chart (2).png`), that the location is read-only and lists and reads them, and that both appear among the session media. The tests switch every kind of file on before each test and set the shipped limits back after. `asShippedNoPictureReachesAModelThatDeclaresPictures` tries the shipped state: for a model declaring images it asserts that `application.yml` ships every kind off, that no file type is accepted for the model, that a PNG upload is refused, and that a picture already in the conversation no longer travels with the requests.
 
 ---
 

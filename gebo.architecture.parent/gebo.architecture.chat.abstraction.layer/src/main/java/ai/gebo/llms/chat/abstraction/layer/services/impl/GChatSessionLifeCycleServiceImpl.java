@@ -1,7 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
-import ai.gebo.llms.chat.abstraction.layer.config.ChatMediaConfig;
 import ai.gebo.acl.AclGrantType;
 
 import java.io.IOException;
@@ -126,7 +125,6 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 	private ObjectProvider<IGChatSessionRemovalListener> removalListeners;
 	private final IGMessageBroker broker;
 	private final IGChatModelRuntimeConfigurationDao chatModelsDao;
-	private final ChatMediaConfig mediaConfig;
 	private final IGKnowledgebaseVisibilityService knowledgeBaseVisibilityService;
 	private final IGPromptConfigDao promptsDao;
 	private final IGChatSessionStateShrinkerService shrinkerService;
@@ -573,8 +571,11 @@ public class GChatSessionLifeCycleServiceImpl implements IGChatSessionLifeCycleS
 		// attaches the ones its model takes. Room is kept for them in the context: the
 		// text is sized to what is left
 		final List<IChatRequestMedia> media = this.chatAreaStorageSession.getSessionMedia(context.getCode());
-		if (!media.isEmpty() && mediaConfig != null) {
-			final int kept = media.size() * Math.max(0, mediaConfig.getEstimatedTokensPerFile());
+		if (!media.isEmpty()) {
+			// each file by the estimate of its kind (images, recordings, videos, documents)
+			final int kept = media.stream().mapToInt(
+					x -> ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.estimatedTokens(x.getMimeType()))
+					.sum();
 			final int reduced = Math.max(budget / 2, budget - kept);
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Request {} of chat {} carries {} file(s): budget {} -> {} tokens for its text",

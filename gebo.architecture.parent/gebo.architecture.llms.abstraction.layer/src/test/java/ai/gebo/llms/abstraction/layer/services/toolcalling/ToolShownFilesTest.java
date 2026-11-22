@@ -46,6 +46,26 @@ import reactor.core.publisher.Flux;
  * user message after the results of the round's tools, when the model takes it.
  */
 class ToolShownFilesTest {
+
+	private java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> before;
+
+	/** Every kind of file is sent in these tests: the installation's switches are tried on their own. */
+	@org.junit.jupiter.api.BeforeEach
+	void filesAreSent() {
+		before = ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.get();
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> on = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		for (ai.gebo.llms.abstraction.layer.model.GModelInputModality kind : ai.gebo.llms.abstraction.layer.model.GModelInputModality
+				.values()) {
+			on.put(kind, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 6, 20, 20, 1000));
+		}
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(on);
+	}
+
+	@org.junit.jupiter.api.AfterEach
+	void asBefore() {
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(before);
+	}
 	public static class PathParam {
 		@JsonProperty
 		public String path;
@@ -139,12 +159,30 @@ class ToolShownFilesTest {
 	@Test
 	void aRoundShowsWithinItsLimitsAndHandsItsFilesOverOnce() {
 		final GToolShownFiles files = new GToolShownFiles(type -> true);
-		for (int i = 0; i < GToolShownFiles.MAX_FILES_PER_ROUND; i++) {
+		for (int i = 0; i < 6; i++) {
 			assertTrue(files.show("p" + i + ".png", "image/png", new byte[] { 1 }));
 		}
 		assertFalse(files.show("one-too-many.png", "image/png", new byte[] { 1 }));
-		assertEquals(GToolShownFiles.MAX_FILES_PER_ROUND, files.takeMessage().getMedia().size());
+		assertEquals(6, files.takeMessage().getMedia().size());
 		assertNull(files.takeMessage(), "shown once");
 		assertTrue(files.show("next-round.png", "image/png", new byte[] { 1 }));
+	}
+
+	@Test
+	void aKindOfFileTheInstallationDoesNotSendIsNotShown() {
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> imagesOnly = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		imagesOnly.put(ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE,
+				ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 1, 1, 1, 1500));
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(imagesOnly);
+		final GToolShownFiles files = new GToolShownFiles(type -> true);
+		assertFalse(files.show("talk.mp3", "audio/mpeg", new byte[] { 1 }), "recordings are off");
+		assertFalse(files.show("huge.png", "image/png", new byte[2 * 1024 * 1024]), "beyond the size of an image");
+		assertTrue(files.show("chart.png", "image/png", new byte[] { 1 }));
+		assertFalse(files.show("second.png", "image/png", new byte[] { 1 }), "one image a round");
+
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(null);
+		assertFalse(new GToolShownFiles(type -> true).show("chart.png", "image/png", new byte[] { 1 }),
+				"every kind off: nothing is shown");
 	}
 }

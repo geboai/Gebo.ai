@@ -8,6 +8,8 @@
  */
 package ai.gebo.llms.abstraction.layer.services.toolcalling;
 
+import ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -23,19 +25,15 @@ import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
  * The files the tools of one model call asked to show to the model: collected while a
  * round of tool calls runs, handed to the model in a user message after the round's
  * results ({@link GeboToolCallingAdvisor}). Only what the model takes is accepted
- * ({@link ai.gebo.llms.abstraction.layer.model.GModelMediaGuard}), within a number
- * of files and of bytes a round.
+ * ({@link ai.gebo.llms.abstraction.layer.model.GModelMediaGuard}), and only the kinds
+ * of file the installation sends to its models, each within its own number of files
+ * and of bytes a round ({@link GModelFilesDelivery}).
  */
 public final class GToolShownFiles implements IGToolShownFiles {
-	/** The files a round of tool calls may show. */
-	public static final int MAX_FILES_PER_ROUND = 6;
-	/** The bytes a round of tool calls may show, all files together. */
-	public static final long MAX_BYTES_PER_ROUND = 20L * 1024 * 1024;
-
 	private final Predicate<String> modelTakes;
 	private final List<Media> pending = new ArrayList<>();
 	private final List<String> names = new ArrayList<>();
-	private long pendingBytes = 0;
+	private GModelFilesDelivery.Admission round = new GModelFilesDelivery.Admission();
 
 	/**
 	 * @param modelTakes whether the model of the call takes a file of a MIME type
@@ -50,14 +48,13 @@ public final class GToolShownFiles implements IGToolShownFiles {
 		if (type == null || data == null || data.length == 0 || !modelTakes.test(type)) {
 			return false;
 		}
-		if (pending.size() >= MAX_FILES_PER_ROUND || pendingBytes + data.length > MAX_BYTES_PER_ROUND) {
+		if (!round.admit(type, data.length)) {
 			return false;
 		}
 		final String shownName = name != null && !name.isBlank() ? name : "file-" + (pending.size() + 1);
 		pending.add(Media.builder().mimeType(MimeTypeUtils.parseMimeType("audio/mpeg".equals(type) ? "audio/mp3" : type))
 				.data(data).name(shownName.replaceAll("[^A-Za-z0-9 \\-()\\[\\]]", "-")).build());
 		names.add(shownName);
-		pendingBytes += data.length;
 		return true;
 	}
 
@@ -74,7 +71,7 @@ public final class GToolShownFiles implements IGToolShownFiles {
 				.media(new ArrayList<>(pending)).build();
 		pending.clear();
 		names.clear();
-		pendingBytes = 0;
+		round = new GModelFilesDelivery.Admission();
 		return message;
 	}
 }

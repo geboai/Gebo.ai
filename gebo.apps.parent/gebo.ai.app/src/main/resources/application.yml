@@ -553,12 +553,39 @@ ai:
       mail-sender: no-reply@gebo.ai
       gebo-reachable-base-address: http://localhost:12999
 
-# The files of a conversation that go to its model as they are (pictures, PDF files,
-# recordings), on each request: the newest first, within these limits.
-ai.gebo.chat.media:
-    max-files: 10
-    max-file-bytes: 20971520
-    max-total-bytes: 41943040
-    # the room kept in the context for each file, in tokens: an estimate, every provider
-    # counts a picture or a recording its own way
-    estimated-tokens-per-file: 1000
+# The files that go to a chat model as they are, when the model takes them: with a request
+# of a conversation (the uploads no reader turned into text, the pictures generated before)
+# and when a tool shows a file to its model. One switch and one set of limits for each kind
+# of file; every kind is off when not set, and then no file of that kind reaches a model and
+# such an upload is accepted or refused as if the model took text only. The limits count for
+# one request, and for one round of tool calls. The estimated tokens are the room kept in
+# the context for each file: an estimate, every provider counts a picture, a recording or a
+# page its own way and none is asked beforehand - raise the limits knowing the context length
+# of the models that answer.
+ai.gebo.images.chat-enabled: false
+ai.gebo.images.chat-max-images: 2
+ai.gebo.images.chat-max-image-mb: 2
+ai.gebo.images.chat-max-total-mb: 4
+ai.gebo.images.chat-estimated-tokens-per-image: 1500
+ai.gebo.recordings.chat-enabled: false
+ai.gebo.recordings.chat-max-recordings: 1
+ai.gebo.recordings.chat-max-recording-mb: 5
+ai.gebo.recordings.chat-max-total-mb: 5
+ai.gebo.recordings.chat-estimated-tokens-per-recording: 5000
+ai.gebo.videos.chat-enabled: false
+ai.gebo.videos.chat-max-videos: 1
+ai.gebo.videos.chat-max-video-mb: 10
+ai.gebo.videos.chat-max-total-mb: 10
+ai.gebo.videos.chat-estimated-tokens-per-video: 10000
+# any other file a model takes as it is (a PDF no reader turned into text, an office file)
+ai.gebo.documents.chat-enabled: false
+ai.gebo.documents.chat-max-documents: 1
+ai.gebo.documents.chat-max-document-mb: 2
+ai.gebo.documents.chat-max-total-mb: 2
+ai.gebo.documents.chat-estimated-tokens-per-document: 5000
+# The conversation's files sent to the remote A2A agents a network calls, when the agent's
+# card says it takes them: off when not set. They are among the files above, so the kinds
+# switched on there apply first; these are the megabytes of one file and of one message.
+ai.gebo.a2a.clients.send-files-enabled: false
+ai.gebo.a2a.clients.send-max-file-mb: 2
+ai.gebo.a2a.clients.send-max-total-mb: 4

@@ -190,9 +190,20 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 		return synthetic;
 	}
 
-	/** The size in bytes a file may have, and the files of one message together, to travel to a remote agent. */
-	static final long MAX_OUTBOUND_FILE_BYTES = 20L * 1024 * 1024;
-	static final long MAX_OUTBOUND_FILES_BYTES = 40L * 1024 * 1024;
+	/**
+	 * Whether the conversation's files travel to the remote agents, the size in bytes a
+	 * file may have and the files of one message together: the settings of
+	 * {@link A2AOutboundFilesConfig}, off and low until the installation says otherwise.
+	 */
+	private static volatile boolean outboundFilesEnabled = false;
+	private static volatile long maxOutboundFileBytes = 2L * 1024 * 1024;
+	private static volatile long maxOutboundFilesBytes = 4L * 1024 * 1024;
+
+	static void setOutboundFiles(boolean enabled, long maxFileBytes, long maxFilesBytes) {
+		outboundFilesEnabled = enabled;
+		maxOutboundFileBytes = maxFileBytes;
+		maxOutboundFilesBytes = maxFilesBytes;
+	}
 
 	/**
 	 * The conversation's files the remote agent says it takes - the pictures, PDF
@@ -205,7 +216,7 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 		final List<A2AClientConnector.OutboundFile> files = new java.util.ArrayList<>();
 		final List<ai.gebo.llms.abstraction.layer.model.IChatRequestMedia> media = context != null ? context.getMedia()
 				: null;
-		if (media == null || media.isEmpty()) {
+		if (!outboundFilesEnabled || media == null || media.isEmpty()) {
 			return files;
 		}
 		final java.util.Set<String> modes = connector.acceptedInputModes(remoteConfig);
@@ -214,14 +225,14 @@ public class RemoteA2ANetworkAgentService implements IGNetworkAgentService<Strin
 			if (file == null || !A2AClientConnector.takes(modes, file.getMimeType())) {
 				continue;
 			}
-			if (file.getSize() > MAX_OUTBOUND_FILE_BYTES || total + file.getSize() > MAX_OUTBOUND_FILES_BYTES) {
+			if (file.getSize() > maxOutboundFileBytes || total + file.getSize() > maxOutboundFilesBytes) {
 				LOGGER.warn("The file " + file.getName() + " (" + file.getSize()
 						+ " bytes) is too large to be sent to remote A2A agent " + getId());
 				continue;
 			}
 			try {
 				final byte[] bytes = file.readBytes();
-				if (bytes == null || bytes.length == 0 || total + bytes.length > MAX_OUTBOUND_FILES_BYTES) {
+				if (bytes == null || bytes.length == 0 || total + bytes.length > maxOutboundFilesBytes) {
 					continue;
 				}
 				files.add(new A2AClientConnector.OutboundFile(file.getName(), file.getMimeType(), bytes));

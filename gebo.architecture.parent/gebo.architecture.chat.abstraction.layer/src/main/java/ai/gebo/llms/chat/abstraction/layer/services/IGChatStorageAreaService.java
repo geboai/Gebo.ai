@@ -101,7 +101,9 @@ public interface IGChatStorageAreaService {
 	/**
 	 * The files of a conversation that may go to the model as they are: its uploads no
 	 * content handler turned into text - pictures, recordings, scanned or unread files -
-	 * newest first and within the limits of {@code ai.gebo.chat.media}. They are
+	 * newest first, of the kinds the installation sends to its models and within the
+	 * limits of each kind (ai.gebo.images.chat-*, ai.gebo.recordings.chat-*,
+	 * ai.gebo.videos.chat-*, ai.gebo.documents.chat-*); none while every kind is off. They are
 	 * candidates: each model call attaches the ones its model takes. Their bytes are
 	 * read when they are attached.
 	 */

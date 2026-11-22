@@ -45,6 +45,26 @@ import io.micrometer.observation.ObservationRegistry;
  */
 class ChatRequestMediaAttachmentTest {
 
+	private java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> before;
+
+	/** Every kind of file is sent in these tests: the installation's switches are tried on their own. */
+	@org.junit.jupiter.api.BeforeEach
+	void filesAreSent() {
+		before = ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.get();
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> on = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		for (ai.gebo.llms.abstraction.layer.model.GModelInputModality kind : ai.gebo.llms.abstraction.layer.model.GModelInputModality
+				.values()) {
+			on.put(kind, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 6, 20, 20, 1000));
+		}
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(on);
+	}
+
+	@org.junit.jupiter.api.AfterEach
+	void asBefore() {
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(before);
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	static class MediaModel extends GAbstractConfigurableChatModel<GBaseChatModelConfig, ChatModel> {
 		private final GModelCarriedMediaTypes carried;
@@ -144,6 +164,35 @@ class ChatRequestMediaAttachmentTest {
 		assertEquals("image/png", message.getMedia().get(0).getMimeType().toString());
 		assertArrayEquals(new byte[] { 1, 2, 3 }, message.getMedia().get(0).getDataAsByteArray());
 		assertEquals(List.of("chart 1.png"), read, "a file that stays out is never read");
+	}
+
+	@Test
+	void withEveryKindOffNoFileIsSentOrRead() {
+		read.clear();
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(null);
+		final MediaModel model = new MediaModel(List.of(TEXT, IMAGE), PICTURES_AND_PDF);
+		final UserMessage message = model.createLastUserMessage(prompt(), Map.of(),
+				context(file("chart 1.png", "image/png", new byte[] { 1, 2, 3 })));
+
+		assertEquals("what is in the picture?", message.getText());
+		assertTrue(message.getMedia().isEmpty(), "the installation sends no image to its models");
+		assertTrue(read.isEmpty(), "and reads none");
+	}
+
+	@Test
+	void anImageBeyondTheLimitsOfItsKindStaysOut() {
+		read.clear();
+		final java.util.Map<GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> one = new java.util.EnumMap<>(
+				GModelInputModality.class);
+		one.put(IMAGE, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 1, 1, 1, 1500));
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(one);
+		final MediaModel model = new MediaModel(List.of(TEXT, IMAGE), PICTURES_AND_PDF);
+		final UserMessage message = model.createLastUserMessage(prompt(), Map.of(),
+				context(file("first.png", "image/png", new byte[] { 1 }),
+						file("second.png", "image/png", new byte[] { 2 })));
+
+		assertEquals(1, message.getMedia().size(), "one image a request");
+		assertArrayEquals(new byte[] { 1 }, message.getMedia().get(0).getDataAsByteArray());
 	}
 
 	@Test

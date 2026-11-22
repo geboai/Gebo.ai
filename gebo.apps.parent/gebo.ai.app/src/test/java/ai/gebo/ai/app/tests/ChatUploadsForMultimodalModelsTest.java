@@ -103,6 +103,29 @@ public class ChatUploadsForMultimodalModelsTest extends AbstractBaseTestLLmsInte
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> shippedLimits;
+
+	/**
+	 * The installation ships with every kind of file off (application.yml): these tests
+	 * turn the kinds on, and one of them tries the shipped state.
+	 */
+	@org.junit.jupiter.api.BeforeEach
+	void filesAreSentToTheModels() {
+		shippedLimits = ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.get();
+		final java.util.Map<ai.gebo.llms.abstraction.layer.model.GModelInputModality, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits> on = new java.util.EnumMap<>(
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.class);
+		for (ai.gebo.llms.abstraction.layer.model.GModelInputModality kind : ai.gebo.llms.abstraction.layer.model.GModelInputModality
+				.values()) {
+			on.put(kind, ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Limits.of(true, 4, 5, 10, 1000));
+		}
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(on);
+	}
+
+	@org.junit.jupiter.api.AfterEach
+	void asShipped() {
+		ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(shippedLimits);
+	}
+
 	@Test
 	public void aPictureReachesTheModelThatDeclaresPictures() throws Exception {
 		final IGConfigurableChatModel model = answeringModel();
@@ -158,6 +181,34 @@ public class ChatUploadsForMultimodalModelsTest extends AbstractBaseTestLLmsInte
 					"a text only model never gets a file");
 		} finally {
 			lifeCycleService.releaseRequest(request);
+		}
+	}
+
+	@Test
+	public void asShippedNoPictureReachesAModelThatDeclaresPictures() throws Exception {
+		final IGConfigurableChatModel model = answeringModel();
+		final List<ai.gebo.llms.abstraction.layer.model.GModelInputModality> declaredBefore = config(model)
+				.getInputModalities();
+		config(model).setInputModalities(List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE));
+		try {
+			final String chat = newSession("a chat of an installation as shipped");
+			// a picture generated while the kinds were on stays in the conversation
+			storageArea.addMedia(org.springframework.ai.content.Media.builder()
+					.mimeType(org.springframework.util.MimeTypeUtils.IMAGE_PNG).data(png()).name("drawn").build(), chat);
+			assertEquals(1, storageArea.getSessionMedia(chat).size());
+
+			ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.set(shippedLimits);
+			assertFalse(ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.deliversAnything(),
+					"application.yml ships every kind of file off");
+			assertEquals(List.of(), uploadsController.acceptedFileTypes(chat, null).getModelMimeTypes(),
+					"no file type is accepted for the model");
+			final OperationStatus<List<UserUploadedContent>> uploaded = uploadsController.chatSessionUpload(chat,
+					List.of(new MockMultipartFile("files[]", "chart.png", "image/png", png())));
+			assertNull(uploaded.getResult(), "a picture is refused as it was before pictures went to the models");
+			assertTrue(storageArea.getSessionMedia(chat).isEmpty(), "and no file travels with the requests");
+		} finally {
+			config(model).setInputModalities(declaredBefore);
 		}
 	}
 

@@ -173,8 +173,12 @@ public class GChatUploadFileTypesServiceImpl implements IGChatUploadFileTypesSer
 			if (model == null) {
 				model = dao.defaultHandler();
 			}
+			// of what the model takes, the kinds of file the installation sends to its models:
+			// with a kind off its files are not accepted for the model, as before it existed
 			final List<String> types = model != null ? model.getEffectiveInputMimeTypes() : null;
-			return types != null ? new ArrayList<>(types) : List.of();
+			return types != null
+					? new ArrayList<>(ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(types))
+					: List.of();
 		} catch (RuntimeException unreadable) {
 			LOGGER.warn("What the chat's model takes as input could not be read: " + unreadable);
 			return List.of();

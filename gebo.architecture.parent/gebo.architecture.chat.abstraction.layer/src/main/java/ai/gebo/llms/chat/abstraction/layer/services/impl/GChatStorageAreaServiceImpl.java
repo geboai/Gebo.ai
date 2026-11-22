@@ -1,7 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.services.impl;
 
 import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
-import ai.gebo.llms.chat.abstraction.layer.config.ChatMediaConfig;
+import ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery;
 import ai.gebo.llms.abstraction.layer.model.IChatRequestMedia;
 import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
 import ai.gebo.acl.AclGrantType;
@@ -67,7 +67,6 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	final IGDocumentReferenceFactory documentReferenceFactory;
 	final LLMGeneratedResourceRepository llmGeneratedResourceRepository;
 	final IGChatUploadFileTypesService uploadFileTypes;
-	final ChatMediaConfig mediaConfig;
 	final static String SESSIONS_PATH_PREFIX = "SESSIONS_AREA";
 	final static ObjectMapper objectMapper = new ObjectMapper();
 	final static JTokkitTokenCountEstimator tokenCountEstimator = new JTokkitTokenCountEstimator();
@@ -429,7 +428,8 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 
 	@Override
 	public List<IChatRequestMedia> getSessionMedia(String userSessionCode) {
-		if (userSessionCode == null) {
+		// no kind of file is sent to the models: nothing is gathered, nothing is read
+		if (userSessionCode == null || !GModelFilesDelivery.deliversAnything()) {
 			return List.of();
 		}
 		final List<MediaFile> files = new ArrayList<>();
@@ -467,12 +467,12 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 				.comparing(MediaFile::created, java.util.Comparator.nullsFirst(java.util.Comparator.naturalOrder()))
 				.reversed());
 		final List<IChatRequestMedia> media = new ArrayList<>();
-		long total = 0;
+		final GModelFilesDelivery.Admission admission = new GModelFilesDelivery.Admission();
 		for (MediaFile candidate : files) {
 			final String mimeType = candidate.mimeType();
 			final Path file = candidate.file();
 			long known = candidate.size();
-			if (mimeType == null || !Files.exists(file)) {
+			if (mimeType == null || !GModelFilesDelivery.delivers(mimeType) || !Files.exists(file)) {
 				continue;
 			}
 			if (known < 0) {
@@ -483,15 +483,13 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 				}
 			}
 			final long size = known;
-			if (media.size() >= mediaConfig.getMaxFiles() || size > mediaConfig.getMaxFileBytes()
-					|| total + size > mediaConfig.getMaxTotalBytes()) {
+			if (!admission.admit(mimeType, size)) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("getSessionMedia(...) session:" + userSessionCode + " file:" + candidate.name() + " ("
-							+ size + " bytes) is beyond the limits of ai.gebo.chat.media, it stays with the tools");
+							+ size + " bytes) is beyond the limits of its kind, it stays with the tools");
 				}
 				continue;
 			}
-			total += size;
 			final String name = candidate.name();
 			media.add(new IChatRequestMedia() {
 				@Override

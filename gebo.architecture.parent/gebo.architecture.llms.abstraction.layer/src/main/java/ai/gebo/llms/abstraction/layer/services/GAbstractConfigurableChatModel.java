@@ -843,9 +843,12 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			toolContext = withToolsRoom(toolContext, messages, tools, LOGGER.isDebugEnabled() ? tokens : -1);
 		}
 		// the files the tools show to the model (a picture they extracted or received): only
-		// in the calls whose loop Gebo runs, and for a model that takes files at all
+		// in the calls whose loop Gebo runs, for a model that takes files at all, and
+		// while the installation sends files of some kind it takes (GModelFilesDelivery)
 		GToolShownFiles shownFiles = null;
-		if (toolCalling != null && !tools.isEmpty() && !getEffectiveInputMimeTypes().isEmpty()) {
+		if (toolCalling != null && !tools.isEmpty()
+				&& !ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivered(getEffectiveInputMimeTypes())
+						.isEmpty()) {
 			shownFiles = new GToolShownFiles(this::acceptsMedia);
 			toolContext = toolContext != null ? new HashMap<>(toolContext) : new HashMap<>();
 			toolContext.put(IGToolShownFiles.TOOLS_CONTEXT_KEY, shownFiles);
@@ -1119,7 +1122,9 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	/**
 	 * The files of the request that go to this model as they are: the ones its
 	 * configuration declares and its provider's integration carries
-	 * ({@link GModelMediaGuard}), as bytes. A file that stays out is logged with the
+	 * ({@link GModelMediaGuard}), of the kinds the installation sends to its models and
+	 * within their limits ({@link ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery}),
+	 * as bytes. A file that stays out is logged with the
 	 * reason and never fails the call, and so does one that cannot be read.
 	 */
 	protected List<Media> mediaToAttach(IChatRequestContext chatContext) {
@@ -1130,8 +1135,18 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		final List<GModelInputModality> declared = getInputModalities();
 		final GModelCarriedMediaTypes carried = getCarriedMediaTypes();
 		final List<Media> media = new ArrayList<>();
+		// the last word on what leaves: the kinds the installation sends to its models,
+		// each within its limits, whoever gathered the candidates
+		final ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Admission admission = new ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.Admission();
 		for (IChatRequestMedia candidate : candidates) {
 			if (candidate == null) {
+				continue;
+			}
+			if (!ai.gebo.llms.abstraction.layer.model.GModelFilesDelivery.delivers(candidate.getMimeType())) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Chat model code=" + getCode() + " file " + candidate.getName() + " ("
+							+ candidate.getMimeType() + ") is not sent: files of its kind are not sent to the models");
+				}
 				continue;
 			}
 			final GModelMediaGuard.Outcome outcome = GModelMediaGuard.decide(declared, carried,
@@ -1146,6 +1161,14 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			try {
 				final byte[] bytes = candidate.readBytes();
 				if (bytes == null || bytes.length == 0) {
+					continue;
+				}
+				if (!admission.admit(candidate.getMimeType(), bytes.length)) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Chat model code=" + getCode() + " file " + candidate.getName() + " ("
+								+ candidate.getMimeType() + ", " + bytes.length
+								+ " bytes) is not sent: beyond the limits of its kind");
+					}
 					continue;
 				}
 				media.add(Media.builder().mimeType(MimeTypeUtils.parseMimeType(sentMimeType(candidate.getMimeType())))
