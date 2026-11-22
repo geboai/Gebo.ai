@@ -140,10 +140,20 @@ class LoopControllerNetworkRunTest {
 		return new RuntimeAgentInfos(agent, config, participant, 0, 0);
 	}
 
-	private static IGNetworkAgentService agent(Function<Object[], List<?>> behaviour) throws Exception {
+	/** What the network did to its agents, in the order it did: initialized for the run, or given a message. */
+	private final List<String> whatTheNetworkDid = new java.util.ArrayList<>();
+
+	private IGNetworkAgentService agent(Function<Object[], List<?>> behaviour) throws Exception {
 		IGNetworkAgentService agent = mock(IGNetworkAgentService.class);
 		when(agent.onMessage(any(), any(), any(), org.mockito.ArgumentMatchers.anyInt(), any(), any(), any(), any(),
-				any(), any(), any(), any(), any())).thenAnswer(invocation -> behaviour.apply(invocation.getArguments()));
+				any(), any(), any(), any(), any())).thenAnswer(invocation -> {
+					whatTheNetworkDid.add("message to " + ((GAgentConfig) invocation.getArgument(1)).getCode());
+					return behaviour.apply(invocation.getArguments());
+				});
+		org.mockito.Mockito.doAnswer(invocation -> {
+			whatTheNetworkDid.add("initialized " + ((GAgentConfig) invocation.getArgument(1)).getCode());
+			return null;
+		}).when(agent).initializeForRun(any(), any());
 		when(agent.getInputType()).thenReturn((Class) String.class);
 		when(agent.getAgentCapabilities(any())).thenReturn(new AgentCapabilities());
 		return agent;
@@ -220,6 +230,11 @@ class LoopControllerNetworkRunTest {
 					privateTurnsSeen.add(((AgentPrivateSessionContext) execution[7]).getContributionTurnNumbers());
 					return Flux.just(IGPartialOperation.of(answer(controllerModel.apply(execution)), false));
 				});
+		// the adapter hands the initialization to the agent it adapts
+		org.mockito.Mockito.doAnswer(invocation -> {
+			whatTheNetworkDid.add("initialized " + ((GAgentConfig) invocation.getArgument(1)).getCode());
+			return null;
+		}).when(loop).initializeForRun(any(), any());
 		return new LoopControllerNetworkAdapter(loop, Sinks.many().unicast().onBackpressureBuffer());
 	}
 
@@ -293,6 +308,10 @@ class LoopControllerNetworkRunTest {
 		assertEquals(requestsGiven, requestsInTheContext, "the loop's model reads the request from the context");
 		assertEquals(List.of(List.of(), List.of(1), List.of(1, 3)), privateTurnsSeen,
 				"each turn it handed work over is a turn of its own in its private session");
+		assertEquals(List.of("initialized " + INPUT, "initialized " + CONTROLLER, "initialized " + SPECIALIST,
+				"message to " + INPUT), whatTheNetworkDid.subList(0, 4),
+				"every agent is initialized for the run, one at a time, before the first message is delivered");
+		assertEquals(3, whatTheNetworkDid.stream().filter(x -> x.startsWith("initialized ")).count(), "once each");
 	}
 
 	@Test

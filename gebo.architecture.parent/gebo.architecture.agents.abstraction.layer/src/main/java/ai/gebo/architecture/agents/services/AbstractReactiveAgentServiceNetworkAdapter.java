@@ -58,6 +58,12 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	}
 
 	@Override
+	public void initializeForRun(IChatRequestContext chatRequestContext, GAgentConfig agentConfig) {
+		// the agent adapted is the one that knows what it works with
+		service.initializeForRun(chatRequestContext, agentConfig);
+	}
+
+	@Override
 	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 
 		return service.getAgentCapabilities(agentConfig);

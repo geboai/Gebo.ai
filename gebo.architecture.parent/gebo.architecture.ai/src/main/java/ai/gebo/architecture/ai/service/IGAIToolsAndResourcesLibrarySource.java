@@ -46,6 +46,26 @@ public interface IGAIToolsAndResourcesLibrarySource {
 	/** Creates an instance of a type for the given owners. */
 	public AIToolsAndResourcesLibraryInstance createInstance(AIToolsAndResourcesLibraryType type, List<String> owners);
 
+	/**
+	 * Allocates the instance a handle stands for. A conversation is given the handle
+	 * of each library its agents work with - a unique id - before any of them runs,
+	 * and nothing is allocated then: the instance is created under that id the first
+	 * time an agent accesses it, which is when this is called, {@link #getInstanceById}
+	 * knowing no instance of the handle. A source allocates here only what an instance
+	 * needs to exist, and what is costly - a container, a remote resource - when the
+	 * instance is first used.
+	 * <p>
+	 * A source that cannot create an instance under an id given to it creates one as
+	 * {@link #createInstance} does, which is what this default does: the id the
+	 * instance comes back with is then the one the conversation records.
+	 *
+	 * @param handle the id the instance is to have
+	 */
+	public default AIToolsAndResourcesLibraryInstance allocateInstance(AIToolsAndResourcesLibraryType type,
+			List<String> owners, String handle) {
+		return createInstance(type, owners);
+	}
+
 	/** Drops an instance: what it held is released, its tools are no more. */
 	public void dropInstance(AIToolsAndResourcesLibraryInstance instance);
 

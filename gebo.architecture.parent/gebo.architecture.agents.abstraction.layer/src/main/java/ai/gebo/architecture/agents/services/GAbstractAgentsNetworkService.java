@@ -366,6 +366,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		}
 		OutputType producedOutput = null;
 		Throwable failure = null;
+		initializeAgentsForRun(chatRequestContext);
 		// The handler of this run's suspension, given to every agent of the run: an
 		// agent asks it to suspend the run, this service asks it whether one did.
 		final IGNetworkOfAgentsSuspensionHandler suspensionHandler = createSuspensionHandler();
@@ -425,6 +426,30 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		sessionCompleted(session, sessionCreation, producedOutput, failure);
 	}
 
+	/**
+	 * Every agent of the network is initialized for the run, one at a time, before
+	 * any message is delivered (see {@code IGGenericAgentService.initializeForRun}):
+	 * what the agents need in place is there before they work at the same time. An
+	 * agent that cannot be initialized is not what stops the run: it prepares what it
+	 * needs when it is first executed, as an agent run outside a network does.
+	 */
+	@SuppressWarnings("rawtypes")
+	private void initializeAgentsForRun(IChatRequestContext chatRequestContext) throws AgentException {
+		for (RuntimeAgentInfos runtime : agentsRuntime()) {
+			final IGNetworkAgentService service = runtime.getService();
+			if (service == null) {
+				continue;
+			}
+			try {
+				service.initializeForRun(chatRequestContext, runtime.getConfig());
+			} catch (RuntimeException notInitialized) {
+				LOGGER.warn("Agent:" + (runtime.getConfig() != null ? runtime.getConfig().getCode() : null)
+						+ " of network:" + (network != null ? network.getCode() : null)
+						+ " could not be initialized for the run, it prepares at its first turn: " + notInitialized);
+			}
+		}
+	}
+
 	/** The runtime of every agent of the network that has one. */
 	private List<RuntimeAgentInfos> agentsRuntime() throws AgentException {
 		final List<RuntimeAgentInfos> runtimes = new ArrayList<RuntimeAgentInfos>();
@@ -469,6 +494,7 @@ public abstract class GAbstractAgentsNetworkService<InputType, OutputType>
 		final AgentsSessionCreationContext sessionCreation = sessionCreationContext(chatRequestContext,
 				session.getEnvironment());
 		restoreAgentsRuntime(suspension);
+		initializeAgentsForRun(chatRequestContext);
 		final Map<String, List<AgentSuspendedWaitingCondition>> resolvedByAgent = resolvedByAgent(suspension,
 				resolvedConditions);
 		OutputType producedOutput = null;
