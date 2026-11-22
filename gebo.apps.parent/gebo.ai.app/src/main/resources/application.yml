@@ -459,6 +459,8 @@ ai.gebo.images.ingestion-enabled: false
 # the images of one document taken at most, and the size of one image, in megabytes
 ai.gebo.images.max-images-per-document: 30
 ai.gebo.images.max-image-mb: 20
+# an image smaller than this, in bytes, is taken for a decoration (a bullet, a rule) and passed over
+ai.gebo.images.min-image-bytes: 2048
 ai.gebo.recordings.ingestion-enabled: false
 ai.gebo.recordings.max-recording-mb: 20
 ai.gebo.videos.ingestion-enabled: false

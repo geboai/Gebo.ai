@@ -55,7 +55,9 @@ import ai.gebo.system.ingestion.impl.GAbstractConfiguredHandler;
  * This service extracts the text of each slide and the presentation metadata
  * for ingestion into the system. Every slide with some text gives one document,
  * in the order of the presentation, carrying its slide number the way a PDF
- * page carries its page number. Pictures are not read.
+ * page carries its page number. With ai.gebo.images.ingestion-enabled the
+ * pictures of the slides are given too, each as a document of its own holding
+ * the picture as media with its slide number; no model is called here.
  */
 @Service
 public class MSPowerPointIngestionHandler extends GAbstractConfiguredHandler {
