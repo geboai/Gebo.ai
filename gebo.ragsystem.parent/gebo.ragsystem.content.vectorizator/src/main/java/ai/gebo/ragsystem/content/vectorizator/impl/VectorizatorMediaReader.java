@@ -52,6 +52,29 @@ public class VectorizatorMediaReader {
 	private static final Logger LOGGER = LoggerFactory.getLogger(VectorizatorMediaReader.class);
 	/** The metadata telling a text was written by a model, and from what: description or transcript. */
 	public static final String MODEL_WRITTEN_METADATA = "gebo_model_written";
+
+	/**
+	 * A piece of the text written of a media, opening with the header the chunking gave
+	 * the media ({@link DocumentMetaInfos#GEBO_EMBEDDING_METADATA}) and its document's
+	 * title, laid out as the document's text chunks are; the piece as it is when the
+	 * media carries no header.
+	 */
+	static Document withHeader(Document piece) {
+		final Map<String, Object> metadata = piece.getMetadata();
+		final Object header = metadata != null ? metadata.get(DocumentMetaInfos.GEBO_EMBEDDING_METADATA) : null;
+		if (header == null || header.toString().isBlank()) {
+			return piece;
+		}
+		final StringBuilder content = new StringBuilder();
+		if (metadata.get(DocumentMetaInfos.TITLE) != null) {
+			content.append("META-TITLE:").append(metadata.get(DocumentMetaInfos.TITLE)).append("\n");
+		}
+		if (metadata.get(DocumentMetaInfos.SUBTITLE) != null) {
+			content.append("META-SUBTITLE:").append(metadata.get(DocumentMetaInfos.SUBTITLE)).append("\n");
+		}
+		content.append(header).append("\n\n").append(piece.getText()).append("\n");
+		return new Document(piece.getId(), content.toString(), new HashMap<String, Object>(metadata));
+	}
 	static final String DESCRIBE_SYSTEM_PROMPT = "You turn a picture into text for a search index. Write, in the language of the text the picture carries (English when it carries none): first every text you can read in it, as it is written and in its reading order, tables row by row; then what the picture shows - the kind of picture, what a chart or a diagram says with its figures, labels and relations. Write only what is in the picture, no introduction and no comment. If the picture is empty or cannot be made out, answer with nothing at all.";
 
 	private final VectorizatorMediaConfig config;
@@ -202,8 +225,14 @@ public class VectorizatorMediaReader {
 					mediaDocument.getMetadata() != null ? mediaDocument.getMetadata() : Map.of());
 			metadata.put(MODEL_WRITTEN_METADATA, written);
 			// a long text (a transcript) is split as the document's texts are; a short one is one piece
-			final List<Document> pieces = new TokenTextSplitter()
+			final List<Document> split = new TokenTextSplitter()
 					.split(new Document(mediaDocument.getId(), text.trim(), metadata));
+			// each piece opens with the header the document's text chunks open with (title,
+			// knowledge base, project, category), as the chunking put it on the media
+			final List<Document> pieces = new java.util.ArrayList<>();
+			for (Document piece : split) {
+				pieces.add(withHeader(piece));
+			}
 			for (Document piece : pieces) {
 				final String content = piece.getText() != null ? piece.getText() : "";
 				piece.getMetadata().put(DocumentMetaInfos.GEBO_BYTES_LENGTH, content.length() * 2);

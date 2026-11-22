@@ -94,6 +94,42 @@ public class DocumentsChunkServiceImpl
 	private static final String CANNOT_SERIALIZE_SEARCH_RESULT = "Cannot serialize searchResult";
 	private final DocumentChunkOperationRepository documentChunkOperationRepository;
 	private static final String CHUNKS_CACHE_DIRECTORY_NAME = ".CHCACHE";
+	/**
+	 * The metadata header of a document's chunks - knowledge base, project, data source,
+	 * category - or null when its context cannot be resolved: enrichment is best effort
+	 * and never aborts the batch.
+	 */
+	private MetaDataHeaderInfos metaDataHeaderOf(Document doc, GDocumentReference dr) {
+		try {
+			GProject project = dr.getParentProjectCode() != null
+					? persistentObjectManager.findById(GProject.class,
+							dr.getParentProjectCode())
+					: null;
+			GKnowledgeBase knowledgeBase = dr.getRootKnowledgebaseCode() != null
+					? persistentObjectManager.findById(GKnowledgeBase.class,
+							dr.getRootKnowledgebaseCode())
+					: null;
+			GProjectEndpoint endpoint = dr.getProjectEndpointReference() != null
+					? persistentObjectManager.findByReference(dr.getProjectEndpointReference(),
+							GProjectEndpoint.class)
+					: null;
+
+			return this.metaDataEnricher.createMetaDataHeader(List.of(doc), dr,
+					knowledgeBase, project, endpoint);
+		} catch (GeboPersistenceException e) {
+			// Metadata enrichment is best-effort flavor on top of the chunk (its own text
+			// content is already resolved by this point) - a failure here, e.g. resolving
+			// a content-handler-specific GProjectEndpoint subtype's class on a
+			// content-handler-agnostic service like chunker (which does not and should
+			// not carry every content-handler's model classes on its classpath), must not
+			// abort the whole batch. metaDataHeader stays null, which the caller already
+			// treats as "nothing to enrich with".
+			LOGGER.warn("Could not resolve metadata enrichment context for document "
+					+ dr.getCode() + "; proceeding without it", e);
+		}
+		return null;
+	}
+
 	/** The bytes of media a chunk set holds before it is written and another begun. */
 	static final long MEDIA_BYTES_PER_CHUNK_SET = 8L * 1024 * 1024;
 	private final static Map<String, TokenTextSplitter> splittersCache = new Hashtable<String, TokenTextSplitter>();
@@ -331,6 +367,20 @@ public class DocumentsChunkServiceImpl
 								if (chunk == null) {
 									return;
 								}
+								// the header the text chunks open with, for whoever writes the media as text
+								if (enrichWithMetaData && document instanceof GDocumentReference dr) {
+									try {
+										final MetaDataHeaderInfos header = metaDataHeaderOf(doc, dr);
+										if (header != null && header.metaDataHeader != null
+												&& !header.metaDataHeader.isBlank()) {
+											chunk.getMetaData().put(DocumentMetaInfos.GEBO_EMBEDDING_METADATA,
+													header.metaDataHeader);
+										}
+									} catch (RuntimeException noHeader) {
+										LOGGER.debug("No metadata header for a media of " + document.getCode() + ": "
+												+ noHeader);
+									}
+								}
 								if (contentHash != null) {
 									// a changed image changes the document, as a changed text does
 									contentHash.add(mediaType + ":" + bytes.length + ":" + java.util.Arrays.hashCode(bytes));
@@ -382,33 +432,7 @@ public class DocumentsChunkServiceImpl
 							// same metadata for all other chunks)
 							if (enrichWithMetaData && metaDataHeader == null && doc.isText()
 									&& document instanceof GDocumentReference dr) {
-								try {
-									GProject project = dr.getParentProjectCode() != null
-											? persistentObjectManager.findById(GProject.class,
-													dr.getParentProjectCode())
-											: null;
-									GKnowledgeBase knowledgeBase = dr.getRootKnowledgebaseCode() != null
-											? persistentObjectManager.findById(GKnowledgeBase.class,
-													dr.getRootKnowledgebaseCode())
-											: null;
-									GProjectEndpoint endpoint = dr.getProjectEndpointReference() != null
-											? persistentObjectManager.findByReference(dr.getProjectEndpointReference(),
-													GProjectEndpoint.class)
-											: null;
-
-									metaDataHeader = this.metaDataEnricher.createMetaDataHeader(List.of(doc), dr,
-											knowledgeBase, project, endpoint);
-								} catch (GeboPersistenceException e) {
-									// Metadata enrichment is best-effort flavor on top of the chunk (its own text
-									// content is already resolved by this point) - a failure here, e.g. resolving
-									// a content-handler-specific GProjectEndpoint subtype's class on a
-									// content-handler-agnostic service like chunker (which does not and should
-									// not carry every content-handler's model classes on its classpath), must not
-									// abort the whole batch. metaDataHeader stays null, which the caller already
-									// treats as "nothing to enrich with".
-									LOGGER.warn("Could not resolve metadata enrichment context for document "
-											+ dr.getCode() + "; proceeding without it", e);
-								}
+								metaDataHeader = metaDataHeaderOf(doc, dr);
 							}
 							// discard zero length contents
 							if (usedSplitter != null && doc.isText() && doc.getText() != null

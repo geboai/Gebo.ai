@@ -99,6 +99,10 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 		return status;
 	}
 
+	/** What a chosen model accepts: its stored metadata, else the models library. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.llms.abstraction.layer.services.GChatModelInputModalitiesResolver inputModalitiesResolver;
+
 	private OperationStatus<ChatModelConfigType> insertInternal(ChatModelConfigType config) {
 		ChatModelConfigType out = null;
 		LOGGER.info("Begin chat model configuration insert");
@@ -107,8 +111,9 @@ public abstract class AbstractBaseChatModelsConfigurationCRUDController<ChatMode
 		// (IGChatModelConfigurationSupportService.insertAndConfigureModel). An update
 		// keeps what the form sends.
 		if (config != null && config.getInputModalities() == null) {
-			config.setInputModalities(
-					IGChatModelConfigurationSupportService.inputModalitiesOf(config.getChoosedModel()));
+			config.setInputModalities(inputModalitiesResolver != null
+					? inputModalitiesResolver.of(config.getModelTypeCode(), config.getChoosedModel())
+					: IGChatModelConfigurationSupportService.inputModalitiesOf(config.getChoosedModel()));
 		}
 		try {
 			out = persistentObjectManager.insert(config);

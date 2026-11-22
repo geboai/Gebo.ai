@@ -124,4 +124,21 @@ class VectorizatorMediaReaderTest {
 		final List<Document> texts = List.of(new Document("text-1", "The sales.", new HashMap<>()));
 		assertSame(texts, reader(true, seeing("x")).withMediaAsText("sales.docx", texts));
 	}
+
+	@Test
+	void aDescriptionOpensWithTheHeaderOfTheDocumentsTextChunks() {
+		final Map<String, Object> metadata = new HashMap<>();
+		metadata.put(ai.gebo.model.DocumentMetaInfos.GEBO_EMBEDDING_METADATA,
+				"[METADATA]  Category: /report.docx knowledge base: Sales [/METADATA]");
+		metadata.put(ai.gebo.model.DocumentMetaInfos.TITLE, "Heron report");
+		final Document described = VectorizatorMediaReader
+				.withHeader(new Document("piece-1", "Bar chart: North 42, South 17.", metadata));
+		assertEquals("piece-1", described.getId());
+		assertTrue(described.getText().startsWith("META-TITLE:Heron report\n[METADATA]  Category: /report.docx"),
+				described.getText());
+		assertTrue(described.getText().contains("[/METADATA]\n\nBar chart: North 42, South 17."));
+
+		final Document plain = new Document("piece-2", "Bar chart.", new HashMap<>());
+		assertSame(plain, VectorizatorMediaReader.withHeader(plain), "no header, the piece as it is");
+	}
 }

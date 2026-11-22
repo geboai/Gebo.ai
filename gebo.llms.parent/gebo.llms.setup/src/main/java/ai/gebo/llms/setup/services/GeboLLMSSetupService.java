@@ -95,6 +95,8 @@ import lombok.AllArgsConstructor;
 @Service
 @AllArgsConstructor
 public class GeboLLMSSetupService {
+	/** What a chosen model accepts: its stored metadata, else the models library. */
+	private final org.springframework.beans.factory.ObjectProvider<ai.gebo.llms.abstraction.layer.services.GChatModelInputModalitiesResolver> inputModalitiesResolver;
 	private final IGSecurityService securityService;
 	private final IGChatModelRuntimeConfigurationDao chatModelsConfigDao;
 	private final IGChatModelConfigurationSupportServiceRepositoryPattern chatModelsSupportRepo;
@@ -1189,8 +1191,13 @@ public class GeboLLMSSetupService {
 					if (config.getInputModalities() != null) {
 						configuration.setInputModalities(config.getInputModalities());
 					} else if (configuration.getInputModalities() == null) {
-						configuration.setInputModalities(
-								IGChatModelConfigurationSupportService.inputModalitiesOf(configuration.getChoosedModel()));
+						final ai.gebo.llms.abstraction.layer.services.GChatModelInputModalitiesResolver resolver = inputModalitiesResolver != null
+								? inputModalitiesResolver.getIfAvailable()
+								: null;
+						configuration.setInputModalities(resolver != null
+								? resolver.of(configuration.getModelTypeCode(), configuration.getChoosedModel())
+								: IGChatModelConfigurationSupportService
+										.inputModalitiesOf(configuration.getChoosedModel()));
 					}
 					configureModelValidating(supportLogic, configuration, config, operationsOutput, result);
 				} catch (Throwable th) {

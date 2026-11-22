@@ -117,6 +117,24 @@ Not checked: no request was sent to a real provider; nothing was tried in the br
 
 ---
 
+## 5. Live trial (2026-11-22) and the fixes it led to
+
+`develop` at `72695e494` ran on port 12997 against a copy of a working installation's database (OpenAI and Regolo models configured), with its own work folder and vector store and with `ai.gebo.images.chat-enabled`, `ai.gebo.images.ingestion-enabled` and `ai.gebo.vectorizator.embed-images` on.
+
+- **Pictures in chat:** `gpt-6.1-sol` (OpenAI) and `qwen3.5-122b` (Regolo) read an uploaded invoice picture correctly, and a follow-up question was answered from the same picture.
+- **Pictures in the knowledge base:** the pictures of a Word file, an image file and an image-only PDF page were described by the vision model and embedded. Questions that only the pictures answer were answered through the "Chat with knowledge bases" profile, each from a retrieved document.
+- **Screens:** the models list, the model editor, the MCP server editor and the upload box show the new information, in Italian.
+
+Three defects were found and fixed on branch `fix/multimodality-live-findings`:
+
+1. **Image-only PDF pages.** The application carries PDFBox 2.0.30 (brought by `markdown2office`, which Maven prefers over the PDFBox 3 Tika asks for), while the page rendering called the PDFBox 3 `Loader`. The `NoClassDefFoundError` dropped the whole chunking batch. `PdfIngestionHandler.loadForRendering` now opens the PDF with whichever PDFBox is present (`Loader.loadPDF` or `PDDocument.load`), and a `LinkageError` only leaves the page out. Checked live with PDFBox 2. PDF text is read with iText (`PdfReader`); PDFBox only renders the pages without text. Tika never parses a PDF: it serves language detection and the RTF reader, and its fallback reader (`GTikaFailBackContentHandler`) is not a bean.
+2. **Configurations made before the input modalities were recorded.** Their stored model metadata know nothing of the modalities, so "Use the models' metadata" passed them over even when the models library declares them. The new `GChatModelInputModalitiesResolver` answers from the stored metadata, else the library entry, else a library rule. It is used by the models list, the "Use the models' metadata" action, the insert of a configuration and the setup service. Checked live: `gpt-6-luna` received text, image, document.
+3. **Descriptions without the chunk header.** The chunker now puts on each media chunk the header it puts on text chunks (`GEBO_EMBEDDING_METADATA`), and `VectorizatorMediaReader.withHeader` opens each piece of a description or transcript with it, laid out as text chunks are. Checked live.
+
+Seen during the trial and not related to multimodality: a folder data source saved with a malformed path made the application fail at start (`GFilesystemChangesHandlingService.addHandling`, `endpath.root` null); and a file added to a watched folder during a publish was registered twice (`…/ferry.png` and `…//ferry.png`, uri `null//ferry.png`). The data source of the trial was created through the API, which may be the cause of the second.
+
+---
+
 # Part A — The models layer
 
 How a chat model is told what it accepts besides text, how a file of a request reaches a model, how a tool shows a file to the model that called it, and what each provider integration can deliver.
