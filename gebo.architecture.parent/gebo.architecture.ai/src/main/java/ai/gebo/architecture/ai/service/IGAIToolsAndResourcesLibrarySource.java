@@ -47,6 +47,18 @@ public interface IGAIToolsAndResourcesLibrarySource {
 	public AIToolsAndResourcesLibraryInstance createInstance(AIToolsAndResourcesLibraryType type, List<String> owners);
 
 	/**
+	 * A new handle for an instance of a type: the unique id an instance will have,
+	 * given to a conversation before anything is allocated (see
+	 * {@link #allocateInstance}). A source whose ids say more than which instance it
+	 * is - the server it is on, the type it is of - gives a handle in its own form, so
+	 * that the instance allocated under it has exactly that id; the default is a
+	 * random UUID.
+	 */
+	public default String newInstanceHandle(AIToolsAndResourcesLibraryType type) {
+		return java.util.UUID.randomUUID().toString();
+	}
+
+	/**
 	 * Allocates the instance a handle stands for. A conversation is given the handle
 	 * of each library its agents work with - a unique id - before any of them runs,
 	 * and nothing is allocated then: the instance is created under that id the first

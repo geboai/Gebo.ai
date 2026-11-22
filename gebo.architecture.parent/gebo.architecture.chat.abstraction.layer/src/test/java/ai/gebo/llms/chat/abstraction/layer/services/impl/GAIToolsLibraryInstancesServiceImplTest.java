@@ -174,6 +174,21 @@ class GAIToolsLibraryInstancesServiceImplTest {
 	}
 
 	@Test
+	void theHandleIsInTheFormItsSourceGivesItsIds() {
+		// a source whose ids say more than which instance it is: the server, the type
+		when(source.newInstanceHandle(workingDirectory)).thenReturn("a-server/working-directories/an-id");
+		theSourceAllocatesUnderTheHandle();
+
+		service.reserve(CONVERSATION, List.of(WORKING_DIRECTORY));
+
+		assertEquals(Map.of(WORKING_DIRECTORY, "a-server/working-directories/an-id"), record.getInstanceIds());
+		assertEquals("a-server/working-directories/an-id",
+				service.reclaim(CONVERSATION, List.of(WORKING_DIRECTORY)).get(WORKING_DIRECTORY).getId(),
+				"allocated under the id reserved: what the conversation holds is not written again");
+		verify(records, times(1)).save(any());
+	}
+
+	@Test
 	void anAgentRunWithNoNetworkIsGivenTheHandleAsItAccessesTheLibrary() {
 		theSourceAllocatesUnderTheHandle();
 

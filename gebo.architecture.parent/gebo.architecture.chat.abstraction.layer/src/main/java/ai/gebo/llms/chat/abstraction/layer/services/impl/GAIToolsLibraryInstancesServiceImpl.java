@@ -129,6 +129,12 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 		}
 	}
 
+	/** The handle of a new instance, in the form its source gives its ids; a random UUID when it gives none. */
+	private static String newHandle(Managed library) {
+		final String given = library.source().newInstanceHandle(library.type());
+		return given != null && !given.isBlank() ? given : UUID.randomUUID().toString();
+	}
+
 	@Override
 	public void reserve(String chatSessionCode, Collection<String> libraryTypeIds) {
 		if (chatSessionCode == null || libraryTypeIds == null || libraryTypeIds.isEmpty()) {
@@ -151,7 +157,7 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 					continue;
 				}
 				// the handle only: the instance is allocated when an agent accesses it
-				ids.put(typeId, UUID.randomUUID().toString());
+				ids.put(typeId, newHandle(managed.get(typeId)));
 				reserved.add(typeId);
 			}
 			if (!reserved.isEmpty()) {
@@ -194,7 +200,7 @@ public class GAIToolsLibraryInstancesServiceImpl implements IGAIToolsLibraryInst
 			// the network, or given now to an agent that runs with no network reserving
 			String handle = ids.get(typeId);
 			if (handle == null) {
-				handle = UUID.randomUUID().toString();
+				handle = newHandle(library);
 				ids.put(typeId, handle);
 				changed = true;
 				LOGGER.info("Conversation:" + chatSessionCode + " now holds the handle:" + handle
