@@ -228,9 +228,75 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		return notificationSink != null && contextAgentPersona != null && contextAgentPersona.isAllowedToNotifyUser();
 	}
 
+	/**
+	 * What a loop keeps from an iteration to the next: the story of its iterations, the
+	 * documents its tools found, what was taken out of its answers, how far the deep
+	 * searches covered, the cycle its answer is at. A loop running in one execution of
+	 * its agent makes its own and forgets it with the answer
+	 * ({@link #createResponse}); a loop that stops before its answer and goes on when
+	 * its agent is executed again (see {@link #stopsTheLoop}) is given the same one at
+	 * each execution ({@link #loopResponse}).
+	 */
+	protected static final class LoopRun {
+		final List<LoopIteration> history = new ArrayList<>();
+		final ToolsFoundDocuments toolDocuments = new ToolsFoundDocuments();
+		final Set<String> removedAddresses = java.util.Collections.synchronizedSet(new LinkedHashSet<>());
+		/** The coverage gate of the run, kept once its first execution made it. */
+		CoverageGate coverage = null;
+		/** The cycle the answer is at, and the documents the cycles' answers rest on so far (see {@link CycleRenderer}). */
+		int cycle = 1;
+		List<GResponseDocumentRef> documentsSoFar = null;
+
+		/** The iterations made before the ones of the story, by a loop whose story was lost (see {@link #startAfter}). */
+		private int startedAfter = 0;
+
+		public LoopRun() {
+		}
+
+		/** The iterations run so far: none in a loop not yet executed. */
+		public int iterations() {
+			return history.isEmpty() ? startedAfter : Math.max(startedAfter, history.get(history.size() - 1).number());
+		}
+
+		/**
+		 * Makes a loop not yet executed here go on after the given number of iterations:
+		 * what a loop does whose earlier executions ran elsewhere, their story lost, so
+		 * that it does not count again the iterations they took. A loop that ran more
+		 * iterations here is left as it is.
+		 */
+		public void startAfter(int iterations) {
+			startedAfter = Math.max(startedAfter, iterations);
+		}
+
+		/** Whether the last iteration stopped the loop before its answer. */
+		public boolean stopped() {
+			return !history.isEmpty() && history.get(history.size() - 1).stopped();
+		}
+	}
+
 	/** One iteration of the loop: what the model wrote and the tools it called. */
 	record LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor,
-			boolean draftToBuildOn, boolean cut) {
+			boolean draftToBuildOn, boolean cut, String stoppedFor) {
+		/** An iteration that did not stop the loop. */
+		LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor,
+				boolean draftToBuildOn, boolean cut) {
+			this(number, text, calls, discardedFor, draftToBuildOn, cut, null);
+		}
+
+		/**
+		 * An iteration that stopped the loop before its answer, for the given reason (see
+		 * {@link AgenticLoopReactiveAgentServiceImpl#stopsTheLoop}): what it wrote, if
+		 * anything, was shown.
+		 */
+		static LoopIteration stopped(int number, String text, List<ToolCallExecuted> calls, String stoppedFor) {
+			return new LoopIteration(number, text, calls, null, false, false, stoppedFor);
+		}
+
+		/** Whether the loop stopped at this iteration before its answer: then why. */
+		boolean stopped() {
+			return stoppedFor != null;
+		}
+
 		/** An iteration the model's output limit did not cut. */
 		LoopIteration(int number, String text, List<ToolCallExecuted> calls, String discardedFor,
 				boolean draftToBuildOn) {
@@ -579,11 +645,35 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
 			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener, GeboToolCalling toolCalling)
 			throws LLMConfigException, AgentException {
+		return loopResponse(chatRequestContext, agentConfig, request, network, contextAgentPersona, notificationSink,
+				session, mySessionContext, agentModel, agentRole, agentPrompt, runAs, callBacksListener, toolCalling,
+				new LoopRun());
+	}
+
+	/**
+	 * The response of the loop over the given run: a run of its own is the whole loop,
+	 * from its first iteration to its answer; a run kept from an earlier execution that
+	 * stopped before its answer (see {@link #stopsTheLoop}) goes on from the iteration
+	 * after the one it stopped at, with the story, the documents and the cycle it had.
+	 * The listener given records the tool calls of the whole run: a run going on is
+	 * given the one its first execution had.
+	 */
+	protected Flux<IGPartialOperation<GeboChatMessageEnvelope>> loopResponse(IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig, String request, GAgentsNetwork network,
+			AgentNetworkParticipant contextAgentPersona, INotificationSink notificationSink,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<String, GeboChatMessageEnvelope> mySessionContext,
+			IGConfigurableChatModel agentModel, GAgentRole agentRole, GPromptTemplateConfig agentPrompt,
+			ReactiveIdentityUtil runAs, ToolCallsListener callBacksListener, GeboToolCalling toolCalling, LoopRun run)
+			throws LLMConfigException, AgentException {
+		// the iterations the run made in the executions before this one: none in a loop of one execution
+		final int iterationsBefore = run.iterations();
 		final int maxIterations = maxIterations(network, contextAgentPersona);
 		final int budget = agentTokenBudget(agentModel, agentPrompt, chatRequestContext);
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Begin createResponse(...) agentic loop agent id:" + getId() + " maxIterations:"
-					+ maxIterations + " budget:" + budget + " (tok)");
+					+ maxIterations + " budget:" + budget + " (tok)"
+					+ (iterationsBefore > 0 ? ", going on after " + iterationsBefore + " iteration(s)" : ""));
 		}
 		// The kind of deliverable the user asked for (a direct answer, an analysis...)
 		// shapes every iteration, as it shapes the report writer's answer.
@@ -617,11 +707,11 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 					new ConversationFilesMemo(() -> filesRenderer.render(filesContext, budget),
 							() -> ConversationFilesRenderer.writtenInThisRequest(filesContext)));
 		}
-		final List<LoopIteration> history = new ArrayList<>();
+		final List<LoopIteration> history = run.history;
 		// The search and deep search tools called by the loop add their documents to this
 		// collector, shared through the tools context of the loop's model calls: they
 		// become the answer's documents.
-		final ToolsFoundDocuments toolDocuments = new ToolsFoundDocuments();
+		final ToolsFoundDocuments toolDocuments = run.toolDocuments;
 		IChatRequestContext loopContext = toolDocuments.sharedThrough(chatRequestContext);
 		if (mayNotifyUser(contextAgentPersona, notificationSink)) {
 			// as the other tool-calling agents of the network, each tool used is told to the
@@ -641,8 +731,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		// completed once before it is shown (see CoverageGate): the deep search tells
 		// its coverage by the depth the agent asked, a precise answer is never thin
 		final MountedSearchTools mounted = searchTools(agentModel);
-		final CoverageGate coverage = searchForbidden || mounted.deepSearches().isEmpty() ? null
-				: new CoverageGate(mounted.searches(), mounted.deepSearches(), mounted.knowledgeBaseTools());
+		final CoverageGate coverage = iterationsBefore > 0 ? run.coverage
+				: searchForbidden || mounted.deepSearches().isEmpty() ? null
+						: new CoverageGate(mounted.searches(), mounted.deepSearches(), mounted.knowledgeBaseTools());
+		run.coverage = coverage;
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Agentic loop agent id:" + getId() + " coverage gate:" + (coverage != null)
 					+ (coverage != null ? " deep searches:" + coverage.deepSearchTools() + " knowledge base tools:"
@@ -668,12 +760,16 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			LOGGER.debug("Agentic loop agent id:" + getId() + " evidence required:" + gate.evidenceRequired()
 					+ " answer held until a search:" + !gate.tools().isEmpty());
 		}
-		final Flux<String> iterations = iteration(1, maxIterations, budget, history, agentModel, agentPrompt,
-				loopContext, contextAgentPersona, notificationSink, callBacksListener, deliverableParams, gate, runAs,
-				toolCalling);
+		// a run going on that searched the sources already is not held for a search again
+		final SourceGate firstGate = iterationsBefore > 0 && usedEvidenceTool(callBacksListener, 0, gate.tools())
+				? SourceGate.continuing(coverage)
+				: gate;
+		final Flux<String> iterations = iteration(Math.min(iterationsBefore + 1, maxIterations), maxIterations, budget,
+				history, agentModel, agentPrompt, loopContext, contextAgentPersona, notificationSink,
+				callBacksListener, deliverableParams, firstGate, runAs, toolCalling);
 		// an address no tool returned, nor the user or the chat gave, is made up: removed as
 		// the answer streams
-		final Set<String> removedAddresses = java.util.Collections.synchronizedSet(new LinkedHashSet<>());
+		final Set<String> removedAddresses = run.removedAddresses;
 		final KnownAddresses knownAddresses = new KnownAddresses(chatRequestContext, callBacksListener, toolDocuments);
 		Flux<String> text = CitedAddresses.guarded(iterations, knownAddresses::isKnown, address -> {
 			if (removedAddresses.add(address)) {
@@ -718,7 +814,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 								+ " wrote in the request: the others are listed after it");
 					}
 					return closing;
-				});
+				}, run);
 		return cycles.render(text);
 	}
 
@@ -788,6 +884,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		/** The text closing the last answer, given its text: empty for none (see {@link #unnamedWrittenFiles}). */
 		private final java.util.function.UnaryOperator<String> lastAnswerClosing;
 		private final StringBuilder cycleText = new StringBuilder();
+		/** The run of the loop: a loop that stopped before its answer goes on from its cycle (see {@link LoopRun}). */
+		private final LoopRun run;
 		/** The documents the answers of the cycles so far rest on, no one twice. */
 		private List<GResponseDocumentRef> documentsSoFar = null;
 		private int cycle = 1;
@@ -803,6 +901,17 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		CycleRenderer(int maxCycles, AgentNetworkParticipant persona, INotificationSink notificationSink,
 				ToolCallsListener callBacksListener, Consumer<GeboChatResponse> answerDocuments,
 				Consumer<GeboChatResponse> lastAnswer, java.util.function.UnaryOperator<String> lastAnswerClosing) {
+			this(maxCycles, persona, notificationSink, callBacksListener, answerDocuments, lastAnswer,
+					lastAnswerClosing, new LoopRun());
+		}
+
+		CycleRenderer(int maxCycles, AgentNetworkParticipant persona, INotificationSink notificationSink,
+				ToolCallsListener callBacksListener, Consumer<GeboChatResponse> answerDocuments,
+				Consumer<GeboChatResponse> lastAnswer, java.util.function.UnaryOperator<String> lastAnswerClosing,
+				LoopRun run) {
+			this.run = run;
+			this.cycle = run.cycle;
+			this.documentsSoFar = run.documentsSoFar;
 			this.lastAnswerClosing = lastAnswerClosing;
 			this.maxCycles = maxCycles;
 			this.persona = persona;
@@ -815,7 +924,23 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		/** The chat's messages of the loop's streamed text. */
 		Flux<IGPartialOperation<GeboChatMessageEnvelope>> render(Flux<String> text) {
 			return text.concatMap(chunk -> Flux.fromIterable(accept(chunk)))
-					.concatWith(Flux.defer(() -> Flux.fromIterable(complete())));
+					.concatWith(Flux.defer(() -> Flux.fromIterable(run.stopped() ? stopped() : complete())));
+		}
+
+		/**
+		 * The stream of a loop that stopped before its answer ends with no answer: the
+		 * cycle it is at and the documents so far are kept with the run, for the execution
+		 * that goes on.
+		 */
+		List<IGPartialOperation<GeboChatMessageEnvelope>> stopped() {
+			run.cycle = cycle;
+			run.documentsSoFar = documentsSoFar;
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Agentic loop agent id:" + getId() + " stopped before its answer at cycle " + cycle
+						+ " of at most " + maxCycles + ": no response, the loop goes on when the agent is executed"
+						+ " again");
+			}
+			return new ArrayList<>();
 		}
 
 		/** The messages of a streamed chunk: its text, and the cycles ending in it. */
@@ -1713,6 +1838,7 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			INotificationSink notificationSink, ToolCallsListener callBacksListener,
 			Map<String, Object> deliverableParams, SourceGate gate, ReactiveIdentityUtil runAs, GeboToolCalling toolCalling) {
 		return Flux.defer(() -> {
+			iterationStarts(number, maxIterations, toolCalling);
 			final Map<String, Object> params = new HashMap<>(deliverableParams);
 			final String conversationFiles = params.remove(CONVERSATION_FILES_MEMO_PARAM) instanceof ConversationFilesMemo memo
 					? memo.text()
@@ -1775,7 +1901,10 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 			// the coverage the deep searches of this iteration ask to complete, re-read as calls arrive
 			final CoverageWatch coverageWatch = new CoverageWatch(gate != null ? gate.coverage() : null,
 					callBacksListener, callsBefore);
-			Flux<String> visible = modelText.map(chunk -> {
+			// once a tool of the iteration stopped the loop (see stopsTheLoop), what still arrives
+			// is the word of the tools that ended the model's call, returned in its place: the
+			// model did not write it, so it is neither shown nor kept as what the iteration wrote
+			Flux<String> visible = modelText.filter(chunk -> stopsTheLoop(number, toolCalling) == null).map(chunk -> {
 				String out = stripper.accept(chunk);
 				text.append(out);
 				return passed(out, held, open, callBacksListener, callsBefore, gate.tools(), coverageWatch);
@@ -1788,6 +1917,30 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				List<ToolCallExecuted> calls = callBacksListener.getCalls();
 				final List<ToolCallExecuted> iterationCalls = new ArrayList<>(
 						calls.subList(Math.min(callsBefore, calls.size()), calls.size()));
+				// the iteration stopped the loop before its answer (see stopsTheLoop): what it
+				// wrote is shown as it stands, and the loop goes on from it when the agent is
+				// executed again
+				final String stoppedFor = stopsTheLoop(number, toolCalling);
+				if (stoppedFor != null) {
+					history.add(LoopIteration.stopped(number, text.toString(), iterationCalls, stoppedFor));
+					LOGGER.info("Agentic loop agent id:" + getId() + " iteration " + number + " of " + maxIterations
+							+ " stopped the loop before its answer after " + iterationCalls.size() + " tool call(s) and "
+							+ text.length() + " text character(s): " + stoppedFor);
+					if (LOGGER.isTraceEnabled()) {
+						LOGGER.trace("<AGENTIC_LOOP_STOPPED_ITERATION number=" + number + ">");
+						LOGGER.trace(text.toString());
+						LOGGER.trace("</AGENTIC_LOOP_STOPPED_ITERATION>");
+					}
+					// a text held back for a search is shown: nothing checks it before the loop goes on
+					final Flux<String> shown = open[0] ? Flux.<String>empty()
+							: Flux.just(held.toString()).filter(chunk -> !chunk.isEmpty());
+					if (text.toString().isBlank()) {
+						return shown;
+					}
+					recordAnswerDocuments(chatRequestContext, stripper, number);
+					// what it wrote is the cycle's answer: the execution going on writes it again
+					return shown.concatWith(Flux.just(CYCLE_END_MARK));
+				}
 				// the model's output limit cut this iteration (see CutAnswer)
 				final boolean cut = CutAnswer.isCut(finishReason.get());
 				// cut while its reasoning took the output limit: the next iteration asks for less
@@ -2288,6 +2441,27 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		}
 	}
 
+	/**
+	 * Called as an iteration starts, before its model call, with what the model calls of
+	 * the run are made with: nothing to do in a loop that runs to its answer in one
+	 * execution.
+	 */
+	protected void iterationStarts(int number, int maxIterations, GeboToolCalling toolCalling) {
+	}
+
+	/**
+	 * Whether the iteration that just ended stops the loop before its answer, the agent
+	 * being executed again later to go on from it (see {@link #loopResponse}): null,
+	 * the default, in a loop that runs to its answer in one execution; else why, as the
+	 * iterations after it are told in the story.
+	 */
+	protected String stopsTheLoop(int number, GeboToolCalling toolCalling) {
+		return null;
+	}
+
+	/** Introduces, in the story, why an iteration stopped the loop before its answer. */
+	static final String STOPPED_HERE = "THE WORK STOPPED HERE: ";
+
 	/** The same, without the documents the tools returned. */
 	protected String loopStory(List<LoopIteration> history, int budget) {
 		return loopStory(history, budget, null);
@@ -2315,7 +2489,8 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 		for (int i = 0; i < history.size(); i++) {
 			if (history.get(i).discarded()) {
 				lastDraft = i;
-			} else {
+			} else if (!history.get(i).stopped() || !history.get(i).text().isBlank()) {
+				// an iteration that stopped the loop having written nothing showed no answer
 				lastShown = i;
 			}
 		}
@@ -2331,7 +2506,12 @@ public class AgenticLoopReactiveAgentServiceImpl extends ReportWriterReactiveAge
 				piece.append("TOOL-CALLED-").append(i + 1).append(": ").append(functions.get(i).getFunctionName())
 						.append(" params:").append(functions.get(i).getParamsDescription()).append(NEWLINE);
 			}
-			if (!iteration.discarded() && index == lastShown) {
+			if (iteration.stopped()) {
+				piece.append(STOPPED_HERE).append(iteration.stoppedFor()).append(NEWLINE);
+			}
+			if (iteration.stopped() && iteration.text().isBlank()) {
+				// it wrote nothing: no answer of its own to recall
+			} else if (!iteration.discarded() && index == lastShown) {
 				// the answer the user sees now: the next iteration writes it again, improved
 				piece.append(LAST_ANSWER).append(iteration.text()).append(NEWLINE);
 				if (iteration.calls() == null || iteration.calls().isEmpty()) {

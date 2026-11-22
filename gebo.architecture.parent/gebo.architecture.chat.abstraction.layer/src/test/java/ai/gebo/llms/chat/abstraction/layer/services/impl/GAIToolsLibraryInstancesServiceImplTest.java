@@ -14,10 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -85,6 +87,8 @@ class GAIToolsLibraryInstancesServiceImplTest {
 			instance.setResources(List.of(readme, scratch));
 			return instance;
 		});
+		// a source that names its instances itself: allocating under a handle is creating
+		when(source.allocateInstance(any(), anyList(), anyString())).thenCallRealMethod();
 		IGAIToolsAndResourcesLibrarySourceRepositoryPattern libraries = mock(
 				IGAIToolsAndResourcesLibrarySourceRepositoryPattern.class);
 		when(libraries.getImplementations()).thenReturn(List.of(source));
@@ -121,6 +125,77 @@ class GAIToolsLibraryInstancesServiceImplTest {
 		assertEquals(Map.of(WORKING_DIRECTORY, "dir-of-" + CONVERSATION), record.getInstanceIds());
 		assertEquals(CONVERSATION, record.getUserChatContextCode());
 		verify(source).createInstance(eq(workingDirectory), eq(List.of(CONVERSATION, "somebody")));
+	}
+
+	/** The source allocates an instance under the handle it is given, as the ones keeping folders do. */
+	private void theSourceAllocatesUnderTheHandle() {
+		// stubbed without calling it: the stub of the set up runs the source's own method
+		org.mockito.Mockito.doAnswer(invocation -> {
+			AIToolsAndResourcesLibraryInstance instance = new AIToolsAndResourcesLibraryInstance();
+			instance.setId(invocation.getArgument(2));
+			instance.setLibraryType(workingDirectory);
+			return instance;
+		}).when(source).allocateInstance(eq(workingDirectory), anyList(), anyString());
+	}
+
+	@Test
+	void aNetworkReservesTheHandlesBeforeItsAgentsRunAndNothingIsAllocated() {
+		service.reserve(CONVERSATION, List.of(WORKING_DIRECTORY, "a-library-this-installation-lacks"));
+
+		assertEquals(java.util.Set.of(WORKING_DIRECTORY), record.getInstanceIds().keySet(),
+				"a handle for the library the installation has, none for the one it lacks");
+		String handle = record.getInstanceIds().get(WORKING_DIRECTORY);
+		assertEquals(handle, java.util.UUID.fromString(handle).toString(), "a unique id");
+		verify(source, never()).createInstance(any(), anyList());
+		verify(source, never()).allocateInstance(any(), anyList(), anyString());
+
+		// reserving again, for a later run of the conversation, keeps the handle
+		service.reserve(CONVERSATION, List.of(WORKING_DIRECTORY));
+		assertEquals(handle, record.getInstanceIds().get(WORKING_DIRECTORY));
+		verify(records, times(1)).save(any());
+
+		service.reserve("no-such-conversation", List.of(WORKING_DIRECTORY));
+		service.reserve(CONVERSATION, List.of());
+		verify(records, times(1)).save(any());
+	}
+
+	@Test
+	void theInstanceIsAllocatedUnderItsHandleWhenAnAgentAccessesItAndNothingIsSavedThen() {
+		theSourceAllocatesUnderTheHandle();
+		service.reserve(CONVERSATION, List.of(WORKING_DIRECTORY));
+		String handle = record.getInstanceIds().get(WORKING_DIRECTORY);
+
+		Map<String, AIToolsAndResourcesLibraryInstance> held = service.reclaim(CONVERSATION, List.of(WORKING_DIRECTORY));
+
+		assertEquals(handle, held.get(WORKING_DIRECTORY).getId(), "the instance has the id reserved for it");
+		verify(source).allocateInstance(eq(workingDirectory), eq(List.of(CONVERSATION, "somebody")), eq(handle));
+		assertEquals(Map.of(WORKING_DIRECTORY, handle), record.getInstanceIds());
+		verify(records, times(1)).save(any());
+	}
+
+	@Test
+	void theHandleIsInTheFormItsSourceGivesItsIds() {
+		// a source whose ids say more than which instance it is: the server, the type
+		when(source.newInstanceHandle(workingDirectory)).thenReturn("a-server/working-directories/an-id");
+		theSourceAllocatesUnderTheHandle();
+
+		service.reserve(CONVERSATION, List.of(WORKING_DIRECTORY));
+
+		assertEquals(Map.of(WORKING_DIRECTORY, "a-server/working-directories/an-id"), record.getInstanceIds());
+		assertEquals("a-server/working-directories/an-id",
+				service.reclaim(CONVERSATION, List.of(WORKING_DIRECTORY)).get(WORKING_DIRECTORY).getId(),
+				"allocated under the id reserved: what the conversation holds is not written again");
+		verify(records, times(1)).save(any());
+	}
+
+	@Test
+	void anAgentRunWithNoNetworkIsGivenTheHandleAsItAccessesTheLibrary() {
+		theSourceAllocatesUnderTheHandle();
+
+		Map<String, AIToolsAndResourcesLibraryInstance> held = service.reclaim(CONVERSATION, List.of(WORKING_DIRECTORY));
+
+		assertEquals(record.getInstanceIds().get(WORKING_DIRECTORY), held.get(WORKING_DIRECTORY).getId());
+		verify(records, times(1)).save(any());
 	}
 
 	@Test

@@ -46,6 +46,19 @@ public interface IGAIToolsLibraryInstancesService {
 	Map<String, AIToolsAndResourcesLibraryInstance> reclaim(String chatSessionCode, Collection<String> libraryTypeIds);
 
 	/**
+	 * Reserves for a conversation the handle of an instance of each library type given
+	 * that it holds none of yet: a unique id, recorded against the conversation, with
+	 * no instance allocated - that happens when an agent reclaims the library (see
+	 * {@link #reclaim}). A network reserves the handles of every agent of a run before
+	 * any of them starts, one agent at a time: the agents, which then work at the same
+	 * time, find what the conversation holds already written. A type the installation
+	 * does not have is left out. The default reserves nothing: the handles are then
+	 * given as the agents reclaim.
+	 */
+	default void reserve(String chatSessionCode, Collection<String> libraryTypeIds) {
+	}
+
+	/**
 	 * The libraries and the resources each holds, written for the agents to read:
 	 * a tool is called on something, and the something has to be known. Empty when
 	 * there are no instances.

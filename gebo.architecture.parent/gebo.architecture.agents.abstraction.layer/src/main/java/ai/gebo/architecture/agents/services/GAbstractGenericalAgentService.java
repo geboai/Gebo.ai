@@ -451,6 +451,30 @@ public abstract class GAbstractGenericalAgentService extends BaseLLMSInvokingSer
 	}
 
 	/**
+	 * Reserves for the conversation the handles of the libraries the configuration
+	 * mounts, as the network starts a run: the agents of the run then reclaim what is
+	 * recorded already, whatever the order they work in. No instance is allocated.
+	 */
+	@Override
+	public void initializeForRun(IChatRequestContext chatRequestContext, GAgentConfig agentConfig) {
+		final List<String> libraryTypeIds = libraryTypeIdsOf(agentConfig);
+		if (chatRequestContext == null || chatRequestContext.getSessionID() == null || agentConfig == null
+				|| libraryTypeIds.isEmpty()) {
+			return;
+		}
+		final IGAIToolsLibraryInstancesService instances = libraryInstances();
+		if (instances == null) {
+			return;
+		}
+		instances.reserve(chatRequestContext.getSessionID(), libraryTypeIds);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Agent config code:" + agentConfig.getCode() + " initialized for a run of conversation:"
+					+ chatRequestContext.getSessionID() + ": the handles of its library types " + libraryTypeIds
+					+ " are reserved, for agent service id:" + getId());
+		}
+	}
+
+	/**
 	 * Reclaims from the conversation the libraries the configuration names: the
 	 * instances the conversation holds of those types, created for it when it holds
 	 * none yet. Their tools, bound to the resources of the instances, are the only

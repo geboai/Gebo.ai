@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ai.gebo.architecture.agents.model.IGPartialOperation;
 import ai.gebo.architecture.agents.services.IGReactiveAgentService;
 import ai.gebo.architecture.agents.services.IGReactiveToNetworkAgentAdapterFactory;
+import ai.gebo.llms.agent.chat.service.ILoopControllerReactiveAgentService;
 import ai.gebo.llms.agent.chat.service.IReportWriterReactiveAgentService;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatMessageEnvelope;
 import reactor.core.publisher.Flux;
@@ -20,7 +21,9 @@ public final class ReportWriterReactiveAgentServiceNetworkAdapterFactory
 
 	@Override
 	public boolean canBeAdapted(IGReactiveAgentService<String, GeboChatMessageEnvelope> service) {
-		final boolean adaptable = service instanceof IReportWriterReactiveAgentService;
+		// a loop controller is a report writer too, adapted by its own factory
+		final boolean adaptable = service instanceof IReportWriterReactiveAgentService
+				&& !(service instanceof ILoopControllerReactiveAgentService);
 		if (LOGGER.isTraceEnabled()) {
 			LOGGER.trace("canBeAdapted(" + (service != null ? service.getId() : null) + ") -> " + adaptable);
 		}

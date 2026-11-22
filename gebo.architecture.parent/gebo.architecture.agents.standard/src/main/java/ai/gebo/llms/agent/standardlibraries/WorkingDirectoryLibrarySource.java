@@ -205,11 +205,30 @@ public class WorkingDirectoryLibrarySource implements IGAIToolsAndResourcesLibra
 	@Override
 	public AIToolsAndResourcesLibraryInstance createInstance(AIToolsAndResourcesLibraryType type,
 			List<String> owners) {
+		return allocateInstance(type, owners, UUID.randomUUID().toString());
+	}
+
+	/** The folder is created under the handle, the first time an agent accesses the working directory. */
+	@Override
+	public AIToolsAndResourcesLibraryInstance allocateInstance(AIToolsAndResourcesLibraryType type,
+			List<String> owners, String handle) {
 		if (type == null || !TYPE_ID.equals(type.getId())) {
 			throw new IllegalArgumentException("Not a working directory type: " + (type != null ? type.getId() : null));
 		}
+		try {
+			// an id is a UUID, and nothing else names a folder here
+			if (handle == null || !handle.equals(UUID.fromString(handle).toString())) {
+				throw new IllegalArgumentException("Not the handle of a working directory: " + handle);
+			}
+		} catch (IllegalArgumentException notAnId) {
+			throw new IllegalArgumentException("Not the handle of a working directory: " + handle, notAnId);
+		}
+		if (Files.exists(folderOf(handle))) {
+			// never the folder of somebody else: a handle is allocated once
+			throw new IllegalStateException("The working directory " + handle + " exists already");
+		}
 		final WorkingDirectoryMetadata metadata = new WorkingDirectoryMetadata();
-		metadata.setId(UUID.randomUUID().toString());
+		metadata.setId(handle);
 		metadata.setTypeId(TYPE_ID);
 		metadata.setOwners(owners != null ? new ArrayList<>(owners) : new ArrayList<>());
 		metadata.setCreated(new Date());

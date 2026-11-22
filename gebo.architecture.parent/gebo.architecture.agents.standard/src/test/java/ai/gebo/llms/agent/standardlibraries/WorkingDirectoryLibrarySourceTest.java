@@ -81,6 +81,28 @@ class WorkingDirectoryLibrarySourceTest {
 	}
 
 	@Test
+	void theFolderIsCreatedUnderTheHandleWhenAnAgentAccessesItAndNeverOverAnotherOne() {
+		String handle = java.util.UUID.randomUUID().toString();
+		assertNull(source.getInstanceById(handle, "the-conversation"), "a handle is not an instance yet");
+		assertFalse(Files.exists(root.resolve(handle)), "nothing is allocated for a handle");
+
+		AIToolsAndResourcesLibraryInstance allocated = source.allocateInstance(type,
+				List.of("the-conversation", "somebody"), handle);
+
+		assertEquals(handle, allocated.getId(), "the instance has the id it was reserved");
+		assertTrue(Files.isDirectory(root.resolve(handle)));
+		assertNotNull(source.getInstanceById(handle, "the-conversation"));
+		assertNull(source.getInstanceById(handle, "somebody-else"), "not theirs");
+
+		org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class,
+				() -> source.allocateInstance(type, List.of("somebody-else"), handle),
+				"a handle is allocated once: nobody takes the folder of another");
+		assertNotNull(source.getInstanceById(handle, "the-conversation"), "still its owner's");
+		org.junit.jupiter.api.Assertions.assertThrows(IllegalArgumentException.class,
+				() -> source.allocateInstance(type, List.of("the-conversation"), "../elsewhere"));
+	}
+
+	@Test
 	void anInstanceIsAFolderOfItsOwnThatItsOwnerGetsBack() {
 		AIToolsAndResourcesLibraryInstance created = source.createInstance(type, List.of("the-conversation", "somebody"));
 

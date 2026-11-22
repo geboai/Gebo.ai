@@ -43,6 +43,18 @@ public interface IGGenericAgentService {
 	 * @param agentConfig the configuration
 	 * @param installed   the library types the installation has
 	 */
+	/**
+	 * Called by a network as a run starts, once for each agent of the network with
+	 * its configuration, one agent at a time and before any message is delivered: an
+	 * agent prepares here what must be in place before the agents work at the same
+	 * time - the handles of the libraries it works with, reserved for the
+	 * conversation. Nothing costly is done here: what an agent may never use is
+	 * allocated when it uses it. The default does nothing.
+	 */
+	public default void initializeForRun(ai.gebo.llms.abstraction.layer.model.IChatRequestContext chatRequestContext,
+			GAgentConfig agentConfig) {
+	}
+
 	public default List<String> libraryTypeIdsOf(GAgentConfig agentConfig,
 			Collection<AIToolsAndResourcesLibraryType> installed) {
 		return GAgentLibraryTypes.mountedBy(agentConfig, getImpliedLibraryTypeIds(), installed);

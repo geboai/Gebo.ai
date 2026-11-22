@@ -58,6 +58,12 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	}
 
 	@Override
+	public void initializeForRun(IChatRequestContext chatRequestContext, GAgentConfig agentConfig) {
+		// the agent adapted is the one that knows what it works with
+		service.initializeForRun(chatRequestContext, agentConfig);
+	}
+
+	@Override
 	public AgentCapabilities getAgentCapabilities(GAgentConfig agentConfig) {
 
 		return service.getAgentCapabilities(agentConfig);
@@ -94,9 +100,13 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 		// stream ended. A respawned agent is told first what it waited for.
 		final AgentSuspensionTurn turn = AgentSuspensionTurn.of("Reactive agent " + getId(), toolCalling,
 				suspensionHandler, contextAgentPersona, config);
-		final GeboToolCalling callToolCalling = turn.toolCalling();
-		final RequestType request = turn.toldInput(msg.getPayload());
-		Flux<IGPartialOperation<ResponseType>> flux = service.execute(turn.toldContext(chatRequestContext, request),
+		// what the adapter itself adds to the turn: nothing, unless a subclass does
+		final TurnAdditions<RequestType, ResponseType> additions = turnAdditions(msg, actualContributionNr, network,
+				contextAgentPersona, session, mySessionContext, agentsDao);
+		final GeboToolCalling callToolCalling = additions.toolCalling(turn.toolCalling());
+		final RequestType request = additions.request(turn.toldInput(msg.getPayload()));
+		Flux<IGPartialOperation<ResponseType>> flux = service.execute(
+				additions.context(turn.toldContext(chatRequestContext, request), request),
 				config, request, network,
 				contextAgentPersona, notificationSink, session, mySessionContext, runAs, callToolCalling);
 		// Once a tool of the call declared what the run waits for, the agent says nothing:
@@ -135,6 +145,15 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 			LOGGER.trace(String.valueOf(response));
 			LOGGER.trace("</ADAPTED_REACTIVE_AGENT_OUTPUT>");
 		}
+		// what the agent sends in place of its response, when the turn ended on that
+		final List<AgentsExchangeMessage<ResponseType>> inPlace = additions.messages(response);
+		if (inPlace != null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("End onMessage(...) reactive agent network adapter id:" + getId() + " sends "
+						+ inPlace.size() + " message(s) in place of its response");
+			}
+			return inPlace;
+		}
 		AgentsExchangeMessage<ResponseType> outMessage = AgentsExchangeMessage.of(session,
 				contextAgentPersona.getNetworkAgentName(), msg.getFromAgent(), response, getProducedMessageSemantic());
 		if (LOGGER.isDebugEnabled()) {
@@ -144,5 +163,48 @@ public abstract class AbstractReactiveAgentServiceNetworkAdapter<RequestType, Re
 	}
 
 	protected abstract ResponseType extractResponse(List<IGPartialOperation<ResponseType>> buffered);
+
+	/**
+	 * What an adapter adds to one turn of its agent, around the agent's execution: by
+	 * default nothing, the turn runs with what it was given and the agent's response
+	 * is its message. Made at the start of the turn, for that turn only.
+	 */
+	protected static class TurnAdditions<RequestType, ResponseType> {
+		/** What the model calls of the turn run with: the turn's own, or that with more loaded. */
+		public GeboToolCalling toolCalling(GeboToolCalling ofTheTurn) {
+			return ofTheTurn;
+		}
+
+		/** What the agent is given as its request: the turn's own, or that with more told first. */
+		public RequestType request(RequestType ofTheTurn) {
+			return ofTheTurn;
+		}
+
+		/** The request context the agent is executed with, given the request it is given. */
+		public IChatRequestContext context(IChatRequestContext ofTheTurn, RequestType request) {
+			return ofTheTurn;
+		}
+
+		/**
+		 * The messages the agent sends to the network in place of its response, once its
+		 * stream ended: null, the default, sends the response.
+		 */
+		public List<AgentsExchangeMessage<ResponseType>> messages(ResponseType response) {
+			return null;
+		}
+	}
+
+	/**
+	 * The additions of this adapter to the turn executing the given message: none by
+	 * default. An adapter whose agent does more than answer - one that hands work to
+	 * the other agents of the network - gives its own.
+	 */
+	protected TurnAdditions<RequestType, ResponseType> turnAdditions(AgentsExchangeMessage<RequestType> msg,
+			int actualContributionNr, GAgentsNetwork network, AgentNetworkParticipant contextAgentPersona,
+			AgentsCollaborationSessionContext session,
+			AgentPrivateSessionContext<RequestType, ResponseType> mySessionContext, IGAgentsNetworkRuntimeDao agentsDao)
+			throws AgentException {
+		return new TurnAdditions<RequestType, ResponseType>();
+	}
 
 }
