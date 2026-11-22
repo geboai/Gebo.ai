@@ -36,11 +36,7 @@ public final class AgentAnswersText {
 	private AgentAnswersText() {
 	}
 
-	/**
-	 * What an agent answered, and what it was asked: a null request is one not known, a
-	 * null answer is none. With no agent, the answer is something the agent being told
-	 * settled itself, given as it is.
-	 */
+	/** What an agent answered, and what it was asked: a null request is one not known, a null answer is none. */
 	public static record AgentAnswer(String agent, String request, String answer) {
 	}
 
@@ -81,23 +77,9 @@ public final class AgentAnswersText {
 	 * @param asked     what each agent was asked, by its name, when known: null or
 	 *                  empty leaves the requests untold
 	 */
-	public static List<AgentAnswer> answersIn(AgentsCollaborationSessionContext session, Integer afterTurn,
-			Collection<String> agents, Map<String, List<String>> asked) {
-		return answersIn(session, afterTurn, agents, asked, null);
-	}
-
-	/**
-	 * The same, for the agent of the name given: what it settled itself with a person
-	 * is told to it too, in the order it happened. A respawned run keeps in the
-	 * session, under the name of the agent that waited, that the condition is settled
-	 * and how; the agent is told so only at the turn it is re-executed on, so at its
-	 * later turns of the run it would ask again what it reads in its request.
-	 *
-	 * @param self the network name of the agent being told; null tells it nothing of its own
-	 */
 	@SuppressWarnings("rawtypes")
 	public static List<AgentAnswer> answersIn(AgentsCollaborationSessionContext session, Integer afterTurn,
-			Collection<String> agents, Map<String, List<String>> asked, String self) {
+			Collection<String> agents, Map<String, List<String>> asked) {
 		final List<AgentAnswer> answers = new ArrayList<AgentAnswer>();
 		if (session == null || afterTurn == null || agents == null) {
 			return answers;
@@ -105,11 +87,6 @@ public final class AgentAnswersText {
 		final Map<String, Integer> taken = new HashMap<String, Integer>();
 		for (AgentProducedSessionContribution said : session.getSampledContributionsAfter(afterTurn + 1)) {
 			final String agent = said.getAgentName();
-			if (agent != null && agent.equals(self) && ResolvedConditionText.isSettledNote(said.getData())) {
-				// what the agent itself waited for and got: told as the platform wrote it
-				answers.add(new AgentAnswer(null, null, textOf(said.getData())));
-				continue;
-			}
 			if (agent == null || !agents.contains(agent)) {
 				continue;
 			}
@@ -142,9 +119,6 @@ public final class AgentAnswersText {
 	 * respawned run also keeps there, under its name, what it waited for and got).
 	 */
 	public static String render(AgentAnswer answer) {
-		if (answer.agent() == null) {
-			return answer.answer();
-		}
 		return (answer.request() != null ? "You asked the agent " + answer.agent() + ": " + answer.request() + "\n" : "")
 				+ "The agent " + answer.agent()
 				+ (answer.answer() != null ? " said: " + answer.answer() : NO_ANSWER);

@@ -29,19 +29,7 @@ import ai.gebo.architecture.agents.tools.GAbstractAskUserChoiceQuestionTool;
  * ({@link #renderForPeers}), as settled, and never the notes.
  */
 public final class ResolvedConditionText {
-	/** How what the agents read of a settled condition begins (see {@link #renderForPeers}). */
-	static final String SETTLED = "Already settled, do not ask for it again.";
-
 	private ResolvedConditionText() {
-	}
-
-	/**
-	 * Whether what an agent contributed to the session is the note of a condition it
-	 * waited for and that was settled ({@link #renderForPeers}), not something it said
-	 * of its work.
-	 */
-	public static boolean isSettledNote(Object contributed) {
-		return contributed != null && String.valueOf(contributed).startsWith(SETTLED);
 	}
 
 	/** The text the model is given before the message it is re-executed on; null for no condition. */
@@ -65,7 +53,7 @@ public final class ResolvedConditionText {
 			return null;
 		}
 		final StringBuilder text = new StringBuilder();
-		text.append(SETTLED).append(" Agent ").append(agent).append(" waited for: ")
+		text.append("Already settled, do not ask for it again. Agent ").append(agent).append(" waited for: ")
 				.append(condition.getWaitingConditionStatement());
 		final String why = condition.getWaitedConditionInstanceLLMExplanation();
 		if (why != null && !why.isBlank()) {

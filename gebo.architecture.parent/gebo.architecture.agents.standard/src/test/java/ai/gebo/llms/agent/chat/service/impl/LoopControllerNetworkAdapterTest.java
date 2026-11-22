@@ -228,6 +228,7 @@ class LoopControllerNetworkAdapterTest {
 	}
 
 	@Test
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void aControllerThatAskedTheUserIsToldAtItsLaterTurnsWhatWasSettled() throws Exception {
 		controllerReaching("presentations");
 		theAgent(toolCalling -> {
@@ -238,26 +239,30 @@ class LoopControllerNetworkAdapterTest {
 			}
 			return "The deck q3.pptx is ready.";
 		});
+		// the run was respawned on the user's answer to a question of the controller: its private
+		// session keeps what it waited for and got
+		final ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object> settled = new ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition<String, Object>(
+				String.class, "which template?", "the deck needs one", null, true);
+		settled.setInstanceValue("the corporate one");
+		((AgentPrivateSessionContext) mine).addSolvedConditions(List.of(settled));
 
+		// re-executed on the message it asked on, with the answer: the platform tells it there
 		turn(3);
+		assertEquals(REQUEST, executions.get(0)[2], "nothing added by the adapter at that turn");
 
-		// the run had been respawned on the user's answer to a question of the controller: the
-		// platform keeps in the session, under the controller's name, that it is settled
-		final String settled = "Already settled, do not ask for it again. Agent " + me.getNetworkAgentName()
-				+ " waited for: Which template?\nThe corporate one.";
-		session.addContribution(AgentsExchangeMessage.of(session, me.getNetworkAgentName(), null, settled,
-				MessageSemantic.RESPONSE), 4);
-		// something the controller said of its work is not a settled note: not told back to it
-		session.addContribution(AgentsExchangeMessage.of(session, me.getNetworkAgentName(), null,
-				"Something I said before.", MessageSemantic.RESPONSE), 5);
 		session.addContribution(AgentsExchangeMessage.of(session, "presentations", me.getNetworkAgentName(),
-				"q3.pptx written.", MessageSemantic.RESPONSE), 6);
+				"q3.pptx written.", MessageSemantic.RESPONSE), 5);
+		// executed again on its own message once the agent answered: its request may still say to ask
+		final AgentsExchangeMessage<String> again = AgentsExchangeMessage.of(session, me.getNetworkAgentName(),
+				me.getNetworkAgentName(), REQUEST, MessageSemantic.EXECUTE_AND_SHARE_RESULT);
+		adapter.onMessage(IChatRequestContext.of("the corporate one"), config, again, 6, network, me, state -> {
+		}, session, mine, null, IGAgentsNetworkRuntimeDao.of(allocated), RUN_TOOL_CALLING, handler);
 
-		turn(7);
-
-		String told = settled + "\n\n" + "The agent presentations said: q3.pptx written." + "\n\n" + REQUEST;
-		assertEquals(told, executions.get(1)[2],
-				"its request may still say to ask: it is told the question was asked and answered");
+		final String told = ai.gebo.architecture.agents.services.ResolvedConditionText.prepend(
+				List.of((ai.gebo.architecture.agents.model.AgentSuspendedWaitingCondition) settled),
+				"The agent presentations said: q3.pptx written." + "\n\n" + REQUEST);
+		assertTrue(told.contains("which template?") && told.contains("the corporate one"), told);
+		assertEquals(told, executions.get(1)[2], "it is told the question was asked and what was answered");
 		assertEquals(told, ((IChatRequestContext) executions.get(1)[0]).getActualUserRequest());
 	}
 
