@@ -13,8 +13,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springaicommunity.typesafe.TypeSafeClient;
 import org.springframework.ai.ollama.OllamaDecisionModel;
+import org.springframework.ai.systemone.api.SystemOneClient;
 import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.decision.OllamaDecisionOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
@@ -93,7 +93,7 @@ public class OllamaDecisionModelConfigurationSupportService
 					.restClientBuilder(restClientBuilder).webClientBuilder(clientsProvider.getWebClientBuilder())
 					.build();
 			// The System One client talks to the same Ollama server as the Ollama API
-			final TypeSafeClient systemOneClient = TypeSafeClient.builder().baseUrl(config.getBaseUrl())
+			final SystemOneClient systemOneClient = SystemOneClient.builder().baseUrl(config.getBaseUrl())
 					.apiKey(apiKeyOf(config)).restClientBuilder(restClientBuilder).build();
 			final OllamaDecisionOptions.Builder options = OllamaDecisionOptions.builder();
 			if (config.getChoosedModel() != null && config.getChoosedModel().getCode() != null) {

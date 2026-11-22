@@ -19,7 +19,7 @@
 		documents-cache implementation (e.g. brain.gebo.ai).
 	-->
 	<properties>
-		<spring-cloud.version>2026.0.0-RC2</spring-cloud.version>
+		<spring-cloud.version>2026.0.0</spring-cloud.version>
 	</properties>
 
 	<dependencyManagement>
