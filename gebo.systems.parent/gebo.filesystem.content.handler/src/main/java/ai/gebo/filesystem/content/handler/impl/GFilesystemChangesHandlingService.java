@@ -90,7 +90,14 @@ public class GFilesystemChangesHandlingService
 
 		if (endpoint.getPath() != null) {
 			for (VFilesystemReference endpath : endpoint.getPath()) {
-				String path = endpath.path != null ? endpath.path.absolutePath : endpath.root.getAbsolutePath();
+				// an entry that names no folder (neither a path nor a root) is left out: the
+				// endpoint's other folders, and the other endpoints, are watched all the same
+				final String path = VFilesystemReference.absolutePathOf(endpath);
+				if (path == null) {
+					LOGGER.warn("Filesystem endpoint " + endpoint.getCode()
+							+ " has a path entry naming no folder: it is not watched");
+					continue;
+				}
 				File file = new File(path);
 				if (file.exists() && file.isDirectory()) {
 					handledEndpoints.add(new EndpointFolderEntries(file, endpoint));
@@ -142,8 +149,14 @@ public class GFilesystemChangesHandlingService
 		FilesystemProjectEndpointRepository repo = runtimeBinder
 				.getImplementationOf(FilesystemProjectEndpointRepository.class);
 		Stream<GFilesystemProjectEndpoint> stream = repo.findAll().stream();
+		// one endpoint that cannot be watched never stops the others, nor the application
 		stream.forEach(x -> {
-			addHandling(x);
+			try {
+				addHandling(x);
+			} catch (RuntimeException unwatchable) {
+				LOGGER.error("Filesystem endpoint " + (x != null ? x.getCode() : null)
+						+ " cannot be watched for changes: it is left out", unwatchable);
+			}
 		});
 		watcher.addListener(this);
 		watcher.start();

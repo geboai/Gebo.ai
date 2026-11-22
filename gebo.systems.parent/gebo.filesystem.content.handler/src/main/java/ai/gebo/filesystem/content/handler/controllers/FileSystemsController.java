@@ -185,6 +185,7 @@ public class FileSystemsController
 	@PostMapping(value = "updateFilesystemEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GFilesystemProjectEndpoint updateFilesystemEndpoint(@RequestBody GFilesystemProjectEndpoint endpoint)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
+		checkPaths(endpoint);
 		return updateEndpoint(endpoint);
 	}
 
@@ -199,9 +200,29 @@ public class FileSystemsController
 	@PostMapping(value = "insertFilesystemEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public GFilesystemProjectEndpoint insertFilesystemEndpoint(@RequestBody GFilesystemProjectEndpoint endpoint)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
+		checkPaths(endpoint);
 		endpoint = insertEndpoint(endpoint);
 		changesHandlingService.addHandling(endpoint);
 		return endpoint;
+	}
+
+	/**
+	 * Refuses, before anything is saved, an endpoint with a path entry that names no
+	 * folder: neither a path nor a root to read it from.
+	 *
+	 * @throws ResponseStatusException 400 naming the entry
+	 */
+	static void checkPaths(GFilesystemProjectEndpoint endpoint) {
+		if (endpoint == null || endpoint.getPath() == null) {
+			return;
+		}
+		for (int i = 0; i < endpoint.getPath().size(); i++) {
+			if (ai.gebo.model.virtualfs.VFilesystemReference.absolutePathOf(endpoint.getPath().get(i)) == null) {
+				throw new org.springframework.web.server.ResponseStatusException(
+						org.springframework.http.HttpStatus.BAD_REQUEST,
+						"Path entry " + (i + 1) + " names no folder: it needs a path or a root");
+			}
+		}
 	}
 
 	/**
