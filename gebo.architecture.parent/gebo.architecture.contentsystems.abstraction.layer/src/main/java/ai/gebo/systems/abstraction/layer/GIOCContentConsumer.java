@@ -3,6 +3,7 @@ package ai.gebo.systems.abstraction.layer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -62,6 +63,13 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final EnricherMappers enrichers;
 	private final GJobStatus jobStatus;
 	private final Map<String, Integer> docsCounters = new HashMap<String, Integer>();
+	/**
+	 * The documents the source itself reported deleted in this session (the folder
+	 * watcher does, for a file removed): at the end, every store holding their contents
+	 * erases them, as for the documents a publish finds gone.
+	 */
+	private final java.util.Set<String> deletedBySource = java.util.Collections
+			.synchronizedSet(new java.util.LinkedHashSet<String>());
 	private final Map<String, Object> handlerCache = new HashMap<String, Object>();
 	private final IGContentsAccessErrorConsumer errorConsumer;
 	private final IGUserMessagesConsumer userMessagesConsumer;
@@ -134,6 +142,14 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				}
 			}
 
+			if (Boolean.TRUE.equals(docref.getDeleted())) {
+				// a document the source reports deleted: nothing to read, its contents are
+				// erased from the stores at the end of the session
+				if (docref.getCode() != null) {
+					deletedBySource.add(docref.getCode());
+				}
+				batchDiscardedInput++;
+			} else
 			// skipped vectorization contents are not sent to vectorization or indexing
 			if (docref.getSkippedVectorizationContent() == null || !docref.getSkippedVectorizationContent()) {
 				try {
@@ -223,9 +239,31 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 
 	}
 
+	/**
+	 * Asks every store holding the documents' contents to erase them: the vector store,
+	 * the knowledge graph and the full-text index where deployed.
+	 */
+	private void disposeOf(List<String> codes) {
+		GInternalDeletionMessagePayload deletedDocumentPayload = new GInternalDeletionMessagePayload();
+		deletedDocumentPayload.setCodes4deletion(new ArrayList<String>(codes));
+		deletedDocumentPayload.setObjectsType(ObjectType.DOCUMENTREF);
+		GStoreDisposers.send(broker, () -> GMessageEnvelope.newMessageFrom(this.dispatcher, deletedDocumentPayload));
+	}
+
 	@Override
 	public void endConsuming() {
 		documentConsumer.endConsuming();
+		if (!deletedBySource.isEmpty()) {
+			try {
+				final List<String> codes;
+				synchronized (deletedBySource) {
+					codes = new ArrayList<String>(deletedBySource);
+				}
+				disposeOf(codes);
+			} catch (Throwable th) {
+				LOGGER.error("Error erasing the contents of the documents deleted at the source", th);
+			}
+		}
 		if (!errorConsumer.hasErrors()) {
 			try {
 				Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
@@ -255,13 +293,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					}
 				});
 				if (!deletedDocsCodes.isEmpty()) {
-					GInternalDeletionMessagePayload deletedDocumentPayload = new GInternalDeletionMessagePayload();
-					deletedDocumentPayload.setCodes4deletion(new ArrayList<String>(deletedDocsCodes.keySet()));
-					deletedDocumentPayload.setObjectsType(ObjectType.DOCUMENTREF);
-					// every store holding the documents' contents erases them: the vector
-					// store, the knowledge graph and the full-text index where deployed
-					GStoreDisposers.send(broker,
-							() -> GMessageEnvelope.newMessageFrom(this.dispatcher, deletedDocumentPayload));
+					disposeOf(new ArrayList<String>(deletedDocsCodes.keySet()));
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Error in deletions check", th);
