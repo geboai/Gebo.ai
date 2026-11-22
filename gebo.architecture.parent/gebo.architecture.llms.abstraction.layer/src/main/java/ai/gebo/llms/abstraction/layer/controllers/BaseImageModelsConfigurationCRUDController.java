@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableImageModel;
@@ -120,8 +119,8 @@ public class BaseImageModelsConfigurationCRUDController<ImageModelConfigType ext
 	 */
 	protected void handleDefaultModel(ImageModelConfigType config) throws GeboPersistenceException {
 		if (config.getDefaultModel() != null && config.getDefaultModel()) {
-			List<GBaseChatModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseChatModelConfig.class);
-			for (GBaseChatModelConfig gBaseChatModelConfig : all) {
+			List<GBaseImageModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseImageModelConfig.class);
+			for (GBaseImageModelConfig gBaseChatModelConfig : all) {
 				if (!(gBaseChatModelConfig.getClass().getName().equals(config.getClass().getName())
 						&& gBaseChatModelConfig.getCode().equals(config.getCode()))) {
 					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {

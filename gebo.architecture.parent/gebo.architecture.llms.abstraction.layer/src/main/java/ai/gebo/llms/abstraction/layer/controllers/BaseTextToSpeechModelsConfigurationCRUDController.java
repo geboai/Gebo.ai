@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelChice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
@@ -120,8 +119,8 @@ public class BaseTextToSpeechModelsConfigurationCRUDController<TextToSpeechModel
 	 */
 	protected void handleDefaultModel(TextToSpeechModelConfigType config) throws GeboPersistenceException {
 		if (config.getDefaultModel() != null && config.getDefaultModel()) {
-			List<GBaseChatModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseChatModelConfig.class);
-			for (GBaseChatModelConfig gBaseChatModelConfig : all) {
+			List<GBaseTextToSpeachModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseTextToSpeachModelConfig.class);
+			for (GBaseTextToSpeachModelConfig gBaseChatModelConfig : all) {
 				if (!(gBaseChatModelConfig.getClass().getName().equals(config.getClass().getName())
 						&& gBaseChatModelConfig.getCode().equals(config.getCode()))) {
 					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {
