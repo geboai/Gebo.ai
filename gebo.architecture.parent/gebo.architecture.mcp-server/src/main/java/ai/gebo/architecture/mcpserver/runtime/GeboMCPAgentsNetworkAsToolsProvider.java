@@ -163,9 +163,10 @@ public class GeboMCPAgentsNetworkAsToolsProvider {
 					}
 				}
 			}
-			if (response == null) {
-				response = run.getResponse();
-			}
+			// the files the run wrote and generated are kept on the run's own response,
+			// not always the one the last frame carries
+			response = ai.gebo.llms.agent.standard.services.ChatRunFiles.withFilesOfTheRun(response,
+					run.getResponse());
 			String answer = response != null && response.getQueryResponse() != null
 					&& !response.getQueryResponse().isBlank() ? response.getQueryResponse() : streamed.toString();
 			if (run.isSuspended()) {

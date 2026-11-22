@@ -171,7 +171,9 @@ public class A2AServerBuilder {
 				LOGGER.debug("A2A message/send read " + frames.size() + " frame(s) of the run");
 			}
 		}
-		return fromFrames != null ? fromFrames : run.getResponse();
+		// the files the run wrote and generated are kept on the run's own response, not
+		// always the one the last frame carries
+		return ai.gebo.llms.agent.standard.services.ChatRunFiles.withFilesOfTheRun(fromFrames, run.getResponse());
 	}
 
 	private String chatContextOf(GeboChatResponse response) {
@@ -229,6 +231,9 @@ public class A2AServerBuilder {
 					try {
 						GeboChatResponse carried = resultAdapter.responseOf(frame);
 						if (carried != null) {
+							// the files the run wrote and generated are kept on the run's own response
+							carried = ai.gebo.llms.agent.standard.services.ChatRunFiles.withFilesOfTheRun(carried,
+									run.getResponse());
 							Message message = resultAdapter.messageOf(carried, null,
 									contextId != null ? contextId : carried.getUserChatContextCode(), notTaken);
 							sse.data(JsonUtil.toJson(new SendStreamingMessageResponse(id, message)));
