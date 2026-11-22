@@ -124,11 +124,44 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
     /** The pages of one document rendered at most: the limit of images of a document is applied after. */
     static final int MAX_RENDERED_PAGES = 200;
 
+    /**
+     * Opens a PDF for rendering with the PDFBox the application carries: PDFBox 3 opens it
+     * with {@code Loader.loadPDF}, PDFBox 2 with {@code PDDocument.load}. The application
+     * may carry either (another library of it brings PDFBox 2), so both are looked up at
+     * run time; rendering itself ({@code PDFRenderer.renderImageWithDPI}) is the same in
+     * both.
+     */
+    static org.apache.pdfbox.pdmodel.PDDocument loadForRendering(byte[] pdf) throws IOException {
+        java.lang.reflect.Method open;
+        try {
+            open = Class.forName("org.apache.pdfbox.Loader").getMethod("loadPDF", byte[].class);
+        } catch (ClassNotFoundException | NoSuchMethodException pdfbox2) {
+            try {
+                open = org.apache.pdfbox.pdmodel.PDDocument.class.getMethod("load", byte[].class);
+            } catch (NoSuchMethodException none) {
+                throw new IOException("No PDFBox able to open a PDF is available", none);
+            }
+        }
+        try {
+            return (org.apache.pdfbox.pdmodel.PDDocument) open.invoke(null, (Object) pdf);
+        } catch (java.lang.reflect.InvocationTargetException failed) {
+            final Throwable cause = failed.getCause();
+            if (cause instanceof IOException io) {
+                throw io;
+            }
+            throw new IOException("The PDF cannot be opened for rendering", cause);
+        } catch (IllegalAccessException denied) {
+            throw new IOException("The PDF cannot be opened for rendering", denied);
+        }
+    }
+
     @Override
     public Stream<Document> handleContent(GDocumentReference reference, InputStream is, Map<String, Object> metadata)
             throws GeboIngestionException, IOException {
         PdfReader pdfReader = null;
         org.apache.pdfbox.pdmodel.PDDocument rendered = null;
+        // set when the PDF cannot be opened for rendering: the other pages are not tried
+        boolean renderingUnavailable = false;
         try {
             // while images are taken the bytes are kept: a page without text (a scan, a full
             // page picture) is rendered and given as an image, like any picture of a document
@@ -153,11 +186,11 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
                 clonedMetaData.put(DocumentMetaInfos.CONTENT_PAGE, "" + i);
                 Document document = new Document(text, clonedMetaData);
                 docs.add(document);
-                if (pdf != null && (text == null || text.trim().isEmpty())
+                if (pdf != null && !renderingUnavailable && (text == null || text.trim().isEmpty())
                         && pagesAsImages.size() < MAX_RENDERED_PAGES) {
                     try {
                         if (rendered == null) {
-                            rendered = org.apache.pdfbox.Loader.loadPDF(pdf);
+                            rendered = loadForRendering(pdf);
                         }
                         final java.awt.image.BufferedImage image = new org.apache.pdfbox.rendering.PDFRenderer(rendered)
                                 .renderImageWithDPI(i - 1, PAGE_AS_IMAGE_DPI);
@@ -165,9 +198,14 @@ public class PdfIngestionHandler extends GAbstractConfiguredHandler {
                         javax.imageio.ImageIO.write(image, "png", png);
                         pagesAsImages.add(new ai.gebo.system.ingestion.EmbeddedPicture(null, "image/png",
                                 png.toByteArray(), i));
-                    } catch (IOException | RuntimeException unreadable) {
+                    } catch (IOException | RuntimeException | LinkageError unreadable) {
+                        // a page that cannot be rendered is left out: the text of the document, and
+                        // the other documents read with it, are given all the same
                         LOGGER.warn("Page " + i + " of " + reference.getCode()
                                 + " has no text and could not be rendered as an image: " + unreadable);
+                        if (rendered == null) {
+                            renderingUnavailable = true;
+                        }
                     }
                 }
             }
