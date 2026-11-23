@@ -43,13 +43,15 @@ import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService.GConsumers;
 import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
 import ai.gebo.workflows.compute.model.JobSummary;
+import ai.gebo.workflows.compute.service.impl.GWorkflowStatusDeamonServiceImpl;
 
 /**
  * Certifies what a deleted document leaves behind, over the whole ingestion workflow
  * (content handler, chunker, vectorizer): its record stays, logically deleted, and its
  * vectors are erased - whether the deletion is found by the deletions check ending an
  * ingestion or reported by the source itself, as the folder watcher does. The job
- * counts it among its deleted documents, not in its input.
+ * counts it among its deleted documents, not in its input, and a job that finds
+ * nothing but deleted documents ends as any other.
  */
 public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String WATCHED = "deleted-while-watched.docx";
@@ -65,6 +67,9 @@ public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsI
 
 	@Autowired
 	JobStatusRepository jobStatusRepository;
+
+	@Autowired
+	GWorkflowStatusDeamonServiceImpl workflowStatusDeamon;
 
 	@Test
 	public void aDeletedDocumentKeepsItsRecordAndLosesItsVectors() throws Exception {
@@ -115,6 +120,18 @@ public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsI
 		assertEquals(stayingVectors, vectorIds(stayingCode), "the document still there keeps its vectors");
 		assertEquals(Boolean.TRUE, documentReferenceRepository.findById(watchedCode).get().getDeleted(),
 				"the document reported deleted before stays deleted");
+
+		// 3. an ingestion that finds nothing but a deleted document: no input, and it ends
+		Files.delete(staying);
+		final ComputedWorkflowStatus onlyDeleted = ingest(endpoint).getWorkflowStatus().getRootStatus();
+		assertEquals(1, onlyDeleted.getBatchDeletedDocuments());
+		assertEquals(0, onlyDeleted.getBatchDocumentsInput(), "a deleted document is not input");
+		assertTrue(awaitVectors(stayingCode, false).isEmpty());
+		final String onlyDeletedJob = lastJobOf(endpoint);
+		workflowStatusDeamon.checkJobsStatus();
+		final GJobStatus closed = persistentObjectManager.findById(GJobStatus.class, onlyDeletedJob);
+		assertEquals(Boolean.TRUE, closed.getFinished(), "the job that found only a deleted document is closed");
+		assertEquals(Boolean.FALSE, closed.getProcessing());
 		cleanPersistent(endpoint);
 	}
 
