@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.tika.exception.TikaException;
+import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.parser.ParseContext;
@@ -94,7 +95,10 @@ public class RtfIngestionHandler extends GAbstractConfiguredHandler {
 			// no limit on the characters read: the whole text of the document is indexed
 			BodyContentHandler body = new BodyContentHandler(-1);
 			Metadata rtf = new Metadata();
-			new RTFParser().parse(is, body, rtf, new ParseContext());
+			// Tika 4 parsers take a TikaInputStream; closing it closes the stream it wraps
+			try (TikaInputStream tis = TikaInputStream.get(is)) {
+				new RTFParser().parse(tis, body, rtf, new ParseContext());
+			}
 			enrichRtfMetadata(rtf, metadata);
 			String text = body.toString();
 			if (text != null && !text.trim().isEmpty()) {
