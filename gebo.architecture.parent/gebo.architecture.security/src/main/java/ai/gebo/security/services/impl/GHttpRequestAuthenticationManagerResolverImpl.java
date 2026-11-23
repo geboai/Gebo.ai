@@ -49,6 +49,16 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequestAuthenticationManagerResolver {
 	static private final Logger LOGGER = LoggerFactory.getLogger(GHttpRequestAuthenticationManagerResolverImpl.class);
+
+	/**
+	 * The client is told only that its bearer token is invalid: the reason (which may say how
+	 * authentication is configured here) goes to the server log, never into the response's
+	 * WWW-Authenticate error_description.
+	 */
+	private static InvalidBearerTokenException invalidBearerToken(String reason) {
+		LOGGER.debug("Bearer token refused: {}", reason);
+		return new InvalidBearerTokenException("Invalid bearer token");
+	}
 	private final UserDetailsService userDetailsService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuthenticationManager localLoginAuthenticationManager;
@@ -140,7 +150,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 				List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 						.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 				if (oauth2AuthenticationConfigs.isEmpty())
-					throw new InvalidBearerTokenException(
+					throw invalidBearerToken(
 							"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
 				if (isJwtFormatStrict(header.getToken())) {
 					manager = new MultiOauth2ConfigJwtAuthenticationManager(header, oauth2AuthenticationConfigs,
@@ -192,7 +202,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 			List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 					.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 			if (oauth2AuthenticationConfigs.isEmpty()) {
-				throw new InvalidBearerTokenException(
+				throw invalidBearerToken(
 						"Bearer token is not a recognizable JWT and no AUTHENTICATION oauth2 configuration is "
 								+ "configured to try it as an opaque token against");
 			}
