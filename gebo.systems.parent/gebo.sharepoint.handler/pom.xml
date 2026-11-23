@@ -64,6 +64,13 @@
 			<artifactId>microsoft-graph</artifactId>
 			<version>6.69.0</version>
 		</dependency>
+		<!-- GMicrosoftGraphClientFactory builds the Graph OkHttpClient: graph brings
+		     okhttp, which for OkHttp 5 is an empty jar in Maven; the classes are in
+		     okhttp-jvm (version from the okhttp-bom in ai.gebo.parent) -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp-jvm</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.azure</groupId>
 			<artifactId>azure-identity</artifactId>

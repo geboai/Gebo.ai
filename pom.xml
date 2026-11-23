@@ -63,6 +63,7 @@
 		     over the Cloud BOM, so a lower value pins the microservices DOWN. -->
 		<bouncycastle.version>1.87</bouncycastle.version>
 		<bouncycastle.prov.version>1.87</bouncycastle.prov.version>
+		<okhttp.version>5.5.1</okhttp.version>
 		<maven.compiler.release></maven.compiler.release>
 	</properties>
 	<modules>
@@ -227,6 +228,38 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			<!-- One OkHttp, 5.x. Everything that ships OkHttp asks for 4.12.0 (Spring AI's
+			     OpenAI and Anthropic modules, google-genai, Microsoft Graph and kiota, the
+			     OpenSandbox SDK, the vault clients, the Kubernetes client) while the
+			     OpenTelemetry okhttp sender brings okhttp-jvm 5.x: unmanaged, both carried
+			     the same okhttp3 classes on one classpath and the first jar listed won.
+			     Each of those consumers links against 5.5.1 with no missing member (checked
+			     on their bytecode). For Maven, OkHttp 5's `okhttp` artifact is an empty jar
+			     (Gradle follows its module metadata to okhttp-jvm, Maven does not), so a
+			     module whose own code uses okhttp3 declares okhttp-jvm, as
+			     gebo.architecture.llms.abstraction.layer and gebo.sharepoint.handler do.
+			     Boot 4.2 does not manage OkHttp, and Spring Cloud 2026.0.0 does, at 4.12.1
+			     (spring-cloud-commons-dependencies imports okhttp-bom 4.12.1): an imported
+			     okhttp-bom would lose to it in every module that imports Spring Cloud itself
+			     (the microservices and containers.gebo.ai.pro), so the three artifacts that
+			     ship are managed here by name, which beats any imported BOM. Okio follows
+			     OkHttp (3.18.1 for 5.5.1): the okio pin that kept okhttp 4.12's okio 3.6.0
+			     off the classpath is gone with it. -->
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp</artifactId>
+				<version>${okhttp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>okhttp-jvm</artifactId>
+				<version>${okhttp.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.squareup.okhttp3</groupId>
+				<artifactId>logging-interceptor</artifactId>
+				<version>${okhttp.version}</version>
+			</dependency>
 			<!-- Tika arrives transitively through io.github.twwch:markdown2office, which
 			     asks for 3.2.2 while dragging tika-langdetect-optimaize 3.2.3 — the family
 			     was already resolving out of sync. 3.2.x is affected by CVE-2026-66755
@@ -312,26 +345,6 @@
 						<artifactId>commons-beanutils</artifactId>
 					</exclusion>
 				</exclusions>
-			</dependency>
-			<!-- gebo.architecture.llms.abstraction.layer pins okhttp:4.12.0, which pulls
-			     okio-jvm:3.6.0; the OpenTelemetry okhttp sender (auto-configured on every
-			     microservice via tracing) pulls okhttp-jvm 5.x (5.5.1 with OpenTelemetry
-			     1.68), which asks for okio-jvm 3.18.1. Without this override, Maven's
-			     nearest-wins mediation keeps the older 3.6.0 on the runtime classpath
-			     alongside okhttp-jvm 5.x, which is missing the Socket-based
-			     Okio.socket(Socket) overload that version calls, failing with
-			     NoSuchMethodError at embedding-model/vector store initialization. Keep it
-			     at or above what okhttp-jvm asks for (3.18.2 now): below, it pins okio
-			     DOWN under okhttp 5. DROP once okhttp 4.12 is gone from the apps. -->
-			<dependency>
-				<groupId>com.squareup.okio</groupId>
-				<artifactId>okio</artifactId>
-				<version>3.18.2</version>
-			</dependency>
-			<dependency>
-				<groupId>com.squareup.okio</groupId>
-				<artifactId>okio-jvm</artifactId>
-				<version>3.18.2</version>
 			</dependency>
 			<!-- gebo.architecture.crypting, gebo.secrets.services and gebo.secrets.impl
 			     each hardcoded their own bcprov/bcpkix version (1.84 vs 1.78.1), so
