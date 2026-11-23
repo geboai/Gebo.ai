@@ -100,26 +100,6 @@
 
 	</dependencies>
 
-	<repositories>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/snapshot</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-
-
-	</repositories>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -221,8 +201,10 @@
 			     speaks the 2026-07-28 "modern" protocol), while this BOM used to import
 			     2.0.0 and so pinned the SDK DOWN under those jars - a compile-clean
 			     NoSuchMethodError waiting for the first MCP call. Keep it on the version
-			     the spring-ai-mcp pom of ${spring.ai.version} declares; DROP once the
-			     Spring AI BOM manages the SDK itself. -->
+			     the spring-ai-mcp pom of ${spring.ai.version} declares, and move it with
+			     every spring.ai.version bump: nothing else manages the SDK here (this
+			     pom imports no Spring AI BOM, and spring-ai-bom 2.1.0 does not manage
+			     io.modelcontextprotocol.sdk either). -->
 			<dependency>
 				<groupId>io.modelcontextprotocol.sdk</groupId>
 				<artifactId>mcp-bom</artifactId>

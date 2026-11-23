@@ -12,8 +12,13 @@ features of the new Spring AI have been adopted: the reasoning of every model is
 in the new uniform way (message parts), and a new kind of model, the **decision
 model**, has been added to the product with three providers and its admin screens.
 
-The branch is **not to be merged** until the three final (GA) releases ship, expected
-in November 2026. Everything that concerns the new platforms is done on this branch;
+**Update, 23 November 2026: done.** The GA releases (Spring Boot 4.2.0, Spring AI 2.1.0,
+Spring Cloud 2026.0.0, MCP SDK 2.2.0) are on `develop` since 22 November (#412), and the
+pins were reviewed against them on 23 November (#418 to #422). The rest of this document is
+the record of how the upgrade was carried out; its "RC2" mentions are history.
+
+The branch was **not to be merged** until the three final (GA) releases shipped, expected
+in November 2026. Everything that concerns the new platforms was done on this branch;
 no side branches.
 
 This document lists what is still to do, in enough detail to start working without
@@ -43,7 +48,7 @@ Updated on 16 November 2026; the details of each item are in "Progress on 15 Nov
 | 11. Deprecated APIs cleanup | done; the generated clients stay on `RestTemplate` until Spring Framework 8 (decided 16 November) | — |
 | 12. Spring Security 7.2 | done; one live login per provider still to do | small |
 | 13. Documentation | points 1, 2 and 4 done; 3 and 5 open | small |
-| 14. GA bump and merge | when the releases ship (still RC2 on Maven Central) | small |
+| 14. GA bump and merge | done: GA on `develop` 22 November (#412), pins reviewed 23 November (#418-#422) | — |
 
 ### Progress on 15 November
 
@@ -790,6 +795,12 @@ whole list for this code base.
    them current at the GA bump.
 
 ## 16. Item 14: GA bump and merge
+
+**Done** (22-23 November 2026, #412 and #418 to #422). Outcome of step 2: `derby.version`
+kept at 10.17.1.0 (Boot 4.2.0 still manages 10.16.1.1, affected by CVE-2022-46337);
+`spring-retry` dropped for Spring Framework's own retry; `mcp-bom`
+kept at 2.2.0, what `spring-ai-mcp` 2.1.0 declares, since no imported BOM manages the SDK;
+springdoc on 3.2.1. The steps as planned:
 
 1. When Spring Boot 4.2.0, Spring AI 2.1.0 and Spring Cloud 2026.0.0 are on Maven
    Central: `spring-boot-starter-parent` in the root and in
