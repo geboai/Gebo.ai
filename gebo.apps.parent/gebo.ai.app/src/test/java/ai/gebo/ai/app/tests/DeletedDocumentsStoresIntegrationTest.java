@@ -51,7 +51,8 @@ import ai.gebo.workflows.compute.service.impl.GWorkflowStatusDeamonServiceImpl;
  * vectors are erased - whether the deletion is found by the deletions check ending an
  * ingestion or reported by the source itself, as the folder watcher does. The job
  * counts it among its deleted documents, not in its input, and a job that finds
- * nothing but deleted documents ends as any other.
+ * nothing but deleted documents ends as any other. A deleted document met again with
+ * the same code is live again and indexed again, even as it was when deleted.
  */
 public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String WATCHED = "deleted-while-watched.docx";
@@ -132,6 +133,44 @@ public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsI
 		final GJobStatus closed = persistentObjectManager.findById(GJobStatus.class, onlyDeletedJob);
 		assertEquals(Boolean.TRUE, closed.getFinished(), "the job that found only a deleted document is closed");
 		assertEquals(Boolean.FALSE, closed.getProcessing());
+		cleanPersistent(endpoint);
+	}
+
+	@Test
+	public void aDeletedDocumentMetAgainIsIndexedAgain() throws Exception {
+		GFilesystemProjectEndpoint endpoint = createAndPersist("deleted documents met again",
+				GFilesystemProjectEndpoint.class);
+		GFilesystemContentManagementSystem system = filesystemHandler.getSystem(endpoint);
+		Path folder = Path.of(localFolderDiscoveryService.getLocalPersistentFolder(system, endpoint));
+		Files.createDirectories(folder);
+		Path returning = folder.resolve("returning.docx");
+		Path staying = folder.resolve(STAYING);
+		Files.copy(extractResource(TEST_001_DOCX_FILE, ".docx"), returning, StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(extractResource(OTHER_DOCX, ".docx"), staying, StandardCopyOption.REPLACE_EXISTING);
+		endpoint.setPath(List.of(VFilesystemReference.from(folder)));
+		endpoint = persistentObjectManager.update(endpoint);
+
+		ingest(endpoint);
+		final String returningCode = codeOf(endpoint, "returning.docx");
+		awaitVectors(returningCode, true);
+		final Path aside = Files.createTempFile("returning", ".docx");
+		Files.copy(returning, aside, StandardCopyOption.REPLACE_EXISTING);
+		final java.nio.file.attribute.FileTime date = Files.getLastModifiedTime(returning);
+
+		// deleted: its record stays, its vectors go
+		Files.delete(returning);
+		ingest(endpoint);
+		assertTrue(awaitVectors(returningCode, false).isEmpty());
+		assertEquals(Boolean.TRUE, documentReferenceRepository.findById(returningCode).get().getDeleted());
+
+		// met again with the same code, as it was: live again, and indexed again
+		Files.copy(aside, returning, StandardCopyOption.REPLACE_EXISTING);
+		Files.setLastModifiedTime(returning, date);
+		ingest(endpoint);
+		assertFalse(Boolean.TRUE.equals(documentReferenceRepository.findById(returningCode).get().getDeleted()),
+				"the document met again with the same code is no longer deleted");
+		assertFalse(awaitVectors(returningCode, true).isEmpty(), "the document met again is indexed again");
+		Files.deleteIfExists(aside);
 		cleanPersistent(endpoint);
 	}
 

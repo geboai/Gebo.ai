@@ -253,6 +253,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				// their contents erases them, their records stay, deleted
 				GStoreDisposers.send(broker,
 						() -> GMessageEnvelope.newMessageFrom(this.dispatcher, reportedDeletedPayload));
+				// met again, they are ingested again: nothing of them is in the stores
+				evaluator.forgetIngested(deletedBySource);
 			} catch (Throwable th) {
 				LOGGER.error("Error erasing the stores of the documents reported deleted", th);
 			}
@@ -294,6 +296,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					// store, the knowledge graph and the full-text index where deployed
 					GStoreDisposers.send(broker,
 							() -> GMessageEnvelope.newMessageFrom(this.dispatcher, deletedDocumentPayload));
+					// met again, they are ingested again: nothing of them is in the stores
+					evaluator.forgetIngested(deletedDocsCodes.keySet());
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Error in deletions check", th);

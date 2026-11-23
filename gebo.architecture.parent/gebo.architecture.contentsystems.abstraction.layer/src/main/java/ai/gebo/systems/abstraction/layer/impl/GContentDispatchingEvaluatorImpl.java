@@ -89,6 +89,18 @@ public class GContentDispatchingEvaluatorImpl implements IGContentDispatchingEva
 		chRepository.save(ContentHandshakeData.of(handshake));
 	}
 
+	@Override
+	public void forgetIngested(java.util.Collection<String> contentCodes) {
+		if (contentCodes == null || contentCodes.isEmpty()) {
+			return;
+		}
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Forgetting the ingestion acknowledgements of " + contentCodes.size()
+					+ " content(s) whose stores were erased");
+		}
+		chRepository.deleteByContentCodeIn(new java.util.ArrayList<String>(contentCodes));
+	}
+
 	/**
 	 * The newest acknowledgement first by when it was received (the ones stored
 	 * before it was recorded have none), then by the content's modification date.
