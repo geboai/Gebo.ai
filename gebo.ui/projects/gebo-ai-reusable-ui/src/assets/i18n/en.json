@@ -38,6 +38,7 @@
       "ProcessedSeries": { "label": "Processed" },
       "SentToNextStepSeries": { "label": "Sent to next step" },
       "DiscardedSeries": { "label": "Discarded" },
+      "DeletedSeries": { "label": "Deleted" },
       "ErrorsSeries": { "label": "Errors" },
       "ChunksSeries": { "label": "Chunks" },
       "TokensSeries": { "label": "Tokens (k)" }
@@ -3930,7 +3931,8 @@
         "dataset-0-label": "Received docs",
         "dataset-1-label": "Processed docs",
         "dataset-2-label": "Error docs",
-        "dataset-3-label": "Discarded docs"
+        "dataset-3-label": "Discarded docs",
+        "dataset-4-label": "Deleted docs"
       },
       "TOKENIZATION": { "description": "Documents tokenization" },
       "TOKENIZATION-docs-histogram": {
@@ -4002,7 +4004,8 @@
         "dataset-0-label": "Received docs",
         "dataset-1-label": "Processed docs",
         "dataset-2-label": "Error docs",
-        "dataset-3-label": "Discarded docs"
+        "dataset-3-label": "Discarded docs",
+        "dataset-4-label": "Deleted docs"
       },
       "TOKENIZATION-docs-histogram": {
         "label-0": "Not treated docs",
