@@ -25,7 +25,8 @@
 		<apache-poi.version>6.0.0</apache-poi.version>
 		<odfdom.version>0.13.0</odfdom.version>
 		<spring.ai.version>2.1.0</spring.ai.version>
-		<springdoc.version>3.0.3</springdoc.version>
+		<springdoc.version>3.2.1</springdoc.version>
+		<swagger.version>3.0.0</swagger.version>
 		<!-- Official Agent2Agent (A2A) Java SDK (org.a2aproject.sdk, the current group;
 		     the old io.github.a2asdk group is frozen at 0.3.x). gebo.architecture.a2a-*
 		     consume ONLY a2a-java-sdk-spec (the Gson wire types: AgentCard, Message/Part,
@@ -397,6 +398,37 @@
 				<groupId>org.jsoup</groupId>
 				<artifactId>jsoup</artifactId>
 				<version>1.23.2</version>
+			</dependency>
+			<!-- One swagger annotations API. springdoc 3.2.1 (built on Boot 4.2) moves to
+			     swagger-core 3.0.0, whose artifacts are Jakarta under their plain names
+			     (swagger-annotations, swagger-core, swagger-models: there is no 3.x
+			     -jakarta artifact); Spring AI 2.1's spring-ai-model still brings
+			     swagger-annotations-jakarta 2.2.38, and the generated REST clients
+			     swagger-annotations 2.2.42. Both jars carry the same
+			     io.swagger.v3.oas.annotations classes, and the copy loaded first wins:
+			     2.2.38 lacks SecurityRequirementEntry, the kind of skew that ended in
+			     NoSuchMethodError before (see gebo.llms.openai). 2.2.56, the last of
+			     the -jakarta line, has the same classes and members as 3.0.0 (checked
+			     with javap): with both managed here either copy serves. -->
+			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-annotations</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-core</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-models</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger.core.v3</groupId>
+				<artifactId>swagger-annotations-jakarta</artifactId>
+				<version>2.2.56</version>
 			</dependency>
 			<!-- Guava reaches the apps from six directions at six versions: 18.0 through
 			     tika-langdetect-optimaize's language-detector 0.6 (in every module that
