@@ -13,6 +13,6 @@ import { MCPClientConfig } from './mCPClientConfig';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelMCPClientConfig { 
-    content?: Array<MCPClientConfig>;
-    page?: PageMetadata;
+    content: Array<MCPClientConfig>;
+    page: PageMetadata;
 }

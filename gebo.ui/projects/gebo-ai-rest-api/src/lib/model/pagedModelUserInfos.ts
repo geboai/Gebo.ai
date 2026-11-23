@@ -13,6 +13,6 @@ import { PageMetadata } from './pageMetadata';
 import { UserInfos } from './userInfos';
 
 export interface PagedModelUserInfos { 
-    content?: Array<UserInfos>;
-    page?: PageMetadata;
+    content: Array<UserInfos>;
+    page: PageMetadata;
 }

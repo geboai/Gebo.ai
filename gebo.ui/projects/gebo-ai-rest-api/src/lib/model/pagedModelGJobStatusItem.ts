@@ -13,6 +13,6 @@ import { GJobStatusItem } from './gJobStatusItem';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGJobStatusItem { 
-    content?: Array<GJobStatusItem>;
-    page?: PageMetadata;
+    content: Array<GJobStatusItem>;
+    page: PageMetadata;
 }

@@ -13,6 +13,6 @@ import { GeneratedApiKeyInfo } from './generatedApiKeyInfo';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGeneratedApiKeyInfo { 
-    content?: Array<GeneratedApiKeyInfo>;
-    page?: PageMetadata;
+    content: Array<GeneratedApiKeyInfo>;
+    page: PageMetadata;
 }

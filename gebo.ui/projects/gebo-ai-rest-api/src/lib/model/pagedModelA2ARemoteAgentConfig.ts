@@ -13,6 +13,6 @@ import { A2ARemoteAgentConfig } from './a2ARemoteAgentConfig';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelA2ARemoteAgentConfig { 
-    content?: Array<A2ARemoteAgentConfig>;
-    page?: PageMetadata;
+    content: Array<A2ARemoteAgentConfig>;
+    page: PageMetadata;
 }

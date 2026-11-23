@@ -13,6 +13,6 @@ import { GUserChatInfo } from './gUserChatInfo';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGUserChatInfo { 
-    content?: Array<GUserChatInfo>;
-    page?: PageMetadata;
+    content: Array<GUserChatInfo>;
+    page: PageMetadata;
 }

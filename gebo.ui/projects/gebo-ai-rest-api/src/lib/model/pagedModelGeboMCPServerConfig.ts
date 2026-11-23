@@ -13,6 +13,6 @@ import { GeboMCPServerConfig } from './geboMCPServerConfig';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGeboMCPServerConfig { 
-    content?: Array<GeboMCPServerConfig>;
-    page?: PageMetadata;
+    content: Array<GeboMCPServerConfig>;
+    page: PageMetadata;
 }

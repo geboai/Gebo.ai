@@ -13,6 +13,6 @@ import { GUserMessage } from './gUserMessage';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGUserMessage { 
-    content?: Array<GUserMessage>;
-    page?: PageMetadata;
+    content: Array<GUserMessage>;
+    page: PageMetadata;
 }
