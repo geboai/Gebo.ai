@@ -9,7 +9,6 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
-import org.springframework.retry.support.RetryTemplate;
 
 import ai.gebo.llms.abstraction.layer.services.config.GeboLlmsClientConfig;
 import okhttp3.Interceptor;
@@ -17,7 +16,7 @@ import okhttp3.Interceptor;
 /**
  * Provides all transport clients and configuration required by LLM model builders.
  * Spring-transport providers (Mistral, Ollama, Google GenAI) consume the WebClient/RestClient
- * builders and the RetryTemplate. OkHttp-based providers (OpenAI, Anthropic) read the raw
+ * builders and the core RetryTemplate. OkHttp-based providers (OpenAI, Anthropic) read the raw
  * connection and retry parameters from getClientConfig() and construct their own HTTP client
  * customizer inside their own module — keeping this interface free of any vendor-specific types.
  * All values are driven by application.yml via GeboDefaultLlmsServiceClientsProviderConfig.
@@ -37,18 +36,11 @@ public interface IGLlmsServiceClientsProvider {
     org.springframework.web.client.RestClient.Builder getRestClientBuilder();
 
     /**
-     * RetryTemplate configured with the backoff interval and max-attempts from application.yml.
-     * This is the classic Spring Retry template ({@code org.springframework.retry.support.RetryTemplate}),
-     * still consumed by our own clients (e.g. the standard ranker client) and by Spring AI 1.x-style
-     * model constructors.
-     */
-    RetryTemplate getRetryTemplate();
-
-    /**
      * Spring Framework core RetryTemplate ({@code org.springframework.core.retry.RetryTemplate})
-     * configured with the same backoff interval and max-attempts from application.yml.
-     * Spring AI 2.0 model builders (e.g. Mistral) require this newer core retry type instead of
-     * the classic Spring Retry one. It is a general Spring Framework type, not vendor-specific.
+     * configured with the backoff interval and max-attempts from application.yml: max-attempts
+     * counts every call, the first one included, as the OkHttp interceptor counts them. The
+     * retry type Spring AI 2 model builders (Mistral, Deepseek, Vertex) take, and the one our
+     * own clients (the standard ranker client) use: Spring Retry is no longer a dependency.
      */
     org.springframework.core.retry.RetryTemplate getCoreRetryTemplate();
 

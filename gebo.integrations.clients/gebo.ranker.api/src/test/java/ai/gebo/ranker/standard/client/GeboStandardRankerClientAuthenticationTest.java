@@ -23,7 +23,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
-import org.springframework.retry.support.RetryTemplate;
+import org.springframework.core.retry.RetryPolicy;
+import org.springframework.core.retry.RetryTemplate;
 
 import com.sun.net.httpserver.HttpServer;
 
@@ -69,7 +70,7 @@ class GeboStandardRankerClientAuthenticationTest {
 	GeboStandardRankerClient client(String apiKey) {
 		return new GeboStandardRankerClient(apiKey,
 				"http://127.0.0.1:" + server.getAddress().getPort() + "/v1/rerank", "lexical", null,
-				RetryTemplate.builder().maxAttempts(1).build(), null, null, null, null);
+				new RetryTemplate(RetryPolicy.builder().maxRetries(0).build()), null, null, null, null);
 	}
 
 	static RankingInput input() {

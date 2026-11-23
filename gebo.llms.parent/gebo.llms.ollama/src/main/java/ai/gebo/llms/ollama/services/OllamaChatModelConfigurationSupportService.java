@@ -22,7 +22,6 @@ import org.springframework.ai.ollama.api.OllamaApi;
 import org.springframework.ai.ollama.api.OllamaChatOptions;
 import org.springframework.ai.ollama.management.ModelManagementOptions;
 import org.springframework.ai.tool.ToolCallback;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
@@ -142,7 +141,6 @@ public class OllamaChatModelConfigurationSupportService
 			org.springframework.web.client.RestClient.Builder restClient = clientsProvider.getRestClientBuilder();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClient = clientsProvider
 					.getWebClientBuilder();
-			RetryTemplate retryTemplate = clientsProvider.getRetryTemplate();
 			apiBuilder.restClientBuilder(restClient);
 			apiBuilder.webClientBuilder(webClient);
 			OllamaApi ollamaapi = apiBuilder.build();

@@ -16,10 +16,6 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.client.ReactorClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.retry.backoff.FixedBackOffPolicy;
-import org.springframework.retry.policy.SimpleRetryPolicy;
-import org.springframework.retry.support.RetryTemplate;
-import org.springframework.retry.support.RetryTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.ClientHttpObservationDocumentation;
@@ -96,19 +92,11 @@ public class GDefaultLlmsServiceClientsProviderImpl implements IGLlmsServiceClie
 	}
 
 	@Override
-	public RetryTemplate getRetryTemplate() {
-		RetryTemplateBuilder builder = RetryTemplate.builder();
-		FixedBackOffPolicy backOffPolicy = new FixedBackOffPolicy();
-		backOffPolicy.setBackOffPeriod(defaultConfig.getRetryConfig().getBackoffInterval());
-		SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
-		retryPolicy.setMaxAttempts(defaultConfig.getRetryConfig().getMaxAttempts());
-		return builder.customPolicy(retryPolicy).customBackoff(backOffPolicy).build();
-	}
-
-	@Override
 	public org.springframework.core.retry.RetryTemplate getCoreRetryTemplate() {
+		// max-attempts counts the first call too (as the OkHttp interceptor and the former
+		// Spring Retry template did); the core policy counts only the retries after it
 		org.springframework.core.retry.RetryPolicy policy = org.springframework.core.retry.RetryPolicy.builder()
-				.maxRetries(defaultConfig.getRetryConfig().getMaxAttempts())
+				.maxRetries(Math.max(0, defaultConfig.getRetryConfig().getMaxAttempts() - 1))
 				.delay(Duration.ofMillis(defaultConfig.getRetryConfig().getBackoffInterval()))
 				.multiplier(1.0)
 				.build();

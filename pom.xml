@@ -36,12 +36,6 @@
 		     imported (it manages junit/mockito at test scope and would leak into the
 		     whole reactor); the a2a module poms pin this version on their single dep. -->
 		<a2a.sdk.version>1.3.0.Final</a2a.sdk.version>
-		<!-- Required, not an override: gebo.ranker.api and
-		     gebo.architecture.llms.abstraction.layer declare spring-retry with
-		     <version>${spring-retry.version}</version>, and Spring Boot does not
-		     manage spring-retry, so the build does not resolve without it. 2.0.13 is
-		     the current release (it also carries the fix for CVE-2026-41710). -->
-		<spring-retry.version>2.0.13</spring-retry.version>
 		<!-- Security fixes are normally taken by bumping spring-boot-starter-parent
 		     (and spring.ai.version), NOT by pinning single libraries: an override
 		     drifts out of date and starts pinning its library DOWN once the parent

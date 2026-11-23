@@ -3,7 +3,7 @@ package ai.gebo.llms.abstraction.layer.services;
 import ai.gebo.llms.abstraction.layer.model.GModelPricingConditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.retry.support.RetryTemplate;
+import org.springframework.core.retry.RetryTemplate;
 import org.springframework.web.client.RestClient.Builder;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
@@ -112,7 +112,7 @@ public abstract class GAbstractConfigurableRankerModel<ModelConfig extends GBase
 			IGLlmsServiceClientsProvider serviceClientProvider = this.serviceClientsProviderFactory
 					.get(config.getModelTypeCode());
 			Builder restClientBuilder = serviceClientProvider.getRestClientBuilder();
-			RetryTemplate retryTemplate = serviceClientProvider.getRetryTemplate();
+			RetryTemplate retryTemplate = serviceClientProvider.getCoreRetryTemplate();
 			org.springframework.web.reactive.function.client.WebClient.Builder webClientBuilder = serviceClientProvider
 					.getWebClientBuilder();
 			this.model = new GeboStandardRankerClient(apiKey, thisCompleteUrl, model, restClientBuilder, retryTemplate,
