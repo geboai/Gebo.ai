@@ -281,6 +281,7 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		final ModelConfig requestConfig = requestConfig(config);
 		this.model = configureModel(requestConfig, type);
 		// a file the provider refuses does not sink the answer: the call is made again without
+		// the files (RefusedFilesRetryingChatModel)
 		Builder builder = ChatClient.builder(RefusedFilesRetryingChatModel.wrap(configureModel(requestConfig, type)));
 		// Priced through this model's getPricingConditions(), read when each call ends; a
 		// call's answer read from its answer generation, not from a reasoning one; the

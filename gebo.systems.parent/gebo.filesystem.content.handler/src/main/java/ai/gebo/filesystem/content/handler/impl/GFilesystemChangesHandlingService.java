@@ -131,9 +131,11 @@ public class GFilesystemChangesHandlingService
 
 	/**
 	 * Replaces the running watcher by a new one on the folders handled now: a stopped
-	 * FileSystemWatcher does not scan again when started. The snapshots of the folders
-	 * already watched are kept in the shared state repository, so a change made while
-	 * the watchers are swapped is still seen.
+	 * FileSystemWatcher does not scan again when started. Stopping the previous one
+	 * interrupts its thread and waits for it. The new one starts from the snapshots the
+	 * previous one saved, and it saved them only when it detected a change: a change of
+	 * the last polling interval in a folder never seen changing, and one whose handling
+	 * the stop interrupted, are found by the next publish of the data source.
 	 */
 	synchronized void rewatch() {
 		final FileSystemWatcher fresh = newWatcher();
