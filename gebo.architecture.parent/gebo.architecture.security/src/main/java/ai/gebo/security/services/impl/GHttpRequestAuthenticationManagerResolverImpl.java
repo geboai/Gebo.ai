@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -139,7 +140,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 				List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 						.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 				if (oauth2AuthenticationConfigs.isEmpty())
-					throw new RuntimeException(
+					throw new InvalidBearerTokenException(
 							"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
 				if (isJwtFormatStrict(header.getToken())) {
 					manager = new MultiOauth2ConfigJwtAuthenticationManager(header, oauth2AuthenticationConfigs,
@@ -191,7 +192,7 @@ public class GHttpRequestAuthenticationManagerResolverImpl implements IGHttpRequ
 			List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 					.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 			if (oauth2AuthenticationConfigs.isEmpty()) {
-				throw new RuntimeException(
+				throw new InvalidBearerTokenException(
 						"Bearer token is not a recognizable JWT and no AUTHENTICATION oauth2 configuration is "
 								+ "configured to try it as an opaque token against");
 			}

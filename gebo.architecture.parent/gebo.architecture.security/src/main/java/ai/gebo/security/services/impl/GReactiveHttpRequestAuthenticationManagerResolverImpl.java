@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManagerResolver;
@@ -139,7 +140,7 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 		List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 				.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 		if (oauth2AuthenticationConfigs.isEmpty())
-			throw new RuntimeException(
+			throw new InvalidBearerTokenException(
 					"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
 		return isJwtFormatStrict(header.getToken()) ? multiJwt(oauth2AuthenticationConfigs)
 				: multiOpaque(oauth2AuthenticationConfigs);
