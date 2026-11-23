@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
-import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
@@ -120,8 +119,8 @@ public class BaseTranscriptModelsConfigurationCRUDController<TranscriptModelConf
 	 */
 	protected void handleDefaultModel(TranscriptModelConfigType config) throws GeboPersistenceException {
 		if (config.getDefaultModel() != null && config.getDefaultModel()) {
-			List<GBaseChatModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseChatModelConfig.class);
-			for (GBaseChatModelConfig gBaseChatModelConfig : all) {
+			List<GBaseTranscriptModelConfig> all = persistentObjectManager.findAllExtendingType(GBaseTranscriptModelConfig.class);
+			for (GBaseTranscriptModelConfig gBaseChatModelConfig : all) {
 				if (!(gBaseChatModelConfig.getClass().getName().equals(config.getClass().getName())
 						&& gBaseChatModelConfig.getCode().equals(config.getCode()))) {
 					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {
