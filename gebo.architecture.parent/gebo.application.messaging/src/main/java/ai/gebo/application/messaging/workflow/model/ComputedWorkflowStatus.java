@@ -18,6 +18,7 @@ public class ComputedWorkflowStatus {
 	private long batchDocumentsProcessed;
 	private long batchSentToNextStep;
 	private long batchDiscardedInput = 0;
+	private long batchDeletedDocuments = 0;
 	private long chunksProcessed = 0l;
 	private long tokensProcessed = 0l;
 	private boolean completed;

@@ -241,6 +241,9 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	@Override
 	public void endConsuming() {
 		documentConsumer.endConsuming();
+		// the documents deleted in this session: the ones their source reported and the
+		// ones the deletions check below finds; counted on the session's last message
+		long batchDeletedDocuments = deletedBySource.size();
 		if (!deletedBySource.isEmpty()) {
 			try {
 				GInternalDeletionMessagePayload reportedDeletedPayload = new GInternalDeletionMessagePayload();
@@ -282,6 +285,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						accept(x);
 					}
 				});
+				batchDeletedDocuments += deletedDocsCodes.size();
 				if (!deletedDocsCodes.isEmpty()) {
 					GInternalDeletionMessagePayload deletedDocumentPayload = new GInternalDeletionMessagePayload();
 					deletedDocumentPayload.setCodes4deletion(new ArrayList<String>(deletedDocsCodes.keySet()));
@@ -306,6 +310,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
 			payload.setBatchSentToNextStep(batchSentToNextStep);
 			payload.setBatchDiscardedInput(batchDiscardedInput);
+			payload.setBatchDeletedDocuments(batchDeletedDocuments);
 			payload.setLastMessage(true);
 			payload.setTimestamp(new Date());
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope

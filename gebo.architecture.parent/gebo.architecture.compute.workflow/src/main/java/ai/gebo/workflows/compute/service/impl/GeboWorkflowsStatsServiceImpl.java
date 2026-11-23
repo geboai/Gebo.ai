@@ -179,6 +179,7 @@ public class GeboWorkflowsStatsServiceImpl implements IGeboWorkflowsStatsService
 		data.setBatchDocumentsProcessed(step.getBatchDocumentsProcessed());
 		data.setBatchSentToNextStep(step.getBatchSentToNextStep());
 		data.setBatchDiscardedInput(step.getBatchDiscardedInput());
+		data.setBatchDeletedDocuments(step.getBatchDeletedDocuments());
 		data.setChunksProcessed(step.getChunksProcessed());
 		data.setTokensProcessed(step.getTokensProcessed());
 		data.setCompleted(step.isCompleted());

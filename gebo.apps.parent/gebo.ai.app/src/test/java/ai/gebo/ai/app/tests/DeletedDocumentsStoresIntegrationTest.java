@@ -30,11 +30,13 @@ import org.springframework.boot.devtools.filewatch.ChangedFiles;
 
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.application.messaging.workflow.model.ComputedWorkflowStatus;
 import ai.gebo.filesystem.content.handler.GFilesystemContentManagementSystem;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHandler;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
+import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
@@ -46,7 +48,8 @@ import ai.gebo.workflows.compute.model.JobSummary;
  * Certifies what a deleted document leaves behind, over the whole ingestion workflow
  * (content handler, chunker, vectorizer): its record stays, logically deleted, and its
  * vectors are erased - whether the deletion is found by the deletions check ending an
- * ingestion or reported by the source itself, as the folder watcher does.
+ * ingestion or reported by the source itself, as the folder watcher does. The job
+ * counts it among its deleted documents, not in its input.
  */
 public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String WATCHED = "deleted-while-watched.docx";
@@ -59,6 +62,9 @@ public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsI
 
 	@Autowired
 	IGeboInversionOfControlIngestionService inversionOfControlIngestionService;
+
+	@Autowired
+	JobStatusRepository jobStatusRepository;
 
 	@Test
 	public void aDeletedDocumentKeepsItsRecordAndLosesItsVectors() throws Exception {
@@ -93,10 +99,15 @@ public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsI
 		assertEquals(Boolean.TRUE, watchedRecord.getDeleted(), "logically deleted");
 		assertFalse(vectorIds(publishedCode).isEmpty(), "the other documents' vectors untouched");
 		assertEquals(stayingVectors, vectorIds(stayingCode));
+		final ComputedWorkflowStatus watcherSession = awaitDeletedCounted(lastJobOf(endpoint), 1);
+		assertEquals(2, watcherSession.getBatchDocumentsInput(),
+				"the two documents still there are the session's input, the deleted one is not");
 
 		// 2. the deletions check ending an ingestion finds the deletion
 		Files.delete(published);
-		ingest(endpoint);
+		final ComputedWorkflowStatus publish = ingest(endpoint).getWorkflowStatus().getRootStatus();
+		assertEquals(1, publish.getBatchDeletedDocuments(), "the document found deleted counted");
+		assertEquals(1, publish.getBatchDocumentsInput(), "the document still there is the input");
 		assertTrue(awaitVectors(publishedCode, false).isEmpty(), "the vectors of the document found deleted erased");
 		final GDocumentReference publishedRecord = documentReferenceRepository.findById(publishedCode).orElse(null);
 		assertTrue(publishedRecord != null, "the record of the deleted document stays");
@@ -122,6 +133,31 @@ public class DeletedDocumentsStoresIntegrationTest extends AbstractBaseTestLLmsI
 			consumers.getMessagesConsumer().endConsuming();
 			consumers.end();
 		}
+	}
+
+	/** The code of the last job started on the endpoint. */
+	private String lastJobOf(GFilesystemProjectEndpoint endpoint) {
+		return jobStatusRepository
+				.findFirstByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeOrderByStartDateTimeDesc(
+						endpoint.getClass().getName(), endpoint.getCode())
+				.orElseThrow(() -> new AssertionError("no job on the endpoint")).getCode();
+	}
+
+	/** Waits for the job's discovery step to count the deleted documents expected. */
+	private ComputedWorkflowStatus awaitDeletedCounted(String jobCode, long expected) throws Exception {
+		final long deadline = System.currentTimeMillis() + 60_000l;
+		ComputedWorkflowStatus root = null;
+		while (System.currentTimeMillis() < deadline) {
+			final JobSummary summary = workflowStatsService.getJobSummary(jobCode);
+			root = summary != null && summary.getWorkflowStatus() != null ? summary.getWorkflowStatus().getRootStatus()
+					: null;
+			if (root != null && root.getBatchDeletedDocuments() == expected) {
+				return root;
+			}
+			Thread.sleep(1000);
+		}
+		throw new AssertionError("the job " + jobCode + " counts "
+				+ (root != null ? root.getBatchDeletedDocuments() : "no") + " deleted document(s), expected " + expected);
 	}
 
 	/** Runs an ingestion of the endpoint and waits for its end. */

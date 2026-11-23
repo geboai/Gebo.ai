@@ -29,6 +29,7 @@ public class WorkflowStatsAggregationBucket {
 	private long batchDocumentsProcessingErrors;
 	private long batchSentToNextStep;
 	private long batchDiscardedInput;
+	private long batchDeletedDocuments;
 	private long chunksProcessed;
 	private long tokensProcessed;
 	private long nrSnapshots;

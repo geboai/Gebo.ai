@@ -76,6 +76,11 @@ public class ContentsBatchProcessed {
 	private long batchDiscardedInput = 0;
 
 	/**
+	 * The number of documents found deleted in the batch: neither input nor sent on.
+	 */
+	private long batchDeletedDocuments = 0;
+
+	/**
 	 * The number of documents sent to vectorization in the batch.
 	 */
 	private long batchSentToNextStep = 0;
@@ -98,6 +103,7 @@ public class ContentsBatchProcessed {
 		this.batchDocumentsProcessingErrors += x.batchDocumentsProcessingErrors;
 		this.batchSentToNextStep += x.batchSentToNextStep;
 		this.batchDiscardedInput += x.batchDiscardedInput;
+		this.batchDeletedDocuments += x.batchDeletedDocuments;
 		this.chunksProcessed += x.chunksProcessed;
 		this.tokensProcessed += x.tokensProcessed;
 		this.errorChunks += x.errorChunks;
@@ -114,6 +120,7 @@ public class ContentsBatchProcessed {
 		this.batchDocumentsProcessingErrors += x.getBatchDocumentsProcessingErrors();
 		this.batchSentToNextStep += x.getBatchSentToNextStep();
 		this.batchDiscardedInput += x.getBatchDiscardedInput();
+		this.batchDeletedDocuments += x.getBatchDeletedDocuments();
 		this.chunksProcessed += x.getChunksProcessed();
 		this.tokensProcessed += x.getTokensProcessed();
 		this.errorChunks += x.getErrorChunks();
