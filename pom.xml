@@ -16,9 +16,10 @@
 		<java.version>21</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
-		<!-- TODO: Test if works ok
-		<org.eclipse.jgit.version>6.10.1.202505221210-r</org.eclipse.jgit.version> -->
-		<org.eclipse.jgit.version>7.3.0.202506031305-r</org.eclipse.jgit.version>
+		<!-- gebo.git.content.handler declares jgit and jgit.ssh.jsch with this version;
+		     kept on the release Spring Cloud 2026.0.0 manages, so the microservices that
+		     import the Cloud BOM and the monolith run the same jgit. -->
+		<org.eclipse.jgit.version>7.8.1.202611041320-r</org.eclipse.jgit.version>
 		<!-- POI 6 needs Java 17+. No tika release is built on it yet (tika 4.2.0
 		     still compiles against 5.5.1): tika's office parsers run on 6.0.0 here. -->
 		<apache-poi.version>6.0.0</apache-poi.version>
@@ -59,15 +60,15 @@
 		     here with the other pins so every edition built on this parent gets it.
 		     DROP once the parent manages 10.17.1.0 or later. -->
 		<derby.version>10.17.1.0</derby.version>
-		<maven-source-plugin.version>3.3.0</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
 		<version.swagger.codegen>2.4.44</version.swagger.codegen>
 		<!-- Bouncy Castle expects its bc* artifacts to move as a matched set; see the
-		     dependencyManagement entries below. bcprov ships an extra patch release
-		     (1.85.2) that the other artifacts don't, so the provider carries its own
-		     property — that pairing is the combination BC itself publishes. -->
-		<bouncycastle.version>1.85</bouncycastle.version>
-		<bouncycastle.prov.version>1.85.2</bouncycastle.prov.version>
+		     dependencyManagement entries below. bcprov sometimes ships an extra patch
+		     release (1.85.2 did) that the other artifacts don't, so the provider keeps
+		     its own property; on 1.87 the whole set is on one version. Keep it at or
+		     above the set Spring Cloud manages (1.86 in 2026.0.0): these entries win
+		     over the Cloud BOM, so a lower value pins the microservices DOWN. -->
+		<bouncycastle.version>1.87</bouncycastle.version>
+		<bouncycastle.prov.version>1.87</bouncycastle.prov.version>
 		<maven.compiler.release></maven.compiler.release>
 	</properties>
 	<modules>
@@ -153,7 +154,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>${maven-source-plugin.version}</version>
+					<!-- version managed by spring-boot-starter-parent -->
 					<executions>
 						<execution>
 							<id>attach-sources</id>
@@ -169,7 +170,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${maven-javadoc-plugin.version}</version>
+					<!-- version managed by spring-boot-starter-parent -->
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
@@ -318,33 +319,25 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			<!-- opentelemetry-semconv is pulled transitively at 1.41.1, which is inside the
-			     range of CVE-2026-39883 (>=1.15.0,<1.43.0). Spring Boot manages the
-			     OpenTelemetry BOM but not this artifact, which versions on its own line.
-			     1.43.0 is the fix; the artifact carries generated attribute constants, so
-			     moving it does not change behaviour. -->
-			<dependency>
-				<groupId>io.opentelemetry.semconv</groupId>
-				<artifactId>opentelemetry-semconv</artifactId>
-				<version>1.43.0</version>
-			</dependency>
 			<!-- gebo.architecture.llms.abstraction.layer pins okhttp:4.12.0, which pulls
 			     okio-jvm:3.6.0; the OpenTelemetry okhttp sender (auto-configured on every
-			     microservice via tracing) pulls okhttp-jvm:5.3.2, which requires
-			     okio-jvm:3.16.4. Without this override, Maven's nearest-wins mediation
-			     keeps the older 3.6.0 on the runtime classpath alongside okhttp-jvm 5.3.2,
-			     which is missing the Socket-based Okio.socket(Socket) overload that
-			     version calls, failing with NoSuchMethodError at embedding-model/vector
-			     store initialization. 3.16.4 satisfies both okhttp consumers. -->
+			     microservice via tracing) pulls okhttp-jvm 5.x (5.5.1 with OpenTelemetry
+			     1.68), which asks for okio-jvm 3.18.1. Without this override, Maven's
+			     nearest-wins mediation keeps the older 3.6.0 on the runtime classpath
+			     alongside okhttp-jvm 5.x, which is missing the Socket-based
+			     Okio.socket(Socket) overload that version calls, failing with
+			     NoSuchMethodError at embedding-model/vector store initialization. Keep it
+			     at or above what okhttp-jvm asks for (3.18.2 now): below, it pins okio
+			     DOWN under okhttp 5. DROP once okhttp 4.12 is gone from the apps. -->
 			<dependency>
 				<groupId>com.squareup.okio</groupId>
 				<artifactId>okio</artifactId>
-				<version>3.16.4</version>
+				<version>3.18.2</version>
 			</dependency>
 			<dependency>
 				<groupId>com.squareup.okio</groupId>
 				<artifactId>okio-jvm</artifactId>
-				<version>3.16.4</version>
+				<version>3.18.2</version>
 			</dependency>
 			<!-- gebo.architecture.crypting, gebo.secrets.services and gebo.secrets.impl
 			     each hardcoded their own bcprov/bcpkix version (1.84 vs 1.78.1), so
@@ -411,13 +404,22 @@
 			     gebo.system.ingestion hardcoded 2.18.0 and 2.19.0, and nearest-wins
 			     mediation left 2.11.0 in the build-system handler (via maven-invoker
 			     3.3.0) and 2.13.0 behind milton 4.0.x, both affected by CVE-2024-47554
-			     (high, XmlStreamReader DoS, fixed 2.14.0).
-			     2.20.0 is the highest the build already ran on (testcontainers 2.x asks
-			     for it); the module versions are gone, so every consumer moves with it. -->
+			     (high, XmlStreamReader DoS, fixed 2.14.0). The module versions are gone,
+			     so every consumer moves with this one. Keep it at the highest a consumer
+			     asks for (2.22.0, current release): below, it pins commons-io DOWN. -->
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.20.0</version>
+				<version>2.22.0</version>
+			</dependency>
+			<!-- org.json: Tika 3.3.2 brings 20251224 and milton-server-ce 4.2.0 (the
+			     WebDAV handler) 20240303, both affected by CVE-2026-59171 (moderate,
+			     JSONTokener unbounded numeric string DoS, fixed 20260719). 20260814 is
+			     the current release. DROP once every consumer brings 20260719 or later. -->
+			<dependency>
+				<groupId>org.json</groupId>
+				<artifactId>json</artifactId>
+				<version>20260814</version>
 			</dependency>
 			<!-- commons-compress: testcontainers 1.20.4, still used by some test
 			     scopes, drags 1.24.0, affected by CVE-2024-25710 and CVE-2024-26308
