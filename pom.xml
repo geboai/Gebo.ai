@@ -64,6 +64,7 @@
 		<bouncycastle.version>1.87</bouncycastle.version>
 		<bouncycastle.prov.version>1.87</bouncycastle.prov.version>
 		<okhttp.version>5.5.1</okhttp.version>
+		<tika.version>4.2.0</tika.version>
 		<maven.compiler.release></maven.compiler.release>
 	</properties>
 	<modules>
@@ -260,36 +261,41 @@
 				<artifactId>logging-interceptor</artifactId>
 				<version>${okhttp.version}</version>
 			</dependency>
-			<!-- Tika arrives transitively through io.github.twwch:markdown2office, which
-			     asks for 3.2.2 while dragging tika-langdetect-optimaize 3.2.3 — the family
-			     was already resolving out of sync. 3.2.x is affected by CVE-2026-66755
-			     (tika-core and tika-langdetect-optimaize); 3.3.2 is the fix and stays on
-			     the same major. Importing the BOM keeps every tika-* artifact on one
-			     version instead of pinning them one by one, and it also lifts junrar:
-			     tika-parent 3.3.2 sets junrar.version=7.6.0, above the 7.5.10 that fixes
-			     CVE-2026-41245 (for the later CVE-2026-86071 see the junrar pin below). -->
+			<!-- Tika 4.2.0. Spring AI 2.1's spring-ai-tika-document-reader (the ingestion
+			     fallback reader) is built on Tika 4 and brings 4.x modules (the encoding
+			     detectors, tika-ml-*), while io.github.twwch:markdown2office and
+			     tika-langdetect-optimaize asked for 3.x: on 3.3.2 the classpath mixed the
+			     two majors. 4.2.0 also brings junrar 8.1.2, past the 7.6.1 that fixes
+			     CVE-2026-86071 (the junrar pin is gone).
+			     Managed by name, NOT through tika-bom: from 4.x tika-bom has tika-parent
+			     as its parent, and importing it imports tika-parent's dependencyManagement
+			     too, which moved some 250 third-party versions of the platform (Jackson 2,
+			     jna...) and fixed 770 more. The entry points are enough: the parser modules
+			     come from tika-parsers-standard-package, which names them at its own
+			     version. In 4.x tika-parsers-standard-package is pom-packaged (Spring AI
+			     declares it so); markdown2office, which asks for it as a jar, excludes it in
+			     gebo.architecture.chat.abstraction.layer. -->
 			<dependency>
 				<groupId>org.apache.tika</groupId>
-				<artifactId>tika-bom</artifactId>
-				<version>3.3.2</version>
-				<type>pom</type>
-				<scope>import</scope>
+				<artifactId>tika-core</artifactId>
+				<version>${tika.version}</version>
 			</dependency>
-			<!-- junrar 7.6.0, the version tika 3.3.2 brings, is affected by CVE-2026-86071
-			     (LocalFolderExtractor mkdir escape, low); 7.6.1 is the fix, and no tika 3.3.x
-			     newer than 3.3.2 exists to bring it (the next line is 4.0.0). A version
-			     declared here wins over the imported tika-bom. DROP this once tika-bom
-			     manages 7.6.1 or later. -->
 			<dependency>
-				<groupId>com.github.junrar</groupId>
-				<artifactId>junrar</artifactId>
-				<version>7.6.1</version>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-parsers-standard-package</artifactId>
+				<version>${tika.version}</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.tika</groupId>
+				<artifactId>tika-langdetect-optimaize</artifactId>
+				<version>${tika.version}</version>
 			</dependency>
 			<!-- The whole POI family on ${apache-poi.version}. Tika's microsoft module
-			     brings poi-ooxml-full at its own poi.version (5.5.1 up to tika 4.2.0)
+			     brings poi-ooxml-full at its own poi.version (5.5.1 in tika 4.2.0)
 			     next to the poi-ooxml-lite of our poi-ooxml: unmanaged, the two
 			     majors would meet on one classpath. Declared here, they win over the
-			     imported tika-bom. -->
+			     Tika modules. -->
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
@@ -382,7 +388,7 @@
 			     gebo.architecture.search.abstraction.layer and gebo.llms.standard.functions,
 			     1.20.1 in gebo.system.ingestion - so nearest-wins mediation put the oldest,
 			     1.18.1, on the assembled app's runtime classpath. Those direct declarations
-			     also override the tika-bom imported above, which manages 1.22.2, so the
+			     also overrode the 1.22.2 Tika asked for, so the
 			     module pins were actively holding jsoup down. 1.18.1 is affected by
 			     CVE-2026-71497 (Cleaner may emit active markup for custom Safelists that
 			     permit raw-text elements); 1.23.1 is the fix and 1.23.2 is current. Managing

@@ -55,10 +55,27 @@
 			<artifactId>gebo.architecture.agents.abstraction.layer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- markdown2office asks for tika-parsers-standard-package as a jar, which in
+		     Tika 4 (the version ai.gebo.parent manages) is pom-packaged: excluded. Only
+		     its TikaFileParser uses Tika, and Gebo calls the converter, not that parser;
+		     the apps get the Tika parsers through spring-ai-tika-document-reader. -->
 		<dependency>
 			<groupId>io.github.twwch</groupId>
 			<artifactId>markdown2office</artifactId>
 			<version>1.0.16</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tika</groupId>
+					<artifactId>tika-parsers-standard-package</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Jackson 2's ObjectMapper (GResponseDocumentRef, DefaultConditionTransportTranslator,
+		     DocumentNamesShown): it used to arrive only through Tika 3's parsers package.
+		     Version from Boot's jackson-2-bom. -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
 		<dependency>
