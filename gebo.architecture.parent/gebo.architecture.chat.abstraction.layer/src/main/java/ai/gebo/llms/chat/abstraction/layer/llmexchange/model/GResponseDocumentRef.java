@@ -16,6 +16,8 @@ import java.util.Map;
 
 import org.springframework.ai.document.Document;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import ai.gebo.architecture.rag.support.layer.model.AIDocumentsSet;
@@ -59,9 +61,22 @@ public class GResponseDocumentRef implements Serializable {
 	private String name = null; // Name of the document
 	private boolean knowledgeBaseDocument;
 	private SearchResult nestedSearchResult = null;
+	/*
+	 * The JSON names of the three N* fields are pinned. Jackson 2 lowercased the leading capitals of
+	 * getNTokensRelevant() into "ntokensRelevant", the name every generated client reads (the
+	 * Angular stubs of all the UIs, the Java clients); Jackson 3's standard bean naming keeps them
+	 * ("NTokensRelevant"), which since Spring Boot 4 left those clients reading nothing. The alias
+	 * still reads JSON written with the capitalized names.
+	 */
+	@JsonProperty("ntokensRelevant")
+	@JsonAlias("NTokensRelevant")
 	private long NTokensRelevant = 0l; // Number of relevant tokens in the document
+	@JsonProperty("ntotalContentTokens")
+	@JsonAlias("NTotalContentTokens")
 	private long NTotalContentTokens = 0l; // Total number of content tokens in the document
 	private double loadPercentage = 0.0; // Load percentage of tokens relevant to total content
+	@JsonProperty("nbytesRelevant")
+	@JsonAlias("NBytesRelevant")
 	private long NBytesRelevant = 0l; // Number of relevant bytes in the document
 	private List<DocInternalRef> references = new ArrayList<GResponseDocumentRef.DocInternalRef>(); // List of document
 																									// internal
