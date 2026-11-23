@@ -62,6 +62,12 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final EnricherMappers enrichers;
 	private final GJobStatus jobStatus;
 	private final Map<String, Integer> docsCounters = new HashMap<String, Integer>();
+	/**
+	 * The codes of the documents their source reported deleted in this session (a
+	 * watched folder, a user's space) and did not hand over again live: their stores are
+	 * erased when the session ends, as those of the documents its deletions check finds.
+	 */
+	private final java.util.Set<String> deletedBySource = new java.util.LinkedHashSet<String>();
 	private final Map<String, Object> handlerCache = new HashMap<String, Object>();
 	private final IGContentsAccessErrorConsumer errorConsumer;
 	private final IGUserMessagesConsumer userMessagesConsumer;
@@ -120,8 +126,17 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				}
 			}
 		}
-		if (t instanceof GDocumentReference) {
+		// a document its source reports deleted: its record is saved deleted, as below,
+		// and nothing of it goes to the ingestion - there is nothing left to read
+		final boolean reportedDeleted = t instanceof GDocumentReference reported && reported.getCode() != null
+				&& Boolean.TRUE.equals(reported.getDeleted());
+		if (reportedDeleted) {
+			deletedBySource.add(t.getCode());
+		}
+		if (t instanceof GDocumentReference && !reportedDeleted) {
 			GDocumentReference docref = (GDocumentReference) t;
+			// handed over live after being reported deleted in this session: it is there
+			deletedBySource.remove(docref.getCode());
 			batchDocumentInput++;
 			if (docref.getCode() != null) {
 				if (!docsCounters.containsKey(docref.getCode())) {
@@ -226,6 +241,19 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	@Override
 	public void endConsuming() {
 		documentConsumer.endConsuming();
+		if (!deletedBySource.isEmpty()) {
+			try {
+				GInternalDeletionMessagePayload reportedDeletedPayload = new GInternalDeletionMessagePayload();
+				reportedDeletedPayload.setCodes4deletion(new ArrayList<String>(deletedBySource));
+				reportedDeletedPayload.setObjectsType(ObjectType.DOCUMENTREF);
+				// as for the documents the deletions check below finds: every store holding
+				// their contents erases them, their records stay, deleted
+				GStoreDisposers.send(broker,
+						() -> GMessageEnvelope.newMessageFrom(this.dispatcher, reportedDeletedPayload));
+			} catch (Throwable th) {
+				LOGGER.error("Error erasing the stores of the documents reported deleted", th);
+			}
+		}
 		if (!errorConsumer.hasErrors()) {
 			try {
 				Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
