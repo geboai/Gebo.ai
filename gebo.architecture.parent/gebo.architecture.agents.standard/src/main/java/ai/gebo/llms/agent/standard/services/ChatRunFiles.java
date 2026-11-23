@@ -65,54 +65,6 @@ public class ChatRunFiles {
 		this.libraryFiles = libraryFiles;
 	}
 
-	/**
-	 * The response a frame of a run carries, with the files the run wrote and generated.
-	 * The run keeps those on its own response (the tools report what they write there,
-	 * the image models what they draw), which is not always the object the last frame
-	 * carries: a caller reading the frames would otherwise answer without them. The
-	 * files of both are merged, each once; the carried response is returned, or the
-	 * run's one when no frame carried a response.
-	 *
-	 * @param carried  the response the last frame of the run carried, may be null
-	 * @param ofTheRun the response the run filled in, may be null
-	 */
-	public static GeboChatResponse withFilesOfTheRun(GeboChatResponse carried, GeboChatResponse ofTheRun) {
-		if (carried == null) {
-			return ofTheRun;
-		}
-		if (ofTheRun == null || ofTheRun == carried) {
-			return carried;
-		}
-		if (ofTheRun.getWrittenFiles() != null && !ofTheRun.getWrittenFiles().isEmpty()) {
-			final java.util.LinkedHashMap<String, ai.gebo.architecture.ai.files.GConversationFile> written = new java.util.LinkedHashMap<>();
-			for (List<ai.gebo.architecture.ai.files.GConversationFile> list : List.of(
-					carried.getWrittenFiles() != null ? carried.getWrittenFiles()
-							: List.<ai.gebo.architecture.ai.files.GConversationFile>of(),
-					ofTheRun.getWrittenFiles())) {
-				for (ai.gebo.architecture.ai.files.GConversationFile file : list) {
-					if (file != null) {
-						written.putIfAbsent(file.key(), file);
-					}
-				}
-			}
-			carried.setWrittenFiles(new ArrayList<>(written.values()));
-		}
-		if (ofTheRun.getGeneratedResources() != null && !ofTheRun.getGeneratedResources().isEmpty()) {
-			final List<LLMGeneratedResource> generated = carried.getGeneratedResources() != null
-					? new ArrayList<>(carried.getGeneratedResources())
-					: new ArrayList<>();
-			final Set<String> codes = new HashSet<>();
-			generated.forEach(x -> codes.add(x != null ? x.getCode() : null));
-			for (LLMGeneratedResource resource : ofTheRun.getGeneratedResources()) {
-				if (resource != null && (resource.getCode() == null || codes.add(resource.getCode()))) {
-					generated.add(resource);
-				}
-			}
-			carried.setGeneratedResources(generated);
-		}
-		return carried;
-	}
-
 	public List<RunFile> of(GeboChatResponse response) {
 		final List<RunFile> files = new ArrayList<>();
 		if (response == null) {
