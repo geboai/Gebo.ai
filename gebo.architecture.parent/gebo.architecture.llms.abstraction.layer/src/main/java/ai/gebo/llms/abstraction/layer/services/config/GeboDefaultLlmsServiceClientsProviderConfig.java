@@ -38,7 +38,7 @@ public class GeboDefaultLlmsServiceClientsProviderConfig {
     public static class RetryConfig {
         long retryTimeout = 80000; // Timeout in milliseconds before a retry is attempted
         long backoffInterval = 5000; // Interval in milliseconds between retry attempts
-        int maxAttempts = 5; // Maximum number of retry attempts
+        int maxAttempts = 5; // Maximum number of attempts, the first call included
     }
 
     /**

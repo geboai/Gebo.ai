@@ -8,9 +8,9 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
+import org.springframework.core.retry.RetryTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -85,7 +85,8 @@ public class GeboStandardRankerClient implements RankerModel {
 		for (List<DocumentBatchItem> batch : batches) {
 			StandardRerankRequest request = toRequest(query, batch, requestedTopK);
 
-			StandardRerankResponse response = retryTemplate.execute(context -> execute(request));
+			// invoke rethrows the last failure as it was, as spring-retry did
+			StandardRerankResponse response = retryTemplate.invoke(() -> execute(request));
 
 			if (response == null || response.getResults() == null) {
 				continue;
