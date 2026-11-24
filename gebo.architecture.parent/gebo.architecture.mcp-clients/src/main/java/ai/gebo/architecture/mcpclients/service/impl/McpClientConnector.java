@@ -64,7 +64,6 @@ public class McpClientConnector {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(McpClientConnector.class);
 
-	private static final Duration DEFAULT_INITIALIZATION_TIMEOUT = Duration.ofSeconds(30);
 	private static final String DEFAULT_MCP_ENDPOINT = "/mcp";
 	/** How long a token minted to relay the caller's identity to a Gebo peer lives. */
 	private static final Duration USER_TOKEN_EXCHANGE_TTL = Duration.ofMinutes(5);
@@ -94,7 +93,7 @@ public class McpClientConnector {
 		Duration requestTimeout = Duration.ofSeconds(
 				ownTimeout != null && ownTimeout > 0 ? ownTimeout : clientsConfig.getRequestTimeoutSeconds());
 		McpSyncClient client = McpClient.sync(transport).requestTimeout(requestTimeout)
-				.initializationTimeout(DEFAULT_INITIALIZATION_TIMEOUT).build();
+				.initializationTimeout(Duration.ofSeconds(clientsConfig.getHandshakeTimeoutSeconds())).build();
 		client.initialize();
 		return client;
 	}

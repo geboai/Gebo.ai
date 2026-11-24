@@ -49,4 +49,11 @@ public class McpClientsConfig {
 	 * ({@code MCPClientConfig.requestTimeoutSeconds}). Defaults to one minute.
 	 */
 	private int requestTimeoutSeconds = 60;
+
+	/**
+	 * How long, in seconds, the handshake of a connection to an MCP server waits:
+	 * the opening exchange in which client and server tell each other who they are
+	 * and what they can do, before any request. Defaults to one minute.
+	 */
+	private int handshakeTimeoutSeconds = 60;
 }
