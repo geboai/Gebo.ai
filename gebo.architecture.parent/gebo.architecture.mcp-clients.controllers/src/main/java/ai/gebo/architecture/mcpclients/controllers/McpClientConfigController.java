@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import ai.gebo.architecture.mcpclients.config.McpClientsConfig;
 import ai.gebo.architecture.mcpclients.model.MCPClientConfig;
 import ai.gebo.architecture.mcpclients.repository.McpClientConfigRepository;
 import ai.gebo.architecture.mcpclients.service.McpClientManagementService;
@@ -53,6 +54,7 @@ public class McpClientConfigController {
 	 * are part of its configuration.
 	 */
 	private final IGSecurityAuditLoggerService securityAuditLoggerService;
+	private final McpClientsConfig clientsConfig;
 
 	/**
 	 * Tests connectivity to the configured MCP server and discovers its
@@ -106,6 +108,15 @@ public class McpClientConfigController {
 	@GetMapping(value = "findMCPClientConfigByCode", produces = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<MCPClientConfig> findMCPClientConfigByCode(@RequestParam("code") String code) {
 		return managementService.findByCode(code);
+	}
+
+	/**
+	 * The time, in seconds, a request waits for its answer on an MCP server that
+	 * sets none of its own: the editor shows it where the server's own time is asked.
+	 */
+	@GetMapping(value = "getDefaultRequestTimeoutSeconds", produces = MediaType.APPLICATION_JSON_VALUE)
+	public Integer getDefaultRequestTimeoutSeconds() {
+		return clientsConfig.getRequestTimeoutSeconds();
 	}
 
 	/**

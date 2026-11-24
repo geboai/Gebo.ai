@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import ai.gebo.architecture.mcpclients.config.McpClientsConfig;
 import ai.gebo.architecture.mcpclients.model.MCPClientConfig;
 import ai.gebo.architecture.mcpclients.model.MCPTransportType;
 import ai.gebo.architecture.mcpclients.model.McpAuthMode;
@@ -63,7 +64,6 @@ public class McpClientConnector {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(McpClientConnector.class);
 
-	private static final Duration DEFAULT_REQUEST_TIMEOUT = Duration.ofSeconds(30);
 	private static final Duration DEFAULT_INITIALIZATION_TIMEOUT = Duration.ofSeconds(30);
 	private static final String DEFAULT_MCP_ENDPOINT = "/mcp";
 	/** How long a token minted to relay the caller's identity to a Gebo peer lives. */
@@ -75,6 +75,7 @@ public class McpClientConnector {
 	private final IGSecurityService securityService;
 	private final LocalJwtTokenProvider jwtTokenProvider;
 	private final GeboSecurityConfig securityConfig;
+	private final McpClientsConfig clientsConfig;
 
 	/**
 	 * Builds a fully initialized synchronous MCP client for the given configuration.
@@ -88,7 +89,11 @@ public class McpClientConnector {
 	 */
 	public McpSyncClient connectAndInitialize(MCPClientConfig config) throws Exception {
 		McpClientTransport transport = buildTransport(config);
-		McpSyncClient client = McpClient.sync(transport).requestTimeout(DEFAULT_REQUEST_TIMEOUT)
+		// the time this server sets for its requests, or the one of the installation
+		Integer ownTimeout = config.getRequestTimeoutSeconds();
+		Duration requestTimeout = Duration.ofSeconds(
+				ownTimeout != null && ownTimeout > 0 ? ownTimeout : clientsConfig.getRequestTimeoutSeconds());
+		McpSyncClient client = McpClient.sync(transport).requestTimeout(requestTimeout)
 				.initializationTimeout(DEFAULT_INITIALIZATION_TIMEOUT).build();
 		client.initialize();
 		return client;

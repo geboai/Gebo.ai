@@ -41,4 +41,12 @@ public class McpClientsConfig {
 	 * a call fails, or the application shuts down).
 	 */
 	private long connectionPoolTtlSeconds = 300;
+
+	/**
+	 * How long, in seconds, a request to an MCP server waits for its answer: the
+	 * call of a tool, the reading of a resource, a listing. It is the time given to
+	 * every MCP server that sets none of its own
+	 * ({@code MCPClientConfig.requestTimeoutSeconds}). Defaults to one minute.
+	 */
+	private int requestTimeoutSeconds = 60;
 }

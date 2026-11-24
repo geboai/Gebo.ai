@@ -6,6 +6,7 @@ import java.util.Map;
 import ai.gebo.acl.IAclGrantedResource;
 import ai.gebo.model.IGObjectWithSecurity;
 import ai.gebo.model.base.GBaseObject;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -36,6 +37,11 @@ public class MCPClientConfig extends GBaseObject implements IAclGrantedResource,
 	private List<String> stdioArgs = null;
 	// STDIO transport only: extra environment variables for the spawned process.
 	private Map<String, String> stdioEnvironment = null;
+	// How long, in seconds, a request to this server waits for its answer (the call
+	// of a tool, the reading of a resource). Not set: the time of the installation,
+	// ai.gebo.mcp.clients.request-timeout-seconds.
+	@Min(1)
+	private Integer requestTimeoutSeconds = null;
 
 	@NotNull
 	private MCPTransportType transportType;
