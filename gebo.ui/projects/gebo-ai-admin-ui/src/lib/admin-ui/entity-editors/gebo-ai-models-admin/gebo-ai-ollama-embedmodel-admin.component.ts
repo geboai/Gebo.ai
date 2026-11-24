@@ -27,6 +27,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 import { isValidUrl } from "../utils/url-ok";
 
 import { alignChoosedModel } from "../utils/choosed-model-alignment";
+import { saveAskingOnDefaultEmbeddingModelChange } from "../utils/default-embedding-model-change";
 /**
  * Component responsible for administrating Ollama embedding models.
  * It provides a UI to create, read, update and delete embedding model configurations
@@ -160,6 +161,16 @@ export class GeboAIOllamaEmbedModelAdminComponent extends BaseEntityEditingCompo
         return this.embedModelConfigService.findOllamaEmbeddingModelConfigByCode(code)
     }
     
+
+    /**
+     * A save that changes which embedding model is the default one asks the user first:
+     * what was ingested with the previous default may no longer be reached.
+     */
+    override doSave(successfulActionCallback?: (data: GOllamaEmbeddingModelConfig) => void): void {
+        saveAskingOnDefaultEmbeddingModelChange(this.injector, this.entity?.defaultModel === true,
+            this.formGroup.value?.defaultModel === true, () => super.doSave(successfulActionCallback));
+    }
+
     /**
      * Saves changes to an existing embedding model configuration
      * 

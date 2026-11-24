@@ -1521,6 +1521,12 @@
     }
   },
   "GeboAiLargeLanguageModelsModule": {
+    "DefaultEmbeddingModelChange": {
+      "DefaultEmbeddingModelChangeConfirmation": {
+        "message": "The default embedding model is changing: contents already ingested with the present default embedding model could become unreachable by the searches. Do you want to save?",
+        "header": "Default embedding model change"
+      }
+    },
     "GeboAITestChatComponent": {
       "TestingModelDialog": { "label": "Testing model" },
       "TestChatBtn": { "label": "Test chat" }

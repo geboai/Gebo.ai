@@ -27,6 +27,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 import { isValidUrl } from "../utils/url-ok";
 
 import { alignChoosedModel } from "../utils/choosed-model-alignment";
+import { saveAskingOnDefaultEmbeddingModelChange } from "../utils/default-embedding-model-change";
 /**
  * Component responsible for administering MistralAI embedding models.
  * Extends BaseEntityEditingComponent to manage CRUD operations for GMistralEmbeddingModelConfig entities.
@@ -151,6 +152,16 @@ export class GeboAIMistralAIEmbedModelAdminComponent extends BaseEntityEditingCo
         return this.MIstralEmbedModelConfigService.findMistralAIEmbeddingModelConfigByCode(code)
     }
     
+
+    /**
+     * A save that changes which embedding model is the default one asks the user first:
+     * what was ingested with the previous default may no longer be reached.
+     */
+    override doSave(successfulActionCallback?: (data: GMistralEmbeddingModelConfig) => void): void {
+        saveAskingOnDefaultEmbeddingModelChange(this.injector, this.entity?.defaultModel === true,
+            this.formGroup.value?.defaultModel === true, () => super.doSave(successfulActionCallback));
+    }
+
     /**
      * Saves changes to an existing MistralAI embedding model configuration
      */

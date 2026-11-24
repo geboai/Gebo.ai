@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
+import { Component, EventEmitter, Injector, Input, OnChanges, OnInit, Output, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormControlStatus, FormGroup, Validators } from "@angular/forms";
 import { LLMSSetupConfiguration, SecretInfo, GeboFastLlmsSetupControllerService, LLMModelPresetChoice, GBaseModelChoice, LLMCreateModelData, ComponentLLMSStatus, GUserMessage, LLMModelsLookupParameter, LLMCredentialsVerificationData, LLMUnresolvedModel } from "@Gebo.ai/gebo-ai-rest-api";
 import { GeboAIValidators, IOperationStatus } from "@Gebo.ai/reusable-ui";
 import { ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, map, Observable, of, Subscription } from "rxjs";
+import { saveAskingOnDefaultEmbeddingModelChange } from "../../admin-ui/entity-editors/utils/default-embedding-model-change";
 interface IModelChoice {
     setAsDefault?: boolean;
     choosedModel?: string;
@@ -162,7 +163,8 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
 
 
     constructor(
-        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService
+        private geboFastLLMSSetupService: GeboFastLlmsSetupControllerService,
+        private injector: Injector
     ) {
 
         this.secretFormGroup.controls["selectedSecret"].valueChanges.subscribe({
@@ -524,7 +526,12 @@ export class GeboAILlmsVendorModelTypeConfig implements OnInit, OnChanges {
         this.addModelData(this.transcriptModelAdvancedFormGroup, modelDataCreationArray, "TRANSCRIPT", true, undefined, true);
         this.addModelData(this.ttsModelAdvancedFormGroup, modelDataCreationArray, "TTS", true, undefined, true);
         this.addModelData(this.decisionModelAdvancedFormGroup, modelDataCreationArray, "DECISION", true, undefined, true);
-        this.createLLMS(modelDataCreationArray);
+        // an embedding model created as the default takes the place of the present default one:
+        // the user is asked first, what was ingested with it may no longer be reached
+        const embedding: IModelChoice = this.embeddingModelAdvancedFormGroup.value;
+        saveAskingOnDefaultEmbeddingModelChange(this.injector, false,
+            (embedding?.choosedModel ? true : false) && embedding?.setAsDefault === true,
+            () => this.createLLMS(modelDataCreationArray));
     }
     private buildCreateModelData(modelChoice: IModelChoice, type: LLMCreateModelData.TypeEnum, uses?: Array<LLMCreateModelData.UsesEnum>, honorDefaultFlag: boolean = false): LLMCreateModelData | undefined {
         if (this.vendorConfiguration?.libraryModel) {
