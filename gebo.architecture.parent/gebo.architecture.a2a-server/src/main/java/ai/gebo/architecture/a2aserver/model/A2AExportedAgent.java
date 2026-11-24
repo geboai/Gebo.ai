@@ -1,5 +1,7 @@
 package ai.gebo.architecture.a2aserver.model;
 
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.model.annotations.GObjectReference;
 import lombok.Data;
 
 /**
@@ -47,6 +49,7 @@ public class A2AExportedAgent {
 	 * Left empty the export works with the default chat profile of the
 	 * installation.
 	 */
+	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	private String chatProfileCode;
 
 	/**

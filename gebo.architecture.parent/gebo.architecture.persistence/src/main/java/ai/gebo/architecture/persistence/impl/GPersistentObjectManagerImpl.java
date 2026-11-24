@@ -12,6 +12,7 @@ package ai.gebo.architecture.persistence.impl;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +33,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,6 +67,9 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 	static Logger LOGGER = LoggerFactory.getLogger(GPersistentObjectManagerImpl.class);
 	protected IGMongoRepositoriesImplementationRepositoryPattern repoPattern;
 	protected IGCodeGeneratorEntityHandlerRepositoryPattern codeGenerationRepoPattern = null;
+	/** Finds the entities whose list elements hold a reference, which no example can match. */
+	@Autowired(required = false)
+	private MongoOperations mongoOperations;
 
 	/**
 	 * Represents an item in a dependency tree, containing the type and lists of
@@ -86,6 +93,12 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 		public DependencyTreeItem from = null;
 		public DependencyTreeItem to = null;
 		public Field field = null;
+		/**
+		 * The list of the entity whose elements hold the reference, when the reference
+		 * is a field of the elements of a list and not of the entity itself (the
+		 * exports of a server, each naming a chat profile); null otherwise.
+		 */
+		public Field containerField = null;
 		public Method getAccessor = null, setAccessor = null;
 		public DependencyType dependencyType = null;
 	}
@@ -148,29 +161,62 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 			Field field = fields[i];
 
 			GObjectReference objectReference = field.getAnnotation(GObjectReference.class);
-			if (objectReference == null)
-				continue;
-			Class<? extends GBaseObject> referredType = objectReference.referencedType();
-
-			boolean considerThatClassAndExtending = objectReference.referencesExtensions();
-			if (considerThatClassAndExtending) {
-				List<IGBaseMongoDBRepository> targetAndExtendingRepos = this.repoPattern
-						.findByAssignableBy(referredType);
-				for (IGBaseMongoDBRepository igBaseMongoDBRepository : targetAndExtendingRepos) {
-					buildRelation(managedType, descriptors2, igBaseMongoDBRepository.getManagedType(), item, field);
+			if (objectReference == null) {
+				// a list of elements, each holding references of its own
+				final Class<?> elementType = listElementTypeOf(field);
+				if (elementType != null) {
+					for (Field elementField : elementType.getDeclaredFields()) {
+						final GObjectReference elementReference = elementField.getAnnotation(GObjectReference.class);
+						if (elementReference != null) {
+							buildRelations(managedType, descriptors2, elementReference, item, elementField, field);
+						}
+					}
 				}
-			} else {
-				buildRelation(managedType, descriptors2, referredType, item, field);
+				continue;
 			}
-
+			buildRelations(managedType, descriptors2, objectReference, item, field, null);
 		}
 		LOGGER.info("End createDependencyTreeItem(" + managedType.getName() + ",....)");
 		return item;
 	}
 
+	/**
+	 * The relations a reference declares: towards the type it names, and towards
+	 * the types extending it when it says so.
+	 *
+	 * @param containerField the list of the entity whose elements hold the reference,
+	 *                       null when the reference is a field of the entity itself
+	 */
+	private void buildRelations(Class<? extends GBaseObject> managedType,
+			Map<Class<? extends GBaseObject>, DependencyTreeItem> descriptors2, GObjectReference objectReference,
+			DependencyTreeItem item, Field field, Field containerField) throws GeboPersistenceException {
+		Class<? extends GBaseObject> referredType = objectReference.referencedType();
+		boolean considerThatClassAndExtending = objectReference.referencesExtensions();
+		if (considerThatClassAndExtending) {
+			List<IGBaseMongoDBRepository> targetAndExtendingRepos = this.repoPattern.findByAssignableBy(referredType);
+			for (IGBaseMongoDBRepository igBaseMongoDBRepository : targetAndExtendingRepos) {
+				buildRelation(managedType, descriptors2, igBaseMongoDBRepository.getManagedType(), item, field,
+						containerField);
+			}
+		} else {
+			buildRelation(managedType, descriptors2, referredType, item, field, containerField);
+		}
+	}
+
+	/** The type of the elements of a field that is a list of objects of this platform, or null. */
+	private static Class<?> listElementTypeOf(Field field) {
+		if (!List.class.isAssignableFrom(field.getType())
+				|| !(field.getGenericType() instanceof ParameterizedType parameterized)
+				|| parameterized.getActualTypeArguments().length != 1
+				|| !(parameterized.getActualTypeArguments()[0] instanceof Class<?> elementType)) {
+			return null;
+		}
+		return elementType.getName().startsWith("ai.gebo.") ? elementType : null;
+	}
+
 	private void buildRelation(Class<? extends GBaseObject> managedType,
 			Map<Class<? extends GBaseObject>, DependencyTreeItem> descriptors2, Class referredType,
-			DependencyTreeItem item, Field field) throws GeboPersistenceException {
+			DependencyTreeItem item, Field field, Field containerField) throws GeboPersistenceException {
 		LOGGER.info("Inspecting relation between " + managedType.getName() + " ==> " + referredType.getName());
 		DependencyTreeItem toItem = descriptors2.get(referredType);
 		if (toItem == null) {
@@ -180,6 +226,19 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 		edge.from = item;
 		edge.to = toItem;
 		edge.field = field;
+		edge.containerField = containerField;
+		if (containerField != null) {
+			// held by the elements of a list: found by its path, a code only
+			if (!String.class.isAssignableFrom(field.getType())) {
+				throw new GeboPersistenceException(
+						"The Gebo.ai framework does not support a field of the elements of a list annotated with"
+								+ " @GObjectReference of type " + field.getType().getName());
+			}
+			edge.dependencyType = DependencyType.CODE_RELATION;
+			item.dependencies.add(edge);
+			toItem.dependants.add(edge);
+			return;
+		}
 		if (String.class.isAssignableFrom(field.getType())) {
 			edge.dependencyType = DependencyType.CODE_RELATION;
 		} else if (GObjectRef.class.isAssignableFrom(field.getType())) {
@@ -400,7 +459,9 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 			throws GeboPersistenceException {
 		final Map<Class<? extends GBaseObject>, Integer> map = new HashMap<Class<? extends GBaseObject>, Integer>();
 		for (DependencyTreeItemEdge dependantEdge : describedAs(object).dependants) {
-			final long count = repositoryOf(dependantEdge).count(dependantsOf(object, dependantEdge));
+			final long count = dependantEdge.containerField != null
+					? mongo().count(holdingInAListElement(object, dependantEdge), dependantEdge.from.type)
+					: repositoryOf(dependantEdge).count(dependantsOf(object, dependantEdge));
 			if (count > 0) {
 				map.merge(dependantEdge.from.type, (int) Math.min(count, Integer.MAX_VALUE), Integer::sum);
 			}
@@ -420,10 +481,37 @@ public class GPersistentObjectManagerImpl implements IGPersistentObjectManager {
 		Stream<? extends GBaseObject> stream = Stream.of();
 		// Process dependency tree to find related objects
 		for (DependencyTreeItemEdge dependantEdge : describedAs(object).dependants) {
-			List<? extends GBaseObject> list = repositoryOf(dependantEdge).findAll(dependantsOf(object, dependantEdge));
+			List<? extends GBaseObject> list = dependantEdge.containerField != null
+					? mongo().find(holdingInAListElement(object, dependantEdge), dependantEdge.from.type)
+					: repositoryOf(dependantEdge).findAll(dependantsOf(object, dependantEdge));
 			stream = Stream.concat(stream, list.stream());
 		}
 		return stream;
+	}
+
+	/**
+	 * The query matching the dependants holding the object's code in an element of
+	 * their list: an example compares a list as a whole, so the element is found by
+	 * its path.
+	 */
+	private static Query holdingInAListElement(GBaseObject object, DependencyTreeItemEdge dependantEdge)
+			throws GeboPersistenceException {
+		if (object.getCode() == null)
+			throw new GeboPersistenceException(
+					"There is no meaning on accessing object related to a null code type=>"
+							+ object.getClass().getName());
+		final String path = dependantEdge.containerField.getName() + "." + dependantEdge.field.getName();
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Dependants of " + object.getClass().getSimpleName() + " code=" + object.getCode() + " in "
+					+ dependantEdge.from.type.getSimpleName() + "." + path);
+		}
+		return Query.query(Criteria.where(path).is(object.getCode()));
+	}
+
+	private MongoOperations mongo() throws GeboPersistenceException {
+		if (mongoOperations == null)
+			throw new GeboPersistenceException("No access to the database to look for the dependants of an object");
+		return mongoOperations;
 	}
 
 	private static DependencyTreeItem describedAs(GBaseObject object) throws GeboPersistenceException {

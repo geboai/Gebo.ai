@@ -1,5 +1,7 @@
 package ai.gebo.architecture.mcpserver.model;
 
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.model.annotations.GObjectReference;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -16,5 +18,6 @@ public class GeboMCPAgentsNetworkTool {
 	 * files the network's models generate and its tools write have a place to be
 	 * kept, and the tool answers with them beside its text.
 	 */
+	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	private String chatProfileCode = null;
 }
