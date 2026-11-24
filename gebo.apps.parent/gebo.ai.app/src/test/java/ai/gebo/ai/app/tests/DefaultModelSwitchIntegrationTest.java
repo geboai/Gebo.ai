@@ -375,6 +375,65 @@ public class DefaultModelSwitchIntegrationTest extends AbstractBaseTestLLmsInteg
 		}
 	}
 
+	/** The models the fast setup creates: saved by the service of their provider. */
+	@Test
+	public void theDecisionAndRankerModelsTheSetupCreatesRunAndTakeTheDefault() throws Exception {
+		final String secret = aSecret();
+		final HttpServer provider = aDecisionsProvider();
+		final String providerUrl = "http://localhost:" + provider.getAddress().getPort() + "/v1";
+		final IGRankerModelConfigurationSupportService support = rankerSupportServices
+				.findByCode(rankerController.getGenericOpenAIRankerModelTypes().get(0).getCode());
+		final List<GOpenAIDecisionModelConfig> decisions = new ArrayList<>();
+		final List<GenericOpenAIAPIRankerModelConfig> rankers = new ArrayList<>();
+		try {
+			for (String description : List.of("Setup decision test first", "Setup decision test second")) {
+				final GOpenAIDecisionModelConfig config = decisionSupportService
+						.createBaseConfiguration("omni-moderation-latest");
+				config.setDescription(description);
+				config.setApiSecretCode(secret);
+				config.setBaseUrl(providerUrl);
+				config.setDefaultModel(true);
+				final OperationStatus<GOpenAIDecisionModelConfig> status = decisionSupportService
+						.insertAndConfigure(config);
+				assertFalse(status.isHasErrorMessages(), "the decision model is created: " + status.getMessages());
+				decisions.add(status.getResult());
+			}
+			assertNotNull(decisionModelsDao.findByCode(decisions.get(0).getCode()),
+					"the first decision model the setup created is running");
+			assertNotNull(decisionModelsDao.findByCode(decisions.get(1).getCode()),
+					"the second decision model the setup created is running");
+			assertFalse(Boolean.TRUE.equals(decisionController
+					.findOpenAIDecisionModelConfigByCode(decisions.get(0).getCode()).getDefaultModel()),
+					"the previous default decision model is stored as no longer the default");
+			assertEquals(decisions.get(1).getCode(), decisionModelsDao.defaultHandler().getCode(),
+					"the decisions are asked to the default decision model the setup created last");
+
+			for (String description : List.of("Setup ranker test first", "Setup ranker test second")) {
+				final GenericOpenAIAPIRankerModelConfig config = (GenericOpenAIAPIRankerModelConfig) support
+						.createBaseConfiguration("test-reranker");
+				config.setDescription(description);
+				config.setApiSecretCode(secret);
+				config.setDefaultModel(true);
+				final OperationStatus<GenericOpenAIAPIRankerModelConfig> status = support.insertAndConfigure(config);
+				assertFalse(status.isHasErrorMessages(), "the ranker model is created: " + status.getMessages());
+				rankers.add(status.getResult());
+			}
+			assertFalse(Boolean.TRUE.equals(rankerController
+					.findGenericOpenAIAPIRankerModelConfigByCode(rankers.get(0).getCode()).getDefaultModel()),
+					"the previous default ranker model is stored as no longer the default");
+			assertEquals(rankers.get(1).getCode(), rankerModelsDao.defaultHandler().getCode(),
+					"the ranking is asked to the default ranker model the setup created last");
+		} finally {
+			for (GOpenAIDecisionModelConfig config : decisions) {
+				decisionController.deleteOpenAIDecisionModelConfig(config);
+			}
+			for (GenericOpenAIAPIRankerModelConfig config : rankers) {
+				rankerController.deleteGenericOpenAIAPIRankerModelConfig(config);
+			}
+			provider.stop(0);
+		}
+	}
+
 	private List<String> storedDefaultChatModels() throws Exception {
 		return persistentObjectManager.findAllExtendingType(GBaseChatModelConfig.class).stream()
 				.filter(chat -> Boolean.TRUE.equals(chat.getDefaultModel())).map(chat -> chat.getCode()).sorted().toList();

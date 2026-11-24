@@ -14,6 +14,7 @@ import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseModelConfig;
@@ -70,6 +71,13 @@ public class ModelRuntimeConfigureHandler {
 			IGRankerModelRuntimeConfigurationDao dao = runtimeBinder
 					.getImplementationOf(IGRankerModelRuntimeConfigurationDao.class);
 			dao.addRuntimeByConfigClustered(rankerConfig);
+			handleDefaultModel(GBaseRankerModelConfig.class, rankerConfig, dao);
+		}
+		if (model instanceof GBaseDecisionModelConfig decisionConfig) {
+			IGDecisionModelRuntimeConfigurationDao dao = runtimeBinder
+					.getImplementationOf(IGDecisionModelRuntimeConfigurationDao.class);
+			dao.addRuntimeByConfigClustered(decisionConfig);
+			handleDefaultModel(GBaseDecisionModelConfig.class, decisionConfig, dao);
 		}
 		if (model instanceof GBaseTextToSpeachModelConfig ttsConfig) {
 			IGTextToSpeechModelRuntimeConfigurationDao dao = runtimeBinder
