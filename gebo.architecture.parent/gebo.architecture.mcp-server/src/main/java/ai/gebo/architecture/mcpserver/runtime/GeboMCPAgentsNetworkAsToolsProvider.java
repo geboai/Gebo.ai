@@ -82,14 +82,38 @@ public class GeboMCPAgentsNetworkAsToolsProvider {
 		this.runFiles = runFiles;
 	}
 
-	/** Whether the export names a chat profile and this installation can run in a conversation. */
-	private boolean runsInAConversation(GeboMCPAgentsNetworkTool export) {
-		return chatRunner != null && export != null && export.getChatProfileCode() != null
-				&& !export.getChatProfileCode().isBlank();
+	/** Gives the default chat profile, the one an export stating none works with; absent in a unit test. */
+	@org.springframework.beans.factory.annotation.Autowired(required = false)
+	private ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService chatProfiles;
+
+	/** Whether the export states a chat profile. */
+	private static boolean statesAChatProfile(GeboMCPAgentsNetworkTool export) {
+		return export.getChatProfileCode() != null && !export.getChatProfileCode().isBlank();
 	}
 
 	/**
-	 * The tools of the exported networks. A network exported with a chat profile
+	 * Whether this installation can run the export in a conversation: of the chat
+	 * profile it states, else of the default one.
+	 */
+	private boolean runsInAConversation(GeboMCPAgentsNetworkTool export) {
+		return chatRunner != null && export != null && (statesAChatProfile(export) || chatProfiles != null);
+	}
+
+	/** The chat profile an export works with: the one it states, else the default one. */
+	private String chatProfileOf(GeboMCPAgentsNetworkTool export) throws AgentException {
+		if (statesAChatProfile(export)) {
+			return export.getChatProfileCode();
+		}
+		try {
+			return chatProfiles.getOrCreateDefaultChatProfile().getCode();
+		} catch (ai.gebo.llms.abstraction.layer.services.LLMConfigException e) {
+			throw new AgentException("The default chat profile cannot be read: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * The tools of the exported networks. A network runs in a conversation of the
+	 * chat profile it is exported with, the default one when it states none, and
 	 * answers through a handler of its own, since its answer is more than text: the
 	 * files of its run travel in it (see {@link #callInAConversation}).
 	 */
@@ -132,8 +156,9 @@ public class GeboMCPAgentsNetworkAsToolsProvider {
 	}
 
 	/**
-	 * A call of a network exported with a chat profile: the network runs in a new
-	 * conversation of the caller, in the environment of that profile, and the tool
+	 * A call of an exported network: the network runs in a new conversation of the
+	 * caller, in the environment of the chat profile the export states or of the
+	 * default one, and the tool
 	 * answers with the text of its answer and the files the run left - a picture as
 	 * image content, a recording as audio content, any other file as an embedded
 	 * resource - bytes included, since an MCP client has no way to fetch them from
@@ -146,7 +171,7 @@ public class GeboMCPAgentsNetworkAsToolsProvider {
 		ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun run = null;
 		try {
 			run = chatRunner.run(export.getAgentsNetworkCode(),
-					chatRunner.requestOf(text, export.getChatProfileCode(), null),
+					chatRunner.requestOf(text, chatProfileOf(export), null),
 					ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatRunAttachments.none(),
 					toolCallingOf(config, toolName), GTextAgentsNetworkRunner.LOGGING_SINK);
 			ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatResponse response = null;

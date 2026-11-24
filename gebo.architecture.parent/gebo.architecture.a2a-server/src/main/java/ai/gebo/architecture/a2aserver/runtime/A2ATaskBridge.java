@@ -9,10 +9,12 @@ import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.agents.services.AgentException;
 import ai.gebo.llms.agent.standard.services.GChatEnvironmentNetworkRunner.ChatEnvironmentRun;
 import ai.gebo.architecture.agents.services.INotificationSink;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 import ai.gebo.llms.chat.abstraction.layer.session.model.ExternalSessionRef;
 import lombok.AllArgsConstructor;
 
@@ -32,6 +34,8 @@ public class A2ATaskBridge {
 	private final A2AChatEnvironmentRunner chatEnvironmentRunner;
 	/** Builds what the A2A server adds to every model call of a run (see {@link #toolCallingOf}). */
 	private final GeboToolCallingManagerFactory toolCallingFactory;
+	/** Gives the default chat profile, the one an export stating none works with. */
+	private final IGChatProfileManagementService chatProfiles;
 
 	/**
 	 * The caller an A2A run names itself as: {@code a2a:<exported url>/<skill>}, or
@@ -104,11 +108,12 @@ public class A2ATaskBridge {
 		}
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("A2A skill '" + skillId + "' runs network:" + exported.getNetworkCode()
-					+ " in the environment of chat profile:" + exported.getChatProfileCode() + " conversation:"
+					+ " in the environment of chat profile:" + exported.getChatProfileCode()
+					+ " (none stated is the default one) conversation:"
 					+ chatContextCode);
 		}
 		final GeboChatRequest request = chatEnvironmentRunner.requestOf(inbound.getText(),
-				exported.getChatProfileCode(), chatContextCode);
+				chatProfileOf(exported), chatContextCode);
 		if (chatContextCode != null && !chatContextCode.isBlank()) {
 			// the caller's context id: a Gebo conversation code, or the caller's own key of its
 			// dialogue, by which the conversation is opened and found again (see ExternalSessionRef)
@@ -117,6 +122,18 @@ public class A2ATaskBridge {
 		}
 		return chatEnvironmentRunner.run(exported.getNetworkCode(), request, inbound, toolCallingOf(serverConfig, skillId),
 				sink);
+	}
+
+	/** The chat profile an export works with: the one it states, else the default one. */
+	private String chatProfileOf(A2AExportedAgent exported) throws AgentException {
+		if (exported.getChatProfileCode() != null && !exported.getChatProfileCode().isBlank()) {
+			return exported.getChatProfileCode();
+		}
+		try {
+			return chatProfiles.getOrCreateDefaultChatProfile().getCode();
+		} catch (LLMConfigException e) {
+			throw new AgentException("The default chat profile cannot be read: " + e.getMessage(), e);
+		}
 	}
 
 	private A2AExportedAgent resolveExport(A2AServerConfig serverConfig, String skillId) {
