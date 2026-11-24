@@ -245,7 +245,10 @@ because both platform auth modes present a bearer token that the security chain 
 
 `handleRpc` reads the raw body, extracts `method`, and parses into a `SendMessageRequest`
 (both send and stream carry `MessageSendParams` + id). It renders the inbound message's text parts,
-reads `contextId`, and extracts the target `skillId` from the message metadata (`metadata.skillId`).
+reads `contextId`, and extracts the target `skillId` from the message metadata (`metadata.skillId`)
+when the caller states one. A call is answered under the name protocol 1.0 gives it (`SendMessage`,
+`SendStreamingMessage`, the names the SDK writes) and under the older one (`message/send`,
+`message/stream`).
 
 - `message/send` → `handleSend` runs the bridge synchronously and returns a `SendMessageResponse`
   wrapping an agent `Message`.
@@ -259,8 +262,9 @@ reads `contextId`, and extracts the target `skillId` from the message metadata (
 
 `runtime/A2ATaskBridge.java` is the heart of the export side:
 
-1. `resolveExport(serverConfig, skillId)` — match the export entry by `skillName`, falling back to
-   the underlying network/agent code.
+1. `resolveExport(serverConfig, skillId)` — a server exporting one entry runs it for a call that
+   names no skill: the address is what tells the agent. Otherwise match the export entry by
+   `skillName`, falling back to the underlying network/agent code.
 2. `resolveNetwork(exported)`:
    - `NETWORK` → `IAgentsNetworkDao.findByCode(networkCode)` (works for Mongo or code-generated
      networks).

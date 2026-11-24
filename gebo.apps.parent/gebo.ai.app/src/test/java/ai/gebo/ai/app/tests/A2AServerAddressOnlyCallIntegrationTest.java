@@ -20,9 +20,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import org.a2aproject.sdk.jsonrpc.common.json.JsonUtil;
 import org.a2aproject.sdk.jsonrpc.common.wrappers.SendMessageRequest;
 import org.a2aproject.sdk.jsonrpc.common.wrappers.SendMessageResponse;
@@ -134,12 +131,8 @@ public class A2AServerAddressOnlyCallIntegrationTest extends AbstractBaseTestLLm
 		if (skill != null) {
 			message.metadata(Map.of("skillId", skill));
 		}
-		final JsonObject written = JsonParser.parseString(JsonUtil.toJson(new SendMessageRequest(
-				UUID.randomUUID().toString(), MessageSendParams.builder().message(message.build()).build())))
-				.getAsJsonObject();
-		// the name of the method the server answers to
-		written.addProperty("method", "message/send");
-		final String body = written.toString();
+		final String body = JsonUtil.toJson(new SendMessageRequest(UUID.randomUUID().toString(),
+				MessageSendParams.builder().message(message.build()).build()));
 
 		final MockHttpServletRequest http = new MockHttpServletRequest("POST",
 				"/a2a/" + server.getExportedRelativeUrl());
