@@ -21,6 +21,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTextToSpeechModel;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
@@ -126,6 +127,18 @@ public class BaseTextToSpeechModelsConfigurationCRUDController<TextToSpeechModel
 					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {
 						gBaseChatModelConfig.setDefaultModel(false);
 						persistentObjectManager.update(gBaseChatModelConfig);
+						// the model as it runs loses the default too: it kept it until the next start,
+						// and the first default found among the running models is the one used
+						IGConfigurableTextToSpeechModel running = modelRuntimeConfigurationDao
+								.findByCode(gBaseChatModelConfig.getCode());
+						if (running != null) {
+							try {
+								running.reconfigure(gBaseChatModelConfig);
+							} catch (LLMConfigException e) {
+								LOGGER.error("Error in reconfigure the model " + gBaseChatModelConfig.getCode()
+										+ " that is no longer the default", e);
+							}
+						}
 					}
 				}
 			}
