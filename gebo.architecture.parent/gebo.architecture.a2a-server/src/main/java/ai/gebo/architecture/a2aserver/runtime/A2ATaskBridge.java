@@ -33,7 +33,10 @@ public class A2ATaskBridge {
 	/** Builds what the A2A server adds to every model call of a run (see {@link #toolCallingOf}). */
 	private final GeboToolCallingManagerFactory toolCallingFactory;
 
-	/** The caller an A2A run names itself as: {@code a2a:<exported url>/<skill>}. */
+	/**
+	 * The caller an A2A run names itself as: {@code a2a:<exported url>/<skill>}, or
+	 * {@code a2a:<exported url>} when the call named no skill.
+	 */
 	public static final String A2A_CALLER_PREFIX = "a2a:";
 
 	/**
@@ -44,7 +47,7 @@ public class A2ATaskBridge {
 	GeboToolCalling toolCallingOf(A2AServerConfig serverConfig, String skillId) {
 		return toolCallingFactory.builder()
 				.caller(A2A_CALLER_PREFIX + (serverConfig != null ? serverConfig.getExportedRelativeUrl() : null)
-						+ "/" + skillId)
+						+ (skillId != null && !skillId.isBlank() ? "/" + skillId : ""))
 				.build();
 	}
 
@@ -119,6 +122,10 @@ public class A2ATaskBridge {
 	private A2AExportedAgent resolveExport(A2AServerConfig serverConfig, String skillId) {
 		if (serverConfig.getExportedAgents() == null) {
 			return null;
+		}
+		if ((skillId == null || skillId.isBlank()) && serverConfig.getExportedAgents().size() == 1) {
+			// no skill is named and this address exports one thing only: the address tells which
+			return serverConfig.getExportedAgents().get(0);
 		}
 		for (A2AExportedAgent exported : serverConfig.getExportedAgents()) {
 			String id = exported.getSkillName();
