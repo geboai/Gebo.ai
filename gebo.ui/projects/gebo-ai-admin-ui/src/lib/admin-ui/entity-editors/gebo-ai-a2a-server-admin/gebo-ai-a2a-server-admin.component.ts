@@ -9,7 +9,7 @@
 
 import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { A2AExportedAgent, A2AServerConfig, GeboA2AServerAdminControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { A2AExportedAgent, A2AServerConfig, GChatProfileConfiguration, GeboA2AServerAdminControllerService, GeboAdminChatProfilesConfigurationControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
@@ -66,6 +66,9 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
     /** New-entry form state. */
     public newEntry: A2AExportedAgent = this.blankEntry();
 
+    /** The chat profiles an exported network can be given; with none chosen it works with the default one. */
+    public chatProfiles: GChatProfileConfiguration[] = [];
+
     public readonly: boolean = false;
 
     constructor(
@@ -74,11 +77,26 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
         confirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
-        private service: GeboA2AServerAdminControllerService
+        private service: GeboA2AServerAdminControllerService,
+        private chatProfilesService: GeboAdminChatProfilesConfigurationControllerService
     ) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
         this.manageOperationStatus = true;
         this.readExportKinds();
+        this.readChatProfiles();
+    }
+
+    /** Reads the chat profiles the screen offers for an exported network. */
+    private readChatProfiles(): void {
+        this.chatProfilesService.getAllChatProfileConfiguration({ page: 0, pageSize: 1000 }).subscribe({
+            next: (page) => { this.chatProfiles = page?.content || []; }
+        });
+    }
+
+    /** How a chat profile is shown in the list of the exports: by its description. */
+    public chatProfileDescription(code?: string): string {
+        const profile = this.chatProfiles.find((x) => x.code === code);
+        return profile?.description || code || "";
     }
 
     /**
@@ -124,8 +142,7 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
             kind: A2AExportedAgent.KindEnum.NETWORK,
             networkCode: '',
             agentConfigCode: '',
-            skillName: '',
-            chatProfileCode: ''
+            skillName: ''
         };
     }
 
@@ -144,6 +161,8 @@ export class GeboAIA2AServerAdminComponent extends BaseEntityEditingComponent<A2
         if (!entry.skillName || !entry.skillName.trim()) {
             entry.skillName = code;
         }
+        // no chat profile chosen: the export works with the default one
+        entry.chatProfileCode = entry.chatProfileCode ? entry.chatProfileCode : undefined;
         this.exportedAgents = [...this.exportedAgents, entry];
         this.formGroup.patchValue({ exportedAgents: this.exportedAgents });
         this.formGroup.markAsDirty();

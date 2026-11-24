@@ -93,7 +93,11 @@
                                 <td>{{ isNetwork(item) ? 'Network' : 'Agent' }}</td>
                                 <td>{{ isNetwork(item) ? item.networkCode : item.agentConfigCode }}</td>
                                 <td>{{ item.skillName }}</td>
-                                <td>{{ item.chatProfileCode }}</td>
+                                <td>
+                                    <span *ngIf="item.chatProfileCode">{{ chatProfileDescription(item.chatProfileCode) }}</span>
+                                    <span id="DefaultChatProfileText" *ngIf="!item.chatProfileCode && isNetwork(item)"
+                                        class="text-secondary" gebo-ai-text>Default chat profile</span>
+                                </td>
                                 <td>
                                     <p-button icon="pi pi-trash" severity="danger" [text]="true"
                                         (onClick)="removeEntry(i)" [disabled]="readonly"></p-button>
@@ -135,9 +139,13 @@
                         </div>
                         <div class="col-3" *ngIf="isNetwork(newEntry)">
                             <gebo-ai-field id="newChatProfileCode" label="Chat profile"
-                                help="The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. Left empty it sees every knowledge base the calling account can see.">
-                                <input pInputText id="newChatProfileCode" [(ngModel)]="newEntry.chatProfileCode"
-                                    [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                                help="The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. When none is selected the default chat profile is used."
+                                placeholder="Default chat profile">
+                                <p-select id="newChatProfileCode" styleClass="w-full" [(ngModel)]="newEntry.chatProfileCode"
+                                    [ngModelOptions]="{standalone: true}" [options]="chatProfiles"
+                                    optionLabel="description" optionValue="code" [filter]="true"
+                                    filterBy="description" [showClear]="true" appendTo="body"
+                                    gebo-ai-field-element></p-select>
                             </gebo-ai-field>
                         </div>
                         <div class="col-1" style="display: flex; align-items: flex-end;">

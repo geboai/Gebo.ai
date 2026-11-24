@@ -5683,14 +5683,15 @@
       "newAgentToolName": { "label": "Tool name", "help": "The name MCP clients see (defaults to the agent code)." },
       "AddAgentToolBtn": { "label": "Add" },
       "NetworkToolsHeader": { "label": "Networks of agents exported as tools" },
-      "NetworkToolsDescription": { "label": "Each network becomes a tool that takes a request in natural language and answers with the text the network produced, run as the caller. A network given a chat profile runs in a conversation of the caller and answers with the files it produced too." },
+      "NetworkToolsDescription": { "label": "Each network becomes a tool that takes a request in natural language, run as the caller in a conversation of its chat profile, and answers with the text the network produced and the files it produced too. When no chat profile is selected the default one is used." },
       "NetworkToolNetworkHeader": { "label": "Network code" },
       "NetworkToolNameHeader": { "label": "Tool name" },
       "NetworkToolChatProfileHeader": { "label": "Chat profile" },
       "NoNetworkToolsText": { "label": "No network of agents exported as a tool." },
       "newNetworkToolCode": { "label": "Network code", "help": "The code of the network of agents to export." },
       "newNetworkToolName": { "label": "Tool name", "help": "The name MCP clients see (defaults to the network code)." },
-      "newNetworkToolChatProfile": { "label": "Chat profile", "help": "The code of the chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call then runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. Left empty the network runs outside any conversation and answers with text." },
+      "newNetworkToolChatProfile": { "label": "Chat profile", "help": "The chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. When none is selected the default chat profile is used.", "placeholder": "Default chat profile" },
+      "NetworkToolDefaultChatProfileText": { "label": "Default chat profile" },
       "AddNetworkToolBtn": { "label": "Add" }
     }
   },
@@ -5795,8 +5796,10 @@
       },
       "newChatProfileCode": {
         "label": "Chat profile",
-        "help": "The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. Left empty it sees every knowledge base the calling account can see."
+        "help": "The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. When none is selected the default chat profile is used.",
+        "placeholder": "Default chat profile"
       },
+      "DefaultChatProfileText": { "label": "Default chat profile" },
       "ChatProfileHeader": { "label": "Chat profile" },
       "GeneralSettingsTab": { "label": "General settings" },
       "ExportedAgentsTab": { "label": "Exported agents & networks" },

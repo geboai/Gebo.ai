@@ -143,7 +143,7 @@
                       <!-- Networks of agents exported as tools -->
                       <div class="col-12">
                         <h4 id="NetworkToolsHeader" class="mb-1" gebo-ai-text>Networks of agents exported as tools</h4>
-                        <p id="NetworkToolsDescription" class="text-secondary mt-0" gebo-ai-text>Each network becomes a tool that takes a request in natural language and answers with the text the network produced, run as the caller. A network given a chat profile runs in a conversation of the caller and answers with the files it produced too.</p>
+                        <p id="NetworkToolsDescription" class="text-secondary mt-0" gebo-ai-text>Each network becomes a tool that takes a request in natural language, run as the caller in a conversation of its chat profile, and answers with the text the network produced and the files it produced too. When no chat profile is selected the default one is used.</p>
                         <p-table [value]="networkTools" [tableStyle]="{ 'min-width': '40rem' }">
                           <ng-template pTemplate="header">
                             <tr>
@@ -157,7 +157,11 @@
                             <tr>
                               <td>{{ item.agentsNetworkCode }}</td>
                               <td>{{ item.toolName }}</td>
-                              <td>{{ item.chatProfileCode }}</td>
+                              <td>
+                                <span *ngIf="item.chatProfileCode">{{ chatProfileDescription(item.chatProfileCode) }}</span>
+                                <span id="NetworkToolDefaultChatProfileText" *ngIf="!item.chatProfileCode"
+                                  class="text-secondary" gebo-ai-text>Default chat profile</span>
+                              </td>
                               <td>
                                 <p-button id="RemoveNetworkToolBtn_{{i}}" icon="pi pi-trash" severity="danger" [text]="true"
                                   (onClick)="removeNetworkTool(i)"></p-button>
@@ -185,9 +189,13 @@
                           </div>
                           <div class="col-3">
                             <gebo-ai-field id="newNetworkToolChatProfile" label="Chat profile"
-                              help="The code of the chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call then runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. Left empty the network runs outside any conversation and answers with text.">
-                              <input pInputText id="newNetworkToolChatProfile" [(ngModel)]="newNetworkTool.chatProfileCode"
-                                [ngModelOptions]="{standalone: true}" class="col-12" gebo-ai-field-element />
+                              help="The chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. When none is selected the default chat profile is used."
+                              placeholder="Default chat profile">
+                              <p-select id="newNetworkToolChatProfile" styleClass="w-full" [(ngModel)]="newNetworkTool.chatProfileCode"
+                                [ngModelOptions]="{standalone: true}" [options]="chatProfiles"
+                                optionLabel="description" optionValue="code" [filter]="true"
+                                filterBy="description" [showClear]="true" appendTo="body"
+                                gebo-ai-field-element></p-select>
                             </gebo-ai-field>
                           </div>
                           <div class="col-2" style="display: flex; align-items: flex-end;">

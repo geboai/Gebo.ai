@@ -38,7 +38,7 @@ The administrator sees this in three places: the chat model editor (which file t
 ### 1.4 Gebo.ai exchanges files with other systems
 
 - **MCP client:** pictures, recordings and binary resources in a tool result are kept in the conversation instead of being flattened to a placeholder.
-- **MCP server:** a network exported as a tool can be given a chat profile; it then runs in a conversation and answers with the files of its run as image, audio or embedded-resource content.
+- **MCP server:** a network exported as a tool runs in a conversation of its chat profile - the one chosen for it, or the default one when none is chosen - and answers with the files of its run as image, audio or embedded-resource content.
 - **A2A server:** an exported network answers with the files its models generated and its tools wrote, declares the input types it takes, tells the caller what it did not take (`notTaken`), and fetches a file named by a link only from hosts the administrator listed.
 - **A2A client:** the conversation's files are sent to a remote agent when its card says it takes them and `ai.gebo.a2a.clients.send-files-enabled` is on (off by default); a file the remote agent returns is kept, and one named by an address is fetched only from the agent's own address.
 
@@ -564,7 +564,7 @@ Four tests on `renderResult` with a recording store. The first asserts the exact
 
 ### What it does now (functional view)
 
-An agents network exported as a tool of a Gebo MCP server can now be given a chat profile. With one, each call of the tool runs the network in a new conversation of the caller, in the environment of that profile, exactly as a chat with that profile would. The tool then answers with the text and with the files the run left: a picture as image content, a recording as audio content, any other file as an embedded resource with the address `gebo://conversation/<conversation code>/<file name>`, bytes included. A run that stops to wait for an answer says so in its text, with its questions and the conversation code. Without a chat profile the export behaves as before: the network runs outside any conversation and answers with text only. The files follow the limits of `ChatRunFiles` (20 MB per file, 40 MB per answer).
+An agents network exported as a tool of a Gebo MCP server can now be given a chat profile. With one, each call of the tool runs the network in a new conversation of the caller, in the environment of that profile, exactly as a chat with that profile would. The tool then answers with the text and with the files the run left: a picture as image content, a recording as audio content, any other file as an embedded resource with the address `gebo://conversation/<conversation code>/<file name>`, bytes included. A run that stops to wait for an answer says so in its text, with its questions and the conversation code. An export with no chat profile chosen works with the default chat profile of the installation (it ran outside any conversation, answering with text only, until this was changed with the chat profile picker of the editor). The files follow the limits of `ChatRunFiles` (20 MB per file, 40 MB per answer).
 
 ### Class by class
 
