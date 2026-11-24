@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,31 +23,42 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.TestPropertySource;
 
+import com.sun.net.httpserver.HttpServer;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
+import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportService;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelConfigurationSupportServiceRepositoryPattern;
+import ai.gebo.llms.abstraction.layer.services.IGRankerModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.openai.controllers.OpenAIDecisionModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAIEmbeddingModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAIImageModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAITextToSpeechModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAITranscriptModelsConfigurationController;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
+import ai.gebo.llms.openai.model.GOpenAIDecisionModelConfig;
 import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
 import ai.gebo.llms.openai.model.GOpenAIImageModelConfig;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
+import ai.gebo.llms.openai.services.OpenAIDecisionModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAIImageModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAITextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAITranscriptModelConfigurationSupportService;
+import ai.gebo.llms.openai_compat.controllers.GenericOpenAIRankerModelsConfigurationController;
+import ai.gebo.llms.openai_compat.model.GenericOpenAIAPIRankerModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.GeboTokenContent;
 
 /**
- * Certifies what saving a default transcript, speech, image or embedding model does, through the
+ * Certifies what saving a default transcript, speech, image, embedding, ranker or decision model does, through the
  * controllers the setup screens call: the previous default model of the same kind is no
  * longer the default, in its stored configuration and in the model the platform is
  * running, so the work goes to the new one at once; the default chat model keeps its
@@ -78,6 +91,18 @@ public class DefaultModelSwitchIntegrationTest extends AbstractBaseTestLLmsInteg
 	private OpenAIEmbeddingModelConfigurationSupportService embeddingSupportService;
 	@Autowired
 	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
+	@Autowired
+	private OpenAIDecisionModelsConfigurationController decisionController;
+	@Autowired
+	private OpenAIDecisionModelConfigurationSupportService decisionSupportService;
+	@Autowired
+	private IGDecisionModelRuntimeConfigurationDao decisionModelsDao;
+	@Autowired
+	private GenericOpenAIRankerModelsConfigurationController rankerController;
+	@Autowired
+	private IGRankerModelConfigurationSupportServiceRepositoryPattern rankerSupportServices;
+	@Autowired
+	private IGRankerModelRuntimeConfigurationDao rankerModelsDao;
 
 	private final List<GOpenAITranscriptModelConfig> inserted = new ArrayList<>();
 
@@ -252,6 +277,100 @@ public class DefaultModelSwitchIntegrationTest extends AbstractBaseTestLLmsInteg
 		} finally {
 			for (GOpenAIEmbeddingModelConfig config : saved) {
 				embeddingController.deleteOpenAIEmbeddingModelConfig(config);
+			}
+		}
+	}
+
+	/**
+	 * A local server answering as OpenAI's Decisions api does: a decision model is asked
+	 * one question when it is saved, and a provider that does not answer refuses it.
+	 */
+	private static HttpServer aDecisionsProvider() throws Exception {
+		final HttpServer server = HttpServer.create(new InetSocketAddress("localhost", 0), 0);
+		server.createContext("/v1/decisions", exchange -> {
+			exchange.getRequestBody().readAllBytes();
+			final byte[] answer = ("{\"model\":\"omni-moderation-latest\",\"answers\":[{\"type\":\"predicate\","
+					+ "\"name\":\"colour\",\"probability\":0.9}],\"usage\":{\"input_tokens\":5,"
+					+ "\"input_tokens_details\":{\"cached_tokens\":0,\"cache_write_tokens\":0},\"output_tokens\":1,"
+					+ "\"output_tokens_details\":{\"reasoning_tokens\":0},\"total_tokens\":6}}")
+					.getBytes(StandardCharsets.UTF_8);
+			exchange.getResponseHeaders().add("Content-Type", "application/json");
+			exchange.sendResponseHeaders(200, answer.length);
+			exchange.getResponseBody().write(answer);
+			exchange.close();
+		});
+		server.start();
+		return server;
+	}
+
+	@Test
+	public void aNewDefaultDecisionModelTakesTheDefaultFromThePreviousOne() throws Exception {
+		final String secret = aSecret();
+		final HttpServer provider = aDecisionsProvider();
+		final String providerUrl = "http://localhost:" + provider.getAddress().getPort() + "/v1";
+		final List<GOpenAIDecisionModelConfig> saved = new ArrayList<>();
+		try {
+			for (String description : List.of("Default decision switch test first",
+					"Default decision switch test second")) {
+				final GOpenAIDecisionModelConfig config = decisionSupportService
+						.createBaseConfiguration("omni-moderation-latest");
+				config.setDescription(description);
+				config.setApiSecretCode(secret);
+				config.setBaseUrl(providerUrl);
+				config.setDefaultModel(true);
+				final OperationStatus<GOpenAIDecisionModelConfig> status = decisionController
+						.insertOpenAIDecisionModelConfig(config);
+				assertFalse(status.isHasErrorMessages(), "the decision model is saved: " + status.getMessages());
+				saved.add(status.getResult());
+			}
+			final String first = saved.get(0).getCode(), second = saved.get(1).getCode();
+			assertFalse(Boolean.TRUE.equals(
+					decisionController.findOpenAIDecisionModelConfigByCode(first).getDefaultModel()),
+					"the previous default decision model is stored as no longer the default");
+			assertFalse(Boolean.TRUE.equals(decisionModelsDao.findByCode(first).getConfig().getDefaultModel()),
+					"the previous default decision model, as it runs, is no longer the default");
+			assertEquals(second, decisionModelsDao.defaultHandler().getCode(),
+					"the decisions are asked to the default decision model just saved");
+		} finally {
+			for (GOpenAIDecisionModelConfig config : saved) {
+				decisionController.deleteOpenAIDecisionModelConfig(config);
+			}
+			provider.stop(0);
+		}
+	}
+
+	@Test
+	public void aNewDefaultRankerModelTakesTheDefaultFromThePreviousOne() throws Exception {
+		final String secret = aSecret();
+		assertFalse(rankerController.getGenericOpenAIRankerModelTypes().isEmpty(),
+				"the installation of the test has a provider of ranker models");
+		final IGRankerModelConfigurationSupportService support = rankerSupportServices
+				.findByCode(rankerController.getGenericOpenAIRankerModelTypes().get(0).getCode());
+		final List<GenericOpenAIAPIRankerModelConfig> saved = new ArrayList<>();
+		try {
+			for (String description : List.of("Default ranker switch test first",
+					"Default ranker switch test second")) {
+				final GenericOpenAIAPIRankerModelConfig config = (GenericOpenAIAPIRankerModelConfig) support
+						.createBaseConfiguration("test-reranker");
+				config.setDescription(description);
+				config.setApiSecretCode(secret);
+				config.setDefaultModel(true);
+				final OperationStatus<GenericOpenAIAPIRankerModelConfig> status = rankerController
+						.insertGenericOpenAIAPIRankerModelConfig(config);
+				assertFalse(status.isHasErrorMessages(), "the ranker model is saved: " + status.getMessages());
+				saved.add(status.getResult());
+			}
+			final String first = saved.get(0).getCode(), second = saved.get(1).getCode();
+			assertFalse(Boolean.TRUE.equals(
+					rankerController.findGenericOpenAIAPIRankerModelConfigByCode(first).getDefaultModel()),
+					"the previous default ranker model is stored as no longer the default");
+			assertFalse(Boolean.TRUE.equals(rankerModelsDao.findByCode(first).getConfig().getDefaultModel()),
+					"the previous default ranker model, as it runs, is no longer the default");
+			assertEquals(second, rankerModelsDao.defaultHandler().getCode(),
+					"the ranking is asked to the default ranker model just saved");
+		} finally {
+			for (GenericOpenAIAPIRankerModelConfig config : saved) {
+				rankerController.deleteGenericOpenAIAPIRankerModelConfig(config);
 			}
 		}
 	}
