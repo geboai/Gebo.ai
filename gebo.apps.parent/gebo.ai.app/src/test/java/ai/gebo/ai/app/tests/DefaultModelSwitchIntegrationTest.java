@@ -24,16 +24,20 @@ import org.springframework.test.context.TestPropertySource;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableChatModel;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableTranscriptModel;
+import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
 import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
+import ai.gebo.llms.openai.controllers.OpenAIEmbeddingModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAIImageModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAITextToSpeechModelsConfigurationController;
 import ai.gebo.llms.openai.controllers.OpenAITranscriptModelsConfigurationController;
 import ai.gebo.llms.openai.model.GOpenAIChatModelConfig;
+import ai.gebo.llms.openai.model.GOpenAIEmbeddingModelConfig;
 import ai.gebo.llms.openai.model.GOpenAIImageModelConfig;
 import ai.gebo.llms.openai.model.GOpenAITextToSpeechModelConfig;
 import ai.gebo.llms.openai.model.GOpenAITranscriptModelConfig;
+import ai.gebo.llms.openai.services.OpenAIEmbeddingModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAIImageModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAITextToSpeechModelConfigurationSupportService;
 import ai.gebo.llms.openai.services.OpenAITranscriptModelConfigurationSupportService;
@@ -41,7 +45,7 @@ import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.model.GeboTokenContent;
 
 /**
- * Certifies what saving a default transcript, speech or image model does, through the
+ * Certifies what saving a default transcript, speech, image or embedding model does, through the
  * controllers the setup screens call: the previous default model of the same kind is no
  * longer the default, in its stored configuration and in the model the platform is
  * running, so the work goes to the new one at once; the default chat model keeps its
@@ -68,6 +72,12 @@ public class DefaultModelSwitchIntegrationTest extends AbstractBaseTestLLmsInteg
 	private OpenAIImageModelConfigurationSupportService imageSupportService;
 	@Autowired
 	private IGImageModelRuntimeConfigurationDao imageModelsDao;
+	@Autowired
+	private OpenAIEmbeddingModelsConfigurationController embeddingController;
+	@Autowired
+	private OpenAIEmbeddingModelConfigurationSupportService embeddingSupportService;
+	@Autowired
+	private IGEmbeddingModelRuntimeConfigurationDao embeddingModelsDao;
 
 	private final List<GOpenAITranscriptModelConfig> inserted = new ArrayList<>();
 
@@ -210,6 +220,38 @@ public class DefaultModelSwitchIntegrationTest extends AbstractBaseTestLLmsInteg
 		} finally {
 			for (GOpenAIImageModelConfig config : saved) {
 				imageController.deleteOpenAIImageModelConfig(config);
+			}
+		}
+	}
+
+	@Test
+	public void aNewDefaultEmbeddingModelTakesTheDefaultFromThePreviousOne() throws Exception {
+		final String secret = aSecret();
+		final List<GOpenAIEmbeddingModelConfig> saved = new ArrayList<>();
+		try {
+			for (String description : List.of("Default embedding switch test first",
+					"Default embedding switch test second")) {
+				final GOpenAIEmbeddingModelConfig config = embeddingSupportService
+						.createBaseConfiguration("text-embedding-3-small");
+				config.setDescription(description);
+				config.setApiSecretCode(secret);
+				config.setDefaultModel(true);
+				final OperationStatus<GOpenAIEmbeddingModelConfig> status = embeddingController
+						.insertOpenAIEmbeddingModelConfig(config);
+				assertFalse(status.isHasErrorMessages(), "the embedding model is saved: " + status.getMessages());
+				saved.add(status.getResult());
+			}
+			final String first = saved.get(0).getCode(), second = saved.get(1).getCode();
+			assertFalse(Boolean.TRUE.equals(
+					embeddingController.findOpenAIEmbeddingModelConfigByCode(first).getDefaultModel()),
+					"the previous default embedding model is stored as no longer the default");
+			assertFalse(Boolean.TRUE.equals(embeddingModelsDao.findByCode(first).getConfig().getDefaultModel()),
+					"the previous default embedding model, as it runs, is no longer the default");
+			assertTrue(Boolean.TRUE.equals(embeddingModelsDao.findByCode(second).getConfig().getDefaultModel()),
+					"the embedding model just saved, as it runs, is the default");
+		} finally {
+			for (GOpenAIEmbeddingModelConfig config : saved) {
+				embeddingController.deleteOpenAIEmbeddingModelConfig(config);
 			}
 		}
 	}
