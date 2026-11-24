@@ -85,6 +85,16 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 
 	private static final Logger LOGGER = LoggerFactory
 			.getLogger(GReactiveHttpRequestAuthenticationManagerResolverImpl.class);
+
+	/**
+	 * The client is told only that its bearer token is invalid: the reason (which may say how
+	 * authentication is configured here) goes to the server log, never into the response's
+	 * WWW-Authenticate error_description.
+	 */
+	private static InvalidBearerTokenException invalidBearerToken(String reason) {
+		LOGGER.debug("Bearer token refused: {}", reason);
+		return new InvalidBearerTokenException("Invalid bearer token");
+	}
 	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
 	private final UserDetailsService customUserDetailsService;
@@ -140,7 +150,7 @@ public class GReactiveHttpRequestAuthenticationManagerResolverImpl
 		List<Oauth2RuntimeConfiguration> oauth2AuthenticationConfigs = oauth2RuntimeConfigurationDao
 				.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION);
 		if (oauth2AuthenticationConfigs.isEmpty())
-			throw new InvalidBearerTokenException(
+			throw invalidBearerToken(
 					"Oauth2 specified in request header but no AUTHENTICATION oauth2 configuration found");
 		return isJwtFormatStrict(header.getToken()) ? multiJwt(oauth2AuthenticationConfigs)
 				: multiOpaque(oauth2AuthenticationConfigs);

@@ -17,8 +17,10 @@ import org.springframework.mock.web.server.MockServerWebExchange;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
+import org.springframework.security.oauth2.server.resource.web.server.BearerTokenServerAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.server.authentication.ServerBearerTokenAuthenticationConverter;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.ServerAuthenticationEntryPointFailureHandler;
 
 import ai.gebo.security.config.GeboSecurityConfig;
 import ai.gebo.security.model.oauth2.Oauth2ConfigurationType;
@@ -30,7 +32,8 @@ import reactor.core.publisher.Mono;
 /**
  * A bearer token the resolvers cannot route anywhere - not JWT-shaped with no OAuth2 provider
  * configured, or an OAUTH2 header with no provider configured - is a failed authentication:
- * the client gets 401, not 500.
+ * the client gets 401, not 500, and is told only that its token is invalid: nothing about how
+ * authentication is configured here.
  */
 class UnreadableBearerTokenStatusTest {
 
@@ -44,7 +47,13 @@ class UnreadableBearerTokenStatusTest {
 		when(configurations.findByConfigurationType(Oauth2ConfigurationType.AUTHENTICATION)).thenReturn(List.of());
 	}
 
-	private int servletStatus(String authType) throws Exception {
+	private static void assertGenericInvalidToken(String wwwAuthenticate) {
+		assertThat(wwwAuthenticate).startsWith("Bearer error=\"invalid_token\"")
+				.contains("error_description=\"Invalid bearer token\"").doesNotContainIgnoringCase("configuration")
+				.doesNotContainIgnoringCase("oauth2");
+	}
+
+	private MockHttpServletResponse servletResponse(String authType) throws Exception {
 		UserDetailsService users = mock(UserDetailsService.class);
 		GHttpRequestAuthenticationManagerResolverImpl resolver = new GHttpRequestAuthenticationManagerResolverImpl(
 				users, mock(PasswordEncoder.class), configurations, mock(LocalJwtTokenProvider.class), users,
@@ -59,17 +68,21 @@ class UnreadableBearerTokenStatusTest {
 		MockFilterChain chain = new MockFilterChain();
 		filter.doFilter(request, response, chain);
 		assertThat(chain.getRequest()).as("the request must not reach the application").isNull();
-		return response.getStatus();
+		return response;
 	}
 
 	@Test
 	void anUnreadableTokenWithoutAuthTypeIsUnauthorized() throws Exception {
-		assertThat(servletStatus(null)).isEqualTo(401);
+		MockHttpServletResponse response = servletResponse(null);
+		assertThat(response.getStatus()).isEqualTo(401);
+		assertGenericInvalidToken(response.getHeader("WWW-Authenticate"));
 	}
 
 	@Test
 	void anOauth2TokenWithNoProviderConfiguredIsUnauthorized() throws Exception {
-		assertThat(servletStatus("OAUTH2")).isEqualTo(401);
+		MockHttpServletResponse response = servletResponse("OAUTH2");
+		assertThat(response.getStatus()).isEqualTo(401);
+		assertGenericInvalidToken(response.getHeader("WWW-Authenticate"));
 	}
 
 	@Test
@@ -78,6 +91,8 @@ class UnreadableBearerTokenStatusTest {
 				mock(UserDetailsService.class), configurations, mock(LocalJwtTokenProvider.class), null, null);
 		AuthenticationWebFilter filter = new AuthenticationWebFilter(resolver);
 		filter.setServerAuthenticationConverter(new ServerBearerTokenAuthenticationConverter());
+		filter.setAuthenticationFailureHandler(
+				new ServerAuthenticationEntryPointFailureHandler(new BearerTokenServerAuthenticationEntryPoint()));
 		MockServerWebExchange exchange = MockServerWebExchange.from(MockServerHttpRequest.get("/api/users/anything")
 				.header("Authorization", "Bearer " + GARBAGE).header("X-AuthType", "OAUTH2"));
 		boolean[] reached = { false };
@@ -85,5 +100,6 @@ class UnreadableBearerTokenStatusTest {
 		filter.filter(exchange, e -> Mono.fromRunnable(() -> reached[0] = true)).block();
 		assertThat(reached[0]).as("the request must not reach the application").isFalse();
 		assertThat(exchange.getResponse().getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+		assertGenericInvalidToken(exchange.getResponse().getHeaders().getFirst("WWW-Authenticate"));
 	}
 }
