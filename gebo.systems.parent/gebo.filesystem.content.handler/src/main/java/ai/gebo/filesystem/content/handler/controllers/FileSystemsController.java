@@ -244,6 +244,8 @@ public class FileSystemsController
 	 */
 	@PostMapping(value = "publishFilesystemEndpoint", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public OperationStatus<GJobStatus> publishFilesystemEndpoint(@RequestBody GFilesystemProjectEndpoint endpoint) {
+		// the publish saves the data source it is given, as the update does
+		checkPaths(endpoint);
 		return publish(endpoint);
 	}
 }
