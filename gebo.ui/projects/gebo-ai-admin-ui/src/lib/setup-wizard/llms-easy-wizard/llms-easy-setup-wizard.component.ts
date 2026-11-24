@@ -21,7 +21,7 @@
  * through outputs. All backend contracts, DTOs and the catalogue/merge logic are the same the
  * original easy setup uses, so the two flows stay interchangeable at the API level.
  */
-import { Component, ChangeDetectionStrategy } from "@angular/core";
+import { Component, ChangeDetectionStrategy, Injector } from "@angular/core";
 import {
     ComponentLLMSStatus, GBaseModelChoice, GeboFastLlmsSetupControllerService, GUserMessage,
     LLMCreateModelData, LLMSSetupConfiguration, LLMSSetupConfigurationData
@@ -30,6 +30,7 @@ import { BaseWizardSectionComponent, fieldHostComponentName, GEBO_AI_FIELD_HOST,
 import { MenuItem, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { forkJoin, Observable } from "rxjs";
 import { MODEL_CLASSES, ModelChoiceOption, ModelClassDecision, ModelClassDescriptor } from "./model-classes";
+import { saveAskingOnDefaultEmbeddingModelChange } from "../../admin-ui/entity-editors/utils/default-embedding-model-change";
 
 /** A chosen model the provider no longer offers, with the live choices to replace it from. */
 interface ModelResolution {
@@ -97,7 +98,8 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
 
     constructor(setupWizardComunicationService: SetupWizardComunicationService,
         private setupService: GeboFastLlmsSetupControllerService,
-        private translationService: GeboAITranslationService) {
+        private translationService: GeboAITranslationService,
+        private injector: Injector) {
         super(setupWizardComunicationService);
         // p-steps renders the labels of its model, which the [gebo-ai-label] attribute directive does
         // not reach (it reads element attributes, not the item model). The step labels are translated
@@ -355,7 +357,10 @@ export class LLMSEasySetupWizardComponent extends BaseWizardSectionComponent {
             this.activeStep = WizardStep.SUMMARY;
             return;
         }
-        this.sendCreate(requests);
+        // an embedding model is created as the default one: when another one is the default now
+        // the user is asked first, what was ingested with it may no longer be reached
+        saveAskingOnDefaultEmbeddingModelChange(this.injector, false, requests.some(r => r.type === "EMBEDDING"),
+            () => this.sendCreate(requests));
     }
 
     private buildCreateModelData(decision: ModelClassDecision): LLMCreateModelData | undefined {
