@@ -204,6 +204,42 @@ export class McpClientConfigControllerService {
     /**
      * 
      * 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getDefaultRequestTimeoutSeconds(observe?: 'body', reportProgress?: boolean): Observable<number>;
+    public getDefaultRequestTimeoutSeconds(observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<number>>;
+    public getDefaultRequestTimeoutSeconds(observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<number>>;
+    public getDefaultRequestTimeoutSeconds(observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<number>('get',`${this.basePath}/api/admin/McpClientConfigController/getDefaultRequestTimeoutSeconds`,
+            {
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
      * @param body 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.

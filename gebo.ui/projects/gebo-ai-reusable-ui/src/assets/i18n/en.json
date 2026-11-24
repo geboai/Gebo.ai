@@ -5537,6 +5537,10 @@
         "label": "Exporting Prefix",
         "help": "Prefix added to exported tools/resources on this server."
       },
+      "requestTimeoutSeconds": {
+        "label": "Request timeout (seconds)",
+        "help": "How long a request to this MCP Server waits for its answer, a tool call for example. Left empty, the time of the installation applies: the field shows it."
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the MCP Client."
