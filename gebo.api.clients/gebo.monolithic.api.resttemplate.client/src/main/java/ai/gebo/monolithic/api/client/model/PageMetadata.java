@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * PageMetadata
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T08:54:21.499303300+01:00[Europe/Rome]")
 
 public class PageMetadata {
   @JsonProperty("size")
@@ -46,7 +46,7 @@ public class PageMetadata {
    * Get size
    * @return size
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public Long getSize() {
     return size;
   }
@@ -64,7 +64,7 @@ public class PageMetadata {
    * Get number
    * @return number
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public Long getNumber() {
     return number;
   }
@@ -82,7 +82,7 @@ public class PageMetadata {
    * Get totalElements
    * @return totalElements
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public Long getTotalElements() {
     return totalElements;
   }
@@ -100,7 +100,7 @@ public class PageMetadata {
    * Get totalPages
    * @return totalPages
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public Long getTotalPages() {
     return totalPages;
   }

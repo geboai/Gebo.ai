@@ -26,11 +26,11 @@ import java.util.List;
  * PagedModelGUserSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T08:54:21.499303300+01:00[Europe/Rome]")
 
 public class PagedModelGUserSession {
   @JsonProperty("content")
-  private List<GUserSession> content = null;
+  private List<GUserSession> content = new ArrayList<>();
 
   @JsonProperty("page")
   private PageMetadata page = null;
@@ -41,9 +41,6 @@ public class PagedModelGUserSession {
   }
 
   public PagedModelGUserSession addContentItem(GUserSession contentItem) {
-    if (this.content == null) {
-      this.content = new ArrayList<>();
-    }
     this.content.add(contentItem);
     return this;
   }
@@ -52,7 +49,7 @@ public class PagedModelGUserSession {
    * Get content
    * @return content
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public List<GUserSession> getContent() {
     return content;
   }
@@ -70,7 +67,7 @@ public class PagedModelGUserSession {
    * Get page
    * @return page
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public PageMetadata getPage() {
     return page;
   }

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**List&lt;UsersGroup&gt;**](UsersGroup.md) |  |  [optional]
-**page** | [**PageMetadata**](PageMetadata.md) |  |  [optional]
+**content** | [**List&lt;UsersGroup&gt;**](UsersGroup.md) |  | 
+**page** | [**PageMetadata**](PageMetadata.md) |  | 

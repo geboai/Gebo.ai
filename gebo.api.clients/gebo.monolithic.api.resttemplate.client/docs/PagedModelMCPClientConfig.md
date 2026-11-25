@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**List&lt;MCPClientConfig&gt;**](MCPClientConfig.md) |  |  [optional]
-**page** | [**PageMetadata**](PageMetadata.md) |  |  [optional]
+**content** | [**List&lt;MCPClientConfig&gt;**](MCPClientConfig.md) |  | 
+**page** | [**PageMetadata**](PageMetadata.md) |  | 

@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**List&lt;GeneratedApiKeyInfo&gt;**](GeneratedApiKeyInfo.md) |  |  [optional]
-**page** | [**PageMetadata**](PageMetadata.md) |  |  [optional]
+**content** | [**List&lt;GeneratedApiKeyInfo&gt;**](GeneratedApiKeyInfo.md) |  | 
+**page** | [**PageMetadata**](PageMetadata.md) |  | 
