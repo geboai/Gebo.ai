@@ -18,16 +18,22 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.uploads.model.VFilesystemReference;
+import gebo.microservices.api.client.uploads.model.VirtualFilesystemNavigationNode;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * VirtualFilesystemNavigationNode
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:29.686242990+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:05:26.645804470+01:00[Europe/Rome]")
 
 public class VirtualFilesystemNavigationNode {
   @JsonProperty("value")
   private VFilesystemReference value = null;
+
+  @JsonProperty("childs")
+  private List<VirtualFilesystemNavigationNode> childs = null;
 
   @JsonProperty("selected")
   private Boolean selected = null;
@@ -51,6 +57,32 @@ public class VirtualFilesystemNavigationNode {
 
   public void setValue(VFilesystemReference value) {
     this.value = value;
+  }
+
+  public VirtualFilesystemNavigationNode childs(List<VirtualFilesystemNavigationNode> childs) {
+    this.childs = childs;
+    return this;
+  }
+
+  public VirtualFilesystemNavigationNode addChildsItem(VirtualFilesystemNavigationNode childsItem) {
+    if (this.childs == null) {
+      this.childs = new ArrayList<>();
+    }
+    this.childs.add(childsItem);
+    return this;
+  }
+
+   /**
+   * Get childs
+   * @return childs
+  **/
+  @Schema(description = "")
+  public List<VirtualFilesystemNavigationNode> getChilds() {
+    return childs;
+  }
+
+  public void setChilds(List<VirtualFilesystemNavigationNode> childs) {
+    this.childs = childs;
   }
 
   public VirtualFilesystemNavigationNode selected(Boolean selected) {
@@ -100,13 +132,14 @@ public class VirtualFilesystemNavigationNode {
     }
     VirtualFilesystemNavigationNode virtualFilesystemNavigationNode = (VirtualFilesystemNavigationNode) o;
     return Objects.equals(this.value, virtualFilesystemNavigationNode.value) &&
+        Objects.equals(this.childs, virtualFilesystemNavigationNode.childs) &&
         Objects.equals(this.selected, virtualFilesystemNavigationNode.selected) &&
         Objects.equals(this.opened, virtualFilesystemNavigationNode.opened);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(value, selected, opened);
+    return Objects.hash(value, childs, selected, opened);
   }
 
 
@@ -116,6 +149,7 @@ public class VirtualFilesystemNavigationNode {
     sb.append("class VirtualFilesystemNavigationNode {\n");
     
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
+    sb.append("    childs: ").append(toIndentedString(childs)).append("\n");
     sb.append("    selected: ").append(toIndentedString(selected)).append("\n");
     sb.append("    opened: ").append(toIndentedString(opened)).append("\n");
     sb.append("}");

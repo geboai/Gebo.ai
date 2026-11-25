@@ -24,14 +24,14 @@ import java.util.List;
  * UserInfos
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:31:38.818352780+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:03:04.297667225+01:00[Europe/Rome]")
 
 public class UserInfos {
-  @JsonProperty("roles")
-  private List<String> roles = null;
-
   @JsonProperty("username")
   private String username = null;
+
+  @JsonProperty("roles")
+  private List<String> roles = null;
 
   @JsonProperty("disabled")
   private Boolean disabled = null;
@@ -41,6 +41,24 @@ public class UserInfos {
 
   @JsonProperty("name")
   private String name = null;
+
+  public UserInfos username(String username) {
+    this.username = username;
+    return this;
+  }
+
+   /**
+   * Get username
+   * @return username
+  **/
+  @Schema(description = "")
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
 
   public UserInfos roles(List<String> roles) {
     this.roles = roles;
@@ -66,24 +84,6 @@ public class UserInfos {
 
   public void setRoles(List<String> roles) {
     this.roles = roles;
-  }
-
-  public UserInfos username(String username) {
-    this.username = username;
-    return this;
-  }
-
-   /**
-   * Get username
-   * @return username
-  **/
-  @Schema(description = "")
-  public String getUsername() {
-    return username;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
   }
 
   public UserInfos disabled(Boolean disabled) {
@@ -150,8 +150,8 @@ public class UserInfos {
       return false;
     }
     UserInfos userInfos = (UserInfos) o;
-    return Objects.equals(this.roles, userInfos.roles) &&
-        Objects.equals(this.username, userInfos.username) &&
+    return Objects.equals(this.username, userInfos.username) &&
+        Objects.equals(this.roles, userInfos.roles) &&
         Objects.equals(this.disabled, userInfos.disabled) &&
         Objects.equals(this.sourname, userInfos.sourname) &&
         Objects.equals(this.name, userInfos.name);
@@ -159,7 +159,7 @@ public class UserInfos {
 
   @Override
   public int hashCode() {
-    return Objects.hash(roles, username, disabled, sourname, name);
+    return Objects.hash(username, roles, disabled, sourname, name);
   }
 
 
@@ -168,8 +168,8 @@ public class UserInfos {
     StringBuilder sb = new StringBuilder();
     sb.append("class UserInfos {\n");
     
-    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
+    sb.append("    roles: ").append(toIndentedString(roles)).append("\n");
     sb.append("    disabled: ").append(toIndentedString(disabled)).append("\n");
     sb.append("    sourname: ").append(toIndentedString(sourname)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");

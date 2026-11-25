@@ -22,9 +22,18 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * GUserMessage
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:34.994209543+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:05:37.592204541+01:00[Europe/Rome]")
 
 public class GUserMessage {
+  @JsonProperty("key")
+  private String key = null;
+
+  @JsonProperty("summary")
+  private String summary = null;
+
+  @JsonProperty("detail")
+  private String detail = null;
+
   /**
    * Gets or Sets severity
    */
@@ -61,17 +70,8 @@ public class GUserMessage {
   }  @JsonProperty("severity")
   private SeverityEnum severity = null;
 
-  @JsonProperty("summary")
-  private String summary = null;
-
-  @JsonProperty("detail")
-  private String detail = null;
-
   @JsonProperty("id")
   private String id = null;
-
-  @JsonProperty("key")
-  private String key = null;
 
   @JsonProperty("jobId")
   private String jobId = null;
@@ -79,22 +79,22 @@ public class GUserMessage {
   @JsonProperty("timestamp")
   private Long timestamp = null;
 
-  public GUserMessage severity(SeverityEnum severity) {
-    this.severity = severity;
+  public GUserMessage key(String key) {
+    this.key = key;
     return this;
   }
 
    /**
-   * Get severity
-   * @return severity
+   * Get key
+   * @return key
   **/
-  @Schema(required = true, description = "")
-  public SeverityEnum getSeverity() {
-    return severity;
+  @Schema(description = "")
+  public String getKey() {
+    return key;
   }
 
-  public void setSeverity(SeverityEnum severity) {
-    this.severity = severity;
+  public void setKey(String key) {
+    this.key = key;
   }
 
   public GUserMessage summary(String summary) {
@@ -133,6 +133,24 @@ public class GUserMessage {
     this.detail = detail;
   }
 
+  public GUserMessage severity(SeverityEnum severity) {
+    this.severity = severity;
+    return this;
+  }
+
+   /**
+   * Get severity
+   * @return severity
+  **/
+  @Schema(required = true, description = "")
+  public SeverityEnum getSeverity() {
+    return severity;
+  }
+
+  public void setSeverity(SeverityEnum severity) {
+    this.severity = severity;
+  }
+
   public GUserMessage id(String id) {
     this.id = id;
     return this;
@@ -149,24 +167,6 @@ public class GUserMessage {
 
   public void setId(String id) {
     this.id = id;
-  }
-
-  public GUserMessage key(String key) {
-    this.key = key;
-    return this;
-  }
-
-   /**
-   * Get key
-   * @return key
-  **/
-  @Schema(description = "")
-  public String getKey() {
-    return key;
-  }
-
-  public void setKey(String key) {
-    this.key = key;
   }
 
   public GUserMessage jobId(String jobId) {
@@ -215,18 +215,18 @@ public class GUserMessage {
       return false;
     }
     GUserMessage guserMessage = (GUserMessage) o;
-    return Objects.equals(this.severity, guserMessage.severity) &&
+    return Objects.equals(this.key, guserMessage.key) &&
         Objects.equals(this.summary, guserMessage.summary) &&
         Objects.equals(this.detail, guserMessage.detail) &&
+        Objects.equals(this.severity, guserMessage.severity) &&
         Objects.equals(this.id, guserMessage.id) &&
-        Objects.equals(this.key, guserMessage.key) &&
         Objects.equals(this.jobId, guserMessage.jobId) &&
         Objects.equals(this.timestamp, guserMessage.timestamp);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(severity, summary, detail, id, key, jobId, timestamp);
+    return Objects.hash(key, summary, detail, severity, id, jobId, timestamp);
   }
 
 
@@ -235,11 +235,11 @@ public class GUserMessage {
     StringBuilder sb = new StringBuilder();
     sb.append("class GUserMessage {\n");
     
-    sb.append("    severity: ").append(toIndentedString(severity)).append("\n");
+    sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("    summary: ").append(toIndentedString(summary)).append("\n");
     sb.append("    detail: ").append(toIndentedString(detail)).append("\n");
+    sb.append("    severity: ").append(toIndentedString(severity)).append("\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    key: ").append(toIndentedString(key)).append("\n");
     sb.append("    jobId: ").append(toIndentedString(jobId)).append("\n");
     sb.append("    timestamp: ").append(toIndentedString(timestamp)).append("\n");
     sb.append("}");

@@ -11,13 +11,14 @@
  */
 
 export interface GeboAudioDocumentFragment { 
+    contentType?: string;
+    name?: string;
+    is?: any;
     customMetaData?: { [key: string]: any; };
     fragmentType?: GeboAudioDocumentFragment.FragmentTypeEnum;
-    contentType?: string;
     characterEncoding?: string;
     encoding?: string;
     content?: string;
-    name?: string;
     uniqueCode?: string;
 }
 export namespace GeboAudioDocumentFragment {

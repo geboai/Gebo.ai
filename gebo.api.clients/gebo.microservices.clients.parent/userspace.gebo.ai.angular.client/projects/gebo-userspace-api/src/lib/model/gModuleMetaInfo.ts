@@ -12,6 +12,7 @@
 import { ComponentMetaInfo } from './componentMetaInfo';
 
 export interface GModuleMetaInfo { 
-    messagingModuleId?: string;
+    moduleId?: string;
     components?: Array<ComponentMetaInfo>;
+    messagingModuleId?: string;
 }

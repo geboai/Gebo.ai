@@ -27,7 +27,7 @@ import java.util.List;
  * PageGeneratedApiKeyInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:31:38.818352780+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:03:04.297667225+01:00[Europe/Rome]")
 
 public class PageGeneratedApiKeyInfo {
   @JsonProperty("totalPages")
@@ -36,29 +36,29 @@ public class PageGeneratedApiKeyInfo {
   @JsonProperty("totalElements")
   private Long totalElements = null;
 
-  @JsonProperty("pageable")
-  private PageableObject pageable = null;
+  @JsonProperty("size")
+  private Integer size = null;
+
+  @JsonProperty("content")
+  private List<GeneratedApiKeyInfo> content = null;
+
+  @JsonProperty("number")
+  private Integer number = null;
 
   @JsonProperty("sort")
   private SortObject sort = null;
+
+  @JsonProperty("pageable")
+  private PageableObject pageable = null;
+
+  @JsonProperty("numberOfElements")
+  private Integer numberOfElements = null;
 
   @JsonProperty("first")
   private Boolean first = null;
 
   @JsonProperty("last")
   private Boolean last = null;
-
-  @JsonProperty("number")
-  private Integer number = null;
-
-  @JsonProperty("numberOfElements")
-  private Integer numberOfElements = null;
-
-  @JsonProperty("size")
-  private Integer size = null;
-
-  @JsonProperty("content")
-  private List<GeneratedApiKeyInfo> content = null;
 
   @JsonProperty("empty")
   private Boolean empty = null;
@@ -97,114 +97,6 @@ public class PageGeneratedApiKeyInfo {
 
   public void setTotalElements(Long totalElements) {
     this.totalElements = totalElements;
-  }
-
-  public PageGeneratedApiKeyInfo pageable(PageableObject pageable) {
-    this.pageable = pageable;
-    return this;
-  }
-
-   /**
-   * Get pageable
-   * @return pageable
-  **/
-  @Schema(description = "")
-  public PageableObject getPageable() {
-    return pageable;
-  }
-
-  public void setPageable(PageableObject pageable) {
-    this.pageable = pageable;
-  }
-
-  public PageGeneratedApiKeyInfo sort(SortObject sort) {
-    this.sort = sort;
-    return this;
-  }
-
-   /**
-   * Get sort
-   * @return sort
-  **/
-  @Schema(description = "")
-  public SortObject getSort() {
-    return sort;
-  }
-
-  public void setSort(SortObject sort) {
-    this.sort = sort;
-  }
-
-  public PageGeneratedApiKeyInfo first(Boolean first) {
-    this.first = first;
-    return this;
-  }
-
-   /**
-   * Get first
-   * @return first
-  **/
-  @Schema(description = "")
-  public Boolean isFirst() {
-    return first;
-  }
-
-  public void setFirst(Boolean first) {
-    this.first = first;
-  }
-
-  public PageGeneratedApiKeyInfo last(Boolean last) {
-    this.last = last;
-    return this;
-  }
-
-   /**
-   * Get last
-   * @return last
-  **/
-  @Schema(description = "")
-  public Boolean isLast() {
-    return last;
-  }
-
-  public void setLast(Boolean last) {
-    this.last = last;
-  }
-
-  public PageGeneratedApiKeyInfo number(Integer number) {
-    this.number = number;
-    return this;
-  }
-
-   /**
-   * Get number
-   * @return number
-  **/
-  @Schema(description = "")
-  public Integer getNumber() {
-    return number;
-  }
-
-  public void setNumber(Integer number) {
-    this.number = number;
-  }
-
-  public PageGeneratedApiKeyInfo numberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
-    return this;
-  }
-
-   /**
-   * Get numberOfElements
-   * @return numberOfElements
-  **/
-  @Schema(description = "")
-  public Integer getNumberOfElements() {
-    return numberOfElements;
-  }
-
-  public void setNumberOfElements(Integer numberOfElements) {
-    this.numberOfElements = numberOfElements;
   }
 
   public PageGeneratedApiKeyInfo size(Integer size) {
@@ -251,6 +143,114 @@ public class PageGeneratedApiKeyInfo {
     this.content = content;
   }
 
+  public PageGeneratedApiKeyInfo number(Integer number) {
+    this.number = number;
+    return this;
+  }
+
+   /**
+   * Get number
+   * @return number
+  **/
+  @Schema(description = "")
+  public Integer getNumber() {
+    return number;
+  }
+
+  public void setNumber(Integer number) {
+    this.number = number;
+  }
+
+  public PageGeneratedApiKeyInfo sort(SortObject sort) {
+    this.sort = sort;
+    return this;
+  }
+
+   /**
+   * Get sort
+   * @return sort
+  **/
+  @Schema(description = "")
+  public SortObject getSort() {
+    return sort;
+  }
+
+  public void setSort(SortObject sort) {
+    this.sort = sort;
+  }
+
+  public PageGeneratedApiKeyInfo pageable(PageableObject pageable) {
+    this.pageable = pageable;
+    return this;
+  }
+
+   /**
+   * Get pageable
+   * @return pageable
+  **/
+  @Schema(description = "")
+  public PageableObject getPageable() {
+    return pageable;
+  }
+
+  public void setPageable(PageableObject pageable) {
+    this.pageable = pageable;
+  }
+
+  public PageGeneratedApiKeyInfo numberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+    return this;
+  }
+
+   /**
+   * Get numberOfElements
+   * @return numberOfElements
+  **/
+  @Schema(description = "")
+  public Integer getNumberOfElements() {
+    return numberOfElements;
+  }
+
+  public void setNumberOfElements(Integer numberOfElements) {
+    this.numberOfElements = numberOfElements;
+  }
+
+  public PageGeneratedApiKeyInfo first(Boolean first) {
+    this.first = first;
+    return this;
+  }
+
+   /**
+   * Get first
+   * @return first
+  **/
+  @Schema(description = "")
+  public Boolean isFirst() {
+    return first;
+  }
+
+  public void setFirst(Boolean first) {
+    this.first = first;
+  }
+
+  public PageGeneratedApiKeyInfo last(Boolean last) {
+    this.last = last;
+    return this;
+  }
+
+   /**
+   * Get last
+   * @return last
+  **/
+  @Schema(description = "")
+  public Boolean isLast() {
+    return last;
+  }
+
+  public void setLast(Boolean last) {
+    this.last = last;
+  }
+
   public PageGeneratedApiKeyInfo empty(Boolean empty) {
     this.empty = empty;
     return this;
@@ -281,20 +281,20 @@ public class PageGeneratedApiKeyInfo {
     PageGeneratedApiKeyInfo pageGeneratedApiKeyInfo = (PageGeneratedApiKeyInfo) o;
     return Objects.equals(this.totalPages, pageGeneratedApiKeyInfo.totalPages) &&
         Objects.equals(this.totalElements, pageGeneratedApiKeyInfo.totalElements) &&
-        Objects.equals(this.pageable, pageGeneratedApiKeyInfo.pageable) &&
-        Objects.equals(this.sort, pageGeneratedApiKeyInfo.sort) &&
-        Objects.equals(this.first, pageGeneratedApiKeyInfo.first) &&
-        Objects.equals(this.last, pageGeneratedApiKeyInfo.last) &&
-        Objects.equals(this.number, pageGeneratedApiKeyInfo.number) &&
-        Objects.equals(this.numberOfElements, pageGeneratedApiKeyInfo.numberOfElements) &&
         Objects.equals(this.size, pageGeneratedApiKeyInfo.size) &&
         Objects.equals(this.content, pageGeneratedApiKeyInfo.content) &&
+        Objects.equals(this.number, pageGeneratedApiKeyInfo.number) &&
+        Objects.equals(this.sort, pageGeneratedApiKeyInfo.sort) &&
+        Objects.equals(this.pageable, pageGeneratedApiKeyInfo.pageable) &&
+        Objects.equals(this.numberOfElements, pageGeneratedApiKeyInfo.numberOfElements) &&
+        Objects.equals(this.first, pageGeneratedApiKeyInfo.first) &&
+        Objects.equals(this.last, pageGeneratedApiKeyInfo.last) &&
         Objects.equals(this.empty, pageGeneratedApiKeyInfo.empty);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(totalPages, totalElements, pageable, sort, first, last, number, numberOfElements, size, content, empty);
+    return Objects.hash(totalPages, totalElements, size, content, number, sort, pageable, numberOfElements, first, last, empty);
   }
 
 
@@ -305,14 +305,14 @@ public class PageGeneratedApiKeyInfo {
     
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    totalElements: ").append(toIndentedString(totalElements)).append("\n");
-    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
-    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
-    sb.append("    first: ").append(toIndentedString(first)).append("\n");
-    sb.append("    last: ").append(toIndentedString(last)).append("\n");
-    sb.append("    number: ").append(toIndentedString(number)).append("\n");
-    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
     sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
+    sb.append("    number: ").append(toIndentedString(number)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    pageable: ").append(toIndentedString(pageable)).append("\n");
+    sb.append("    numberOfElements: ").append(toIndentedString(numberOfElements)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    last: ").append(toIndentedString(last)).append("\n");
     sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -6,9 +6,9 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 ### What changed this round
 
-The section of `brain` was regenerated on 25 November 2026 from `fix/audit-corrections`
-(develop 1.0.7.0-SNAPSHOT), with `brain`, `filesystem`, `tyr` and `heimdall` built and running:
-the services whose API the branch touches. `brain` goes from 490 to 499 endpoints, its
+Regenerated on 25 November 2026 from `fix/audit-corrections` (develop 1.0.7.0-SNAPSHOT), every
+service built with `swagger-on` and run in four batches beside the infrastructure, `eureka` and
+`heimdall`, rather than all together. `brain` goes from 490 to 499 endpoints, its
 controllers still 99: the chat models' inputs and the kinds of file sent to the models
 (`ChatModelsController`: `getChatModelsInputs`, `getCarriedMediaTypes`,
 `getFileKindsSentToModels`, `applyModelsMetadataInputModalities`), the files a chat wrote
@@ -16,8 +16,7 @@ controllers still 99: the chat models' inputs and the kinds of file sent to the 
 types a chat accepts (`GeboUserChatUploadsController`: `acceptedFileTypes`,
 `chatSessionCreateWithUpload`, `ragChatSessionCreateWithUpload`) and the time a request to an
 MCP server waits by default (`McpClientConfigController.getDefaultRequestTimeoutSeconds`). The
-sections of `filesystem`, `tyr` and `heimdall` came out as they were. The other services were
-not running in that round: their sections are those of the round below.
+sections of every other service came out as they were in the round below.
 
 Regenerated on 16 November 2026 from `feature/spring-platforms-upgrade` (Spring Boot 4.2.0-RC2,
 Spring AI 2.1.0-RC2) rebased on develop 1.0.7.0-SNAPSHOT. The previous round was the one that

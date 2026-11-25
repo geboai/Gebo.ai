@@ -25,9 +25,18 @@ import java.util.Map;
  * GeboMediaDocumentFragment
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:59.303886578+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:08:27.232257316+01:00[Europe/Rome]")
 
 public class GeboMediaDocumentFragment {
+  @JsonProperty("contentType")
+  private String contentType = null;
+
+  @JsonProperty("name")
+  private String name = null;
+
+  @JsonProperty("is")
+  private Object is = null;
+
   @JsonProperty("customMetaData")
   private Map<String, Object> customMetaData = null;
 
@@ -68,9 +77,6 @@ public class GeboMediaDocumentFragment {
   }  @JsonProperty("fragmentType")
   private FragmentTypeEnum fragmentType = null;
 
-  @JsonProperty("contentType")
-  private String contentType = null;
-
   @JsonProperty("characterEncoding")
   private String characterEncoding = null;
 
@@ -80,11 +86,62 @@ public class GeboMediaDocumentFragment {
   @JsonProperty("content")
   private String content = null;
 
-  @JsonProperty("name")
-  private String name = null;
-
   @JsonProperty("uniqueCode")
   private String uniqueCode = null;
+
+  public GeboMediaDocumentFragment contentType(String contentType) {
+    this.contentType = contentType;
+    return this;
+  }
+
+   /**
+   * Get contentType
+   * @return contentType
+  **/
+  @Schema(description = "")
+  public String getContentType() {
+    return contentType;
+  }
+
+  public void setContentType(String contentType) {
+    this.contentType = contentType;
+  }
+
+  public GeboMediaDocumentFragment name(String name) {
+    this.name = name;
+    return this;
+  }
+
+   /**
+   * Get name
+   * @return name
+  **/
+  @Schema(description = "")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public GeboMediaDocumentFragment is(Object is) {
+    this.is = is;
+    return this;
+  }
+
+   /**
+   * Get is
+   * @return is
+  **/
+  @Schema(description = "")
+  public Object getIs() {
+    return is;
+  }
+
+  public void setIs(Object is) {
+    this.is = is;
+  }
 
   public GeboMediaDocumentFragment customMetaData(Map<String, Object> customMetaData) {
     this.customMetaData = customMetaData;
@@ -128,24 +185,6 @@ public class GeboMediaDocumentFragment {
 
   public void setFragmentType(FragmentTypeEnum fragmentType) {
     this.fragmentType = fragmentType;
-  }
-
-  public GeboMediaDocumentFragment contentType(String contentType) {
-    this.contentType = contentType;
-    return this;
-  }
-
-   /**
-   * Get contentType
-   * @return contentType
-  **/
-  @Schema(description = "")
-  public String getContentType() {
-    return contentType;
-  }
-
-  public void setContentType(String contentType) {
-    this.contentType = contentType;
   }
 
   public GeboMediaDocumentFragment characterEncoding(String characterEncoding) {
@@ -202,24 +241,6 @@ public class GeboMediaDocumentFragment {
     this.content = content;
   }
 
-  public GeboMediaDocumentFragment name(String name) {
-    this.name = name;
-    return this;
-  }
-
-   /**
-   * Get name
-   * @return name
-  **/
-  @Schema(description = "")
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
   public GeboMediaDocumentFragment uniqueCode(String uniqueCode) {
     this.uniqueCode = uniqueCode;
     return this;
@@ -248,19 +269,20 @@ public class GeboMediaDocumentFragment {
       return false;
     }
     GeboMediaDocumentFragment geboMediaDocumentFragment = (GeboMediaDocumentFragment) o;
-    return Objects.equals(this.customMetaData, geboMediaDocumentFragment.customMetaData) &&
+    return Objects.equals(this.contentType, geboMediaDocumentFragment.contentType) &&
+        Objects.equals(this.name, geboMediaDocumentFragment.name) &&
+        Objects.equals(this.is, geboMediaDocumentFragment.is) &&
+        Objects.equals(this.customMetaData, geboMediaDocumentFragment.customMetaData) &&
         Objects.equals(this.fragmentType, geboMediaDocumentFragment.fragmentType) &&
-        Objects.equals(this.contentType, geboMediaDocumentFragment.contentType) &&
         Objects.equals(this.characterEncoding, geboMediaDocumentFragment.characterEncoding) &&
         Objects.equals(this.encoding, geboMediaDocumentFragment.encoding) &&
         Objects.equals(this.content, geboMediaDocumentFragment.content) &&
-        Objects.equals(this.name, geboMediaDocumentFragment.name) &&
         Objects.equals(this.uniqueCode, geboMediaDocumentFragment.uniqueCode);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(customMetaData, fragmentType, contentType, characterEncoding, encoding, content, name, uniqueCode);
+    return Objects.hash(contentType, name, is, customMetaData, fragmentType, characterEncoding, encoding, content, uniqueCode);
   }
 
 
@@ -269,13 +291,14 @@ public class GeboMediaDocumentFragment {
     StringBuilder sb = new StringBuilder();
     sb.append("class GeboMediaDocumentFragment {\n");
     
+    sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    is: ").append(toIndentedString(is)).append("\n");
     sb.append("    customMetaData: ").append(toIndentedString(customMetaData)).append("\n");
     sb.append("    fragmentType: ").append(toIndentedString(fragmentType)).append("\n");
-    sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    characterEncoding: ").append(toIndentedString(characterEncoding)).append("\n");
     sb.append("    encoding: ").append(toIndentedString(encoding)).append("\n");
     sb.append("    content: ").append(toIndentedString(content)).append("\n");
-    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    uniqueCode: ").append(toIndentedString(uniqueCode)).append("\n");
     sb.append("}");
     return sb.toString();

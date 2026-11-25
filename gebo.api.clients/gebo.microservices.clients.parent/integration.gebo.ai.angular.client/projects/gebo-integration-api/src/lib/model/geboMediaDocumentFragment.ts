@@ -11,13 +11,14 @@
  */
 
 export interface GeboMediaDocumentFragment { 
+    contentType?: string;
+    name?: string;
+    is?: any;
     customMetaData?: { [key: string]: any; };
     fragmentType?: GeboMediaDocumentFragment.FragmentTypeEnum;
-    contentType?: string;
     characterEncoding?: string;
     encoding?: string;
     content?: string;
-    name?: string;
     uniqueCode?: string;
 }
 export namespace GeboMediaDocumentFragment {

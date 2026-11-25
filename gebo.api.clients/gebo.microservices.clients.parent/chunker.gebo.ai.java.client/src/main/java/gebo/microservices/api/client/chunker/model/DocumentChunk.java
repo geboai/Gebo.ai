@@ -25,7 +25,7 @@ import java.util.Map;
  * DocumentChunk
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:10.884793465+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:03:33.258222753+01:00[Europe/Rome]")
 
 public class DocumentChunk {
   @JsonProperty("originalDocumentCode")
@@ -42,7 +42,9 @@ public class DocumentChunk {
    */
   public enum ChunkTypeEnum {
     TEXT("TEXT"),
-    IMAGE("IMAGE");
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO");
 
     private String value;
 
