@@ -3451,6 +3451,10 @@
         "label": "Configure build systems",
         "help": "List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)"
       },
+      "syncOnFilesModifications": {
+        "label": "Sync on files modifications",
+        "help": "When checked, the files written, changed and removed in the selected folders are synchronized shortly after they change, between one publication and the next, once the data source is published. Unchecked, the contents are refreshed by the publications, launched by hand or by the schedule above."
+      },
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."

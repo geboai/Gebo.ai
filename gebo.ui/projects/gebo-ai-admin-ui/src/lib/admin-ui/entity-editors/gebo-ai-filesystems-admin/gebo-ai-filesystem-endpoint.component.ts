@@ -62,6 +62,7 @@ export class GeboAIFileSystemEndpointComponent extends BaseEntityEditingComponen
         catalogingCriteria: new FormControl(),
         contentManagementSystem: new FormControl(),
         openZips: new FormControl(),
+        syncOnFilesModifications: new FormControl(),
         vectorizeOnlyExtensions: new FormControl(),
         programmedTables: new FormControl()
     });

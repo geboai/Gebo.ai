@@ -106,6 +106,13 @@
                       gebo-ai-field-element></gebo-ai-content-reindex-scheduler-component>
                     </gebo-ai-field>
                   </div>
+                  <div class="col-12">
+                    <gebo-ai-field id="syncOnFilesModifications" label="Sync on files modifications"
+                      help="When checked, the files written, changed and removed in the selected folders are synchronized shortly after they change, between one publication and the next, once the data source is published. Unchecked, the contents are refreshed by the publications, launched by hand or by the schedule above.">
+                      <p-checkbox formControlName="syncOnFilesModifications" id="syncOnFilesModifications" [binary]="true" [trueValue]="true"
+                      [falseValue]="false" gebo-ai-field-element></p-checkbox>
+                    </gebo-ai-field>
+                  </div>
                 <div class="col-12">
                   <gebo-ai-field id="personalData" label="Contains personal data"
                     help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
