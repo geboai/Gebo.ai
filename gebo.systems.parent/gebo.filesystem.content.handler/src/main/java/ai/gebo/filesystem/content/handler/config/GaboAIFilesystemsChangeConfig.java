@@ -12,6 +12,7 @@
 
 package ai.gebo.filesystem.content.handler.config;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,8 +48,13 @@ public class GaboAIFilesystemsChangeConfig {
 	 */
 	@Bean
 	@Scope("singleton")
-	public GFilesystemChangesHandlingService filesystemChangeHandlingService() {
-		return new GFilesystemChangesHandlingService(runtimeBinder);
+	public GFilesystemChangesHandlingService filesystemChangeHandlingService(
+			ObjectProvider<GeboAiFilesystemsConfig> filesystemsConfig) {
+		final GeboAiFilesystemsConfig config = filesystemsConfig.getIfAvailable();
+		return config != null
+				? new GFilesystemChangesHandlingService(runtimeBinder, config.getWatchersPoolLimits(),
+						config.getWatchersPeriod(), config.getWatcherChangeEventsWindow())
+				: new GFilesystemChangesHandlingService(runtimeBinder);
 	}
 
 }

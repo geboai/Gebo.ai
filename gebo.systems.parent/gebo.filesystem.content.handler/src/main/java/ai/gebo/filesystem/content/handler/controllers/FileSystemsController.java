@@ -37,7 +37,6 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.filesystem.content.handler.GFilesystemContentManagementSystem;
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.filesystem.content.handler.IGFilesystemContentManagementSystemHandler;
-import ai.gebo.filesystem.content.handler.impl.GFilesystemChangesHandlingService;
 import ai.gebo.filesystem.content.handler.impl.GFilesystemConfigurationDao;
 import ai.gebo.filesystem.content.handler.service.FileSystemsManagementService;
 import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
@@ -74,8 +73,6 @@ public class FileSystemsController
 	/**
 	 * Service for handling file system changes
 	 */
-	@Autowired
-	GFilesystemChangesHandlingService changesHandlingService;
 	
 	/**
 	 * Data access object for file system configurations
@@ -201,9 +198,7 @@ public class FileSystemsController
 	public GFilesystemProjectEndpoint insertFilesystemEndpoint(@RequestBody GFilesystemProjectEndpoint endpoint)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
 		checkPaths(endpoint);
-		endpoint = insertEndpoint(endpoint);
-		changesHandlingService.addHandling(endpoint);
-		return endpoint;
+		return insertEndpoint(endpoint);
 	}
 
 	/**
@@ -233,7 +228,6 @@ public class FileSystemsController
 	@PostMapping(value = "deleteFilesystemEndpoint", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteFilesystemEndpoint(@RequestBody GFilesystemProjectEndpoint endpoint)
 			throws GeboPersistenceException {
-		changesHandlingService.removeHandling(endpoint);
 		deleteEndpoint(endpoint);
 	}
 

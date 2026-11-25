@@ -12,6 +12,8 @@
 
 package ai.gebo.filesystem.content.handler.repositories;
 
+import java.util.List;
+
 import ai.gebo.filesystem.content.handler.GFilesystemProjectEndpoint;
 import ai.gebo.knowledgebase.repositories.IGBaseMongoDBProjectEndpointRepository;
 
@@ -30,6 +32,9 @@ public interface FilesystemProjectEndpointRepository
 	 * 
 	 * @return The GFilesystemProjectEndpoint class that this repository manages
 	 */
+	/** The data sources that follow the changes of their files. */
+	List<GFilesystemProjectEndpoint> findBySyncOnFilesModificationsTrue();
+
 	@Override
 	default Class<GFilesystemProjectEndpoint> getManagedType() {
 
