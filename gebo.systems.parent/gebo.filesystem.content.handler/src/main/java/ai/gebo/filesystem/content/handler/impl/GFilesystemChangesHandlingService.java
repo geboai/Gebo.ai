@@ -71,7 +71,10 @@ import ai.gebo.systems.abstraction.layer.ChangedContentsConsumingSessionParam;
  * published, or being published, is not looked at: its picture stays, so what changed
  * meanwhile is found by the first look after. A change is told once the folder stayed
  * as it is for the quiet time, so a file being written is not read half way; a folder
- * still changing is looked at again at the next wake-up.
+ * still changing is looked at again at the next wake-up. A folder that cannot be
+ * listed - a network share that dropped, a folder taken away - is not read as emptied:
+ * it is left as it was last seen and looked at again at the next wake-up, so an outage
+ * deletes nothing; a folder removed for good is found by the next publication.
  * <p>
  * What a look finds is not handed to the ingestion at once: it is stored
  * ({@link GFilesystemChangesQueueEntry}) and the changes of a data source gather for
@@ -108,6 +111,8 @@ public class GFilesystemChangesHandlingService implements ApplicationListener<Co
 	 * folders, the files as last seen.
 	 */
 	private final Map<String, Map<String, Map<String, FileState>>> pictures = new ConcurrentHashMap<>();
+	/** The folders found impossible to list at the last look, to tell of it once. */
+	private final Set<String> unlistable = ConcurrentHashMap.newKeySet();
 
 	/** What is compared of a file between two looks. */
 	record FileState(long length, long lastModified) {
@@ -271,7 +276,7 @@ public class GFilesystemChangesHandlingService implements ApplicationListener<Co
 			if (known.containsKey(folder.getAbsolutePath())) {
 				pictured.add(folder);
 			} else if (folder.isDirectory()) {
-				known.put(folder.getAbsolutePath(), pictureOf(folder));
+				known.put(folder.getAbsolutePath(), pictureOf(folder, null));
 			}
 		}
 		if (!Boolean.TRUE.equals(endpoint.getPublished())) {
@@ -288,7 +293,18 @@ public class GFilesystemChangesHandlingService implements ApplicationListener<Co
 		}
 		final Map<File, Map<String, FileState>> changed = new LinkedHashMap<>();
 		for (File folder : pictured) {
-			final Map<String, FileState> now = pictureOf(folder);
+			final Map<String, FileState> now = pictureOf(folder, known.get(folder.getAbsolutePath()));
+			if (now == null) {
+				if (unlistable.add(folder.getAbsolutePath())) {
+					LOGGER.warn("Folder " + folder + " of filesystem data source " + endpoint.getCode()
+							+ " cannot be listed: it is left as it was last seen and looked at again at every wake-up");
+				}
+				continue;
+			}
+			if (unlistable.remove(folder.getAbsolutePath())) {
+				LOGGER.info("Folder " + folder + " of filesystem data source " + endpoint.getCode()
+						+ " can be listed again");
+			}
 			if (!now.equals(known.get(folder.getAbsolutePath()))) {
 				changed.put(folder, now);
 			}
@@ -302,11 +318,11 @@ public class GFilesystemChangesHandlingService implements ApplicationListener<Co
 		Thread.sleep(QUIET_PERIOD.toMillis());
 		for (Map.Entry<File, Map<String, FileState>> seen : changed.entrySet()) {
 			final File folder = seen.getKey();
-			final Map<String, FileState> settled = pictureOf(folder);
-			if (!settled.equals(seen.getValue())) {
+			final Map<String, FileState> settled = pictureOf(folder, known.get(folder.getAbsolutePath()));
+			if (settled == null || !settled.equals(seen.getValue())) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Folder " + folder + " of filesystem data source " + endpoint.getCode()
-							+ " is still changing: looked at again at the next wake-up");
+							+ " is still changing, or cannot be listed: looked at again at the next wake-up");
 				}
 				continue;
 			}
@@ -361,21 +377,42 @@ public class GFilesystemChangesHandlingService implements ApplicationListener<Co
 		}
 	}
 
-	/** The files of a folder and of the folders inside it, each with what is compared of it. */
-	static Map<String, FileState> pictureOf(File folder) {
+	/**
+	 * The files of a folder and of the folders inside it, each with what is compared of
+	 * it; null when the folder, or a folder inside it that held files when last seen,
+	 * cannot be listed now: its files are not gone, they cannot be seen.
+	 *
+	 * @param known the files as last seen, null when the folder is seen for the first time
+	 */
+	static Map<String, FileState> pictureOf(File folder, Map<String, FileState> known) {
 		final Map<String, FileState> files = new HashMap<>();
-		collect(folder, files);
+		final List<File> notListed = new ArrayList<>();
+		collect(folder, files, notListed);
+		if (known != null) {
+			for (File unseen : notListed) {
+				if (unseen.equals(folder)) {
+					return null;
+				}
+				final String inside = unseen.getAbsolutePath() + File.separator;
+				for (String path : known.keySet()) {
+					if (path.startsWith(inside)) {
+						return null;
+					}
+				}
+			}
+		}
 		return files;
 	}
 
-	private static void collect(File folder, Map<String, FileState> files) {
+	private static void collect(File folder, Map<String, FileState> files, List<File> notListed) {
 		final File[] children = folder.listFiles();
 		if (children == null) {
+			notListed.add(folder);
 			return;
 		}
 		for (File child : children) {
 			if (child.isDirectory()) {
-				collect(child, files);
+				collect(child, files, notListed);
 			} else if (child.isFile()) {
 				files.put(child.getAbsolutePath(), new FileState(child.length(), child.lastModified()));
 			}

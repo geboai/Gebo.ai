@@ -124,6 +124,52 @@ public class FilesystemChangesSyncIntegrationTest extends AbstractFilesystemChan
 	}
 
 	@Test
+	public void aFolderThatCannotBeListedIsNotReadAsEmptied() throws Exception {
+		final GFilesystemProjectEndpoint endpoint = dataSource("filesystem data source on a share that drops", true);
+		final Path folder = folderOf(endpoint);
+		final Path inner = folder.resolve("inner");
+		Files.createDirectories(inner);
+		Thread.sleep(3000);
+		final Path note = folder.resolve("note.txt");
+		final Path minutes = inner.resolve("minutes.txt");
+		Files.writeString(note, "On the share.");
+		Files.writeString(minutes, "In a folder of the share.");
+		assertTrue(within(40, () -> documentOf(note) != null && documentOf(minutes) != null));
+		assertTrue(within(10, () -> storedFor(endpoint).isEmpty()));
+
+		// the share drops: the folder is no longer where the data source says
+		final Path away = folder.resolveSibling(folder.getFileName() + "-away");
+		Files.move(folder, away);
+		try {
+			Thread.sleep(12000);
+			assertEquals(List.of(), storedFor(endpoint), "a folder that cannot be listed is not read as emptied");
+			assertFalse(Boolean.TRUE.equals(documentOf(note).getDeleted()), "its files are not told deleted");
+		} finally {
+			Files.move(away, folder);
+		}
+
+		// a folder inside it can no longer be listed
+		final java.util.Set<java.nio.file.attribute.PosixFilePermission> permissions = Files
+				.getPosixFilePermissions(inner);
+		Files.setPosixFilePermissions(inner, java.util.Set.of());
+		try {
+			Thread.sleep(12000);
+			assertEquals(List.of(), storedFor(endpoint), "nor is a folder inside it");
+			assertFalse(Boolean.TRUE.equals(documentOf(minutes).getDeleted()));
+		} finally {
+			Files.setPosixFilePermissions(inner, permissions);
+		}
+
+		// the share is back: what changes is followed again, and nothing was lost
+		final Path later = folder.resolve("written-once-back.txt");
+		Files.writeString(later, "The share is back.");
+		assertTrue(within(40, () -> documentOf(later) != null), "once it can be listed again it is followed again");
+		assertFalse(Boolean.TRUE.equals(documentOf(note).getDeleted()));
+		assertFalse(Boolean.TRUE.equals(documentOf(minutes).getDeleted()));
+		cleanPersistent(endpoint);
+	}
+
+	@Test
 	public void onlyADataSourceFlaggedToFollowItsChangesIsLookedAt() throws Exception {
 		GFilesystemProjectEndpoint endpoint = dataSource("filesystem data source saved before the flag", null);
 		final Path folder = folderOf(endpoint);
