@@ -283,7 +283,9 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 
 		final IGContentConsumer documentSenderConsumerWrapper = new GIOCContentConsumer<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>(
 				enrichers, jobStatus, evaluator, handler, endpoint, workflowRouter, this, userMessagesConsumer,
-				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository, uniqueIds);
+				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository, uniqueIds,
+				// a session fed with what its caller found changed tells its own deletions
+				!(sessionParam instanceof ChangedContentsConsumingSessionParam));
 
 		return new Consumers(documentSenderConsumerWrapper, userMessagesConsumer, errorConsumer);
 	}

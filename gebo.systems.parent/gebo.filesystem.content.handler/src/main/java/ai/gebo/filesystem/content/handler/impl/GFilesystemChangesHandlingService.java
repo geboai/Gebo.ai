@@ -50,7 +50,7 @@ import ai.gebo.jobs.services.IGGeboIngestionJobQueueService;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService;
 import ai.gebo.jobs.services.IGeboInversionOfControlIngestionService.GConsumers;
 import ai.gebo.model.virtualfs.VFilesystemReference;
-import ai.gebo.systems.abstraction.layer.NoContentConsumingSessionParam;
+import ai.gebo.systems.abstraction.layer.ChangedContentsConsumingSessionParam;
 
 /**
  * Follows the changes of the files of the filesystem data sources that ask for it
@@ -544,7 +544,9 @@ public class GFilesystemChangesHandlingService implements ApplicationListener<Co
 				.getImplementationOf(IGFilesystemContentManagementSystemHandler.class);
 		final IGeboInversionOfControlIngestionService iocService = this.runtimeBinder
 				.getImplementationOf(IGeboInversionOfControlIngestionService.class);
-		final GConsumers consumers = iocService.getConsumer(endpoint, new NoContentConsumingSessionParam());
+		// the session is fed with what the looks found changed, the files gone included: it
+		// does not end with the check of every other file of the data source
+		final GConsumers consumers = iocService.getConsumer(endpoint, new ChangedContentsConsumingSessionParam());
 		try {
 			for (ChangedFiles changedFiles : changes) {
 				handler.consume(endpoint, consumers.getContentConsumer(), consumers.getMessagesConsumer(),

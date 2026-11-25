@@ -101,6 +101,29 @@ public class FilesystemChangesSyncIntegrationTest extends AbstractFilesystemChan
 	}
 
 	@Test
+	public void handingOverAChangeDoesNotCheckEveryOtherFileOfTheDataSource() throws Exception {
+		final GFilesystemProjectEndpoint endpoint = dataSource("filesystem data source with many files", true);
+		final Path folder = folderOf(endpoint);
+		Thread.sleep(3000);
+
+		final Path settled = folder.resolve("settled.txt");
+		Files.writeString(settled, "A file handed over some time ago.");
+		assertTrue(within(40, () -> documentOf(settled) != null));
+		assertTrue(within(10, () -> storedFor(endpoint).isEmpty()));
+		final String sessionOfSettled = documentOf(settled).getLastesJobId();
+		assertNotNull(sessionOfSettled, "a document keeps the session that last worked on it");
+
+		final Path changed = folder.resolve("changed-later.txt");
+		Files.writeString(changed, "The only file that changes now.");
+		assertTrue(within(40, () -> documentOf(changed) != null), "the change is handed over");
+		assertTrue(within(10, () -> storedFor(endpoint).isEmpty()), "and its session ended");
+		assertFalse(sessionOfSettled.equals(documentOf(changed).getLastesJobId()), "in a session of its own");
+		assertEquals(sessionOfSettled, documentOf(settled).getLastesJobId(),
+				"which did not work on the file that did not change");
+		cleanPersistent(endpoint);
+	}
+
+	@Test
 	public void onlyADataSourceFlaggedToFollowItsChangesIsLookedAt() throws Exception {
 		GFilesystemProjectEndpoint endpoint = dataSource("filesystem data source saved before the flag", null);
 		final Path folder = folderOf(endpoint);

@@ -76,6 +76,13 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final DocumentReferenceRepository documentReferenceRepository;
 	private final VirtualFolderRepository virtualFolderRepository;
 	private final VirtualFilesystemUniqueIds uniqueIds;
+	/**
+	 * Whether the session ends with the check, on the data source, of every content of
+	 * it this session did not meet. A session reading the whole data source does; one
+	 * fed with what its caller found changed ({@link ChangedContentsConsumingSessionParam})
+	 * tells its own deletions and does not.
+	 */
+	private final boolean checksWhatWasNotMet;
 	private long batchDocumentInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
 			batchDocumentsProcessed = 0l, batchDiscardedInput = 0l;
 	private final WorkflowContext workflowContext;
@@ -87,7 +94,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			IGUserMessagesConsumer userMessagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			IGContentConsumer documentConsumer, IGMessageBroker broker,
 			DocumentReferenceRepository documentReferenceRepository, VirtualFolderRepository virtualFolderRepository,
-			VirtualFilesystemUniqueIds uniqueIds) {
+			VirtualFilesystemUniqueIds uniqueIds, boolean checksWhatWasNotMet) {
+		this.checksWhatWasNotMet = checksWhatWasNotMet;
 		this.enrichers = enrich;
 		this.jobStatus = jobStatus;
 		this.evaluator = evaluator;
@@ -259,7 +267,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				LOGGER.error("Error erasing the stores of the documents reported deleted", th);
 			}
 		}
-		if (!errorConsumer.hasErrors()) {
+		if (checksWhatWasNotMet && !errorConsumer.hasErrors()) {
 			try {
 				Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
 						.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
