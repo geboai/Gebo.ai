@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**List&lt;GUserMessage&gt;**](GUserMessage.md) |  |  [optional]
-**page** | [**PageMetadata**](PageMetadata.md) |  |  [optional]
+**content** | [**List&lt;GUserMessage&gt;**](GUserMessage.md) |  | 
+**page** | [**PageMetadata**](PageMetadata.md) |  | 

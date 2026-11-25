@@ -21,6 +21,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 import ai.gebo.llms.abstraction.layer.services.IGConfigurableEmbeddingModel;
 import ai.gebo.llms.abstraction.layer.services.IGEmbeddingModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
@@ -179,6 +180,18 @@ public abstract class AbstractBaseEmbeddingModelsConfigurationCRUDController<Emb
 					if (gBaseChatModelConfig.getDefaultModel() != null && gBaseChatModelConfig.getDefaultModel()) {
 						gBaseChatModelConfig.setDefaultModel(false);
 						persistentObjectManager.update(gBaseChatModelConfig);
+						// the model as it runs loses the default too: it kept it until the next start,
+						// and the first default found among the running models is the one used
+						IGConfigurableEmbeddingModel running = modelRuntimeConfigurationDao
+								.findByCode(gBaseChatModelConfig.getCode());
+						if (running != null) {
+							try {
+								running.reconfigure(gBaseChatModelConfig);
+							} catch (LLMConfigException e) {
+								LOGGER.error("Error in reconfigure the model " + gBaseChatModelConfig.getCode()
+										+ " that is no longer the default", e);
+							}
+						}
 					}
 				}
 			}

@@ -16,6 +16,7 @@ import { map, Observable } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
 import { alignChoosedModel } from "../utils/choosed-model-alignment";
+import { saveAskingOnDefaultEmbeddingModelChange } from "../utils/default-embedding-model-change";
 /**
  * Component for administering AWS Bedrock embedding model configurations
  * (Amazon Titan / Cohere).
@@ -92,6 +93,15 @@ export class GeboAIBedrockEmbedModelAdminComponent extends BaseEntityEditingComp
 
     override findByCode(code: string): Observable<GBedrockEmbeddingModelConfig | null> {
         return this.bedrockEmbedModelConfigService.findBedrockEmbeddingModelConfigByCode(code);
+    }
+
+    /**
+     * A save that changes which embedding model is the default one asks the user first:
+     * what was ingested with the previous default may no longer be reached.
+     */
+    override doSave(successfulActionCallback?: (data: GBedrockEmbeddingModelConfig) => void): void {
+        saveAskingOnDefaultEmbeddingModelChange(this.injector, this.entity?.defaultModel === true,
+            this.formGroup.value?.defaultModel === true, () => super.doSave(successfulActionCallback));
     }
 
     override save(value: GBedrockEmbeddingModelConfig): Observable<GBedrockEmbeddingModelConfig> {

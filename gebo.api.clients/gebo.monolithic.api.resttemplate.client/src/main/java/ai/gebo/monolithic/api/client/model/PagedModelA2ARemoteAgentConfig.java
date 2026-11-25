@@ -26,11 +26,11 @@ import java.util.List;
  * PagedModelA2ARemoteAgentConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T08:54:21.499303300+01:00[Europe/Rome]")
 
 public class PagedModelA2ARemoteAgentConfig {
   @JsonProperty("content")
-  private List<A2ARemoteAgentConfig> content = null;
+  private List<A2ARemoteAgentConfig> content = new ArrayList<>();
 
   @JsonProperty("page")
   private PageMetadata page = null;
@@ -41,9 +41,6 @@ public class PagedModelA2ARemoteAgentConfig {
   }
 
   public PagedModelA2ARemoteAgentConfig addContentItem(A2ARemoteAgentConfig contentItem) {
-    if (this.content == null) {
-      this.content = new ArrayList<>();
-    }
     this.content.add(contentItem);
     return this;
   }
@@ -52,7 +49,7 @@ public class PagedModelA2ARemoteAgentConfig {
    * Get content
    * @return content
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public List<A2ARemoteAgentConfig> getContent() {
     return content;
   }
@@ -70,7 +67,7 @@ public class PagedModelA2ARemoteAgentConfig {
    * Get page
    * @return page
   **/
-  @Schema(description = "")
+  @Schema(required = true, description = "")
   public PageMetadata getPage() {
     return page;
   }

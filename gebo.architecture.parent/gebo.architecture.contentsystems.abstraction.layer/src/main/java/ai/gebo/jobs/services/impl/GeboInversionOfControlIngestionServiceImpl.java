@@ -78,6 +78,7 @@ public class GeboInversionOfControlIngestionServiceImpl implements IGeboInversio
 			InternalGConsumers ic = new InternalGConsumers();
 			ic.contentConsumer = c.getContentConsumer();
 			ic.messagesConsumer = c.getUserMessagesConsumer();
+			ic.errorConsumer = c.getErrorConsumer();
 			return ic;
 		}
 	}

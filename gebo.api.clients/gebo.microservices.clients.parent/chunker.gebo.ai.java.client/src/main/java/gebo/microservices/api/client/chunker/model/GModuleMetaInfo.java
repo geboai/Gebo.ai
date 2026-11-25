@@ -25,31 +25,34 @@ import java.util.List;
  * GModuleMetaInfo
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:10.884793465+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:03:33.258222753+01:00[Europe/Rome]")
 
 public class GModuleMetaInfo {
-  @JsonProperty("messagingModuleId")
-  private String messagingModuleId = null;
+  @JsonProperty("moduleId")
+  private String moduleId = null;
 
   @JsonProperty("components")
   private List<ComponentMetaInfo> components = null;
 
-  public GModuleMetaInfo messagingModuleId(String messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
+  @JsonProperty("messagingModuleId")
+  private String messagingModuleId = null;
+
+  public GModuleMetaInfo moduleId(String moduleId) {
+    this.moduleId = moduleId;
     return this;
   }
 
    /**
-   * Get messagingModuleId
-   * @return messagingModuleId
+   * Get moduleId
+   * @return moduleId
   **/
   @Schema(description = "")
-  public String getMessagingModuleId() {
-    return messagingModuleId;
+  public String getModuleId() {
+    return moduleId;
   }
 
-  public void setMessagingModuleId(String messagingModuleId) {
-    this.messagingModuleId = messagingModuleId;
+  public void setModuleId(String moduleId) {
+    this.moduleId = moduleId;
   }
 
   public GModuleMetaInfo components(List<ComponentMetaInfo> components) {
@@ -78,6 +81,24 @@ public class GModuleMetaInfo {
     this.components = components;
   }
 
+  public GModuleMetaInfo messagingModuleId(String messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
+    return this;
+  }
+
+   /**
+   * Get messagingModuleId
+   * @return messagingModuleId
+  **/
+  @Schema(description = "")
+  public String getMessagingModuleId() {
+    return messagingModuleId;
+  }
+
+  public void setMessagingModuleId(String messagingModuleId) {
+    this.messagingModuleId = messagingModuleId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -88,13 +109,14 @@ public class GModuleMetaInfo {
       return false;
     }
     GModuleMetaInfo gmoduleMetaInfo = (GModuleMetaInfo) o;
-    return Objects.equals(this.messagingModuleId, gmoduleMetaInfo.messagingModuleId) &&
-        Objects.equals(this.components, gmoduleMetaInfo.components);
+    return Objects.equals(this.moduleId, gmoduleMetaInfo.moduleId) &&
+        Objects.equals(this.components, gmoduleMetaInfo.components) &&
+        Objects.equals(this.messagingModuleId, gmoduleMetaInfo.messagingModuleId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(messagingModuleId, components);
+    return Objects.hash(moduleId, components, messagingModuleId);
   }
 
 
@@ -103,8 +125,9 @@ public class GModuleMetaInfo {
     StringBuilder sb = new StringBuilder();
     sb.append("class GModuleMetaInfo {\n");
     
-    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
+    sb.append("    moduleId: ").append(toIndentedString(moduleId)).append("\n");
     sb.append("    components: ").append(toIndentedString(components)).append("\n");
+    sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

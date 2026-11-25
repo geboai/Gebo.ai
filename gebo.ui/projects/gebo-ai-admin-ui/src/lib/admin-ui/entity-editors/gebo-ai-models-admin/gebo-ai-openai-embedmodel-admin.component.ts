@@ -27,6 +27,7 @@ import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-re
 import { isValidUrl } from "../utils/url-ok";
 
 import { alignChoosedModel } from "../utils/choosed-model-alignment";
+import { saveAskingOnDefaultEmbeddingModelChange } from "../utils/default-embedding-model-change";
 @Component({
     selector: "gebo-ai-open-ai-embed-model-admin-component",
     templateUrl: "gebo-ai-openai-embedmodel-admin.component.html",
@@ -150,6 +151,16 @@ export class GeboAIOpenAIEmbedModelAdminComponent extends BaseEntityEditingCompo
         return this.openaiEmbedModelConfigService.findOpenAIEmbeddingModelConfigByCode(code)
     }
     
+
+    /**
+     * A save that changes which embedding model is the default one asks the user first:
+     * what was ingested with the previous default may no longer be reached.
+     */
+    override doSave(successfulActionCallback?: (data: GOpenAIEmbeddingModelConfig) => void): void {
+        saveAskingOnDefaultEmbeddingModelChange(this.injector, this.entity?.defaultModel === true,
+            this.formGroup.value?.defaultModel === true, () => super.doSave(successfulActionCallback));
+    }
+
     /**
      * Updates an existing embedding model configuration
      * @param value The model configuration to update

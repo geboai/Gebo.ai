@@ -27,7 +27,7 @@ export interface GAgentConfig {
     mainLoopPromptUseCode?: string;
     customLoopPrompt?: GPromptTemplateConfig;
     subscribeAllTools?: boolean;
-    agentRoleCode: string;
+    agentRoleCode?: string;
     useDefaultChatModel?: boolean;
     useChatModelWithUse?: GAgentConfig.UseChatModelWithUseEnum;
     chatModelReference?: GObjectRefGBaseChatModelConfig;
@@ -45,6 +45,8 @@ export interface GAgentConfig {
     excludedToolSources?: Array<string>;
     additionalToolSources?: Array<string>;
     libraryTypeIds?: Array<string>;
+    subscribeAllLibraries?: boolean;
+    excludedLibraryTypeIds?: Array<string>;
     toolsNeedingConfirmation?: Array<string>;
 }
 export namespace GAgentConfig {

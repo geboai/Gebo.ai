@@ -32,6 +32,11 @@ public class GContentsProcessingStatusUpdatePayload extends GBaseMessagePayload 
 	private long batchDocumentsInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
 			batchDocumentsProcessed = 0l, chunksProcessed = 0l, tokensProcessed = 0l, batchDiscardedInput = 0,
 			errorChunks = 0, errorTokens = 0;
+	/**
+	 * The documents found deleted by the step: their records stay, logically deleted,
+	 * and their stores are erased. They are neither input nor sent to the next step.
+	 */
+	private long batchDeletedDocuments = 0;
 	private String workflowType = null, workflowId = null, workflowStepId = null;
 	// Timestamp indicating when this status update was created
 	private Date timestamp = new Date();
@@ -42,6 +47,7 @@ public class GContentsProcessingStatusUpdatePayload extends GBaseMessagePayload 
 		this.batchDocumentsProcessingErrors += x.batchDocumentsProcessingErrors;
 		this.batchSentToNextStep += x.batchSentToNextStep;
 		this.batchDiscardedInput += x.batchDiscardedInput;
+		this.batchDeletedDocuments += x.batchDeletedDocuments;
 		this.chunksProcessed += x.chunksProcessed;
 		this.tokensProcessed += x.tokensProcessed;
 		this.errorChunks += x.errorChunks;

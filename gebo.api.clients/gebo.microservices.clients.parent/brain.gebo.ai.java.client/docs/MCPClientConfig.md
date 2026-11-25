@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **stdioCommand** | **String** |  |  [optional]
 **stdioArgs** | **List&lt;String&gt;** |  |  [optional]
 **stdioEnvironment** | **Map&lt;String, String&gt;** |  |  [optional]
+**requestTimeoutSeconds** | **Integer** |  |  [optional]
 **transportType** | [**TransportTypeEnum**](#TransportTypeEnum) |  | 
 **authMode** | [**AuthModeEnum**](#AuthModeEnum) |  | 
 **exportingPrefix** | **String** |  | 

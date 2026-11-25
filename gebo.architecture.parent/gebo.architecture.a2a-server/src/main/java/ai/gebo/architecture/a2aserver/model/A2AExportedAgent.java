@@ -1,5 +1,7 @@
 package ai.gebo.architecture.a2aserver.model;
 
+import ai.gebo.llms.chat.abstraction.layer.model.GChatProfileConfiguration;
+import ai.gebo.model.annotations.GObjectReference;
 import lombok.Data;
 
 /**
@@ -44,12 +46,10 @@ public class A2AExportedAgent {
 	 * profile's knowledge bases, its chat and embedding models, its retrieval
 	 * thresholds and the rules set for it.
 	 * <p>
-	 * Left empty the run keeps the older behaviour, which is to see every knowledge
-	 * base the calling account can see, with the platform defaults. That is rarely
-	 * what an exported agent should do - an A2A caller has no screen on which to
-	 * choose - so stating a profile is the way to make an export say what it works
-	 * on.
+	 * Left empty the export works with the default chat profile of the
+	 * installation.
 	 */
+	@GObjectReference(referencedType = GChatProfileConfiguration.class)
 	private String chatProfileCode;
 
 	/**

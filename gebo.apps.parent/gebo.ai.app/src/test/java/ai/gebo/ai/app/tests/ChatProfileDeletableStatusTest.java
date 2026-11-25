@@ -25,9 +25,13 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
+import ai.gebo.architecture.a2aserver.model.A2AExportedAgent;
+import ai.gebo.architecture.a2aserver.model.A2AServerConfig;
 import ai.gebo.architecture.angular.persistence.model.SimpleGObjectRef;
 import ai.gebo.architecture.angular.persistence.service.GeboAngularFormGroupMetaInfoService;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
+import ai.gebo.architecture.mcpserver.model.GeboMCPAgentsNetworkTool;
+import ai.gebo.architecture.mcpserver.model.GeboMCPServerConfig;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.DeliverableIntent;
@@ -163,6 +167,75 @@ public class ChatProfileDeletableStatusTest extends AbstractBaseIntegrationTest 
 			if (persistenceManager.findById(GChatProfileConfiguration.class, profile.getCode()) != null) {
 				persistenceManager.delete(profile);
 			}
+		}
+	}
+
+	/**
+	 * A network exported over A2A names its chat profile in an element of the list of
+	 * the exports of its server: the profile is not deletable while an export names it.
+	 */
+	@Test
+	public void aProfileAnA2AExportWorksWithIsNotDeletable() throws Exception {
+		final GChatProfileConfiguration profile = aProfile("Profile an A2A export works with");
+		final GChatProfileConfiguration other = aProfile("Profile no export works with");
+		final A2AExportedAgent first = new A2AExportedAgent();
+		first.setNetworkCode("a-network");
+		first.setSkillName("first");
+		final A2AExportedAgent second = new A2AExportedAgent();
+		second.setNetworkCode("a-network");
+		second.setSkillName("second");
+		second.setChatProfileCode(profile.getCode());
+		A2AServerConfig server = new A2AServerConfig();
+		server.setDescription("A2A server of the profile deletable test");
+		server.setExportedRelativeUrl("deletable-test-" + UUID.randomUUID());
+		server.setExportedAgents(List.of(first, second));
+		server = persistenceManager.insert(server);
+		try {
+			assertFalse(persistenceManager.isDeletable(profile), "an export of the server names the profile");
+			assertFalse(deletableFromTheAdminUi(profile), "the admin UI's check sees the export");
+			assertThrows(GeboPersistenceException.class, () -> profilesController.deleteChatProfile(profile),
+					"the endpoint refuses as well");
+			assertTrue(persistenceManager.isDeletable(other), "a profile no export names can go");
+
+			persistenceManager.delete(server);
+			server = null;
+			assertTrue(deletableFromTheAdminUi(profile), "once the server is gone the profile can go");
+		} finally {
+			if (server != null) {
+				persistenceManager.delete(server);
+			}
+			persistenceManager.delete(profile);
+			persistenceManager.delete(other);
+		}
+	}
+
+	/** The same for a network exported as a tool of an MCP server. */
+	@Test
+	public void aProfileAnMcpNetworkToolWorksWithIsNotDeletable() throws Exception {
+		final GChatProfileConfiguration profile = aProfile("Profile an MCP tool works with");
+		final GeboMCPAgentsNetworkTool tool = new GeboMCPAgentsNetworkTool();
+		tool.setAgentsNetworkCode("a-network");
+		tool.setToolName("ask");
+		tool.setChatProfileCode(profile.getCode());
+		GeboMCPServerConfig server = new GeboMCPServerConfig();
+		server.setDescription("MCP server of the profile deletable test");
+		server.setExportedUniqueRelativeUrl("deletable-test-" + UUID.randomUUID());
+		server.setAgentNetworkAsTools(List.of(tool));
+		server = persistenceManager.insert(server);
+		try {
+			assertFalse(persistenceManager.isDeletable(profile), "a tool of the server names the profile");
+			assertFalse(deletableFromTheAdminUi(profile), "the admin UI's check sees the tool");
+			assertThrows(GeboPersistenceException.class, () -> profilesController.deleteChatProfile(profile),
+					"the endpoint refuses as well");
+
+			persistenceManager.delete(server);
+			server = null;
+			assertTrue(deletableFromTheAdminUi(profile), "once the server is gone the profile can go");
+		} finally {
+			if (server != null) {
+				persistenceManager.delete(server);
+			}
+			persistenceManager.delete(profile);
 		}
 	}
 

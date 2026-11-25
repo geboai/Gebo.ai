@@ -25,7 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * WorkflowStatsAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:24.171841609+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:48.933840589+01:00[Europe/Rome]")
 
 public class WorkflowStatsAggregationBucket {
   @JsonProperty("knowledgeBaseReference")
@@ -69,6 +69,9 @@ public class WorkflowStatsAggregationBucket {
 
   @JsonProperty("batchDiscardedInput")
   private Long batchDiscardedInput = null;
+
+  @JsonProperty("batchDeletedDocuments")
+  private Long batchDeletedDocuments = null;
 
   @JsonProperty("chunksProcessed")
   private Long chunksProcessed = null;
@@ -331,6 +334,24 @@ public class WorkflowStatsAggregationBucket {
     this.batchDiscardedInput = batchDiscardedInput;
   }
 
+  public WorkflowStatsAggregationBucket batchDeletedDocuments(Long batchDeletedDocuments) {
+    this.batchDeletedDocuments = batchDeletedDocuments;
+    return this;
+  }
+
+   /**
+   * Get batchDeletedDocuments
+   * @return batchDeletedDocuments
+  **/
+  @Schema(description = "")
+  public Long getBatchDeletedDocuments() {
+    return batchDeletedDocuments;
+  }
+
+  public void setBatchDeletedDocuments(Long batchDeletedDocuments) {
+    this.batchDeletedDocuments = batchDeletedDocuments;
+  }
+
   public WorkflowStatsAggregationBucket chunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
     return this;
@@ -409,6 +430,7 @@ public class WorkflowStatsAggregationBucket {
         Objects.equals(this.batchDocumentsProcessingErrors, workflowStatsAggregationBucket.batchDocumentsProcessingErrors) &&
         Objects.equals(this.batchSentToNextStep, workflowStatsAggregationBucket.batchSentToNextStep) &&
         Objects.equals(this.batchDiscardedInput, workflowStatsAggregationBucket.batchDiscardedInput) &&
+        Objects.equals(this.batchDeletedDocuments, workflowStatsAggregationBucket.batchDeletedDocuments) &&
         Objects.equals(this.chunksProcessed, workflowStatsAggregationBucket.chunksProcessed) &&
         Objects.equals(this.tokensProcessed, workflowStatsAggregationBucket.tokensProcessed) &&
         Objects.equals(this.nrSnapshots, workflowStatsAggregationBucket.nrSnapshots);
@@ -416,7 +438,7 @@ public class WorkflowStatsAggregationBucket {
 
   @Override
   public int hashCode() {
-    return Objects.hash(knowledgeBaseReference, projectReference, projectEndpointReference, workflowType, workflowId, workflowStepId, year, month, day, batchDocumentsInput, batchDocumentsProcessed, batchDocumentsProcessingErrors, batchSentToNextStep, batchDiscardedInput, chunksProcessed, tokensProcessed, nrSnapshots);
+    return Objects.hash(knowledgeBaseReference, projectReference, projectEndpointReference, workflowType, workflowId, workflowStepId, year, month, day, batchDocumentsInput, batchDocumentsProcessed, batchDocumentsProcessingErrors, batchSentToNextStep, batchDiscardedInput, batchDeletedDocuments, chunksProcessed, tokensProcessed, nrSnapshots);
   }
 
 
@@ -439,6 +461,7 @@ public class WorkflowStatsAggregationBucket {
     sb.append("    batchDocumentsProcessingErrors: ").append(toIndentedString(batchDocumentsProcessingErrors)).append("\n");
     sb.append("    batchSentToNextStep: ").append(toIndentedString(batchSentToNextStep)).append("\n");
     sb.append("    batchDiscardedInput: ").append(toIndentedString(batchDiscardedInput)).append("\n");
+    sb.append("    batchDeletedDocuments: ").append(toIndentedString(batchDeletedDocuments)).append("\n");
     sb.append("    chunksProcessed: ").append(toIndentedString(chunksProcessed)).append("\n");
     sb.append("    tokensProcessed: ").append(toIndentedString(tokensProcessed)).append("\n");
     sb.append("    nrSnapshots: ").append(toIndentedString(nrSnapshots)).append("\n");

@@ -16,7 +16,7 @@ Name | Type | Description | Notes
 **mainLoopPromptUseCode** | **String** |  |  [optional]
 **customLoopPrompt** | [**GPromptTemplateConfig**](GPromptTemplateConfig.md) |  |  [optional]
 **subscribeAllTools** | **Boolean** |  |  [optional]
-**agentRoleCode** | **String** |  | 
+**agentRoleCode** | **String** |  |  [optional]
 **useDefaultChatModel** | **Boolean** |  |  [optional]
 **useChatModelWithUse** | [**UseChatModelWithUseEnum**](#UseChatModelWithUseEnum) |  |  [optional]
 **chatModelReference** | [**GObjectRefGBaseChatModelConfig**](GObjectRefGBaseChatModelConfig.md) |  |  [optional]
@@ -34,6 +34,8 @@ Name | Type | Description | Notes
 **excludedToolSources** | **List&lt;String&gt;** |  |  [optional]
 **additionalToolSources** | **List&lt;String&gt;** |  |  [optional]
 **libraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
+**subscribeAllLibraries** | **Boolean** |  |  [optional]
+**excludedLibraryTypeIds** | **List&lt;String&gt;** |  |  [optional]
 **toolsNeedingConfirmation** | **List&lt;String&gt;** |  |  [optional]
 
 <a name="AgentTypeEnum"></a>

@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **batchDocumentsProcessingErrors** | **Long** |  |  [optional]
 **batchSentToNextStep** | **Long** |  |  [optional]
 **batchDiscardedInput** | **Long** |  |  [optional]
+**batchDeletedDocuments** | **Long** |  |  [optional]
 **chunksProcessed** | **Long** |  |  [optional]
 **tokensProcessed** | **Long** |  |  [optional]
 **nrSnapshots** | **Long** |  |  [optional]

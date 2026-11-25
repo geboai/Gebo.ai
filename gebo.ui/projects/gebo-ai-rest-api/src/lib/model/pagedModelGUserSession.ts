@@ -13,6 +13,6 @@ import { GUserSession } from './gUserSession';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGUserSession { 
-    content?: Array<GUserSession>;
-    page?: PageMetadata;
+    content: Array<GUserSession>;
+    page: PageMetadata;
 }

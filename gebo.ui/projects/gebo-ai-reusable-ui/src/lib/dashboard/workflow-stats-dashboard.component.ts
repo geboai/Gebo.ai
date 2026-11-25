@@ -30,6 +30,7 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
     ProcessedSeries: "Processed",
     SentToNextStepSeries: "Sent to next step",
     DiscardedSeries: "Discarded",
+    DeletedSeries: "Deleted",
     ErrorsSeries: "Errors",
     ChunksSeries: "Chunks",
     TokensSeries: "Tokens (k)"
@@ -218,6 +219,13 @@ export abstract class BaseWorkflowStatsDashboardComponent implements OnInit {
           data: buckets.map(b => b.batchDiscardedInput || 0),
           backgroundColor: "rgba(255, 167, 38, 0.75)",
           borderColor: "#FB8C00",
+          borderWidth: 1.5
+        },
+        {
+          label: this.texts["DeletedSeries"],
+          data: buckets.map(b => b.batchDeletedDocuments || 0),
+          backgroundColor: "rgba(171, 71, 188, 0.75)",
+          borderColor: "#8E24AA",
           borderWidth: 1.5
         },
         {

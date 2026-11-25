@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **uses** | [**List&lt;UsesEnum&gt;**](#List&lt;UsesEnum&gt;) |  |  [optional]
 **maxGeneratedTokens** | **Integer** |  |  [optional]
 **thinking** | [**ThinkingEnum**](#ThinkingEnum) |  |  [optional]
+**inputModalities** | [**List&lt;InputModalitiesEnum&gt;**](#List&lt;InputModalitiesEnum&gt;) |  |  [optional]
 **temperature** | **Double** |  |  [optional]
 
 <a name="TypeEnum"></a>
@@ -44,3 +45,13 @@ LOW_THINKING | &quot;LOW_THINKING&quot;
 MEDIUM_THINKING | &quot;MEDIUM_THINKING&quot;
 HIGH_THINKING | &quot;HIGH_THINKING&quot;
 AUTO | &quot;AUTO&quot;
+
+<a name="List<InputModalitiesEnum>"></a>
+## Enum: List&lt;InputModalitiesEnum&gt;
+Name | Value
+---- | -----
+TEXT | &quot;TEXT&quot;
+IMAGE | &quot;IMAGE&quot;
+AUDIO | &quot;AUDIO&quot;
+VIDEO | &quot;VIDEO&quot;
+DOCUMENT | &quot;DOCUMENT&quot;

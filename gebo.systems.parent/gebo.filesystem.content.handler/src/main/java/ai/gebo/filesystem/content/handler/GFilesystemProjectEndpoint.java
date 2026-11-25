@@ -39,6 +39,13 @@ public class GFilesystemProjectEndpoint extends GProjectEndpoint {
 	 * in the shared filesystem.
 	 */
 	private List<VFilesystemReference> path = null;
+	/**
+	 * Whether the changes of the files in the folders of this data source are followed
+	 * and synchronized as they happen: only a data source with this flag set is. Without
+	 * it the contents are refreshed when the data source is published, by hand or by its
+	 * schedule.
+	 */
+	private Boolean syncOnFilesModifications = null;
 
 	/**
 	 * Default constructor for the GFilesystemProjectEndpoint.
@@ -63,6 +70,14 @@ public class GFilesystemProjectEndpoint extends GProjectEndpoint {
 	 */
 	public void setPath(List<VFilesystemReference> path) {
 		this.path = path;
+	}
+
+	public Boolean getSyncOnFilesModifications() {
+		return syncOnFilesModifications;
+	}
+
+	public void setSyncOnFilesModifications(Boolean syncOnFilesModifications) {
+		this.syncOnFilesModifications = syncOnFilesModifications;
 	}
 
 }

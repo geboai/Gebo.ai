@@ -188,6 +188,7 @@ public class GWorkflowsConcentratorMessagesReceiverFactory extends GAbstractTime
 				processed.setBatchDocumentsProcessingErrors(payload.getBatchDocumentsProcessingErrors());
 				processed.setBatchDocumentsProcessed(payload.getBatchDocumentsProcessed());
 				processed.setBatchDiscardedInput(payload.getBatchDiscardedInput());
+				processed.setBatchDeletedDocuments(payload.getBatchDeletedDocuments());
 				processed.setBatchSentToNextStep(payload.getBatchSentToNextStep());
 				processed.setChunksProcessed(payload.getChunksProcessed());
 				processed.setTokensProcessed(payload.getTokensProcessed());

@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **thinking** | [**ThinkingEnum**](#ThinkingEnum) |  |  [optional]
 **temperature** | **Double** |  |  [optional]
 **internalServicesThinking** | [**InternalServicesThinkingEnum**](#InternalServicesThinkingEnum) |  |  [optional]
+**inputModalities** | [**List&lt;InputModalitiesEnum&gt;**](#List&lt;InputModalitiesEnum&gt;) |  |  [optional]
 
 <a name="List<UsesEnum>"></a>
 ## Enum: List&lt;UsesEnum&gt;
@@ -39,3 +40,13 @@ LOW_THINKING | &quot;LOW_THINKING&quot;
 MEDIUM_THINKING | &quot;MEDIUM_THINKING&quot;
 HIGH_THINKING | &quot;HIGH_THINKING&quot;
 AUTO | &quot;AUTO&quot;
+
+<a name="List<InputModalitiesEnum>"></a>
+## Enum: List&lt;InputModalitiesEnum&gt;
+Name | Value
+---- | -----
+TEXT | &quot;TEXT&quot;
+IMAGE | &quot;IMAGE&quot;
+AUDIO | &quot;AUDIO&quot;
+VIDEO | &quot;VIDEO&quot;
+DOCUMENT | &quot;DOCUMENT&quot;

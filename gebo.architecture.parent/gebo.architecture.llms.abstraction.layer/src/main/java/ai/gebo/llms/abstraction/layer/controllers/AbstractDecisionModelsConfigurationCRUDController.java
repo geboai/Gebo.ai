@@ -18,7 +18,9 @@ import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
+import ai.gebo.llms.abstraction.layer.services.IGConfigurableDecisionModel;
 import ai.gebo.llms.abstraction.layer.services.IGDecisionModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
@@ -100,6 +102,17 @@ public abstract class AbstractDecisionModelsConfigurationCRUDController<Decision
 					if (other.getDefaultModel() != null && other.getDefaultModel()) {
 						other.setDefaultModel(false);
 						persistentObjectManager.update(other);
+						// the model as it runs loses the default too: it kept it until the next start,
+						// and the first default found among the running models is the one used
+						IGConfigurableDecisionModel running = modelRuntimeConfigurationDao.findByCode(other.getCode());
+						if (running != null) {
+							try {
+								running.reconfigure(other);
+							} catch (LLMConfigException e) {
+								LOGGER.error("Error in reconfigure the model " + other.getCode()
+										+ " that is no longer the default", e);
+							}
+						}
 					}
 				}
 			}

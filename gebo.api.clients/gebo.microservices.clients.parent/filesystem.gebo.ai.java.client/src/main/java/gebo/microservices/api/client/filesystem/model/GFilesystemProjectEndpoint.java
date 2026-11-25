@@ -28,7 +28,7 @@ import java.util.List;
  * GFilesystemProjectEndpoint
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:18:24.772329981+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:39.354886231+01:00[Europe/Rome]")
 
 public class GFilesystemProjectEndpoint {
   @JsonProperty("code")
@@ -152,6 +152,9 @@ public class GFilesystemProjectEndpoint {
 
   @JsonProperty("path")
   private List<VFilesystemReference> path = null;
+
+  @JsonProperty("syncOnFilesModifications")
+  private Boolean syncOnFilesModifications = null;
 
   public GFilesystemProjectEndpoint code(String code) {
     this.code = code;
@@ -553,6 +556,24 @@ public class GFilesystemProjectEndpoint {
     this.path = path;
   }
 
+  public GFilesystemProjectEndpoint syncOnFilesModifications(Boolean syncOnFilesModifications) {
+    this.syncOnFilesModifications = syncOnFilesModifications;
+    return this;
+  }
+
+   /**
+   * Get syncOnFilesModifications
+   * @return syncOnFilesModifications
+  **/
+  @Schema(description = "")
+  public Boolean isSyncOnFilesModifications() {
+    return syncOnFilesModifications;
+  }
+
+  public void setSyncOnFilesModifications(Boolean syncOnFilesModifications) {
+    this.syncOnFilesModifications = syncOnFilesModifications;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -582,12 +603,13 @@ public class GFilesystemProjectEndpoint {
         Objects.equals(this.objectSpaceType, gfilesystemProjectEndpoint.objectSpaceType) &&
         Objects.equals(this.aclAliases, gfilesystemProjectEndpoint.aclAliases) &&
         Objects.equals(this.personalData, gfilesystemProjectEndpoint.personalData) &&
-        Objects.equals(this.path, gfilesystemProjectEndpoint.path);
+        Objects.equals(this.path, gfilesystemProjectEndpoint.path) &&
+        Objects.equals(this.syncOnFilesModifications, gfilesystemProjectEndpoint.syncOnFilesModifications);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, path);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, parentProjectCode, readonly, published, synchPeriodically, openZips, buildSystemsRefs, catalogingCriteria, programmedTables, vectorizeOnlyExtensions, synchroStrategy, objectSpaceType, aclAliases, personalData, path, syncOnFilesModifications);
   }
 
 
@@ -616,6 +638,7 @@ public class GFilesystemProjectEndpoint {
     sb.append("    aclAliases: ").append(toIndentedString(aclAliases)).append("\n");
     sb.append("    personalData: ").append(toIndentedString(personalData)).append("\n");
     sb.append("    path: ").append(toIndentedString(path)).append("\n");
+    sb.append("    syncOnFilesModifications: ").append(toIndentedString(syncOnFilesModifications)).append("\n");
     sb.append("}");
     return sb.toString();
   }

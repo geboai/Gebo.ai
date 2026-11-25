@@ -13,6 +13,6 @@ import { DocumentReferenceView } from './documentReferenceView';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelDocumentReferenceView { 
-    content?: Array<DocumentReferenceView>;
-    page?: PageMetadata;
+    content: Array<DocumentReferenceView>;
+    page: PageMetadata;
 }

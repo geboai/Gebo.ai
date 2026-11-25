@@ -28,6 +28,7 @@ export interface MCPClientConfig {
     stdioCommand?: string;
     stdioArgs?: Array<string>;
     stdioEnvironment?: { [key: string]: string; };
+    requestTimeoutSeconds?: number;
     transportType: MCPClientConfig.TransportTypeEnum;
     authMode: MCPClientConfig.AuthModeEnum;
     exportingPrefix: string;

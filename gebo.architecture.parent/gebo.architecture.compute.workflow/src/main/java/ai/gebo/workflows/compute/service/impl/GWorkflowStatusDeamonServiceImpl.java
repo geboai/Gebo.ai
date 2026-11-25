@@ -78,8 +78,10 @@ public class GWorkflowStatusDeamonServiceImpl {
 						// deleted after it was listed: nothing left to close, go on with the others
 						return;
 					}
+					// a job that found only deleted documents has no input and did its work too
 					boolean batchFinished = (measures.isFinished()
-							&& measures.getRootStatus().getBatchDocumentsInput() > 0);
+							&& (measures.getRootStatus().getBatchDocumentsInput() > 0
+									|| measures.getRootStatus().getBatchDeletedDocuments() > 0));
 					boolean timeoutPassed = (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) <= now;
 					if (batchFinished || timeoutPassed) {
 						try {

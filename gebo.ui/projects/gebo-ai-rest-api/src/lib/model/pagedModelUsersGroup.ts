@@ -13,6 +13,6 @@ import { PageMetadata } from './pageMetadata';
 import { UsersGroup } from './usersGroup';
 
 export interface PagedModelUsersGroup { 
-    content?: Array<UsersGroup>;
-    page?: PageMetadata;
+    content: Array<UsersGroup>;
+    page: PageMetadata;
 }

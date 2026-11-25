@@ -11,6 +11,7 @@
  */
 import { CalledFunction } from './calledFunction';
 import { ChatModelRequestContextWindowStats } from './chatModelRequestContextWindowStats';
+import { GConversationFile } from './gConversationFile';
 import { GResponseDocumentRef } from './gResponseDocumentRef';
 import { GUserMessage } from './gUserMessage';
 import { GeboWorkingMemoryWindowOccupation } from './geboWorkingMemoryWindowOccupation';
@@ -30,6 +31,7 @@ export interface GeboTemplatedChatResponse {
     forcedDocumentsRef?: Array<GResponseDocumentRef>;
     documentsRef?: Array<GResponseDocumentRef>;
     listedDocumentNames?: Array<string>;
+    writtenFiles?: Array<GConversationFile>;
     calledFunctions?: Array<CalledFunction>;
     contextWindowStats?: ChatModelRequestContextWindowStats;
     generatedResources?: Array<LLMGeneratedResource>;

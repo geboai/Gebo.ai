@@ -23,7 +23,7 @@ import java.util.Date;
  * DocumentReferenceView
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class DocumentReferenceView {
   @JsonProperty("contentType")
@@ -35,11 +35,11 @@ public class DocumentReferenceView {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("code")
-  private String code = null;
-
   @JsonProperty("messagingModuleId")
   private String messagingModuleId = null;
+
+  @JsonProperty("code")
+  private String code = null;
 
   @JsonProperty("rootKnowledgebaseCode")
   private String rootKnowledgebaseCode = null;
@@ -119,24 +119,6 @@ public class DocumentReferenceView {
     this.description = description;
   }
 
-  public DocumentReferenceView code(String code) {
-    this.code = code;
-    return this;
-  }
-
-   /**
-   * Get code
-   * @return code
-  **/
-  @Schema(description = "")
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
-  }
-
   public DocumentReferenceView messagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
     return this;
@@ -153,6 +135,24 @@ public class DocumentReferenceView {
 
   public void setMessagingModuleId(String messagingModuleId) {
     this.messagingModuleId = messagingModuleId;
+  }
+
+  public DocumentReferenceView code(String code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(description = "")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
   }
 
   public DocumentReferenceView rootKnowledgebaseCode(String rootKnowledgebaseCode) {
@@ -312,8 +312,8 @@ public class DocumentReferenceView {
     return Objects.equals(this.contentType, documentReferenceView.contentType) &&
         Objects.equals(this.extension, documentReferenceView.extension) &&
         Objects.equals(this.description, documentReferenceView.description) &&
-        Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.messagingModuleId, documentReferenceView.messagingModuleId) &&
+        Objects.equals(this.code, documentReferenceView.code) &&
         Objects.equals(this.rootKnowledgebaseCode, documentReferenceView.rootKnowledgebaseCode) &&
         Objects.equals(this.parentProjectCode, documentReferenceView.parentProjectCode) &&
         Objects.equals(this.modificationDate, documentReferenceView.modificationDate) &&
@@ -326,7 +326,7 @@ public class DocumentReferenceView {
 
   @Override
   public int hashCode() {
-    return Objects.hash(contentType, extension, description, code, messagingModuleId, rootKnowledgebaseCode, parentProjectCode, modificationDate, parentVirtualFolderCode, relativePath, deleted, creationDate, name);
+    return Objects.hash(contentType, extension, description, messagingModuleId, code, rootKnowledgebaseCode, parentProjectCode, modificationDate, parentVirtualFolderCode, relativePath, deleted, creationDate, name);
   }
 
 
@@ -338,8 +338,8 @@ public class DocumentReferenceView {
     sb.append("    contentType: ").append(toIndentedString(contentType)).append("\n");
     sb.append("    extension: ").append(toIndentedString(extension)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    messagingModuleId: ").append(toIndentedString(messagingModuleId)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    rootKnowledgebaseCode: ").append(toIndentedString(rootKnowledgebaseCode)).append("\n");
     sb.append("    parentProjectCode: ").append(toIndentedString(parentProjectCode)).append("\n");
     sb.append("    modificationDate: ").append(toIndentedString(modificationDate)).append("\n");

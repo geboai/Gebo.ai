@@ -13,6 +13,6 @@ import { GChatProfileConfiguration } from './gChatProfileConfiguration';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGChatProfileConfiguration { 
-    content?: Array<GChatProfileConfiguration>;
-    page?: PageMetadata;
+    content: Array<GChatProfileConfiguration>;
+    page: PageMetadata;
 }

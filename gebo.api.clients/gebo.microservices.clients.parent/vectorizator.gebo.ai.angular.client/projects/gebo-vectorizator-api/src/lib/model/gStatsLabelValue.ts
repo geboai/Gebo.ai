@@ -11,6 +11,8 @@
  */
 
 export interface GStatsLabelValue { 
+    s?: string;
+    n?: number;
     label?: string;
     value?: number;
 }

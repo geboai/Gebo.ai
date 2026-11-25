@@ -28,6 +28,7 @@ import org.a2aproject.sdk.jsonrpc.common.wrappers.SendMessageRequest;
 import org.a2aproject.sdk.jsonrpc.common.wrappers.SendMessageResponse;
 import org.a2aproject.sdk.jsonrpc.common.wrappers.SendStreamingMessageResponse;
 import org.a2aproject.sdk.spec.A2AError;
+import org.a2aproject.sdk.spec.A2AMethods;
 import org.a2aproject.sdk.spec.AgentCard;
 import org.a2aproject.sdk.spec.Message;
 import org.a2aproject.sdk.spec.MessageSendParams;
@@ -109,10 +110,11 @@ public class A2AServerBuilder {
 		String contextId = inbound != null ? inbound.contextId() : null;
 		String skillId = extractSkillId(inbound);
 
-		if ("message/stream".equals(method)) {
+		// a call is answered under the name protocol 1.0 gives it and under the older one
+		if ("message/stream".equals(method) || A2AMethods.SEND_STREAMING_MESSAGE_METHOD.equals(method)) {
 			return handleStream(config, id, skillId, received, contextId);
 		}
-		if ("message/send".equals(method)) {
+		if ("message/send".equals(method) || A2AMethods.SEND_MESSAGE_METHOD.equals(method)) {
 			return handleSend(config, id, skillId, received, contextId);
 		}
 		A2AError error = new A2AError(JSONRPC_METHOD_NOT_FOUND, "Method not supported: " + method, null);
@@ -171,9 +173,7 @@ public class A2AServerBuilder {
 				LOGGER.debug("A2A message/send read " + frames.size() + " frame(s) of the run");
 			}
 		}
-		// the files the run wrote and generated are kept on the run's own response, not
-		// always the one the last frame carries
-		return ai.gebo.llms.agent.standard.services.ChatRunFiles.withFilesOfTheRun(fromFrames, run.getResponse());
+		return fromFrames != null ? fromFrames : run.getResponse();
 	}
 
 	private String chatContextOf(GeboChatResponse response) {
@@ -231,9 +231,6 @@ public class A2AServerBuilder {
 					try {
 						GeboChatResponse carried = resultAdapter.responseOf(frame);
 						if (carried != null) {
-							// the files the run wrote and generated are kept on the run's own response
-							carried = ai.gebo.llms.agent.standard.services.ChatRunFiles.withFilesOfTheRun(carried,
-									run.getResponse());
 							Message message = resultAdapter.messageOf(carried, null,
 									contextId != null ? contextId : carried.getUserChatContextCode(), notTaken);
 							sse.data(JsonUtil.toJson(new SendStreamingMessageResponse(id, message)));

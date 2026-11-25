@@ -24,9 +24,11 @@ export interface DocumentChunk {
     chunkingSessionId?: string;
 }
 export namespace DocumentChunk {
-    export type ChunkTypeEnum = 'TEXT' | 'IMAGE';
+    export type ChunkTypeEnum = 'TEXT' | 'IMAGE' | 'AUDIO' | 'VIDEO';
     export const ChunkTypeEnum = {
         TEXT: 'TEXT' as ChunkTypeEnum,
-        IMAGE: 'IMAGE' as ChunkTypeEnum
+        IMAGE: 'IMAGE' as ChunkTypeEnum,
+        AUDIO: 'AUDIO' as ChunkTypeEnum,
+        VIDEO: 'VIDEO' as ChunkTypeEnum
     };
 }

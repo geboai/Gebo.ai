@@ -53,6 +53,7 @@ export class GeboAIMcpClientAdminComponent extends BaseEntityEditingComponent<MC
         stdioCommand: new FormControl(),
         stdioArgsRaw: new FormControl(''),
         stdioEnvironmentRaw: new FormControl(''),
+        requestTimeoutSeconds: new FormControl(),
         transportType: new FormControl('SSE_LEGACY', Validators.required),
         authMode: new FormControl('NONE', Validators.required),
         exportingPrefix: new FormControl('mcp-', Validators.required),
@@ -95,6 +96,9 @@ export class GeboAIMcpClientAdminComponent extends BaseEntityEditingComponent<MC
     public tools: MCPTool[] = [];
     public resources: MCPResource[] = [];
     public prompts: MCPPrompt[] = [];
+
+    // The time of the installation for a request, shown where the server's own time is asked
+    public defaultRequestTimeoutSeconds: string = "";
 
     // Readonly property for the editor template
     public readonly: boolean = false;
@@ -144,6 +148,7 @@ export class GeboAIMcpClientAdminComponent extends BaseEntityEditingComponent<MC
         super.ngOnInit();
         this.userAdminControllerService.getAllUsers().subscribe(u => this.users = u || []);
         this.userAdminControllerService.getAllGroups().subscribe(g => this.groups = g || []);
+        this.service.getDefaultRequestTimeoutSeconds().subscribe(seconds => this.defaultRequestTimeoutSeconds = "" + seconds);
     }
 
     override onLoadedPersistentData(actualValue: MCPClientConfig): void {

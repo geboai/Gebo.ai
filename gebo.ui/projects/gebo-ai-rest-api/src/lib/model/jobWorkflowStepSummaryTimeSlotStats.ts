@@ -15,6 +15,7 @@ export interface JobWorkflowStepSummaryTimeSlotStats {
     endDateTime?: Date;
     batchDocumentsInput?: number;
     batchDiscardedInput?: number;
+    batchDeletedDocuments?: number;
     batchSentToNextStep?: number;
     chunksProcessed?: number;
     tokensProcessed?: number;

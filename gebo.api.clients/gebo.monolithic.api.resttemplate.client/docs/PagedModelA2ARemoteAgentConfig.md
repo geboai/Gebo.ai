@@ -3,5 +3,5 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**content** | [**List&lt;A2ARemoteAgentConfig&gt;**](A2ARemoteAgentConfig.md) |  |  [optional]
-**page** | [**PageMetadata**](PageMetadata.md) |  |  [optional]
+**content** | [**List&lt;A2ARemoteAgentConfig&gt;**](A2ARemoteAgentConfig.md) |  | 
+**page** | [**PageMetadata**](PageMetadata.md) |  | 

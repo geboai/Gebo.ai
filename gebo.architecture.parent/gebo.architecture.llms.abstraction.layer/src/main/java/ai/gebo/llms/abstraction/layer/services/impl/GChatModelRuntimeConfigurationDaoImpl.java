@@ -83,6 +83,19 @@ public class GChatModelRuntimeConfigurationDaoImpl
 		}
 	}
 
+	/** Tells of the files a provider refused to the models registered here; looked up late, it may not exist. */
+	@Autowired(required = false)
+	ObjectProvider<RefusedFilesNotifier> refusedFilesNotifier;
+
+	/** Every model registered here tells of the files its provider refuses. */
+	private void attachRefusedFilesNotifier(IGConfigurableChatModel element) {
+		final RefusedFilesNotifier notifier = refusedFilesNotifier != null ? refusedFilesNotifier.getIfAvailable()
+				: null;
+		if (notifier != null && element instanceof GAbstractConfigurableChatModel model) {
+			model.setRefusedFilesNotifier(notifier);
+		}
+	}
+
 	/**
 	 * Default constructor initializing the base class with an empty list.
 	 */
@@ -141,6 +154,7 @@ public class GChatModelRuntimeConfigurationDaoImpl
 	public void add(IGConfigurableChatModel element) {
 		attachProviderDealPricing(element);
 		attachPromptContextProviders(element);
+		attachRefusedFilesNotifier(element);
 		this.staticConfigs.add(element);
 	}
 
@@ -170,6 +184,7 @@ public class GChatModelRuntimeConfigurationDaoImpl
 			}
 			IGConfigurableChatModel chatModel = handler.create(config);
 			attachPromptContextProviders(chatModel);
+			attachRefusedFilesNotifier(chatModel);
 			LOGGER.info("Initialized chatModel successfully");
 			attachProviderDealPricing(chatModel);
 			this.staticConfigs.add(chatModel);

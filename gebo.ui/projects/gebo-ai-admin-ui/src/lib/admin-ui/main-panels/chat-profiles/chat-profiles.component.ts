@@ -53,7 +53,8 @@ export class ChatProfilesComponent extends AncestorPanelComponent implements OnI
      * Container for chat profiles data retrieved from the server.
      */
     chatprofiles: PagedModelGChatProfileConfiguration = {
-        content: []
+        content: [],
+        page: { size: 0, number: 0, totalElements: 0, totalPages: 0 }
     };
 
     /**

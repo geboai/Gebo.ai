@@ -24,7 +24,7 @@ import java.util.List;
  * LLMModelPresetChoice
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class LLMModelPresetChoice {
   @JsonProperty("code")
@@ -152,6 +152,43 @@ public class LLMModelPresetChoice {
 
   }  @JsonProperty("internalServicesThinking")
   private InternalServicesThinkingEnum internalServicesThinking = null;
+
+  /**
+   * Gets or Sets inputModalities
+   */
+  public enum InputModalitiesEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO"),
+    DOCUMENT("DOCUMENT");
+
+    private String value;
+
+    InputModalitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static InputModalitiesEnum fromValue(String input) {
+      for (InputModalitiesEnum b : InputModalitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("inputModalities")
+  private List<InputModalitiesEnum> inputModalities = null;
 
   public LLMModelPresetChoice code(String code) {
     this.code = code;
@@ -323,6 +360,32 @@ public class LLMModelPresetChoice {
     this.internalServicesThinking = internalServicesThinking;
   }
 
+  public LLMModelPresetChoice inputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+    return this;
+  }
+
+  public LLMModelPresetChoice addInputModalitiesItem(InputModalitiesEnum inputModalitiesItem) {
+    if (this.inputModalities == null) {
+      this.inputModalities = new ArrayList<>();
+    }
+    this.inputModalities.add(inputModalitiesItem);
+    return this;
+  }
+
+   /**
+   * Get inputModalities
+   * @return inputModalities
+  **/
+  @Schema(description = "")
+  public List<InputModalitiesEnum> getInputModalities() {
+    return inputModalities;
+  }
+
+  public void setInputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -341,12 +404,13 @@ public class LLMModelPresetChoice {
         Objects.equals(this.maxGeneratedTokens, llMModelPresetChoice.maxGeneratedTokens) &&
         Objects.equals(this.thinking, llMModelPresetChoice.thinking) &&
         Objects.equals(this.temperature, llMModelPresetChoice.temperature) &&
-        Objects.equals(this.internalServicesThinking, llMModelPresetChoice.internalServicesThinking);
+        Objects.equals(this.internalServicesThinking, llMModelPresetChoice.internalServicesThinking) &&
+        Objects.equals(this.inputModalities, llMModelPresetChoice.inputModalities);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, defaultChoice, contextWindow, uses, maxGeneratedTokens, thinking, temperature, internalServicesThinking);
+    return Objects.hash(code, description, defaultChoice, contextWindow, uses, maxGeneratedTokens, thinking, temperature, internalServicesThinking, inputModalities);
   }
 
 
@@ -364,6 +428,7 @@ public class LLMModelPresetChoice {
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
     sb.append("    temperature: ").append(toIndentedString(temperature)).append("\n");
     sb.append("    internalServicesThinking: ").append(toIndentedString(internalServicesThinking)).append("\n");
+    sb.append("    inputModalities: ").append(toIndentedString(inputModalities)).append("\n");
     sb.append("}");
     return sb.toString();
   }

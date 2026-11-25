@@ -14,6 +14,7 @@ Name | Type | Description | Notes
 **adaptable** | **Boolean** |  |  [optional]
 **messageSemantic** | [**MessageSemanticEnum**](#MessageSemanticEnum) |  |  [optional]
 **kind** | [**KindEnum**](#KindEnum) |  |  [optional]
+**buildingPrompts** | **Boolean** |  |  [optional]
 
 <a name="MessageSemanticEnum"></a>
 ## Enum: MessageSemanticEnum

@@ -38,6 +38,7 @@
       "ProcessedSeries": { "label": "Processed" },
       "SentToNextStepSeries": { "label": "Sent to next step" },
       "DiscardedSeries": { "label": "Discarded" },
+      "DeletedSeries": { "label": "Deleted" },
       "ErrorsSeries": { "label": "Errors" },
       "ChunksSeries": { "label": "Chunks" },
       "TokensSeries": { "label": "Tokens (k)" }
@@ -1520,6 +1521,12 @@
     }
   },
   "GeboAiLargeLanguageModelsModule": {
+    "DefaultEmbeddingModelChange": {
+      "DefaultEmbeddingModelChangeConfirmation": {
+        "message": "The default embedding model is changing: contents already ingested with the present default embedding model could become unreachable by the searches. Do you want to save?",
+        "header": "Default embedding model change"
+      }
+    },
     "GeboAITestChatComponent": {
       "TestingModelDialog": { "label": "Testing model" },
       "TestChatBtn": { "label": "Test chat" }
@@ -3444,6 +3451,10 @@
         "label": "Configure build systems",
         "help": "List of build/packaging systems to inspect for meta informations and additional artifacts infos (leave empty if no software code is contained)"
       },
+      "syncOnFilesModifications": {
+        "label": "Sync on files modifications",
+        "help": "When checked, the files written, changed and removed in the selected folders are synchronized shortly after they change, between one publication and the next, once the data source is published. Unchecked, the contents are refreshed by the publications, launched by hand or by the schedule above."
+      },
       "personalData": {
         "label": "Contains personal data",
         "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
@@ -3930,7 +3941,8 @@
         "dataset-0-label": "Received docs",
         "dataset-1-label": "Processed docs",
         "dataset-2-label": "Error docs",
-        "dataset-3-label": "Discarded docs"
+        "dataset-3-label": "Discarded docs",
+        "dataset-4-label": "Deleted docs"
       },
       "TOKENIZATION": { "description": "Documents tokenization" },
       "TOKENIZATION-docs-histogram": {
@@ -4002,7 +4014,8 @@
         "dataset-0-label": "Received docs",
         "dataset-1-label": "Processed docs",
         "dataset-2-label": "Error docs",
-        "dataset-3-label": "Discarded docs"
+        "dataset-3-label": "Discarded docs",
+        "dataset-4-label": "Deleted docs"
       },
       "TOKENIZATION-docs-histogram": {
         "label-0": "Not treated docs",
@@ -5528,6 +5541,10 @@
         "label": "Exporting Prefix",
         "help": "Prefix added to exported tools/resources on this server."
       },
+      "requestTimeoutSeconds": {
+        "label": "Request timeout (seconds)",
+        "help": "How long a request to this MCP Server waits for its answer, a tool call for example. Left empty, the time of the installation applies: the field shows it."
+      },
       "code": {
         "label": "Unique Code",
         "help": "Automatically generated unique code of the MCP Client."
@@ -5670,14 +5687,15 @@
       "newAgentToolName": { "label": "Tool name", "help": "The name MCP clients see (defaults to the agent code)." },
       "AddAgentToolBtn": { "label": "Add" },
       "NetworkToolsHeader": { "label": "Networks of agents exported as tools" },
-      "NetworkToolsDescription": { "label": "Each network becomes a tool that takes a request in natural language and answers with the text the network produced, run as the caller. A network given a chat profile runs in a conversation of the caller and answers with the files it produced too." },
+      "NetworkToolsDescription": { "label": "Each network becomes a tool that takes a request in natural language, run as the caller in a conversation of its chat profile, and answers with the text the network produced and the files it produced too. When no chat profile is selected the default one is used." },
       "NetworkToolNetworkHeader": { "label": "Network code" },
       "NetworkToolNameHeader": { "label": "Tool name" },
       "NetworkToolChatProfileHeader": { "label": "Chat profile" },
       "NoNetworkToolsText": { "label": "No network of agents exported as a tool." },
       "newNetworkToolCode": { "label": "Network code", "help": "The code of the network of agents to export." },
       "newNetworkToolName": { "label": "Tool name", "help": "The name MCP clients see (defaults to the network code)." },
-      "newNetworkToolChatProfile": { "label": "Chat profile", "help": "The code of the chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call then runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. Left empty the network runs outside any conversation and answers with text." },
+      "newNetworkToolChatProfile": { "label": "Chat profile", "help": "The chat profile the network works with when called as this tool: its knowledge bases, its models and its retrieval settings. Each call runs in a conversation of its own, and the tool answers with the files the network generated or wrote (pictures, documents) beside its text. When none is selected the default chat profile is used.", "placeholder": "Default chat profile" },
+      "NetworkToolDefaultChatProfileText": { "label": "Default chat profile" },
       "AddNetworkToolBtn": { "label": "Add" }
     }
   },
@@ -5782,8 +5800,10 @@
       },
       "newChatProfileCode": {
         "label": "Chat profile",
-        "help": "The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. Left empty it sees every knowledge base the calling account can see."
+        "help": "The chat profile this export works with: its knowledge bases, its models and its retrieval settings, so the network works here as it does in a chat. When none is selected the default chat profile is used.",
+        "placeholder": "Default chat profile"
       },
+      "DefaultChatProfileText": { "label": "Default chat profile" },
       "ChatProfileHeader": { "label": "Chat profile" },
       "GeneralSettingsTab": { "label": "General settings" },
       "ExportedAgentsTab": { "label": "Exported agents & networks" },

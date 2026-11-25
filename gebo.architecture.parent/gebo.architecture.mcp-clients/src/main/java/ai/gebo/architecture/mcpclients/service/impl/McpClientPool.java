@@ -37,8 +37,8 @@ import lombok.AllArgsConstructor;
  * static bearer / client-credentials) a single connection is shared across users.
  * <p>
  * <b>Invalidation.</b> A signature of the connection-relevant fields of the
- * config (transport, URLs, auth, secret references, STDIO process, last
- * modification date) is stored with each entry; if the config changes the stale
+ * config (transport, URLs, auth, secret references, STDIO process, time given
+ * to requests, last modification date) is stored with each entry; if the config changes the stale
  * connection is closed and rebuilt. Entries also expire after a TTL — which both
  * bounds resource usage and refreshes credentials that were resolved at connect
  * time (e.g. client-credentials access tokens). On an operation failure the entry
@@ -177,6 +177,7 @@ public class McpClientPool implements DisposableBean {
 		append(sb, config.getStdioCommand());
 		append(sb, config.getStdioArgs());
 		append(sb, config.getStdioEnvironment());
+		append(sb, config.getRequestTimeoutSeconds());
 		Date dateModified = config.getDateModified();
 		append(sb, dateModified != null ? dateModified.getTime() : null);
 		return sb.toString();

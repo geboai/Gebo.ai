@@ -18,6 +18,7 @@ import { CustomHttpUrlEncodingCodec }                        from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { AIToolsAndResourcesLibraryInstance } from '../model/aIToolsAndResourcesLibraryInstance';
+import { ChatWrittenFile } from '../model/chatWrittenFile';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -154,6 +155,53 @@ export class GeboChatLibrariesControllerService {
         ];
 
         return this.httpClient.request<Array<AIToolsAndResourcesLibraryInstance>>('get',`${this.basePath}/api/users/GeboChatLibrariesController/getChatLibraryInstance`,
+            {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param chatCode 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getChatWrittenFiles(chatCode: string, observe?: 'body', reportProgress?: boolean): Observable<Array<ChatWrittenFile>>;
+    public getChatWrittenFiles(chatCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<Array<ChatWrittenFile>>>;
+    public getChatWrittenFiles(chatCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<Array<ChatWrittenFile>>>;
+    public getChatWrittenFiles(chatCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (chatCode === null || chatCode === undefined) {
+            throw new Error('Required parameter chatCode was null or undefined when calling getChatWrittenFiles.');
+        }
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (chatCode !== undefined && chatCode !== null) {
+            queryParameters = queryParameters.set('chatCode', <any>chatCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+        ];
+
+        return this.httpClient.request<Array<ChatWrittenFile>>('get',`${this.basePath}/api/users/GeboChatLibrariesController/getChatWrittenFiles`,
             {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,

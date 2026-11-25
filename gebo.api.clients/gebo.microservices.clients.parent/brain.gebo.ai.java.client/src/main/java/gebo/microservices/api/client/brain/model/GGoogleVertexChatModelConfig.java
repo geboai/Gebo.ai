@@ -26,7 +26,7 @@ import java.util.List;
  * GGoogleVertexChatModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class GGoogleVertexChatModelConfig {
   @JsonProperty("code")
@@ -190,6 +190,43 @@ public class GGoogleVertexChatModelConfig {
 
   @JsonProperty("maxGeneratedTokens")
   private Integer maxGeneratedTokens = null;
+
+  /**
+   * Gets or Sets inputModalities
+   */
+  public enum InputModalitiesEnum {
+    TEXT("TEXT"),
+    IMAGE("IMAGE"),
+    AUDIO("AUDIO"),
+    VIDEO("VIDEO"),
+    DOCUMENT("DOCUMENT");
+
+    private String value;
+
+    InputModalitiesEnum(String value) {
+      this.value = value;
+    }
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+    @JsonCreator
+    public static InputModalitiesEnum fromValue(String input) {
+      for (InputModalitiesEnum b : InputModalitiesEnum.values()) {
+        if (b.value.equals(input)) {
+          return b;
+        }
+      }
+      return null;
+    }
+
+  }  @JsonProperty("inputModalities")
+  private List<InputModalitiesEnum> inputModalities = null;
 
   public GGoogleVertexChatModelConfig code(String code) {
     this.code = code;
@@ -601,6 +638,32 @@ public class GGoogleVertexChatModelConfig {
     this.maxGeneratedTokens = maxGeneratedTokens;
   }
 
+  public GGoogleVertexChatModelConfig inputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+    return this;
+  }
+
+  public GGoogleVertexChatModelConfig addInputModalitiesItem(InputModalitiesEnum inputModalitiesItem) {
+    if (this.inputModalities == null) {
+      this.inputModalities = new ArrayList<>();
+    }
+    this.inputModalities.add(inputModalitiesItem);
+    return this;
+  }
+
+   /**
+   * Get inputModalities
+   * @return inputModalities
+  **/
+  @Schema(description = "")
+  public List<InputModalitiesEnum> getInputModalities() {
+    return inputModalities;
+  }
+
+  public void setInputModalities(List<InputModalitiesEnum> inputModalities) {
+    this.inputModalities = inputModalities;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -631,12 +694,13 @@ public class GGoogleVertexChatModelConfig {
         Objects.equals(this.forUses, ggoogleVertexChatModelConfig.forUses) &&
         Objects.equals(this.features, ggoogleVertexChatModelConfig.features) &&
         Objects.equals(this.thinking, ggoogleVertexChatModelConfig.thinking) &&
-        Objects.equals(this.maxGeneratedTokens, ggoogleVertexChatModelConfig.maxGeneratedTokens);
+        Objects.equals(this.maxGeneratedTokens, ggoogleVertexChatModelConfig.maxGeneratedTokens) &&
+        Objects.equals(this.inputModalities, ggoogleVertexChatModelConfig.inputModalities);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, temperature, forUses, features, thinking, maxGeneratedTokens);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, modelTypeCode, defaultModel, apiSecretCode, choosedModel, baseUrl, contextLength, topP, accessibleGroups, accessibleUsers, accessibleToAll, temperature, forUses, features, thinking, maxGeneratedTokens, inputModalities);
   }
 
 
@@ -666,6 +730,7 @@ public class GGoogleVertexChatModelConfig {
     sb.append("    features: ").append(toIndentedString(features)).append("\n");
     sb.append("    thinking: ").append(toIndentedString(thinking)).append("\n");
     sb.append("    maxGeneratedTokens: ").append(toIndentedString(maxGeneratedTokens)).append("\n");
+    sb.append("    inputModalities: ").append(toIndentedString(inputModalities)).append("\n");
     sb.append("}");
     return sb.toString();
   }

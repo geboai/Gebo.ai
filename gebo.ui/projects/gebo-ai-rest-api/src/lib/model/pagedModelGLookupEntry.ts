@@ -13,6 +13,6 @@ import { GLookupEntry } from './gLookupEntry';
 import { PageMetadata } from './pageMetadata';
 
 export interface PagedModelGLookupEntry { 
-    content?: Array<GLookupEntry>;
-    page?: PageMetadata;
+    content: Array<GLookupEntry>;
+    page: PageMetadata;
 }

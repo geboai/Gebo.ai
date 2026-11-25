@@ -23,9 +23,13 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
+import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
+import ai.gebo.llms.abstraction.layer.services.IGImageModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTextToSpeechModelRuntimeConfigurationDao;
+import ai.gebo.llms.abstraction.layer.services.IGTranscriptModelRuntimeConfigurationDao;
 
 /**
- * Making a speech or image model the default takes the default from the other models
+ * Making a speech, transcript or image model the default takes the default from the other models
  * of the same kind only: it took it from the chat models, and after the next start the
  * installation had no default chat model (the knowledge base chats failed). Found live.
  */
@@ -46,7 +50,7 @@ class DefaultModelOfItsOwnKindTest {
 		when(persistence.findAllExtendingType(GBaseTextToSpeachModelConfig.class)).thenReturn(List.of(previous));
 		when(persistence.findAllExtendingType(GBaseChatModelConfig.class)).thenReturn(List.of(chat));
 		final BaseTextToSpeechModelsConfigurationCRUDController controller = new BaseTextToSpeechModelsConfigurationCRUDController(
-				persistence, null, GBaseTextToSpeachModelConfig.class, null, null);
+				persistence, mock(IGTextToSpeechModelRuntimeConfigurationDao.class), GBaseTextToSpeachModelConfig.class, null, null);
 
 		controller.handleDefaultModel(config(new GBaseTextToSpeachModelConfig(), "tts-new"));
 
@@ -65,9 +69,28 @@ class DefaultModelOfItsOwnKindTest {
 		when(persistence.findAllExtendingType(GBaseImageModelConfig.class)).thenReturn(List.of(previous));
 		when(persistence.findAllExtendingType(GBaseChatModelConfig.class)).thenReturn(List.of(chat));
 		final BaseImageModelsConfigurationCRUDController controller = new BaseImageModelsConfigurationCRUDController(
-				persistence, null, GBaseImageModelConfig.class, null, null);
+				persistence, mock(IGImageModelRuntimeConfigurationDao.class), GBaseImageModelConfig.class, null, null);
 
 		controller.handleDefaultModel(config(new GBaseImageModelConfig(), "image-new"));
+
+		assertEquals(false, previous.getDefaultModel());
+		verify(persistence).update(previous);
+		assertEquals(true, chat.getDefaultModel(), "the default chat model stays");
+		verify(persistence, never()).update(chat);
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Test
+	void aDefaultTranscriptModelTakesTheDefaultFromTranscriptModelsOnly() throws Exception {
+		final IGPersistentObjectManager persistence = mock(IGPersistentObjectManager.class);
+		final GBaseTranscriptModelConfig previous = config(new GBaseTranscriptModelConfig(), "transcript-old");
+		final GBaseChatModelConfig chat = config(new GBaseChatModelConfig(), "chat-default");
+		when(persistence.findAllExtendingType(GBaseTranscriptModelConfig.class)).thenReturn(List.of(previous));
+		when(persistence.findAllExtendingType(GBaseChatModelConfig.class)).thenReturn(List.of(chat));
+		final BaseTranscriptModelsConfigurationCRUDController controller = new BaseTranscriptModelsConfigurationCRUDController(
+				persistence, mock(IGTranscriptModelRuntimeConfigurationDao.class), GBaseTranscriptModelConfig.class, null, null);
+
+		controller.handleDefaultModel(config(new GBaseTranscriptModelConfig(), "transcript-new"));
 
 		assertEquals(false, previous.getDefaultModel());
 		verify(persistence).update(previous);

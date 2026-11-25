@@ -90,6 +90,7 @@ public class WorkflowStatsAggregationService {
 		group = group.sum("batchDocumentsInput").as("batchDocumentsInput").sum("batchDocumentsProcessed")
 				.as("batchDocumentsProcessed").sum("batchDocumentsProcessingErrors").as("batchDocumentsProcessingErrors")
 				.sum("batchSentToNextStep").as("batchSentToNextStep").sum("batchDiscardedInput").as("batchDiscardedInput")
+				.sum("batchDeletedDocuments").as("batchDeletedDocuments")
 				.sum("chunksProcessed").as("chunksProcessed").sum("tokensProcessed").as("tokensProcessed").count()
 				.as("nrSnapshots");
 		ops.add(group);
@@ -98,6 +99,7 @@ public class WorkflowStatsAggregationService {
 				.and("batchDocumentsInput").as("batchDocumentsInput").and("batchDocumentsProcessed")
 				.as("batchDocumentsProcessed").and("batchDocumentsProcessingErrors").as("batchDocumentsProcessingErrors")
 				.and("batchSentToNextStep").as("batchSentToNextStep").and("batchDiscardedInput").as("batchDiscardedInput")
+				.and("batchDeletedDocuments").as("batchDeletedDocuments")
 				.and("chunksProcessed").as("chunksProcessed").and("tokensProcessed").as("tokensProcessed")
 				.and("nrSnapshots").as("nrSnapshots");
 		if (includeDay)
@@ -250,6 +252,7 @@ public class WorkflowStatsAggregationService {
 			b.setBatchDocumentsProcessingErrors(r.getBatchDocumentsProcessingErrors());
 			b.setBatchSentToNextStep(r.getBatchSentToNextStep());
 			b.setBatchDiscardedInput(r.getBatchDiscardedInput());
+			b.setBatchDeletedDocuments(r.getBatchDeletedDocuments());
 			b.setChunksProcessed(r.getChunksProcessed());
 			b.setTokensProcessed(r.getTokensProcessed());
 			b.setNrSnapshots(r.getNrSnapshots());
@@ -288,6 +291,7 @@ public class WorkflowStatsAggregationService {
 		private long batchDocumentsProcessingErrors;
 		private long batchSentToNextStep;
 		private long batchDiscardedInput;
+		private long batchDeletedDocuments;
 		private long chunksProcessed;
 		private long tokensProcessed;
 		private long nrSnapshots;

@@ -28,6 +28,7 @@ export interface WorkflowStatsAggregationBucket {
     batchDocumentsProcessingErrors?: number;
     batchSentToNextStep?: number;
     batchDiscardedInput?: number;
+    batchDeletedDocuments?: number;
     chunksProcessed?: number;
     tokensProcessed?: number;
     nrSnapshots?: number;

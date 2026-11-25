@@ -61,6 +61,7 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRenderer;
 import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.ai.service.ToolsTokenBudget;
+import ai.gebo.llms.abstraction.layer.services.impl.RefusedFilesNotifier;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -178,6 +179,17 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 	public IGPromptContextProviders getPromptContextProviders() {
 		return promptContextProviders;
 	}
+
+	/**
+	 * Tells the person asking and the administrators of the files a provider refused
+	 * (see {@link RefusedFilesRetryingChatModel}); attached by the runtime DAO, null
+	 * telling nobody.
+	 */
+	protected volatile RefusedFilesNotifier refusedFilesNotifier = null;
+
+	public void setRefusedFilesNotifier(RefusedFilesNotifier refusedFilesNotifier) {
+		this.refusedFilesNotifier = refusedFilesNotifier;
+	}
 	/**
 	 * The parameter rules of the model the configuration names, resolved each time it is
 	 * initialized; null when none covers it.
@@ -281,13 +293,27 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		final ModelConfig requestConfig = requestConfig(config);
 		this.model = configureModel(requestConfig, type);
 		// a file the provider refuses does not sink the answer: the call is made again without
-		Builder builder = ChatClient.builder(RefusedFilesRetryingChatModel.wrap(configureModel(requestConfig, type)));
+		// the files (RefusedFilesRetryingChatModel), and the person asking and the
+		// administrators are told
+		Builder builder = ChatClient.builder(
+				RefusedFilesRetryingChatModel.wrap(configureModel(requestConfig, type), this::tellFilesLeftOut));
 		// Priced through this model's getPricingConditions(), read when each call ends; a
 		// call's answer read from its answer generation, not from a reasoning one; the
 		// reasoning of every model round apart from the answer, every provider alike.
 		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
 				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration),
-				thinkingNormalization()).build();
+				thinkingNormalization(),
+				// every round of a streamed call's tool calling loop runs with the identity of
+				// who asks (StreamedCallIdentity)
+				new StreamedCallIdentity.Carrier(), new StreamedCallIdentity.Restorer()).build();
+	}
+
+	/** Tells of the files a request to this model was made again without, where somebody is to be told. */
+	private void tellFilesLeftOut(List<Media> files, Throwable refusal, String asking) {
+		final RefusedFilesNotifier notifier = refusedFilesNotifier;
+		if (notifier != null && config != null) {
+			notifier.filesLeftOut(config.getCode(), config.getDescription(), getProviderId(), files, refusal, asking);
+		}
 	}
 
 	/**
@@ -1572,6 +1598,8 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 			if (handler instanceof GAbstractConfigurableChatModel clone) {
 				// the clone fills its prompts as this model does
 				clone.promptContextProviders = this.promptContextProviders;
+				// and tells of the files its provider refuses as this model does
+				clone.refusedFilesNotifier = this.refusedFilesNotifier;
 				clone.toolNames = configOptions.getToolsName() != null ? List.copyOf(configOptions.getToolsName())
 						: List.of();
 				if (configOptions.getAdditionalTools() != null) {

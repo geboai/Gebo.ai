@@ -84,4 +84,13 @@ public interface IGContentDispatchingEvaluator {
      */
     public ContentHandshakeData lastIngested(String contentCode);
 
+    /**
+     * Forgets the acknowledgements of the contents: their stores were erased, so
+     * nothing of them is ingested any more. A content met again is then ingested as
+     * one never seen, whatever it was when last ingested.
+     *
+     * @param contentCodes the codes of the contents (their document references)
+     */
+    public void forgetIngested(java.util.Collection<String> contentCodes);
+
 }

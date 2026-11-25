@@ -27,6 +27,8 @@ public interface ContentsBatchProcessedSummary {
 	public long getBatchDocumentsProcessed();
 
 	public long getBatchDiscardedInput();
+
+	public long getBatchDeletedDocuments();
 	public long getErrorChunks();
 	public long getErrorTokens();
 	

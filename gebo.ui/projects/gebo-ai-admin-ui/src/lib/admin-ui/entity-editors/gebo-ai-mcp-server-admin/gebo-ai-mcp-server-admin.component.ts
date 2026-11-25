@@ -1,6 +1,6 @@
 import { Component, forwardRef, Injector, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-import { GeboMcpServerAdminControllerService, GeboMCPAgentsNetworkTool, GeboMCPAgentTool, GeboMCPServerConfig, GObjectRefGProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
+import { GChatProfileConfiguration, GeboAdminChatProfilesConfigurationControllerService, GeboMcpServerAdminControllerService, GeboMCPAgentsNetworkTool, GeboMCPAgentTool, GeboMCPServerConfig, GObjectRefGProjectEndpoint } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAIPluggableKnowledgeAdminBaseTreeSearchService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, TreeNode } from "@openng/optimus-ui/api";
 import { TreeNodeExpandEvent } from "@openng/optimus-ui/tree";
@@ -55,6 +55,8 @@ export class GeboAIMCPServerAdminComponent extends BaseEntityEditingComponent<Ge
     networkTools: GeboMCPAgentsNetworkTool[] = [];
     newAgentTool: GeboMCPAgentTool = this.blankAgentTool();
     newNetworkTool: GeboMCPAgentsNetworkTool = this.blankNetworkTool();
+    /** The chat profiles an exported network can be given; with none chosen it works with the default one. */
+    chatProfiles: GChatProfileConfiguration[] = [];
 
     constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
@@ -62,8 +64,18 @@ export class GeboAIMCPServerAdminComponent extends BaseEntityEditingComponent<Ge
         geboUIActionRoutingService: GeboUIActionRoutingService,
         outputForwardingService: GeboUIOutputForwardingService,
         private service: GeboMcpServerAdminControllerService,
-        private browsingService:GeboAIPluggableKnowledgeAdminBaseTreeSearchService) {
+        private browsingService:GeboAIPluggableKnowledgeAdminBaseTreeSearchService,
+        private chatProfilesService: GeboAdminChatProfilesConfigurationControllerService) {
         super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
+        this.chatProfilesService.getAllChatProfileConfiguration({ page: 0, pageSize: 1000 }).subscribe({
+            next: (page) => { this.chatProfiles = page?.content || []; }
+        });
+    }
+
+    /** How a chat profile is shown in the list of the exported networks: by its description. */
+    chatProfileDescription(code?: string): string {
+        const profile = this.chatProfiles.find((x) => x.code === code);
+        return profile?.description || code || "";
     }
 
     protected override onLoadedPersistentData(actualValue: GeboMCPServerConfig): void {
@@ -128,9 +140,8 @@ export class GeboAIMCPServerAdminComponent extends BaseEntityEditingComponent<Ge
         if (!entry.toolName || !entry.toolName.trim()) {
             entry.toolName = entry.agentsNetworkCode;
         }
-        // a network runs in a conversation only when a chat profile is named
-        entry.chatProfileCode = entry.chatProfileCode && entry.chatProfileCode.trim()
-            ? entry.chatProfileCode.trim() : undefined;
+        // no chat profile chosen: the network works with the default one
+        entry.chatProfileCode = entry.chatProfileCode ? entry.chatProfileCode : undefined;
         this.networkTools = [...this.networkTools, entry];
         this.formGroup.patchValue({ agentNetworkAsTools: this.networkTools });
         this.formGroup.markAsDirty();

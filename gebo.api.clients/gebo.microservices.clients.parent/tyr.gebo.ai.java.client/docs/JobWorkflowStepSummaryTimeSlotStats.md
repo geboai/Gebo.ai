@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **endDateTime** | [**Date**](Date.md) |  |  [optional]
 **batchDocumentsInput** | **Long** |  |  [optional]
 **batchDiscardedInput** | **Long** |  |  [optional]
+**batchDeletedDocuments** | **Long** |  |  [optional]
 **batchSentToNextStep** | **Long** |  |  [optional]
 **chunksProcessed** | **Long** |  |  [optional]
 **tokensProcessed** | **Long** |  |  [optional]

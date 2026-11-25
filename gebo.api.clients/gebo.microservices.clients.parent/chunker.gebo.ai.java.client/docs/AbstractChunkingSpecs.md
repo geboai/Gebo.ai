@@ -11,3 +11,5 @@ Name | Value
 ---- | -----
 TEXT | &quot;TEXT&quot;
 IMAGE | &quot;IMAGE&quot;
+AUDIO | &quot;AUDIO&quot;
+VIDEO | &quot;VIDEO&quot;

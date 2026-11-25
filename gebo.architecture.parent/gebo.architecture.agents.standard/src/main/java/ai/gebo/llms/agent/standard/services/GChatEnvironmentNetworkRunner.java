@@ -767,6 +767,22 @@ public class GChatEnvironmentNetworkRunner implements IGChatEnvironment {
 
 	private GeboChatResponse responseOf(GeboChatMessageEnvelope last, GeboChatResponse filledIn) {
 		if (last != null && last.getContent() instanceof GeboChatResponse answered) {
+			if (filledIn != null && answered != filledIn) {
+				// The answer an agent wrote says nothing of the conversation, nor of the files
+				// the run's tools wrote and its models generated: the run kept those on its own
+				// response. Who reads the answer - an MCP caller, an A2A client - gets them.
+				if (answered.getUserChatContextCode() == null) {
+					answered.setUserChatContextCode(filledIn.getUserChatContextCode());
+				}
+				if (filledIn.getWrittenFiles() != null && !filledIn.getWrittenFiles().isEmpty()
+						&& (answered.getWrittenFiles() == null || answered.getWrittenFiles().isEmpty())) {
+					answered.setWrittenFiles(new ArrayList<>(filledIn.getWrittenFiles()));
+				}
+				if (filledIn.getGeneratedResources() != null && !filledIn.getGeneratedResources().isEmpty()
+						&& (answered.getGeneratedResources() == null || answered.getGeneratedResources().isEmpty())) {
+					answered.setGeneratedResources(new ArrayList<>(filledIn.getGeneratedResources()));
+				}
+			}
 			return answered;
 		}
 		return filledIn;

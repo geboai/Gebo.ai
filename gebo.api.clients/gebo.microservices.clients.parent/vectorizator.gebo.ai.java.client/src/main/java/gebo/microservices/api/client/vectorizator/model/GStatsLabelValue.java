@@ -23,14 +23,56 @@ import java.math.BigDecimal;
  * GStatsLabelValue
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:40.134356333+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:03:16.245345636+01:00[Europe/Rome]")
 
 public class GStatsLabelValue {
+  @JsonProperty("s")
+  private String s = null;
+
+  @JsonProperty("n")
+  private BigDecimal n = null;
+
   @JsonProperty("label")
   private String label = null;
 
   @JsonProperty("value")
   private BigDecimal value = null;
+
+  public GStatsLabelValue s(String s) {
+    this.s = s;
+    return this;
+  }
+
+   /**
+   * Get s
+   * @return s
+  **/
+  @Schema(description = "")
+  public String getS() {
+    return s;
+  }
+
+  public void setS(String s) {
+    this.s = s;
+  }
+
+  public GStatsLabelValue n(BigDecimal n) {
+    this.n = n;
+    return this;
+  }
+
+   /**
+   * Get n
+   * @return n
+  **/
+  @Schema(description = "")
+  public BigDecimal getN() {
+    return n;
+  }
+
+  public void setN(BigDecimal n) {
+    this.n = n;
+  }
 
   public GStatsLabelValue label(String label) {
     this.label = label;
@@ -78,13 +120,15 @@ public class GStatsLabelValue {
       return false;
     }
     GStatsLabelValue gstatsLabelValue = (GStatsLabelValue) o;
-    return Objects.equals(this.label, gstatsLabelValue.label) &&
+    return Objects.equals(this.s, gstatsLabelValue.s) &&
+        Objects.equals(this.n, gstatsLabelValue.n) &&
+        Objects.equals(this.label, gstatsLabelValue.label) &&
         Objects.equals(this.value, gstatsLabelValue.value);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(label, value);
+    return Objects.hash(s, n, label, value);
   }
 
 
@@ -93,6 +137,8 @@ public class GStatsLabelValue {
     StringBuilder sb = new StringBuilder();
     sb.append("class GStatsLabelValue {\n");
     
+    sb.append("    s: ").append(toIndentedString(s)).append("\n");
+    sb.append("    n: ").append(toIndentedString(n)).append("\n");
     sb.append("    label: ").append(toIndentedString(label)).append("\n");
     sb.append("    value: ").append(toIndentedString(value)).append("\n");
     sb.append("}");

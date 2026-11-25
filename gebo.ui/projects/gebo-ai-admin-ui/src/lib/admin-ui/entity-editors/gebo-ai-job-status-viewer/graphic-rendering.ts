@@ -25,6 +25,15 @@ function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary, workfl
       backgroundColor: []
     }]
   };
+  // the discovery step also counts the documents it found deleted
+  const countsDeleted = workflowStepId === "DOCUMENT_DISCOVERY";
+  if (countsDeleted) {
+    chart.datasets.push({
+      label: "Deleted docs",
+      data: [],
+      backgroundColor: []
+    });
+  }
   if (foundProcessStepSummary) {
     foundProcessStepSummary.timesamples?.forEach(data => {
       if (data.startDateTime) {
@@ -38,6 +47,10 @@ function documentsChart(foundProcessStepSummary?: JobWorkflowStepSummary, workfl
       chart.datasets[2].backgroundColor?.push("red");
       chart.datasets[3].data.push(n(data.batchDiscardedInput));
       chart.datasets[3].backgroundColor?.push("gray");
+      if (countsDeleted) {
+        chart.datasets[4].data.push(n(data.batchDeletedDocuments));
+        chart.datasets[4].backgroundColor?.push("purple");
+      }
     });
     return chart;
   }

@@ -151,6 +151,16 @@
                             </div>
                         </ng-container>
 
+                        <div class="col-6">
+                            <gebo-ai-field id="requestTimeoutSeconds" label="Request timeout (seconds)"
+                                help="How long a request to this MCP Server waits for its answer, a tool call for example. Left empty, the time of the installation applies: the field shows it.">
+                                <p-inputNumber id="requestTimeoutSeconds" formControlName="requestTimeoutSeconds"
+                                    [min]="1" [maxFractionDigits]="0" [useGrouping]="false"
+                                    [placeholder]="defaultRequestTimeoutSeconds" gebo-ai-field-element
+                                    [readonly]="readonly"></p-inputNumber>
+                            </gebo-ai-field>
+                        </div>
+
                         <!-- Connectivity Test Buttons -->
                         <div class="col-12 flex justify-content-end mt-3 gap-2">
                             <p-button *ngIf="mode === 'NEW' || !formGroup.get('code')?.value"

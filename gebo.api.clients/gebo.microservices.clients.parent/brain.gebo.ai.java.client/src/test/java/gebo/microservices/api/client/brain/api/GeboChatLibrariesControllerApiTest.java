@@ -13,6 +13,7 @@
 package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.AIToolsAndResourcesLibraryInstance;
+import gebo.microservices.api.client.brain.model.ChatWrittenFile;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -58,6 +59,21 @@ public class GeboChatLibrariesControllerApiTest {
     public void getChatLibraryInstanceTest() {
         String chatCode = null;
         List<AIToolsAndResourcesLibraryInstance> response = api.getChatLibraryInstance(chatCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getChatWrittenFilesTest() {
+        String chatCode = null;
+        List<ChatWrittenFile> response = api.getChatWrittenFiles(chatCode);
 
         // TODO: test validations
     }

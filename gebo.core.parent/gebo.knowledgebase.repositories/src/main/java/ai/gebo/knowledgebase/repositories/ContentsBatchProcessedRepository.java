@@ -29,6 +29,7 @@ public interface ContentsBatchProcessedRepository extends MongoRepository<Conten
 			+ "  jobId: { $first: '$jobId' }, " + "  batchDocumentsInput: { $sum: '$batchDocumentsInput' }, "
 			+ "  batchSentToNextStep: { $sum: '$batchSentToNextStep' }, "
 			+ "  batchDiscardedInput: { $sum: '$batchDiscardedInput' },"
+			+ "  batchDeletedDocuments: { $sum: '$batchDeletedDocuments' },"
 			+ "  chunksProcessed: { $sum: '$chunksProcessed' }, " + "  tokensProcessed: { $sum: '$tokensProcessed' }, "
 			+ "  errorChunks:{ $sum: '$errorChunks' },  errorTokens: { $sum: '$errorTokens' },"
 			+ "  batchDocumentsProcessingErrors: { $sum: '$batchDocumentsProcessingErrors' }, "
@@ -38,7 +39,7 @@ public interface ContentsBatchProcessedRepository extends MongoRepository<Conten
 			"{ $project: { " + "  _id: 0, " + "  jobId: 1, " + "  workflowType: '$_id.workflowType', "
 					+ "  workflowId: '$_id.workflowId', " + "  workflowStepId: '$_id.workflowStepId', "
 					+ "  lastMessage: { $gt: ['$lastMessageAny', 0] }, " + "  batchDocumentsInput: 1, "
-					+ "  batchSentToNextStep: 1, batchDiscardedInput: 1, " + "  chunksProcessed: 1, "
+					+ "  batchSentToNextStep: 1, batchDiscardedInput: 1, batchDeletedDocuments: 1, " + "  chunksProcessed: 1, "
 					+ "  tokensProcessed: 1, errorChunks:1,  errorTokens: 1," + "  batchDocumentsProcessingErrors: 1, "
 					+ "  batchDocumentsProcessed: 1, " + "  timestampMin: 1, " + "  timestampMax: 1 " + "} }",
 			"{ $sort: { workflowType: 1, workflowId: 1, workflowStepId: 1 } }" })

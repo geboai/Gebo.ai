@@ -150,7 +150,6 @@ public class SharedFilesystemIntegrationTest extends AbstractBaseTestLLmsIntegra
 		}
 		endpoint.setPath(List.of(VFilesystemReference.from(Path.of(baseFolder))));
 		endpoint = persistentObjectManager.update(endpoint);
-		fsChangeService.addHandling(endpoint);
 		runAndWaitDoneCheckingResults(endpoint, ALL_DATA_FILES.size() - 1, true);
 		long howMany = statusRepo.count();
 		copyResource(TEST_001_ZIP_FILE, baseFolder);

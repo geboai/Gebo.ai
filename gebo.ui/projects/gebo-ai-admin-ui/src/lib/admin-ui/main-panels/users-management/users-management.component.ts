@@ -48,7 +48,7 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
     // The live sessions: tokens in use, by whom and from where, and their revocation
     loadingSessions: boolean = false;
     sessionsPage: DataPage = { page: 0, pageSize: 20 };
-    sessionsPaged: PagedModelGUserSession = { content: [] };
+    sessionsPaged: PagedModelGUserSession = { content: [], page: { size: 0, number: 0, totalElements: 0, totalPages: 0 } };
     sessionsQuery: SessionsQuery = { username: '', activeWithinMinutes: 15, includeRevoked: false, includeExpired: false };
     private translationService = inject(GeboAITranslationService);
     private moduleId = inject(GEBO_AI_MODULE, { optional: true });
@@ -85,12 +85,14 @@ export class GeboAIUsersManagementComponent extends AncestorPanelComponent imple
 
     // Container for paginated user information
     usersPaged: PagedModelUserInfos = {
-        content: []
+        content: [],
+        page: { size: 0, number: 0, totalElements: 0, totalPages: 0 }
     };
 
     // Container for paginated group information
     groupsPaged: PagedModelUsersGroup = {
-        content: []
+        content: [],
+        page: { size: 0, number: 0, totalElements: 0, totalPages: 0 }
     };
 
     // Filter variables for user search

@@ -154,6 +154,7 @@ public abstract class AbstractWorkflowStatusHandler implements IWorkflowStatusHa
 			status.setBatchDocumentsProcessingErrors(data.getBatchDocumentsProcessingErrors());
 			status.setBatchSentToNextStep(data.getBatchSentToNextStep());
 			status.setBatchDiscardedInput(data.getBatchDiscardedInput());
+			status.setBatchDeletedDocuments(data.getBatchDeletedDocuments());
 			status.setChunksProcessed(data.getChunksProcessed());
 			status.setTokensProcessed(data.getTokensProcessed());
 			status.setStartProcessingTimestamp(data.getStartProcessingTimestamp());

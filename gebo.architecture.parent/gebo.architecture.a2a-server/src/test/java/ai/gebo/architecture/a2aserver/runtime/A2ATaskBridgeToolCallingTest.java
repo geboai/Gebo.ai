@@ -30,6 +30,7 @@ import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCalling;
 import ai.gebo.llms.abstraction.layer.services.toolcalling.GeboToolCallingManagerFactory;
 import ai.gebo.llms.agent.standard.services.GTextAgentsNetworkRunner;
 import ai.gebo.llms.chat.abstraction.layer.llmexchange.model.GeboChatRequest;
+import ai.gebo.llms.chat.abstraction.layer.services.IGChatProfileManagementService;
 
 /**
  * An A2A skill run names the server and the skill as the caller of every model
@@ -39,7 +40,7 @@ class A2ATaskBridgeToolCallingTest {
 	private final GTextAgentsNetworkRunner runner = mock(GTextAgentsNetworkRunner.class);
 	private final A2AChatEnvironmentRunner chatEnvironment = mock(A2AChatEnvironmentRunner.class);
 	private final A2ATaskBridge bridge = new A2ATaskBridge(runner, chatEnvironment,
-			new GeboToolCallingManagerFactory());
+			new GeboToolCallingManagerFactory(), mock(IGChatProfileManagementService.class));
 
 	private static A2AServerConfig server(A2AExportedAgent.Kind kind, String code) {
 		A2AExportedAgent exported = new A2AExportedAgent();

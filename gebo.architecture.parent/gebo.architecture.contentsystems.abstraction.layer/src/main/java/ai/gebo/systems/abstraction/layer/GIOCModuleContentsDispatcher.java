@@ -9,6 +9,7 @@
 
 package ai.gebo.systems.abstraction.layer;
 
+import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -233,6 +234,13 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 		try {
 			this.handler.consume(endpoint, sessionParam, consumers.getContentConsumer(),
 					consumers.getUserMessagesConsumer(), consumers.getErrorConsumer());
+		} catch (RuntimeException | GeboContentHandlerSystemException failure) {
+			// a reading that failed did not get to the contents it did not meet: they are
+			// not gone. The failure is among the errors of the session, so the session does
+			// not end by checking them on the data source and telling them deleted
+			consumers.getErrorConsumer().accept(ContentsAccessError.of(failure,
+					ContentsAccessError.ContentsAccessedObjectType.FOLDER, endpoint != null ? endpoint.getCode() : null));
+			throw failure;
 		} finally {
 			consumers.getContentConsumer().endConsuming();
 			consumers.getUserMessagesConsumer().endConsuming();
@@ -283,7 +291,9 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 
 		final IGContentConsumer documentSenderConsumerWrapper = new GIOCContentConsumer<SystemIntegrationType, ProjectEndpointType,ContentConsumingSessionParamType>(
 				enrichers, jobStatus, evaluator, handler, endpoint, workflowRouter, this, userMessagesConsumer,
-				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository, uniqueIds);
+				errorConsumer, documentConsumer, broker, documentReferenceRepository, virtualFolderRepository, uniqueIds,
+				// a session fed with what its caller found changed tells its own deletions
+				!(sessionParam instanceof ChangedContentsConsumingSessionParam));
 
 		return new Consumers(documentSenderConsumerWrapper, userMessagesConsumer, errorConsumer);
 	}

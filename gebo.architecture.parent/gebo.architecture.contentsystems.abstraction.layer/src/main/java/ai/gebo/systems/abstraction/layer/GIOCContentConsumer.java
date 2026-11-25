@@ -62,6 +62,12 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final EnricherMappers enrichers;
 	private final GJobStatus jobStatus;
 	private final Map<String, Integer> docsCounters = new HashMap<String, Integer>();
+	/**
+	 * The codes of the documents their source reported deleted in this session (a
+	 * watched folder, a user's space) and did not hand over again live: their stores are
+	 * erased when the session ends, as those of the documents its deletions check finds.
+	 */
+	private final java.util.Set<String> deletedBySource = new java.util.LinkedHashSet<String>();
 	private final Map<String, Object> handlerCache = new HashMap<String, Object>();
 	private final IGContentsAccessErrorConsumer errorConsumer;
 	private final IGUserMessagesConsumer userMessagesConsumer;
@@ -70,6 +76,13 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	private final DocumentReferenceRepository documentReferenceRepository;
 	private final VirtualFolderRepository virtualFolderRepository;
 	private final VirtualFilesystemUniqueIds uniqueIds;
+	/**
+	 * Whether the session ends with the check, on the data source, of every content of
+	 * it this session did not meet. A session reading the whole data source does; one
+	 * fed with what its caller found changed ({@link ChangedContentsConsumingSessionParam})
+	 * tells its own deletions and does not.
+	 */
+	private final boolean checksWhatWasNotMet;
 	private long batchDocumentInput = 0l, batchSentToNextStep = 0l, batchDocumentsProcessingErrors = 0l,
 			batchDocumentsProcessed = 0l, batchDiscardedInput = 0l;
 	private final WorkflowContext workflowContext;
@@ -81,7 +94,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			IGUserMessagesConsumer userMessagesConsumer, IGContentsAccessErrorConsumer errorConsumer,
 			IGContentConsumer documentConsumer, IGMessageBroker broker,
 			DocumentReferenceRepository documentReferenceRepository, VirtualFolderRepository virtualFolderRepository,
-			VirtualFilesystemUniqueIds uniqueIds) {
+			VirtualFilesystemUniqueIds uniqueIds, boolean checksWhatWasNotMet) {
+		this.checksWhatWasNotMet = checksWhatWasNotMet;
 		this.enrichers = enrich;
 		this.jobStatus = jobStatus;
 		this.evaluator = evaluator;
@@ -120,8 +134,17 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 				}
 			}
 		}
-		if (t instanceof GDocumentReference) {
+		// a document its source reports deleted: its record is saved deleted, as below,
+		// and nothing of it goes to the ingestion - there is nothing left to read
+		final boolean reportedDeleted = t instanceof GDocumentReference reported && reported.getCode() != null
+				&& Boolean.TRUE.equals(reported.getDeleted());
+		if (reportedDeleted) {
+			deletedBySource.add(t.getCode());
+		}
+		if (t instanceof GDocumentReference && !reportedDeleted) {
 			GDocumentReference docref = (GDocumentReference) t;
+			// handed over live after being reported deleted in this session: it is there
+			deletedBySource.remove(docref.getCode());
 			batchDocumentInput++;
 			if (docref.getCode() != null) {
 				if (!docsCounters.containsKey(docref.getCode())) {
@@ -226,7 +249,25 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 	@Override
 	public void endConsuming() {
 		documentConsumer.endConsuming();
-		if (!errorConsumer.hasErrors()) {
+		// the documents deleted in this session: the ones their source reported and the
+		// ones the deletions check below finds; counted on the session's last message
+		long batchDeletedDocuments = deletedBySource.size();
+		if (!deletedBySource.isEmpty()) {
+			try {
+				GInternalDeletionMessagePayload reportedDeletedPayload = new GInternalDeletionMessagePayload();
+				reportedDeletedPayload.setCodes4deletion(new ArrayList<String>(deletedBySource));
+				reportedDeletedPayload.setObjectsType(ObjectType.DOCUMENTREF);
+				// as for the documents the deletions check below finds: every store holding
+				// their contents erases them, their records stay, deleted
+				GStoreDisposers.send(broker,
+						() -> GMessageEnvelope.newMessageFrom(this.dispatcher, reportedDeletedPayload));
+				// met again, they are ingested again: nothing of them is in the stores
+				evaluator.forgetIngested(deletedBySource);
+			} catch (Throwable th) {
+				LOGGER.error("Error erasing the stores of the documents reported deleted", th);
+			}
+		}
+		if (checksWhatWasNotMet && !errorConsumer.hasErrors()) {
 			try {
 				Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
 						.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
@@ -254,6 +295,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 						accept(x);
 					}
 				});
+				batchDeletedDocuments += deletedDocsCodes.size();
 				if (!deletedDocsCodes.isEmpty()) {
 					GInternalDeletionMessagePayload deletedDocumentPayload = new GInternalDeletionMessagePayload();
 					deletedDocumentPayload.setCodes4deletion(new ArrayList<String>(deletedDocsCodes.keySet()));
@@ -262,6 +304,8 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					// store, the knowledge graph and the full-text index where deployed
 					GStoreDisposers.send(broker,
 							() -> GMessageEnvelope.newMessageFrom(this.dispatcher, deletedDocumentPayload));
+					// met again, they are ingested again: nothing of them is in the stores
+					evaluator.forgetIngested(deletedDocsCodes.keySet());
 				}
 			} catch (Throwable th) {
 				LOGGER.error("Error in deletions check", th);
@@ -278,6 +322,7 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
 			payload.setBatchSentToNextStep(batchSentToNextStep);
 			payload.setBatchDiscardedInput(batchDiscardedInput);
+			payload.setBatchDeletedDocuments(batchDeletedDocuments);
 			payload.setLastMessage(true);
 			payload.setTimestamp(new Date());
 			GMessageEnvelope<GContentsProcessingStatusUpdatePayload> cmessage = GMessageEnvelope

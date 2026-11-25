@@ -42,6 +42,25 @@ public class GeboAiFilesystemsConfig {
 	private Boolean allowFilesystemSharesUI = false;
 
     /**
+     * The most threads that look for the changes of the files of the data sources
+     * that follow them (ai.gebo.filesystem.watchers-pool-limits).
+     */
+	private int watchersPoolLimits = 1;
+
+    /**
+     * Every how many seconds those threads look, counted from the end of a look at
+     * every data source to the beginning of the next (ai.gebo.filesystem.watchers-period).
+     */
+	private long watchersPeriod = 60;
+
+    /**
+     * For how many minutes the changes found in a data source gather, from the first
+     * one, before they are handed to the ingestion together
+     * (ai.gebo.filesystem.watcher-change-events-window).
+     */
+	private long watcherChangeEventsWindow = 5;
+
+    /**
      * Default constructor for GeboAiFilesystemsConfig.
      */
 	public GeboAiFilesystemsConfig() {
@@ -82,6 +101,30 @@ public class GeboAiFilesystemsConfig {
      */
 	public void setAllowFilesystemSharesUI(Boolean allowFilesystemSharesUI) {
 		this.allowFilesystemSharesUI = allowFilesystemSharesUI;
+	}
+
+	public int getWatchersPoolLimits() {
+		return watchersPoolLimits;
+	}
+
+	public void setWatchersPoolLimits(int watchersPoolLimits) {
+		this.watchersPoolLimits = watchersPoolLimits;
+	}
+
+	public long getWatchersPeriod() {
+		return watchersPeriod;
+	}
+
+	public void setWatchersPeriod(long watchersPeriod) {
+		this.watchersPeriod = watchersPeriod;
+	}
+
+	public long getWatcherChangeEventsWindow() {
+		return watcherChangeEventsWindow;
+	}
+
+	public void setWatcherChangeEventsWindow(long watcherChangeEventsWindow) {
+		this.watcherChangeEventsWindow = watcherChangeEventsWindow;
 	}
 
 }

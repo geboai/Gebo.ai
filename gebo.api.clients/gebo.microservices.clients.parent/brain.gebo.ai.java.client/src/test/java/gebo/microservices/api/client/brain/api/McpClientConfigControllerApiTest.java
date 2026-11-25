@@ -88,6 +88,20 @@ public class McpClientConfigControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void getDefaultRequestTimeoutSecondsTest() {
+        Integer response = api.getDefaultRequestTimeoutSeconds();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void insertMCPClientConfigTest() {
         MCPClientConfig body = null;
         OperationStatusMCPClientConfig response = api.insertMCPClientConfig(body);

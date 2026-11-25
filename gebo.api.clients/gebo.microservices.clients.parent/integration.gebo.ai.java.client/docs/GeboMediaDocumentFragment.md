@@ -3,13 +3,14 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**contentType** | **String** |  |  [optional]
+**name** | **String** |  |  [optional]
+**is** | **Object** |  |  [optional]
 **customMetaData** | **Map&lt;String, Object&gt;** |  |  [optional]
 **fragmentType** | [**FragmentTypeEnum**](#FragmentTypeEnum) |  |  [optional]
-**contentType** | **String** |  |  [optional]
 **characterEncoding** | **String** |  |  [optional]
 **encoding** | **String** |  |  [optional]
 **content** | **String** |  |  [optional]
-**name** | **String** |  |  [optional]
 **uniqueCode** | **String** |  |  [optional]
 
 <a name="FragmentTypeEnum"></a>

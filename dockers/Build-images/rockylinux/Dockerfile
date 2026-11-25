@@ -35,7 +35,11 @@ RUN dnf -y install rpm-build
 # update. TARGETARCH is set by BuildKit (amd64 | arm64). curl -f fails the build on
 # an HTTP error instead of saving the 404 HTML page as the .rpm.
 ARG TARGETARCH
-ARG JDK_VERSION=25.0.5
+# 25.0.5.1 is the Nov 2026 Oracle CPU build that fixes CVE-2026-114938 (Java2Shell /
+# Java4Shell: critical pre-auth RCE in the AVX-512 Base64 decode intrinsic, affecting
+# Java 17.0.6+ incl. the 25 line up to 25.0.5.0). jpackage bundles this runtime into
+# the installers, so the fix must come from here.
+ARG JDK_VERSION=25.0.5.1
 RUN JDK_ARCH=$(case "$TARGETARCH" in arm64) echo aarch64 ;; *) echo x64 ;; esac) \
  && curl -fL -o /tmp/jdk.rpm "https://download.oracle.com/java/25/archive/jdk-${JDK_VERSION}_linux-${JDK_ARCH}_bin.rpm" \
  && rpm -i /tmp/jdk.rpm \

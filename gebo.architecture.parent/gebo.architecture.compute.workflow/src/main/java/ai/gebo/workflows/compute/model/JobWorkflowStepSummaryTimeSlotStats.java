@@ -10,6 +10,7 @@ public class JobWorkflowStepSummaryTimeSlotStats {
 	private Date startDateTime = null, endDateTime = null;
 	private long batchDocumentsInput = 0;
 	private long batchDiscardedInput = 0;
+	private long batchDeletedDocuments = 0;
 	private long batchSentToNextStep = 0;
 	private long chunksProcessed = 0l;
 	private long tokensProcessed = 0l;
@@ -24,6 +25,7 @@ public class JobWorkflowStepSummaryTimeSlotStats {
 		this.batchDocumentsProcessingErrors += x.getBatchDocumentsProcessingErrors();
 		this.batchSentToNextStep += x.getBatchSentToNextStep();
 		this.batchDiscardedInput += x.getBatchDiscardedInput();
+		this.batchDeletedDocuments += x.getBatchDeletedDocuments();
 		this.chunksProcessed += x.getChunksProcessed();
 		this.tokensProcessed += x.getTokensProcessed();
 		this.errorChunks += x.getErrorChunks();
