@@ -15,10 +15,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.chat.client.ChatClientRequest;
-import org.springframework.ai.chat.client.ChatClientResponse;
-import org.springframework.ai.chat.client.advisor.api.StreamAdvisor;
-import org.springframework.ai.chat.client.advisor.api.StreamAdvisorChain;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
@@ -26,7 +22,6 @@ import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.content.Media;
-import org.springframework.core.Ordered;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,8 +42,6 @@ public final class RefusedFilesRetryingChatModel implements ChatModel {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RefusedFilesRetryingChatModel.class);
 	/** The note the model reads in place of the files left out. */
 	static final String LEFT_OUT_NOTE = "These files could not be read by the model provider and were left out: ";
-	/** Where a streamed call carries who it is made for (see {@link AskingAdvisor}). */
-	static final String ASKING_KEY = RefusedFilesRetryingChatModel.class.getName() + ".asking";
 	/** What the error of a provider's client is asked for the HTTP status of its answer. */
 	private static final List<String> STATUS_ACCESSORS = List.of("statusCode", "code");
 	private final ChatModel delegate;
@@ -106,18 +99,22 @@ public final class RefusedFilesRetryingChatModel implements ChatModel {
 			return delegate.stream(prompt);
 		}
 		final AtomicBoolean received = new AtomicBoolean(false);
-		return Flux.deferContextual(context -> Flux.defer(() -> delegate.stream(prompt))
-				.doOnNext(x -> received.set(true)).onErrorResume(failure -> {
-					if (received.get() || !refusedAsBadRequest(failure)) {
-						return Flux.error(failure);
-					}
-					LOGGER.warn("The model provider refused a streamed request carrying files (" + causeOf(failure)
-							+ "): it is made again without " + namesOf(prompt));
-					// the rounds after a tool ran are made on threads that do not know the person
-					final String carried = context.getOrDefault(ASKING_KEY, null);
-					tell(prompt, failure, carried != null ? carried : askingOnThisThread());
-					return delegate.stream(withoutFiles(prompt));
-				}));
+		return Flux.defer(() -> {
+			// read where the call is subscribed, with the identity of who asks (every round of
+			// a tool calling loop is, see StreamedCallIdentity): the threads the provider
+			// answers on know nobody
+			final String asking = askingOnThisThread();
+			return Flux.defer(() -> delegate.stream(prompt)).doOnNext(x -> received.set(true))
+					.onErrorResume(failure -> {
+						if (received.get() || !refusedAsBadRequest(failure)) {
+							return Flux.error(failure);
+						}
+						LOGGER.warn("The model provider refused a streamed request carrying files ("
+								+ causeOf(failure) + "): it is made again without " + namesOf(prompt));
+						tell(prompt, failure, asking);
+						return delegate.stream(withoutFiles(prompt));
+					});
+		});
 	}
 
 	/** Tells who listens, best effort: the answer never depends on it. */
@@ -141,34 +138,6 @@ public final class RefusedFilesRetryingChatModel implements ChatModel {
 		} catch (Throwable e) {
 			LOGGER.error("Cannot read the person a model call is made for", e);
 			return null;
-		}
-	}
-
-	/**
-	 * Carries who a streamed call is made for down to its model, where
-	 * {@link RefusedFilesRetryingChatModel} reads it: the rounds after a tool ran are
-	 * made on threads that do not know the person. Outside the tool calling loop
-	 * (Spring AI's ToolCallingAdvisor, DEFAULT_ORDER = HIGHEST_PRECEDENCE + 300), so it
-	 * is read once, on the thread the call starts on.
-	 */
-	public static final class AskingAdvisor implements StreamAdvisor {
-		static final int ORDER = Ordered.HIGHEST_PRECEDENCE + 150;
-
-		@Override
-		public Flux<ChatClientResponse> adviseStream(ChatClientRequest request, StreamAdvisorChain chain) {
-			final String asking = askingOnThisThread();
-			final Flux<ChatClientResponse> stream = chain.nextStream(request);
-			return asking == null ? stream : stream.contextWrite(context -> context.put(ASKING_KEY, asking));
-		}
-
-		@Override
-		public String getName() {
-			return "Gebo Asking Person Advisor";
-		}
-
-		@Override
-		public int getOrder() {
-			return ORDER;
 		}
 	}
 

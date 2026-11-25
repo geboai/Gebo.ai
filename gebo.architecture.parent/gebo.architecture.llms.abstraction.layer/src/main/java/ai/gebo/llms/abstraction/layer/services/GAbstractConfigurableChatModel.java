@@ -302,7 +302,10 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 		// reasoning of every model round apart from the answer, every provider alike.
 		this.chatClient = builder.defaultAdvisors(usageAdvisorFactory.create(config, this::getPricingConditions,
 				this::getProviderId), new AnswerFirstGenerations.Advisor(this::isReasoningGeneration),
-				thinkingNormalization(), new RefusedFilesRetryingChatModel.AskingAdvisor()).build();
+				thinkingNormalization(),
+				// every round of a streamed call's tool calling loop runs with the identity of
+				// who asks (StreamedCallIdentity)
+				new StreamedCallIdentity.Carrier(), new StreamedCallIdentity.Restorer()).build();
 	}
 
 	/** Tells of the files a request to this model was made again without, where somebody is to be told. */
