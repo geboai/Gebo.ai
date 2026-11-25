@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **batchDocumentsProcessed** | **Long** |  |  [optional]
 **batchSentToNextStep** | **Long** |  |  [optional]
 **batchDiscardedInput** | **Long** |  |  [optional]
+**batchDeletedDocuments** | **Long** |  |  [optional]
 **chunksProcessed** | **Long** |  |  [optional]
 **tokensProcessed** | **Long** |  |  [optional]
 **completed** | **Boolean** |  |  [optional]

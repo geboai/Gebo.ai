@@ -13,7 +13,9 @@
 package gebo.microservices.api.client.brain.api;
 
 import java.io.File;
+import gebo.microservices.api.client.brain.model.GChatUploadFileTypes;
 import gebo.microservices.api.client.brain.model.OperationStatusListUserUploadedContent;
+import gebo.microservices.api.client.brain.model.OperationStatusUploadsWithNewChat;
 import gebo.microservices.api.client.brain.model.UserUploadedContent;
 import org.junit.Test;
 import org.junit.Ignore;
@@ -31,6 +33,38 @@ public class GeboUserChatUploadsControllerApiTest {
 
     private final GeboUserChatUploadsControllerApi api = new GeboUserChatUploadsControllerApi();
 
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void acceptedFileTypesTest() {
+        String userSessionCode = null;
+        String chatProfileCode = null;
+        GChatUploadFileTypes response = api.acceptedFileTypes(userSessionCode, chatProfileCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void chatSessionCreateWithUploadTest() {
+        String chatModelCode = null;
+        List<File> files = null;
+        OperationStatusUploadsWithNewChat response = api.chatSessionCreateWithUpload(chatModelCode, files);
+
+        // TODO: test validations
+    }
     /**
      * 
      *
@@ -60,6 +94,22 @@ public class GeboUserChatUploadsControllerApiTest {
         List<UserUploadedContent> body = null;
         String userSessionCode = null;
         OperationStatusListUserUploadedContent response = api.deleteSessionUploads(body, userSessionCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void ragChatSessionCreateWithUploadTest() {
+        String chatProfileCode = null;
+        List<File> files = null;
+        OperationStatusUploadsWithNewChat response = api.ragChatSessionCreateWithUpload(chatProfileCode, files);
 
         // TODO: test validations
     }

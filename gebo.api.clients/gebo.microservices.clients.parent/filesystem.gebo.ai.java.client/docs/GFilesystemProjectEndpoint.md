@@ -23,6 +23,7 @@ Name | Type | Description | Notes
 **aclAliases** | **List&lt;Integer&gt;** |  |  [optional]
 **personalData** | **Boolean** |  |  [optional]
 **path** | [**List&lt;VFilesystemReference&gt;**](VFilesystemReference.md) |  |  [optional]
+**syncOnFilesModifications** | **Boolean** |  |  [optional]
 
 <a name="SynchroStrategyEnum"></a>
 ## Enum: SynchroStrategyEnum

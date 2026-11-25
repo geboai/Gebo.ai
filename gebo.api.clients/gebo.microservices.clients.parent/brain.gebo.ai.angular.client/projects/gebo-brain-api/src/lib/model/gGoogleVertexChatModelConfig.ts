@@ -33,6 +33,7 @@ export interface GGoogleVertexChatModelConfig {
     features?: Array<GGoogleVertexChatModelConfig.FeaturesEnum>;
     thinking?: GGoogleVertexChatModelConfig.ThinkingEnum;
     maxGeneratedTokens?: number;
+    inputModalities?: Array<GGoogleVertexChatModelConfig.InputModalitiesEnum>;
 }
 export namespace GGoogleVertexChatModelConfig {
     export type ForUsesEnum = 'CHAT' | 'INTERNAL_SERVICES';
@@ -55,5 +56,13 @@ export namespace GGoogleVertexChatModelConfig {
         MEDIUMTHINKING: 'MEDIUM_THINKING' as ThinkingEnum,
         HIGHTHINKING: 'HIGH_THINKING' as ThinkingEnum,
         AUTO: 'AUTO' as ThinkingEnum
+    };
+    export type InputModalitiesEnum = 'TEXT' | 'IMAGE' | 'AUDIO' | 'VIDEO' | 'DOCUMENT';
+    export const InputModalitiesEnum = {
+        TEXT: 'TEXT' as InputModalitiesEnum,
+        IMAGE: 'IMAGE' as InputModalitiesEnum,
+        AUDIO: 'AUDIO' as InputModalitiesEnum,
+        VIDEO: 'VIDEO' as InputModalitiesEnum,
+        DOCUMENT: 'DOCUMENT' as InputModalitiesEnum
     };
 }

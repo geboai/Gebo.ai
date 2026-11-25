@@ -30,7 +30,7 @@ import java.util.Map;
  * MCPClientConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class MCPClientConfig {
   @JsonProperty("code")
@@ -74,6 +74,9 @@ public class MCPClientConfig {
 
   @JsonProperty("stdioEnvironment")
   private Map<String, String> stdioEnvironment = null;
+
+  @JsonProperty("requestTimeoutSeconds")
+  private Integer requestTimeoutSeconds = null;
 
   /**
    * Gets or Sets transportType
@@ -441,6 +444,25 @@ public class MCPClientConfig {
     this.stdioEnvironment = stdioEnvironment;
   }
 
+  public MCPClientConfig requestTimeoutSeconds(Integer requestTimeoutSeconds) {
+    this.requestTimeoutSeconds = requestTimeoutSeconds;
+    return this;
+  }
+
+   /**
+   * Get requestTimeoutSeconds
+   * minimum: 1
+   * @return requestTimeoutSeconds
+  **/
+  @Schema(description = "")
+  public Integer getRequestTimeoutSeconds() {
+    return requestTimeoutSeconds;
+  }
+
+  public void setRequestTimeoutSeconds(Integer requestTimeoutSeconds) {
+    this.requestTimeoutSeconds = requestTimeoutSeconds;
+  }
+
   public MCPClientConfig transportType(TransportTypeEnum transportType) {
     this.transportType = transportType;
     return this;
@@ -693,6 +715,7 @@ public class MCPClientConfig {
         Objects.equals(this.stdioCommand, mcPClientConfig.stdioCommand) &&
         Objects.equals(this.stdioArgs, mcPClientConfig.stdioArgs) &&
         Objects.equals(this.stdioEnvironment, mcPClientConfig.stdioEnvironment) &&
+        Objects.equals(this.requestTimeoutSeconds, mcPClientConfig.requestTimeoutSeconds) &&
         Objects.equals(this.transportType, mcPClientConfig.transportType) &&
         Objects.equals(this.authMode, mcPClientConfig.authMode) &&
         Objects.equals(this.exportingPrefix, mcPClientConfig.exportingPrefix) &&
@@ -707,7 +730,7 @@ public class MCPClientConfig {
 
   @Override
   public int hashCode() {
-    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, baseUrl, mcpEndpoint, sseEndpoint, secretCode, oauth2AuthenticatorCode, stdioCommand, stdioArgs, stdioEnvironment, transportType, authMode, exportingPrefix, accessibleGroups, accessibleUsers, accessibleToAll, aclAliases, tools, resources, prompts);
+    return Objects.hash(code, description, userModified, userCreated, dateModified, dateCreated, baseUrl, mcpEndpoint, sseEndpoint, secretCode, oauth2AuthenticatorCode, stdioCommand, stdioArgs, stdioEnvironment, requestTimeoutSeconds, transportType, authMode, exportingPrefix, accessibleGroups, accessibleUsers, accessibleToAll, aclAliases, tools, resources, prompts);
   }
 
 
@@ -730,6 +753,7 @@ public class MCPClientConfig {
     sb.append("    stdioCommand: ").append(toIndentedString(stdioCommand)).append("\n");
     sb.append("    stdioArgs: ").append(toIndentedString(stdioArgs)).append("\n");
     sb.append("    stdioEnvironment: ").append(toIndentedString(stdioEnvironment)).append("\n");
+    sb.append("    requestTimeoutSeconds: ").append(toIndentedString(requestTimeoutSeconds)).append("\n");
     sb.append("    transportType: ").append(toIndentedString(transportType)).append("\n");
     sb.append("    authMode: ").append(toIndentedString(authMode)).append("\n");
     sb.append("    exportingPrefix: ").append(toIndentedString(exportingPrefix)).append("\n");

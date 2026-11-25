@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * AgentServiceDescriptor
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class AgentServiceDescriptor {
   @JsonProperty("serviceId")
@@ -122,6 +122,9 @@ public class AgentServiceDescriptor {
 
   }  @JsonProperty("kind")
   private KindEnum kind = null;
+
+  @JsonProperty("buildingPrompts")
+  private Boolean buildingPrompts = null;
 
   public AgentServiceDescriptor serviceId(String serviceId) {
     this.serviceId = serviceId;
@@ -321,6 +324,24 @@ public class AgentServiceDescriptor {
     this.kind = kind;
   }
 
+  public AgentServiceDescriptor buildingPrompts(Boolean buildingPrompts) {
+    this.buildingPrompts = buildingPrompts;
+    return this;
+  }
+
+   /**
+   * Get buildingPrompts
+   * @return buildingPrompts
+  **/
+  @Schema(description = "")
+  public Boolean isBuildingPrompts() {
+    return buildingPrompts;
+  }
+
+  public void setBuildingPrompts(Boolean buildingPrompts) {
+    this.buildingPrompts = buildingPrompts;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -341,12 +362,13 @@ public class AgentServiceDescriptor {
         Objects.equals(this.reactive, agentServiceDescriptor.reactive) &&
         Objects.equals(this.adaptable, agentServiceDescriptor.adaptable) &&
         Objects.equals(this.messageSemantic, agentServiceDescriptor.messageSemantic) &&
-        Objects.equals(this.kind, agentServiceDescriptor.kind);
+        Objects.equals(this.kind, agentServiceDescriptor.kind) &&
+        Objects.equals(this.buildingPrompts, agentServiceDescriptor.buildingPrompts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind);
+    return Objects.hash(serviceId, description, inputType, outputType, networkAgent, routingAgent, networkAdapter, reactive, adaptable, messageSemantic, kind, buildingPrompts);
   }
 
 
@@ -366,6 +388,7 @@ public class AgentServiceDescriptor {
     sb.append("    adaptable: ").append(toIndentedString(adaptable)).append("\n");
     sb.append("    messageSemantic: ").append(toIndentedString(messageSemantic)).append("\n");
     sb.append("    kind: ").append(toIndentedString(kind)).append("\n");
+    sb.append("    buildingPrompts: ").append(toIndentedString(buildingPrompts)).append("\n");
     sb.append("}");
     return sb.toString();
   }

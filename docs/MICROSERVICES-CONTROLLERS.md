@@ -6,6 +6,19 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 ### What changed this round
 
+The section of `brain` was regenerated on 25 November 2026 from `fix/audit-corrections`
+(develop 1.0.7.0-SNAPSHOT), with `brain`, `filesystem`, `tyr` and `heimdall` built and running:
+the services whose API the branch touches. `brain` goes from 490 to 499 endpoints, its
+controllers still 99: the chat models' inputs and the kinds of file sent to the models
+(`ChatModelsController`: `getChatModelsInputs`, `getCarriedMediaTypes`,
+`getFileKindsSentToModels`, `applyModelsMetadataInputModalities`), the files a chat wrote
+(`GeboChatLibrariesController.getChatWrittenFiles`), the uploads that open a chat and the file
+types a chat accepts (`GeboUserChatUploadsController`: `acceptedFileTypes`,
+`chatSessionCreateWithUpload`, `ragChatSessionCreateWithUpload`) and the time a request to an
+MCP server waits by default (`McpClientConfigController.getDefaultRequestTimeoutSeconds`). The
+sections of `filesystem`, `tyr` and `heimdall` came out as they were. The other services were
+not running in that round: their sections are those of the round below.
+
 Regenerated on 16 November 2026 from `feature/spring-platforms-upgrade` (Spring Boot 4.2.0-RC2,
 Spring AI 2.1.0-RC2) rebased on develop 1.0.7.0-SNAPSHOT. The previous round was the one that
 added the web search providers to `brain`. Since then the following has changed:
@@ -50,7 +63,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 1 | 1 |
-| brain.gebo.ai | 13001 | `/brain` | 99 | 490 |
+| brain.gebo.ai | 13001 | `/brain` | 99 | 499 |
 | vectorizator.gebo.ai | 13002 | `/vectorizator` | 3 | 6 |
 | graphicator.gebo.ai | 13003 | `/graphicator` | 3 | 13 |
 | chunker.gebo.ai | 13004 | `/chunker` | 5 | 17 |
@@ -84,7 +97,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-99 controller(s), 490 endpoint(s):
+99 controller(s), 499 endpoint(s):
 
 
 ### `a-2-a-client-config-controller`
@@ -189,7 +202,11 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 ### `chat-models-controller`
 | Method | Path | Operation |
 |---|---|---|
+| POST | `/brain/api/admin/ChatModelsController/applyModelsMetadataInputModalities` | applyModelsMetadataInputModalities |
+| GET | `/brain/api/admin/ChatModelsController/getCarriedMediaTypes` | getCarriedMediaTypes |
 | GET | `/brain/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
+| GET | `/brain/api/admin/ChatModelsController/getChatModelsInputs` | getChatModelsInputs |
+| GET | `/brain/api/admin/ChatModelsController/getFileKindsSentToModels` | getFileKindsSentToModels |
 | GET | `/brain/api/admin/ChatModelsController/getRuntimeConfiguredChatModels` | getRuntimeConfiguredChatModels |
 
 ### `chat-models-lookup-controller`
@@ -385,6 +402,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 |---|---|---|
 | GET | `/brain/api/users/GeboChatLibrariesController/downloadChatLibraryResource` | downloadChatLibraryResource |
 | GET | `/brain/api/users/GeboChatLibrariesController/getChatLibraryInstance` | getChatLibraryInstance |
+| GET | `/brain/api/users/GeboChatLibrariesController/getChatWrittenFiles` | getChatWrittenFiles |
 
 ### `gebo-chat-pipelines-controller`
 | Method | Path | Operation |
@@ -521,8 +539,11 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 ### `gebo-user-chat-uploads-controller`
 | Method | Path | Operation |
 |---|---|---|
+| GET | `/brain/api/users/GeboUserChatUploadsController/acceptedFileTypes` | acceptedFileTypes |
+| POST | `/brain/api/users/GeboUserChatUploadsController/chatSessionCreateWithUpload/{chatModelCode}` | chatSessionCreateWithUpload |
 | POST | `/brain/api/users/GeboUserChatUploadsController/chatSessionUpload/{userSessionCode}` | chatSessionUpload |
 | DELETE | `/brain/api/users/GeboUserChatUploadsController/deleteSessionUploads/{userSessionCode}` | deleteSessionUploads |
+| POST | `/brain/api/users/GeboUserChatUploadsController/ragChatSessionCreateWithUpload/{chatProfileCode}` | ragChatSessionCreateWithUpload |
 | GET | `/brain/api/users/GeboUserChatUploadsController/serveContent/{userSessionCode}/{uploadedContentId}` | serveContent |
 
 ### `gebo-user-chats-controller`
@@ -726,6 +747,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 | DELETE | `/brain/api/admin/McpClientConfigController/deleteMCPClientConfig` | deleteMCPClientConfig |
 | GET | `/brain/api/admin/McpClientConfigController/findMCPClientConfigByCode` | findMCPClientConfigByCode |
 | POST | `/brain/api/admin/McpClientConfigController/findMCPClientConfigByQbe` | findMCPClientConfigByQbe |
+| GET | `/brain/api/admin/McpClientConfigController/getDefaultRequestTimeoutSeconds` | getDefaultRequestTimeoutSeconds |
 | POST | `/brain/api/admin/McpClientConfigController/insertMCPClientConfig` | insertMCPClientConfig |
 | POST | `/brain/api/admin/McpClientConfigController/listMCPClientConfig` | listMCPClientConfig |
 | POST | `/brain/api/admin/McpClientConfigController/testAndDiscovery` | testAndDiscovery |

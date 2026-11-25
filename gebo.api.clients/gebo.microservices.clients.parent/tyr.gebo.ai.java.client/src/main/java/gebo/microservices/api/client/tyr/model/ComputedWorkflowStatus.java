@@ -26,7 +26,7 @@ import java.util.List;
  * ComputedWorkflowStatus
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:24.171841609+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:48.933840589+01:00[Europe/Rome]")
 
 public class ComputedWorkflowStatus {
   @JsonProperty("jobId")
@@ -58,6 +58,9 @@ public class ComputedWorkflowStatus {
 
   @JsonProperty("batchDiscardedInput")
   private Long batchDiscardedInput = null;
+
+  @JsonProperty("batchDeletedDocuments")
+  private Long batchDeletedDocuments = null;
 
   @JsonProperty("chunksProcessed")
   private Long chunksProcessed = null;
@@ -269,6 +272,24 @@ public class ComputedWorkflowStatus {
     this.batchDiscardedInput = batchDiscardedInput;
   }
 
+  public ComputedWorkflowStatus batchDeletedDocuments(Long batchDeletedDocuments) {
+    this.batchDeletedDocuments = batchDeletedDocuments;
+    return this;
+  }
+
+   /**
+   * Get batchDeletedDocuments
+   * @return batchDeletedDocuments
+  **/
+  @Schema(description = "")
+  public Long getBatchDeletedDocuments() {
+    return batchDeletedDocuments;
+  }
+
+  public void setBatchDeletedDocuments(Long batchDeletedDocuments) {
+    this.batchDeletedDocuments = batchDeletedDocuments;
+  }
+
   public ComputedWorkflowStatus chunksProcessed(Long chunksProcessed) {
     this.chunksProcessed = chunksProcessed;
     return this;
@@ -477,6 +498,7 @@ public class ComputedWorkflowStatus {
         Objects.equals(this.batchDocumentsProcessed, computedWorkflowStatus.batchDocumentsProcessed) &&
         Objects.equals(this.batchSentToNextStep, computedWorkflowStatus.batchSentToNextStep) &&
         Objects.equals(this.batchDiscardedInput, computedWorkflowStatus.batchDiscardedInput) &&
+        Objects.equals(this.batchDeletedDocuments, computedWorkflowStatus.batchDeletedDocuments) &&
         Objects.equals(this.chunksProcessed, computedWorkflowStatus.chunksProcessed) &&
         Objects.equals(this.tokensProcessed, computedWorkflowStatus.tokensProcessed) &&
         Objects.equals(this.completed, computedWorkflowStatus.completed) &&
@@ -491,7 +513,7 @@ public class ComputedWorkflowStatus {
 
   @Override
   public int hashCode() {
-    return Objects.hash(jobId, workflowType, workflowId, workflowStepId, description, batchDocumentsInput, batchDocumentsProcessingErrors, batchDocumentsProcessed, batchSentToNextStep, batchDiscardedInput, chunksProcessed, tokensProcessed, completed, hasErrors, startedRunning, levelId, enabledStep, startProcessingTimestamp, lastProcessingTimestamp, childs);
+    return Objects.hash(jobId, workflowType, workflowId, workflowStepId, description, batchDocumentsInput, batchDocumentsProcessingErrors, batchDocumentsProcessed, batchSentToNextStep, batchDiscardedInput, batchDeletedDocuments, chunksProcessed, tokensProcessed, completed, hasErrors, startedRunning, levelId, enabledStep, startProcessingTimestamp, lastProcessingTimestamp, childs);
   }
 
 
@@ -510,6 +532,7 @@ public class ComputedWorkflowStatus {
     sb.append("    batchDocumentsProcessed: ").append(toIndentedString(batchDocumentsProcessed)).append("\n");
     sb.append("    batchSentToNextStep: ").append(toIndentedString(batchSentToNextStep)).append("\n");
     sb.append("    batchDiscardedInput: ").append(toIndentedString(batchDiscardedInput)).append("\n");
+    sb.append("    batchDeletedDocuments: ").append(toIndentedString(batchDeletedDocuments)).append("\n");
     sb.append("    chunksProcessed: ").append(toIndentedString(chunksProcessed)).append("\n");
     sb.append("    tokensProcessed: ").append(toIndentedString(tokensProcessed)).append("\n");
     sb.append("    completed: ").append(toIndentedString(completed)).append("\n");

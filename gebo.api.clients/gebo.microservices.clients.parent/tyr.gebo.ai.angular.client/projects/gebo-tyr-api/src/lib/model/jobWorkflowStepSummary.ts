@@ -19,6 +19,7 @@ export interface JobWorkflowStepSummary {
     endDateTime?: Date;
     batchDocumentsInput?: number;
     batchDiscardedInput?: number;
+    batchDeletedDocuments?: number;
     batchSentToNextStep?: number;
     chunksProcessed?: number;
     tokensProcessed?: number;

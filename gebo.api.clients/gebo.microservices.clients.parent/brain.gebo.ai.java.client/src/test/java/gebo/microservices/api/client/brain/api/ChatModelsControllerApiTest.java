@@ -12,8 +12,11 @@
 
 package gebo.microservices.api.client.brain.api;
 
+import gebo.microservices.api.client.brain.model.ChatModelInputs;
 import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseChatModelConfig;
 import gebo.microservices.api.client.brain.model.GChatModelType;
+import gebo.microservices.api.client.brain.model.GModelCarriedMediaTypes;
+import gebo.microservices.api.client.brain.model.OperationStatusListChatModelInputs;
 import org.junit.Test;
 import org.junit.Ignore;
 
@@ -39,8 +42,66 @@ public class ChatModelsControllerApiTest {
      *          if the Api call fails
      */
     @Test
+    public void applyModelsMetadataInputModalitiesTest() {
+        OperationStatusListChatModelInputs response = api.applyModelsMetadataInputModalities();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getCarriedMediaTypesTest() {
+        String modelTypeCode = null;
+        String modelCode = null;
+        GModelCarriedMediaTypes response = api.getCarriedMediaTypes(modelTypeCode, modelCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
     public void getChatModelTypesTest() {
         List<GChatModelType> response = api.getChatModelTypes();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getChatModelsInputsTest() {
+        List<ChatModelInputs> response = api.getChatModelsInputs();
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getFileKindsSentToModelsTest() {
+        List<String> response = api.getFileKindsSentToModels();
 
         // TODO: test validations
     }

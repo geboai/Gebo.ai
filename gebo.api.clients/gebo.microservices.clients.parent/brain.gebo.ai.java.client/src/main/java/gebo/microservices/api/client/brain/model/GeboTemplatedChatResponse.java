@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import gebo.microservices.api.client.brain.model.CalledFunction;
 import gebo.microservices.api.client.brain.model.ChatModelRequestContextWindowStats;
+import gebo.microservices.api.client.brain.model.GConversationFile;
 import gebo.microservices.api.client.brain.model.GResponseDocumentRef;
 import gebo.microservices.api.client.brain.model.GUserMessage;
 import gebo.microservices.api.client.brain.model.GeboWorkingMemoryWindowOccupation;
@@ -33,7 +34,7 @@ import java.util.Map;
  * GeboTemplatedChatResponse
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class GeboTemplatedChatResponse {
   @JsonProperty("id")
@@ -71,6 +72,9 @@ public class GeboTemplatedChatResponse {
 
   @JsonProperty("listedDocumentNames")
   private List<String> listedDocumentNames = null;
+
+  @JsonProperty("writtenFiles")
+  private List<GConversationFile> writtenFiles = null;
 
   @JsonProperty("calledFunctions")
   private List<CalledFunction> calledFunctions = null;
@@ -349,6 +353,32 @@ public class GeboTemplatedChatResponse {
     this.listedDocumentNames = listedDocumentNames;
   }
 
+  public GeboTemplatedChatResponse writtenFiles(List<GConversationFile> writtenFiles) {
+    this.writtenFiles = writtenFiles;
+    return this;
+  }
+
+  public GeboTemplatedChatResponse addWrittenFilesItem(GConversationFile writtenFilesItem) {
+    if (this.writtenFiles == null) {
+      this.writtenFiles = new ArrayList<>();
+    }
+    this.writtenFiles.add(writtenFilesItem);
+    return this;
+  }
+
+   /**
+   * Get writtenFiles
+   * @return writtenFiles
+  **/
+  @Schema(description = "")
+  public List<GConversationFile> getWrittenFiles() {
+    return writtenFiles;
+  }
+
+  public void setWrittenFiles(List<GConversationFile> writtenFiles) {
+    this.writtenFiles = writtenFiles;
+  }
+
   public GeboTemplatedChatResponse calledFunctions(List<CalledFunction> calledFunctions) {
     this.calledFunctions = calledFunctions;
     return this;
@@ -521,6 +551,7 @@ public class GeboTemplatedChatResponse {
         Objects.equals(this.forcedDocumentsRef, geboTemplatedChatResponse.forcedDocumentsRef) &&
         Objects.equals(this.documentsRef, geboTemplatedChatResponse.documentsRef) &&
         Objects.equals(this.listedDocumentNames, geboTemplatedChatResponse.listedDocumentNames) &&
+        Objects.equals(this.writtenFiles, geboTemplatedChatResponse.writtenFiles) &&
         Objects.equals(this.calledFunctions, geboTemplatedChatResponse.calledFunctions) &&
         Objects.equals(this.contextWindowStats, geboTemplatedChatResponse.contextWindowStats) &&
         Objects.equals(this.generatedResources, geboTemplatedChatResponse.generatedResources) &&
@@ -532,7 +563,7 @@ public class GeboTemplatedChatResponse {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, networkOfAgentsSuspendedState);
+    return Objects.hash(id, userChatContextCode, usedChatModelCode, usedChatModelProvider, queryResponse, windowOccupation, query, thinkingOutputs, backendMessages, forcedDocumentsRef, documentsRef, listedDocumentNames, writtenFiles, calledFunctions, contextWindowStats, generatedResources, pipelineRouterDecisionCode, pipelineParams, deepSearchRequestId, networkOfAgentsSuspendedState);
   }
 
 
@@ -553,6 +584,7 @@ public class GeboTemplatedChatResponse {
     sb.append("    forcedDocumentsRef: ").append(toIndentedString(forcedDocumentsRef)).append("\n");
     sb.append("    documentsRef: ").append(toIndentedString(documentsRef)).append("\n");
     sb.append("    listedDocumentNames: ").append(toIndentedString(listedDocumentNames)).append("\n");
+    sb.append("    writtenFiles: ").append(toIndentedString(writtenFiles)).append("\n");
     sb.append("    calledFunctions: ").append(toIndentedString(calledFunctions)).append("\n");
     sb.append("    contextWindowStats: ").append(toIndentedString(contextWindowStats)).append("\n");
     sb.append("    generatedResources: ").append(toIndentedString(generatedResources)).append("\n");

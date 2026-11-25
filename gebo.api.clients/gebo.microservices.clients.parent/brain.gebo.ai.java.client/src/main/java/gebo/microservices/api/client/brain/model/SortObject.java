@@ -22,17 +22,35 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SortObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
 
 public class SortObject {
+  @JsonProperty("empty")
+  private Boolean empty = null;
+
   @JsonProperty("sorted")
   private Boolean sorted = null;
 
   @JsonProperty("unsorted")
   private Boolean unsorted = null;
 
-  @JsonProperty("empty")
-  private Boolean empty = null;
+  public SortObject empty(Boolean empty) {
+    this.empty = empty;
+    return this;
+  }
+
+   /**
+   * Get empty
+   * @return empty
+  **/
+  @Schema(description = "")
+  public Boolean isEmpty() {
+    return empty;
+  }
+
+  public void setEmpty(Boolean empty) {
+    this.empty = empty;
+  }
 
   public SortObject sorted(Boolean sorted) {
     this.sorted = sorted;
@@ -70,24 +88,6 @@ public class SortObject {
     this.unsorted = unsorted;
   }
 
-  public SortObject empty(Boolean empty) {
-    this.empty = empty;
-    return this;
-  }
-
-   /**
-   * Get empty
-   * @return empty
-  **/
-  @Schema(description = "")
-  public Boolean isEmpty() {
-    return empty;
-  }
-
-  public void setEmpty(Boolean empty) {
-    this.empty = empty;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -98,14 +98,14 @@ public class SortObject {
       return false;
     }
     SortObject sortObject = (SortObject) o;
-    return Objects.equals(this.sorted, sortObject.sorted) &&
-        Objects.equals(this.unsorted, sortObject.unsorted) &&
-        Objects.equals(this.empty, sortObject.empty);
+    return Objects.equals(this.empty, sortObject.empty) &&
+        Objects.equals(this.sorted, sortObject.sorted) &&
+        Objects.equals(this.unsorted, sortObject.unsorted);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(sorted, unsorted, empty);
+    return Objects.hash(empty, sorted, unsorted);
   }
 
 
@@ -114,9 +114,9 @@ public class SortObject {
     StringBuilder sb = new StringBuilder();
     sb.append("class SortObject {\n");
     
+    sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("    sorted: ").append(toIndentedString(sorted)).append("\n");
     sb.append("    unsorted: ").append(toIndentedString(unsorted)).append("\n");
-    sb.append("    empty: ").append(toIndentedString(empty)).append("\n");
     sb.append("}");
     return sb.toString();
   }

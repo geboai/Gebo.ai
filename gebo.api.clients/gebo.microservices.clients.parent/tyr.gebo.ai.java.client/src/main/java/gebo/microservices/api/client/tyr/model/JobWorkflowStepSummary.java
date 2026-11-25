@@ -26,7 +26,7 @@ import java.util.List;
  * JobWorkflowStepSummary
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:19:24.171841609+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:48.933840589+01:00[Europe/Rome]")
 
 public class JobWorkflowStepSummary {
   @JsonProperty("workflowType")
@@ -49,6 +49,9 @@ public class JobWorkflowStepSummary {
 
   @JsonProperty("batchDiscardedInput")
   private Long batchDiscardedInput = null;
+
+  @JsonProperty("batchDeletedDocuments")
+  private Long batchDeletedDocuments = null;
 
   @JsonProperty("batchSentToNextStep")
   private Long batchSentToNextStep = null;
@@ -198,6 +201,24 @@ public class JobWorkflowStepSummary {
 
   public void setBatchDiscardedInput(Long batchDiscardedInput) {
     this.batchDiscardedInput = batchDiscardedInput;
+  }
+
+  public JobWorkflowStepSummary batchDeletedDocuments(Long batchDeletedDocuments) {
+    this.batchDeletedDocuments = batchDeletedDocuments;
+    return this;
+  }
+
+   /**
+   * Get batchDeletedDocuments
+   * @return batchDeletedDocuments
+  **/
+  @Schema(description = "")
+  public Long getBatchDeletedDocuments() {
+    return batchDeletedDocuments;
+  }
+
+  public void setBatchDeletedDocuments(Long batchDeletedDocuments) {
+    this.batchDeletedDocuments = batchDeletedDocuments;
   }
 
   public JobWorkflowStepSummary batchSentToNextStep(Long batchSentToNextStep) {
@@ -369,6 +390,7 @@ public class JobWorkflowStepSummary {
         Objects.equals(this.endDateTime, jobWorkflowStepSummary.endDateTime) &&
         Objects.equals(this.batchDocumentsInput, jobWorkflowStepSummary.batchDocumentsInput) &&
         Objects.equals(this.batchDiscardedInput, jobWorkflowStepSummary.batchDiscardedInput) &&
+        Objects.equals(this.batchDeletedDocuments, jobWorkflowStepSummary.batchDeletedDocuments) &&
         Objects.equals(this.batchSentToNextStep, jobWorkflowStepSummary.batchSentToNextStep) &&
         Objects.equals(this.chunksProcessed, jobWorkflowStepSummary.chunksProcessed) &&
         Objects.equals(this.tokensProcessed, jobWorkflowStepSummary.tokensProcessed) &&
@@ -381,7 +403,7 @@ public class JobWorkflowStepSummary {
 
   @Override
   public int hashCode() {
-    return Objects.hash(workflowType, workflowId, workflowStepId, startDateTime, endDateTime, batchDocumentsInput, batchDiscardedInput, batchSentToNextStep, chunksProcessed, tokensProcessed, batchDocumentsProcessingErrors, batchDocumentsProcessed, errorChunks, errorTokens, timesamples);
+    return Objects.hash(workflowType, workflowId, workflowStepId, startDateTime, endDateTime, batchDocumentsInput, batchDiscardedInput, batchDeletedDocuments, batchSentToNextStep, chunksProcessed, tokensProcessed, batchDocumentsProcessingErrors, batchDocumentsProcessed, errorChunks, errorTokens, timesamples);
   }
 
 
@@ -397,6 +419,7 @@ public class JobWorkflowStepSummary {
     sb.append("    endDateTime: ").append(toIndentedString(endDateTime)).append("\n");
     sb.append("    batchDocumentsInput: ").append(toIndentedString(batchDocumentsInput)).append("\n");
     sb.append("    batchDiscardedInput: ").append(toIndentedString(batchDiscardedInput)).append("\n");
+    sb.append("    batchDeletedDocuments: ").append(toIndentedString(batchDeletedDocuments)).append("\n");
     sb.append("    batchSentToNextStep: ").append(toIndentedString(batchSentToNextStep)).append("\n");
     sb.append("    chunksProcessed: ").append(toIndentedString(chunksProcessed)).append("\n");
     sb.append("    tokensProcessed: ").append(toIndentedString(tokensProcessed)).append("\n");

@@ -18,4 +18,16 @@ export interface ModelProviderCapabilities {
     supportsStructuredOutput?: boolean;
     supportsFunctionCalls?: boolean;
     functionsTreeList?: Array<ToolCategoriesTree>;
+    inputModalities?: Array<ModelProviderCapabilities.InputModalitiesEnum>;
+    inputMimeTypes?: Array<string>;
+}
+export namespace ModelProviderCapabilities {
+    export type InputModalitiesEnum = 'TEXT' | 'IMAGE' | 'AUDIO' | 'VIDEO' | 'DOCUMENT';
+    export const InputModalitiesEnum = {
+        TEXT: 'TEXT' as InputModalitiesEnum,
+        IMAGE: 'IMAGE' as InputModalitiesEnum,
+        AUDIO: 'AUDIO' as InputModalitiesEnum,
+        VIDEO: 'VIDEO' as InputModalitiesEnum,
+        DOCUMENT: 'DOCUMENT' as InputModalitiesEnum
+    };
 }

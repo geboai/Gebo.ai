@@ -7,6 +7,7 @@ Method | HTTP request | Description
 [**deleteMCPClientConfig**](McpClientConfigControllerApi.md#deleteMCPClientConfig) | **DELETE** /api/admin/McpClientConfigController/deleteMCPClientConfig | 
 [**findMCPClientConfigByCode**](McpClientConfigControllerApi.md#findMCPClientConfigByCode) | **GET** /api/admin/McpClientConfigController/findMCPClientConfigByCode | 
 [**findMCPClientConfigByQbe**](McpClientConfigControllerApi.md#findMCPClientConfigByQbe) | **POST** /api/admin/McpClientConfigController/findMCPClientConfigByQbe | 
+[**getDefaultRequestTimeoutSeconds**](McpClientConfigControllerApi.md#getDefaultRequestTimeoutSeconds) | **GET** /api/admin/McpClientConfigController/getDefaultRequestTimeoutSeconds | 
 [**insertMCPClientConfig**](McpClientConfigControllerApi.md#insertMCPClientConfig) | **POST** /api/admin/McpClientConfigController/insertMCPClientConfig | 
 [**listMCPClientConfig**](McpClientConfigControllerApi.md#listMCPClientConfig) | **POST** /api/admin/McpClientConfigController/listMCPClientConfig | 
 [**testAndDiscovery**](McpClientConfigControllerApi.md#testAndDiscovery) | **POST** /api/admin/McpClientConfigController/testAndDiscovery | 
@@ -139,6 +140,45 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getDefaultRequestTimeoutSeconds"></a>
+# **getDefaultRequestTimeoutSeconds**
+> Integer getDefaultRequestTimeoutSeconds()
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.McpClientConfigControllerApi;
+
+
+McpClientConfigControllerApi apiInstance = new McpClientConfigControllerApi();
+try {
+    Integer result = apiInstance.getDefaultRequestTimeoutSeconds();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling McpClientConfigControllerApi#getDefaultRequestTimeoutSeconds");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**Integer**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
  - **Accept**: application/json
 
 <a name="insertMCPClientConfig"></a>

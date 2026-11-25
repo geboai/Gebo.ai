@@ -34,6 +34,7 @@ export interface GFilesystemProjectEndpoint {
     aclAliases?: Array<number>;
     personalData?: boolean;
     path?: Array<VFilesystemReference>;
+    syncOnFilesModifications?: boolean;
 }
 export namespace GFilesystemProjectEndpoint {
     export type SynchroStrategyEnum = 'SIZE_AND_TIMESTAMP_AND_HASH_CHECK' | 'HASH_CHECK';
