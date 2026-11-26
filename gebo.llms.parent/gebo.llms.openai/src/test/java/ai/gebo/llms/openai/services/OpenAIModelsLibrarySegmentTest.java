@@ -52,8 +52,10 @@ class OpenAIModelsLibrarySegmentTest {
 		assertEquals(Sampling.REJECTED, library.findParameterRules("openai", "o4-mini").getSampling());
 		assertNull(library.findParameterRules("openai", "gpt-4.1"), "gpt-4.1 takes sampling: no rule");
 
-		// the current models' limits, which /v1/models does not give
-		assertEquals(1050000, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getContextLength());
+		// the current models' limits, which /v1/models does not give: the context is the
+		// most a request may carry as input, the page's maximum of input tokens
+		assertEquals(922000, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getContextLength());
+		assertEquals(922000, library.findByProviderIdAndModelId("openai", "gpt-6.2-astra").getContextLength());
 		assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getSupportsFunctionCalls(),
 				"tools through the Responses api Gebo calls it with");
 		assertEquals(32768, library.findByProviderIdAndModelId("openai", "gpt-4.1-mini").getMaxOutputToken());
@@ -101,8 +103,13 @@ class OpenAIModelsLibrarySegmentTest {
 			assertFalse(rules.knowsEfforts(), id + ": the family rule");
 		}
 
+		// gpt-5.2's page states no maximum of input tokens, gpt-5.4-mini's states 272,000;
+		// a snapshot is known as its model is
+		assertEquals(400000, library.findByProviderIdAndModelId("openai", "gpt-5.2").getContextLength());
+		assertEquals(272000, library.findByProviderIdAndModelId("openai", "gpt-5.4-mini").getContextLength());
+		assertEquals(272000,
+				library.findByProviderIdAndModelId("openai", "gpt-5.4-mini-2026-03-17").getContextLength());
 		for (String id : List.of("gpt-5.2", "gpt-5.4-mini")) {
-			assertEquals(400000, library.findByProviderIdAndModelId("openai", id).getContextLength(), id);
 			assertEquals(128000, library.findByProviderIdAndModelId("openai", id).getMaxOutputToken(), id);
 			assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", id).getSupportsFunctionCalls(), id);
 		}
@@ -146,7 +153,13 @@ class OpenAIModelsLibrarySegmentTest {
 	@Test
 	void aDatedVariantTakesItsModelsInputModalitiesFromARuleAndKeepsItsParameterRules() throws Exception {
 		GModelsLibraryDaoImpl library = library();
-		assertNull(library.findByProviderIdAndModelId("openai", "gpt-5.2-2025-12-11"), "no entry of its own");
+		// a snapshot its model's page lists has an entry of its own, a copy of its model's
+		assertEquals(400000,
+				library.findByProviderIdAndModelId("openai", "gpt-5.2-2025-12-11").getContextLength());
+		// a later one the library does not list yet takes its modalities from the rule
+		assertNull(library.findByProviderIdAndModelId("openai", "gpt-5.2-2026-12-01"), "no entry of its own");
+		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
+				library.findInputModalities("openai", "gpt-5.2-2026-12-01"));
 		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
 				library.findInputModalities("openai", "gpt-5.2-2025-12-11"));
 		assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),

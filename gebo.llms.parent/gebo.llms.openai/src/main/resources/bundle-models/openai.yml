@@ -12,8 +12,14 @@
 # text and page images requires a model that accepts image inputs", so the models that
 # take images take PDF files too.
 # A model whose page was not checked has none, which means text only.
-# The dated variants of a model have no entry of their own: the parameter rules at the
-# end of the file that state inputModalities only cover them by pattern.
+# contextLength is the most a request may carry as input: the "Maximum input tokens" of
+# the model page where it states one (the window less the 128,000 tokens of output kept
+# for the answer), else its context window. The budgets take the generated tokens off it,
+# so they never build a request larger than OpenAI accepts; a model the library does not
+# know is given 8,192 tokens. Checked on the model pages 2026-11-26.
+# The library matches a model id exactly: each snapshot a model page lists has an entry
+# of its own, a copy of its model's; the parameter rules at the end of the file that
+# state inputModalities cover the other dated variants by pattern.
 ai.gebo.models.providers.openai:
   modelsInfo:
     - providerId: openai
@@ -47,6 +53,16 @@ ai.gebo.models.providers.openai:
       description: GPT-4o 2024-08-06 openai flagship model
       informativeUrl: https://platform.openai.com/docs/models/gpt-4o
     - providerId: openai
+      modelId: gpt-4o-2024-11-20
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      maxOutputToken: 16384
+      tokenizingThreashold:
+      description: GPT-4o 2024-11-20 openai flagship model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4o
+    - providerId: openai
       modelId: gpt-4.1
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
@@ -55,6 +71,16 @@ ai.gebo.models.providers.openai:
       maxOutputToken: 32768
       tokenizingThreashold:
       description: GPT-4.1 model
+      informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
+    - providerId: openai
+      modelId: gpt-4.1-2025-04-14
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1047576
+      maxOutputToken: 32768
+      tokenizingThreashold:
+      description: GPT-4.1 2025-04-14 model
       informativeUrl: https://platform.openai.com/docs/models/gpt-4.1
     - providerId: openai
       modelId: gpt-4o-mini
@@ -122,11 +148,22 @@ ai.gebo.models.providers.openai:
       description: GPT-4.1 mini
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-4.1-mini
     - providerId: openai
+      modelId: gpt-4.1-mini-2025-04-14
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1047576
+      maxOutputToken: 32768
+      supportsFunctionCalls: true
+      supportsReasoning: false
+      description: GPT-4.1 mini (2025-04-14 snapshot)
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-4.1-mini
+    - providerId: openai
       modelId: gpt-6.1-sol
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
-      contextLength: 1050000
+      contextLength: 922000
       maxOutputToken: 128000
       supportsFunctionCalls: true
       supportsReasoning: true
@@ -137,7 +174,7 @@ ai.gebo.models.providers.openai:
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
-      contextLength: 1050000
+      contextLength: 922000
       maxOutputToken: 128000
       supportsFunctionCalls: true
       supportsReasoning: true
@@ -148,7 +185,7 @@ ai.gebo.models.providers.openai:
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
-      contextLength: 1050000
+      contextLength: 922000
       maxOutputToken: 128000
       supportsFunctionCalls: true
       supportsReasoning: true
@@ -159,12 +196,73 @@ ai.gebo.models.providers.openai:
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
-      contextLength: 1050000
+      contextLength: 922000
       maxOutputToken: 128000
       supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-6 Luna
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-luna
+    # Models on developers.openai.com/api/docs/models the library did not know, read
+    # 2026-11-26 for their limits only: their other fields stay unknown until their pages
+    # are read for them. gpt-6-cyber and gpt-5.6-cyber need Daybreak Red access; the
+    # gpt-5.6-cyber page gives Chat Completions "Not supported", Responses only.
+    - providerId: openai
+      modelId: gpt-6.2-astra
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-6.2 Astra
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.2-astra
+    - providerId: openai
+      modelId: gpt-6.2-sol
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-6.2 Sol
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.2-sol
+    - providerId: openai
+      modelId: gpt-6.1-terra
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-6.1 Terra
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.1-terra
+    - providerId: openai
+      modelId: gpt-6-cyber
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-6 Cyber
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-cyber
+    - providerId: openai
+      modelId: gpt-5.6-cyber
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      description: GPT-5.6 Cyber
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-cyber
+    # The gpt-5.4 page states no maximum of input tokens: contextLength is its window.
+    - providerId: openai
+      modelId: gpt-5.4
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1050000
+      maxOutputToken: 128000
+      description: GPT-5.4
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4
+    - providerId: openai
+      modelId: gpt-5.4-2026-03-05
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1050000
+      maxOutputToken: 128000
+      description: GPT-5.4 (2026-03-05 snapshot)
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4
     - providerId: openai
       modelId: gpt-5.5
       inputModalities: [TEXT, IMAGE, DOCUMENT]
@@ -176,8 +274,21 @@ ai.gebo.models.providers.openai:
       supportsReasoning: true
       description: GPT-5.5
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.5
+    - providerId: openai
+      modelId: gpt-5.5-2026-04-23
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1050000
+      maxOutputToken: 128000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      description: GPT-5.5 (2026-04-23 snapshot)
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.5
     # The OpenAI fast setup presets (fetched 2026-11-15): both on Chat Completions, below
-    # version 6; the gpt-5.4-mini page states 272,000 tokens of input in the window.
+    # version 6; the gpt-5.4-mini page states 272,000 tokens of input in the window. The
+    # gpt-5.2 page states no maximum of input tokens (checked 2026-11-26): its contextLength
+    # is its window, the fast setup writes 272,000 into its configuration all the same.
     - providerId: openai
       modelId: gpt-5.2
       inputModalities: [TEXT, IMAGE, DOCUMENT]
@@ -190,26 +301,59 @@ ai.gebo.models.providers.openai:
       description: GPT-5.2
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2
     - providerId: openai
-      modelId: gpt-5.4-mini
+      modelId: gpt-5.2-2025-12-11
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
+      maxOutputToken: 128000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      description: GPT-5.2 (2025-12-11 snapshot)
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2
+    - providerId: openai
+      modelId: gpt-5.4-mini
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
       maxOutputToken: 128000
       supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-5.4 mini
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-mini
     - providerId: openai
+      modelId: gpt-5.4-mini-2026-03-17
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      description: GPT-5.4 mini (2026-03-17 snapshot)
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-mini
+    - providerId: openai
       modelId: gpt-5
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
-      contextLength: 400000
+      contextLength: 272000
       maxOutputToken: 128000
       supportsFunctionCalls: true
       supportsReasoning: true
       description: GPT-5
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5
+    - providerId: openai
+      modelId: gpt-5-2025-08-07
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      supportsFunctionCalls: true
+      supportsReasoning: true
+      description: GPT-5 (2025-08-07 snapshot)
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5
   parameterRules:
     # OpenAI - every model below answered "400: Unsupported value: 'temperature' does not
