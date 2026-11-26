@@ -1,13 +1,43 @@
 # The deepseek piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # DeepseekModelsLibrary under ai.gebo.models.providers.deepseek.
-# No entry yet: the reasoning levels each model accepts come from its models api, kept on the model choice.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.deepseek:
-#   parameterRules:
-#     - providerId: deepseek
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The reasoning levels each model accepts come from its models api, kept on the model
+# choice. The models of api-docs.deepseek.com (2026-11-26): "The total length of input
+# tokens and generated tokens is limited by the model's context length", 1M (the models
+# list gives context_window 1048576), output up to 384K (393216). The lookup reads
+# context_window live, these stand in when it leaves it out. deepseek-v4-flash and
+# deepseek-v4-flash-vision-exp are the retired names, served by V4.1 Flash.
+ai.gebo.models.providers.deepseek:
+  modelsInfo:
+    - providerId: deepseek
+      modelId: deepseek-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 393216
+      description: DeepSeek V4.1 Flash 1017
+      informativeUrl: https://api-docs.deepseek.com/quick_start/pricing
+    - providerId: deepseek
+      modelId: deepseek-v4-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 393216
+      description: DeepSeek V4 Pro 0813
+      informativeUrl: https://api-docs.deepseek.com/quick_start/pricing
+    - providerId: deepseek
+      modelId: deepseek-v4-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 393216
+      description: DeepSeek V4.1 Flash 1017 (retired name)
+      informativeUrl: https://api-docs.deepseek.com/quick_start/pricing
+    - providerId: deepseek
+      modelId: deepseek-v4-flash-vision-exp
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 393216
+      description: DeepSeek V4.1 Flash 1017 (retired name)
+      informativeUrl: https://api-docs.deepseek.com/quick_start/pricing

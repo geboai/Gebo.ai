@@ -1,13 +1,45 @@
 # The cheapestinference piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # CheapestInferenceModelsLibrary under ai.gebo.models.providers.cheapestinference.
-# No entry yet: nothing is known of its models yet beyond what the models lookup returns.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.cheapestinference:
-#   parameterRules:
-#     - providerId: cheapestinference
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The models of cheapestinference.com/docs/getting-started/models (2026-11-26). Its
+# /v1/models gives context_length, which the generic lookup does not read (it reads
+# context_window and max_model_len): these entries are where the context comes from.
+ai.gebo.models.providers.cheapestinference:
+  modelsInfo:
+    - providerId: cheapestinference
+      modelId: kimi-k3.1-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      informativeUrl: https://cheapestinference.com/docs/getting-started/models/
+    - providerId: cheapestinference
+      modelId: qwen3.8-max
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      informativeUrl: https://cheapestinference.com/docs/getting-started/models/
+    - providerId: cheapestinference
+      modelId: glm-5.3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      informativeUrl: https://cheapestinference.com/docs/getting-started/models/
+    - providerId: cheapestinference
+      modelId: minimax-m3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      informativeUrl: https://cheapestinference.com/docs/getting-started/models/
+    - providerId: cheapestinference
+      modelId: deepseek-v4.1-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      informativeUrl: https://cheapestinference.com/docs/getting-started/models/
+    - providerId: cheapestinference
+      modelId: mimo-v2.6-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 131072
+      informativeUrl: https://cheapestinference.com/docs/getting-started/models/

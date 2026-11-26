@@ -1,13 +1,134 @@
 # The profundoai piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # ProfundoaiModelsLibrary under ai.gebo.models.providers.profundoai.
-# No entry yet: nothing is known of its models yet beyond what the models lookup returns.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.profundoai:
-#   parameterRules:
-#     - providerId: profundoai
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The models of profundoai.com/models (2026-11-26), text only: their pages give the
+# context in thousands ("128K tokens context"), taken as thousands of tokens; no maximum
+# of output is stated. Profundo's own limits, below some models' native window.
+ai.gebo.models.providers.profundoai:
+  modelsInfo:
+    - providerId: profundoai
+      modelId: glm-5.3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/glm-5.3
+    - providerId: profundoai
+      modelId: glm-5.2
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/glm-5.2
+    - providerId: profundoai
+      modelId: glm-5.3-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/glm-5.3-flash
+    - providerId: profundoai
+      modelId: gpt-6-astra
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/gpt-6-astra
+    - providerId: profundoai
+      modelId: gpt-5.6-luna
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/gpt-5.6-luna
+    - providerId: profundoai
+      modelId: gpt-5.6-sol
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/gpt-5.6-sol
+    - providerId: profundoai
+      modelId: gpt-5.6-terra
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/gpt-5.6-terra
+    - providerId: profundoai
+      modelId: gpt-5.5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/gpt-5.5
+    - providerId: profundoai
+      modelId: gpt-5.4-mini
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      informativeUrl: https://profundoai.com/models/gpt-5.4-mini
+    - providerId: profundoai
+      modelId: claude-fable-5-1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      informativeUrl: https://profundoai.com/models/claude-fable-5-1
+    - providerId: profundoai
+      modelId: claude-sonnet-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      informativeUrl: https://profundoai.com/models/claude-sonnet-5
+    - providerId: profundoai
+      modelId: claude-opus-4-8
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      informativeUrl: https://profundoai.com/models/claude-opus-4-8
+    - providerId: profundoai
+      modelId: claude-opus-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      informativeUrl: https://profundoai.com/models/claude-opus-5
+    - providerId: profundoai
+      modelId: claude-fable-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      informativeUrl: https://profundoai.com/models/claude-fable-5
+    - providerId: profundoai
+      modelId: kimi-k3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/kimi-k3
+    - providerId: profundoai
+      modelId: kimi-k2.7-code
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/kimi-k2.7-code
+    - providerId: profundoai
+      modelId: deepseek-v4-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/deepseek-v4-pro
+    - providerId: profundoai
+      modelId: deepseek-v4-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/deepseek-v4-flash
+    - providerId: profundoai
+      modelId: deepseek-v4-1-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/deepseek-v4-1-flash
+    - providerId: profundoai
+      modelId: qwen3.8-max
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/qwen3.8-max
+    - providerId: profundoai
+      modelId: qwen3.8-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      informativeUrl: https://profundoai.com/models/qwen3.8-flash

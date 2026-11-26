@@ -1,13 +1,40 @@
 # The subconscious piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # SubconsciousModelsLibrary under ai.gebo.models.providers.subconscious.
-# No entry yet: nothing is known of its models yet beyond what the models lookup returns.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.subconscious:
-#   parameterRules:
-#     - providerId: subconscious
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The models of subconscious.dev/pricing (2026-11-26): "Base models ... have a 1M context
+# window". The Marathon models are given a "5M+" window there, while the api reference's
+# own entry of subconscious/glm-5.3-marathon reads context_length 200000 and
+# max_output_tokens 32000: that figure is kept, and 1M, the base models' window, for the
+# other Marathon model. Its /v1/models gives context_length, which the generic lookup
+# does not read: these entries are where the context comes from.
+ai.gebo.models.providers.subconscious:
+  modelsInfo:
+    - providerId: subconscious
+      modelId: subconscious/glm-5.3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: GLM-5.3
+      informativeUrl: https://www.subconscious.dev/pricing
+    - providerId: subconscious
+      modelId: subconscious/glm-5.3-marathon
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 32000
+      description: GLM-5.3 Marathon
+      informativeUrl: https://www.subconscious.dev/pricing
+    - providerId: subconscious
+      modelId: subconscious/deepseek-v4.1-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: DeepSeek V4.1 1017
+      informativeUrl: https://www.subconscious.dev/pricing
+    - providerId: subconscious
+      modelId: subconscious/deepseek-v4.1-flash-marathon
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: DeepSeek V4.1 1017 Marathon
+      informativeUrl: https://www.subconscious.dev/pricing

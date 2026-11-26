@@ -5,6 +5,66 @@
 # Rules: the first one covering a model applies, so specific models come before family
 # patterns ("*" stands for any characters); unset fields are unknown.
 ai.gebo.models.providers.openrouter:
+  # The setup's models with their limits from openrouter.ai/api/v1/models (2026-11-26:
+  # context_length, top_provider.max_completion_tokens): the lookup reads them live, these
+  # stand in when it leaves them out. OpenRouter routes a request to the endpoints that
+  # take its length: the model's context_length is the one that counts.
+  modelsInfo:
+    - providerId: openrouter.ai
+      modelId: z-ai/glm-5.3-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 943717
+      description: GLM 5.3 Flash
+      informativeUrl: https://openrouter.ai/z-ai/glm-5.3-flash
+    - providerId: openrouter.ai
+      modelId: z-ai/glm-5.3-flashx
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 131072
+      description: GLM 5.3 FlashX
+      informativeUrl: https://openrouter.ai/z-ai/glm-5.3-flashx
+    - providerId: openrouter.ai
+      modelId: deepseek/deepseek-v4-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 393216
+      description: DeepSeek V4 Flash
+      informativeUrl: https://openrouter.ai/deepseek/deepseek-v4-flash
+    - providerId: openrouter.ai
+      modelId: deepseek/deepseek-v4-flash-0731
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1048576
+      maxOutputToken: 943718
+      description: DeepSeek V4 Flash 0731
+      informativeUrl: https://openrouter.ai/deepseek/deepseek-v4-flash-0731
+    - providerId: openrouter.ai
+      modelId: openai/gpt-oss-120b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 117964
+      description: GPT-OSS 120B
+      informativeUrl: https://openrouter.ai/openai/gpt-oss-120b
+    - providerId: openrouter.ai
+      modelId: openai/gpt-oss-20b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 117964
+      description: GPT-OSS 20B
+      informativeUrl: https://openrouter.ai/openai/gpt-oss-20b
+    - providerId: openrouter.ai
+      modelId: qwen/qwen3-embedding-8b
+      chatModel: false
+      embeddingModel: true
+      contextLength: 40960
+      description: Qwen3 Embedding 8B
+      informativeUrl: https://openrouter.ai/qwen/qwen3-embedding-8b
   parameterRules:
     # OpenRouter speech - Gemini TTS answers pcm only: asked for mp3 it answered
     # "400 Gemini TTS only supports response_format="pcm". Got "mp3"." (tested against a
