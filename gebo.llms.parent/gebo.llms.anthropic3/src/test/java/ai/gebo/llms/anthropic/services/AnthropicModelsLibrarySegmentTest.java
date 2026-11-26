@@ -49,4 +49,17 @@ class AnthropicModelsLibrarySegmentTest {
 		assertNull(library.findParameterRules("anthropic", "claude-sonnet-4-5"));
 		assertNull(library.findParameterRules("aws-bedrock", "claude-sonnet-5-5"), "a rule is its provider's only");
 	}
+
+	@Test
+	void theModelsLimitsStandInWhenTheModelsApiLeavesThemOut() throws Exception {
+		GModelsLibraryDaoImpl library = new GModelsLibraryDaoImpl(new ModelsLibraryConfig(), List.of(GProviderModelsLibrary
+				.load(AnthropicModelsLibrary.YML, AnthropicModelsLibrary.PREFIX, AnthropicModelsLibrary.class)));
+
+		assertEquals(1000000, library.findByProviderIdAndModelId("anthropic", "claude-opus-5-5").getContextLength());
+		assertEquals(128000, library.findByProviderIdAndModelId("anthropic", "claude-opus-5-5").getMaxOutputToken());
+		// the 4.5 models by their dated id and by their alias
+		assertEquals(200000,
+				library.findByProviderIdAndModelId("anthropic", "claude-haiku-4-5-20251001").getContextLength());
+		assertEquals(200000, library.findByProviderIdAndModelId("anthropic", "claude-haiku-4-5").getContextLength());
+	}
 }
