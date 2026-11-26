@@ -41,7 +41,7 @@ class ProviderModelsLibrariesWiringTest {
 						CheapestInferenceModelsLibrary.class, ProfundoaiModelsLibrary.class, GModelsLibraryDaoImpl.class)
 				.run(context -> {
 					assertThat(context).hasNotFailed();
-					// a provider with no entry yet: its yml is comments only, its library empty
+					// regolo.ai has models info and no rule; vllm's yml is comments only, its library empty
 					assertThat(context.getBean(RegoloModelsLibrary.class).getParameterRules()).isEmpty();
 					assertThat(context.getBean(VllmModelsLibrary.class).getModelsInfo()).isEmpty();
 					IGModelsLibraryDao library = context.getBean(IGModelsLibraryDao.class);
@@ -59,9 +59,10 @@ class ProviderModelsLibrariesWiringTest {
 					assertThat(library.findByProviderIdAndModelId("xai", "grok-4.5").getInputModalities())
 							.containsExactly(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
 									ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE);
-					assertThat(library.findByProviderIdAndModelId("nvidia", "adept/fuyu-8b").getInputModalities())
-							.contains(ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE);
-					assertThat(context.getBean(NvidiaModelsLibrary.class).getModelsInfo()).hasSize(4);
+					// nvidia's api gives no context: its library does
+					assertThat(library.findByProviderIdAndModelId("nvidia", "nvidia/nemotron-3.5-super-vl-120b-a12b")
+							.getContextLength()).isEqualTo(1000000);
+					assertThat(context.getBean(NvidiaModelsLibrary.class).getModelsInfo()).hasSize(9);
 					assertThat(library.findParameterRules("groq", "openai/gpt-oss-20b").getReasoningEfforts())
 							.containsExactly("low", "medium", "high");
 					assertThat(library.findParameterRules("xai", "grok-4.3").acceptsEffort("none")).isTrue();
