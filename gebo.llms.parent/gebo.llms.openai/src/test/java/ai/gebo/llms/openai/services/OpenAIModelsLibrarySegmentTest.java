@@ -62,6 +62,25 @@ class OpenAIModelsLibrarySegmentTest {
 	}
 
 	@Test
+	void aVersion6ModelTheLibraryDoesNotNameSendsNoTemperature() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+
+		// gpt-6.2-sol refused the temperature 0 of its configuration's test call
+		for (String id : List.of("gpt-6.2-sol", "gpt-6.2-sol-2026-11-20", "gpt-6.3-luna", "gpt-6")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertNotNull(rules, id + ": covered by the family rule");
+			assertEquals(Sampling.REJECTED, rules.getSampling(), id + ": no temperature, no top_p");
+			assertFalse(rules.samplingAllowed(false), id);
+			assertFalse(rules.knowsEfforts(), id + ": its efforts are not known");
+		}
+		// the models with a page of their own keep their rules, read before the family one
+		assertEquals(Sampling.WITHOUT_REASONING, library.findParameterRules("openai", "gpt-6-sol").getSampling());
+		assertEquals(Sampling.WITHOUT_REASONING, library.findParameterRules("openai", "gpt-6-luna-2026-09-01").getSampling());
+		assertEquals(List.of("low", "medium", "high", "xhigh", "max"),
+				library.findParameterRules("openai", "gpt-6.1-sol").getReasoningEfforts());
+	}
+
+	@Test
 	void theFastSetupPresetsTakeTheirOwnRulesBeforeTheFamilyOne() throws Exception {
 		GModelsLibraryDaoImpl library = library();
 
