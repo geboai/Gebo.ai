@@ -226,6 +226,16 @@ ai.gebo.models.providers.openai:
       sampling: WITHOUT_REASONING
       reasoningEfforts: [none, low, medium, high, xhigh, max]
       source: developers.openai.com/api/docs/models/gpt-6-sol and gpt-6-luna, 2026-10-11
+    # The family rule of the version 6 models, after the ones above that have a page of
+    # their own: a model of the family the library does not name yet (gpt-6.2-sol answered
+    # "400: Unsupported parameter: 'temperature' is not supported with this model" to the
+    # test call of its configuration, 2026-11-26) sends no temperature and no top_p, where
+    # it was sent Gebo's deterministic 0 and could not be configured at all. Its efforts
+    # are unknown until its page is read.
+    - providerId: openai
+      models: ["gpt-6*"]
+      sampling: REJECTED
+      source: temperature refused by gpt-6.2-sol, reported 2026-11-26; as the gpt-5 family rule below
     - providerId: openai
       models: ["gpt-5.5*"]
       sampling: REJECTED
