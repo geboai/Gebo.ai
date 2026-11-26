@@ -284,6 +284,9 @@ public class LLMUsageRecorder {
 			if (cost != null) {
 				detail.setCost(cost);
 				detail.setCurrencyCode(conditions.getCurrencyCode());
+				// the token parts of the cost; a price per request is in the cost only
+				detail.setInputCost(conditions.inputTokensCost(inputToken));
+				detail.setOutputCost(conditions.outputTokensCost(outputToken));
 			} else if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Model=" + detail.getModel() + " pricing type=" + conditions.getPricingType()
 						+ " attributes no cost to a single call");

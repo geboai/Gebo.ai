@@ -203,6 +203,10 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 		// different currencies cannot be summed.
 		private long costSamples;
 		private double costSum;
+		// The input and output parts of the cost, over the priced calls that recorded them.
+		private long costSplitSamples;
+		private double inputCostSum;
+		private double outputCostSum;
 		private final java.util.Set<String> currencies = new java.util.LinkedHashSet<>();
 		/** The provider of the key's model type, from its raw rows; null if none has one. */
 		private String providerId;
@@ -215,6 +219,11 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 				costSamples++;
 				costSum += detail.getCost();
 				currencies.add(detail.getCurrencyCode());
+				if (detail.getInputCost() != null && detail.getOutputCost() != null) {
+					costSplitSamples++;
+					inputCostSum += detail.getInputCost();
+					outputCostSum += detail.getOutputCost();
+				}
 			}
 			inputToken += detail.getInputToken();
 			outputToken += detail.getOutputToken();
@@ -256,6 +265,9 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 			if (costSamples > 0 && currencies.size() == 1) {
 				target.setCost(costSum);
 				target.setCurrencyCode(currencies.iterator().next());
+				target.setCostSplitSamples(costSplitSamples);
+				target.setInputCost(costSplitSamples > 0 ? inputCostSum : null);
+				target.setOutputCost(costSplitSamples > 0 ? outputCostSum : null);
 			} else {
 				if (currencies.size() > 1) {
 					LOGGER_ACC.warn("Usage of provider=" + target.getProviderId() + " model=" + target.getModel()
@@ -264,6 +276,9 @@ public class LLMUsageDailyAggregationServiceImpl implements ILLMUsageDailyAggreg
 				}
 				target.setCost(null);
 				target.setCurrencyCode(null);
+				target.setCostSplitSamples(0);
+				target.setInputCost(null);
+				target.setOutputCost(null);
 			}
 		}
 	}

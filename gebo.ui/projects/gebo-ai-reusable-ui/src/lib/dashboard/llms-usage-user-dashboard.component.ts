@@ -36,4 +36,8 @@ export class GeboAILLMSUsageUserDashboardComponent extends BaseLLMSUsageDashboar
   executeDrillDown(filter: LLMUsageDrillDownLevel): Observable<LLMUsageDrillDownResult> {
     return this.userService.userDrillDown(filter);
   }
+
+  exportExcelPath(): string {
+    return "api/users/LLMSUsageUserLevelController/exportExcel";
+  }
 }

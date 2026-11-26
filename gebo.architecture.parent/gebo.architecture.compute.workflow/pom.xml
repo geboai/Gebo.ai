@@ -61,6 +61,12 @@
 			<artifactId>gebo.architecture.utils</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The LLM usage export as an Excel workbook. -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>${apache-poi.version}</version>
+		</dependency>
 		<!-- Test only: JUnit 5 + Mockito for the daily usage consolidation test. -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

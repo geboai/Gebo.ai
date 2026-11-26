@@ -87,6 +87,30 @@ public class GModelPricingConditions {
 	}
 
 	/**
+	 * The part of a recorded call's cost ({@link #usageCost}) due to its input tokens,
+	 * or null when it is not priced per token: a {@link PricingModelType#FLAT} model,
+	 * or no input price set.
+	 */
+	public Double inputTokensCost(long inputTokens) {
+		if (pricingType == PricingModelType.FLAT || inputMtokenPrice == null) {
+			return null;
+		}
+		return inputTokens * inputMtokenPrice / 1_000_000d;
+	}
+
+	/**
+	 * The part of a recorded call's cost ({@link #usageCost}) due to its output tokens,
+	 * at the {@link #effectiveOutputMtokenPrice()}; null when it is not priced per
+	 * token, as {@link #inputTokensCost}.
+	 */
+	public Double outputTokensCost(long outputTokens) {
+		if (pricingType == PricingModelType.FLAT || inputMtokenPrice == null) {
+			return null;
+		}
+		return outputTokens * effectiveOutputMtokenPrice() / 1_000_000d;
+	}
+
+	/**
 	 * The pay per use cost of one call: its tokens at the per million token prices
 	 * plus the {@link #requestPrice}. Null when neither a token price nor a request
 	 * price is set.

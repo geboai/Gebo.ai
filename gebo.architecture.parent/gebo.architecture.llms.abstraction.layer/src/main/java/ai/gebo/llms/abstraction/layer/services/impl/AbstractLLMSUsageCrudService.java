@@ -62,6 +62,8 @@ public abstract class AbstractLLMSUsageCrudService implements ILLMSUsageCrudServ
 		payload.setTimeToFirstToken(usage.getTimeToFirstToken());
 		payload.setCost(usage.getCost());
 		payload.setCurrencyCode(usage.getCurrencyCode());
+		payload.setInputCost(usage.getInputCost());
+		payload.setOutputCost(usage.getOutputCost());
 		payload.setInputToken(usage.getInputToken());
 		payload.setOutputToken(usage.getOutputToken());
 		payload.setTotalToken(usage.getTotalToken());

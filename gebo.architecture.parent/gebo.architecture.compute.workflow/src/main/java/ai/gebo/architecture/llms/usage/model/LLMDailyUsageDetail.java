@@ -82,6 +82,19 @@ public class LLMDailyUsageDetail {
 	private String currencyCode;
 	/** How many of the calls aggregated here had a cost. */
 	private long costSamples;
+	/**
+	 * The parts of {@link #cost} due to the input and output tokens, summed over the
+	 * priced calls that recorded them ({@link #costSplitSamples}); null when none did.
+	 * A price per request is in {@link #cost} only.
+	 */
+	private Double inputCost;
+	private Double outputCost;
+	/**
+	 * How many of the priced calls aggregated here recorded the input and output parts
+	 * of their cost: the calls recorded before the parts existed did not, and when
+	 * these are fewer than {@link #costSamples} the parts do not cover the whole cost.
+	 */
+	private long costSplitSamples;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;

@@ -1,6 +1,7 @@
 package ai.gebo.architecture.llms.usage.controller;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownLevel;
 import ai.gebo.architecture.llms.usage.model.LLMUsageDrillDownResult;
 import ai.gebo.architecture.llms.usage.service.impl.LLMSUsageAggregationService;
+import ai.gebo.architecture.llms.usage.service.impl.LLMUsageExcelExportService;
 import ai.gebo.security.services.IGSecurityService;
 import lombok.AllArgsConstructor;
 
@@ -25,11 +27,19 @@ import lombok.AllArgsConstructor;
 public class LLMSUsageUserLevelController {
 
 	private final LLMSUsageAggregationService aggregationService;
+	private final LLMUsageExcelExportService exportService;
 	private final IGSecurityService securityService;
 
 	@PostMapping(value = "drillDown", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public LLMUsageDrillDownResult userDrillDown(@RequestBody LLMUsageDrillDownLevel criteria) {
 		String username = securityService.getCurrentUser().getUsername();
 		return aggregationService.drillDown(criteria, username);
+	}
+
+	/** The current user's own usage the criteria select, as an Excel workbook. */
+	@PostMapping(value = "exportExcel", produces = LLMUsageExcelExportService.CONTENT_TYPE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<byte[]> userExportExcel(@RequestBody LLMUsageDrillDownLevel criteria) {
+		String username = securityService.getCurrentUser().getUsername();
+		return LLMSUsageExcelResponse.of(exportService.export(criteria, username));
 	}
 }

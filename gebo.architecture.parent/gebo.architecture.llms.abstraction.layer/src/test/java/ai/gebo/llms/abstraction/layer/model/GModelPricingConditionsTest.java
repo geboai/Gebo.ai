@@ -77,6 +77,27 @@ class GModelPricingConditionsTest {
 	}
 
 	@Test
+	void theInputAndOutputPartsOfACallCostAreItsTokensAtTheirPrices() {
+		GModelPricingConditions pricing = GModelPricingConditions.fromPerTokenPrices(2e-6, 8e-6, 0.01, "USD");
+		assertEquals(2e-3, pricing.inputTokensCost(1000), 1e-12);
+		assertEquals(4e-3, pricing.outputTokensCost(500), 1e-12);
+		// the parts plus the price per request are the cost
+		assertEquals(2e-3 + 4e-3 + 0.01, pricing.usageCost(1000, 500, true), 1e-12);
+		// an output priced as the input
+		assertEquals(1e-3, mtoken(1.00, null).outputTokensCost(1000), 1e-12);
+	}
+
+	@Test
+	void aCallNotPricedPerTokenHasNoInputNorOutputCost() {
+		GModelPricingConditions flat = new GModelPricingConditions();
+		flat.setPricingType(GModelPricingConditions.PricingModelType.FLAT);
+		flat.setInputMtokenPrice(1d);
+		assertNull(flat.inputTokensCost(1000));
+		assertNull(flat.outputTokensCost(1000));
+		assertNull(GModelPricingConditions.fromPerTokenPrices(null, null, 0.01, "USD").inputTokensCost(1000));
+	}
+
+	@Test
 	void noInputPriceMeansNoTokenCost() {
 		assertNull(mtoken(null, 2.00).tokenCost(1000, 1000));
 		assertNull(new GModelPricingConditions().tokenCost(1000, 1000));

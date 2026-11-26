@@ -203,6 +203,9 @@ class UsageRecordingModelsTest {
 		verify(crud, times(1)).enqueueUsage(captor.capture());
 		assertEquals(0.001, captor.getValue().getCost(), 1e-12);
 		assertEquals("USD", captor.getValue().getCurrencyCode());
+		// the price per request is in the cost only, not in its token parts
+		assertEquals(0d, captor.getValue().getInputCost(), 1e-12);
+		assertEquals(0d, captor.getValue().getOutputCost(), 1e-12);
 	}
 
 	@Test
@@ -220,6 +223,8 @@ class UsageRecordingModelsTest {
 		ArgumentCaptor<LLMUsageDetailDto> captor = ArgumentCaptor.forClass(LLMUsageDetailDto.class);
 		verify(crud, times(1)).enqueueUsage(captor.capture());
 		assertEquals(1.0 + 2.1, captor.getValue().getCost(), 1e-9);
+		assertEquals(1.0, captor.getValue().getInputCost(), 1e-9);
+		assertEquals(2.1, captor.getValue().getOutputCost(), 1e-9);
 	}
 
 	@Test
