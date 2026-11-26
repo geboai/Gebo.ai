@@ -242,15 +242,22 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chat-aws-bedrock
           doModelsLookup: true
           choices:
+            # The Bedrock models lookup gives no context: each model takes its window from
+            # here, its card's "Context window: 1M tokens" (docs.aws.amazon.com/bedrock/latest/
+            # userguide/model-card-anthropic-claude-<model>.html, 2026-11-26), which states no
+            # maximum of input tokens below it.
             - code: global.anthropic.claude-sonnet-5-5
               description: Anthropic Claude Sonnet 5.5 (global inference profile)
+              contextWindow: 1000000
               uses: CHAT
               defaultChoice: true
             - code: global.anthropic.claude-opus-5-5
               description: Anthropic Claude Opus 5.5 (global inference profile)
+              contextWindow: 1000000
               uses: CHAT
             - code: global.anthropic.claude-haiku-5-5
               description: Anthropic Claude Haiku 5.5 (global inference profile)
+              contextWindow: 1000000
               uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-aws-bedrock
