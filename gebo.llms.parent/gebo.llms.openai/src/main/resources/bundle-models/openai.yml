@@ -355,6 +355,163 @@ ai.gebo.models.providers.openai:
       supportsReasoning: true
       description: GPT-5 (2025-08-07 snapshot)
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5
+    # The other models of developers.openai.com/api/docs/models/all still served (read
+    # 2026-11-26), for their limits only, as above: contextLength the page's "Maximum input
+    # tokens" where it states one, else the window. The deprecated ones carry their
+    # shutdown date (developers.openai.com/api/docs/deprecations); the models already shut
+    # down have no entry.
+    - providerId: openai
+      modelId: gpt-5.6-sol
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-5.6 Sol
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-sol
+    - providerId: openai
+      modelId: gpt-5.6-terra
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-5.6 Terra
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-terra
+    - providerId: openai
+      modelId: gpt-5.6-luna
+      chatModel: true
+      embeddingModel: false
+      contextLength: 922000
+      maxOutputToken: 128000
+      description: GPT-5.6 Luna
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-luna
+    - providerId: openai
+      modelId: gpt-5.5-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1050000
+      maxOutputToken: 128000
+      description: GPT-5.5 pro
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.5-pro
+    - providerId: openai
+      modelId: gpt-5.4-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1050000
+      maxOutputToken: 128000
+      description: GPT-5.4 pro
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-pro
+    - providerId: openai
+      modelId: gpt-5.2-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 400000
+      maxOutputToken: 128000
+      description: GPT-5.2 pro
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2-pro
+    - providerId: openai
+      modelId: chat-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      description: ChatGPT latest
+      informativeUrl: https://developers.openai.com/api/docs/models/chat-latest
+    - providerId: openai
+      modelId: gpt-oss-120b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 131072
+      description: gpt-oss-120b
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-oss-120b
+    - providerId: openai
+      modelId: gpt-oss-20b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 131072
+      description: gpt-oss-20b
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-oss-20b
+    - providerId: openai
+      modelId: gpt-5.4-nano
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      deprecated: true
+      retirementDate: "2027-04-01"
+      description: GPT-5.4 nano
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-nano
+    - providerId: openai
+      modelId: gpt-5.3-codex
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      deprecated: true
+      retirementDate: "2027-04-01"
+      description: GPT-5.3-Codex
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.3-codex
+    - providerId: openai
+      modelId: gpt-5.1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 400000
+      maxOutputToken: 128000
+      deprecated: true
+      retirementDate: "2027-04-01"
+      description: GPT-5.1
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.1
+    - providerId: openai
+      modelId: gpt-5-mini
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      deprecated: true
+      retirementDate: "2026-12-11"
+      description: GPT-5 mini
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5-mini
+    - providerId: openai
+      modelId: gpt-5-nano
+      chatModel: true
+      embeddingModel: false
+      contextLength: 272000
+      maxOutputToken: 128000
+      deprecated: true
+      retirementDate: "2026-12-11"
+      description: GPT-5 nano
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5-nano
+    - providerId: openai
+      modelId: gpt-5-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 400000
+      maxOutputToken: 272000
+      deprecated: true
+      retirementDate: "2026-12-11"
+      description: GPT-5 pro
+      informativeUrl: https://developers.openai.com/api/docs/models/gpt-5-pro
+    - providerId: openai
+      modelId: o3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 100000
+      deprecated: true
+      retirementDate: "2026-12-11"
+      description: o3
+      informativeUrl: https://developers.openai.com/api/docs/models/o3
+    - providerId: openai
+      modelId: o3-pro
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 100000
+      deprecated: true
+      retirementDate: "2026-12-11"
+      description: o3-pro
+      informativeUrl: https://developers.openai.com/api/docs/models/o3-pro
   parameterRules:
     # OpenAI - every model below answered "400: Unsupported value: 'temperature' does not
     # support 0.0 with this model. Only the default (1) value is supported." at its

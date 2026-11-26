@@ -56,6 +56,8 @@ class OpenAIModelsLibrarySegmentTest {
 		// most a request may carry as input, the page's maximum of input tokens
 		assertEquals(922000, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getContextLength());
 		assertEquals(922000, library.findByProviderIdAndModelId("openai", "gpt-6.2-astra").getContextLength());
+		assertEquals(922000, library.findByProviderIdAndModelId("openai", "gpt-5.6-sol").getContextLength());
+		assertEquals("2026-12-11", library.findByProviderIdAndModelId("openai", "o3").getRetirementDate());
 		assertEquals(Boolean.TRUE, library.findByProviderIdAndModelId("openai", "gpt-6.1-sol").getSupportsFunctionCalls(),
 				"tools through the Responses api Gebo calls it with");
 		assertEquals(32768, library.findByProviderIdAndModelId("openai", "gpt-4.1-mini").getMaxOutputToken());
