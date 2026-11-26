@@ -5,6 +5,77 @@
 # Rules: the first one covering a model applies, so specific models come before family
 # patterns ("*" stands for any characters); unset fields are unknown.
 ai.gebo.models.providers.groq:
+  # The models of console.groq.com/docs/models with their limits ("CONTEXT WINDOW (TOKENS)"
+  # and "MAX COMPLETION TOKENS", read 2026-11-26): the models api gives the context window
+  # too, these stand in when it leaves it out. No page states a maximum of input tokens
+  # below the window, so contextLength is the window. llama-3.1-8b-instant and
+  # llama-3.3-70b-versatile were shut down on 2026-08-16 for the free and developer tiers;
+  # enterprise contracts keep them. Their input modalities come from the rules below.
+  modelsInfo:
+    - providerId: groq
+      modelId: llama-3.1-8b-instant
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 131072
+      description: Llama 3.1 8B Instant
+      informativeUrl: https://console.groq.com/docs/model/llama-3.1-8b-instant
+    - providerId: groq
+      modelId: llama-3.3-70b-versatile
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 32768
+      description: Llama 3.3 70B Versatile
+      informativeUrl: https://console.groq.com/docs/model/llama-3.3-70b-versatile
+    - providerId: groq
+      modelId: openai/gpt-oss-120b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 65536
+      description: GPT-OSS 120B
+      informativeUrl: https://console.groq.com/docs/model/openai/gpt-oss-120b
+    - providerId: groq
+      modelId: openai/gpt-oss-20b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 65536
+      description: GPT-OSS 20B
+      informativeUrl: https://console.groq.com/docs/model/openai/gpt-oss-20b
+    - providerId: groq
+      modelId: openai/gpt-oss-safeguard-20b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 65536
+      description: GPT-OSS Safeguard 20B
+      informativeUrl: https://console.groq.com/docs/model/openai/gpt-oss-safeguard-20b
+    - providerId: groq
+      modelId: meta-models/muse-spark-open
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 131072
+      description: Muse Spark Open
+      informativeUrl: https://console.groq.com/docs/model/meta-models/muse-spark-open
+    - providerId: groq
+      modelId: minimaxai/minimax-m2.7
+      chatModel: true
+      embeddingModel: false
+      contextLength: 196608
+      maxOutputToken: 131072
+      description: MiniMax M2.7
+      informativeUrl: https://console.groq.com/docs/model/minimaxai/minimax-m2.7
+    - providerId: groq
+      modelId: qwen/qwen3.8-27b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 131072
+      maxOutputToken: 16384
+      description: Qwen3.8 27B
+      informativeUrl: https://console.groq.com/docs/model/qwen/qwen3.8-27b
   parameterRules:
     # Groq - console.groq.com/docs/reasoning, 2026-10-11: temperature 0.0 to 2.0 on its
     # reasoning models.

@@ -39,8 +39,13 @@ class GoogleVertexModelsLibrarySegmentTest {
 		assertTrue(flash.getDeprecated());
 		assertEquals("2026-10-20", flash.getRetirementDate());
 		assertEquals("gemini-3.8-flash", flash.getReplacementModel());
-		assertEquals("2026-11-19",
+		// moved by Google to January 28, 2027 (its Vertex model page, read 2026-11-26)
+		assertEquals("2027-01-28",
 				library.findByProviderIdAndModelId("google-vertex", "gemini-3.6-flash").getRetirementDate());
+		assertEquals("gemini-4-hydrogen",
+				library.findByProviderIdAndModelId("google-vertex", "gemini-3.6-flash").getReplacementModel());
+		assertEquals(1048576,
+				library.findByProviderIdAndModelId("google-vertex", "gemini-3.8-flash").getContextLength());
 		assertNull(library.findByProviderIdAndModelId("google-vertex", "gemini-3.8-flash").getRetirementDate(),
 				"no retirement announced");
 		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.PROVIDER_DEFAULT,
