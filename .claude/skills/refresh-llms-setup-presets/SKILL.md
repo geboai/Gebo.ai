@@ -50,14 +50,18 @@ quoted with its URL and date; never from memory.**
 4. **Temperature:** no preset writes one. The chat model sets temperature 0 wherever the
    model takes it (the models library's `sampling` rules); a model whose provider
    recommends its own default (`PROVIDER_DEFAULT`, Gemini 3) keeps it.
-5. **Context window:** `contextWindow` only for the providers whose models list gives no
+5. **Input types:** no `inputModalities` on a preset whose model's metadata or models
+   library tells them (the configuration takes them from the chosen model); a preset
+   gives them only for a model neither tells, from the provider's page. Missing library
+   values are the `refresh-models-library` skill's (its "input / output modalities" part).
+6. **Context window:** `contextWindow` only for the providers whose models list gives no
    context (today: openai, aws-bedrock, xai, nvidia, llmax, profundoai), set to the
    models library's `contextLength` of the model (the most input a request may carry).
    Where the list gives it (regolo.ai `max_input_tokens`, groq `context_window`,
    openrouter.ai `context_length`, and Anthropic, DeepSeek, Vertex, Mistral, Ollama by
    their own lookups) no `contextWindow`: a preset value would override the live one.
    Check the provider's list-models reference when a provider is added.
-6. **Codes the lookup can validate:** with `doModelsLookup: true` the setup creates a model
+7. **Codes the lookup can validate:** with `doModelsLookup: true` the setup creates a model
    only if its code is in the provider's live list (`configureModelValidating`); use the
    ids the provider documents (`mistral-large-4-0`, not an alias the docs do not show).
 
@@ -68,7 +72,7 @@ quoted with its URL and date; never from memory.**
    python3 .claude/skills/refresh-llms-setup-presets/scripts/check_presets.py --months 6
    ```
    It prints every preset with its library entry, retirement, context and thinking (as
-   sent, for the reasoning_effort providers) and WARNs for what breaks rules 1, 3 and 5.
+   sent, for the reasoning_effort providers) and WARNs for what breaks rules 1, 3 and 6.
    "no library entry" means the libraries cannot tell its status (most image, speech,
    transcription, ranking and some embedding models): those need the provider pages.
 2. **Read the providers' lifecycle pages in parallel** (`web-fetch` agents in one message,
@@ -99,7 +103,7 @@ quoted with its URL and date; never from memory.**
    docs make them obsolete; do not change a vendor's default to another generation
    without asking.
 4. **Edit library.yml** in place: keep the comments, add to each change a comment quoting
-   the page with its date, apply rules 3-5 to every touched chat preset. Validate the YAML.
+   the page with its date, apply rules 3-6 to every touched chat preset. Validate the YAML.
    If a preset model has no models library entry and its library should carry it (context,
    retirement date), run the `refresh-models-library` skill for that provider.
 5. **Tests:** update `gebo.llms.setup/src/test/java/ai/gebo/llms/setup/config/PresetChoiceDefaultsTest.java`

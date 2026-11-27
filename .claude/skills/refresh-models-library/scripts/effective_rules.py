@@ -90,6 +90,8 @@ def main():
     parser.add_argument("yml")
     parser.add_argument("--model", action="append", default=[])
     parser.add_argument("--provider")
+    parser.add_argument("--missing-modalities", action="store_true",
+                        help="list only the chat entries with no input modalities, of their own or by a rule")
     args = parser.parse_args()
     library = library_of(yaml.safe_load(open(args.yml, encoding="utf-8"))) or {}
     entries = library.get("modelsInfo") or []
@@ -99,6 +101,11 @@ def main():
         sys.exit("no providerId found: pass --provider")
     print("provider %s: %d entries, %d rules" % (provider_id, len(entries), len(rules)))
     by_id = {e.get("modelId"): e for e in entries if e.get("providerId") == provider_id}
+    if args.missing_modalities:
+        missing = [m for m, e in by_id.items() if e.get("chatModel") and not e.get("inputModalities")
+                   and not first(rules, provider_id, m, lambda r: bool(r.get("inputModalities")))]
+        print("%d chat entries without input modalities: %s" % (len(missing), ", ".join(missing)))
+        return
     for model_id in (args.model or list(by_id)):
         print(describe(rules, provider_id, model_id, by_id.get(model_id)))
 
