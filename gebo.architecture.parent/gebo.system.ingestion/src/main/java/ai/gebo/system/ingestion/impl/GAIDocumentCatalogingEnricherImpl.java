@@ -94,17 +94,42 @@ public class GAIDocumentCatalogingEnricherImpl implements IGAIDocumentMetaDataEn
 	}
 
 	/**
-	 * Retrieves the IngestionFileType for a given document reference based on its
-	 * extension.
-	 * 
+	 * Retrieves the IngestionFileType for a given document reference: by its
+	 * extension, else by its content type. A file read as plain text under an
+	 * extension no reader declares (.log, .out, .cfg...) still gets the file type,
+	 * so the cataloging header, of its content type.
+	 *
 	 * @param reference The document reference to find the file type for
-	 * @return The corresponding IngestionFileType for the document
+	 * @return The corresponding IngestionFileType for the document, null when
+	 *         neither the extension nor the content type is known
 	 */
 	protected IngestionFileType getFileType(GDocumentReference reference) {
 		if (fileTypeRetrieve.isEmpty()) {
 			this.fileTypesFillMap();
 		}
-		return fileTypeRetrieve.get(reference.getExtension());
+		IngestionFileType byExtension = fileTypeRetrieve.get(reference.getExtension());
+		if (byExtension != null) {
+			return byExtension;
+		}
+		String contentType = baseContentType(reference.getContentType());
+		IngestionFileType byContentType = contentType != null ? contentTypeRetrieve.get(contentType) : null;
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("No file type for the extension " + reference.getExtension() + " of " + reference.getCode()
+					+ ", content type " + reference.getContentType() + " gives "
+					+ (byContentType != null ? byContentType.getDescription() : "none"));
+		}
+		return byContentType;
+	}
+
+	/** The media type without its parameters, lower case: "text/plain; charset=UTF-8" gives "text/plain". */
+	static String baseContentType(String contentType) {
+		if (contentType == null) {
+			return null;
+		}
+		int semicolon = contentType.indexOf(';');
+		String base = (semicolon >= 0 ? contentType.substring(0, semicolon) : contentType).trim()
+				.toLowerCase(java.util.Locale.ROOT);
+		return base.isEmpty() ? null : base;
 	}
 
 	/**
