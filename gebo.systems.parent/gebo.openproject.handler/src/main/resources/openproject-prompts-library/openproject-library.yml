@@ -1,0 +1,32 @@
+ai.gebo.openproject.library:
+  - promptUse: openproject-standard-query-extraction-prompt
+    langCode: en
+    systemReference: /openproject-prompts-library/en/openproject-standard-query-extraction-prompt-system-prompt.txt
+    userReference: /openproject-prompts-library/en/openproject-standard-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+  - promptUse: openproject-native-query-extraction-prompt
+    langCode: en
+    systemReference: /openproject-prompts-library/en/openproject-native-query-extraction-prompt-system-prompt.txt
+    userReference: /openproject-prompts-library/en/openproject-native-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+ai.gebo.openproject.uses:
+  - code: openproject-standard-query-extraction-prompt
+    description: Extracts a few plain-text, operator-free search strings from the user's question for the OpenProject search over the subject, description and comments of work packages.
+    module: openproject
+    placeholders:
+      - placeholder: format
+        description: The structured-output format the extracted search strings must comply with.
+      - placeholder: question
+        description: The user's current question or request text.
+  - code: openproject-native-query-extraction-prompt
+    description: Generates a structured OpenProject work packages search filter (as JSON) from the user's question and the available OpenProject projects, translated server side into the filters of an API v3 work packages query.
+    module: openproject
+    placeholders:
+      - placeholder: format
+        description: The JSON format of the OpenProject work packages search filter.
+      - placeholder: openprojectProjects
+        description: Catalog of the OpenProject projects available to be searched.
+      - placeholder: question
+        description: The user's current question or request text.

@@ -48,5 +48,7 @@
 		<module>gebo.redmine.handler</module>
 		<module>gebo.glpi.search.api</module>
 		<module>gebo.glpi.handler</module>
+		<module>gebo.openproject.search.api</module>
+		<module>gebo.openproject.handler</module>
 	</modules>
 </project>
