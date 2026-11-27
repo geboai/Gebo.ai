@@ -118,6 +118,7 @@ backends:
   redmine:      { port: 13021, enabled: true }
   glpi:         { port: 13022, enabled: true }
   openproject:  { port: 13023, enabled: true }
+  zammad:       { port: 13024, enabled: true }
 
 # --- Stateful dependencies -------------------------------------------------
 # enabled:true  -> deployed in-cluster (StatefulSet + PVC + Service).

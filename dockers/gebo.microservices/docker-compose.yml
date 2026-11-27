@@ -11,7 +11,7 @@
 #
 # App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id, so
 # nothing here NEEDS a host port except the gateway. Every microservice publishes
-# one anyway, on its own dedicated port from the 13000-13023 block, so each service
+# one anyway, on its own dedicated port from the 13000-13024 block, so each service
 # can be reached (and its /v3/api-docs scraped by the generated client stubs)
 # without going through the gateway:
 #
@@ -30,6 +30,7 @@
 #                                                       13021 redmine
 #                                                       13022 glpi
 #                                                       13023 openproject
+#                                                       13024 zammad
 #
 # 13018 extends what used to be a full 13000-13017 block; heimdall was added after
 # every slot in it was taken. 13019 (tyr), 13020 (webdav) and 13021 (redmine) followed the same way.
@@ -192,6 +193,9 @@ services:
       - openproject-home:/v/openproject-home
       - openproject-work:/v/openproject-work
       - openproject-logs:/v/openproject-logs
+      - zammad-home:/v/zammad-home
+      - zammad-work:/v/zammad-work
+      - zammad-logs:/v/zammad-logs
       - graphicator-logs:/v/graphicator-logs
       - fulltextor-logs:/v/fulltextor-logs
       - jira-logs:/v/jira-logs
@@ -564,6 +568,16 @@ services:
     image: geboai/openproject.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
     ports:
       - "13023:13023"
+  zammad:
+    <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - zammad-home:/opt/gebo.ai/home
+      - zammad-work:/opt/gebo.ai/work
+      - zammad-logs:/opt/gebo.ai/logs
+    image: geboai/zammad.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
+    ports:
+      - "13024:13024"
   integration:
     <<: *microservice
     volumes:
@@ -692,6 +706,9 @@ volumes:
   openproject-home:
   openproject-work:
   openproject-logs:
+  zammad-home:
+  zammad-work:
+  zammad-logs:
   integration-home:
   integration-work:
   integration-logs:

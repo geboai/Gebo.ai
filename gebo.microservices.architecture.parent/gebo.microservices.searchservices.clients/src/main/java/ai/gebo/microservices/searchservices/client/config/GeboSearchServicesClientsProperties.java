@@ -51,6 +51,9 @@ public class GeboSearchServicesClientsProperties {
 	private Endpoint openproject = Endpoint.of("openproject_gebo_ai", "api/users/OpenProjectSearchServiceController",
 			"openproject", "OpenProject Search", "openproject", "openproject-module",
 			"openproject-standard-query-extraction-prompt", "openproject-native-query-extraction-prompt");
+	private Endpoint zammad = Endpoint.of("zammad_gebo_ai", "api/users/ZammadSearchServiceController", "zammad",
+			"Zammad Search", "zammad", "zammad-module", "zammad-standard-query-extraction-prompt",
+			"zammad-native-query-extraction-prompt");
 
 	@Data
 	public static class Endpoint {

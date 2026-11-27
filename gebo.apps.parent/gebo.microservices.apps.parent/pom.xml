@@ -47,6 +47,7 @@
 		<module>redmine.gebo.ai</module>
 		<module>glpi.gebo.ai</module>
 		<module>openproject.gebo.ai</module>
+		<module>zammad.gebo.ai</module>
 		<module>integration.gebo.ai</module>
 		<module>fulltextor.gebo.ai</module>
 		<module>tyr.gebo.ai</module>

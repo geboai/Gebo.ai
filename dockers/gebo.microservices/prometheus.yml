@@ -63,3 +63,5 @@ scrape_configs:
         labels: { service: glpi }
       - targets: ["openproject:13990"]
         labels: { service: openproject }
+      - targets: ["zammad:13990"]
+        labels: { service: zammad }
