@@ -10,10 +10,11 @@
 
 
 
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ChangeDetectionStrategy } from "@angular/core";
 import { FormGroup } from "@angular/forms";
 import { ChatModelsControllerService, GBaseChatModelConfig, GModelCarriedMediaTypes, ModelMetaInfo } from "@Gebo.ai/gebo-ai-rest-api";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService } from "@Gebo.ai/reusable-ui";
+import { ChatModelParametersControls, ThinkingOptionItem } from "./chat-model-parameters-controls";
 /**
  * AI generated comments
  * This file defines a component for configuring standard chat model settings
@@ -42,7 +43,7 @@ const standardDefaultContextLength: number = 4096;
         { provide: GEBO_AI_FIELD_HOST, multi: false, useValue: fieldHostComponentName("GeboAIStandardChatModelSettings") }
     ]
 })
-export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
+export class GeboAIStandardChatModelSettings implements OnInit, OnChanges, OnDestroy {
     // Form group to bind settings controls to
     @Input() formGroup?: FormGroup;
 
@@ -84,6 +85,24 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
     protected modelHaveNativeContextWindowSettings: boolean = false;
 
     protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
+
+    /**
+     * The temperature, top_p and thinking controls as the chosen model's integration
+     * tells (enabled, ranges, the thinking choices reaching the model).
+     */
+    protected parameters?: ChatModelParametersControls;
+
+    /** The thinking choices offered for the chosen model. */
+    protected offeredThinkingOptions: ThinkingOptionItem[] = this.thinkingOptions;
+
+    /** The least temperature the chosen model takes. */
+    protected get temperatureMin(): number { return this.parameters ? this.parameters.min("temperature", this.minTemperature) : this.minTemperature; }
+    /** The greatest temperature the chosen model takes. */
+    protected get temperatureMax(): number { return this.parameters ? this.parameters.max("temperature", this.maxTemperature) : this.maxTemperature; }
+    /** The least top_p the chosen model takes. */
+    protected get topPMin(): number { return this.parameters ? this.parameters.min("topP", this.minTopP) : this.minTopP; }
+    /** The greatest top_p the chosen model takes. */
+    protected get topPMax(): number { return this.parameters ? this.parameters.max("topP", this.maxTopP) : this.maxTopP; }
 
     /**
      * Lifecycle hook that is called after data-bound properties are initialized
@@ -154,6 +173,10 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
         });
     }
 
+    ngOnDestroy(): void {
+        this.parameters?.destroy();
+    }
+
     ngOnInit(): void {
         this.translations.translateMenuItems("GeboAIStandardChatModelModule", "GeboAIStandardChatModelSettings",
             this.inputModalityOptions as any[])
@@ -192,8 +215,9 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
      * 
      * @param choosed - The selected model object containing context length information
      */
-    private notifyChoosedModelChange(choosed?: { code?: string, contextLength?: number, metaInfos?: ModelMetaInfo }) {
+    private notifyChoosedModelChange(choosed?: { code?: string, contextLength?: number, metaInfos?: ModelMetaInfo, modelDetails?: { [key: string]: any } }) {
         this.loadCarriedMediaTypes(choosed?.code);
+        this.parameters?.chosen(this.formGroup?.controls["modelTypeCode"]?.value, choosed);
         this.defaultContextLength = standardDefaultContextLength;
         this.modelHaveNativeContextWindowSettings = false;
         const meta: any = choosed?.metaInfos;
@@ -218,6 +242,11 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges {
      */
     ngOnChanges(changes: SimpleChanges): void {
         if (this.formGroup && changes["formGroup"]) {
+            this.parameters?.destroy();
+            this.parameters = new ChatModelParametersControls(this.formGroup, this.chatModelsController, () => {
+                this.offeredThinkingOptions = this.parameters ? this.parameters.thinkingOptions(this.thinkingOptions) : this.thinkingOptions;
+                this.changeDetector.markForCheck();
+            });
             if (this.formGroup.controls["choosedModel"]) {
                 const currentChoosedModel = this.formGroup.controls["choosedModel"].value;
                 this.notifyChoosedModelChange(currentChoosedModel);
