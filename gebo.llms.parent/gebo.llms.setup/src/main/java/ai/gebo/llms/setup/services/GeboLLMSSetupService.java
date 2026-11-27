@@ -1026,6 +1026,39 @@ public class GeboLLMSSetupService {
 	 * provider unreachable) nothing is created either: the provider's own messages are
 	 * handed back as the operation status.
 	 */
+	/**
+	 * Gives a chat model its preset leaves without a thinking level the platform's one
+	 * ({@link SetupThinkingDefaults}), on what its integration tells the model takes,
+	 * read on the choice the provider's live list offers for it.
+	 */
+	@SuppressWarnings("rawtypes")
+	private void applyThinkingDefault(IGModelConfigurationSupportService supportLogic, GBaseModelConfig configuration,
+			List<GBaseModelChoice> available, LLMCreateModelData req) {
+		if (!(configuration instanceof GBaseChatModelConfig chat) || chat.getThinking() != null
+				|| !(supportLogic instanceof IGChatModelConfigurationSupportService chatSupport))
+			return;
+		try {
+			final GBaseModelChoice choice = available.stream()
+					.filter(c -> c.getCode() != null && c.getCode().equalsIgnoreCase(req.getModelCode())).findFirst()
+					.orElse(null);
+			final ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport support = chatSupport
+					.parametersSupport(req.getModelCode(), choice != null ? choice.getMetaInfos() : null,
+							SetupThinkingDefaults.modelDetailsOf(choice));
+			final ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption thinking = SetupThinkingDefaults
+					.forUses(support, chat.getForUses());
+			if (thinking != null) {
+				chat.setThinking(thinking);
+			}
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chat model '{}' on {} for {}: no preset thinking, the platform's is {}",
+						req.getModelCode(), req.getServiceHandler(), chat.getForUses(), thinking);
+			}
+		} catch (RuntimeException e) {
+			LOGGER.error("Cannot decide the thinking of the chat model '" + req.getModelCode() + "' on "
+					+ req.getServiceHandler() + ", its provider's default applies", e);
+		}
+	}
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void configureModelValidating(IGModelConfigurationSupportService supportLogic,
 			GBaseModelConfig configuration, LLMCreateModelData req,
@@ -1064,6 +1097,7 @@ public class GeboLLMSSetupService {
 			result.getUnresolved().add(unresolved);
 			return;
 		}
+		applyThinkingDefault(supportLogic, configuration, available, req);
 		try {
 			operationsOutput.add(supportLogic.insertAndConfigureModel(configuration, req.getModelCode()));
 		} catch (Throwable th) {

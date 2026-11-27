@@ -30,3 +30,6 @@ ui-exports/
 **/dist/
 **/.angular/
 *~
+
+# Python bytecode caches (e.g. the .claude/skills scripts)
+__pycache__/

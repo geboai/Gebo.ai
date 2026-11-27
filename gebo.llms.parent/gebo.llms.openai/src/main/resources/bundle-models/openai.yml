@@ -21,6 +21,9 @@
 # of its own, a copy of its model's; the parameter rules at the end of the file that
 # state inputModalities cover the other dated variants by pattern.
 ai.gebo.models.providers.openai:
+  # inputModalities: the model pages' "Input modalities" (developers.openai.com/api/docs/models/<id>, 2026-11-27); PDF
+  # (DOCUMENT) where the page lists image input: "the API extracts both text and page images and
+  # sends both to models that accept image inputs" (guides/pdf-files).
   modelsInfo:
     - providerId: openai
       modelId: gpt-4o
@@ -210,6 +213,7 @@ ai.gebo.models.providers.openai:
     # gpt-5.6-cyber page gives Chat Completions "Not supported", Responses only.
     - providerId: openai
       modelId: gpt-6.2-astra
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -218,6 +222,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.2-astra
     - providerId: openai
       modelId: gpt-6.2-sol
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -226,6 +231,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.2-sol
     - providerId: openai
       modelId: gpt-6.1-terra
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -234,6 +240,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6.1-terra
     - providerId: openai
       modelId: gpt-6-cyber
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -242,6 +249,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-6-cyber
     - providerId: openai
       modelId: gpt-5.6-cyber
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 272000
@@ -251,6 +259,7 @@ ai.gebo.models.providers.openai:
     # The gpt-5.4 page states no maximum of input tokens: contextLength is its window.
     - providerId: openai
       modelId: gpt-5.4
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -259,6 +268,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4
     - providerId: openai
       modelId: gpt-5.4-2026-03-05
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -364,6 +374,7 @@ ai.gebo.models.providers.openai:
     # down have no entry.
     - providerId: openai
       modelId: gpt-5.6-sol
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -372,6 +383,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-sol
     - providerId: openai
       modelId: gpt-5.6-terra
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -380,6 +392,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-terra
     - providerId: openai
       modelId: gpt-5.6-luna
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 922000
@@ -388,6 +401,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.6-luna
     - providerId: openai
       modelId: gpt-5.5-pro
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -396,6 +410,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.5-pro
     - providerId: openai
       modelId: gpt-5.4-pro
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1050000
@@ -404,6 +419,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-pro
     - providerId: openai
       modelId: gpt-5.2-pro
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -412,6 +428,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.2-pro
     - providerId: openai
       modelId: chat-latest
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 272000
@@ -420,6 +437,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/chat-latest
     - providerId: openai
       modelId: gpt-oss-120b
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -428,6 +446,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-oss-120b
     - providerId: openai
       modelId: gpt-oss-20b
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -436,6 +455,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-oss-20b
     - providerId: openai
       modelId: gpt-5.4-nano
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 272000
@@ -446,6 +466,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.4-nano
     - providerId: openai
       modelId: gpt-5.3-codex
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 272000
@@ -456,6 +477,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.3-codex
     - providerId: openai
       modelId: gpt-5.1
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -466,6 +488,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5.1
     - providerId: openai
       modelId: gpt-5-mini
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 272000
@@ -476,6 +499,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5-mini
     - providerId: openai
       modelId: gpt-5-nano
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 272000
@@ -486,6 +510,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5-nano
     - providerId: openai
       modelId: gpt-5-pro
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 400000
@@ -496,6 +521,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/gpt-5-pro
     - providerId: openai
       modelId: o3
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000
@@ -506,6 +532,7 @@ ai.gebo.models.providers.openai:
       informativeUrl: https://developers.openai.com/api/docs/models/o3
     - providerId: openai
       modelId: o3-pro
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000

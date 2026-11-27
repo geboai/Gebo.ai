@@ -8,9 +8,12 @@
 # context_window live, these stand in when it leaves it out. deepseek-v4-flash and
 # deepseek-v4-flash-vision-exp are the retired names, served by V4.1 Flash.
 ai.gebo.models.providers.deepseek:
+  # inputModalities: "The deepseek-flash model accepts images alongside text" (guides/vision); deepseek-v4-pro: Vision
+  # "Not supported" (quick_start/pricing), 2026-11-27.
   modelsInfo:
     - providerId: deepseek
       modelId: deepseek-flash
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1048576
@@ -19,6 +22,7 @@ ai.gebo.models.providers.deepseek:
       informativeUrl: https://api-docs.deepseek.com/quick_start/pricing
     - providerId: deepseek
       modelId: deepseek-v4-pro
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 1048576

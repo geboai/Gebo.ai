@@ -86,7 +86,9 @@
                   help="What the model takes as input, as its provider or the models library tells; empty means text only. A file goes to the model as it is when the model accepts its kind here and this provider's integration can deliver its type.">
                   <p-multiselect inputId="inputModalities" formControlName="inputModalities" [options]="inputModalityOptions"
                     optionLabel="label" optionValue="value" display="chip" [showToggleAll]="false" styleClass="w-full" gebo-ai-field-element />
-                  @if (modelInputModalities?.length) {
+                  @if (inputModalitiesFromMetadata) {
+                    <small class="text-muted-color"><span id="ModelInputModalitiesFilledLabel" gebo-ai-text>Filled in from the model's metadata</span></small>
+                  } @else if (inputModalitiesDifferFromMetadata) {
                     <small class="text-muted-color"><span id="ModelInputModalitiesLabel" gebo-ai-text>The model's metadata says:</span>
                       {{ modelInputModalitiesText }} -
                       <a href="#" id="UseModelInputModalities" (click)="useModelInputModalities($event)" gebo-ai-text>use these</a></small>

@@ -108,6 +108,32 @@ Regolo, the generic OpenAI compatible lookup (`context_window` or `max_model_len
 - Every rule ends with `source: <page>, <yyyy-mm-dd>`; a YAML comment above a rule
   quotes the sentence that justifies it.
 
+## 2b. What a model takes and answers with (input / output modalities)
+
+- `inputModalities` of an entry: what the model accepts in a chat request, among
+  `TEXT`, `IMAGE`, `AUDIO`, `VIDEO`, `DOCUMENT` (PDF), text first. `[TEXT]` where the page
+  says the model takes text only; **no field** where the page says nothing (unknown is not
+  text only: the editor then offers no default). `outputModalities`: only what the model
+  answers with besides text (pictures, audio), as `ModelMetaInfo` reads it; leave it out
+  for a text-only output.
+- Where it comes from: the model page's input/output section (OpenAI "Input modalities",
+  Vertex "Modalities" row, NVIDIA cards "Input Type(s)", Groq "INPUT / OUTPUT"), the
+  provider's vision / audio / PDF pages for the families (Anthropic vision and pdf-support,
+  Mistral capabilities/vision, DeepSeek guides/vision). PDF only where a page says the
+  model takes it (OpenAI: PDFs go "to models that accept image inputs"). A provider page
+  saying all its models are text only (ProfundoAI) gives `[TEXT]` to each.
+- What reads it: the lookups enrich the live choices with it where the provider's api
+  tells nothing (`GModelChoiceMetaInfoEnricherServiceImpl`, live values win: Anthropic,
+  Mistral, DeepSeek, Ollama, OpenRouter read them live; OpenAI, Vertex and the OpenAI
+  compatible providers depend on the library; Bedrock reads them from AWS and never the
+  library). The chat model editor fills the configuration's "Accepts as input" with them
+  when the field is empty (`standard-chat-model-settings`), the setup and the insert do
+  the same server side (`insertAndConfigureModel`, the CRUD controller's insert), and the
+  files a request may carry follow them (`GModelMediaGuard`). A dated variant without an
+  entry takes them from an `inputModalities` rule (`gpt-5.2-20*`).
+- Note each file's source once, as a comment above its `modelsInfo`
+  (`# inputModalities: <pages>, <date>`), and the models left unknown and why.
+
 ## 3. Procedure
 
 1. **Scope.** Which providers. For each, the model list to check: the provider's
@@ -115,13 +141,15 @@ Regolo, the generic OpenAI compatible lookup (`context_window` or `max_model_len
    already in the file and every id the fast setup presets name.
 2. **Read the pages in parallel.** Fan out `web-fetch` agents in one message, about 10
    model pages each, asking for verbatim quotes of: maximum input tokens / context
-   window, max output tokens, input modalities, endpoints (OpenAI: Chat Completions and
+   window, max output tokens, input and output modalities (text, image, audio, video,
+   PDF), endpoints (OpenAI: Chat Completions and
    Responses supported or not), reasoning effort values and default, anything on
    temperature/top_p, reasoning summaries, function calling caveats, deprecation and
    shutdown dates and replacement. Require "say explicitly when a page states nothing,
    fails to load or redirects" and "no values from memory". For ranges, also read the
    provider's api reference for the chat endpoint. Do not re-send a URL that failed.
-3. **Diff.** Run `effective_rules.py` and compare, model by model, with the quotes:
+3. **Diff.** Run `effective_rules.py` (and `effective_rules.py <file> --missing-modalities`
+   for the chat entries with no input modalities) and compare, model by model, with the quotes:
    missing models, values that changed, efforts the rule does not list, rules a model
    falls under by accident (a family pattern catching a pro model), snapshots without
    entries, retired models still listed, fast setup presets naming retired models.

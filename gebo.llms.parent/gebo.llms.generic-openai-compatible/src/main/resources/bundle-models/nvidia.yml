@@ -13,9 +13,12 @@ ai.gebo.models.providers.nvidia:
   # gpt-oss-20b, gpt-oss-120b and nemotron-3-embed-1b were retired between 2026-08 and
   # 2026-11 and left the list, as yi-large, fuyu-8b and jamba-1.5-large-instruct had;
   # starcoder2-15b, retired on 2025-07-24, is still listed and its limits are not stated.
+  # inputModalities: the model cards' "Input Type(s)" (build.nvidia.com/<id>, 2026-11-27; Nano Omni: "The API accepts
+  # images, not raw PDF files"); the cards of Lightning, Super VL, Bolt and GLM 5.3 Flash answered 404.
   modelsInfo:
     - providerId: nvidia
       modelId: nvidia/nemotron-3-ultra-550b-a55b
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -44,6 +47,7 @@ ai.gebo.models.providers.nvidia:
       informativeUrl: https://docs.api.nvidia.com/nim/reference/nvidia-nemotron-3_5-bolt-e4b
     - providerId: nvidia
       modelId: nvidia/nemotron-3-nano-omni-30b-a3b-reasoning
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -57,6 +61,7 @@ ai.gebo.models.providers.nvidia:
       informativeUrl: https://docs.api.nvidia.com/nim/reference/z-ai-glm-5-3-flash
     - providerId: nvidia
       modelId: bigcode/starcoder2-15b
+      inputModalities: [TEXT]
       deprecated: true
       retirementDate: "2025-07-24"
       chatModel: true

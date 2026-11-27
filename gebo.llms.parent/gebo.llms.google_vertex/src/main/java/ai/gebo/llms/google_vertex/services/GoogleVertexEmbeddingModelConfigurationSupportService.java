@@ -11,6 +11,7 @@ package ai.gebo.llms.google_vertex.services;
 
 import java.util.List;
 
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.vertexai.embedding.VertexAiEmbeddingConnectionDetails;
 import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingModel;
 import org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingOptions;
@@ -60,15 +61,23 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 	/**
 	 * The text embedding models this provider offers: the ones the Vertex embeddings page
 	 * lists for the predict API the text embedding model calls
-	 * (docs.cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings,
-	 * 2026-10-11: 768 dimensions, 2048 tokens, five texts per request). Spring AI's
-	 * {@code VertexAiTextEmbeddingModelName} still names text-embedding-004, which the page
-	 * no longer lists; the gemini-embedding models take a single text per request there,
-	 * which the batched text embedding requests do not respect, so they are not offered.
+	 * (docs.cloud.google.com/vertex-ai/generative-ai/docs/embeddings/get-text-embeddings).
+	 * gemini-embedding-001 (2026-11-27: multilingual, "up to 3072" dimensions, 3072 by
+	 * default, 2048 tokens per text, called on predict) takes "a single input text" per
+	 * request: its requests go one text at a time ({@link SingleTextEmbeddingModel}). It
+	 * "unifies the previously specialized models like text-embedding-005 and
+	 * text-multilingual-embedding-002", which retire on April 1, 2027 (model-versions).
+	 * gemini-embedding-2 is not offered: the pages do not say it takes the predict API.
+	 * Spring AI's {@code VertexAiTextEmbeddingModelName} still names text-embedding-004,
+	 * which the page no longer lists.
 	 */
 	static final List<GGoogleVertexEmbeddingModelChoice> choices = List.of(
-			choice("text-multilingual-embedding-002", "Text multilingual embedding 002 (768 dimensions, 2048 tokens)"),
-			choice("text-embedding-005", "Text embedding 005, English and code (768 dimensions, 2048 tokens)"));
+			choice("gemini-embedding-001",
+					"Gemini embedding 001, multilingual (3072 dimensions, 2048 tokens, one text per request)"),
+			choice("text-multilingual-embedding-002",
+					"Text multilingual embedding 002 (768 dimensions, 2048 tokens; retires April 1, 2027)"),
+			choice("text-embedding-005",
+					"Text embedding 005, English and code (768 dimensions, 2048 tokens; retires April 1, 2027)"));
 
 	static GGoogleVertexEmbeddingModelChoice choice(String code, String description) {
 		GGoogleVertexEmbeddingModelChoice choice = new GGoogleVertexEmbeddingModelChoice();
@@ -95,7 +104,7 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 	 * Inner class that implements a configurable Google Vertex embedding model.
 	 */
 	class GoogleVertexConfigurableEmbeddingModel
-			extends GAbstractConfigurableEmbeddingModel<GGoogleVertexEmbeddingModelConfig, VertexAiTextEmbeddingModel> {
+			extends GAbstractConfigurableEmbeddingModel<GGoogleVertexEmbeddingModelConfig, EmbeddingModel> {
 
 		/**
 		 * Constructor for the embedding model.
@@ -114,11 +123,12 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 		 * 
 		 * @param config the configuration for the model
 		 * @param type   the embedding model type
-		 * @return a configured VertexAiTextEmbeddingModel
+		 * @return a configured VertexAiTextEmbeddingModel, sending one text per request
+		 *         where the model takes no more ({@link SingleTextEmbeddingModel})
 		 * @throws LLMConfigException if there's an issue with the model configuration
 		 */
 		@Override
-		protected VertexAiTextEmbeddingModel configureModel(GGoogleVertexEmbeddingModelConfig config,
+		protected EmbeddingModel configureModel(GGoogleVertexEmbeddingModelConfig config,
 				GEmbeddingModelType type) throws LLMConfigException {
 
 			org.springframework.ai.vertexai.embedding.text.VertexAiTextEmbeddingOptions.Builder oBuilder = VertexAiTextEmbeddingOptions
@@ -131,7 +141,7 @@ public class GoogleVertexEmbeddingModelConfigurationSupportService implements
 			VertexAiTextEmbeddingOptions options = oBuilder.build();
 			VertexAiTextEmbeddingModel model = new VertexAiTextEmbeddingModel(connectionDetails, options,
 					new org.springframework.core.retry.RetryTemplate(), observationRegistry);
-			return model;
+			return SingleTextEmbeddingModel.forModel(options.getModel(), model);
 		}
 
 	};

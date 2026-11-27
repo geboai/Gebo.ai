@@ -3153,6 +3153,7 @@
       "DeclaredNotCarriedLabel": { "label": "Not delivered through this provider's integration:" },
       "DeclaredNotSentLabel": { "label": "Not sent, this installation does not send these kinds of file to its models (settings ai.gebo.*.chat-enabled):" },
       "ModelInputModalitiesLabel": { "label": "The model's metadata says:" },
+      "ModelInputModalitiesFilledLabel": { "label": "Filled in from the model's metadata" },
       "UseModelInputModalities": { "label": "use these" },
       "TextInputOption": { "label": "Text" },
       "ImageInputOption": { "label": "Images" },

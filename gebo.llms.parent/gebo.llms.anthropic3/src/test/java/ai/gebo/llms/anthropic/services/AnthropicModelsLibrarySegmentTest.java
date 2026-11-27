@@ -61,5 +61,12 @@ class AnthropicModelsLibrarySegmentTest {
 		assertEquals(200000,
 				library.findByProviderIdAndModelId("anthropic", "claude-haiku-4-5-20251001").getContextLength());
 		assertEquals(200000, library.findByProviderIdAndModelId("anthropic", "claude-haiku-4-5").getContextLength());
+		// vision and PDF on every model, no audio or video
+		for (String id : java.util.List.of("claude-opus-5-5", "claude-haiku-5-5", "claude-sonnet-4-5-20250929")) {
+			assertEquals(java.util.List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+					ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE,
+					ai.gebo.llms.abstraction.layer.model.GModelInputModality.DOCUMENT),
+					library.findByProviderIdAndModelId("anthropic", id).getInputModalities(), id);
+		}
 	}
 }

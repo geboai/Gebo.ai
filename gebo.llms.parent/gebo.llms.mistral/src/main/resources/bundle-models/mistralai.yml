@@ -11,9 +11,14 @@ ai.gebo.models.providers.mistralai:
   # max_context_length live, these stand in when it leaves it out. Medium 3.5 and Large 3
   # were deprecated on 2026-10-31 for Large 4; the models past their retirement are left
   # out ("requests to its identifiers fail with a 404 error").
+  # inputModalities: the vision page's models (capabilities/vision: Large 4, Large 3, Ministral 3 14B/8B/3B) and the
+  # model pages ("with multimodal input": Small 4, Medium 3.5; DeepSeek V4.1 Flash "text and image
+  # inputs"; Codestral text and code), 2026-11-27; the GLM models state none and stay unknown. The
+  # lookup reads the models api's vision capability first.
   modelsInfo:
     - providerId: mistralai
       modelId: mistral-large-4
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -21,6 +26,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-large-4-0
     - providerId: mistralai
       modelId: mistral-large-4-0
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -28,6 +34,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-large-4-0
     - providerId: mistralai
       modelId: mistral-large-latest
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -35,6 +42,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-large-4-0
     - providerId: mistralai
       modelId: mistral-small-2603
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -42,6 +50,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-small-4-0-26-03
     - providerId: mistralai
       modelId: mistral-small-latest
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -49,6 +58,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-small-4-0-26-03
     - providerId: mistralai
       modelId: mistral-medium-3-5
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -59,6 +69,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-medium-3-5-26-04
     - providerId: mistralai
       modelId: mistral-medium-latest
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -69,6 +80,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-medium-3-5-26-04
     - providerId: mistralai
       modelId: mistral-large-2512
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -79,6 +91,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/mistral-large-3-25-12
     - providerId: mistralai
       modelId: ministral-14b-2512
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -86,6 +99,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/ministral-3-14b-25-12
     - providerId: mistralai
       modelId: ministral-14b-latest
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -93,6 +107,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/ministral-3-14b-25-12
     - providerId: mistralai
       modelId: ministral-8b-2512
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -100,6 +115,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/ministral-3-8b-25-12
     - providerId: mistralai
       modelId: ministral-8b-latest
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -107,6 +123,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/ministral-3-8b-25-12
     - providerId: mistralai
       modelId: ministral-3b-2512
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -114,6 +131,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/ministral-3-3b-25-12
     - providerId: mistralai
       modelId: ministral-3b-latest
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 256000
@@ -121,6 +139,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/ministral-3-3b-25-12
     - providerId: mistralai
       modelId: codestral-2508
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -128,6 +147,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/codestral-25-08
     - providerId: mistralai
       modelId: codestral-latest
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 128000
@@ -167,6 +187,7 @@ ai.gebo.models.providers.mistralai:
       informativeUrl: https://docs.mistral.ai/models/zai-glm-5-3-flash
     - providerId: mistralai
       modelId: deepseek-v4-1-flash-1017
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000

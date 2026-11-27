@@ -25,6 +25,13 @@ import { ChatModelParametersControls, ThinkingOptionItem } from "./chat-model-pa
 // Standard default context length for language models when not otherwise specified
 const standardDefaultContextLength: number = 4096;
 
+/** Whether two lists of modalities hold the same ones, whatever their order. */
+function sameModalities(a?: string[] | null, b?: string[] | null): boolean {
+    const x = [...(a ?? [])].sort();
+    const y = [...(b ?? [])].sort();
+    return x.length === y.length && x.every((v, i) => v === y[i]);
+}
+
 /**
  * @Component GeboAIStandardChatModelSettings
  * 
@@ -77,6 +84,66 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges, OnDes
 
     /** What the chosen model's metadata says it accepts as input, when it says it. */
     protected modelInputModalities?: string[];
+
+    /**
+     * The metadata's modalities last filled into the form as its default, while nobody
+     * changed them: another chosen model replaces them with its own.
+     */
+    private filledInputModalities?: string[];
+
+    /**
+     * What a saved configuration's model accepts as input, when the metadata stored with
+     * its chosen model predates them: resolved server side from that metadata, else the
+     * models library (ChatModelsController.getChatModelsInputs).
+     */
+    private loadSavedModelInputModalities(modelCode: string): void {
+        const code: string | undefined = this.formGroup?.controls["code"]?.value;
+        if (!code) return;
+        this.chatModelsController.getChatModelsInputs().subscribe({
+            next: (inputs) => {
+                const saved = (inputs ?? []).find(i => i.code === code && i.modelCode === modelCode);
+                const current = this.formGroup?.controls["choosedModel"]?.value;
+                if (!saved?.metadataInputModalities?.length || current?.code !== modelCode || this.modelInputModalities) return;
+                this.modelInputModalities = [...saved.metadataInputModalities];
+                this.fillInputModalitiesFromMetadata();
+                this.changeDetector.markForCheck();
+            },
+            error: () => { }
+        });
+    }
+
+    /** Whether the form holds the modalities the chosen model's metadata filled in. */
+    protected get inputModalitiesFromMetadata(): boolean {
+        const control = this.formGroup?.controls["inputModalities"];
+        return !!this.filledInputModalities && !!control && sameModalities(control.value, this.filledInputModalities);
+    }
+
+    /** Whether the form holds other modalities than the chosen model's metadata tells. */
+    protected get inputModalitiesDifferFromMetadata(): boolean {
+        const control = this.formGroup?.controls["inputModalities"];
+        return !!this.modelInputModalities?.length && !!control
+            && !sameModalities(control.value, this.modelInputModalities);
+    }
+
+    /**
+     * Fills what the chosen model accepts as input into the form, as its default: when the
+     * form holds none yet, or still holds what a previous model's metadata filled in and
+     * nobody changed. A value saved or changed by hand is left as it is ("use these"
+     * applies the metadata then).
+     */
+    private fillInputModalitiesFromMetadata(): void {
+        const control = this.formGroup?.controls["inputModalities"];
+        if (!control || control.disabled || !this.modelInputModalities?.length) return;
+        const current: string[] = control.value ?? [];
+        const untouched = control.pristine
+            && (current.length === 0 || sameModalities(current, this.filledInputModalities));
+        if (untouched && !sameModalities(current, this.modelInputModalities)) {
+            control.setValue([...this.modelInputModalities]);
+            this.filledInputModalities = [...this.modelInputModalities];
+        } else if (untouched && current.length > 0) {
+            this.filledInputModalities = [...current];
+        }
+    }
 
     // The default context length for the selected model
     protected defaultContextLength?: number;
@@ -196,8 +263,9 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges, OnDes
     }
 
     /**
-     * Sets what the model accepts as input to what its metadata says: by hand, so that a
-     * configuration made before this field existed stays text only until someone edits it.
+     * Sets what the model accepts as input to what its metadata says, over a value saved
+     * or changed by hand (an empty one takes the metadata by itself, see
+     * fillInputModalitiesFromMetadata).
      */
     protected useModelInputModalities(event: Event): void {
         event.preventDefault();
@@ -223,6 +291,15 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges, OnDes
         const meta: any = choosed?.metaInfos;
         this.modelInputModalities = meta?.inputModalities?.length ? [...meta.inputModalities]
             : meta?.supportsVision === true ? ["TEXT", "IMAGE"] : meta?.supportsVision === false ? ["TEXT"] : undefined;
+        if (!this.modelInputModalities && choosed?.code) {
+            this.loadSavedModelInputModalities(choosed.code);
+        }
+        // after the patch the chosen model came with: a form loading a configuration sets
+        // its other controls, the modalities among them, in the same patch
+        queueMicrotask(() => {
+            this.fillInputModalitiesFromMetadata();
+            this.changeDetector.markForCheck();
+        });
         if (choosed) {
             if (choosed.contextLength) {
                 this.modelHaveNativeContextWindowSettings = true;

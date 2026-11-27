@@ -9,6 +9,7 @@
 
 package ai.gebo.llms.mistralai.services;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,5 +34,14 @@ class MistralModelsLibrarySegmentTest {
 		assertTrue(library.findParameterRules("mistralai", "mistral-small-latest").acceptsEffort("high"));
 		assertFalse(library.findParameterRules("mistralai", "zai-glm-5-3").acceptsEffort("none"));
 		assertNull(library.findParameterRules("mistralai", "ministral-8b-latest"), "undocumented: no rule");
+
+		// the vision page's models take images, Codestral text and code only
+		assertEquals(java.util.List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE),
+				library.findByProviderIdAndModelId("mistralai", "ministral-8b-latest").getInputModalities());
+		assertEquals(java.util.List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT),
+				library.findByProviderIdAndModelId("mistralai", "codestral-latest").getInputModalities());
+		assertNull(library.findByProviderIdAndModelId("mistralai", "zai-glm-5-3").getInputModalities(),
+				"its page states none");
 	}
 }
