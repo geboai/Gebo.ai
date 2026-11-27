@@ -589,6 +589,14 @@
       "BaseUriHeader": { "label": "Server address" },
       "EditBtn": { "label": "Edit system" }
     },
+    "ZammadWizardComponent": {
+      "MainPanel": { "label": "Setup company Zammad systems" },
+      "ZammadSystemBtn": { "label": "Zammad system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "BaseUriHeader": { "label": "Server address" },
+      "EditBtn": { "label": "Edit system" }
+    },
     "McpServerWizardComponent": {
       "McpAddBtn": { "label": "Add MCP Server" },
       "MainPanel": { "label": "Setup MCP Server Connections" },
@@ -5892,6 +5900,100 @@
         "help": "API key of the OpenProject account Gebo.ai reads with: My account, Access tokens, API"
       },
       "VisibilityNote": { "label": "Gebo.ai reads what this account can see in OpenProject, internal comments included: use an account limited to the projects you want to share." }
+    }
+  },
+  "GeboAIZammadModule": {
+    "GZammadSystem": {
+      "MainPanel": { "label": "Editing Zammad system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Zammad system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the Zammad system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Zammad server without /api/v1, for example https://helpdesk.example.com. Token access must be enabled in Settings, System, API."
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "placeholder": "Select an identity",
+        "help": "The access token (or the username and password) of the Zammad account Gebo.ai reads with. Gebo.ai sees what this account sees, internal notes and internal answers included."
+      }
+    },
+    "GZammadProjectEndpoint": {
+      "MainPanel": { "label": "Sharing Zammad contents" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Zammad data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "placeholder": "Select a project",
+        "help": "Parent project reference."
+      },
+      "zammadSystemCode": {
+        "label": "Zammad system",
+        "placeholder": "Select a Zammad server",
+        "help": "Already configured Zammad system reference."
+      },
+      "tree": {
+        "label": "Selected Zammad contents",
+        "help": "Groups (all their tickets, each with its conversation and attachments) or single tickets; knowledge bases, their categories or single answers (published and internal ones, with their attachments)"
+      },
+      "catalogingCriteria": {
+        "label": "Contents organization criteria",
+        "help": "Please explain here how the groups, tickets and knowledge base answers shared with Gebo.ai are organized"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "openZips": {
+        "label": "Open zip attachments",
+        "help": "Read the documents inside zip attachments and files"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIZammadSystemFastComponent": {
+      "MainPanel": { "label": "Create Zammad system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Zammad system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Zammad server, without /api/v1 (e.g. https://helpdesk.example.com)"
+      },
+      "accessToken": {
+        "label": "Access token",
+        "help": "Access token of the Zammad account Gebo.ai reads with (Profile, Token Access), with the ticket.agent and knowledge_base.reader permissions. Token access must be enabled in Settings, System, API."
+      },
+      "VisibilityNote": { "label": "Gebo.ai reads what this account can see in Zammad, internal notes and internal answers included: use an agent limited to the groups you want to share." }
     }
   },
   "GeboAIMcpClientAdminModule": {

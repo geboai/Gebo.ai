@@ -167,6 +167,9 @@ import { WaitingConditionsControllerService } from './api/waitingConditionsContr
 import { WebdavBrowsingControllerService } from './api/webdavBrowsingController.service';
 import { WebdavSystemsControllerService } from './api/webdavSystemsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
+import { ZammadBrowsingControllerService } from './api/zammadBrowsingController.service';
+import { ZammadSearchServiceControllerService } from './api/zammadSearchServiceController.service';
+import { ZammadSystemsControllerService } from './api/zammadSystemsController.service';
 
 @NgModule({
   imports:      [],
@@ -336,7 +339,10 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     WaitingConditionsControllerService,
     WebdavBrowsingControllerService,
     WebdavSystemsControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    WorkflowStatsAdminLevelControllerService,
+    ZammadBrowsingControllerService,
+    ZammadSearchServiceControllerService,
+    ZammadSystemsControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

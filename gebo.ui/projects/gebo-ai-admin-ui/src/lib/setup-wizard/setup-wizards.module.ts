@@ -52,6 +52,7 @@ import { WebdavInstalledModuleService, WebdavStatusService, WebdavWizardComponen
 import { RedmineInstalledModuleService, RedmineStatusService, RedmineWizardComponent } from "./redmine-wizard.component";
 import { GlpiInstalledModuleService, GlpiStatusService, GlpiWizardComponent } from "./glpi-wizard.component";
 import { OpenProjectInstalledModuleService, OpenProjectStatusService, OpenProjectWizardComponent } from "./openproject-wizard.component";
+import { ZammadInstalledModuleService, ZammadStatusService, ZammadWizardComponent } from "./zammad-wizard.component";
 import { AwsS3InstalledModuleService, AwsS3StatusService, AwsS3WizardComponent } from "./aws-s3-wizard.component";
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
@@ -351,6 +352,19 @@ const openProjectSystemSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const zammadSystemSetupSection: SetupWizardsSection = {
+    orderEntry: 12.9,
+    label: "Zammad integration",
+    description: "Zammad helpdesk: the tickets of the chosen groups with their conversations and attachments, and the knowledge base answers",
+    installedModule: ZammadInstalledModuleService,
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: ZammadStatusService,
+    wizardComponent: ZammadWizardComponent,
+    wizardSectionId: "zammadSystemSetupSection",
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
+    mandatory: false
+};
+
 /**
  * Setup section for knowledge base configuration.
  * This optional section requires work directory, vector store, and LLMs to be configured first.
@@ -548,7 +562,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [TreeModule, GeboAIChooseLLMFunctionsModule, PopoverModule, CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule, MultiSelectModule, InputNumberModule, ChipModule, MessageModule],
-    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, RedmineWizardComponent, GlpiWizardComponent, OpenProjectWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIChatPipelinesToolingWizardComponent, GeboAIEasyVendorConfigurationComponent, AgentsNetworksSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
+    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, RedmineWizardComponent, GlpiWizardComponent, OpenProjectWizardComponent, ZammadWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIChatPipelinesToolingWizardComponent, GeboAIEasyVendorConfigurationComponent, AgentsNetworksSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -568,6 +582,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         RedmineStatusService,
         GlpiStatusService,
         OpenProjectStatusService,
+        ZammadStatusService,
         AwsS3StatusService,
         GoogleWorkspacesStatusService,
         ConfluenceInstalledModuleService,
@@ -576,6 +591,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         RedmineInstalledModuleService,
         GlpiInstalledModuleService,
         OpenProjectInstalledModuleService,
+        ZammadInstalledModuleService,
         AwsS3InstalledModuleService,
         GoogleWorkspacesInstalledModuleService,
         JiraInstalledModuleService,
@@ -607,6 +623,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: redmineSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: glpiSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: openProjectSystemSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: zammadSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },

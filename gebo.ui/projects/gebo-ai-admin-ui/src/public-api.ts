@@ -129,6 +129,9 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-sys
 export * from "./lib/admin-ui/entity-editors/gebo-ai-openproject-admin/gebo-ai-openproject-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-openproject-admin/gebo-ai-openproject-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-openproject-admin/gebo-ai-openproject-system-fast.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-zammad-admin/gebo-ai-zammad-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-zammad-admin/gebo-ai-zammad-endpoint.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-zammad-admin/gebo-ai-zammad-system-fast.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";

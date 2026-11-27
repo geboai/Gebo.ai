@@ -1,0 +1,38 @@
+<p-blockUI id="BlockUI" [target]="instModeUI" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #instModeUI header="Setup company Zammad systems">
+  <div class="grid geboLargeButtonsBar">
+    <div class="col-6">
+      <p-button id="ZammadSystemBtn" gebo-ai-label icon="pi pi-plus" label="Zammad system" styleClass="w-full" [outlined]="true"
+        (onClick)="createZammadSystem()"></p-button>
+    </div>
+  </div>
+  <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+  <div class="grid">
+    <div class="col-12"><p-table id="Table" gebo-ai-label [value]="systems" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template #header pTemplate="header">
+          <tr>
+            <th id="ConfigCodeHeader" gebo-ai-text>Config code</th>
+            <th id="DescriptionHeader" gebo-ai-text>Description</th>
+            <th id="BaseUriHeader" gebo-ai-text>Server address</th>
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-item pTemplate="body">
+          <tr>
+            <td>{{ item.code }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.baseUri }}</td>
+            <td><p-button id="EditBtn" gebo-ai-label label="Edit system" icon="pi pi-pencil" [outlined]="true"
+                (onClick)="editZammadSystem(item)"></p-button></td>
+          </tr>
+        </ng-template>
+      </p-table></div>
+  </div>
+</p-panel>
+<p-dialog id="Dialog" gebo-ai-label [maximizable]="true" [visible]="createZammadWindowOpen" [modal]="true" styleClass="gebo-entity-dialog" (visibleChange)="closeDialog()">
+  <gebo-ai-zammad-system-fast-component (cancelAction)="closeDialog()"
+    (newZammadSystemEvent)="this.closeWizard()"></gebo-ai-zammad-system-fast-component>
+</p-dialog>
+

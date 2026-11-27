@@ -65,6 +65,7 @@ const iconsMapping:{[key:string]:string}={
     GUserspaceProjectEndpoint:"pi pi-user",
     GGlpiProjectEndpoint:"pi pi-glpi",
     GOpenProjectProjectEndpoint:"pi pi-openproject",
+    GZammadProjectEndpoint:"pi pi-zammad",
     project:"pi pi-list-check",
     knowledgebase:"pi pi-sitemap"
 };

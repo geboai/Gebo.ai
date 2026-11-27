@@ -15,7 +15,7 @@
  * Exports constants representing different module identifiers used throughout the application.
  * These constants are used to identify various modules that can be plugged into the system.
  */
-import { AwsS3SystemsControllerService, GGlpiProjectEndpoint, GlpiSystemsControllerService, GOpenProjectProjectEndpoint, OpenProjectSystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GRedmineProjectEndpoint, GSharepointProjectEndpoint, GUploadsProjectEndpoint, GWebdavProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, RedmineSystemsControllerService, SharepointSystemsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AwsS3SystemsControllerService, GGlpiProjectEndpoint, GlpiSystemsControllerService, GOpenProjectProjectEndpoint, OpenProjectSystemsControllerService, GZammadProjectEndpoint, ZammadSystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GRedmineProjectEndpoint, GSharepointProjectEndpoint, GUploadsProjectEndpoint, GWebdavProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, RedmineSystemsControllerService, SharepointSystemsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
 import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";
@@ -34,6 +34,7 @@ export const WEBDAB_CMS_MODULE = "webdab-cms-module";
 export const REDMINE_MODULE = "redmine-module";
 export const GLPI_MODULE = "glpi-module";
 export const OPENPROJECT_MODULE = "openproject-module";
+export const ZAMMAD_MODULE = "zammad-module";
 
 /**
  * Injectable service responsible for managing shared filesystem project endpoints.
@@ -903,6 +904,59 @@ const openProjectModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
 };
 
 /**
+ * Injectable service responsible for managing Zammad project endpoints.
+ * Implements GeboAIPluggableProjectEndpointModuleService to provide functionality
+ * for connecting Zammad tickets and knowledge bases as data sources.
+ */
+@Injectable({
+    providedIn: "root"
+})
+export class GeboAIZammadModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService {
+    constructor(private zammadService: ZammadSystemsControllerService) {
+    }
+
+    findByProjectEndpoints(code: string): Observable<{
+        code?: string; description?: string; parentProjectCode?: string;
+    }[]> {
+        return this.zammadService.findZammadEndpointsByProject(code);
+    }
+
+    byProjectCreateAction(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest {
+        let nextStepsParams: any = undefined;
+        if (wizardStepsConfigurations && actualWizardStepConfigrationId) {
+            nextStepsParams = {
+                wizardStepsConfigurations: wizardStepsConfigurations,
+                actualWizardStepConfigrationId: actualWizardStepConfigrationId
+            };
+        }
+        const target: GZammadProjectEndpoint = {
+            parentProjectCode: project.code
+        };
+        return {
+            actionType: GeboActionType.NEW,
+            context: project,
+            contextType: "GProject",
+            target: target,
+            targetType: "GZammadProjectEndpoint",
+            targetFormInputs: nextStepsParams
+        };
+    }
+}
+
+/**
+ * Configuration object for the Zammad module.
+ * Defines UI elements, labels, icons and service to be used for Zammad connections.
+ */
+const zammadModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
+    moduleId: ZAMMAD_MODULE,
+    addProjectEndpointicon: "pi pi-zammad",
+    addProjectEndpointLabel: "+zammad",
+    addProjectEndpointTitle: "add a Zammad data source (tickets and knowledge base answers)",
+    projecteEndpointClassName: "ai.gebo.zammad.handler.GZammadProjectEndpoint",
+    service: GeboAIZammadModuleProjectEndpointService
+};
+
+/**
  * NgModule that handles the registration of all module services and configurations.
  * This module is responsible for injecting all the pluggable modules into the application
  * by providing their services and configuration blocks to the dependency injection system.
@@ -923,6 +977,7 @@ const openProjectModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
         GeboAIRedmineModuleProjectEndpointService,
         GeboAIGlpiModuleProjectEndpointService,
         GeboAIOpenProjectModuleProjectEndpointService,
+        GeboAIZammadModuleProjectEndpointService,
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -935,7 +990,8 @@ const openProjectModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule 
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: webdavModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: redmineModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: glpiModuleConfigurationBlock, multi: true },
-        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: openProjectModuleConfigurationBlock, multi: true }]
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: openProjectModuleConfigurationBlock, multi: true },
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: zammadModuleConfigurationBlock, multi: true }]
 })
 export class GeboAICommonModulesInjectionsModule {
 
@@ -956,6 +1012,7 @@ export class GeboAICommonModulesInjectionsModule {
                 GeboAIRedmineModuleProjectEndpointService,
                 GeboAIGlpiModuleProjectEndpointService,
                 GeboAIOpenProjectModuleProjectEndpointService,
+                GeboAIZammadModuleProjectEndpointService,
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -968,7 +1025,8 @@ export class GeboAICommonModulesInjectionsModule {
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: webdavModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: redmineModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: glpiModuleConfigurationBlock, multi: true },
-                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: openProjectModuleConfigurationBlock, multi: true }]
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: openProjectModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: zammadModuleConfigurationBlock, multi: true }]
         }
         return moduleWithProv;
 
