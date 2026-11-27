@@ -15,12 +15,12 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
+import ai.gebo.redmine.client.model.RedmineFile;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonValue;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,18 +39,18 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class GetFiles200Response {
   public static final String JSON_PROPERTY_FILES = "files";
   @jakarta.annotation.Nonnull
-  private List<File> files = new ArrayList<>();
+  private List<RedmineFile> files = new ArrayList<>();
 
   public GetFiles200Response() {
   }
 
-  public GetFiles200Response files(@jakarta.annotation.Nonnull List<File> files) {
+  public GetFiles200Response files(@jakarta.annotation.Nonnull List<RedmineFile> files) {
     
     this.files = files;
     return this;
   }
 
-  public GetFiles200Response addFilesItem(File filesItem) {
+  public GetFiles200Response addFilesItem(RedmineFile filesItem) {
     if (this.files == null) {
       this.files = new ArrayList<>();
     }
@@ -66,14 +66,14 @@ public class GetFiles200Response {
   @JsonProperty(value = JSON_PROPERTY_FILES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public List<File> getFiles() {
+  public List<RedmineFile> getFiles() {
     return files;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_FILES, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setFiles(@jakarta.annotation.Nonnull List<File> files) {
+  public void setFiles(@jakarta.annotation.Nonnull List<RedmineFile> files) {
     this.files = files;
   }
 

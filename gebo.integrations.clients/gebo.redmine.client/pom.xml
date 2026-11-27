@@ -11,8 +11,9 @@
 	<description>Redmine REST API, community OpenAPI description (YAML spec) client, generated with OpenAPI Generator (java, restclient on Spring Boot 4 / Jackson 3).</description>
 	<properties>
 		<!-- Regenerate with: mvn -P generate-rest-api generate-sources
-		     (override the spec with -Dswagger.file=<url or path>) -->
+		     (override the spec with -Dswagger.file=<url>) -->
 		<swagger.file>https://github.com/d-yoshi/redmine-openapi/releases/latest/download/openapi.yaml</swagger.file>
+		<openapi.patched.spec>${project.build.directory}/openapi/openapi.yaml</openapi.patched.spec>
 	</properties>
 	<packaging>jar</packaging>
 	<dependencies>
@@ -40,6 +41,31 @@
 			<id>generate-rest-api</id>
 			<build>
 				<plugins>
+					<!-- The "file" schema of /projects/{id}/files is shadowed by java.io.File
+					     (the generator resolves the type name "file" before any model name
+					     mapping): the downloaded copy renames it redmine_file, generated as
+					     RedmineFile. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>download-and-fix-spec</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<mkdir dir="${project.build.directory}/openapi" />
+										<get src="${swagger.file}" dest="${openapi.patched.spec}" />
+										<replaceregexp file="${openapi.patched.spec}" match="#/components/schemas/file'" replace="#/components/schemas/redmine_file'" flags="g" />
+										<replaceregexp file="${openapi.patched.spec}" match="^    file:$" replace="    redmine_file:" flags="gm" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.openapitools</groupId>
 						<artifactId>openapi-generator-maven-plugin</artifactId>
@@ -51,10 +77,18 @@
 									<goal>generate</goal>
 								</goals>
 								<configuration>
-									<inputSpec>${swagger.file}</inputSpec>
+									<inputSpec>${openapi.patched.spec}</inputSpec>
 									<modelPackage>ai.gebo.redmine.client.model</modelPackage>
 									<apiPackage>ai.gebo.redmine.client.api</apiPackage>
 									<invokerPackage>ai.gebo.redmine.client.invoker</invokerPackage>
+									<!--
+										The generator turns every "oneOf" of plain types into an empty class,
+										which can neither be read nor written. project_id (numeric id or
+										identifier) ends up in URLs, so it is a String, which Redmine accepts
+										for both. The other ones (ids or names, numbers or "1h30" durations,
+										custom field values that are a string or a list) are plain JSON values.
+									-->
+									<schemaMappings>createIssue_request_issue_project_id=java.lang.String,addWatchers_request_object_id=java.lang.Object,createIssueRelation_request_relation_issue_to_id=java.lang.Object,createIssue_request_issue_assigned_to_id=java.lang.Object,createIssue_request_issue_estimated_hours=java.lang.Object,createTimeEntry_request_time_entry_hours=java.lang.Object,custom_field_request_value_type=java.lang.Object,custom_field_response_value_type=java.lang.Object,updateIssue_request_issue_assigned_to_id=java.lang.Object</schemaMappings>
 								</configuration>
 							</execution>
 						</executions>

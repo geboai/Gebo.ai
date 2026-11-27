@@ -15,8 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.CreateTimeEntryRequestTimeEntryHours;
-import ai.gebo.redmine.client.model.CustomFieldRequestValueType;
 import ai.gebo.redmine.client.model.CustomFieldsInner;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -59,7 +57,7 @@ public class CreateTimeEntryUnderIssueRequestTimeEntry {
 
   public static final String JSON_PROPERTY_HOURS = "hours";
   @jakarta.annotation.Nonnull
-  private CreateTimeEntryRequestTimeEntryHours hours;
+  private java.lang.Object hours;
 
   public static final String JSON_PROPERTY_ACTIVITY_ID = "activity_id";
   @jakarta.annotation.Nullable
@@ -79,7 +77,7 @@ public class CreateTimeEntryUnderIssueRequestTimeEntry {
 
   public static final String JSON_PROPERTY_CUSTOM_FIELD_VALUES = "custom_field_values";
   @jakarta.annotation.Nullable
-  private Map<String, CustomFieldRequestValueType> customFieldValues = new HashMap<>();
+  private Map<String, java.lang.Object> customFieldValues = new HashMap<>();
 
   public CreateTimeEntryUnderIssueRequestTimeEntry() {
   }
@@ -134,7 +132,7 @@ public class CreateTimeEntryUnderIssueRequestTimeEntry {
     this.spentOn = spentOn;
   }
 
-  public CreateTimeEntryUnderIssueRequestTimeEntry hours(@jakarta.annotation.Nonnull CreateTimeEntryRequestTimeEntryHours hours) {
+  public CreateTimeEntryUnderIssueRequestTimeEntry hours(@jakarta.annotation.Nonnull java.lang.Object hours) {
     
     this.hours = hours;
     return this;
@@ -148,14 +146,14 @@ public class CreateTimeEntryUnderIssueRequestTimeEntry {
   @JsonProperty(value = JSON_PROPERTY_HOURS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public CreateTimeEntryRequestTimeEntryHours getHours() {
+  public java.lang.Object getHours() {
     return hours;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_HOURS, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setHours(@jakarta.annotation.Nonnull CreateTimeEntryRequestTimeEntryHours hours) {
+  public void setHours(@jakarta.annotation.Nonnull java.lang.Object hours) {
     this.hours = hours;
   }
 
@@ -267,13 +265,13 @@ public class CreateTimeEntryUnderIssueRequestTimeEntry {
     this.customFields = customFields;
   }
 
-  public CreateTimeEntryUnderIssueRequestTimeEntry customFieldValues(@jakarta.annotation.Nullable Map<String, CustomFieldRequestValueType> customFieldValues) {
+  public CreateTimeEntryUnderIssueRequestTimeEntry customFieldValues(@jakarta.annotation.Nullable Map<String, java.lang.Object> customFieldValues) {
     
     this.customFieldValues = customFieldValues;
     return this;
   }
 
-  public CreateTimeEntryUnderIssueRequestTimeEntry putCustomFieldValuesItem(String key, CustomFieldRequestValueType customFieldValuesItem) {
+  public CreateTimeEntryUnderIssueRequestTimeEntry putCustomFieldValuesItem(String key, java.lang.Object customFieldValuesItem) {
     if (this.customFieldValues == null) {
       this.customFieldValues = new HashMap<>();
     }
@@ -289,14 +287,14 @@ public class CreateTimeEntryUnderIssueRequestTimeEntry {
   @JsonProperty(value = JSON_PROPERTY_CUSTOM_FIELD_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Map<String, CustomFieldRequestValueType> getCustomFieldValues() {
+  public Map<String, java.lang.Object> getCustomFieldValues() {
     return customFieldValues;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_CUSTOM_FIELD_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCustomFieldValues(@jakarta.annotation.Nullable Map<String, CustomFieldRequestValueType> customFieldValues) {
+  public void setCustomFieldValues(@jakarta.annotation.Nullable Map<String, java.lang.Object> customFieldValues) {
     this.customFieldValues = customFieldValues;
   }
 

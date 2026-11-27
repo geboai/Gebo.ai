@@ -4,7 +4,6 @@ import ai.gebo.redmine.client.invoker.ApiClient;
 
 import ai.gebo.redmine.client.model.CreateIssueCategory201Response;
 import ai.gebo.redmine.client.model.CreateIssueCategoryRequest;
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.Errors;
 import ai.gebo.redmine.client.model.GetIssueCategories200Response;
 import ai.gebo.redmine.client.model.UpdateIssueCategoryRequest;
@@ -67,7 +66,7 @@ public class IssueCategoriesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#POST">Create issue category Documentation</a>
      */
-    private ResponseSpec createIssueCategoryRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec createIssueCategoryRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling createIssueCategory", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -128,7 +127,7 @@ public class IssueCategoriesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#POST">Create issue category Documentation</a>
      */
-    public CreateIssueCategory201Response createIssueCategory(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public CreateIssueCategory201Response createIssueCategory(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<CreateIssueCategory201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createIssueCategoryRequestCreation(format, projectId, createIssueCategoryRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -151,7 +150,7 @@ public class IssueCategoriesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#POST">Create issue category Documentation</a>
      */
-    public ResponseEntity<CreateIssueCategory201Response> createIssueCategoryWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<CreateIssueCategory201Response> createIssueCategoryWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<CreateIssueCategory201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createIssueCategoryRequestCreation(format, projectId, createIssueCategoryRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -174,7 +173,7 @@ public class IssueCategoriesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#POST">Create issue category Documentation</a>
      */
-    public ResponseSpec createIssueCategoryWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec createIssueCategoryWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateIssueCategoryRequest createIssueCategoryRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return createIssueCategoryRequestCreation(format, projectId, createIssueCategoryRequest, xRedmineSwitchUser);
     }
 
@@ -312,7 +311,7 @@ public class IssueCategoriesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#GET">List issue categories Documentation</a>
      */
-    private ResponseSpec getIssueCategoriesRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    private ResponseSpec getIssueCategoriesRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getIssueCategories", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -372,7 +371,7 @@ public class IssueCategoriesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#GET">List issue categories Documentation</a>
      */
-    public GetIssueCategories200Response getIssueCategories(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    public GetIssueCategories200Response getIssueCategories(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         ParameterizedTypeReference<GetIssueCategories200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getIssueCategoriesRequestCreation(format, projectId, nometa, xRedmineSwitchUser, xRedmineNometa).body(localVarReturnType);
     }
@@ -395,7 +394,7 @@ public class IssueCategoriesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#GET">List issue categories Documentation</a>
      */
-    public ResponseEntity<GetIssueCategories200Response> getIssueCategoriesWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    public ResponseEntity<GetIssueCategories200Response> getIssueCategoriesWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         ParameterizedTypeReference<GetIssueCategories200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getIssueCategoriesRequestCreation(format, projectId, nometa, xRedmineSwitchUser, xRedmineNometa).toEntity(localVarReturnType);
     }
@@ -418,7 +417,7 @@ public class IssueCategoriesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_IssueCategories#GET">List issue categories Documentation</a>
      */
-    public ResponseSpec getIssueCategoriesWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    public ResponseSpec getIssueCategoriesWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         return getIssueCategoriesRequestCreation(format, projectId, nometa, xRedmineSwitchUser, xRedmineNometa);
     }
 

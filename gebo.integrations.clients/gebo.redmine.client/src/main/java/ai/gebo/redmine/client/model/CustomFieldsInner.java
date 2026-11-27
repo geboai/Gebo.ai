@@ -15,7 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.CustomFieldRequestValueType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -41,7 +40,7 @@ public class CustomFieldsInner {
 
   public static final String JSON_PROPERTY_VALUE = "value";
   @jakarta.annotation.Nullable
-  private CustomFieldRequestValueType value;
+  private java.lang.Object value;
 
   public CustomFieldsInner() {
   }
@@ -71,7 +70,7 @@ public class CustomFieldsInner {
     this.id = id;
   }
 
-  public CustomFieldsInner value(@jakarta.annotation.Nullable CustomFieldRequestValueType value) {
+  public CustomFieldsInner value(@jakarta.annotation.Nullable java.lang.Object value) {
     
     this.value = value;
     return this;
@@ -85,14 +84,14 @@ public class CustomFieldsInner {
   @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public CustomFieldRequestValueType getValue() {
+  public java.lang.Object getValue() {
     return value;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_VALUE, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setValue(@jakarta.annotation.Nullable CustomFieldRequestValueType value) {
+  public void setValue(@jakarta.annotation.Nullable java.lang.Object value) {
     this.value = value;
   }
 

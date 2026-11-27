@@ -15,7 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.CreateIssueRelationRequestRelationIssueToId;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -38,7 +37,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class CreateIssueRelationRequestRelation {
   public static final String JSON_PROPERTY_ISSUE_TO_ID = "issue_to_id";
   @jakarta.annotation.Nonnull
-  private CreateIssueRelationRequestRelationIssueToId issueToId;
+  private java.lang.Object issueToId;
 
   /**
    * Type of relation from this issue to the target issue. Values: &#x60;relates&#x60; (related to), &#x60;duplicates&#x60; (this duplicates target), &#x60;duplicated&#x60; (this is duplicated by target), &#x60;blocks&#x60; (this blocks target), &#x60;blocked&#x60; (this is blocked by target), &#x60;precedes&#x60; (this must finish before target starts), &#x60;follows&#x60; (this must start after target finishes), &#x60;copied_to&#x60; (this was copied to target), &#x60;copied_from&#x60; (this was copied from target)
@@ -100,7 +99,7 @@ public class CreateIssueRelationRequestRelation {
   public CreateIssueRelationRequestRelation() {
   }
 
-  public CreateIssueRelationRequestRelation issueToId(@jakarta.annotation.Nonnull CreateIssueRelationRequestRelationIssueToId issueToId) {
+  public CreateIssueRelationRequestRelation issueToId(@jakarta.annotation.Nonnull java.lang.Object issueToId) {
     
     this.issueToId = issueToId;
     return this;
@@ -114,14 +113,14 @@ public class CreateIssueRelationRequestRelation {
   @JsonProperty(value = JSON_PROPERTY_ISSUE_TO_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public CreateIssueRelationRequestRelationIssueToId getIssueToId() {
+  public java.lang.Object getIssueToId() {
     return issueToId;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ISSUE_TO_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setIssueToId(@jakarta.annotation.Nonnull CreateIssueRelationRequestRelationIssueToId issueToId) {
+  public void setIssueToId(@jakarta.annotation.Nonnull java.lang.Object issueToId) {
     this.issueToId = issueToId;
   }
 

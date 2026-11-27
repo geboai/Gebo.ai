@@ -2,7 +2,6 @@ package ai.gebo.redmine.client.api;
 
 import ai.gebo.redmine.client.invoker.ApiClient;
 
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.CreateNewsRequest;
 import ai.gebo.redmine.client.model.Errors;
 import ai.gebo.redmine.client.model.GetNews200Response;
@@ -66,7 +65,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Creating-a-news-item">Create news Documentation</a>
      */
-    private ResponseSpec createNewsRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec createNewsRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling createNews", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -126,7 +125,7 @@ public class NewsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Creating-a-news-item">Create news Documentation</a>
      */
-    public void createNews(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void createNews(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         createNewsRequestCreation(format, projectId, createNewsRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -148,7 +147,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Creating-a-news-item">Create news Documentation</a>
      */
-    public ResponseEntity<Void> createNewsWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> createNewsWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createNewsRequestCreation(format, projectId, createNewsRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -171,7 +170,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Creating-a-news-item">Create news Documentation</a>
      */
-    public ResponseSpec createNewsWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec createNewsWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateNewsRequest createNewsRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return createNewsRequestCreation(format, projectId, createNewsRequest, xRedmineSwitchUser);
     }
 
@@ -427,7 +426,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news Documentation</a>
      */
-    private ResponseSpec getNewsListRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable CreateIssueRequestIssueProjectId projectId) throws RestClientResponseException {
+    private ResponseSpec getNewsListRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable java.lang.String projectId) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getNewsList", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -489,7 +488,7 @@ public class NewsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news Documentation</a>
      */
-    public GetNewsList200Response getNewsList(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable CreateIssueRequestIssueProjectId projectId) throws RestClientResponseException {
+    public GetNewsList200Response getNewsList(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable java.lang.String projectId) throws RestClientResponseException {
         ParameterizedTypeReference<GetNewsList200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getNewsListRequestCreation(format, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page, projectId).body(localVarReturnType);
     }
@@ -515,7 +514,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news Documentation</a>
      */
-    public ResponseEntity<GetNewsList200Response> getNewsListWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable CreateIssueRequestIssueProjectId projectId) throws RestClientResponseException {
+    public ResponseEntity<GetNewsList200Response> getNewsListWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable java.lang.String projectId) throws RestClientResponseException {
         ParameterizedTypeReference<GetNewsList200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getNewsListRequestCreation(format, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page, projectId).toEntity(localVarReturnType);
     }
@@ -541,7 +540,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news Documentation</a>
      */
-    public ResponseSpec getNewsListWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable CreateIssueRequestIssueProjectId projectId) throws RestClientResponseException {
+    public ResponseSpec getNewsListWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page, @jakarta.annotation.Nullable java.lang.String projectId) throws RestClientResponseException {
         return getNewsListRequestCreation(format, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page, projectId);
     }
 
@@ -566,7 +565,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news by project Documentation</a>
      */
-    private ResponseSpec getNewsListByProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    private ResponseSpec getNewsListByProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getNewsListByProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -632,7 +631,7 @@ public class NewsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news by project Documentation</a>
      */
-    public GetNewsList200Response getNewsListByProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    public GetNewsList200Response getNewsListByProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         ParameterizedTypeReference<GetNewsList200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getNewsListByProjectRequestCreation(format, projectId, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page).body(localVarReturnType);
     }
@@ -658,7 +657,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news by project Documentation</a>
      */
-    public ResponseEntity<GetNewsList200Response> getNewsListByProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    public ResponseEntity<GetNewsList200Response> getNewsListByProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         ParameterizedTypeReference<GetNewsList200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getNewsListByProjectRequestCreation(format, projectId, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page).toEntity(localVarReturnType);
     }
@@ -684,7 +683,7 @@ public class NewsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_News#Listing-news">List news by project Documentation</a>
      */
-    public ResponseSpec getNewsListByProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    public ResponseSpec getNewsListByProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         return getNewsListByProjectRequestCreation(format, projectId, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page);
     }
 

@@ -15,7 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.CustomFieldRequestValueType;
 import ai.gebo.redmine.client.model.CustomFieldsInner;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -153,7 +152,7 @@ public class UpdateMyAccountRequestUser {
 
   public static final String JSON_PROPERTY_CUSTOM_FIELD_VALUES = "custom_field_values";
   @jakarta.annotation.Nullable
-  private Map<String, CustomFieldRequestValueType> customFieldValues = new HashMap<>();
+  private Map<String, java.lang.Object> customFieldValues = new HashMap<>();
 
   public static final String JSON_PROPERTY_GROUP_IDS = "group_ids";
   @jakarta.annotation.Nullable
@@ -503,13 +502,13 @@ public class UpdateMyAccountRequestUser {
     this.customFields = customFields;
   }
 
-  public UpdateMyAccountRequestUser customFieldValues(@jakarta.annotation.Nullable Map<String, CustomFieldRequestValueType> customFieldValues) {
+  public UpdateMyAccountRequestUser customFieldValues(@jakarta.annotation.Nullable Map<String, java.lang.Object> customFieldValues) {
     
     this.customFieldValues = customFieldValues;
     return this;
   }
 
-  public UpdateMyAccountRequestUser putCustomFieldValuesItem(String key, CustomFieldRequestValueType customFieldValuesItem) {
+  public UpdateMyAccountRequestUser putCustomFieldValuesItem(String key, java.lang.Object customFieldValuesItem) {
     if (this.customFieldValues == null) {
       this.customFieldValues = new HashMap<>();
     }
@@ -525,14 +524,14 @@ public class UpdateMyAccountRequestUser {
   @JsonProperty(value = JSON_PROPERTY_CUSTOM_FIELD_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Map<String, CustomFieldRequestValueType> getCustomFieldValues() {
+  public Map<String, java.lang.Object> getCustomFieldValues() {
     return customFieldValues;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_CUSTOM_FIELD_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCustomFieldValues(@jakarta.annotation.Nullable Map<String, CustomFieldRequestValueType> customFieldValues) {
+  public void setCustomFieldValues(@jakarta.annotation.Nullable Map<String, java.lang.Object> customFieldValues) {
     this.customFieldValues = customFieldValues;
   }
 

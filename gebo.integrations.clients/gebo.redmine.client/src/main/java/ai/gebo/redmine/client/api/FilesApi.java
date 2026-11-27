@@ -3,7 +3,6 @@ package ai.gebo.redmine.client.api;
 import ai.gebo.redmine.client.invoker.ApiClient;
 
 import ai.gebo.redmine.client.model.CreateFileRequest;
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.GetFiles200Response;
 
 import java.util.HashMap;
@@ -62,7 +61,7 @@ public class FilesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#POST">Create file Documentation</a>
      */
-    private ResponseSpec createFileRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec createFileRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling createFile", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -119,7 +118,7 @@ public class FilesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#POST">Create file Documentation</a>
      */
-    public void createFile(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void createFile(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         createFileRequestCreation(format, projectId, createFileRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -140,7 +139,7 @@ public class FilesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#POST">Create file Documentation</a>
      */
-    public ResponseEntity<Void> createFileWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> createFileWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createFileRequestCreation(format, projectId, createFileRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -162,7 +161,7 @@ public class FilesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#POST">Create file Documentation</a>
      */
-    public ResponseSpec createFileWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec createFileWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateFileRequest createFileRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return createFileRequestCreation(format, projectId, createFileRequest, xRedmineSwitchUser);
     }
 
@@ -183,7 +182,7 @@ public class FilesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#GET">List files Documentation</a>
      */
-    private ResponseSpec getFilesRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
+    private ResponseSpec getFilesRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getFiles", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -239,7 +238,7 @@ public class FilesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#GET">List files Documentation</a>
      */
-    public GetFiles200Response getFiles(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
+    public GetFiles200Response getFiles(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
         ParameterizedTypeReference<GetFiles200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getFilesRequestCreation(format, projectId, xRedmineSwitchUser, sort).body(localVarReturnType);
     }
@@ -261,7 +260,7 @@ public class FilesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#GET">List files Documentation</a>
      */
-    public ResponseEntity<GetFiles200Response> getFilesWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
+    public ResponseEntity<GetFiles200Response> getFilesWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
         ParameterizedTypeReference<GetFiles200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getFilesRequestCreation(format, projectId, xRedmineSwitchUser, sort).toEntity(localVarReturnType);
     }
@@ -283,7 +282,7 @@ public class FilesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Files#GET">List files Documentation</a>
      */
-    public ResponseSpec getFilesWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
+    public ResponseSpec getFilesWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable String sort) throws RestClientResponseException {
         return getFilesRequestCreation(format, projectId, xRedmineSwitchUser, sort);
     }
 }

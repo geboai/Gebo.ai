@@ -15,9 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueAssignedToId;
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueEstimatedHours;
-import ai.gebo.redmine.client.model.CustomFieldRequestValueType;
 import ai.gebo.redmine.client.model.CustomFieldsInner;
 import ai.gebo.redmine.client.model.UploadsInner;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -103,7 +100,7 @@ public class CreateIssueUnderProjectRequestIssue {
 
   public static final String JSON_PROPERTY_ASSIGNED_TO_ID = "assigned_to_id";
   @jakarta.annotation.Nullable
-  private CreateIssueRequestIssueAssignedToId assignedToId;
+  private java.lang.Object assignedToId;
 
   public static final String JSON_PROPERTY_PARENT_ISSUE_ID = "parent_issue_id";
   @jakarta.annotation.Nullable
@@ -115,7 +112,7 @@ public class CreateIssueUnderProjectRequestIssue {
 
   public static final String JSON_PROPERTY_CUSTOM_FIELD_VALUES = "custom_field_values";
   @jakarta.annotation.Nullable
-  private Map<String, CustomFieldRequestValueType> customFieldValues = new HashMap<>();
+  private Map<String, java.lang.Object> customFieldValues = new HashMap<>();
 
   public static final String JSON_PROPERTY_WATCHER_USER_IDS = "watcher_user_ids";
   @jakarta.annotation.Nullable
@@ -127,7 +124,7 @@ public class CreateIssueUnderProjectRequestIssue {
 
   public static final String JSON_PROPERTY_ESTIMATED_HOURS = "estimated_hours";
   @jakarta.annotation.Nullable
-  private CreateIssueRequestIssueEstimatedHours estimatedHours;
+  private java.lang.Object estimatedHours;
 
   public static final String JSON_PROPERTY_UPLOADS = "uploads";
   @jakarta.annotation.Nullable
@@ -388,7 +385,7 @@ public class CreateIssueUnderProjectRequestIssue {
     this.fixedVersionId = fixedVersionId;
   }
 
-  public CreateIssueUnderProjectRequestIssue assignedToId(@jakarta.annotation.Nullable CreateIssueRequestIssueAssignedToId assignedToId) {
+  public CreateIssueUnderProjectRequestIssue assignedToId(@jakarta.annotation.Nullable java.lang.Object assignedToId) {
     
     this.assignedToId = assignedToId;
     return this;
@@ -402,14 +399,14 @@ public class CreateIssueUnderProjectRequestIssue {
   @JsonProperty(value = JSON_PROPERTY_ASSIGNED_TO_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public CreateIssueRequestIssueAssignedToId getAssignedToId() {
+  public java.lang.Object getAssignedToId() {
     return assignedToId;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ASSIGNED_TO_ID, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setAssignedToId(@jakarta.annotation.Nullable CreateIssueRequestIssueAssignedToId assignedToId) {
+  public void setAssignedToId(@jakarta.annotation.Nullable java.lang.Object assignedToId) {
     this.assignedToId = assignedToId;
   }
 
@@ -471,13 +468,13 @@ public class CreateIssueUnderProjectRequestIssue {
     this.customFields = customFields;
   }
 
-  public CreateIssueUnderProjectRequestIssue customFieldValues(@jakarta.annotation.Nullable Map<String, CustomFieldRequestValueType> customFieldValues) {
+  public CreateIssueUnderProjectRequestIssue customFieldValues(@jakarta.annotation.Nullable Map<String, java.lang.Object> customFieldValues) {
     
     this.customFieldValues = customFieldValues;
     return this;
   }
 
-  public CreateIssueUnderProjectRequestIssue putCustomFieldValuesItem(String key, CustomFieldRequestValueType customFieldValuesItem) {
+  public CreateIssueUnderProjectRequestIssue putCustomFieldValuesItem(String key, java.lang.Object customFieldValuesItem) {
     if (this.customFieldValues == null) {
       this.customFieldValues = new HashMap<>();
     }
@@ -493,14 +490,14 @@ public class CreateIssueUnderProjectRequestIssue {
   @JsonProperty(value = JSON_PROPERTY_CUSTOM_FIELD_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public Map<String, CustomFieldRequestValueType> getCustomFieldValues() {
+  public Map<String, java.lang.Object> getCustomFieldValues() {
     return customFieldValues;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_CUSTOM_FIELD_VALUES, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setCustomFieldValues(@jakarta.annotation.Nullable Map<String, CustomFieldRequestValueType> customFieldValues) {
+  public void setCustomFieldValues(@jakarta.annotation.Nullable Map<String, java.lang.Object> customFieldValues) {
     this.customFieldValues = customFieldValues;
   }
 
@@ -562,7 +559,7 @@ public class CreateIssueUnderProjectRequestIssue {
     this.isPrivate = isPrivate;
   }
 
-  public CreateIssueUnderProjectRequestIssue estimatedHours(@jakarta.annotation.Nullable CreateIssueRequestIssueEstimatedHours estimatedHours) {
+  public CreateIssueUnderProjectRequestIssue estimatedHours(@jakarta.annotation.Nullable java.lang.Object estimatedHours) {
     
     this.estimatedHours = estimatedHours;
     return this;
@@ -576,14 +573,14 @@ public class CreateIssueUnderProjectRequestIssue {
   @JsonProperty(value = JSON_PROPERTY_ESTIMATED_HOURS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
 
-  public CreateIssueRequestIssueEstimatedHours getEstimatedHours() {
+  public java.lang.Object getEstimatedHours() {
     return estimatedHours;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_ESTIMATED_HOURS, required = false)
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setEstimatedHours(@jakarta.annotation.Nullable CreateIssueRequestIssueEstimatedHours estimatedHours) {
+  public void setEstimatedHours(@jakarta.annotation.Nullable java.lang.Object estimatedHours) {
     this.estimatedHours = estimatedHours;
   }
 
