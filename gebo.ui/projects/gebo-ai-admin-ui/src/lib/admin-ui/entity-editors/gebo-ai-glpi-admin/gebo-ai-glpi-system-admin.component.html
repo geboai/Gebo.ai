@@ -1,0 +1,60 @@
+<p-blockUI id="LockIconBlockUI" [target]="glpiSystemCtrl" [blocked]="loading || testing">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #glpiSystemCtrl header="Editing GLPI system" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+            [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="TestBtn" gebo-ai-label [outlined]="true" label="Test connection" (onClick)="doTest()" icon="pi pi-check-circle" severity="info"
+            [disabled]="this.formGroup.invalid || testing" styleClass="w-full"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+            styleClass="w-full" />
+        </div>
+        <div class="col-3">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            styleClass="w-full" [disabled]="canDelete===false" />
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    <div class="grid">
+      <div class="col-6">
+        <gebo-ai-field id="description" label="Description" help="Enter the description of the GLPI system." [required]="true">
+          <input id="description" formControlName="description" maxlength="120" [required]="true" pInputText gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the GLPI system.">
+          <input id="code" formControlName="code" readonly="true" pInputText gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-12">
+        <gebo-ai-field id="baseUri" label="GLPI address" help="Address of the GLPI web interface (e.g. https://glpi.example.com). The API is reached under its /api.php." [required]="true">
+          <input type="text" id="baseUri" formControlName="baseUri" class="col-12" [required]="true" pInputText gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="oauthClientSecretCode" label="OAuth client" help="Client id and secret of the OAuth client registered in GLPI (Setup > OAuth clients) with the password grant and the api scope." [required]="true" placeholder="Select or create the OAuth client">
+          <geboai-editable-listbox-component id="oauthClientSecretCode" formControlName="oauthClientSecretCode" [optionsObservable]="oauthClientsObservable" [required]="true" [createNewRecordRequest]="newOauthClientSecretAction" gebo-ai-field-element>
+          </geboai-editable-listbox-component>
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="secretCode" label="GLPI user" help="Username and password of the GLPI user: the tickets and articles it can see in GLPI are the ones read." [required]="true" placeholder="Select or create the GLPI user">
+          <geboai-editable-listbox-component id="secretCode" formControlName="secretCode" [optionsObservable]="usersObservable" [required]="true" [createNewRecordRequest]="newUserSecretAction" gebo-ai-field-element>
+          </geboai-editable-listbox-component>
+        </gebo-ai-field>
+      </div>
+    </div>
+  </div>
+</p-panel>

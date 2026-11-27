@@ -120,6 +120,9 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-aws-s3-admin/gebo-ai-aws-s3
 export * from "./lib/admin-ui/entity-editors/gebo-ai-webdav-client-admin/gebo-ai-webdav-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-webdav-client-admin/gebo-ai-webdav-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-webdav-client-admin/gebo-ai-webdav-system-fast.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-endpoint.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-system-fast.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";
