@@ -43,6 +43,10 @@ import ai.gebo.secrets.model.GeboSecretType;
 import ai.gebo.secrets.model.GeboTokenContent;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -181,23 +185,8 @@ public class MistralChatModelConfigurationSupportService
 						&& config.getChoosedModel().getMetaInfos() != null
 								? config.getChoosedModel().getMetaInfos().getSupportsReasoning()
 								: null;
-				MistralAiApi.ChatCompletionRequest.ReasoningEffort effort = null;
-				if (!Boolean.FALSE.equals(reasons)) {
-					switch (config.getThinking()) {
-					case NO_THINKING:
-						if (acceptsEffort("none"))
-							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE;
-						break;
-					case LOW_THINKING:
-					case MEDIUM_THINKING:
-					case HIGH_THINKING:
-						if (acceptsEffort("high"))
-							effort = MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH;
-						break;
-					default:
-						break;
-					}
-				}
+				final MistralAiApi.ChatCompletionRequest.ReasoningEffort effort = reasoningEffortOf(config.getThinking(),
+						reasons, parameterRules);
 				if (effort != null) {
 					builder = builder.reasoningEffort(effort);
 				}
@@ -329,5 +318,58 @@ public class MistralChatModelConfigurationSupportService
 	@Override
 	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
 		return GModelCarriedMediaTypes.none().images("image/*");
+	}
+
+	/**
+	 * The reasoning_effort a request sends for a thinking option: none to a model whose
+	 * card says it does not reason; NONE for no thinking and HIGH for the three levels,
+	 * each only where the model's parameter rules list it (or list no effort); nothing for
+	 * Automatic. What configureModel sends, and what the editors are told.
+	 *
+	 * @param reasons whether the model reasons, as its card tells; null when unknown
+	 * @param rules   the model's parameter rules, may be null
+	 */
+	static MistralAiApi.ChatCompletionRequest.ReasoningEffort reasoningEffortOf(ChatModelThinkingOption option,
+			Boolean reasons, ModelParameterRules rules) {
+		if (option == null || Boolean.FALSE.equals(reasons))
+			return null;
+		switch (option) {
+		case NO_THINKING:
+			return accepts(rules, "none") ? MistralAiApi.ChatCompletionRequest.ReasoningEffort.NONE : null;
+		case LOW_THINKING:
+		case MEDIUM_THINKING:
+		case HIGH_THINKING:
+			return accepts(rules, "high") ? MistralAiApi.ChatCompletionRequest.ReasoningEffort.HIGH : null;
+		default:
+			return null;
+		}
+	}
+
+	/** As GAbstractConfigurableChatModel.acceptsEffort: true unless the rules list efforts without it. */
+	private static boolean accepts(ModelParameterRules rules, String effort) {
+		return rules == null || !rules.knowsEfforts() || rules.acceptsEffort(effort);
+	}
+
+	/**
+	 * The sampling parameters as the model's parameter rules let them go; the thinking as
+	 * {@link #reasoningEffortOf} sends it, by the reasoning capability the chosen model's
+	 * card carries.
+	 */
+	@Override
+	public GChatModelParametersSupport parametersSupport(String modelCode, ModelMetaInfo metaInfos,
+			java.util.Map<String, Object> modelDetails) {
+		final String providerId = type.getProviderId();
+		final ModelParameterRules rules = modelsLibrary != null && modelCode != null
+				? modelsLibrary.findParameterRules(providerId, modelCode)
+				: null;
+		final Boolean reasons = metaInfos != null ? metaInfos.getSupportsReasoning() : null;
+		return GChatModelParametersSupport.of(providerId, modelCode, rules,
+				modelsLibrary != null ? modelsLibrary.findTemperatureRange(providerId, modelCode) : null,
+				modelsLibrary != null ? modelsLibrary.findTopPRange(providerId, modelCode) : null,
+				!Boolean.FALSE.equals(reasons), option -> {
+					final MistralAiApi.ChatCompletionRequest.ReasoningEffort effort = reasoningEffortOf(option,
+							reasons, rules);
+					return effort != null ? effort.name().toLowerCase(java.util.Locale.ROOT) : null;
+				});
 	}
 }

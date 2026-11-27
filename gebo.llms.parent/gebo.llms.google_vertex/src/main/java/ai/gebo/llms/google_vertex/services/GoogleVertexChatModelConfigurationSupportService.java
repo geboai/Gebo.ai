@@ -41,6 +41,9 @@ import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelChoice;
 import ai.gebo.llms.google_vertex.model.GGoogleVertexChatModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
+import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
 import io.micrometer.observation.ObservationRegistry;
 import lombok.AllArgsConstructor;
 
@@ -358,6 +361,25 @@ public class GoogleVertexChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * The sampling parameters as the model's parameter rules let them go (Gemini 3 keeps
+	 * Google's default, Gemini 3.6 Flash and later ignore them), with the ranges of the
+	 * Vertex reference; no thinking, which configureModel never sends.
+	 */
+	@Override
+	public GChatModelParametersSupport parametersSupport(String modelCode, ModelMetaInfo metaInfos,
+			java.util.Map<String, Object> modelDetails) {
+		final String providerId = type.getProviderId();
+		final ModelParameterRules rules = modelsLibrary != null && modelCode != null
+				? modelsLibrary.findParameterRules(providerId, modelCode)
+				: null;
+		final GChatModelParametersSupport parameters = GChatModelParametersSupport.of(providerId, modelCode, rules,
+				modelsLibrary != null ? modelsLibrary.findTemperatureRange(providerId, modelCode) : null,
+				modelsLibrary != null ? modelsLibrary.findTopPRange(providerId, modelCode) : null, false, null);
+		parameters.getSources().add("no thinking level is sent to a Gemini model (configureModel)");
+		return parameters;
 	}
 
 	/**

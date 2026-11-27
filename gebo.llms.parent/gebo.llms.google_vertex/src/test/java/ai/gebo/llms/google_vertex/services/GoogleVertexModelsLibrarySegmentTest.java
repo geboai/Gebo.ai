@@ -48,9 +48,17 @@ class GoogleVertexModelsLibrarySegmentTest {
 				library.findByProviderIdAndModelId("google-vertex", "gemini-3.8-flash").getContextLength());
 		assertNull(library.findByProviderIdAndModelId("google-vertex", "gemini-3.8-flash").getRetirementDate(),
 				"no retirement announced");
-		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.PROVIDER_DEFAULT,
+		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.IGNORED,
 				library.findParameterRules("google-vertex", "gemini-3.8-flash").getSampling(),
-				"Gemini 3 keeps Google's temperature 1.0");
+				"Gemini 3.6 Flash and later ignore the sampling parameters");
+		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.IGNORED,
+				library.findParameterRules("google-vertex", "gemini-4-hydrogen").getSampling());
+		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.PROVIDER_DEFAULT,
+				library.findParameterRules("google-vertex", "gemini-3.5-flash").getSampling(),
+				"Gemini 3 up to 3.5 keeps Google's temperature 1.0");
+		assertEquals(2.0, library.findTemperatureRange("google-vertex", "gemini-3.5-flash").getMax());
+		assertEquals(1.0, library.findTopPRange("google-vertex", "gemini-3.1-pro-preview").getMax());
+		assertNull(library.findTemperatureRange("google-vertex", "gemini-2.5-flash"), "no range given for 2.5");
 		assertNull(library.findParameterRules("google-vertex", "gemini-2.5-flash"));
 	}
 

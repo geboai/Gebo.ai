@@ -198,9 +198,10 @@ class ModelParameterRulesTest {
 	void theEffortSentIsOneTheModelLists() throws Exception {
 		RecordingModel sol = new RecordingModel(openAiLibrary());
 		sol.initialize(config("gpt-6.1-sol", null, null), type("openai"));
-		assertNull(sol.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING), "sol takes no none");
+		assertEquals("low", sol.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING),
+				"sol takes no none: the least reasoning it lists");
 		assertEquals("low", sol.reasoningEffortFor(ChatModelThinkingOption.LOW_THINKING));
-		assertEquals("high", sol.reasoningEffortFor(ChatModelThinkingOption.HIGH_THINKING));
+		assertEquals("max", sol.reasoningEffortFor(ChatModelThinkingOption.HIGH_THINKING), "the most it lists");
 		assertNull(sol.reasoningEffortFor(ChatModelThinkingOption.AUTO));
 
 		RecordingModel unknown = new RecordingModel(openAiLibrary());
@@ -246,6 +247,42 @@ class ModelParameterRulesTest {
 	}
 
 	@Test
+	void theEffortIsTheNearestTheModelLists() {
+		final ModelParameterRules pro = rule("openai", List.of("gpt-5.5-pro"), Sampling.REJECTED,
+				List.of("medium", "high", "xhigh"));
+		assertEquals("medium", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING, pro));
+		assertEquals("medium", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.LOW_THINKING, pro));
+		assertEquals("medium", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.MEDIUM_THINKING, pro));
+		assertEquals("xhigh", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.HIGH_THINKING, pro));
+		assertNull(GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.AUTO, pro));
+
+		final ModelParameterRules onlyHigh = rule("openai", List.of("gpt-5-pro"), null, List.of("high"));
+		for (ChatModelThinkingOption option : List.of(ChatModelThinkingOption.NO_THINKING,
+				ChatModelThinkingOption.LOW_THINKING, ChatModelThinkingOption.MEDIUM_THINKING,
+				ChatModelThinkingOption.HIGH_THINKING))
+			assertEquals("high", GAbstractConfigurableChatModel.reasoningEffortFor(option, onlyHigh), option.name());
+
+		final ModelParameterRules gpt5 = rule("openai", List.of("gpt-5"), null, List.of("minimal", "low", "medium", "high"));
+		assertEquals("minimal", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING, gpt5),
+				"no none: the least reasoning");
+		assertEquals("high", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.HIGH_THINKING, gpt5));
+
+		// none is the thinking turned off: asking some thinking never gets it
+		final ModelParameterRules switchOnly = rule("x", List.of("m"), null, List.of("none", "high"));
+		assertEquals("none", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING, switchOnly));
+		assertEquals("high", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.LOW_THINKING, switchOnly));
+		// a tie keeps the lower effort
+		final ModelParameterRules gapped = rule("x", List.of("m"), null, List.of("minimal", "medium"));
+		assertEquals("minimal", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.LOW_THINKING, gapped));
+		// an effort off the scale is never chosen
+		final ModelParameterRules offScale = rule("x", List.of("m"), null, List.of("default", "low"));
+		assertEquals("low", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.HIGH_THINKING, offScale));
+		// efforts unknown: as asked, no thinking sending nothing
+		assertEquals("medium", GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.MEDIUM_THINKING, null));
+		assertNull(GAbstractConfigurableChatModel.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING, null));
+	}
+
+	@Test
 	void whatTheModelsApiToldWinsOverTheLibrary() throws Exception {
 		GModelsLibraryDaoImpl library = library(List.of(), List.of(rule("openrouter.ai", List.of("google/gemini-3*"),
 				Sampling.PROVIDER_DEFAULT, List.of("none", "low", "high"))));
@@ -255,7 +292,8 @@ class ModelParameterRulesTest {
 		LiveRulesModel model = new LiveRulesModel(library, mandatory);
 		model.initialize(config("google/gemini-3.8-flash", null, ChatModelThinkingOption.NO_THINKING),
 				type("openrouter.ai"));
-		assertNull(model.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING), "the live efforts lack none");
+		assertEquals("low", model.reasoningEffortFor(ChatModelThinkingOption.NO_THINKING),
+				"the live efforts lack none: the least they list");
 		assertEquals("medium", model.reasoningEffortFor(ChatModelThinkingOption.MEDIUM_THINKING));
 		assertNull(model.lastRequestConfig().getTemperature(), "the library's provider default still applies");
 

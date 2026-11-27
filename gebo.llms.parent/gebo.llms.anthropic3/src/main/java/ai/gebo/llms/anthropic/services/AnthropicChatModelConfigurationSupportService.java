@@ -30,6 +30,11 @@ import ai.gebo.architecture.ai.service.IGDocumentContentRendererProvider;
 import ai.gebo.architecture.ai.service.IGToolCallbackSourceRepositoryPattern;
 import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelChoice;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
+import ai.gebo.llms.abstraction.layer.model.GSamplingAvailability;
+import ai.gebo.llms.abstraction.layer.model.GSamplingParameterSupport;
+import java.util.Map;
+import ai.gebo.llms.models.metainfos.ModelMetaInfo;
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import ai.gebo.llms.models.metainfos.ModelParameterRules;
 import ai.gebo.llms.abstraction.layer.model.GChatModelType;
@@ -182,19 +187,7 @@ public class AnthropicChatModelConfigurationSupportService
 				if (support == null && modelCode != null) {
 					support = modelsService.getThinkingSupport(apiKey, config.getBaseUrl(), modelCode);
 				}
-				ChatModelThinkingOption option = config.getThinking();
-				// Without the Models API's word, no thinking is sent as disabled only to a model
-				// the parameter rules do not list without "none": the current models refuse
-				// disabled with a 400, and left at their default they think adaptively.
-				if (support == null && option == ChatModelThinkingOption.NO_THINKING
-						&& !acceptsEffort(ModelParameterRules.NO_REASONING_EFFORT)) {
-					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Chat model {} ({}) asks for no thinking, which its parameter rules say it refuses:"
-								+ " it is left at the provider default", config.getCode(), modelCode);
-					}
-					option = null;
-				}
-				ThinkingRequest thinking = thinkingRequest(option, support, modelCode);
+				ThinkingRequest thinking = thinkingFor(config.getThinking(), support, modelCode, parameterRules);
 				if (thinking == null && config.getThinking() != null) {
 					if (LOGGER.isDebugEnabled()) {
 						LOGGER.debug("Chat model {} asks for thinking {} but {} cannot express it: the model is left"
@@ -326,6 +319,56 @@ public class AnthropicChatModelConfigurationSupportService
 	 * adaptive thinking with an optional effort level.
 	 */
 	record ThinkingRequest(boolean disabled, OutputConfig.Effort effort) {
+	}
+
+	/**
+	 * The thinking a request asks for an option, as {@link #thinkingRequest} maps it, and
+	 * without the Models API's word no thinking is sent as disabled only to a model the
+	 * parameter rules do not list without "none": the current models refuse disabled with
+	 * a 400, and left at their default they think adaptively. What configureModel sends,
+	 * and what the editors are told.
+	 *
+	 * @param rules the model's parameter rules, may be null
+	 */
+	static ThinkingRequest thinkingFor(ChatModelThinkingOption option, AnthropicThinkingSupport support,
+			String modelCode, ModelParameterRules rules) {
+		if (support == null && option == ChatModelThinkingOption.NO_THINKING && rules != null && rules.knowsEfforts()
+				&& !rules.acceptsEffort(ModelParameterRules.NO_REASONING_EFFORT)) {
+			option = null;
+		}
+		return thinkingRequest(option, support, modelCode);
+	}
+
+	/** How a thinking request reads in the editors, null when nothing is asked. */
+	static String describe(ThinkingRequest thinking) {
+		if (thinking == null)
+			return null;
+		if (thinking.disabled())
+			return "thinking disabled";
+		return thinking.effort() != null ? "adaptive thinking, effort " + thinking.effort().asString()
+				: "adaptive thinking";
+	}
+
+	/**
+	 * No sampling parameter is ever sent (configureModel); the thinking as
+	 * {@link #thinkingFor} asks it, from the Models API capabilities the chosen model
+	 * carries, else the models library's rules.
+	 */
+	@Override
+	public GChatModelParametersSupport parametersSupport(String modelCode, ModelMetaInfo metaInfos,
+			Map<String, Object> modelDetails) {
+		final String providerId = type.getProviderId();
+		final ModelParameterRules rules = modelsLibrary != null && modelCode != null
+				? modelsLibrary.findParameterRules(providerId, modelCode)
+				: null;
+		final AnthropicThinkingSupport support = AnthropicThinkingSupport.readFrom(modelDetails);
+		final GChatModelParametersSupport parameters = GChatModelParametersSupport.of(providerId, modelCode, rules,
+				null, null, true, option -> describe(thinkingFor(option, support, modelCode, rules)));
+		parameters.setTemperature(new GSamplingParameterSupport(GSamplingAvailability.NEVER));
+		parameters.setTopP(new GSamplingParameterSupport(GSamplingAvailability.NEVER));
+		parameters.getSources().add(support != null ? "Anthropic Models API capabilities of the model"
+				: "the model code (no Models API capabilities on the choice)");
+		return parameters;
 	}
 
 	/**

@@ -9,6 +9,9 @@
 
 package ai.gebo.llms.abstraction.layer.services;
 
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
+import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -84,5 +87,22 @@ public interface IGChatModelConfigurationSupportService<ModelChoice extends GBas
 	 */
 	public default GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
 		return GModelCarriedMediaTypes.none();
+	}
+
+	/**
+	 * What a model takes of the parameters a configuration sets (temperature, top_p,
+	 * thinking), as this provider's integration sends them, see
+	 * {@link GChatModelParametersSupport}: the editors enable their controls and offer
+	 * their values by it. An integration telling it computes it with the same decisions
+	 * it builds the model's requests with. Unknown by default: the editors then keep
+	 * every control as it is.
+	 *
+	 * @param modelCode    the model the requests name, may be null when none is chosen yet
+	 * @param metaInfos    the metadata of the chosen model, may be null
+	 * @param modelDetails the provider's details of the chosen model, may be null
+	 */
+	public default GChatModelParametersSupport parametersSupport(String modelCode, ModelMetaInfo metaInfos,
+			java.util.Map<String, Object> modelDetails) {
+		return GChatModelParametersSupport.unknown(getType() != null ? getType().getProviderId() : null, modelCode);
 	}
 }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,7 +29,10 @@ import ai.gebo.architecture.persistence.IGPersistentObjectManager;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.llms.abstraction.layer.controllers.model.ChatModelInputs;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupportRequest;
 import ai.gebo.llms.abstraction.layer.model.GModelCarriedMediaTypes;
+import io.swagger.v3.oas.annotations.Operation;
 import ai.gebo.llms.abstraction.layer.model.GModelInputModality;
 import ai.gebo.llms.abstraction.layer.model.GModelMediaGuard;
 import ai.gebo.llms.abstraction.layer.services.IGChatModelConfigurationSupportService;
@@ -147,6 +151,28 @@ public class ChatModelsController {
             @RequestParam(name = "modelCode", required = false) String modelCode) {
         IGChatModelConfigurationSupportService handler = chatModelsTypesRepo.findByCode(modelTypeCode);
         return handler != null ? handler.carriedMediaTypes(modelCode) : GModelCarriedMediaTypes.none();
+    }
+
+    /**
+     * What a model of a chat model type takes of the parameters its configuration sets
+     * (temperature, top_p, thinking), as the type's integration sends them: the chat
+     * model and agent editors enable their controls and offer their values by it. A type
+     * that does not tell, or none found, gives an unknown one, and the editors keep every
+     * control as it is.
+     */
+    @PostMapping(value = "getChatModelParametersSupport", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @Operation(operationId = "getChatModelParametersSupport",
+            summary = "What a chat model takes of temperature, top_p and thinking, as its integration sends them")
+    public GChatModelParametersSupport getChatModelParametersSupport(
+            @RequestBody GChatModelParametersSupportRequest request) {
+        final IGChatModelConfigurationSupportService handler = request != null && request.getModelTypeCode() != null
+                ? chatModelsTypesRepo.findByCode(request.getModelTypeCode())
+                : null;
+        if (handler == null) {
+            return GChatModelParametersSupport.unknown(null, request != null ? request.getModelCode() : null);
+        }
+        return handler.parametersSupport(request.getModelCode(), request.getMetaInfos(), request.getModelDetails());
     }
 
     /**

@@ -24,10 +24,25 @@ ai.gebo.models.providers.google-vertex:
     # parameter at its default value of 1.0"; lower values "may lead to unexpected
     # behavior" (looping, degraded reasoning). A model with no temperature set is left at
     # it instead of Gebo's 0; a temperature set on the model is still sent.
+    # The Vertex inference reference (2026-11-27): "For Gemini 3.6 Flash and later, custom
+    # values for sampling parameters (temperature, topP, and topK) aren't supported and
+    # are ignored if set": not sent, before the Gemini 3 rule below.
+    - providerId: google-vertex
+      models: ["gemini-3.6*", "gemini-3.7*", "gemini-3.8*", "gemini-3.9*", "gemini-4*"]
+      sampling: IGNORED
+      source: docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference, 2026-11-27
     - providerId: google-vertex
       models: ["gemini-3*"]
       sampling: PROVIDER_DEFAULT
       source: docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3, 2026-10-11
+    # The ranges of the same reference: "Range for Gemini 3 models (3.5 Flash and
+    # earlier): 0.0 - 2.0 (default: 1.0)" for the temperature, "Range: 0.0 - 1.0" for
+    # topP. The page gives none for Gemini 2.5.
+    - providerId: google-vertex
+      models: ["gemini-3-*", "gemini-3.1*", "gemini-3.5*"]
+      temperatureRange: {min: 0, max: 2}
+      topPRange: {min: 0, max: 1}
+      source: docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference, 2026-11-27
   modelsInfo:
     - providerId: google-vertex
       modelId: gemini-2.5-pro

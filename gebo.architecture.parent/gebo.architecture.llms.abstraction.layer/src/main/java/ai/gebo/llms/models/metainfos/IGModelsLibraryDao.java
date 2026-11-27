@@ -83,6 +83,25 @@ public interface IGModelsLibraryDao {
     }
 
     /**
+     * The range of the temperature a model of a provider takes by the library's rules:
+     * the range of the first rule covering it that tells one, the installation's library
+     * first; a rule naming every model of the provider ({@code *}), last in its file,
+     * gives the provider's range.
+     *
+     * @param providerId the provider of the model, as its type declares it
+     * @param modelId    the model id its requests name
+     * @return the range, or null when no rule tells it
+     */
+    public default ModelParameterRules.ValueRange findTemperatureRange(String providerId, String modelId) {
+        return null;
+    }
+
+    /** The range of the top_p a model of a provider takes, as {@link #findTemperatureRange}. */
+    public default ModelParameterRules.ValueRange findTopPRange(String providerId, String modelId) {
+        return null;
+    }
+
+    /**
      * Whether the library knows a model as a chat model: it has an entry of its own
      * saying so, or a rule telling what it accepts as input. The lists of chat models
      * that recognise the other kinds by markers in their ids ("audio", "image") keep
