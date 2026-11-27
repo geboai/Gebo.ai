@@ -50,5 +50,7 @@
 		<module>gebo.glpi.handler</module>
 		<module>gebo.openproject.search.api</module>
 		<module>gebo.openproject.handler</module>
+		<module>gebo.zammad.search.api</module>
+		<module>gebo.zammad.handler</module>
 	</modules>
 </project>
