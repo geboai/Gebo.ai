@@ -66,7 +66,8 @@ class GoogleVertexModelsLibrarySegmentTest {
 	void theGeminiModelsTakeEveryInput() throws Exception {
 		GModelsLibraryDaoImpl library = new GModelsLibraryDaoImpl(new ModelsLibraryConfig(), List.of(GProviderModelsLibrary
 				.load(GoogleVertexModelsLibrary.YML, GoogleVertexModelsLibrary.PREFIX, GoogleVertexModelsLibrary.class)));
-		for (String id : List.of("gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash")) {
+		for (String id : List.of("gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash",
+				"gemini-3.5-flash-lite", "gemini-4-hydrogen", "gemini-4-argon")) {
 			assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.AUDIO,
 					GModelInputModality.VIDEO, GModelInputModality.DOCUMENT),
 					library.findByProviderIdAndModelId("google-vertex", id).getInputModalities(), id);

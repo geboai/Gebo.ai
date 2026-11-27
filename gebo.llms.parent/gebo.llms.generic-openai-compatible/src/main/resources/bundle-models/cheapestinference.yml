@@ -5,15 +5,20 @@
 # /v1/models gives context_length, which the generic lookup does not read (it reads
 # context_window and max_model_len): these entries are where the context comes from.
 ai.gebo.models.providers.cheapestinference:
+  # inputModalities: the model pages (cheapestinference.com/docs/models/<id>, 2026-11-27): image input for Kimi K3.1 Pro
+  # ("images as base64 data URLs"), Qwen 3.8 Max, DeepSeek V4.1 Flash, MiMo V2.6 Flash; GLM 5.3 and
+  # MiniMax M3 ("multimodal input", types unnamed) stay unknown.
   modelsInfo:
     - providerId: cheapestinference
       modelId: kimi-k3.1-pro
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1048576
       informativeUrl: https://cheapestinference.com/docs/getting-started/models/
     - providerId: cheapestinference
       modelId: qwen3.8-max
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -32,12 +37,14 @@ ai.gebo.models.providers.cheapestinference:
       informativeUrl: https://cheapestinference.com/docs/getting-started/models/
     - providerId: cheapestinference
       modelId: deepseek-v4.1-flash
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
       informativeUrl: https://cheapestinference.com/docs/getting-started/models/
     - providerId: cheapestinference
       modelId: mimo-v2.6-flash
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1048576

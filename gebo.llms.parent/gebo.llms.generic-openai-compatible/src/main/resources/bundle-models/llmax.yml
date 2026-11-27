@@ -5,9 +5,11 @@
 # time, "the name is stable". No maximum of output is stated. llmax-smart is routed to a
 # 262K or a 1M model: the smaller window is the one every request fits.
 ai.gebo.models.providers.llmax:
+  # inputModalities: "vision" among each model's capabilities (llmax.ai/models, 2026-11-27).
   modelsInfo:
     - providerId: llmax
       modelId: llmax-all-round
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 262144
@@ -15,6 +17,7 @@ ai.gebo.models.providers.llmax:
       informativeUrl: https://llmax.ai/models
     - providerId: llmax
       modelId: llmax-smart
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 262144
@@ -22,6 +25,7 @@ ai.gebo.models.providers.llmax:
       informativeUrl: https://llmax.ai/models
     - providerId: llmax
       modelId: llmax-best
+      inputModalities: [TEXT, IMAGE]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000

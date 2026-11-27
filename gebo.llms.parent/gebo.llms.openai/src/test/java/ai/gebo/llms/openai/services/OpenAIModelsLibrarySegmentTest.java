@@ -223,10 +223,15 @@ class OpenAIModelsLibrarySegmentTest {
 	void theInputModalitiesOfTheModelsWhoseProviderGivesNoneComeFromTheLibrary() throws Exception {
 		GModelsLibraryDaoImpl library = library();
 		for (String id : List.of("gpt-6.1-sol", "gpt-6-luna", "gpt-6-sol", "gpt-6-astra", "gpt-5.5", "gpt-5.2",
-				"gpt-5.4-mini", "gpt-5", "gpt-4.1", "gpt-4o")) {
+				"gpt-5.4-mini", "gpt-5", "gpt-4.1", "gpt-4o", "gpt-6.2-sol", "gpt-5.6-terra", "gpt-5.5-pro", "o3")) {
 			// images from the model's page; PDF files from the file inputs guide, which
 			// gives them to the models that take images
 			assertEquals(List.of(GModelInputModality.TEXT, GModelInputModality.IMAGE, GModelInputModality.DOCUMENT),
+					library.findByProviderIdAndModelId("openai", id).getInputModalities(), id);
+		}
+		// gpt-oss: "Input modalities: text" on its page
+		for (String id : List.of("gpt-oss-120b", "gpt-oss-20b")) {
+			assertEquals(List.of(GModelInputModality.TEXT),
 					library.findByProviderIdAndModelId("openai", id).getInputModalities(), id);
 		}
 	}

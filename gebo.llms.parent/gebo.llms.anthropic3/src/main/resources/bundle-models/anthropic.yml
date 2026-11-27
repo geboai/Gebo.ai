@@ -12,9 +12,12 @@
 # Mythos Preview has no id on them and no entry.
 # Rules: the first one covering a model applies; "*" stands for any characters.
 ai.gebo.models.providers.anthropic:
+  # inputModalities: "All current models support text and image input, text output" (models overview), vision and
+  # PDF on every model listed (build-with-claude/vision and /pdf-support, 2026-11-27); no audio or video.
   modelsInfo:
     - providerId: anthropic
       modelId: claude-fable-5-2
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -23,6 +26,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/fable-5-2/overview
     - providerId: anthropic
       modelId: claude-opus-5-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -31,6 +35,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-5-5/overview
     - providerId: anthropic
       modelId: claude-sonnet-5-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -39,6 +44,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/sonnet-5-5/overview
     - providerId: anthropic
       modelId: claude-haiku-5-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -47,6 +53,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/haiku-5-5/overview
     - providerId: anthropic
       modelId: claude-mythos-5-2
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -55,6 +62,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/mythos-5-2/overview
     - providerId: anthropic
       modelId: claude-fable-5-1
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -63,6 +71,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/fable-5-1/overview
     - providerId: anthropic
       modelId: claude-mythos-5-1
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -71,6 +80,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/mythos-5-1/overview
     - providerId: anthropic
       modelId: claude-fable-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -79,6 +89,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/fable-5/overview
     - providerId: anthropic
       modelId: claude-mythos-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -87,6 +98,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/mythos-5/overview
     - providerId: anthropic
       modelId: claude-opus-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -95,6 +107,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-5/overview
     - providerId: anthropic
       modelId: claude-sonnet-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -103,6 +116,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/sonnet-5/overview
     - providerId: anthropic
       modelId: claude-opus-4-8
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -111,6 +125,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-4-8/overview
     - providerId: anthropic
       modelId: claude-opus-4-7
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -119,6 +134,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-4-7/overview
     - providerId: anthropic
       modelId: claude-opus-4-6
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -127,6 +143,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-4-6/overview
     - providerId: anthropic
       modelId: claude-sonnet-4-6
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 1000000
@@ -135,6 +152,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/sonnet-4-6/overview
     - providerId: anthropic
       modelId: claude-opus-4-5-20251101
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000
@@ -143,6 +161,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-4-5/overview
     - providerId: anthropic
       modelId: claude-opus-4-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000
@@ -151,6 +170,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/opus-4-5/overview
     - providerId: anthropic
       modelId: claude-sonnet-4-5-20250929
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000
@@ -159,6 +179,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/sonnet-4-5/overview
     - providerId: anthropic
       modelId: claude-sonnet-4-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000
@@ -167,6 +188,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/sonnet-4-5/overview
     - providerId: anthropic
       modelId: claude-haiku-4-5-20251001
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000
@@ -175,6 +197,7 @@ ai.gebo.models.providers.anthropic:
       informativeUrl: https://platform.claude.com/docs/en/models/haiku-4-5/overview
     - providerId: anthropic
       modelId: claude-haiku-4-5
+      inputModalities: [TEXT, IMAGE, DOCUMENT]
       chatModel: true
       embeddingModel: false
       contextLength: 200000

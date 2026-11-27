@@ -11,9 +11,11 @@ ai.gebo.models.providers.groq:
   # below the window, so contextLength is the window. llama-3.1-8b-instant and
   # llama-3.3-70b-versatile were shut down on 2026-08-16 for the free and developer tiers;
   # enterprise contracts keep them. Their input modalities come from the rules below.
+  # inputModalities: "INPUT Text OUTPUT Text" on each model page (console.groq.com/docs/model/<id>, 2026-11-27).
   modelsInfo:
     - providerId: groq
       modelId: llama-3.1-8b-instant
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -22,6 +24,7 @@ ai.gebo.models.providers.groq:
       informativeUrl: https://console.groq.com/docs/model/llama-3.1-8b-instant
     - providerId: groq
       modelId: llama-3.3-70b-versatile
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -30,6 +33,7 @@ ai.gebo.models.providers.groq:
       informativeUrl: https://console.groq.com/docs/model/llama-3.3-70b-versatile
     - providerId: groq
       modelId: openai/gpt-oss-120b
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -38,6 +42,7 @@ ai.gebo.models.providers.groq:
       informativeUrl: https://console.groq.com/docs/model/openai/gpt-oss-120b
     - providerId: groq
       modelId: openai/gpt-oss-20b
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -46,6 +51,7 @@ ai.gebo.models.providers.groq:
       informativeUrl: https://console.groq.com/docs/model/openai/gpt-oss-20b
     - providerId: groq
       modelId: openai/gpt-oss-safeguard-20b
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 131072
@@ -62,6 +68,7 @@ ai.gebo.models.providers.groq:
       informativeUrl: https://console.groq.com/docs/model/meta-models/muse-spark-open
     - providerId: groq
       modelId: minimaxai/minimax-m2.7
+      inputModalities: [TEXT]
       chatModel: true
       embeddingModel: false
       contextLength: 196608

@@ -60,5 +60,15 @@ class CompatibleModelsLibrarySegmentsTest {
 		assertEquals(ai.gebo.llms.models.metainfos.ModelParameterRules.Sampling.PROVIDER_DEFAULT,
 				library.findParameterRules("openrouter.ai", "google/gemini-3.8-flash").getSampling());
 		assertNull(library.findParameterRules("openrouter.ai", "google/gemini-2.5-flash"));
+
+		// what the models take as input, from the providers' pages
+		assertEquals(List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT),
+				library.findByProviderIdAndModelId("groq", "openai/gpt-oss-20b").getInputModalities());
+		assertEquals(List.of(ai.gebo.llms.abstraction.layer.model.GModelInputModality.TEXT,
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.IMAGE,
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.AUDIO,
+				ai.gebo.llms.abstraction.layer.model.GModelInputModality.VIDEO),
+				library.findByProviderIdAndModelId("nvidia", "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning")
+						.getInputModalities());
 	}
 }

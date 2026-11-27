@@ -43,6 +43,9 @@ ai.gebo.models.providers.google-vertex:
       temperatureRange: {min: 0, max: 2}
       topPRange: {min: 0, max: 1}
       source: docs.cloud.google.com/vertex-ai/generative-ai/docs/model-reference/inference, 2026-11-27
+  # inputModalities: the model pages' Modalities row "Text Input and output Image Input only Audio Input only Video
+  # Input only", PDF among the text MIME types (gemini-enterprise-agent-platform/models/gemini/<id>,
+  # 2026-11-27); the preview models and Gemini 4 Neon have no page there and stay unknown.
   modelsInfo:
     - providerId: google-vertex
       modelId: gemini-2.5-pro
@@ -127,6 +130,7 @@ ai.gebo.models.providers.google-vertex:
     # (2026-11-26); their input modalities were not read and are not declared.
     - providerId: google-vertex
       modelId: gemini-3.5-flash-lite
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       contextLength: 1048576
       maxOutputToken: 65536
       chatModel: true
@@ -134,6 +138,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite
     - providerId: google-vertex
       modelId: gemini-3.8-flash-cyber
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       contextLength: 1048576
       maxOutputToken: 65536
       chatModel: true
@@ -166,6 +171,7 @@ ai.gebo.models.providers.google-vertex:
     # for "Verified enterprise customers in select regions".
     - providerId: google-vertex
       modelId: gemini-4-argon
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       contextLength: 1048576
       maxOutputToken: 65536
       chatModel: true
@@ -173,6 +179,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon
     - providerId: google-vertex
       modelId: gemini-4-carbon
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       contextLength: 1048576
       maxOutputToken: 65536
       chatModel: true
@@ -180,6 +187,7 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-carbon
     - providerId: google-vertex
       modelId: gemini-4-hydrogen
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       contextLength: 1048576
       maxOutputToken: 65536
       chatModel: true
