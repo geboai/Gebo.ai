@@ -190,6 +190,33 @@ class LLMUsageDailyAggregationServiceImplTest {
 	}
 
 	@Test
+	void theInputAndOutputPartsOfTheCostAreSummedOverTheCallsThatRecordedThem() {
+		long now = System.currentTimeMillis();
+		LLMUsageDetail a = raw(now, 10, 100);
+		a.setCost(0.30);
+		a.setInputCost(0.10);
+		a.setOutputCost(0.20);
+		a.setCurrencyCode("USD");
+		LLMUsageDetail b = raw(now, 10, 100);
+		b.setCost(0.60);
+		b.setInputCost(0.15);
+		b.setOutputCost(0.40);
+		b.setCurrencyCode("USD");
+		// recorded before the parts existed
+		LLMUsageDetail older = raw(now, 10, 100);
+		older.setCost(0.50);
+		older.setCurrencyCode("USD");
+
+		LLMDailyUsageDetail daily = consolidateOne(List.of(a, b, older));
+
+		assertEquals(3, daily.getCostSamples());
+		assertEquals(2, daily.getCostSplitSamples());
+		assertEquals(1.40, daily.getCost(), 1e-12);
+		assertEquals(0.25, daily.getInputCost(), 1e-12);
+		assertEquals(0.60, daily.getOutputCost(), 1e-12);
+	}
+
+	@Test
 	void costsInSeveralCurrenciesAreNotSummed() {
 		long now = System.currentTimeMillis();
 		LLMUsageDetail usd = raw(now, 10, 100);

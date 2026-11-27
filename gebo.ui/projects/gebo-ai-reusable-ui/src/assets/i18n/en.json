@@ -6557,7 +6557,14 @@
       "UsernameFilterChip": { "label": "User" },
       "CallerStackFilterChip": { "label": "Caller stack" },
       "YearFilterChip": { "label": "Year" },
-      "MonthFilterChip": { "label": "Month" }
+      "MonthFilterChip": { "label": "Month" },
+      "ExportExcelBtn": {
+        "label": "Export to Excel",
+        "help": "Save the usage shown as an Excel workbook: one line per user, month, provider and model, with tokens and costs"
+      },
+      "ExportExcelFailedLabel": {
+        "label": "The usage could not be exported: try again."
+      }
     },
     "GeboAILLMSUsageUserDashboardComponent": {
       "noLLMStatsLabel": { "label": "no llms traffic generated yet" },
@@ -6645,7 +6652,14 @@
       "UsernameFilterChip": { "label": "User" },
       "CallerStackFilterChip": { "label": "Caller stack" },
       "YearFilterChip": { "label": "Year" },
-      "MonthFilterChip": { "label": "Month" }
+      "MonthFilterChip": { "label": "Month" },
+      "ExportExcelBtn": {
+        "label": "Export to Excel",
+        "help": "Save the usage shown as an Excel workbook: one line per user, month, provider and model, with tokens and costs"
+      },
+      "ExportExcelFailedLabel": {
+        "label": "The usage could not be exported: try again."
+      }
     }
   },
   "GeboAIChatModelRoleModule": {

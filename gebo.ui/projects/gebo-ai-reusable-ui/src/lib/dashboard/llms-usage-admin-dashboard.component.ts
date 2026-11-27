@@ -36,4 +36,8 @@ export class GeboAILLMSUsageAdminDashboardComponent extends BaseLLMSUsageDashboa
   executeDrillDown(filter: LLMUsageDrillDownLevel): Observable<LLMUsageDrillDownResult> {
     return this.adminService.adminDrillDown(filter);
   }
+
+  exportExcelPath(): string {
+    return "api/admin/LLMSUsageAdminLevelController/exportExcel";
+  }
 }

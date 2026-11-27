@@ -8,10 +8,13 @@
  */
 
 import { Directive, inject, OnInit } from "@angular/core";
-import { 
-  LLMUsageDrillDownLevel, 
-  LLMUsageDrillDownResult, 
-  LLMUsageAggregationBucket 
+import { HttpClient } from "@angular/common/http";
+import {
+  BASE_PATH,
+  Configuration,
+  LLMUsageDrillDownLevel,
+  LLMUsageDrillDownResult,
+  LLMUsageAggregationBucket
 } from "@Gebo.ai/gebo-ai-rest-api";
 import { Observable } from "rxjs";
 import { GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../controls/field-host-component-iface/field-host-component-iface";
@@ -47,6 +50,14 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   activeFiltersTab1: LLMUsageActiveFilter[] = [];
   activeFiltersTab2: LLMUsageActiveFilter[] = [];
 
+  /** True while the Excel export is being prepared. */
+  exporting: boolean = false;
+  /** True when the last Excel export failed. */
+  exportFailed: boolean = false;
+
+  private httpClient = inject(HttpClient);
+  private basePath = inject(BASE_PATH, { optional: true });
+  private apiConfiguration = inject(Configuration, { optional: true });
   private translationService = inject(GeboAITranslationService);
   private moduleId = inject(GEBO_AI_MODULE, { optional: true });
   private fieldHost = inject(GEBO_AI_FIELD_HOST, { optional: true });
@@ -174,6 +185,45 @@ export abstract class BaseLLMSUsageDashboardComponent implements OnInit {
   }
 
   abstract executeDrillDown(filter: LLMUsageDrillDownLevel): Observable<LLMUsageDrillDownResult>;
+
+  /** The path of the Excel export of the usage, under the API base path. */
+  abstract exportExcelPath(): string;
+
+  /**
+   * Saves the usage the charts show (the applied filter) as an Excel workbook: one
+   * line per user, month, provider and model, with tokens and costs.
+   */
+  exportExcel(): void {
+    const base = this.basePath || this.apiConfiguration?.basePath || "";
+    this.exporting = true;
+    this.exportFailed = false;
+    this.httpClient.post(`${base}/${this.exportExcelPath()}`, this.appliedFilter, {
+      responseType: "blob",
+      observe: "response"
+    }).subscribe({
+      next: (response) => {
+        const blob = response.body as Blob;
+        const disposition = response.headers.get("Content-Disposition") || "";
+        const named = /filename="?([^";]+)"?/.exec(disposition);
+        const fileName = named ? named[1] : `gebo-llm-usage-${new Date().toISOString().slice(0, 10)}.xlsx`;
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = fileName;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        this.exporting = false;
+      },
+      error: (err) => {
+        console.error("Error exporting the LLM usage", err);
+        this.exporting = false;
+        this.exportFailed = true;
+      }
+    });
+  }
 
   loadData(filter: LLMUsageDrillDownLevel): void {
     const applied = BaseLLMSUsageDashboardComponent.normalized(filter);

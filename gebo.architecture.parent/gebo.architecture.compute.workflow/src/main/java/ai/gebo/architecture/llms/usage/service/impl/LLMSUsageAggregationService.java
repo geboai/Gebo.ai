@@ -176,7 +176,12 @@ public class LLMSUsageAggregationService {
 		return new AggregationOperation[] { group };
 	}
 
-	private Criteria buildMatch(LLMUsageDrillDownLevel c, String effectiveUsername, boolean forceCurrentMonth) {
+	/**
+	 * The daily documents the drill down criteria select: every non-null field is an
+	 * equality filter; with {@code forceCurrentMonth} the period is the current month
+	 * whatever the criteria say. The export selects the monthly dataset's ones.
+	 */
+	static Criteria buildMatch(LLMUsageDrillDownLevel c, String effectiveUsername, boolean forceCurrentMonth) {
 		List<Criteria> parts = new ArrayList<>();
 
 		if (c != null) {

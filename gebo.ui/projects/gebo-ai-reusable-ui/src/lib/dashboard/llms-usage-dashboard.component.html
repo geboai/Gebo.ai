@@ -108,7 +108,15 @@
                 <p-button id="ResetFilterBtn" gebo-ai-label label="Reset" icon="pi pi-refresh" severity="secondary" (onClick)="resetFilter(2)"
                 class="flex-grow-1"></p-button>
               </div>
+              <div class="col-12 sm:col-6 md:col-3 lg:col-2">
+                <p-button id="ExportExcelBtn" gebo-ai-label label="Export to Excel" icon="pi pi-file-excel" severity="success"
+                [outlined]="true" [loading]="exporting" [disabled]="loading || exporting" (onClick)="exportExcel()"
+                styleClass="w-full"></p-button>
+              </div>
             </div>
+            @if (exportFailed) {
+              <div id="ExportExcelFailedLabel" gebo-ai-text class="text-xs text-red-600 mt-2">The usage could not be exported: try again.</div>
+            }
           </div>
           <!-- Active filters: what the charts below show -->
           <div class="active-filters" role="status" aria-live="polite">

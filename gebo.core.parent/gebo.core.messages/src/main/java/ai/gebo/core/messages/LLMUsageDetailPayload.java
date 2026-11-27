@@ -57,6 +57,13 @@ public class LLMUsageDetailPayload extends GBaseMessagePayload {
 	private Double cost;
 	/** ISO 4217 currency of {@link #cost}. */
 	private String currencyCode;
+	/**
+	 * The part of {@link #cost} due to the input tokens; null when the call is not
+	 * priced per token, and in a payload sent before it existed.
+	 */
+	private Double inputCost;
+	/** The part of {@link #cost} due to the output tokens; null as {@link #inputCost}. */
+	private Double outputCost;
 	private long inputToken;
 	private long outputToken;
 	private long totalToken;
