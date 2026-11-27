@@ -360,16 +360,14 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: embedding-google-vertex
           doModelsLookup: true
           choices:
-            # Both retire on April 1, 2027 (model-versions, 2026-11-27), within six months,
-            # but they are still the only ones the embedding-google-vertex handler offers: the
-            # gemini-embedding models (gemini-embedding-001, no sooner than May 20, 2028;
-            # gemini-embedding-2) take one text per request, which its batched requests do
-            # not respect (GoogleVertexEmbeddingModelConfigurationSupportService).
-            - code: text-multilingual-embedding-002
-              description: Text multilingual embedding 002
+            # text-multilingual-embedding-002 and text-embedding-005 retire on April 1, 2027
+            # (model-versions, 2026-11-27). gemini-embedding-001, no sooner than May 20, 2028,
+            # "unifies the previously specialized models like text-embedding-005 and
+            # text-multilingual-embedding-002" (get-text-embeddings): multilingual, 3072
+            # dimensions, sent one text per request as it requires (SingleTextEmbeddingModel).
+            - code: gemini-embedding-001
+              description: Gemini embedding 001 (multilingual)
               defaultChoice: true
-            - code: text-embedding-005
-              description: Text embedding 005 (English and code)
 
     - vendorInfo:
         vendorId: deepseek

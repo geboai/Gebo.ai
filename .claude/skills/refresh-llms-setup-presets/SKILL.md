@@ -36,10 +36,10 @@ quoted with its URL and date; never from memory.**
 2. **Callable by its integration:** a replacement must be one the module's handler can call
    (endpoint, api, batching). Check the model page's endpoints against the handler before
    presetting it - e.g. OpenAI's TTS replacement `gpt-realtime-2.1-mini` takes only
-   `v1/realtime`, which `openai-tts` (`/v1/audio/speech`) cannot call; Vertex's
-   `gemini-embedding-*` take one text per request, which `embedding-google-vertex` does not
-   send. When no callable replacement exists, say so: keep or drop the preset by the user's
-   decision, and report the integration work it needs.
+   `v1/realtime`, which `openai-tts` (`/v1/audio/speech`) cannot call. When no callable
+   replacement exists, say so: keep or drop the preset by the user's decision, and report
+   the integration work it needs (as Vertex's `gemini-embedding-001`, one text per request,
+   needed `SingleTextEmbeddingModel` in `embedding-google-vertex`).
 3. **Thinking:** a chat model (`uses: CHAT`) `thinking: MEDIUM_THINKING` where the model
    takes a thinking level; a service model (`uses: INTERNAL_SERVICES`) `NO_THINKING` where
    the model can stop thinking, else `LOW_THINKING` (`internalServicesThinking` for a model
