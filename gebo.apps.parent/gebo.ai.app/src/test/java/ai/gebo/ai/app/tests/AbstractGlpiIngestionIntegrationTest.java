@@ -14,6 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
@@ -30,15 +32,22 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
+import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
 import ai.gebo.glpi.handler.GGlpiProjectEndpoint;
 import ai.gebo.glpi.handler.GGlpiSystem;
 import ai.gebo.glpi.handler.controllers.GlpiSystemsController;
 import ai.gebo.glpi.handler.impl.GlpiContentManagementHandlerImpl;
 import ai.gebo.glpi.handler.impl.GlpiNavigationUtil;
+import ai.gebo.glpi.handler.impl.GlpiSearchService;
 import ai.gebo.glpi.handler.impl.GlpiSystemsTestService;
 import ai.gebo.glpi.handler.repositories.GlpiSystemRepository;
+import ai.gebo.glpi.search.api.GlpiSearchFilter;
+import ai.gebo.glpi.search.api.GlpiSearchFilter.GlpiItemKind;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
 import ai.gebo.model.OperationStatus;
+import ai.gebo.model.base.TypedInputStream;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.secrets.model.GeboOauth2SecretContent;
 import ai.gebo.secrets.model.GeboUsernamePasswordContent;
@@ -55,7 +64,8 @@ import ai.gebo.secrets.model.GeboUsernamePasswordContent;
  * entity with two tickets (follow-ups, a task, a solution and two attached
  * files, one of them a PDF) and two knowledge base articles. A data source
  * selecting the entity must ingest every ticket body, timeline item, attached
- * file and article as its own document, with their text in the vectors.
+ * file and article as its own document, with their text in the vectors; the
+ * live search service then finds them and streams them back.
  */
 public abstract class AbstractGlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	/** The default Super-Admin account of a fresh GLPI install */
@@ -100,6 +110,8 @@ public abstract class AbstractGlpiIngestionIntegrationTest extends AbstractBaseT
 	GlpiSystemRepository glpiSystemsRepository;
 	@Autowired
 	GlpiSystemsTestService glpiSystemsTestService;
+	@Autowired
+	GlpiSearchService glpiSearchService;
 
 	@Test
 	public void testGlpiIngestion() throws Exception {
@@ -158,10 +170,53 @@ public abstract class AbstractGlpiIngestionIntegrationTest extends AbstractBaseT
 		assertNotNull(glpiSystemsRepository.findById(system.getCode()).orElse(null),
 				"The GLPI system must still be resolvable after ingestion");
 
+		// the live search the chat agents use, on the same GLPI: a text search, a
+		// native one, and the results streamed back as the ingestion reads them
+		final String systemCode = system.getCode();
+		SearchableSystemMetaData searchable = glpiSearchService.getSearchableSystems().stream()
+				.filter(m -> m.getSystemConfigurationReference() instanceof GGlpiSystem s
+						&& systemCode.equals(s.getCode()))
+				.findFirst().orElse(null);
+		assertNotNull(searchable, "The GLPI system must be among the searchable systems");
+		SearchQuery text = new SearchQuery();
+		text.setQueryText("VPN evening");
+		SearchResult vpnTicket = withTitle(glpiSearchService.search(text, searchable, 10), "VPN drops every evening");
+		assertEquals(5, vpnTicket.getChilds().size(),
+				"The VPN ticket result holds its solution, 2 follow-ups, task and document");
+		assertTrue(load(vpnTicket).contains("drops every evening around 18:00"),
+				"The VPN ticket result streams the ticket body");
+		SearchResult attachedLog = vpnTicket.getChilds().stream().filter(c -> c.getId().startsWith("glpi-document-"))
+				.findFirst().orElseThrow();
+		assertTrue(load(attachedLog).contains("IKE SA rekey failed: lifetime mismatch"),
+				"The document child streams the attached file");
+
+		GlpiSearchFilter articles = new GlpiSearchFilter();
+		articles.setItemKinds(List.of(GlpiItemKind.KB_ARTICLE));
+		articles.setTitleTerms(List.of("printer"));
+		List<SearchResult> found = glpiSearchService.nativeSearch(articles, searchable, 10);
+		assertEquals(1, found.size(), "One knowledge base article has \"printer\" in its title: " + found);
+		assertTrue(load(withTitle(found, "How to reset the office printer")).contains("Hold the reset button"),
+				"The article result streams the article");
+
 		cleanPersistent(endpoint);
 		persistentObjectManager.delete(system);
 		secretsAccessService.deleteSecret(clientSecretId);
 		secretsAccessService.deleteSecret(userSecretId);
+	}
+
+	private static SearchResult withTitle(List<SearchResult> results, String title) {
+		return results.stream()
+				.filter(r -> r.getResultReference() != null && r.getResultReference().getTitle() != null
+						&& r.getResultReference().getTitle().contains(title))
+				.findFirst().orElseThrow(() -> new AssertionError("No search result titled " + title + ": " + results));
+	}
+
+	private String load(SearchResult result) throws Exception {
+		TypedInputStream content = glpiSearchService.loadSearchResult(result);
+		assertNotNull(content, "The search result " + result.getId() + " must be loadable");
+		try (InputStream in = content.getInputStream()) {
+			return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+		}
 	}
 
 	private static void assertContains(List<Document> stored, String text, String what) {
