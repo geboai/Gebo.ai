@@ -47,6 +47,8 @@ import ai.gebo.llms.abstraction.layer.services.IGLlmsServiceClientsProviderFacto
 import ai.gebo.llms.abstraction.layer.services.LLMConfigException;
 import ai.gebo.llms.abstraction.layer.services.ModelRuntimeConfigureHandler;
 import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
 import ai.gebo.llms.openai.api.utils.IGOpenAIApiUtil;
 import ai.gebo.llms.openai.http.OpenAiClientCustomizer;
 import ai.gebo.llms.openai.model.GOpenAIChatModelChoice;
@@ -182,10 +184,14 @@ public class OpenAIChatModelConfigurationSupportService
 			if (maxGeneratedTokens != null) {
 				builder.maxCompletionTokens(maxGeneratedTokens);
 			}
-			// The effort among the ones the model's parameter rules list: no thinking is
-			// sent as none where the model takes it, an effort the model refuses leaves its
-			// default (see GAbstractConfigurableChatModel.reasoningEffortFor).
-			final String effort = reasoningEffortFor(config.getThinking());
+			// The effort among the ones the model's parameter rules list, the nearest to the
+			// thinking asked (see GAbstractConfigurableChatModel.reasoningEffortFor); none to
+			// a model its metadata or the models library say does not reason, which refuses
+			// the parameter.
+			final String effort = Boolean.FALSE.equals(modelReasons(
+					config.getChoosedModel() != null ? config.getChoosedModel().getCode() : null,
+					config.getChoosedModel() != null ? config.getChoosedModel().getMetaInfos() : null)) ? null
+							: reasoningEffortFor(config.getThinking());
 			if (effort != null) {
 				builder.reasoningEffort(effort);
 			}
@@ -363,6 +369,39 @@ public class OpenAIChatModelConfigurationSupportService
 			throws GeboPersistenceException, LLMConfigException {
 
 		return configureHandler.insertAndConfigure(config, type);
+	}
+
+	/**
+	 * Whether a model reasons, as the chosen model's metadata tells, else the models
+	 * library's entry of the model; null when neither tells.
+	 */
+	Boolean modelReasons(String modelCode, ModelMetaInfo metaInfos) {
+		if (metaInfos != null && metaInfos.getSupportsReasoning() != null)
+			return metaInfos.getSupportsReasoning();
+		final ModelMetaInfo entry = modelsLibrary != null && modelCode != null
+				? modelsLibrary.findByProviderIdAndModelId(type.getProviderId(), modelCode)
+				: null;
+		return entry != null ? entry.getSupportsReasoning() : null;
+	}
+
+	/**
+	 * The sampling parameters as the model's parameter rules let them go, with the ranges
+	 * of OpenAI's api reference; the thinking as {@code reasoning_effort}, the nearest
+	 * effort the model lists (see GAbstractConfigurableChatModel.reasoningEffortFor),
+	 * none to a model that does not reason: what configureModel sends.
+	 */
+	@Override
+	public GChatModelParametersSupport parametersSupport(String modelCode, ModelMetaInfo metaInfos,
+			java.util.Map<String, Object> modelDetails) {
+		final String providerId = type.getProviderId();
+		final ModelParameterRules rules = modelsLibrary != null && modelCode != null
+				? modelsLibrary.findParameterRules(providerId, modelCode)
+				: null;
+		final boolean reasons = !Boolean.FALSE.equals(modelReasons(modelCode, metaInfos));
+		return GChatModelParametersSupport.of(providerId, modelCode, rules,
+				modelsLibrary != null ? modelsLibrary.findTemperatureRange(providerId, modelCode) : null,
+				modelsLibrary != null ? modelsLibrary.findTopPRange(providerId, modelCode) : null, reasons,
+				option -> GAbstractConfigurableChatModel.reasoningEffortFor(option, rules));
 	}
 
 	/**

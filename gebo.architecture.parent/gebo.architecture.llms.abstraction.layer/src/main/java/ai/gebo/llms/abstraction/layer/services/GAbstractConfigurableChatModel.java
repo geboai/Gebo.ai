@@ -409,43 +409,76 @@ public abstract class GAbstractConfigurableChatModel<ModelConfig extends GBaseCh
 
 	/**
 	 * The reasoning effort a request sends for a thinking option, as the OpenAI compatible
-	 * APIs spell it ({@code reasoning_effort}): {@code none} for no thinking, low, medium
-	 * and high as asked, each only when the model's parameter rules list it; null to send
-	 * none and leave the provider default. Without rules knowing the model's efforts, low,
-	 * medium and high are sent as asked and no thinking sends nothing, the value that
-	 * turns the reasoning off differing per backend.
+	 * APIs spell it ({@code reasoning_effort}), see
+	 * {@link #reasoningEffortFor(ChatModelThinkingOption, ModelParameterRules)}.
 	 */
 	protected String reasoningEffortFor(ChatModelThinkingOption option) {
-		if (option == null)
+		final String effort = reasoningEffortFor(option, parameterRules);
+		if (LOGGER.isDebugEnabled() && option != null && option != ChatModelThinkingOption.AUTO) {
+			LOGGER.debug("Chat model code=" + getCode() + " thinking " + option + " sent as effort " + effort
+					+ " (efforts " + (parameterRules != null ? parameterRules.getReasoningEfforts() : null) + ")");
+		}
+		return effort;
+	}
+
+	/**
+	 * The reasoning effort a request sends for a thinking option, as the OpenAI compatible
+	 * APIs spell it ({@code reasoning_effort}); null to send none and leave the provider
+	 * default. Automatic sends none.
+	 * <p>
+	 * Where the model's parameter rules list its efforts, the effort is one of them, the
+	 * nearest on {@link ModelParameterRules#EFFORT_SCALE}: no thinking is {@code none}
+	 * where listed, else the least reasoning listed; low and medium are the listed value
+	 * nearest to theirs, the nearest lower one on a tie, never {@code none} (asking some
+	 * thinking does not turn it off); high is the most reasoning listed, as the Anthropic
+	 * and DeepSeek integrations read it. An effort a model lists off the scale is never
+	 * chosen.
+	 * <p>
+	 * Without rules knowing the model's efforts, low, medium and high are sent as asked
+	 * and no thinking sends nothing, the value that turns the reasoning off differing per
+	 * backend.
+	 */
+	public static String reasoningEffortFor(ChatModelThinkingOption option, ModelParameterRules rules) {
+		if (option == null || option == ChatModelThinkingOption.AUTO)
 			return null;
-		final String effort;
+		final String asked = switch (option) {
+		case NO_THINKING -> ModelParameterRules.NO_REASONING_EFFORT;
+		case LOW_THINKING -> "low";
+		case MEDIUM_THINKING -> "medium";
+		case HIGH_THINKING -> "high";
+		default -> null;
+		};
+		if (asked == null)
+			return null;
+		if (rules == null || !rules.knowsEfforts())
+			return option == ChatModelThinkingOption.NO_THINKING ? null : asked;
+		final List<String> scale = ModelParameterRules.EFFORT_SCALE;
+		final List<String> listed = scale.stream().filter(rules::acceptsEffort).toList();
 		switch (option) {
 		case NO_THINKING:
-			effort = ModelParameterRules.NO_REASONING_EFFORT;
-			break;
-		case LOW_THINKING:
-			effort = "low";
-			break;
-		case MEDIUM_THINKING:
-			effort = "medium";
-			break;
-		case HIGH_THINKING:
-			effort = "high";
-			break;
-		default:
-			// AUTO: the provider default
-			return null;
+			return listed.isEmpty() ? null : listed.get(0);
+		case HIGH_THINKING: {
+			final List<String> reasoning = listed.stream()
+					.filter(e -> !ModelParameterRules.NO_REASONING_EFFORT.equals(e)).toList();
+			return reasoning.isEmpty() ? null : reasoning.get(reasoning.size() - 1);
 		}
-		if (parameterRules == null || !parameterRules.knowsEfforts())
-			return option == ChatModelThinkingOption.NO_THINKING ? null : effort;
-		if (parameterRules.acceptsEffort(effort))
-			return effort;
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Chat model code=" + getCode() + " thinking " + option + ": effort " + effort
-					+ " is not among the accepted " + parameterRules.getReasoningEfforts()
-					+ ", the provider default is left");
+		default: {
+			final int target = scale.indexOf(asked);
+			String nearest = null;
+			int distance = Integer.MAX_VALUE;
+			for (String effort : listed) {
+				if (ModelParameterRules.NO_REASONING_EFFORT.equals(effort))
+					continue;
+				final int d = Math.abs(scale.indexOf(effort) - target);
+				// listed from the least reasoning: a tie keeps the lower one
+				if (d < distance) {
+					distance = d;
+					nearest = effort;
+				}
+			}
+			return nearest;
 		}
-		return null;
+		}
 	}
 
 	/**

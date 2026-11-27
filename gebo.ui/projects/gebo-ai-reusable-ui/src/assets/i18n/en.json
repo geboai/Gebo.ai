@@ -3119,7 +3119,7 @@
     "GeboAIStandardChatModelSettings": {
       "temperature": {
         "label": "Temperature",
-        "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"
+        "help": "Temperature the model will respond (if unsure leave empty)"
       },
       "contextLength": {
         "label": "Context length (tokens)",
@@ -3139,6 +3139,14 @@
       },
       "TemperatureRangeLabel": { "label": "Allowed range:" },
       "TopPRangeLabel": { "label": "Allowed range:" },
+      "TemperatureNotSentLabel": { "label": "Not sent: this model does not take it" },
+      "TemperatureWithoutThinkingLabel": { "label": "Sent only with thinking disabled" },
+      "TemperatureProviderDefaultLabel": { "label": "Empty: the provider's default" },
+      "TemperatureZeroDefaultLabel": { "label": "Empty: 0, for answers that do not vary" },
+      "TopPNotSentLabel": { "label": "Not sent: this model does not take it" },
+      "TopPWithoutThinkingLabel": { "label": "Sent only with thinking disabled" },
+      "ThinkingNotSentLabel": { "label": "No thinking choice reaches this model" },
+      "ThinkingSavedNotSentLabel": { "label": "The saved choice sends nothing to this model: pick one of the list" },
       "ContextLengthDefaultLabel": { "label": "Used when not set:" },
       "inputModalities": { "label": "Accepts as input", "help": "What the model takes as input, as its provider or the models library tells; empty means text only. A file goes to the model as it is when the model accepts its kind here and this provider's integration can deliver its type." },
       "SentFileTypesLabel": { "label": "Files sent to this model as they are:" },
@@ -5030,9 +5038,17 @@
         "help": "With every library mounted, these libraries are never mounted on this agent, unless named above."
       },
       "LibrariesOnlyWhenNamedHint": { "label": "Mounted only when named above:" },
+      "TemperatureNotSentLabel": { "label": "Not sent: the agent's model does not take it" },
+      "TemperatureRangeLabel": { "label": "Allowed range:" },
+      "TemperatureWithoutThinkingLabel": { "label": "Sent only with thinking disabled" },
+      "TopPNotSentLabel": { "label": "Not sent: the agent's model does not take it" },
+      "TopPRangeLabel": { "label": "Allowed range:" },
+      "TopPWithoutThinkingLabel": { "label": "Sent only with thinking disabled" },
+      "ThinkingNotSentLabel": { "label": "No thinking choice reaches the agent's model" },
+      "ThinkingSavedNotSentLabel": { "label": "The saved choice sends nothing to the agent's model: pick one of the list" },
       "temperature": {
         "label": "Temperature",
-        "help": "Temperature the model will respond, from 0 to 1 (if unsure leave empty)"
+        "help": "Temperature the model will respond (if unsure leave empty)"
       },
       "thinking": {
         "label": "Thinking efforts",
@@ -5040,7 +5056,7 @@
       },
       "topP": {
         "label": "TopP",
-        "help": "TopP parameter, from 0 to 1 (if unsure leave empty)"
+        "help": "TopP parameter (if unsure leave empty)"
       },
       "warnSystemAgent": {
         "label": "This is a default system agent, you cannot change its configuration"

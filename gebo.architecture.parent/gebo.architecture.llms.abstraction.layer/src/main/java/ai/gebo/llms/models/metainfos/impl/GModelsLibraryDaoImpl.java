@@ -119,6 +119,25 @@ public class GModelsLibraryDaoImpl implements IGModelsLibraryDao {
 	}
 
 	@Override
+	public ModelParameterRules.ValueRange findTemperatureRange(String providerId, String modelId) {
+		return firstRule(providerId, modelId, ModelParameterRules::statesTemperatureRange)
+				.map(ModelParameterRules::getTemperatureRange).orElse(null);
+	}
+
+	@Override
+	public ModelParameterRules.ValueRange findTopPRange(String providerId, String modelId) {
+		return firstRule(providerId, modelId, ModelParameterRules::statesTopPRange).map(ModelParameterRules::getTopPRange)
+				.orElse(null);
+	}
+
+	/** The first rule covering the model that tells what is asked, the installation's first. */
+	private java.util.Optional<ModelParameterRules> firstRule(String providerId, String modelId,
+			Predicate<ModelParameterRules> telling) {
+		return all(ModelsLibraryConfig::getParameterRules, GProviderModelsLibrary::getParameterRules).stream()
+				.filter(Objects::nonNull).filter(telling).filter(rule -> rule.covers(providerId, modelId)).findFirst();
+	}
+
+	@Override
 	public String findApi(String providerId, String modelId) {
 		final String found = all(ModelsLibraryConfig::getParameterRules, GProviderModelsLibrary::getParameterRules)
 				.stream().filter(Objects::nonNull).filter(ModelParameterRules::statesApi)

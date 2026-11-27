@@ -95,6 +95,30 @@ class ProviderModelsLibrariesTest {
 	}
 
 	@Test
+	void theRangeOfAModelIsItsRulesElseItsProvidersAndHidesNoParameterRule() {
+		ModelParameterRules family = rule("alpha", "alpha-*", Sampling.REJECTED);
+		ModelParameterRules narrow = new ModelParameterRules();
+		narrow.setProviderId("alpha");
+		narrow.setModels(List.of("alpha-old*"));
+		narrow.setTemperatureRange(new ModelParameterRules.ValueRange(0.0, 1.0));
+		ModelParameterRules provider = new ModelParameterRules();
+		provider.setProviderId("alpha");
+		provider.setModels(List.of("*"));
+		provider.setTemperatureRange(new ModelParameterRules.ValueRange(0.0, 2.0));
+		provider.setTopPRange(new ModelParameterRules.ValueRange(0.0, 1.0));
+
+		GModelsLibraryDaoImpl library = new GModelsLibraryDaoImpl(new ModelsLibraryConfig(),
+				List.of(provider(null, narrow, family, provider)));
+
+		assertEquals(1.0, library.findTemperatureRange("alpha", "alpha-old-1").getMax(), "the model's rule first");
+		assertEquals(2.0, library.findTemperatureRange("alpha", "alpha-new").getMax(), "else the provider's");
+		assertEquals(1.0, library.findTopPRange("alpha", "alpha-old-1").getMax(), "each range found apart");
+		assertNull(library.findTemperatureRange("beta", "alpha-new"), "a rule is its provider's only");
+		assertFalse(provider.statesParameters());
+		assertSame(family, library.findParameterRules("alpha", "alpha-old-1"), "the range rules are read apart");
+	}
+
+	@Test
 	void aProviderYmlBindsAsItsBeanDoes() throws Exception {
 		GProviderModelsLibrary alpha = GProviderModelsLibrary.load("test-models-library/alpha.yml",
 				"ai.gebo.models.providers.alpha", GProviderModelsLibrary.class);

@@ -52,8 +52,48 @@ public class ModelParameterRules {
 		 * temperatures may loop or degrade reasoning): a configuration setting none
 		 * sends none, instead of Gebo's deterministic 0; one setting it is sent.
 		 */
-		PROVIDER_DEFAULT
+		PROVIDER_DEFAULT,
+		/**
+		 * Ignored by the provider: a request carrying them does not fail, the model's own
+		 * values apply whatever is sent (Gemini 3.6 Flash and later). Not sent, as refused
+		 * ones.
+		 */
+		IGNORED
 	}
+
+	/** The range a numeric parameter takes, its bounds included; a bound left null is unknown. */
+	@Getter
+	@Setter
+	public static class ValueRange {
+		private Double min = null;
+		private Double max = null;
+
+		public ValueRange() {
+		}
+
+		public ValueRange(Double min, Double max) {
+			this.min = min;
+			this.max = max;
+		}
+
+		/** Whether the range tells a bound. */
+		public boolean isKnown() {
+			return min != null || max != null;
+		}
+
+		@Override
+		public String toString() {
+			return "[" + min + ", " + max + "]";
+		}
+	}
+
+	/**
+	 * The reasoning effort values OpenAI's reasoning guide names, from the least reasoning
+	 * to the most: the scale the efforts a model lists are placed on to find the nearest
+	 * one to a thinking level.
+	 */
+	public static final List<String> EFFORT_SCALE = List.of("none", "minimal", "low", "medium", "high", "xhigh",
+			"max");
 
 	/** The effort value that turns the reasoning off. */
 	public static final String NO_REASONING_EFFORT = "none";
@@ -100,6 +140,15 @@ public class ModelParameterRules {
 	 * {@link IGModelsLibraryDao#findApi(String, String)}.
 	 */
 	private String api = null;
+	/**
+	 * The range of the temperature the covered models take, as their provider's api
+	 * reference states it; null when the rule says nothing of it. Read apart from the
+	 * parameters, see {@link IGModelsLibraryDao#findTemperatureRange(String, String)}: a
+	 * rule naming every model of its provider ({@code *}) gives the provider's range.
+	 */
+	private ValueRange temperatureRange = null;
+	/** The range of the top_p the covered models take, as {@link #temperatureRange}. */
+	private ValueRange topPRange = null;
 	/** Where the rule comes from: the provider page it was read on, and when. */
 	private String source = null;
 
@@ -141,6 +190,16 @@ public class ModelParameterRules {
 		return inputModalities != null && !inputModalities.isEmpty();
 	}
 
+	/** Whether the rule tells the temperature range of its models. */
+	public boolean statesTemperatureRange() {
+		return temperatureRange != null && temperatureRange.isKnown();
+	}
+
+	/** Whether the rule tells the top_p range of its models. */
+	public boolean statesTopPRange() {
+		return topPRange != null && topPRange.isKnown();
+	}
+
 	/** Whether the rule tells the api its models are called through. */
 	public boolean statesApi() {
 		return api != null && !api.isBlank();
@@ -148,7 +207,7 @@ public class ModelParameterRules {
 
 	/**
 	 * Whether the rule says anything of the request parameters. A rule that only tells
-	 * the input modalities or the api does not, and is skipped when the parameter rules
+	 * the input modalities, the api or the ranges does not, and is skipped when the parameter rules
 	 * of a model are looked for, so that it never hides the rule after it.
 	 */
 	public boolean statesParameters() {
@@ -182,6 +241,7 @@ public class ModelParameterRules {
 		case WITHOUT_REASONING:
 			return reasoningOff;
 		case REJECTED:
+		case IGNORED:
 		default:
 			return false;
 		}
@@ -199,7 +259,8 @@ public class ModelParameterRules {
 	 * The rules of a model from what its provider's models api told (live) and from the
 	 * models library: the live efforts win when known, a live REJECTED sampling wins (the
 	 * api says the model takes no temperature), any other sampling is the library's when
-	 * it has one; the embedding and speech fields and the api are the library's. Either may be null.
+	 * it has one; the embedding and speech fields, the api and the ranges are the
+	 * library's. Either may be null.
 	 */
 	public static ModelParameterRules merge(ModelParameterRules live, ModelParameterRules library) {
 		if (live == null)
@@ -219,6 +280,8 @@ public class ModelParameterRules {
 		merged.documentInputType = library.documentInputType;
 		merged.speechFormat = library.speechFormat;
 		merged.api = library.api;
+		merged.temperatureRange = library.temperatureRange;
+		merged.topPRange = library.topPRange;
 		merged.inputModalities = new ArrayList<>(live.knowsInputModalities() ? live.inputModalities
 				: library.inputModalities != null ? library.inputModalities : List.of());
 		merged.source = live.source + "; " + library.source;
@@ -236,6 +299,7 @@ public class ModelParameterRules {
 		return "ModelParameterRules[providerId=" + providerId + ", models=" + models + ", sampling=" + sampling
 				+ ", reasoningEfforts=" + reasoningEfforts + ", queryInputType=" + queryInputType
 				+ ", documentInputType=" + documentInputType + ", speechFormat=" + speechFormat
-				+ ", inputModalities=" + inputModalities + ", api=" + api + "]";
+				+ ", inputModalities=" + inputModalities + ", api=" + api + ", temperatureRange=" + temperatureRange
+				+ ", topPRange=" + topPRange + "]";
 	}
 }

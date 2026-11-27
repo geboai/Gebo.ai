@@ -15,17 +15,36 @@
     <div class="col-4">
       <gebo-ai-field id="temperature" label="Temperature"
         help="Temperature the model will respond (if unsure leave empty)">
-        <p-inputNumber id="temperature" formControlName="temperature" [min]="minTemperature" [max]="maxTemperature"
+        <p-inputNumber id="temperature" formControlName="temperature" [min]="temperatureMin" [max]="temperatureMax"
           [maxFractionDigits]="maxTemperatureDigits" styleClass="w-full" gebo-ai-field-element />
-        <small class="text-muted-color"><span id="TemperatureRangeLabel" gebo-ai-text>Allowed range:</span> {{minTemperature}} - {{maxTemperature}}</small>
+        @if (parameters?.never('temperature')) {
+          <small class="text-muted-color"><span id="TemperatureNotSentLabel" gebo-ai-text>Not sent: this model does not take it</span></small>
+        } @else {
+          <small class="text-muted-color"><span id="TemperatureRangeLabel" gebo-ai-text>Allowed range:</span> {{temperatureMin}} - {{temperatureMax}}</small>
+          @if (parameters?.withoutThinkingOnly('temperature')) {
+            <small class="text-muted-color block"><span id="TemperatureWithoutThinkingLabel" gebo-ai-text>Sent only with thinking disabled</span></small>
+          }
+          @if (parameters?.providerDefaultWhenEmpty('temperature')) {
+            <small class="text-muted-color block"><span id="TemperatureProviderDefaultLabel" gebo-ai-text>Empty: the provider's default</span></small>
+          } @else {
+            <small class="text-muted-color block"><span id="TemperatureZeroDefaultLabel" gebo-ai-text>Empty: 0, for answers that do not vary</span></small>
+          }
+        }
         </gebo-ai-field>
       </div>
       <div class="col-4">
         <gebo-ai-field id="topP" label="TopP"
           help="TopP parameter (if unsure leave empty)">
-          <p-inputNumber id="topP" formControlName="topP" [min]="minTopP" [max]="maxTopP"
+          <p-inputNumber id="topP" formControlName="topP" [min]="topPMin" [max]="topPMax"
             [maxFractionDigits]="maxTopPDigits" styleClass="w-full" gebo-ai-field-element />
-          <small class="text-muted-color"><span id="TopPRangeLabel" gebo-ai-text>Allowed range:</span> {{minTopP}} - {{maxTopP}}</small>
+          @if (parameters?.never('topP')) {
+            <small class="text-muted-color"><span id="TopPNotSentLabel" gebo-ai-text>Not sent: this model does not take it</span></small>
+          } @else {
+            <small class="text-muted-color"><span id="TopPRangeLabel" gebo-ai-text>Allowed range:</span> {{topPMin}} - {{topPMax}}</small>
+            @if (parameters?.withoutThinkingOnly('topP')) {
+              <small class="text-muted-color block"><span id="TopPWithoutThinkingLabel" gebo-ai-text>Sent only with thinking disabled</span></small>
+            }
+          }
           </gebo-ai-field>
         </div>
     }
@@ -42,7 +61,13 @@
           @if(thinking===true) {
             <div class="col-4">
               <gebo-ai-field id="thinking" label="Thinking efforts" help="Configure thinking efforts the model will do (not all model supports this)">
-                <geboai-editable-listbox-component formControlName="thinking" [data]="thinkingOptions" />
+                <geboai-editable-listbox-component formControlName="thinking" [data]="offeredThinkingOptions"
+                  [onSingleOptionAutomaticallySelect]="false" />
+                @if (parameters?.thinkingUnavailable) {
+                  <small class="text-muted-color"><span id="ThinkingNotSentLabel" gebo-ai-text>No thinking choice reaches this model</span></small>
+                } @else if (parameters?.thinkingNotSent) {
+                  <small class="text-muted-color"><span id="ThinkingSavedNotSentLabel" gebo-ai-text>The saved choice sends nothing to this model: pick one of the list</span></small>
+                }
               </gebo-ai-field>
             </div>
           }

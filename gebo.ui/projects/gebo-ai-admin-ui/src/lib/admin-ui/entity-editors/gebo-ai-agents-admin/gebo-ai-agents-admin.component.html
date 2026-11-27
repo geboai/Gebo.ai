@@ -224,23 +224,44 @@
 
                     <div class="col-4">
                       <gebo-ai-field id="temperature" label="Temperature"
-                        help="Temperature the model will respond, from 0 to 1 (if unsure leave empty)">
-                        <p-inputNumber id="temperature" formControlName="temperature" [min]="0" [max]="1"
-                          [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
+                        help="Temperature the model will respond (if unsure leave empty)">
+                        <p-inputNumber id="temperature" formControlName="temperature" [min]="parameters.min('temperature', 0)"
+                          [max]="parameters.max('temperature', 1)" [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
+                        @if (parameters.never('temperature')) {
+                          <small class="text-muted-color"><span id="TemperatureNotSentLabel" gebo-ai-text>Not sent: the agent's model does not take it</span></small>
+                        } @else {
+                          <small class="text-muted-color"><span id="TemperatureRangeLabel" gebo-ai-text>Allowed range:</span> {{parameters.min('temperature', 0)}} - {{parameters.max('temperature', 1)}}</small>
+                          @if (parameters.withoutThinkingOnly('temperature')) {
+                            <small class="text-muted-color block"><span id="TemperatureWithoutThinkingLabel" gebo-ai-text>Sent only with thinking disabled</span></small>
+                          }
+                        }
                         </gebo-ai-field>
                       </div>
                       <div class="col-4">
                         <gebo-ai-field id="topP" label="TopP"
-                          help="TopP parameter, from 0 to 1 (if unsure leave empty)">
-                          <p-inputNumber id="topP" formControlName="topP" [min]="0" [max]="1"
-                            [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
+                          help="TopP parameter (if unsure leave empty)">
+                          <p-inputNumber id="topP" formControlName="topP" [min]="parameters.min('topP', 0)"
+                            [max]="parameters.max('topP', 1)" [maxFractionDigits]="2" styleClass="w-full" gebo-ai-field-element />
+                          @if (parameters.never('topP')) {
+                            <small class="text-muted-color"><span id="TopPNotSentLabel" gebo-ai-text>Not sent: the agent's model does not take it</span></small>
+                          } @else {
+                            <small class="text-muted-color"><span id="TopPRangeLabel" gebo-ai-text>Allowed range:</span> {{parameters.min('topP', 0)}} - {{parameters.max('topP', 1)}}</small>
+                            @if (parameters.withoutThinkingOnly('topP')) {
+                              <small class="text-muted-color block"><span id="TopPWithoutThinkingLabel" gebo-ai-text>Sent only with thinking disabled</span></small>
+                            }
+                          }
                           </gebo-ai-field>
                         </div>
                         <div class="col-4">
                           <gebo-ai-field id="thinking" label="Thinking efforts"
                             help="Configure thinking efforts the model will do (not all model supports this)">
                             <geboai-editable-listbox-component formControlName="thinking"
-                              [data]="thinkingOptions"  gebo-ai-field-element  />
+                              [data]="offeredThinkingOptions" [onSingleOptionAutomaticallySelect]="false" gebo-ai-field-element  />
+                            @if (parameters.thinkingUnavailable) {
+                              <small class="text-muted-color"><span id="ThinkingNotSentLabel" gebo-ai-text>No thinking choice reaches the agent's model</span></small>
+                            } @else if (parameters.thinkingNotSent) {
+                              <small class="text-muted-color"><span id="ThinkingSavedNotSentLabel" gebo-ai-text>The saved choice sends nothing to the agent's model: pick one of the list</span></small>
+                            }
                             </gebo-ai-field>
                           </div>
                         </div>

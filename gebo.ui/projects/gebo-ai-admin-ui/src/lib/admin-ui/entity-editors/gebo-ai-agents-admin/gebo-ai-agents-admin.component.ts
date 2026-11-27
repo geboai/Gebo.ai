@@ -4,6 +4,7 @@ import { AgentServiceDescriptor, AIToolsAndResourcesLibraryType, LibraryToolColl
 import { BaseEntityEditingComponent, ExtendedConfirmation, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboAITranslationService, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService, ToastMessageOptions } from "@openng/optimus-ui/api";
 import { catchError, debounceTime, forkJoin, map, merge, Observable, of, Subject, switchMap, take, tap } from "rxjs";
+import { ChatModelParametersControls, ThinkingOptionItem } from "../controls/standard-chat-model-settings/chat-model-parameters-controls";
 const systemAgentService:ToastMessageOptions={id:"systemAgentService",summary:"Default system agent",detail:"This is a default system generated agent, you cannot change its configuration",severity:"warn",life:5000};
 @Component({
     selector: "gebo-ai-agent-admin-component",
@@ -84,6 +85,13 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
     protected defaultChatModel?: ConfigurationEntryGBaseChatModelConfig;
     protected isChooseChatModel: boolean = false;
     protected thinkingOptions: { code: GBaseChatModelConfig.ThinkingEnum, description: string }[] = [{ code: "NO_THINKING", description: "Disabled" }, { code: "AUTO", description: "Automatic" }, { code: "LOW_THINKING", description: "Low" }, { code: "MEDIUM_THINKING", description: "Medium" }, { code: "HIGH_THINKING", description: "High" }];
+    /**
+     * The agent's temperature, top_p and thinking controls as the integration of its
+     * chat model - the chosen one, or the default one - tells.
+     */
+    protected parameters: ChatModelParametersControls;
+    /** The thinking choices offered for the agent's chat model. */
+    protected offeredThinkingOptions: ThinkingOptionItem[] = this.thinkingOptions;
     public constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
         protected myConfirmationService: ConfirmationService,
@@ -94,6 +102,11 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         private networksService: GeboAgentsNetworkAdminControllerService,
         private functionsLookupService: FunctionsLookupControllerService) {
         super(injector, geboFormGroupsService, myConfirmationService, geboUIActionRoutingService, outputForwardingService);
+        this.parameters = new ChatModelParametersControls(this.formGroup, this.geboChatModelsService,
+            () => this.offeredThinkingOptions = this.parameters.thinkingOptions(this.thinkingOptions), undefined,
+            () => this.agentChatModel()?.configuration?.thinking);
+        merge(this.formGroup.controls["chatModelReference"].valueChanges, this.formGroup.controls["useDefaultChatModel"].valueChanges)
+            .subscribe(() => this.agentChatModelChanged());
         // every tool, or the tools chosen: the picker carries the switch and disables
         // the choice while every tool is mounted
         this.formGroup.controls["agentServiceId"].valueChanges.subscribe(agentServiceId => {
@@ -160,6 +173,25 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
         }
         super.onLoadedPersistentData(actualValue);
         this.collisionsCheck.next();
+        this.agentChatModelChanged();
+    }
+    /** The chat model configuration the agent runs on: the default one, or the one chosen. */
+    private agentChatModel(): ConfigurationEntryGBaseChatModelConfig | undefined {
+        if (this.formGroup.controls["useDefaultChatModel"].value === true) {
+            return this.defaultChatModel;
+        }
+        const reference = this.formGroup.controls["chatModelReference"].value;
+        return reference ? this.chatModelsData.find(x => x.objectReference?.code === reference.code
+            && x.objectReference?.className === reference.className) : undefined;
+    }
+    /** Asks what the agent's chat model takes of temperature, top_p and thinking. */
+    private agentChatModelChanged(): void {
+        const model = this.agentChatModel();
+        this.parameters.chosen(model?.configuration?.modelTypeCode, model?.configuration?.choosedModel as any);
+    }
+    override ngOnDestroy(): void {
+        super.ngOnDestroy();
+        this.parameters.destroy();
     }
     /** The libraries mounting every library adds: the ones mounted only when named are not among them. */
     protected librariesMountedByEveryLibrary(): AIToolsAndResourcesLibraryType[] {
@@ -215,6 +247,7 @@ export class GeboAIAgentsAdminComponent extends BaseEntityEditingComponent<GAgen
                 if (values[0]) {
                     this.defaultChatModel = values[0].find(x => x.configuration?.defaultModel === true);
                 }
+                this.agentChatModelChanged();
                 this.agentTypes = values[1];
                 this.roles = values[2] || [];
                 this.serviceDescriptors = values[3] || [];

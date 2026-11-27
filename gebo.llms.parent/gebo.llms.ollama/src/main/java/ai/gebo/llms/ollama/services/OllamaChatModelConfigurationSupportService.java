@@ -44,6 +44,9 @@ import ai.gebo.llms.ollama.model.GOllamaChatModelConfig;
 import ai.gebo.model.OperationStatus;
 import ai.gebo.secrets.services.IGeboSecretsAccessService;
 import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelParameterRules;
+import ai.gebo.llms.abstraction.layer.model.GChatModelParametersSupport;
+import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig.ChatModelThinkingOption;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.el.MethodNotFoundException;
 import lombok.AllArgsConstructor;
@@ -165,35 +168,25 @@ public class OllamaChatModelConfigurationSupportService
 						? config.getChoosedModel().getModelDetails()
 						: null;
 				final Boolean thinks = thinkingCapability(details);
-				if (Boolean.FALSE.equals(thinks)) {
+				final String think = thinkOf(config.getThinking(), thinks, thinkingLevels(details));
+				if (think == null) {
 					if (LOGGER.isDebugEnabled()) {
-						LOGGER.debug("Chat model {} asks for thinking {} but its model does not think: no think sent",
-								config.getCode(), config.getThinking());
+						LOGGER.debug("Chat model {} asks for thinking {}: no think sent (model thinks: {})",
+								config.getCode(), config.getThinking(), thinks);
 					}
 				} else {
-					switch (config.getThinking()) {
-					case NO_THINKING:
+					switch (think) {
+					case THINK_OFF:
 						builder.disableThinking();
 						break;
-					case AUTO:
+					case "low":
+						builder.thinkLow();
 						break;
-					case LOW_THINKING:
-						if (thinkingLevels(details).contains("low"))
-							builder.thinkLow();
-						else
-							builder.enableThinking();
+					case "medium":
+						builder.thinkMedium();
 						break;
-					case MEDIUM_THINKING:
-						if (thinkingLevels(details).contains("medium"))
-							builder.thinkMedium();
-						else
-							builder.enableThinking();
-						break;
-					case HIGH_THINKING:
-						if (thinkingLevels(details).contains("high"))
-							builder.thinkHigh();
-						else
-							builder.enableThinking();
+					case "high":
+						builder.thinkHigh();
 						break;
 					default:
 						builder.enableThinking();
@@ -313,6 +306,61 @@ public class OllamaChatModelConfigurationSupportService
 	 * Whether the model thinks, from the capabilities its /api/show reported; null when
 	 * they are unknown.
 	 */
+	/** The think a request sends to turn the thinking off. */
+	static final String THINK_OFF = "false";
+	/** The think a request sends to turn the thinking on with no level. */
+	static final String THINK_ON = "true";
+
+	/**
+	 * The think a request sends for a thinking option: nothing to a model that does not
+	 * think, or for Automatic; false for no thinking; a level the model lists in its
+	 * thinking values as that level, otherwise the thinking just switched on. What
+	 * configureModel sends, and what the editors are told.
+	 *
+	 * @param thinks whether the model thinks, its /api/show capabilities; null when unknown
+	 * @param levels the levels the model lists
+	 */
+	static String thinkOf(ChatModelThinkingOption option, Boolean thinks, List<String> levels) {
+		if (option == null || Boolean.FALSE.equals(thinks))
+			return null;
+		switch (option) {
+		case NO_THINKING:
+			return THINK_OFF;
+		case AUTO:
+			return null;
+		case LOW_THINKING:
+			return levels.contains("low") ? "low" : THINK_ON;
+		case MEDIUM_THINKING:
+			return levels.contains("medium") ? "medium" : THINK_ON;
+		case HIGH_THINKING:
+			return levels.contains("high") ? "high" : THINK_ON;
+		default:
+			return THINK_ON;
+		}
+	}
+
+	/**
+	 * The sampling parameters as the model's parameter rules let them go; the thinking as
+	 * {@link #thinkOf} sends it, by the /api/show details the chosen model carries.
+	 */
+	@Override
+	public GChatModelParametersSupport parametersSupport(String modelCode, ModelMetaInfo metaInfos,
+			Map<String, Object> modelDetails) {
+		final String providerId = type.getProviderId();
+		final ModelParameterRules rules = modelsLibrary != null && modelCode != null
+				? modelsLibrary.findParameterRules(providerId, modelCode)
+				: null;
+		final Boolean thinks = thinkingCapability(modelDetails);
+		final List<String> levels = thinkingLevels(modelDetails);
+		return GChatModelParametersSupport.of(providerId, modelCode, rules,
+				modelsLibrary != null ? modelsLibrary.findTemperatureRange(providerId, modelCode) : null,
+				modelsLibrary != null ? modelsLibrary.findTopPRange(providerId, modelCode) : null,
+				!Boolean.FALSE.equals(thinks), option -> {
+					final String think = thinkOf(option, thinks, levels);
+					return think != null ? "think: " + think : null;
+				});
+	}
+
 	static Boolean thinkingCapability(Map<String, Object> details) {
 		if (details != null && details.get("capabilities") instanceof List<?> capabilities) {
 			return capabilities.contains("thinking");
