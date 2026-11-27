@@ -1,0 +1,9 @@
+INPUTS:
+- Last User question:
+
+{question}
+
+-(CAT) GLPI entities catalog (may be empty):
+
+{glpiEntities}
+

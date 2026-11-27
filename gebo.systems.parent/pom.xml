@@ -44,5 +44,7 @@
 		<module>gebo.mcp-client.content.handler</module>
 		<module>gebo.aws-s3.content.handler</module>
 		<module>gebo.webdav-cms.handler</module>
+		<module>gebo.glpi.search.api</module>
+		<module>gebo.glpi.handler</module>
 	</modules>
 </project>
