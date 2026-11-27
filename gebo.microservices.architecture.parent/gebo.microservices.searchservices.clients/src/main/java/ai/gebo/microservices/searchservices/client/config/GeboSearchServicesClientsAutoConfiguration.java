@@ -26,6 +26,7 @@ import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.searchservices.client.ConfluenceSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.GoogleDriveSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.JiraSearchServiceRestClient;
+import ai.gebo.microservices.searchservices.client.RedmineSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.SharePointSearchServiceRestClient;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfiguration;
@@ -124,5 +125,15 @@ public class GeboSearchServicesClientsAutoConfiguration {
 			GeboSearchServicesClientsProperties properties) {
 		return new GoogleDriveSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
 				properties.getGoogledrive());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(RedmineSearchServiceRestClient.class)
+	public RedmineSearchServiceRestClient redmineSearchServiceRestClient(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
+			GeboSearchServicesClientsProperties properties) {
+		return new RedmineSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
+				properties.getRedmine());
 	}
 }

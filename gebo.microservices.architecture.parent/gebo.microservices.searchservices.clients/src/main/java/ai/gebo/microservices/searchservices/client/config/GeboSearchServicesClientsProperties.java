@@ -43,6 +43,9 @@ public class GeboSearchServicesClientsProperties {
 	private Endpoint googledrive = Endpoint.of("googledrive_gebo_ai", "api/users/GoogleDriveSearchServiceController",
 			"google-drive", "Google Drive/Workspace Search", "google-drive", "google-drive-module",
 			"google-drive-standard-query-extraction-prompt", null);
+	private Endpoint redmine = Endpoint.of("redmine_gebo_ai", "api/users/RedmineSearchServiceController", "redmine",
+			"Redmine Search", "redmine", "redmine-module", "redmine-standard-query-extraction-prompt",
+			"redmine-native-query-extraction-prompt");
 
 	@Data
 	public static class Endpoint {
