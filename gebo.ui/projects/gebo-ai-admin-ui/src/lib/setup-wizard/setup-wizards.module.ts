@@ -49,6 +49,7 @@ import { UsersWizardComponent } from "./users-wizard.component";
 import { ConfluenceInstalledModuleService, ConfluenceWizardComponent, ConfuenceStatusService } from "./confluence-wizard.component";
 import { SharepointInstalledModuleService, SharepointStatusService, SharepointWizardComponent } from "./sharepoint-wizard.component";
 import { WebdavInstalledModuleService, WebdavStatusService, WebdavWizardComponent } from "./webdav-wizard.component";
+import { RedmineInstalledModuleService, RedmineStatusService, RedmineWizardComponent } from "./redmine-wizard.component";
 import { AwsS3InstalledModuleService, AwsS3StatusService, AwsS3WizardComponent } from "./aws-s3-wizard.component";
 import { GoogleWorkspacesInstalledModuleService, GoogleWorkspacesStatusService, GoogleWorkspacesWizardComponent } from "./google-workspace-wizard.component";
 import { JiraInstalledModuleService, JiraStatusService, JiraWizardComponent } from "./jira-wizard.component";
@@ -309,6 +310,19 @@ const webdavSystemSetupSection: SetupWizardsSection = {
     mandatory: false
 };
 
+const redmineSystemSetupSection: SetupWizardsSection = {
+    orderEntry: 12.6,
+    label: "Redmine integration",
+    description: "Redmine projects: issues with their notes and attachments, wiki pages and files",
+    installedModule: RedmineInstalledModuleService,
+    enabledService: AlwaysTrueStatusService,
+    setupCompletedService: RedmineStatusService,
+    wizardComponent: RedmineWizardComponent,
+    wizardSectionId: "redmineSystemSetupSection",
+    groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID,
+    mandatory: false
+};
+
 /**
  * Setup section for knowledge base configuration.
  * This optional section requires work directory, vector store, and LLMs to be configured first.
@@ -506,7 +520,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
  */
 @NgModule({
     imports: [TreeModule, GeboAIChooseLLMFunctionsModule, PopoverModule, CommonModule, ReactiveFormsModule, FormsModule, SetupWizardPanelModule, DialogModule, EditableListboxModule, RadioButtonModule, FieldsetModule, PanelModule, BlockUIModule, ToggleButtonModule, ButtonModule, InputTextModule, GeboAINotificationsModule, TableModule, CheckboxModule, VFilesystemSelectorModule, ProjectAddContextMenuModule, GeboAiAdminModule, PaginatorModule, TextareaModule, GeboAIFieldTranslationContainerModule, AccordionModule, TranslableModule, SelectButtonModule, TabsModule, GeboAIApiKeyModule, GeboAINotificationsModule, SelectModule, DatePickerModule, StepsModule, MultiSelectModule, InputNumberModule, ChipModule, MessageModule],
-    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIChatPipelinesToolingWizardComponent, GeboAIEasyVendorConfigurationComponent, AgentsNetworksSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
+    declarations: [LLMSetupWizardComponent, LLMSEasySetupWizardComponent, LLMSEasyIntroStepComponent, LLMSEasyProviderStepComponent, LLMSEasyModelsStepComponent, LLMSEasySummaryStepComponent, LLMSEasyClassStatusComponent, SetupWizardsComponent, WorkFolderWizardComponent, SharedFilesystemWizardComponent, KnowledgeBaseWizardComponent, ChatProfileWizardComponent, UsersWizardComponent, ConfluenceWizardComponent, SharepointWizardComponent, WebdavWizardComponent, RedmineWizardComponent, AwsS3WizardComponent, GoogleWorkspacesWizardComponent, JiraWizardComponent, Oauth2WizardComponent, GraphRagWizardComponent, GeboAILLMSVendorConfiguration, GeboAILlmsVendorModelTypeConfig, GeboAIGoogleSearchWizardComponent, GeboAIWebSearchWizardComponent, GeboAIDeepSearchWizardComponent, GeboAIRagAutotuneWizardComponent, GeboAIChatPipelinesToolingWizardComponent, GeboAIEasyVendorConfigurationComponent, AgentsNetworksSetupWizardComponent, McpServerWizardComponent, GeboAIMCPServerWizardComponent, A2AImportWizardComponent, A2AExportWizardComponent, GeneratedAdminApiKeyWizardComponent, ProviderDealsWizardComponent, AgenticChatNetworksWizardComponent],
     exports: [SetupWizardsComponent],
     providers: [
         Oauth2SetupWizardService,
@@ -523,11 +537,13 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         ChatProfileStatusService,
         SharepointStatusService,
         WebdavStatusService,
+        RedmineStatusService,
         AwsS3StatusService,
         GoogleWorkspacesStatusService,
         ConfluenceInstalledModuleService,
         SharepointInstalledModuleService,
         WebdavInstalledModuleService,
+        RedmineInstalledModuleService,
         AwsS3InstalledModuleService,
         GoogleWorkspacesInstalledModuleService,
         JiraInstalledModuleService,
@@ -556,6 +572,7 @@ const generatedAdminApiKeySetupSection: SetupWizardsSection = {
         { provide: WIZARD_SECTION, useValue: awsS3SystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: googleDriveWorkspacesSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: webdavSystemSetupSection, multi: true },
+        { provide: WIZARD_SECTION, useValue: redmineSystemSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstKnowledgeBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: firstChatProfileBaseSetupSection, multi: true },
         { provide: WIZARD_SECTION, useValue: ragAutotuneSetupSection, multi: true },

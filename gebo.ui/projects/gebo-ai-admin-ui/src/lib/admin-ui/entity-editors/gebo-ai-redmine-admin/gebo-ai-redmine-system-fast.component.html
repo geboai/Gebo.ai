@@ -1,0 +1,66 @@
+<p-blockUI id="BlockUI" [target]="redmineSystemCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #redmineSystemCtrl header="Create Redmine system configuration" [formGroup]="formGroup">
+  <div class="geboButtonsBar" style="vertical-align: baseline;">
+    <div class="grid">
+      <div class="col-4">
+        <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"
+          styleClass="w-full" [disabled]="this.formGroup.invalid || loading"></p-button>
+      </div>
+      <div class="col-4">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+          styleClass="w-full" />
+      </div>
+    </div>
+  </div>
+
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+    <div class="grid">
+      <div class="col-6">
+        <gebo-ai-field id="description" label="Description" help="Enter the description of the Redmine system." [required]="true">
+          <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="authType" label="Authentication method" [required]="true" help="How Gebo.ai signs in to Redmine. The API key is in My account, API access key, once the REST web service is enabled in Administration, Settings, API." placeholder="Select authentication method">
+          <geboai-editable-listbox-component id="authType" formControlName="authType" [required]="true" class="col-12 required" [data]="authTypes" gebo-ai-field-element>
+          </geboai-editable-listbox-component>
+        </gebo-ai-field>
+      </div>
+      <div class="col-12">
+        <gebo-ai-field id="baseUri" label="Base internet address" help="Address of the Redmine server (e.g. https://redmine.example.com)" [required]="true">
+          <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" [required]="true" gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      @if (isApiKey) {
+        <div class="col-6">
+          <gebo-ai-field id="apiKeyUsername" label="Account" help="Login of the Redmine account the API key belongs to (for reference only)">
+            <input pInputText id="apiKeyUsername" formControlName="username" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="apiKey" label="API key" help="API access key of the Redmine account Gebo.ai reads with" [required]="true">
+            <input type="password" pInputText id="apiKey" formControlName="apiKey" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+      } @else {
+        <div class="col-6">
+          <gebo-ai-field id="username" label="User name" help="Login of the Redmine account Gebo.ai reads with" [required]="true">
+            <input pInputText id="username" formControlName="username" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+        <div class="col-6">
+          <gebo-ai-field id="password" label="Password" help="Password of the Redmine account" [required]="true">
+            <input type="password" pInputText id="password" formControlName="password" class="col-12 required" [required]="true" gebo-ai-field-element />
+          </gebo-ai-field>
+        </div>
+      }
+      <div class="col-12">
+        <small id="VisibilityNote" gebo-ai-text>Gebo.ai reads what this account can see in Redmine, private issues and private notes included: use an account limited to the projects you want to share.</small>
+      </div>
+    </div>
+  </div>
+</p-panel>

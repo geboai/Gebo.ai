@@ -278,6 +278,10 @@
         "label": "WebDAV integration",
         "description": "WebDAV compatible servers: Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server ..."
       },
+      "redmineSystemSetupSection": {
+        "label": "Redmine integration",
+        "description": "Redmine projects: issues with their notes and attachments, wiki pages and files"
+      },
       "webSearchApiSetupSection": {
         "label": "Configure web search",
         "description": "Choose and configure one web search provider (Google, Tavily, Brave or SearXNG) for AI web searches"
@@ -555,6 +559,14 @@
       "ConfigCodeHeader": { "label": "Config code" },
       "DescriptionHeader": { "label": "Description" },
       "AuthTypeHeader": { "label": "Auth type" },
+      "EditBtn": { "label": "Edit system" }
+    },
+    "RedmineWizardComponent": {
+      "MainPanel": { "label": "Setup company Redmine systems" },
+      "RedmineSystemBtn": { "label": "Redmine system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "BaseUriHeader": { "label": "Server address" },
       "EditBtn": { "label": "Edit system" }
     },
     "McpServerWizardComponent": {
@@ -3905,6 +3917,10 @@
         "label": "+jira",
         "help": "add an Atlassian Jira data source"
       },
+      "ai_gebo_redmine_handler_GRedmineProjectEndpoint": {
+        "label": "+redmine",
+        "help": "add a Redmine data source (issues, wiki pages and files)"
+      },
       "ai_gebo_git_content_handler_GGitProjectEndpoint": {
         "label": "+git repo",
         "help": "add a git repository data source like bitbucket,github or others"
@@ -5530,6 +5546,119 @@
       "token": {
         "label": "Bearer token",
         "help": "Bearer token to access the WebDAV system"
+      }
+    }
+  },
+  "GeboAIRedmineModule": {
+    "GRedmineSystem": {
+      "MainPanel": { "label": "Editing Redmine system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Redmine system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the Redmine system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Redmine server, for example https://redmine.example.com. The REST web service must be enabled in Administration, Settings, API."
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "help": "The Redmine account Gebo.ai reads with: an API key (token) or a username and password. Gebo.ai sees what this account sees, private notes and private issues included.",
+        "placeholder": "Select an identity"
+      }
+    },
+    "GRedmineProjectEndpoint": {
+      "MainPanel": { "label": "Sharing Redmine contents" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Redmine data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
+      },
+      "redmineSystemCode": {
+        "label": "Redmine system",
+        "help": "Already configured Redmine system reference.",
+        "placeholder": "Select a Redmine server"
+      },
+      "tree": {
+        "label": "Selected Redmine contents",
+        "help": "Projects, or their issues, wiki and files sections, single issues (with their notes, attachments and sub-issues), wiki pages (with their child pages) and files"
+      },
+      "catalogingCriteria": {
+        "label": "Contents organization criteria",
+        "help": "Please explain here how the projects, issues and wiki pages shared with Gebo.ai are organized"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "openZips": {
+        "label": "Open zip attachments",
+        "help": "Read the documents inside zip attachments and files"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIRedmineSystemFastComponent": {
+      "MainPanel": { "label": "Create Redmine system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Redmine system."
+      },
+      "authType": {
+        "label": "Authentication method",
+        "help": "How Gebo.ai signs in to Redmine. The API key is in My account, API access key, once the REST web service is enabled in Administration, Settings, API.",
+        "placeholder": "Select authentication method"
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Redmine server (e.g. https://redmine.example.com)"
+      },
+      "apiKeyUsername": {
+        "label": "Account",
+        "help": "Login of the Redmine account the API key belongs to (for reference only)"
+      },
+      "apiKey": {
+        "label": "API key",
+        "help": "API access key of the Redmine account Gebo.ai reads with"
+      },
+      "username": {
+        "label": "User name",
+        "help": "Login of the Redmine account Gebo.ai reads with"
+      },
+      "password": {
+        "label": "Password",
+        "help": "Password of the Redmine account"
+      },
+      "VisibilityNote": {
+        "label": "Gebo.ai reads what this account can see in Redmine, private issues and private notes included: use an account limited to the projects you want to share."
       }
     }
   },

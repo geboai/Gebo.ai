@@ -1,0 +1,101 @@
+<p-panel id="MainPanel" gebo-ai-label #endPointUI header="Sharing Redmine contents" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboLargeButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success" [disabled]="this.formGroup.invalid || canSave===false || relatedBackendProcessingRunning===true" styleClass="w-full"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="PublishBtn" gebo-ai-label [outlined]="true" label="Publish!"
+            title="Saves and let these contents be available in knowledge base for LLMs" severity="success"
+            icon="pi pi-microchip-ai" (onClick)="doPublish()"
+            [disabled]="this.formGroup.invalid || canPublish===false || relatedBackendProcessingRunning===true"
+            styleClass="w-full" />
+        </div>
+        <div class="col-3">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+            styleClass="w-full" />
+        </div>
+        <div class="col-3">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            styleClass="w-full" [disabled]="canDelete===false || relatedBackendProcessingRunning===true" />
+        </div>
+      </div>
+    </div>
+  }
+
+  <p-blockUI id="LockBlockUI" [target]="endPointUI" [blocked]="loading">
+    <i class="pi pi-lock" style="font-size: 3rem"></i>
+  </p-blockUI>
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+
+    <p-tabs [value]="0" id="TabView" class="standardTabDialogueHeight">
+      <p-tablist>
+        <p-tab id="SettingsTab" [value]="0" gebo-ai-text>Settings</p-tab>
+        <p-tab id="LogsTab" [value]="1" gebo-ai-text [disabled]="!objectReference">Logs</p-tab>
+      </p-tablist>
+      <p-tabpanels>
+        <p-tabpanel [value]="0">
+          <div class="grid">
+            <div class="col-6">
+              <gebo-ai-field id="description" label="Description" help="Enter the description of the Redmine data source." [required]="true">
+                <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the contents.">
+                <input pInputText id="code" formControlName="code" readonly="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="parentProjectCode" label="Project" help="Parent project reference." [required]="true" placeholder="Select a project">
+                <geboai-editable-listbox-component formControlName="parentProjectCode" [required]="true" [optionsObservable]="projectsObservable" [readonly]="cantModifyProject" gebo-ai-field-element>
+                </geboai-editable-listbox-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="redmineSystemCode" label="Redmine system" help="Already configured Redmine system reference." [required]="true" placeholder="Select a Redmine server">
+                <geboai-editable-listbox-component formControlName="redmineSystemCode" [required]="true" [data]="redmineSystemsData" [readonly]="mode==='EDIT'" [createNewRecordRequest]="newRedmineSystemRequest" gebo-ai-field-element>
+                </geboai-editable-listbox-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="tree" label="Selected Redmine contents" help="Projects, or their issues, wiki and files sections, single issues (with their notes, attachments and sub-issues), wiki pages (with their child pages) and files" [required]="true">
+                <gebo-ai-vfilesystem-selector-component [loadRootsObservable]="loadRootsObservable" [browsePathObservable]="browsePathObservable"
+                  [reconstructNavigationCallback]="reconstructNavigationObservableCallback" [readonly]="mode==='EDIT'" formControlName="paths"
+                  selectionMode="multiple" class="col-12" [required]="true" gebo-ai-field-element>
+                </gebo-ai-vfilesystem-selector-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="catalogingCriteria" label="Contents organization criteria" help="Please explain here how the projects, issues and wiki pages shared with Gebo.ai are organized">
+                <textarea formControlName="catalogingCriteria" id="catalogingCriteria" rows="2" gebo-ai-field-element></textarea>
+              </gebo-ai-field>
+            </div>
+            <div class="col-12">
+              <gebo-ai-field id="programmedTables" label="Contents updates checks schedule" help="Configure the scheduling of changed contents to keep the RAG system updated">
+                <gebo-ai-content-reindex-scheduler-component formControlName="programmedTables" id="programmedTables" gebo-ai-field-element>
+                </gebo-ai-content-reindex-scheduler-component>
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="openZips" label="Open zip attachments" help="Read the documents inside zip attachments and files">
+                <p-checkbox formControlName="openZips" id="openZips" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="personalData" label="Contains personal data"
+                help="Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register.">
+                <p-checkbox formControlName="personalData" id="personalData" [binary]="true" [trueValue]="true" [falseValue]="false" gebo-ai-field-element></p-checkbox>
+              </gebo-ai-field>
+            </div>
+          </div>
+        </p-tabpanel>
+        <p-tabpanel [value]="1">
+          <gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference" title="This Redmine data source ingestion log"></gebo-ai-log-table-component>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  </div>
+</p-panel>
