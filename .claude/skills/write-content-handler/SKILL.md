@@ -1,0 +1,659 @@
+---
+name: write-content-handler
+description: Write a complete Gebo.ai content handler module under gebo.systems.parent - the system and data source (project endpoint) entities, repositories, declared-in-yml systems and data sources, the remote virtual filesystem consuming/browsing services, the handler, dispatcher and job wiring, the admin controllers, the optional search service with its search.api module and prompts - plus its Angular UI (system editor, fast setup form, data source editor with the tree selector, setup wizard section, knowledge-base "add data source" entry, i18n) and its registration in the monolith and the microservices. Use when asked to add/write/implement a new content handler, a new connector or integration that ingests a remote system (ticketing, CMS, storage, wiki...) into knowledge bases, a new data source type, or to explain how the existing handlers (Jira, Confluence, SharePoint, WebDAV, AWS S3, Google Drive) are built.
+user-invocable: true
+allowed-tools:
+  - Read
+  - Edit
+  - Write
+  - Glob
+  - Grep
+  - Bash
+  - PowerShell
+---
+
+# /write-content-handler — Build a full content handler module (backend + setup UI)
+
+A **content handler** connects one kind of external system to Gebo.ai knowledge bases. An admin
+configures a **system** (where it is and which credential to use), then attaches one or more
+**data sources** (what to read from it) to a knowledge-base project. Publishing a data source starts
+an ingestion job, which lists the remote items, streams their contents and runs them through the
+ingestion workflow. Optionally the handler also exposes a **search service** that chat agents use to
+query the remote system live.
+
+This skill describes the pattern as the code really implements it (checked 2026-11-27 on `develop`).
+**Re-check each class name and signature in the code before copying it**: the abstraction layer
+evolves, and several existing handlers carry bugs you must not replicate (see §9).
+
+**Reference modules**
+- `gebo.systems.parent/gebo.webdav-cms.handler`: the cleanest complete remote handler (declared
+  systems *and* data sources, endpoint DAO, seeder, test service, fast config). Use it as the
+  **structural template**.
+- `gebo.systems.parent/gebo.atlassian.jira.handler` + `gebo.atlassian.jira.search.api`: the
+  template for the **search side** (native search, prompts library, search.api DTO module) and for
+  generated-OpenAPI-client usage.
+- SharePoint and Google Drive: the most complete (seeder, disposer, search, OAuth). Confluence has
+  native search plus a translator. `gebo.integration.content.handler` is the simplest non-remote
+  handler. `gebo.mcp-client.content.handler` is the simplest remote one.
+
+---
+
+## 0. Decide the shape first
+
+| Shape | Base classes | Examples | Use when |
+|---|---|---|---|
+| **Remote virtual filesystem** | `GAbstractRemoteVirtualFilesystemContentManagementSystemHandler` + `GAbstractRemoteVirtualFilesystemConsumingService` | Jira, Confluence, SharePoint, Google Drive, AWS S3, WebDAV, MCP | The remote system has a browsable hierarchy (projects → issues → attachments, sites → folders → files), reached through a REST/SDK client |
+| Local / push | `GAbstractContentManagementSystemHandler` directly | filesystem, uploads, userspace, git, integration | Contents are on a local or mounted filesystem, are cloned, or are pushed to Gebo |
+| Web search only | `AbstractWebSearchServiceImpl` | google, tavily, brave, searxng, serpapi | No ingestion, only a live search service (runs in brain in microservices) |
+
+The rest of this skill is about the **remote virtual filesystem** shape, the one every new
+connector to an external application uses.
+
+Naming used below: `<X>` = the product in class names (`Redmine`), `<x>` = lower case
+(`redmine`), `<pkg>` = `ai.gebo.<x>.handler`, `<MODULE>` = the messaging module id
+(`redmine-module`), `<TYPE>` = the system type code (`REDMINE`).
+
+---
+
+## 1. Concepts you must hold before writing code
+
+**System vs data source**
+- **System** = `G<X>System extends GContentManagementSystem` (`gebo.core.parent/gebo.knowledgebase.model/.../systems/GContentManagementSystem.java`).
+  - Inherited fields: `code`, `description`, `contentManagementSystemType` (set it to `<TYPE>`), `baseUri`, `readonly`, `usedCapabilities`, `aclAliases`.
+  - Add the connection fields, typically a `secretCode` that references a stored credential. **Never store a credential on the entity.**
+- **Data source** = `G<X>ProjectEndpoint extends GVirtualFilesystemProjectEndpoint`, annotated `@Data @Document @EntityDescription(description = "...", entityCategory = GProjectEndpoint.class)`.
+  - Inherited fields: `paths: List<VFilesystemReference>` (the selected roots/folders/items), `parentProjectCode` (the knowledge-base project), `readonly`, `published`, `programmedTables`, `openZips`, `vectorizeOnlyExtensions`, `synchroStrategy`, `objectSpaceType`, `aclAliases`, `personalData`.
+  - Add `<x>SystemCode`, the code of the system it reads.
+- Codes are generated by persistence from the description: an insert **refuses a pre-set code**. Never set `code` on a new entity, in tests or in REST calls.
+
+**Where systems and data sources come from (the DAOs)**
+- Systems are **declared in yml** under `ai.gebo.<x>.systems` *and* **stored** (created in the UI). `GAbstractContentManagementSystemConfigurationDao` merges the two, and a declared code wins over a stored record with the same code.
+- Data sources can likewise be declared under `ai.gebo.<x>.datasources`. A seeder (`GAbstractDeclaredDataSourcesSeeder`) writes them to Mongo as `readonly` records, because publishing, the scheduler and the job launcher reach endpoints through `IGPersistentObjectManager`, not through a DAO.
+- The base controller refuses UI writes on declared systems (`isDeclaredInConfiguration`) and on declared data sources (stored `readonly=true`).
+- **Always resolve systems and data sources through the handler** (`getConfigurations`, `findConfiguration`, `findDataSource`, `findDataSourcesByProject`), never through the repository. Otherwise declared ones are invisible.
+
+**Ingestion flow (what calls what)**
+1. The UI saves the endpoint (`insert<X>Endpoint`). The base controller inserts it, replicates it, and sends a reschedule message to the scheduler module.
+2. Publish (`JobLauncherControllerService.createJob` from the UI, or `publish<X>Endpoint`) creates a `GJobStatus` and queues a STANDARD/INGESTION job.
+3. The job reaches the module's `GIOCModuleContentsDispatcher` (built by your `G<X>ContentsDispatcherConfig`). It calls `handler.consume(endpoint, sessionParam, consumer, ...)`.
+4. The remote base handler creates the root `GVirtualFolder` and calls `consumingService.consumeAll(...)`, the **final** template method in `GAbstractRemoteVirtualFilesystemConsumingService`:
+   - `createEnvironment` (build the API client once)
+   - for each `endpoint.paths` entry (plus session ADD operations): `toNavigationPosition` → `toNativeCoordinates`
+   - for folders: create virtual folder nodes, then recurse with `retrieveChilds` / `getPositionCoordinate`
+   - for resources: `createDocumentReference` (overridable, to enrich ACLs or metadata) → `consumer.accept(...)`
+   - `clearEnvironment`
+5. The ingestion pipeline later reads each document through `handler.streamContent` → `consumingService.getResourceHandle(system, endpoint, docRef, cache)` (rebuilds your resource reference from `docRef.getCustomMetaInfos()`) → `streamResource(...)`.
+6. When the job ends, `GIOCContentConsumer` passes the items **not met in this job** to `checkUpdatedOrDeleted` → your `verifyRemoteObjectExistence`. The return value is read as follows:
+   - `null`: no information, the item is left alone
+   - the item with `deleted=true`: deletion (stores purged)
+   - the item as is: kept and re-stamped
+
+   Every remote handler today returns `null` or `doc`. Implement it for real only if the remote API makes the check cheap.
+
+**The navigation encoding (the part you design)**
+- The UI tree and `endpoint.paths` speak `VFilesystemReference { GVirtualFilesystemRoot root; PathInfo path; }` (`gebo.core.parent/gebo.base.model/.../virtualfs/`).
+- `root.code`/`root.absolutePath` and `path.absolutePath` are **your** encoded strings. Jira uses `PROJECT-KEY:<key>` for roots and `ISSUE-KEY:<k1>|ISSUE-KEY:<k2>` for paths (`JiraNavigationUtil`).
+- Put the encoding in one `<X>NavigationUtil` class, used by browsing, consuming and search alike.
+- Native side: `<X>NativePositionObject extends AbstractNativePositionObject`. It must answer:
+  - `getCode`, `getName`, `getUrl`
+  - `isFolder`, `isResource`: exactly one is true, and it must agree with `path.folder`, or `consumeAll` throws
+  - `getResourceReferenceMetaInfos()`: the map that becomes the document's custom meta infos. Put in it everything `getResourceHandle` needs to re-locate the item later.
+  - `getResourceContentType`, `getResourceModificationTime` (stored as the document's modification date), `getResourceFileSize`
+- `<X>NavigationCoordinates extends AbstractNavigationCoordinates<<X>PathComponent>`: the root plus `browsingSteps` (`PathInfo`) and `browsingStepsCustom` (your typed steps, e.g. `{type: TICKET, id}`).
+- `<X>ResourceReference implements IGRemoteVirtualFilesystemResourceReference`: the minimal handle to stream one item.
+- Metadata maps are inherited down the path (`childrenMapsEnrich`): a child sees its parents' keys unless it overrides them.
+
+**Module id and system type**
+- `<MODULE>` is a messaging module id. Add it to `GStandardModulesConstraints` (`gebo.architecture.parent/gebo.application.messaging/.../model/GStandardModulesConstraints.java`) **and** to its `ALL_MODULES` and `COMMUNITY_MODULES` lists.
+- `GeboModulesConfigurationHolderImpl` enables only listed modules. The UI hides every entry whose module is not enabled.
+- The same string is used in:
+  - the job trio, the controller emitter, the handler's and consuming service's `getMessagingModuleId()`
+  - the UI `moduleId`
+  - the microservice topology
+- `<TYPE>` is the `GContentManagementSystemType` code returned by `getHandledSystemType()`, the value of `contentManagementSystemType`, and the secrets context code the UI filters identities by.
+
+---
+
+## 1b. The remote browsable filesystem abstraction, layer by layer
+
+The abstraction makes any remote API look like a filesystem of **roots → folders → resources**. A
+content handler module uses it twice, with the same encoding:
+
+1. **Browsing, for the admin UI.** A helper service (`<X>BrowsingService implements IGVirtualFilesystemBrowsingService`) and its controller (`<X>BrowsingController`: `get<X>Roots`, `browse<X>Path`) let the data source editor's tree selector walk the remote system live, as if it were a remote filesystem. The admin ticks roots, folders or single items, and the editor saves them as `VFilesystemReference`s in `endpoint.paths`.
+2. **Ingestion, from the memorized references.** When the data source is published, the handler's consuming service takes those stored references as **starting points**. It decodes each one with the same encoding, resolves it on the remote system and walks everything below it, emitting virtual folders and documents. Streaming and live search reach items again through the same encoding.
+
+So one mapping serves four consumers: the admin tree, the saved selection, ingestion and search
+(`loadSearchResult`). Design it before writing anything else.
+
+### The five representations of one item
+
+| # | Representation | Class | Who produces / reads it | Lifetime |
+|---|---|---|---|---|
+| 1 | **UI / persisted reference** | `VFilesystemReference{root: GVirtualFilesystemRoot, path: PathInfo}` | the browsing service produces it; the tree selector shows it; `endpoint.paths` stores it; search results carry it as `navigationReference` | persisted in Mongo, so **its encoding is a compatibility contract** |
+| 2 | **Typed coordinates** | `<X>NavigationCoordinates extends AbstractNavigationCoordinates<<X>PathComponent>`: `root`, `browsingSteps: List<PathInfo>`, `browsingStepsCustom: List<<X>PathComponent>` | `toNavigationPosition` (1 → 2), `getPositionCoordinate` (4 → 2) | in memory, one job |
+| 3 | **Native position path** | `List<<X>NativePositionObject>`: root object first, the addressed item last | `toNativeCoordinates` / `toResourcesNativeCoordinates` (2 → 3, **API calls**), `retrieveChilds` (3 → children) | in memory, one job |
+| 4 | **Gebo virtual filesystem objects** | `GVirtualFolder`, `GDocumentReference` (`customMetaInfos` = the native object's `getResourceReferenceMetaInfos()`) | `createVirtualFolder` / `createDocumentReference` (3 → 4); the consumer persists them | persisted, re-read at every streaming |
+| 5 | **Resource handle** | `<X>ResourceReference implements IGRemoteVirtualFilesystemResourceReference` | `getResourceHandle(... GAbstractVirtualFilesystemObject ...)` (4 → 5), `getResourceHandle(SearchableSystemMetaData ...)` (3 → 5) | in memory, one stream |
+
+Two directions matter:
+- **Down** (ingestion): 1 → 2 → 3 → (children)\* → 4, then the pipeline later does 4 → 5 → stream.
+- **Up** (search): the search service builds 1 from the native item (`<X>NavigationUtil.toVirtualFilesystemReference`), and `loadSearchResult` does 1 → 2 → 3 → 5 → stream.
+
+### Design rules for the mapping
+
+1. **Choose what is a root.** It is the top selectable unit, listed by `getRoots` and sampled as a "catalogue" for the search prompts: project (Jira), space (Confluence), site or drive (SharePoint), bucket (S3), collection (WebDAV). A root is always a folder.
+2. **Choose what is a folder and what is a resource.** Folders have children; resources have a content stream. An entity can be both, so split it into two nodes. Jira models an issue as a folder (`CONTAINER_TICKET`) whose first child is the issue itself as a resource (`TICKET`, the body), followed by its comments and attachments (resources) and its sub-issues (folders). A ticketing handler wants the same split: ticket folder → ticket body, journal/notes, attachments, sub-tickets.
+3. **Encode `root.code` and `path.absolutePath` as typed, prefixed segments**, e.g. `PROJECT-KEY:<key>` and `ISSUE-KEY:<k1>|ISSUE-KEY:<k2>|ATTACHMENT-KEY:<id>`. Then decoding needs no API call, and the last segment says what the item is.
+   - Keep `absolutePath` cumulative: a child's path is the parent's path + separator + its own segment.
+   - Use ids that never change (numeric ids, keys), never display names.
+   - Once data sources are saved, the encoding cannot change without migrating `endpoint.paths`.
+4. **`getCode()` of a native object must be stable and unique among its siblings.** The virtual folder code is `parent.code + "/" + node.getCode()` (`createChildItem`). The document code is `folder.code + "/" + resource.getCode()` (`GDocumentReferenceFactoryImpl.createWebDocumentReference`).
+   - A code that changes between runs means a "new" document plus an orphan that the end-of-job check does not remove (see §1 step 6).
+   - A collision between two siblings merges two documents into one.
+   - Two nodes of the same entity (the issue folder and the issue body) need different codes; prefix by type if the ids clash.
+5. **`getName()` becomes the document name, and its extension the document extension** (`getExtension(name)`). `vectorizeOnlyExtensions` filters on that extension. For items you synthesise from text (ticket bodies, comments), choose a name with the extension that matches `getResourceContentType()` (e.g. `".md"`, `".html"`, `".txt"`).
+6. **Put everything streaming needs into `getResourceReferenceMetaInfos()`.** Streaming happens later, from the persisted `GDocumentReference` only. Jira stores object type, issue key, attachment id, file name, URL and mime type there.
+   - The map is inherited down the path (`childrenMapsEnrich`), so a child can read its project or issue keys without repeating them.
+   - Keep the values serialisable scalars (they are persisted).
+   - Do not store secrets.
+   - Do not store large bodies unless re-reading them is impossible: Jira stores the comment text because a comment has no cheap direct fetch.
+7. **`isFolder()` must match `PathInfo.folder`** for the same item, or `consumeAll` throws. In `browse`, set `PathInfo.folder` and a `metaType` (`PathInfoMetaType`: `FOLDER`, `FILE`, `WEB_PAGE`, `DEVICE`…), because the tree selector uses them for icons and selection rules.
+
+### Browsing contract (`IGVirtualFilesystemBrowsingService`, module `gebo.architecture.virtual-browsing`)
+
+- `getRoots(ctx)` → every root, paged to the end. `browse({root, path:null})` → the root's children. `browse({root, path})` → the children of `path`.
+  - **Children only**, never the node itself.
+  - A child's `absolutePath` follows rule 3.
+  - Each call is independent: stateless, rebuilt from the `systemCode` in the context.
+- `isSupportsNavigationStatus()`, `getParent(ref, ctx)`, `getNavigationKey()`: these let `VirtualFilesystemNavigationLogic.rebuildNavigationTree` reopen the tree on a saved selection. It walks up with `getParent` until `path == null`, browsing every parent, and dedupes nodes by `ROOT:<root.code>|PATH:<absolutePath>` (or by `root.absolutePath` with `NavigationKey.ABSOLUTE_PATH`).
+  - `getParent` must return the parent reference: the same root, and the parent's path or `null` at the top. A cumulative encoding makes this a string operation.
+  - Every remote handler today returns `false` and a `null` parent: only `UserspaceBrowsingService` and the server filesystem browsing support it. Supporting it is optional. If you do, pass `reconstructNavigationCallback` in the UI. If you do not, do not expose the navigation-status endpoint.
+- `IGVirtualFilesystemBrowsingAndSearchService` (contentsystems layer) combines browsing and `ISearchService` in one interface, for a service that does both. The existing handlers keep the two separate.
+
+### Consuming walk (what `consumeAll` does with your answers)
+
+For every selected reference:
+1. Decode it (`toNavigationPosition`) and resolve it to a native path (`toNativeCoordinates`). An empty list is logged and skipped. A missing item is not an error.
+2. **The last node is a folder**: the base emits one `GVirtualFolder` per node of the path (root included, under the endpoint's root folder), then recurses depth-first through `retrieveChilds`. For each folder child it emits the folder, computes its coordinates with `getPositionCoordinate(completePath)`, and descends; for each resource child it emits the document.
+3. **The last node is a resource**: the base emits the folders of the path above it, then the single document.
+4. Errors: a `retrieveChilds` failure is reported as a FOLDER access error, and the walk goes on with the other branches. An unexpected exception on one selected path is reported, and the walk goes on with the next path. `clearEnvironment` runs at the end.
+
+So `retrieveChilds` is the only method that lists. Keep it paged and keep each call bounded to one
+node. Do not prefetch the subtree: the base already walks it.
+
+### Session operations (incremental runs)
+`RemoteVirtualFileSystemContentConsumingSessionParam.operations` can carry `ADD` and `REMOVE`
+`VFilesystemReference`s on top of `endpoint.paths`: the walk adds the ADD ones as extra starting
+points. The REMOVE ones are collected into a list that `consumeAll` never uses (checked 2026-11-27):
+a REMOVE operation does nothing in a remote handler today. A publish sends no session parameter,
+which means "read the whole data source". Handle a `null` session parameter everywhere.
+
+---
+
+## 2. Backend module: file by file
+
+Create `gebo.systems.parent/gebo.<x>.handler` (artifactId `gebo.<x>.handler`, package `<pkg>`). Mirror
+the WebDAV layout:
+
+```
+<pkg>/                      G<X>System, G<X>ProjectEndpoint, G<X>ResourceReference,
+                            IG<X>ContentManagementSystemHandler, IG<X>VirtualFilesystemConsumingService,
+                            <X>BrowsingContext
+<pkg>/config/               <X>SystemsConfig, <X>DataSourcesConfig, <X>HandlerConfig (prompts)
+<pkg>/repositories/         <X>SystemRepository, <X>ProjectEndpointRepository
+<pkg>/model/                <X>NativePositionObject, <X>NavigationCoordinates, <X>PathComponent, <X>PathNodeType
+<pkg>/impl/                 handler impl, consuming impl, browsing service, navigation util, client factory,
+                            systems DAO + dynamic source, endpoint DAO + dynamic source, seeder, test service,
+                            G<X>DefaultBeansConfig, G<X>ContentsDispatcherConfig, job trio
+<pkg>/controllers/          <X>SystemsController, <X>BrowsingController (+ <X>SearchServiceController)
+src/main/resources/<x>-prompts-library/<x>-library.yml   (+ en/*.txt when there is a search service)
+```
+
+All classes live under `ai.gebo.*`. The apps load modules **only by package scan**
+(`@ComponentScan("ai.gebo")` + `@EnableMongoRepositories("ai.gebo")` in
+`gebo.ai.app/.../Main.java` and in every microservice `*Application`). There is no
+`AutoConfiguration.imports` in any handler.
+
+### 2.1 pom.xml
+- Parent: `ai.gebo.systems:gebo.systems.parent`. It has no shared dependencies, so declare:
+  - `ai.gebo.architecture:gebo.architecture.contentsystems.abstraction.layer`
+  - the REST client (e.g. `ai.gebo.integrations.clients:gebo.<x>.client`)
+  - `ai.gebo.architecture:gebo.architecture.ai` when you have prompts or search
+  - `gebo.<x>.search.api` when you have native search
+  - `org.springframework.boot:spring-boot-starter-validation`: the `@Validated` systems config needs a real provider. Copy the comment from the Jira pom.
+- Add `<module>gebo.<x>.handler</module>` (and the `.search.api` module before it) to `gebo.systems.parent/pom.xml`.
+
+### 2.2 Entities and repositories
+```java
+@Data
+public class G<X>System extends GContentManagementSystem {
+	private String secretCode = null;           // reference to a stored secret, never the credential
+}
+
+@Data
+@EntityDescription(description = "<X> documents source", entityCategory = GProjectEndpoint.class)
+@Document
+public class G<X>ProjectEndpoint extends GVirtualFilesystemProjectEndpoint {
+	private String <x>SystemCode = null;
+}
+
+public interface <X>SystemRepository extends IGBaseMongoDBRepository<G<X>System> {
+	@Override default Class<G<X>System> getManagedType() { return G<X>System.class; }
+}
+public interface <X>ProjectEndpointRepository extends IGBaseMongoDBProjectEndpointRepository<G<X>ProjectEndpoint> {
+	@Override default Class<G<X>ProjectEndpoint> getManagedType() { return G<X>ProjectEndpoint.class; }
+}
+```
+- Put bean-validation constraints on the system fields that must exist: the declared systems are validated at startup.
+
+### 2.3 Declared systems and data sources (config + DAOs)
+```java
+@Configuration @ConfigurationProperties(value = "ai.gebo.<x>") @Validated @Data
+public class <X>SystemsConfig { private List<@Valid G<X>System> systems = new ArrayList<>(); }
+
+@Configuration @ConfigurationProperties(value = "ai.gebo.<x>") @Validated @Data
+public class <X>DataSourcesConfig { private List<@Valid GDeclaredDataSource> datasources = new ArrayList<>(); }
+
+@Service public class <X>SystemDynamicSource
+	extends GDynamicConfigurationSourceAdapter<G<X>System, <X>SystemRepository>
+	implements IGDynamicConfigurationSource<G<X>System> {}
+
+@Service public class <X>SystemsConfigurationDao extends GAbstractContentManagementSystemConfigurationDao<G<X>System> {
+	public <X>SystemsConfigurationDao(<X>SystemsConfig config, <X>SystemDynamicSource dynamic) {
+		super(config.getSystems(), dynamic, <X>ContentManagementHandlerImpl.<TYPE_CONSTANT>);
+	}
+}
+
+@Service public class <X>ProjectEndpointDynamicSource
+	extends GDynamicConfigurationSourceAdapter<G<X>ProjectEndpoint, <X>ProjectEndpointRepository>
+	implements IGDynamicConfigurationSource<G<X>ProjectEndpoint> {}
+
+@Service public class <X>ProjectEndpointConfigurationDao extends GAbstractRuntimeConfigurationDao<G<X>ProjectEndpoint>
+	implements IGProjectEndpointRuntimeConfigurationDao<G<X>ProjectEndpoint> {
+	public <X>ProjectEndpointConfigurationDao(<X>ProjectEndpointDynamicSource dynamic) { super(List.of(), dynamic); }
+}
+```
+- Keep the systems config separate from the prompts config even though they share the `ai.gebo.<x>` prefix. Only the systems one is `@Validated` (JiraSystemsConfig explains why).
+- Seeder (`impl/<X>DeclaredDataSourcesSeeder extends GAbstractDeclaredDataSourcesSeeder<G<X>ProjectEndpoint, <X>ProjectEndpointRepository>`, a `@Service`). Implement:
+  - `newEndpoint(declaration)`: set `<x>SystemCode` from `declaration.getSystemCode()`
+  - `toReference(declaration, declaredPath)`: turn the declared path into a `VFilesystemReference` with **your NavigationUtil encoding**, so the UI tree shows it selected
+  - `setPaths(endpoint, refs)`
+
+  See `WebdavDeclaredDataSourcesSeeder`, and its unit test `WebdavDeclaredDataSourcesSeederTest` for the test pattern. A UI-created record with a declared code fails the startup **on purpose**.
+
+### 2.4 Client factory and test service
+- `impl/<X>ApiClientFactory` (`@Service`): `ApiClient getApiClient(G<X>System system[, SearchCallParameters p])`.
+  - Read the secret with `IGeboSecretsAccessService.getSecretContentById(system.getSecretCode())` and switch on `secretContent.type()` (`GeboSecretType`: `TOKEN`, `USERNAME_PASSWORD`, `OAUTH2_STANDARD`, `CUSTOM_SECRET`, …). Support every type the UI lets the admin pick.
+  - When it takes a system **code**, resolve it through `<X>SystemsConfigurationDao.findByCode`, never the repository (Jira's factory reads the repository, so a declared system fails here).
+  - With the generated `restclient` clients in `gebo.integrations.clients` (e.g. `ai.gebo.redmine.client.invoker.ApiClient`):
+    - `new ApiClient(restClient)`, with `restClient` built from `ApiClient.buildRestClientBuilder()` plus your request factory, timeouts from `SearchCallParameters` for search calls, and the observation wrapper Jira uses (`GeboHttpClientObservations`)
+    - then `setBasePath(baseUri)`
+    - then `setUsername/setPassword`, `setApiKey`, `setBearerToken(...)` or `setAccessToken(Supplier)`, according to the auth schemes the generated `ApiClient` registers (read its `authentications.put(...)` lines)
+- `impl/<X>SystemsTestService.test<X>System(G<X>System)` returns `OperationStatus<G<X>System>` with `GUserMessage` errors (missing secret, missing base URI, unreachable, unauthorized) or a success message. It does a cheap authenticated call. Insert and update run it and refuse on errors.
+
+### 2.5 Navigation util and model
+Write `<X>NavigationUtil` first: the prefixes and separators, `toRoot(nativeRoot)`, `toPathInfo(...)`,
+`to<X>NavigationCoordinates(VFilesystemReference)` (encoded → typed steps) and the reverse
+`to<X>NavigationCoordinates(List<NativePositionObject>)`, and `toVirtualFilesystemReference(nativeItem)`
+for search results. Then write the four model classes of §1.
+
+### 2.6 Consuming service
+```java
+public interface IG<X>VirtualFilesystemConsumingService
+	extends IGRemoteVirtualFilesystemConsumingService<G<X>System, G<X>ProjectEndpoint, <X>ResourceReference> {}
+
+public class G<X>RemoteVirtualFilesystemConsumingServiceImpl extends
+	GAbstractRemoteVirtualFilesystemConsumingService<G<X>System, G<X>ProjectEndpoint, <X>NativePositionObject, <X>NavigationCoordinates, <X>ResourceReference>
+	implements IG<X>VirtualFilesystemConsumingService { ... }      // NOT a @Service: created in G<X>DefaultBeansConfig
+```
+Methods to implement (all from the base or the interface):
+
+| Method | What it must do |
+|---|---|
+| `createEnvironment(system, endpoint, errorConsumer)` / `createEnvironment(system)` | Build the API client once and put it in the map. The second overload is used by search's `loadSearchResult`. |
+| `clearEnvironment(env, system, endpoint)` | Release clients (`env.clear()` at least). `endpoint` can be null. |
+| `toNavigationPosition(VFilesystemReference, env)` | Decode a selected path into coordinates (NavigationUtil). |
+| `toNativeCoordinates(position, system, endpoint, root, consumer, ..., env)` | Fetch the native objects for root + each step. Return an empty list if any of them is gone. The **last** element decides folder vs resource. |
+| `toResourcesNativeCoordinates(position, system, env)` | Same, for search result loading (no endpoint). |
+| `retrieveChilds(nativeCoordinates, position, system, endpoint, messages, env)` | List the children of the last node as `NativeCoordinatePointer{parentCoordinates = copy of nativeCoordinates, child}`. **Page through everything**: loop on the API's page token or offset until the last page. |
+| `getPositionCoordinate(childCoordinates, env)` | Coordinates of a child path (reverse NavigationUtil). |
+| `getResourceHandle(system, endpoint, GAbstractVirtualFilesystemObject ref, cache)` | Rebuild a `<X>ResourceReference` from `ref.getCustomMetaInfos()`. |
+| `getResourceHandle(SearchableSystemMetaData, position, nativeCoordinates, env)` | Same, from native coordinates (search path). |
+| `streamResource(system, endpoint, ref, cache)` / `streamResource(system, ref, env)` | Open the content. Cache the client in `cache`. Text items (ticket body, comments) → `ByteArrayInputStream` with an explicit charset. Binary attachments → the client's stream. |
+| `verifyRemoteObjectExistence(...)` | See §1 step 6. `null` when you cannot tell. |
+| `describeSystem`, `describeProjectEndpoint`, `describeObject` | Human strings for job messages and search metadata. |
+| `getMessagingModuleId()` | `<MODULE>` |
+
+Override `createDocumentReference(...)` (call `super`, then enrich the returned reference) to attach
+ACL aliases or extra metadata. It must return non-null.
+
+### 2.7 Handler
+```java
+public interface IG<X>ContentManagementSystemHandler
+	extends IGVirtualFilesystemContentManagementSystemHandler<G<X>System, G<X>ProjectEndpoint> {}
+
+public class <X>ContentManagementHandlerImpl extends
+	GAbstractRemoteVirtualFilesystemContentManagementSystemHandler<G<X>System, G<X>ProjectEndpoint, <X>ResourceReference, IG<X>VirtualFilesystemConsumingService>
+	implements IG<X>ContentManagementSystemHandler {
+	public static final String <TYPE_CONSTANT> = "<TYPE>";
+	private static final GContentManagementSystemType systemType = new GContentManagementSystemType();
+	static { systemType.setCode(<TYPE_CONSTANT>); systemType.setDescription("<X>"); }
+
+	public <X>ContentManagementHandlerImpl(IGBuildSystemHandlerRepositoryPattern buildSystemHandlerRepository,
+			IGDocumentReferenceFactory contentHandler, <X>SystemsConfigurationDao systemsDao,
+			<X>ProjectEndpointConfigurationDao endpointsDao, IGLocalPersistentFolderDiscoveryService localFolderDiscoveryService,
+			IGPersistentObjectManager persistentObjectManager, IGMessageBroker messageBroker,
+			IG<X>VirtualFilesystemConsumingService consumingService, IGDocumentReferenceIngestionHandler ingestionHandler) {
+		super(buildSystemHandlerRepository, contentHandler, systemsDao, endpointsDao, localFolderDiscoveryService,
+				persistentObjectManager, messageBroker, consumingService, ingestionHandler);
+	}
+	@Override public GContentManagementSystemType getHandledSystemType() { return systemType; }
+	@Override public G<X>ProjectEndpoint findProjectEndPoint(String systemCode, String code) { return endpointsDao.findByCode(code); }
+	@Override public boolean isManagedEndpoint(GProjectEndpoint e) { return e instanceof G<X>ProjectEndpoint; }
+	@Override public G<X>System getSystem(G<X>ProjectEndpoint e) { return configurationsDao.findByCode(e.get<X>SystemCode()); }
+	@Override public String getMessagingModuleId() { return GStandardModulesConstraints.<X>_MODULE; }
+}
+```
+- The base handler field-injects the knowledge-base hierarchy lookup, the security audit logger, and lazy `ObjectProvider`s for the workflow and search repositories. **Do not** turn those into constructor parameters: the lazy ones break a real startup bean cycle.
+- Leave `isContentsOnLocalFilesystem()` false (the remote base already does).
+
+### 2.8 Bean wiring, dispatcher, job trio
+```java
+@Configuration public class G<X>DefaultBeansConfig {
+	@Bean @ConditionalOnMissingBean(IG<X>VirtualFilesystemConsumingService.class)
+	public IG<X>VirtualFilesystemConsumingService <x>VirtualFilesystemConsumingService(IGDocumentReferenceFactory f, <X>ApiClientFactory c) {...}
+	@Bean @ConditionalOnMissingBean(IG<X>ContentManagementSystemHandler.class)
+	public IG<X>ContentManagementSystemHandler <x>ContentManagementHandler(/* same params as the ctor */) {...}
+}
+
+@Configuration public class G<X>ContentsDispatcherConfig
+	extends SingletonBuilder<G<X>System, G<X>ProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> {
+	public G<X>ContentsDispatcherConfig(IG<X>ContentManagementSystemHandler handler, IGMessageBroker broker,
+			IGContentConsumerFactory consumerFactory, IGContentDispatchingEvaluator evaluator,
+			IGDocumentReferenceEnricherMapFactory mapperFactory, DocumentReferenceSnapshotRepository docSnapshotRepo,
+			DocumentReferenceRepository documentsRepo, VirtualFolderRepository virtualFolderRepo, IWorkflowRouter workflowRouter) {
+		super(handler, broker, consumerFactory, evaluator, mapperFactory, docSnapshotRepo, documentsRepo, virtualFolderRepo, workflowRouter);
+	}
+	@Bean @Scope("singleton") @Qualifier("<x>ContentsDispatcher")
+	public GIOCModuleContentsDispatcher<G<X>System, G<X>ProjectEndpoint, RemoteVirtualFileSystemContentConsumingSessionParam> get<X>ContentsDispatcher() {
+		return super.getDispatcher();
+	}
+}
+```
+- The `@ConditionalOnMissingBean` lets a downstream edition replace the handler or consuming service.
+- Job trio, each `@Component @Scope("singleton") @ConditionalOnMicroservices`, passing `<MODULE>`:
+  - `<X>JobLaunchManager extends AbstractJobLaunchManager`
+  - `<X>JobStatusEmitter extends AbstractJobStatusEmitter`
+  - `<X>JobStatusReplicatorService extends AbstractJobStatusReplicatorService`
+
+  In the monolith the `Monolithic*` trio takes over; copy the three Jira classes and change the constant.
+
+### 2.9 Browsing service and controller
+- `<X>BrowsingContext implements IGVirtualFileSystemContext` (holds `systemCode`, `of(code)`).
+- `impl/<X>BrowsingService implements IGVirtualFilesystemBrowsingService<<X>BrowsingContext>` (`@Service`):
+  - `getRoots(ctx)`: all roots, **paged to the end**
+  - `browse(BrowseParam{root, path}, ctx)`: children of `path`, or of the root when `path == null`, as `PathInfo` with **your** `absolutePath` encoding; `folder` and `metaType` set
+  - `isSupportsNavigationStatus()` + `getParent(...)`: return true and implement `getParent` if the UI must reopen the tree on the saved selection. Then pass `reconstructNavigationCallback` in the UI. Otherwise return false and **do not expose** a navigation-status endpoint (the default method throws).
+  - Map client errors to `OperationStatus` messages: `RestTemplateWrapperService.toMessage(...)` for `HttpClientErrorException`, `GUserMessage.errorMessage(...)` for the rest. Do not throw.
+- `controllers/<X>BrowsingController`: `@RestController @PreAuthorize("hasRole('ADMIN')") @RequestMapping("api/admin/<X>BrowsingController")` with `get<X>Roots(systemCode)` (GET) and `browse<X>Path(BrowseParam, systemCode)` (POST).
+
+### 2.10 Systems controller
+`controllers/<X>SystemsController extends GAbstractSystemsArchitectureController<G<X>System, G<X>ProjectEndpoint>`,
+`@RestController @PreAuthorize("hasRole('ADMIN')") @RequestMapping("api/admin/<X>SystemsController")`:
+- A nested `public static @Component @Scope("singleton") class <X>ControllerEmitter extends ControllerNestedEmitter` whose `getMessagingModuleId()` returns `<MODULE>`.
+- Constructor: `super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService)`.
+- Endpoints, all named `<operation><X><Type>` so the OpenAPI operationIds stay **unique** (never use `GBaseExposedSystemsArchitectureController`'s generic names in a new handler):
+
+| Endpoint | Implementation |
+|---|---|
+| `get<X>SystemType` | `handler.getHandledSystemType()` |
+| `get<X>Systems` | `handler.getConfigurations()` |
+| `find<X>SystemByCode` | `handler.findConfiguration(code)` |
+| `find<X>EndpointsByProject` | `handler.findDataSourcesByProject(code)` |
+| `find<X>EndpointsByCode` | `handler.findDataSource(code)` |
+| `find<X>EndpointsByQbe` | `findEndpointByQbe` |
+| `insert<X>System` / `update<X>System` | run the test service first; return `OperationStatus<G<X>System>` |
+| `test<X>System` | the test service |
+| `delete<X>System` | `deleteSystem` |
+| `insert<X>Endpoint` / `update<X>Endpoint` / `delete<X>Endpoint` / `publish<X>Endpoint` | the protected base methods (they do the audit log, replication, rescheduling, disposal messages and the declared-source guard) |
+| `fast<X>Config(Fast<X>SystemInsertRequest)` | build the secret, `secretAccessService.storeSecret(secret, description, <TYPE>)`, build the system with `contentManagementSystemType = <TYPE>`, test, `persistentObjectManager.insert`. On failure return an `OperationStatus` error and log at ERROR. |
+
+- Override `isDeclaredInConfiguration(G<X>System s)` → `handler.isDeclaredInConfiguration(s.getCode())`.
+
+### 2.11 Search service (optional, recommended for ticketing and wiki systems)
+1. Module `gebo.systems.parent/gebo.<x>.search.api`: DTOs only. Its pom depends on `gebo.architecture.search.abstraction.layer` + `jackson-annotations`.
+   - `<X>ResultsExtractionData extends BaseSearchResultsExtractionDataType` (the per-result LLM extraction, optionally suggesting follow-up searches)
+   - for native search, `<X>SearchFilter implements INativeQueryObject` (structured filter the LLM fills; `relevantKeywords()`)
+   - document every field with `@JsonPropertyDescription`: the LLM reads them as the schema
+
+   It exists so the brain microservice's search REST clients can share the types without the heavy client SDK.
+2. `impl/<X>SearchService extends GAbstractRemoteVirtualFilesystemSearchService<...> implements INativeSearchService<<X>ResultsExtractionData, <X>SearchFilter>` (`@Service`).
+   - The base gives you `getSearchableSystems` / `findSystemById` (from the handler's configurations), `isEnabled`, `loadSearchResult` (via your consuming service) and catalogue sampling (via browsing roots).
+   - You implement:
+     - `search(query, system, n, params)` (clean with `CleanQueryUtil.cleanQuery`) and `nativeSearch(filter, system, n, params)` → translate the filter to the native query language (a `<X>QueryUtil`/translator)
+     - `getId`, `getDescription`, `getMessagingModuleId`
+     - `aggregate` (use `basicAggregate` + `DataStructureJoinUtils`) and `extractRelatedAnalisysReferences`
+     - `getQueriesGenerationPromptUseCode`, `getNativePromptTemplateUseCode`, `createCustomTemplateParamsMap` (e.g. the projects catalogue for the prompt)
+     - `createBrowsingContext`
+   - Each `SearchResult` needs:
+     - `systemConfigurationCode`
+     - `navigationReference` (a `VFilesystemReference` in your encoding, so `loadSearchResult` can stream it)
+     - `descriptiveText`
+     - `resultReference` (uri, title, contentType)
+     - children for attachments and links
+
+     Call `setOriginOn(result)` on every node.
+3. `controllers/<X>SearchServiceController extends BaseNativeSearchController<...>`, `@PreAuthorize("hasAnyRole('ADMIN','USER')") @RequestMapping("api/users/<X>SearchServiceController")`. Copy `JiraSearchServiceController` and rename every `rest...Jira` method to `rest...<X>`. The method names are the operationIds.
+4. Prompts: `config/<X>HandlerConfig` (`@ConfigurationProperties("ai.gebo.<x>")`, `@PropertySource(value = "classpath:/<x>-prompts-library/<x>-library.yml", factory = GeboYamlPropertySourceFactory.class)`) with `List<GPromptTemplateLibraryReference> library`, `List<GPromptUseInfo> uses`, and two `@Bean`s (`IGStaticPromptsProvider`, `IGStaticPromptUseInfoProvider`), each `new PromptTemplateProvidersImplementation(this, library, List.of(), uses)`.
+   - The yml shape: see `jira-library.yml`. Each prompt use has `promptUse`, `langCode`, `systemReference`, `userReference`, `chatHistory`, `contextDocuments`, plus a `uses` entry documenting its placeholders.
+   - Prompts must work on every supported model (gpt-4.1, Qwen ~100B, gpt-oss-120b...): ask for the structured format, do not rely on one vendor's behaviour.
+   - Without a search service, keep an empty library (`library: []`, `uses: []`) as WebDAV does, or omit the class.
+5. Microservices: brain calls the handler's search controller through `gebo.microservices.architecture.parent/gebo.microservices.searchservices.clients`. Add:
+   - a `<X>SearchServiceRestClient extends AbstractNativeSearchServiceRestClient<...>`
+   - its bean in `GeboSearchServicesClientsAutoConfiguration`
+   - its `Endpoint.of("<x>_gebo_ai", "api/users/<X>SearchServiceController", "<id>", "<MODULE>", "<standard prompt use>", "<native prompt use>")` in `GeboSearchServicesClientsProperties`
+
+### 2.12 Logging (mandatory on every class)
+- `DEBUG` for calls and decisions (paging steps, roots found, which secret type, skipped items).
+- `TRACE` for contents (payloads, metadata maps).
+- `ERROR` with the exception for failures.
+- Guard with `isDebugEnabled()`/`isTraceEnabled()`.
+- Use the base classes' `LOGGER` (`LoggerFactory.getLogger(getClass())`) so the category is the runtime subclass.
+- Never drop an existing log line when rewriting code.
+
+---
+
+## 3. Registration outside the module
+
+**Backend, monolith**
+1. `GStandardModulesConstraints`: add `<X>_MODULE = "<MODULE>"` and add it to `ALL_MODULES` and `COMMUNITY_MODULES`.
+2. `gebo.systems.parent/pom.xml`: the module entries (search.api first).
+3. `gebo.systems.parent/gebo.contentsystems.starter/pom.xml`: a dependency on `gebo.<x>.handler`. The monolith gets it through `gebo.apps.monolithic.starter` → `gebo.ai.app`.
+
+**Backend, microservices** (model: `webdav.gebo.ai`)
+4. `gebo.apps.parent/gebo.microservices.apps.parent/<x>.gebo.ai`. It needs:
+   - a pom on `gebo.microservices.content-handler.starter` + the handler + `gebo.architecture.angular.persistence.support`
+   - `<X>Application` with the `ai.gebo` scans and the `TypeExcludeFilter`/`AutoConfigurationExcludeFilter` excludes
+   - `application.yml` (`spring.application.name: <x>_gebo_ai`, context-path, Eureka appname, database name)
+   - `logback-spring.xml`
+   - a `<X>ContextTest`
+   - a `<module>` entry in `gebo.microservices.apps.parent/pom.xml`
+5. Topology: a `GeboMicroservice.named("<x>_gebo_ai").module("<MODULE>", "module-ioc-dispatcher-component", "resources-dispose-component", "system-settings-controller-component", "job-status-replicator", "async-publishing-job-component", "job-status-notifier")` in `gebo.microservices.topology/.../GeboStandardMicroservices.java`, plus the same service under `gebo.microservices.topology.services` in the gateway `application.yml`.
+6. `dockers/gebo.microservices/docker-compose.yml`, and the per-service java/angular clients under `gebo.api.clients/gebo.microservices.clients.parent` when the deployment needs them. Ask the user whether the microservice part is in scope before doing it.
+
+---
+
+## 4. UI (gebo.ui): system, data source, setup, knowledge base
+
+The handler UI lives in `gebo.ui/projects/gebo-ai-admin-ui/src/lib/admin-ui/entity-editors/gebo-ai-<x>-admin/`.
+The shared bases and controls are in `gebo-ai-reusable-ui`. Read its `docs/01-architecture.md` (§2
+registering an editor, §3 writing an editor, §6 wizards) and `docs/03-forms-and-fields.md` first.
+
+### 4.1 Stubs first
+Regenerate the Angular REST stubs (`/regen-angular-stubs`) after the controllers exist. The UI then uses:
+- `<X>SystemsControllerService`, `<X>BrowsingControllerService`
+- the models `G<X>System`, `G<X>ProjectEndpoint`, `OperationStatusG<X>System`, `Fast<X>SystemInsertRequest`
+
+Check that `models.ts`/`api.module.ts` lost no exports. Stale `.m2` jars drop endpoints, so build the backend with `-am`.
+
+### 4.2 Three components (copy the Jira trio, then fix the Jira leftovers listed in §9)
+All of them extend `BaseEntityEditingComponent<T>`
+(`gebo-ai-reusable-ui/src/lib/controls/base-entity-editing-component/base-entity-editing.component.ts`). A subclass:
+- declares `protected entityName = "G<X>System"` (or `"G<X>ProjectEndpoint"`) and the `formGroup`
+- implements `findByCode`, `save`, `insert`, `delete`, `canBeDeleted` (or extends `BaseEntityEditingComponentAutoDeleteCheck`)
+- keeps the constructor order `injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService` and adds its own services after them
+- provides `{ provide: GEBO_AI_MODULE, useValue: "GeboAI<X>Module" }` and `{ provide: GEBO_AI_FIELD_HOST, multi: false, useExisting: forwardRef(() => <Component>) }`
+
+1. **System editor** `gebo-ai-<x>-system-admin.component.ts/.html` (`GeboAI<X>AdminComponent`).
+   - Set `manageOperationStatus = true`. Map `insert<X>System`/`update<X>System` through `updateLastOperationStatus(r)` and return `r.result`.
+   - Force `contentManagementSystemType = '<TYPE>'` in `onNewData`/save.
+   - Fields: `description`, `baseUri`, `secretCode`. The secret picker is `<geboai-editable-listbox-component formControlName="secretCode" [optionsObservable]="secretsService.getSecretsByContextCode('<TYPE>')" [createNewRecordRequest]="newSecretActionRequest('<TYPE>', entityName, entity, [<allowed GeboSecretType names>])">`; the factory is `entity-editors/utils/gebo-ai-create-secret-action-request-factory.ts`.
+   - Wire a **Test** button to `test<X>System` and show its messages (the Jira/Confluence/SharePoint `testSystem()` is an empty stub).
+2. **Fast form** `gebo-ai-<x>-system-fast.component.ts/.html`: base URI, description, the credential fields the product needs, then calls `fast<X>Config`. It emits an event the wizard uses to close the dialog. Its field host is `useValue: fieldHostComponentName("GeboAI<X>SystemFastComponent")`.
+3. **Data source editor** `gebo-ai-<x>-endpoint.component.ts/.html` (`GeboAI<X>EndpointComponent`).
+   - Set `doPeriodicBackendProcessingCheck = true` and override `checkBackendProcessing()` with `JobLauncherControllerService.getHasRunningJobs`.
+   - The system picker is an editable listbox on `<x>SystemCode`, with "create new" = `{actionType: NEW, targetType: "G<X>System", target: {contentManagementSystemType: "<TYPE>"}}`.
+   - **Rebuild the browse callbacks when `<x>SystemCode` changes**:
+     ```ts
+     this.formGroup.controls["<x>SystemCode"].valueChanges.subscribe(code => {
+       if (code && code !== this.lastSystemCode) {
+         this.lastSystemCode = code;
+         this.loadRootsObservable = () => this.browsing.get<X>Roots(code);
+         this.browsePathObservable = (p: BrowseParam) => this.browsing.browse<X>Path(p, code);
+       }});
+     ```
+   - Bind `<gebo-ai-vfilesystem-selector-component formControlName="paths" selectionMode="multiple" [loadRootsObservable] [browsePathObservable] [readonly]="mode==='EDIT'">`, plus `[reconstructNavigationCallback]` only if browsing supports navigation status.
+   - Copy the standard endpoint parts: the Save/Publish/Cancel/Delete bar under `@if (!isWizardMode)`; `doPublish()` → `doSave(cb)` → `createJob(objectReference)` → open `GJobStatus`; `<gebo-ai-content-reindex-scheduler-component formControlName="programmedTables">`; the `openZips` and `personalData` checkboxes; the Logs tab `<gebo-ai-log-table-component [jobType]="'CONTENTS_READING_VECTORIZING'" [endPointReference]="objectReference">`.
+   - The `formGroup` holds **only** fields of `G<X>ProjectEndpoint`.
+
+### 4.3 Registration points (all mandatory)
+1. `gebo-ai-admin-ui/src/lib/admin-ui/gebo-ai-admin.module.ts`:
+   - declare and export the three components
+   - in `forRoot()` add two `GEBO_UI_ENTITY_FORM_TOKEN` providers (`multi: true`):
+     - `{ entityName: 'G<X>ProjectEndpoint', entityAliases: ['<pkg>.G<X>ProjectEndpoint'], entityUI: GeboAI<X>EndpointComponent }`
+     - the same for `G<X>System`
+
+     The alias is the Java FQCN. This is how `GeboUIActionRoutingService` opens an editor for "open/new G<X>…".
+2. `gebo-ai-admin-ui/src/lib/admin-ui/gebo-ai-standard-modules-injections.module.ts` (the knowledge-base tree and "add data source" menu):
+   - `export const <X>_MODULE = "<MODULE>"` (must equal the backend id)
+   - a `GeboAI<X>ModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService`:
+     - `findByProjectEndpoints(code)` → `find<X>EndpointsByProject`
+     - `byProjectCreateAction(project, wizardSteps?, stepId?)` → NEW `G<X>ProjectEndpoint`, `target: {parentProjectCode}`, `contextType: "GProject"`, the wizard inputs in `targetFormInputs`
+   - a `GeboAIPluggableProjectEndpointModule` block (`moduleId`, `projecteEndpointClassName: "<pkg>.G<X>ProjectEndpoint"`, icon `"pi pi-<x>"`, label `"+<x>"`, title)
+   - provide the service and `{ provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: block, multi: true }` in **both** the `@NgModule` providers and `forRoot()`
+3. Setup wizard (`gebo-ai-admin-ui/src/lib/setup-wizard/<x>-wizard.component.ts/.html`):
+   - `<X>StatusService` ("completed" = `get<X>Systems().length > 0`)
+   - `<X>InstalledModuleService extends GeboRootInstalledModuleService` with `moduleCode = <X>_MODULE` (**its own** module: the Jira one wrongly says `CONFLUENCE_MODULE`)
+   - `<X>WizardComponent extends BaseWizardSectionComponent`, implementing `reloadData()`: a systems table with edit (OPEN `G<X>System`) and a "+ <X> system" `p-dialog` containing the fast form
+   - in `setup-wizards.module.ts`: the import, a `SetupWizardsSection` constant (`wizardSectionId: "<x>SystemSetupSection"`, `groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID`, `mandatory: false`, `orderEntry`, the services and the component), the declaration, the service providers and `{ provide: WIZARD_SECTION, useValue: section, multi: true }`
+4. Icons: a `.pi.pi-<x>` rule in `gebo-ai-reusable-ui/src/styles.scss` (SVG under `assets/3rdparty/`), and `G<X>ProjectEndpoint: "pi pi-<x>"` in the `iconsMapping` of `controls/vfilesystem-selector/vfilesystem-selector.component.ts`.
+5. `gebo-ai-admin-ui/src/public-api.ts`: export the components (the wizard too, if a downstream app must reuse it).
+6. Optionally, a flag in `GeboAIModules` (`gebo-ai-reusable-ui/src/lib/services/gebo-ai-modules.service.ts`), mapped from **the right** module id.
+
+### 4.4 i18n (mandatory with every UI change)
+Run `/i18n-component-resources` for each new component. The keys land in
+`gebo-ai-reusable-ui/src/assets/i18n/en.json`:
+- `GeboAI<X>Module` → `G<X>System`, `G<X>ProjectEndpoint`, `GeboAI<X>SystemFastComponent` → `<element id>` → `label`/`help`/`placeholder`
+- `SetupWizardPanelModule` → `SetupWizardPanelComponent` → `"<x>SystemSetupSection"` (wizard label and description)
+- `SetupWizardPanelModule` → `"<X>WizardComponent"` (wizard body)
+- `AddProjectMenuModule` → `AddProjectMenuComponent` → `"<pkg with dots as _>_G<X>ProjectEndpoint"` (add-menu entry)
+
+Every visible string needs an `id` and a gebo-ai directive. The Jira `<p-tab>` titles have none, so they stay English.
+
+---
+
+## 5. Order of work
+
+1. Ask the user only what the code cannot tell you: product scope (which objects to ingest), auth types to support, whether search and microservices are in scope.
+2. REST client module (e.g. `gebo.integrations.clients/gebo.<x>.client`) present and compiling.
+3. `search.api` (if any), then the handler module, in the §2 order: entities → config/DAOs → client factory + test service → NavigationUtil + model → consuming → handler → wiring → browsing → controllers → seeder → search.
+4. Registration (§3).
+5. Build: **one Maven build at a time**, with `-am` on the changed modules (`mvn -o -q install -pl gebo.systems.parent/gebo.<x>.handler -am`). Never build two reactors concurrently.
+6. Unit tests: seeder test (copy `WebdavDeclaredDataSourcesSeederTest`), NavigationUtil encode/decode round trips, query translator tests. Mock the generated `*Api` classes for paging tests.
+7. Boot the monolith jar on a throwaway DB, with `GEBO_HOME` set and `-D` options before `-jar`. Check that `logs/ai.gebo.monolithic.app.log` shows `Module: <MODULE> is enabled`, and that `/v3/api-docs` has the new controllers with unique operationIds.
+8. Stubs (§4.1) → UI (§4.2-4.4) → `ng build` of the libraries.
+9. Live check with `/gebo-backend-test` (insert a system through `fast<X>Config` against a real or sandbox instance, browse roots, insert an endpoint, publish, follow the job) and in the browser:
+   - setup wizard section visible
+   - "add data source" menu entry visible
+   - tree browsing
+   - publish → job log
+   - re-open in EDIT
+
+   Smoke-test the editors live: mocked tests hide persistence code generation.
+
+---
+
+## 6. Ready-made checklist (copy into the task list)
+
+- [ ] client module compiles · [ ] `search.api` (opt.)
+- [ ] entities + repositories · [ ] systems/datasources config · [ ] systems DAO + dynamic source · [ ] endpoint DAO + dynamic source
+- [ ] client factory (DAO lookups, every secret type) · [ ] test service
+- [ ] NavigationUtil + native/coordinates/path/resource model
+- [ ] consuming service (paging everywhere, streaming, meta infos) · [ ] handler · [ ] default beans · [ ] dispatcher · [ ] job trio
+- [ ] browsing service + controller · [ ] systems controller (+ emitter, fast config, test, publish, declared guard)
+- [ ] seeder (+ test) · [ ] prompts library · [ ] search service + controller (opt.)
+- [ ] `GStandardModulesConstraints` (id + both lists) · [ ] systems parent pom · [ ] contentsystems.starter
+- [ ] microservice app + topology + gateway + searchservices client (if in scope)
+- [ ] stubs regenerated · [ ] 3 components · [ ] admin module + entity form tokens · [ ] pluggable KB module · [ ] wizard section · [ ] icons · [ ] public-api · [ ] en.json
+- [ ] build -am, tests, boot, live checks
+
+---
+
+## 7. Rules that apply to this work
+
+- Ground every step in the real code: verify the call path, which collaborators are optional or nullable, and that a configuration option exists before using it.
+- Open-source wording only: no references to non-OSS editions or packages in code comments or docs.
+- Do not add caps, limits, page-size reductions or retries beyond what the remote API imposes without asking the user.
+- No model prices or vendor-specific prompt tricks.
+- Credentials only through the secrets service. Systems hold `secretCode` references.
+- Commit or push only when the user asks.
+
+---
+
+## 8. Where the shared contracts live (for re-checking)
+
+| Contract | File |
+|---|---|
+| Handler interface | `gebo.architecture.parent/gebo.architecture.contentsystems.abstraction.layer/src/main/java/ai/gebo/systems/abstraction/layer/IGContentManagementSystemHandler.java` |
+| Remote handler base | `.../GAbstractRemoteVirtualFilesystemContentManagementSystemHandler.java` (`consumeImplementation`, `streamContent`, `checkUpdatedOrDeleted`) |
+| Handler base | `.../GAbstractContentManagementSystemHandler.java` (`consume`, `createRootItem`, DAO-backed finders, data-flow infos) |
+| Consuming base | `.../GAbstractRemoteVirtualFilesystemConsumingService.java` (`consumeAll`, `consumeChilds`, `createDocumentReference`, `childrenMapsEnrich`) |
+| Systems DAO base | `.../GAbstractContentManagementSystemConfigurationDao.java`, `IGContentManagementSystemConfigurationDao.java` |
+| Seeder base | `.../GAbstractDeclaredDataSourcesSeeder.java`, `config/GDeclaredDataSource(.Path).java` |
+| Remote search base | `.../GAbstractRemoteVirtualFilesystemSearchService.java` |
+| Controllers base | `.../controllers/GAbstractSystemsArchitectureController.java` |
+| Contents dispatcher | `.../GIOCModuleContentsDispatcher.java` (`SingletonBuilder`) |
+| Deletion check consumer | `.../GIOCContentConsumer.java` |
+| Job bases | `.../ai/gebo/jobs/services/impl/Abstract{JobLaunchManager,JobStatusEmitter,JobStatusReplicatorService}.java` |
+| Browsing interface | `gebo.architecture.parent/gebo.architecture.virtual-browsing/.../IGVirtualFilesystemBrowsingService.java` |
+| Search contracts | `gebo.architecture.parent/gebo.architecture.search.abstraction.layer/.../service/{ISearchService,INativeSearchService,INativeQueryObject}.java`, `controller/Base{,Native}SearchController.java` |
+| UI editor base | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/base-entity-editing-component/base-entity-editing.component.ts` |
+| UI pluggable KB module | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/services/pluggable-project-endpoint.ts` |
+| UI wizard contract | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/setup-wizard/setup-wizard-step.ts`, `base-wizard-section.component.ts` |
+| UI tree selector | `gebo.ui/projects/gebo-ai-reusable-ui/src/lib/controls/vfilesystem-selector/vfilesystem-selector.component.ts` |
+
+---
+
+## 9. Defects in the existing handlers: do not copy them
+
+Found while writing this skill (2026-11-27). They are bugs of the existing modules, **not** part of
+the pattern. Report them to the user rather than fixing them silently while building something else.
+
+**Backend**
+- `JiraApiClientFactory.getApiClient(String code)` reads `JiraSystemRepository.findById`, so browsing a **declared** Jira system fails. Resolve through the DAO.
+- `JiraApiClientFactory` supports only `TOKEN`, while `JiraSystemsTestService` and `fastJiraConfig` also accept `USERNAME_PASSWORD`: a system created with a password passes the test, then fails to browse and ingest.
+- `JiraBrowsingService.getRoots` loops `while (... retrieved.isIsLast())`: it stops after the first page whenever there are more pages (the condition is inverted).
+- `JiraSearchService.addIssueLinks/addAttachments` assign `getFields().containsKey(...)` (a Boolean) and then test `instanceof Collection`: links and attachments are never added to search results.
+- `JiraSystemsController.findJiraEndpointsByProject/ByCode` read the repository or persistence directly instead of `handler.findDataSourcesByProject/findDataSource` (WebDAV does it right).
+- `JiraBrowsingController.getJiraNavigationStatus` is exposed while `isSupportsNavigationStatus()` is false, so the call always throws.
+- `GAbstractRemoteVirtualFilesystemConsumingService.consumeAll` collects the session's `REMOVE` operations into a `deleted` list and never uses it, so removing a path through a session operation has no effect.
+- No remote handler implements `verifyRemoteObjectExistence` (they return `null` or `doc`), so remote deletions are not detected by the end-of-job check.
+- `streamResource` in Jira uses `String.getBytes()` with the platform charset. Use `StandardCharsets.UTF_8`.
+
+**UI**
+- `JiraInstalledModuleService.moduleCode = CONFLUENCE_MODULE`: the Jira wizard section follows the Confluence module's flag.
+- The Jira endpoint `formGroup` carries Confluence fields (`confluenceVersion`, `extractedFormat`, `extractAndSaveContents`), and several of its signatures are typed `GConfluence*`. The Jira wizard table shows `item.confluenceVersion`.
+- The `testSystem()` of the Jira/Confluence/SharePoint system editors is empty, and no template calls `test<X>System`.
+- `newSecretActionRequest(...)` in the Jira editor passes `['TOKEN']` while its comment says USERNAME_PASSWORD.
+- `gebo-ai-modules.service.ts` sets `sharepointModuleEnabled` from `SHARED_FILESYSTEM_MODULE`.
+- `GeboAICommonModulesInjectionsModule.forRoot()` (`gebo-ai-standard-modules-injections.module.ts`) registers the WebDAV KB config block but not its service (it resolves only because the service is `providedIn: "root"`).
