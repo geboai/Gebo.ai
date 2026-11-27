@@ -566,19 +566,15 @@ ai.gebo.llms.vendors.setup.config:
             # naming gpt-oss-120b and gpt-oss-20b as their replacements, and groq/compound on
             # 2026-09-21 (console.groq.com/docs/deprecations); its models page still lists
             # the two llama models, for the enterprise tier only.
-            # The default is not gpt-oss-120b, which has reported tool call failures:
-            # qwen3.8-27b calls tools, in parallel too (console.groq.com/docs/tool-use,
-            # 2026-10). Groq lists it as a preview model; the setup checks it against the
-            # live models list.
-            - code: qwen/qwen3.8-27b
-              description: Qwen 3.8 27b
-              uses: CHAT
-              defaultChoice: true
-              thinking: MEDIUM_THINKING
-            # Kept as an option but not the default: unreliable at tool calls.
+            # qwen/qwen3.8-27b, the default until now, is no longer preset: Groq lists it
+            # under "Preview Models", which "should not be used in production environments as
+            # they may be discontinued at short notice" (console.groq.com/docs/models,
+            # 2026-11-27). gpt-oss-120b, a production model with no deprecation
+            # (console.groq.com/docs/deprecations, 2026-11-27), is the default chat model.
             - code: openai/gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
+              defaultChoice: true
               thinking: MEDIUM_THINKING
             # gpt-oss cannot stop reasoning: LOW_THINKING is sent as reasoning_effort "low",
             # one of the low, medium and high Groq accepts for it, so an internal call does
@@ -719,8 +715,12 @@ ai.gebo.llms.vendors.setup.config:
               description: MiniMax Speech 2.8 Turbo (multilanguage)
             - code: microsoft/mai-voice-2
               description: Microsoft MAI Voice 2 (15 languages)
-            - code: google/gemini-3.1-flash-tts-preview
-              description: Google Gemini 3.1 Flash TTS (70+ languages)
+            # Replaces google/gemini-3.1-flash-tts-preview: OpenRouter's speech models list
+            # calls it "the successor to [Gemini 3.1 Flash TTS Preview]", with the same 30
+            # voices and the same pcm and wav output (openrouter.ai/api/v1/audio/speech/models,
+            # 2026-11-27).
+            - code: google/gemini-3.8-flash-tts
+              description: Google Gemini 3.8 Flash TTS
             - code: deepgram/aura-2
               description: Deepgram Aura 2
             - code: hexgrad/kokoro-82m
