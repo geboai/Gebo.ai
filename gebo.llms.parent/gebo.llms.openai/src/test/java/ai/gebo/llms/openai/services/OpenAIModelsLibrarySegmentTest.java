@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -117,6 +118,33 @@ class OpenAIModelsLibrarySegmentTest {
 		}
 		assertFalse(OpenAiApiRouting.usesResponsesApi("gpt-5.2"), "Chat Completions");
 		assertFalse(OpenAiApiRouting.usesResponsesApi("gpt-5.4-mini"), "Chat Completions");
+	}
+
+	@Test
+	void theModelsWhosePageGivesTheResponsesApiOnlyGoThroughIt() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+
+		// their pages mark Chat Completions "Not supported": the version their id carries
+		// would have sent the pro, codex and cyber models to Chat Completions
+		for (String id : List.of("gpt-5.5-pro", "gpt-5.4-pro", "gpt-5.2-pro", "gpt-5-pro", "o3-pro", "gpt-5.3-codex",
+				"gpt-5.6-cyber", "gpt-oss-120b", "gpt-oss-20b", "gpt-5-pro-2025-10-06", "o3-pro-2025-06-10")) {
+			assertEquals(OpenAiApiRouting.RESPONSES, library.findApi("openai", id), id);
+			assertTrue(OpenAiApiRouting.usesResponsesApi(library, id), id);
+		}
+		// the models taking both apis keep the version rule
+		for (String id : List.of("gpt-5.5", "gpt-5.6-sol", "gpt-5.2", "gpt-5.2-2025-12-11", "gpt-5.4-mini", "gpt-5",
+				"o3", "chat-latest", "gpt-4.1", "gpt-4o")) {
+			assertNull(library.findApi("openai", id), id);
+			assertFalse(OpenAiApiRouting.usesResponsesApi(library, id), id);
+		}
+		assertNull(library.findApi("openai", "gpt-6.1-sol"));
+		assertTrue(OpenAiApiRouting.usesResponsesApi(library, "gpt-6.1-sol"), "by its version");
+		assertNull(library.findApi("groq", "gpt-oss-120b"), "OpenAI's rule only");
+
+		// the api rule states no parameter: each model keeps the rule it had
+		assertEquals(Sampling.REJECTED, library.findParameterRules("openai", "o3-pro").getSampling());
+		assertFalse(library.findParameterRules("openai", "gpt-5-pro").knowsEfforts(), "the gpt-5 family rule");
+		assertNull(library.findParameterRules("openai", "gpt-oss-120b"));
 	}
 
 	@Test

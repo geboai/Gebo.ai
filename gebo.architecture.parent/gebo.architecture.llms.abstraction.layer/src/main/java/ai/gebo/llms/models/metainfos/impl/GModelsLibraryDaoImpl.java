@@ -117,4 +117,16 @@ public class GModelsLibraryDaoImpl implements IGModelsLibraryDao {
 		}
 		return found;
 	}
+
+	@Override
+	public String findApi(String providerId, String modelId) {
+		final String found = all(ModelsLibraryConfig::getParameterRules, GProviderModelsLibrary::getParameterRules)
+				.stream().filter(Objects::nonNull).filter(ModelParameterRules::statesApi)
+				.filter(rule -> rule.covers(providerId, modelId)).findFirst().map(ModelParameterRules::getApi)
+				.map(String::trim).orElse(null);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("findApi(" + providerId + ", " + modelId + ") => " + found);
+		}
+		return found;
+	}
 }

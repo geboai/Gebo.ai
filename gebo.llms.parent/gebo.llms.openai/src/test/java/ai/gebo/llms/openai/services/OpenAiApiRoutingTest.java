@@ -18,7 +18,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-/** Pins which OpenAI models go through the Responses api: version 6 and later. */
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+import ai.gebo.llms.models.metainfos.ModelMetaInfo;
+
+/**
+ * Pins which OpenAI models go through the Responses api: the ones the models library
+ * names, then version 6 and later.
+ */
 class OpenAiApiRoutingTest {
 
 	@Test
@@ -32,5 +38,37 @@ class OpenAiApiRoutingTest {
 		assertEquals(4.1, OpenAiApiRouting.versionOf("gpt-4.1-mini-2025-04-14"));
 		assertNull(OpenAiApiRouting.versionOf("davinci"));
 		assertFalse(OpenAiApiRouting.usesResponsesApi(null));
+	}
+
+	@Test
+	void theLibrarysApiIsReadBeforeTheVersion() {
+		IGModelsLibraryDao library = new IGModelsLibraryDao() {
+			@Override
+			public ModelMetaInfo findByModelId(String modelId) {
+				return null;
+			}
+
+			@Override
+			public ModelMetaInfo findByProviderIdAndModelId(String providerId, String modelId) {
+				return null;
+			}
+
+			@Override
+			public String findApi(String providerId, String modelId) {
+				if (!"openai".equals(providerId))
+					return null;
+				return switch (modelId) {
+				case "gpt-5.5-pro" -> "responses";
+				case "gpt-6-old" -> "chat-completions";
+				default -> null;
+				};
+			}
+		};
+		assertTrue(OpenAiApiRouting.usesResponsesApi(library, "gpt-5.5-pro"), "named by the library");
+		assertFalse(OpenAiApiRouting.usesResponsesApi(library, "gpt-6-old"), "named by the library");
+		assertTrue(OpenAiApiRouting.usesResponsesApi(library, "gpt-6.1-sol"), "by its version");
+		assertFalse(OpenAiApiRouting.usesResponsesApi(library, "gpt-5.5"), "by its version");
+		assertFalse(OpenAiApiRouting.usesResponsesApi(null, "gpt-5.5-pro"), "no library: by its version");
+		assertFalse(OpenAiApiRouting.usesResponsesApi(library, null));
 	}
 }

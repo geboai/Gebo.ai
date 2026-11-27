@@ -577,3 +577,14 @@ ai.gebo.models.providers.openai:
         "gpt-5.4-mini-20*", "gpt-5.5-20*", "gpt-6-sol-20*", "gpt-6-luna-20*", "gpt-6-astra-20*", "gpt-6.1-sol-20*"]
       inputModalities: [TEXT, IMAGE, DOCUMENT]
       source: the model pages and the file inputs guide named at the top of this file
+    # The models whose page marks Chat Completions "Not supported" and Responses
+    # supported, read 2026-11-26: called through the Responses api whatever the version
+    # their id carries (OpenAiApiRouting reads it before its version rule; gpt-oss-120b and
+    # gpt-oss-20b only reached it by reading 120 and 20 as versions). These rules state
+    # nothing of the parameters and are read apart.
+    - providerId: openai
+      models: ["gpt-5.5-pro", "gpt-5.5-pro-20*", "gpt-5.4-pro", "gpt-5.4-pro-20*", "gpt-5.2-pro", "gpt-5.2-pro-20*",
+        "gpt-5-pro", "gpt-5-pro-20*", "o3-pro", "o3-pro-20*", "gpt-5.3-codex", "gpt-5.3-codex-20*", "gpt-5.6-cyber",
+        "gpt-5.6-cyber-20*", "gpt-oss-120b", "gpt-oss-120b-20*", "gpt-oss-20b", "gpt-oss-20b-20*"]
+      api: responses
+      source: developers.openai.com/api/docs/models/<id>, Endpoints section, 2026-11-26

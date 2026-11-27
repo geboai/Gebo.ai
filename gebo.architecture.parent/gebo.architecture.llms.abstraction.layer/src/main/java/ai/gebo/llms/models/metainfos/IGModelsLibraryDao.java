@@ -68,6 +68,21 @@ public interface IGModelsLibraryDao {
     }
 
     /**
+     * The api of its provider a model is called through by the library's rules: the api
+     * of the first rule covering it that tells one, the installation's library first.
+     * It is for the providers serving their models through several apis, a model that
+     * takes one only being named by a rule ({@code gpt-5.5-pro*}), its dated variants
+     * with it.
+     *
+     * @param providerId the provider of the model, as its type declares it
+     * @param modelId    the model id its requests name
+     * @return the api as the provider module spells it, or null when no rule tells it
+     */
+    public default String findApi(String providerId, String modelId) {
+        return null;
+    }
+
+    /**
      * Whether the library knows a model as a chat model: it has an entry of its own
      * saying so, or a rule telling what it accepts as input. The lists of chat models
      * that recognise the other kinds by markers in their ids ("audio", "image") keep
