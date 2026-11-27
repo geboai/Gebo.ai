@@ -12,12 +12,15 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient.ResponseSpec;
 
 import ai.gebo.glpi.client.api.AdministrationApi;
 import ai.gebo.glpi.client.api.AssistanceApi;
@@ -29,16 +32,24 @@ import ai.gebo.glpi.client.model.Document;
 import ai.gebo.glpi.client.model.Entity;
 import ai.gebo.glpi.client.model.Followup;
 import ai.gebo.glpi.client.model.KBArticle;
-import ai.gebo.glpi.client.model.Session;
 import ai.gebo.glpi.client.model.Solution;
 import ai.gebo.glpi.client.model.Ticket;
 import ai.gebo.glpi.client.model.TicketTask;
+import ai.gebo.glpi.handler.model.GlpiNativePositionObject;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * The calls the GLPI handler makes on the generated client, with the paging of
  * the list endpoints. Every list is read to its end: a page is asked from the
  * first item not yet read until GLPI answers an empty one, so a server page
  * size smaller than the one asked never truncates a listing.
+ * <p>
+ * Where GLPI answers differently from its own specification the answer is read
+ * untyped: the timeline lists come as {@code [{"type": ..., "item": {...}}]}
+ * (GLPI 11.0.13) instead of a list of items, a ticket's timeline documents are
+ * links ({@code documents_id}) to the documents, and the session's
+ * {@code profiles} is an object keyed by profile id.
+ * </p>
  */
 public class GlpiRemoteAccess {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GlpiRemoteAccess.class);
@@ -50,6 +61,11 @@ public class GlpiRemoteAccess {
 	 */
 	static final String ENTITY_RECURSIVE = "true";
 	static final String SORT_BY_ID = "id:asc";
+	private static final ParameterizedTypeReference<List<Map<String, Object>>> JSON_LIST = new ParameterizedTypeReference<List<Map<String, Object>>>() {
+	};
+	private static final ParameterizedTypeReference<Map<String, Object>> JSON_OBJECT = new ParameterizedTypeReference<Map<String, Object>>() {
+	};
+	private static final JsonMapper MAPPER = GlpiApiClientFactory.createMapper();
 
 	private final AssistanceApi assistance;
 	private final KnowledgebaseApi knowledgebase;
@@ -109,9 +125,52 @@ public class GlpiRemoteAccess {
 		return Math.toIntExact(value);
 	}
 
-	public Session session() {
-		return session.sessionGet(null, null, null, null);
+	/** The current GLPI session (user_id, name, friendly_name, profiles, active_entities...) */
+	public Map<String, Object> session() {
+		return session.sessionGetWithResponseSpec(null, null, null, null).body(JSON_OBJECT);
 	}
+
+	/**
+	 * The items of a timeline list, wrapped in {@code {"type", "item"}} entries or
+	 * not
+	 */
+	static <T> List<T> timelineItems(ResponseSpec response, Class<T> type) {
+		List<Map<String, Object>> entries = response.body(JSON_LIST);
+		List<T> items = new ArrayList<T>();
+		if (entries != null) {
+			for (Map<String, Object> entry : entries) {
+				Object item = entry.containsKey("item") && entry.containsKey("type") ? entry.get("item") : entry;
+				if (item != null) {
+					items.add(MAPPER.convertValue(item, type));
+				}
+			}
+		}
+		if (LOGGER.isTraceEnabled()) {
+			LOGGER.trace("GLPI timeline " + type.getSimpleName() + " entries: " + entries);
+		}
+		return items;
+	}
+
+	/** The ids of the documents linked to a ticket's timeline */
+	List<Long> ticketDocumentIds(long ticketId) {
+		List<Map<String, Object>> links = timelineItems(assistance.assistanceTicketIdTimelineDocumentGetWithResponseSpec(
+				id(ticketId), null, null, ENTITY_RECURSIVE, null), JSON_OBJECT_TYPE);
+		List<Long> ids = new ArrayList<Long>();
+		for (Map<String, Object> link : links) {
+			Object documentId = link.get("documents_id");
+			if (documentId == null && link.get("document") instanceof Map<?, ?> document) {
+				documentId = document.get("id");
+			}
+			Long value = GlpiNativePositionObject.asLong(documentId);
+			if (value != null && !ids.contains(value)) {
+				ids.add(value);
+			}
+		}
+		return ids;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static final Class<Map<String, Object>> JSON_OBJECT_TYPE = (Class<Map<String, Object>>) (Class<?>) Map.class;
 
 	public List<Entity> entities() {
 		return readAllPages("entities",
@@ -145,8 +204,8 @@ public class GlpiRemoteAccess {
 	}
 
 	public List<Followup> followups(long ticketId) {
-		return orEmpty(assistance.assistanceTicketIdTimelineFollowupGet(id(ticketId), null, null, ENTITY_RECURSIVE,
-				null));
+		return timelineItems(assistance.assistanceTicketIdTimelineFollowupGetWithResponseSpec(id(ticketId), null, null,
+				ENTITY_RECURSIVE, null), Followup.class);
 	}
 
 	public Followup followup(long ticketId, long followupId) {
@@ -155,7 +214,8 @@ public class GlpiRemoteAccess {
 	}
 
 	public List<TicketTask> tasks(long ticketId) {
-		return orEmpty(assistance.assistanceTicketIdTimelineTaskGet(id(ticketId), null, null, ENTITY_RECURSIVE, null));
+		return timelineItems(assistance.assistanceTicketIdTimelineTaskGetWithResponseSpec(id(ticketId), null, null,
+				ENTITY_RECURSIVE, null), TicketTask.class);
 	}
 
 	public TicketTask task(long ticketId, long taskId) {
@@ -164,8 +224,8 @@ public class GlpiRemoteAccess {
 	}
 
 	public List<Solution> solutions(long ticketId) {
-		return orEmpty(assistance.assistanceTicketIdTimelineSolutionGet(id(ticketId), null, null, ENTITY_RECURSIVE,
-				null));
+		return timelineItems(assistance.assistanceTicketIdTimelineSolutionGetWithResponseSpec(id(ticketId), null, null,
+				ENTITY_RECURSIVE, null), Solution.class);
 	}
 
 	public Solution solution(long ticketId, long solutionId) {
@@ -173,15 +233,26 @@ public class GlpiRemoteAccess {
 				id(solutionId), null, null, ENTITY_RECURSIVE, null));
 	}
 
-	/** The documents attached to a ticket (to the ticket itself or to its timeline items) */
+	/**
+	 * The documents attached to a ticket (to the ticket itself or to its timeline
+	 * items): the timeline lists the links, each document is then read
+	 */
 	public List<Document> ticketDocuments(long ticketId) {
-		return orEmpty(assistance.assistanceTicketIdTimelineDocumentGet(id(ticketId), null, null, ENTITY_RECURSIVE,
-				null));
+		List<Document> documents = new ArrayList<Document>();
+		for (Long documentId : ticketDocumentIds(ticketId)) {
+			Document document = document(documentId);
+			if (document != null) {
+				documents.add(document);
+			} else if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("GLPI document " + documentId + " linked to ticket " + ticketId + " is not readable");
+			}
+		}
+		return documents;
 	}
 
+	/** The document, when it is still linked to the ticket */
 	public Document ticketDocument(long ticketId, long documentId) {
-		return orNullWhenMissing(() -> assistance.assistanceTicketIdTimelineDocumentSubitemIdGet(id(ticketId),
-				id(documentId), null, null, ENTITY_RECURSIVE, null));
+		return ticketDocumentIds(ticketId).contains(documentId) ? document(documentId) : null;
 	}
 
 	public Document document(long documentId) {
@@ -213,10 +284,6 @@ public class GlpiRemoteAccess {
 	public KBArticle kbArticle(long articleId) {
 		return orNullWhenMissing(
 				() -> knowledgebase.knowledgebaseArticleArticleIdGet(id(articleId), null, null, null, ENTITY_RECURSIVE, null));
-	}
-
-	private static <T> List<T> orEmpty(List<T> list) {
-		return list != null ? list : List.of();
 	}
 
 	@FunctionalInterface

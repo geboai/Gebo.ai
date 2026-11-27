@@ -8,6 +8,8 @@
  */
 package ai.gebo.glpi.handler.impl;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,7 +19,6 @@ import org.springframework.web.client.RestClientResponseException;
 
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.glpi.client.invoker.ApiClient;
-import ai.gebo.glpi.client.model.Session;
 import ai.gebo.glpi.handler.GGlpiSystem;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
@@ -60,12 +61,10 @@ public class GlpiSystemsTestService {
 			return outValue;
 		}
 		try {
-			String token = apiClientFactory.requestNewToken(system);
-			ApiClient apiClient = apiClientFactory.getApiClient(system);
-			apiClient.setAccessToken(token);
-			Session session = new GlpiRemoteAccess(apiClient).session();
-			String user = session != null
-					? (session.getFriendlyName() != null ? session.getFriendlyName() : session.getName())
+			ApiClient apiClient = apiClientFactory.getApiClientWithNewToken(system);
+			Map<String, Object> session = new GlpiRemoteAccess(apiClient).session();
+			Object user = session != null
+					? (session.get("friendly_name") != null ? session.get("friendly_name") : session.get("name"))
 					: null;
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("GLPI system " + system.getBaseUri() + " test passed, session user " + user);

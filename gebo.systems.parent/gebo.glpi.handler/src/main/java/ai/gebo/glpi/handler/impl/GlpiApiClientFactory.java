@@ -10,6 +10,7 @@ package ai.gebo.glpi.handler.impl;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +40,12 @@ import tools.jackson.databind.json.JsonMapper;
  * accepts only OAuth2 bearer tokens on its data endpoints: the factory obtains
  * them itself with the password grant (the generated token call carries no
  * form fields) and keeps them until they expire.
+ * <p>
+ * The bearer header is set by a request interceptor, not by the generated
+ * client's OAuth authentication: every generated operation lists the "oauth"
+ * scheme twice and that authentication ADDS the header, so each call would
+ * carry two Authorization headers, which GLPI reads as one invalid token.
+ * </p>
  */
 @Service
 public class GlpiApiClientFactory {
@@ -103,12 +110,10 @@ public class GlpiApiClientFactory {
 		}
 		final GlpiCredentials credentials = readCredentials(system);
 		final JsonMapper mapper = createMapper();
-		final RestClient restClient = restClient(mapper, parameters);
-		final ApiClient apiClient = new ApiClient(restClient, mapper, ApiClient.createDefaultDateFormat());
-		apiClient.setBasePath(root + API_PATH);
-		apiClient.addDefaultHeader(GLPI_API_VERSION_HEADER, GLPI_API_VERSION);
+		final RestClient tokenClient = restClient(mapper, parameters, null);
 		final String cacheKey = cacheKeyOf(system);
-		apiClient.setAccessToken(() -> token(cacheKey, root, credentials, restClient));
+		final ApiClient apiClient = apiClient(root, mapper, parameters,
+				() -> token(cacheKey, root, credentials, tokenClient));
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("GLPI client for system " + system.getCode() + " on " + root + API_PATH + " (api version "
 					+ GLPI_API_VERSION + ", user " + credentials.username() + ")");
@@ -117,16 +122,28 @@ public class GlpiApiClientFactory {
 	}
 
 	/**
-	 * Asks GLPI a new token for the system, bypassing the cache: the test of a
-	 * system being inserted or modified must use its current credentials
+	 * A client of the system using a new token, asked bypassing the cache: the
+	 * test of a system being inserted or modified must use its current
+	 * credentials
 	 */
-	public String requestNewToken(GGlpiSystem system) throws GeboCryptSecretException {
+	public ApiClient getApiClientWithNewToken(GGlpiSystem system) throws GeboCryptSecretException {
 		final String root = rootUrlOf(system.getBaseUri());
 		if (root == null) {
 			throw new IllegalStateException("The GLPI system has no base URI");
 		}
-		CachedToken token = requestToken(root, readCredentials(system), restClient(createMapper(), null));
-		return token.accessToken();
+		final JsonMapper mapper = createMapper();
+		final String token = requestToken(root, readCredentials(system), restClient(mapper, null, null))
+				.accessToken();
+		return apiClient(root, mapper, null, () -> token);
+	}
+
+	private ApiClient apiClient(String root, JsonMapper mapper, SearchCallParameters parameters,
+			Supplier<String> bearerToken) {
+		final ApiClient apiClient = new ApiClient(restClient(mapper, parameters, bearerToken), mapper,
+				ApiClient.createDefaultDateFormat());
+		apiClient.setBasePath(root + API_PATH);
+		apiClient.addDefaultHeader(GLPI_API_VERSION_HEADER, GLPI_API_VERSION);
+		return apiClient;
 	}
 
 	/**
@@ -139,13 +156,20 @@ public class GlpiApiClientFactory {
 				.build();
 	}
 
-	private RestClient restClient(JsonMapper mapper, SearchCallParameters parameters) {
+	/** The RestClient of the calls, setting the bearer header once when a token supplier is given */
+	private RestClient restClient(JsonMapper mapper, SearchCallParameters parameters, Supplier<String> bearerToken) {
 		final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
 		if (parameters != null) {
 			requestFactory.setConnectTimeout(parameters.connectTimeout());
 			requestFactory.setReadTimeout(parameters.readTimeout());
 		}
 		RestClient.Builder builder = ApiClient.buildRestClientBuilder(mapper).requestFactory(requestFactory);
+		if (bearerToken != null) {
+			builder = builder.requestInterceptor((request, body, execution) -> {
+				request.getHeaders().setBearerAuth(bearerToken.get());
+				return execution.execute(request, body);
+			});
+		}
 		return GeboHttpClientObservations.observed(builder, GeboHttpClientObservations.registryOf(observationRegistry))
 				.build();
 	}

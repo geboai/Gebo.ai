@@ -23,21 +23,70 @@ import java.util.List;
 import java.util.stream.LongStream;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClient.ResponseSpec;
 
 import ai.gebo.glpi.client.api.AdministrationApi;
 import ai.gebo.glpi.client.api.AssistanceApi;
 import ai.gebo.glpi.client.api.KnowledgebaseApi;
 import ai.gebo.glpi.client.api.ManagementApi;
 import ai.gebo.glpi.client.api.SessionApi;
+import ai.gebo.glpi.client.model.Document;
+import ai.gebo.glpi.client.model.Followup;
+import ai.gebo.glpi.client.model.Solution;
 import ai.gebo.glpi.client.model.Ticket;
 
 class GlpiRemoteAccessTest {
 
 	private final AssistanceApi assistance = mock(AssistanceApi.class);
+	private final ManagementApi management = mock(ManagementApi.class);
 	private final GlpiRemoteAccess access = new GlpiRemoteAccess(assistance, mock(KnowledgebaseApi.class),
-			mock(AdministrationApi.class), mock(ManagementApi.class), mock(SessionApi.class));
+			mock(AdministrationApi.class), management, mock(SessionApi.class));
+
+	@SuppressWarnings("unchecked")
+	private static ResponseSpec answering(String json) {
+		ResponseSpec spec = mock(ResponseSpec.class);
+		when(spec.body(any(ParameterizedTypeReference.class)))
+				.thenReturn(GlpiTestModels.MAPPER.readValue(json.replace('\'', '"'), List.class));
+		return spec;
+	}
+
+	@Test
+	void timelineEntriesAreReadWrappedAsGlpiAnswersThem() {
+		// GLPI 11.0.13 answers the timeline lists as [{type, item}] entries
+		ResponseSpec spec = answering("[{'type':'Followup','item':{'id':881,'content':'<p>Restarted</p>','is_private':true}},"
+				+ "{'type':'Followup','item':{'id':882,'content':'<p>Still offline</p>'}}]");
+		when(assistance.assistanceTicketIdTimelineFollowupGetWithResponseSpec(eq(1042), any(), any(), any(), any()))
+				.thenReturn(spec);
+		List<Followup> followups = access.followups(1042);
+		assertThat(followups).extracting(Followup::getId).containsExactly(881L, 882L);
+		assertThat(followups.get(0).getContent()).isEqualTo("<p>Restarted</p>");
+		assertThat(followups.get(0).getIsPrivate()).isTrue();
+	}
+
+	@Test
+	void plainTimelineItemsAreReadToo() {
+		ResponseSpec spec = answering("[{'id':12,'content':'<p>New toner</p>'}]");
+		when(assistance.assistanceTicketIdTimelineSolutionGetWithResponseSpec(eq(1042), any(), any(), any(), any()))
+				.thenReturn(spec);
+		assertThat(access.solutions(1042)).extracting(Solution::getId).containsExactly(12L);
+	}
+
+	@Test
+	void aTicketDocumentIsReadThroughItsTimelineLink() {
+		// a timeline document entry is the document-ticket link, not the document
+		ResponseSpec links = answering("[{'type':'Document','item':{'id':7,'itemtype':'Ticket','items_id':1042,"
+				+ "'documents_id':9,'document':{'id':9,'name':'Invoice'}}}]");
+		when(assistance.assistanceTicketIdTimelineDocumentGetWithResponseSpec(eq(1042), any(), any(), any(), any()))
+				.thenReturn(links);
+		when(management.managementDocumentIdGet(eq(9), any(), any(), any(), any())).thenReturn(GlpiTestModels
+				.read("{'id':9,'name':'Invoice','filename':'invoice.pdf','mime':'application/pdf'}", Document.class));
+		assertThat(access.ticketDocuments(1042)).extracting(Document::getFilename).containsExactly("invoice.pdf");
+		assertThat(access.ticketDocument(1042, 9)).isNotNull();
+		assertThat(access.ticketDocument(1042, 7)).isNull();
+	}
 
 	private static List<Ticket> tickets(long fromId, long count) {
 		return LongStream.range(fromId, fromId + count).mapToObj(id -> GlpiTestModels.read("{'id':" + id + "}", Ticket.class)).toList();

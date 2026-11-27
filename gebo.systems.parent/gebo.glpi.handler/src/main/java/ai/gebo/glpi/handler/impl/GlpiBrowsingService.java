@@ -197,7 +197,30 @@ public class GlpiBrowsingService implements IGVirtualFilesystemBrowsingService<G
 		for (GlpiPathComponent component : above) {
 			path = GlpiNavigationUtil.toPathInfo(path, component, null);
 		}
+		// the rebuilt tree shows this node as it is returned here: it needs its name
+		path.name = nameOf(above.get(above.size() - 1), context);
 		parent.path = path;
 		return parent;
+	}
+
+	private String nameOf(GlpiPathComponent component, GlpiBrowsingContext context) {
+		switch (component.type) {
+		case TICKETS_SECTION:
+			return GlpiNavigationUtil.TICKETS_SECTION_NAME;
+		case KB_SECTION:
+			return GlpiNavigationUtil.KB_SECTION_NAME;
+		case TICKET:
+			try {
+				Ticket ticket = access(context).ticket(component.id);
+				if (ticket != null) {
+					return GlpiNativeObjects.ticketTitle(ticket);
+				}
+			} catch (Throwable th) {
+				LOGGER.error("Cannot read the GLPI ticket " + component.id + " name", th);
+			}
+			return "#" + component.id;
+		default:
+			return GlpiNavigationUtil.segment(component);
+		}
 	}
 }
