@@ -1,0 +1,20 @@
+# Files the generator must not write: the module pom.xml is hand written
+# (the generated one would replace it) and the build tooling, CI and docs
+# files of a standalone project have no place in the reactor.
+pom.xml
+build.gradle
+build.sbt
+settings.gradle
+gradle.properties
+gradle/**
+gradlew
+gradlew.bat
+git_push.sh
+.travis.yml
+.github/**
+.gitignore
+README.md
+api/**
+src/main/AndroidManifest.xml
+src/test/**
+docs/**

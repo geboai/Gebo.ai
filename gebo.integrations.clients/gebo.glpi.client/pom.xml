@@ -1,0 +1,99 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.integrations.clients</groupId>
+		<artifactId>gebo.integrations.clients.parent</artifactId>
+		<version>1.0.7.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.glpi.client</artifactId>
+	<description>GLPI 11 high-level API v2.3.0 (JSON spec) client, generated with OpenAPI Generator (java, restclient on Spring Boot 4 / Jackson 3).</description>
+	<properties>
+		<!-- Regenerate with: mvn -P generate-rest-api generate-sources
+		     (override the spec with -Dswagger.file=<url or path>) -->
+		<!-- The profile downloads swagger.file and patches it here (see below) -->
+		<openapi.patched.spec>${project.build.directory}/openapi/spec.json</openapi.patched.spec>
+		<swagger.file>https://glpi.whitaker.company/api.php/v2.3.0/doc.json</swagger.file>
+	</properties>
+	<packaging>jar</packaging>
+	<dependencies>
+		<!-- Spring Framework 7 RestClient and Jackson 3 (versions from Spring Boot) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>generate-rest-api</id>
+			<build>
+				<plugins>
+					<!-- Two GLPI schemas (AutomaticAction.state, UserPreferences.timeline_order) are
+					     integers with string enum values (&quot;natural&quot;, &quot;01&quot;), which generate Java that
+					     does not compile: the downloaded copy drops those enums and keeps the integers. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>download-and-fix-spec</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<mkdir dir="${project.build.directory}/openapi" />
+										<get src="${swagger.file}" dest="${openapi.patched.spec}" />
+										<replaceregexp file="${openapi.patched.spec}" match="&quot;type&quot;:&quot;integer&quot;,&quot;enum&quot;:\[&quot;[^\]]*\]" replace="&quot;type&quot;:&quot;integer&quot;" flags="g" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>generate-glpi-client</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>${openapi.patched.spec}</inputSpec>
+									<modelPackage>ai.gebo.glpi.client.model</modelPackage>
+									<apiPackage>ai.gebo.glpi.client.api</apiPackage>
+									<invokerPackage>ai.gebo.glpi.client.invoker</invokerPackage>
+									<!-- The spec references four schemas it never defines: the custom
+									     asset ones depend on the asset types each instance defines, the
+									     close times one is missing. They are read as generic JSON objects. -->
+									<schemaMappings>CalendarCloseTime=java.util.Map,CustomAsset_{itemtype}=java.util.Map,CustomAsset_{itemtype}Model=java.util.Map,CustomAsset_{itemtype}Type=java.util.Map</schemaMappings>
+									<!-- The GLPI spec puts `default` on the parameters themselves
+									     (OpenAPI wants it inside their schema): validation fails on
+									     those attributes only, the generation itself works. -->
+									<skipValidateSpec>true</skipValidateSpec>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

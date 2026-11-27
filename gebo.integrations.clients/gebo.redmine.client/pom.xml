@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.integrations.clients</groupId>
+		<artifactId>gebo.integrations.clients.parent</artifactId>
+		<version>1.0.7.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.redmine.client</artifactId>
+	<description>Redmine REST API, community OpenAPI description (YAML spec) client, generated with OpenAPI Generator (java, restclient on Spring Boot 4 / Jackson 3).</description>
+	<properties>
+		<!-- Regenerate with: mvn -P generate-rest-api generate-sources
+		     (override the spec with -Dswagger.file=<url or path>) -->
+		<swagger.file>https://github.com/d-yoshi/redmine-openapi/releases/latest/download/openapi.yaml</swagger.file>
+	</properties>
+	<packaging>jar</packaging>
+	<dependencies>
+		<!-- Spring Framework 7 RestClient and Jackson 3 (versions from Spring Boot) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>generate-rest-api</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>generate-redmine-client</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>${swagger.file}</inputSpec>
+									<modelPackage>ai.gebo.redmine.client.model</modelPackage>
+									<apiPackage>ai.gebo.redmine.client.api</apiPackage>
+									<invokerPackage>ai.gebo.redmine.client.invoker</invokerPackage>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
