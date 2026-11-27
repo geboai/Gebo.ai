@@ -480,6 +480,9 @@ ai.gebo.llms.vendors.setup.config:
               description: Z.ai GLM 5.3 Flash
               contextWindow: 1048576
               uses: CHAT
+            # Its page labels it "1.0-preview (08/11/2026)" (build.nvidia.com, 2026-11-27); it is
+            # in the live /v1/models list and kept as the services model by the user's
+            # decision of 2026-11-27.
             - code: nvidia/nemotron-3.5-lightning-30b-a3b
               description: NVIDIA Nemotron 3.5 Lightning 30B
               contextWindow: 1000000
