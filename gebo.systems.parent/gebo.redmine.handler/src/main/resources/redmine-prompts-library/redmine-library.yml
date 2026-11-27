@@ -1,0 +1,32 @@
+ai.gebo.redmine.library:
+  - promptUse: redmine-standard-query-extraction-prompt
+    langCode: en
+    systemReference: /redmine-prompts-library/en/redmine-standard-query-extraction-prompt-system-prompt.txt
+    userReference: /redmine-prompts-library/en/redmine-standard-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+  - promptUse: redmine-native-query-extraction-prompt
+    langCode: en
+    systemReference: /redmine-prompts-library/en/redmine-native-query-extraction-prompt-system-prompt.txt
+    userReference: /redmine-prompts-library/en/redmine-native-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+ai.gebo.redmine.uses:
+  - code: redmine-standard-query-extraction-prompt
+    description: Extracts a few plain-text, operator-free search strings from the user's question for the Redmine full text search over issues and wiki pages.
+    module: redmine
+    placeholders:
+      - placeholder: format
+        description: The structured-output format the extracted search strings must comply with.
+      - placeholder: question
+        description: The user's current question or request text.
+  - code: redmine-native-query-extraction-prompt
+    description: Generates a structured Redmine issues search filter (as JSON) from the user's question and the available Redmine projects, translated server side into Redmine issues queries and full text searches.
+    module: redmine
+    placeholders:
+      - placeholder: format
+        description: The JSON format of the Redmine issues search filter.
+      - placeholder: redmineProjects
+        description: Catalog of the Redmine projects available to be searched.
+      - placeholder: question
+        description: The user's current question or request text.

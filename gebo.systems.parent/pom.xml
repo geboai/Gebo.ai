@@ -44,5 +44,7 @@
 		<module>gebo.mcp-client.content.handler</module>
 		<module>gebo.aws-s3.content.handler</module>
 		<module>gebo.webdav-cms.handler</module>
+		<module>gebo.redmine.search.api</module>
+		<module>gebo.redmine.handler</module>
 	</modules>
 </project>

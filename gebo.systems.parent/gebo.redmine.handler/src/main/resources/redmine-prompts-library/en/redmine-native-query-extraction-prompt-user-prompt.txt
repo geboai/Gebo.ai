@@ -1,0 +1,7 @@
+Redmine projects catalog (may be empty):
+
+{redmineProjects}
+
+Last user question:
+
+{question}

@@ -48,6 +48,7 @@ It's a "No AI vendor lock-in"  alternative to cloud vendors platform, it can wor
     - Company shared filesystems
      - **Amazon AWS S3** buckets
      - **WebDAV** compatible servers (Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server...)
+     - **Redmine** projects: issues, wiki pages and files
  - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
  	- **Microsoft Entra**
  	- **Google auth**   
