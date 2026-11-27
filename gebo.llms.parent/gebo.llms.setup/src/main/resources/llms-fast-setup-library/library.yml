@@ -1,4 +1,20 @@
 ai.gebo.llms.vendors.setup.config:
+  # The presets set up a platform tuned for its uses, the user choosing none of these
+  # settings (2026-11-27):
+  # - a chat model (uses CHAT) thinks at MEDIUM_THINKING where the model takes a thinking
+  #   level (sent as the nearest one the model lists, see the models library rules);
+  # - a service model (uses INTERNAL_SERVICES: ranking filter, routing, query rewriting)
+  #   thinks at NO_THINKING where the model can stop thinking, else LOW_THINKING, and
+  #   takes temperature 0 wherever it takes a temperature (the chat model sets it when
+  #   none is configured);
+  # - a model left without a thinking level here gets it by the same rule when its
+  #   integration tells what the model takes (GeboLLMSSetupService), else keeps the
+  #   provider's default;
+  # - a preset model is not one its provider announces retiring within six months;
+  # - a context window is preset only where the provider's models list gives none
+  #   (openai, aws-bedrock, xai, nvidia, llmax, profundoai): where it gives one
+  #   (regolo.ai, groq, openrouter.ai, and the providers with their own lookup) the
+  #   chosen model carries it, and a preset value would override it.
   vendors:
     - vendorInfo:
         vendorId: regolo.ai
@@ -28,6 +44,7 @@ ai.gebo.llms.vendors.setup.config:
             - code: gpt-oss-120b
               description: OpenAI Gpt OSS 120b
               uses: CHAT
+              thinking: MEDIUM_THINKING
             # Replaces Llama-3.3-70B-Instruct, which regolo.ai no longer serves.
             - code: glm5.2
               description: Z.ai GLM 5.2
@@ -104,9 +121,8 @@ ai.gebo.llms.vendors.setup.config:
             # Both models have a 400,000 token window with up to 128,000 tokens of output, so
             # 272,000 of input (the gpt-5.4-mini page states it): contextWindow is that input,
             # so that the budgets never build a request larger than OpenAI accepts.
-            # gpt-5.2 runs the agentic chat: it reasons at effort low (efforts none, low,
-            # medium, high, xhigh), which plans the tool calls without slowing every round of
-            # the loop much. On Chat Completions the reasoning is not carried from one tool
+            # gpt-5.2 runs the agentic chat: it reasons at effort medium, the chat default
+            # (efforts none, low, medium, high, xhigh). On Chat Completions the reasoning is not carried from one tool
             # round to the next (the GPT-5.4 guide: passing it "exists only in the Responses
             # API"), each round reasons again. Its temperature is taken only at effort none
             # (the same guide), so none is sent while it reasons. The reasoning counts in the
@@ -115,7 +131,7 @@ ai.gebo.llms.vendors.setup.config:
               description: GPT-5.2
               contextWindow: 272000
               uses: CHAT
-              thinking: LOW_THINKING
+              thinking: MEDIUM_THINKING
               defaultChoice: true
             # gpt-5.4-mini serves the internal services, short judgement calls: the reasoning
             # is off (NO_THINKING sends effort none). The guide's temperature rule names
@@ -136,41 +152,36 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: image-generation-OpenAI
           doModelsLookup: true
           choices:
-            # gpt-image-1 was shut down on 2026-10-01, DALL-E 2 and 3 on 2026-05-12.
+            # gpt-image-1 was shut down on 2026-10-01, DALL-E 2 and 3 on 2026-05-12;
+            # gpt-image-2 shuts down on 2027-02-10, naming gpt-image-2.6-sunburst and
+            # gpt-image-2.6-flare as replacements (developers.openai.com/api/docs/deprecations,
+            # 2026-11-27). Both 2.6 models support v1/images/generations and v1/images/edits.
+            - code: gpt-image-2.6-flare
+              description: GPT Image 2.6 Flare (fast image generation)
+              defaultChoice: true
+            - code: gpt-image-2.6-sunburst
+              description: GPT Image 2.6 Sunburst (highest quality)
             - code: gpt-image-2.5-flare
               description: GPT Image 2.5 Flare (fast image generation)
-              defaultChoice: true
             - code: gpt-image-2.5-sunburst
               description: GPT Image 2.5 Sunburst (highest quality)
-            - code: gpt-image-2
-              description: GPT Image 2
-        - type: TTS
-          serviceHandler: openai-tts
-          doModelsLookup: true
-          choices:
-            - code: gpt-4o-mini-tts
-              description: GPT-4o mini text to speech
-              defaultChoice: true
-            - code: tts-1
-              description: TTS 1 (low latency)
-            - code: tts-1-hd
-              description: TTS 1 HD (higher quality)
+        # No TTS preset: "The tts-1, tts-1-hd, and gpt-4o-mini-tts models are deprecated
+        # and will shut down on January 6, 2027. Migrate to gpt-realtime-2.1-mini using the
+        # Realtime API", and "gpt-realtime-2.1-mini isn't a supported model for
+        # /v1/audio/speech" (developers.openai.com/api/docs/guides/text-to-speech,
+        # 2026-11-27): no current OpenAI model takes the speech endpoint the openai-tts
+        # handler calls. A text to speech model of another vendor serves instead.
         - type: TRANSCRIPT
           serviceHandler: openai-transcript
           doModelsLookup: true
           choices:
-            # gpt-4o-transcribe, gpt-4o-mini-transcribe and whisper-1 shut down on 2027-02-26.
-            # The OpenAI transcript handler asks for json, which every one of these answers
-            # (gpt-4o-transcribe and gpt-4o-mini-transcribe answer json only).
+            # gpt-4o-transcribe, gpt-4o-mini-transcribe and whisper-1 shut down on 2027-02-26
+            # and are no longer preset; their other replacement, gpt-live-transcribe, takes
+            # the realtime transcription sessions only (its page, 2026-11-27). The OpenAI
+            # transcript handler asks for json, which gpt-transcribe answers.
             - code: gpt-transcribe
               description: GPT Transcribe (speech to text)
               defaultChoice: true
-            - code: gpt-4o-transcribe
-              description: GPT-4o Transcribe (speech to text)
-            - code: gpt-4o-mini-transcribe
-              description: GPT-4o mini Transcribe
-            - code: whisper-1
-              description: Whisper 1
         # Optional: a decision model judging the retrieved fragments, on the Decisions
         # API; the models endpoint does not list the decision models reliably
         - type: DECISION
@@ -199,25 +210,30 @@ ai.gebo.llms.vendors.setup.config:
             # The current lineup (Claude Models API, 2026-10). The models before it remain
             # callable as legacy models, but the setup validates every code against the
             # live models list, so only current models are preset.
+            # The chat models think adaptively at effort medium.
             - code: claude-sonnet-5-5
               uses: CHAT
               description: Claude Sonnet 5.5
               defaultChoice: true
-            # Thinking adaptively, steered by an effort level like the rest of the lineup.
-            # An internal services model should spend few tokens thinking: LOW_THINKING is
-            # sent as effort low when the Models API lists it for the model, else the model
-            # thinks adaptively at its own effort.
+              thinking: MEDIUM_THINKING
+            # The internal services model does not think: "You can also send thinking:
+            # {"type": "disabled"} at high effort or below" (Claude Haiku 5.5,
+            # platform.claude.com/docs/en/build-with-claude/effort, 2026-11-27).
             - code: claude-haiku-5-5
               uses: INTERNAL_SERVICES
               description: Claude Haiku 5.5
-              thinking: LOW_THINKING
+              thinking: NO_THINKING
             - code: claude-opus-5-5
               description: Claude Opus 5.5
               uses: CHAT
-            # Thinks on every request: "no thinking" is not accepted by this model.
-            - code: claude-fable-5-1
-              description: Claude Fable 5.1
+              thinking: MEDIUM_THINKING
+            # Fable 5.2 is the Fable of the latest models (5.1 stays active, no sooner than
+            # 2027-09-01, models overview and deprecations, 2026-11-27). It thinks on every
+            # request: "no thinking" is not accepted by this model.
+            - code: claude-fable-5-2
+              description: Claude Fable 5.2
               uses: CHAT
+              thinking: MEDIUM_THINKING
 
 # AWS Bedrock: credentials and region travel in one AWS_CONNECTION secret, picked or
 # created in the setup. Codes from the Bedrock model cards
@@ -246,19 +262,25 @@ ai.gebo.llms.vendors.setup.config:
             # here, its card's "Context window: 1M tokens" (docs.aws.amazon.com/bedrock/latest/
             # userguide/model-card-anthropic-claude-<model>.html, 2026-11-26), which states no
             # maximum of input tokens below it.
+            # As on Anthropic: the chat models at effort medium, Haiku serving the internal
+            # services without thinking (effort none, which the models library lists for
+            # it, is sent as thinking disabled, BedrockClaudeThinking).
             - code: global.anthropic.claude-sonnet-5-5
               description: Anthropic Claude Sonnet 5.5 (global inference profile)
               contextWindow: 1000000
               uses: CHAT
               defaultChoice: true
+              thinking: MEDIUM_THINKING
             - code: global.anthropic.claude-opus-5-5
               description: Anthropic Claude Opus 5.5 (global inference profile)
               contextWindow: 1000000
               uses: CHAT
+              thinking: MEDIUM_THINKING
             - code: global.anthropic.claude-haiku-5-5
               description: Anthropic Claude Haiku 5.5 (global inference profile)
               contextWindow: 1000000
               uses: INTERNAL_SERVICES
+              thinking: NO_THINKING
         - type: EMBEDDING
           serviceHandler: embedding-aws-bedrock
           doModelsLookup: true
@@ -297,8 +319,13 @@ ai.gebo.llms.vendors.setup.config:
 # the key's, the location GOOGLE_CLOUD_LOCATION or the global endpoint) or a Google OAuth2
 # grant, picked or created in the setup. Codes and lifecycle from the Vertex model versions page
 # (docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions, 2026-10-11):
-# gemini-3.8-flash has no retirement announced, gemini-3.5-flash and gemini-3.1-flash-lite
-# retire May 2027 or later; the 2.5 family retires 2026-10-20 and is not preset.
+# Retirement dates of docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+# (2026-11-27; "they won't be moved to an earlier date than what is listed"):
+# gemini-3.8-flash September 2, 2027 or later, gemini-3.5-flash-lite July 21, 2027 or later,
+# gemini-4-hydrogen none announced. gemini-3.5-flash (May 19, 2027 or later) and
+# gemini-3.1-flash-lite (May 7, 2027 or later) may retire within six months and are no
+# longer preset; the 2.5 family retired 2026-10-20. No thinking level is preset: the Vertex
+# integration sends none (GoogleVertexChatModelConfigurationSupportService).
     - vendorInfo:
         vendorId: google-vertex
         name: Google Vertex AI
@@ -321,16 +348,23 @@ ai.gebo.llms.vendors.setup.config:
               description: Gemini 3.8 Flash
               uses: CHAT
               defaultChoice: true
-            - code: gemini-3.5-flash
-              description: Gemini 3.5 Flash
+            # "cutting-edge intelligence with speed and efficiency" (its model page)
+            - code: gemini-4-hydrogen
+              description: Gemini 4 Hydrogen
               uses: CHAT
-            - code: gemini-3.1-flash-lite
-              description: Gemini 3.1 Flash-Lite
+            # "the latest in our cost-effective Flash-Lite line of models" (its model page)
+            - code: gemini-3.5-flash-lite
+              description: Gemini 3.5 Flash-Lite
               uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-google-vertex
           doModelsLookup: true
           choices:
+            # Both retire on April 1, 2027 (model-versions, 2026-11-27), within six months,
+            # but they are still the only ones the embedding-google-vertex handler offers: the
+            # gemini-embedding models (gemini-embedding-001, no sooner than May 20, 2028;
+            # gemini-embedding-2) take one text per request, which its batched requests do
+            # not respect (GoogleVertexEmbeddingModelConfigurationSupportService).
             - code: text-multilingual-embedding-002
               description: Text multilingual embedding 002
               defaultChoice: true
@@ -394,10 +428,12 @@ ai.gebo.llms.vendors.setup.config:
               contextWindow: 500000
               uses: CHAT
               defaultChoice: true
+              thinking: MEDIUM_THINKING
             - code: grok-4.3
               description: Grok 4.3
               contextWindow: 1000000
               uses: CHAT
+              thinking: MEDIUM_THINKING
             - code: grok-4.20-0309-reasoning
               description: Grok 4.20 reasoning
               contextWindow: 1000000
@@ -426,13 +462,17 @@ ai.gebo.llms.vendors.setup.config:
             # deepseek-v4.1-flash, glm-5.3 and gpt-oss-20b, preset until now, were retired
             # between 2026-08 and 2026-11 and are no longer listed. Each window from the
             # model's page on docs.api.nvidia.com/nim/reference ("Up to 1M tokens"; GLM 5.3
-            # Flash "up to 1,048,576 tokens"); no thinking level is preset, each model
-            # keeps its own default.
+            # Flash "up to 1,048,576 tokens"). Nemotron 3 Ultra takes effort medium
+            # (none, medium, high); GLM 5.3 Flash lists no effort and Lightning turns its
+            # thinking on with chat_template_kwargs enable_thinking (its model card,
+            # 2026-11-27), which the compatible handler does not send: both keep their
+            # default.
             - code: nvidia/nemotron-3-ultra-550b-a55b
               description: NVIDIA Nemotron 3 Ultra 550B
               contextWindow: 1000000
               defaultChoice: true
               uses: CHAT
+              thinking: MEDIUM_THINKING
             - code: z-ai/glm-5.3-flash
               description: Z.ai GLM 5.3 Flash
               contextWindow: 1048576
@@ -471,17 +511,19 @@ ai.gebo.llms.vendors.setup.config:
           doModelsLookup: true
           choices:
             # The Magistral and Devstral models retired on 2026-07-31; reasoning is now a
-            # capability of the generalist models.
-            - code: mistral-medium-latest
-              description: Mistral Medium Latest
-              uses: CHAT
-            - code: mistral-large-latest
-              description: Mistral Large Latest
+            # capability of the generalist models, a switch (high or none): MEDIUM_THINKING
+            # is sent as high. Mistral Medium 3.5 (mistral-medium-latest) and Large 3 retire
+            # on 2027-04-30 for Large 4 (docs.mistral.ai/getting-started/models, 2026-11-27),
+            # preset by the id its page gives (mistral-large-4-0).
+            - code: mistral-large-4-0
+              description: Mistral Large 4
               uses: CHAT
               defaultChoice: true
+              thinking: MEDIUM_THINKING
             - code: mistral-small-latest
               description: Mistral Small Latest
               uses: CHAT
+              thinking: MEDIUM_THINKING
             - code: ministral-8b-latest
               description: Ministral 8b
               uses: INTERNAL_SERVICES
@@ -513,6 +555,9 @@ ai.gebo.llms.vendors.setup.config:
         - type: CHAT
           serviceHandler: chatmodel-groq
           doModelsLookup: true
+          # No context window is preset on groq: its models list gives each model's
+          # context_window (console.groq.com/docs/api-reference), which the lookup puts on
+          # the chosen model.
           choices:
             # Groq shut down llama-3.3-70b-versatile and llama-3.1-8b-instant on 2026-08-16,
             # naming gpt-oss-120b and gpt-oss-20b as their replacements, and groq/compound on
@@ -524,20 +569,19 @@ ai.gebo.llms.vendors.setup.config:
             # live models list.
             - code: qwen/qwen3.8-27b
               description: Qwen 3.8 27b
-              contextWindow: 131072
               uses: CHAT
               defaultChoice: true
+              thinking: MEDIUM_THINKING
             # Kept as an option but not the default: unreliable at tool calls.
             - code: openai/gpt-oss-120b
               description: OpenAI Gpt OSS 120b
-              contextWindow: 131072
               uses: CHAT
+              thinking: MEDIUM_THINKING
             # gpt-oss cannot stop reasoning: LOW_THINKING is sent as reasoning_effort "low",
             # one of the low, medium and high Groq accepts for it, so an internal call does
             # not spend its output on reasoning (as regolo.ai's gpt-oss-20b did).
             - code: openai/gpt-oss-20b
               description: OpenAI Gpt OSS 20b
-              contextWindow: 131072
               uses: INTERNAL_SERVICES
               thinking: LOW_THINKING
         # doModelsLookup=false: the transcript handler has no models list for groq, so
@@ -571,23 +615,27 @@ ai.gebo.llms.vendors.setup.config:
             # in play, which is what a chat pipeline spends most of its calls on: glm
             # 5.3 flash is among the cheapest (its price comes from openrouter.ai's models
             # api) and scores above the other flash-class models on the agentic benchmarks.
-            # Context 1048576 per openrouter.ai/api/v1/models, checked 2026-10-11; its
-            # reasoning is mandatory there, efforts max, high and low.
+            # Its reasoning is mandatory there, efforts max, high and low. No context window is
+            # preset on openrouter.ai: its models list gives each model's context_length,
+            # which the lookup puts on the chosen model.
             - code: z-ai/glm-5.3-flash
               description: Z.ai GLM 5.3 Flash
-              contextWindow: 1048576
               uses: CHAT
               defaultChoice: true
+              thinking: MEDIUM_THINKING
             # Kept as an option but no longer the default: gpt-oss-120b is unreliable at
             # function calling, which a chat that dispatches tools depends on.
             - code: openai/gpt-oss-120b
               description: OpenAI Gpt OSS 120b
-              contextWindow: 131072
               uses: CHAT
-            - code: deepseek/deepseek-v4-flash
-              description: DeepSeek V4 Flash
-              contextWindow: 1048576
+              thinking: MEDIUM_THINKING
+            # DeepSeek retired V4 Flash ("The previous-generation models V4 Flash and V4
+            # Flash Vision Exp have been retired", api-docs.deepseek.com/updates, 2026-09-10);
+            # V4.1 Flash.
+            - code: deepseek/deepseek-v4.1-flash
+              description: DeepSeek V4.1 Flash
               uses: CHAT
+              thinking: MEDIUM_THINKING
             # LOW_THINKING is sent as reasoning_effort "low", which openrouter.ai documents
             # among its request parameters: the same choice as regolo.ai's gpt-oss-20b.
             - code: openai/gpt-oss-20b
@@ -632,8 +680,9 @@ ai.gebo.llms.vendors.setup.config:
               defaultChoice: true
             - code: black-forest-labs/flux.2-pro
               description: Black Forest Labs FLUX.2 Pro
-            - code: openai/gpt-image-1-mini
-              description: OpenAI GPT Image 1 mini (low cost)
+            # openai/gpt-image-1-mini left: OpenAI shuts it down on 2026-12-01.
+            - code: openai/gpt-image-2.6-flare
+              description: OpenAI GPT Image 2.6 Flare (fast image generation)
             - code: openai/gpt-image-2.5-flare
               description: OpenAI GPT Image 2.5 Flare (fast image generation)
             - code: openai/gpt-image-2.5-sunburst
@@ -642,8 +691,10 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: transcript-openrouter.ai
           doModelsLookup: true
           choices:
-            - code: openai/whisper-1
-              description: OpenAI Whisper 1 (speech to text)
+            # whisper-1 shuts down on 2027-02-26 (OpenAI deprecations, 2026-11-27);
+            # gpt-transcribe is served at openrouter.ai/api/v1/audio/transcriptions.
+            - code: openai/gpt-transcribe
+              description: OpenAI GPT Transcribe (speech to text)
               defaultChoice: true
         - type: TTS
           serviceHandler: tts-openrouter.ai

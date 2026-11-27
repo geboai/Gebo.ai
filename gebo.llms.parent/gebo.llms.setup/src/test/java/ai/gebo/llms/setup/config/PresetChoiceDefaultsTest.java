@@ -87,7 +87,8 @@ class PresetChoiceDefaultsTest {
 		LLMModelPresetChoice main = chat.get(0);
 		assertTrue(main.isDefaultChoice());
 		assertEquals(List.of(ChatModelsUses.CHAT), main.getUses());
-		assertEquals(ChatModelThinkingOption.LOW_THINKING, main.thinkingFor(main.getUses()), "the agentic chat reasons");
+		assertEquals(ChatModelThinkingOption.MEDIUM_THINKING, main.thinkingFor(main.getUses()),
+				"a chat model thinks medium");
 		LLMModelPresetChoice services = chat.get(1);
 		assertEquals(List.of(ChatModelsUses.INTERNAL_SERVICES), services.getUses());
 		assertEquals(ChatModelThinkingOption.NO_THINKING, services.thinkingFor(services.getUses()),
@@ -95,6 +96,33 @@ class PresetChoiceDefaultsTest {
 		for (LLMModelPresetChoice choice : chat) {
 			assertEquals(272000, choice.getContextWindow(), choice.getCode() + ": the input OpenAI accepts");
 		}
+	}
+
+	@Test
+	void everyPresetThinkingFollowsThePlatformRule() throws Exception {
+		StandardEnvironment environment = new StandardEnvironment();
+		environment.getPropertySources().addFirst(new GeboYamlPropertySourceFactory().createPropertySource(null,
+				new EncodedResource(new ClassPathResource("llms-fast-setup-library/library.yml"))));
+		LLMSVendorsSetupConfig library = Binder.get(environment)
+				.bind("ai.gebo.llms.vendors.setup.config", LLMSVendorsSetupConfig.class).get();
+
+		// a service model does not think or thinks low, a chat model thinks medium (or keeps
+		// its provider's default where the preset names no level)
+		library.getVendors().stream().flatMap(v -> v.getPresets().stream()).filter(p -> p.getType() == ModelType.CHAT)
+				.filter(p -> p.getChoices() != null).flatMap(p -> p.getChoices().stream()).forEach(choice -> {
+					final ChatModelThinkingOption service = choice.thinkingFor(List.of(ChatModelsUses.INTERNAL_SERVICES));
+					final boolean servesInternals = choice.getUses() != null
+							&& choice.getUses().contains(ChatModelsUses.INTERNAL_SERVICES);
+					if (servesInternals && service != null) {
+						assertTrue(service == ChatModelThinkingOption.NO_THINKING
+								|| service == ChatModelThinkingOption.LOW_THINKING, choice.getCode() + ": " + service);
+					}
+					final ChatModelThinkingOption chat = choice.thinkingFor(List.of(ChatModelsUses.CHAT));
+					if (choice.getUses() != null && choice.getUses().equals(List.of(ChatModelsUses.CHAT))) {
+						assertTrue(chat == null || chat == ChatModelThinkingOption.MEDIUM_THINKING,
+								choice.getCode() + ": " + chat);
+					}
+				});
 	}
 
 	@Test
