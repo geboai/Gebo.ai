@@ -61,3 +61,5 @@ scrape_configs:
         labels: { service: redmine }
       - targets: ["glpi:13990"]
         labels: { service: glpi }
+      - targets: ["openproject:13990"]
+        labels: { service: openproject }
