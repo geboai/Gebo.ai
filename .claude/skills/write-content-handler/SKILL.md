@@ -402,7 +402,7 @@ public class <X>ContentManagementHandlerImpl extends
 `@RestController @PreAuthorize("hasRole('ADMIN')") @RequestMapping("api/admin/<X>SystemsController")`:
 - A nested `public static @Component @Scope("singleton") class <X>ControllerEmitter extends ControllerNestedEmitter` whose `getMessagingModuleId()` returns `<MODULE>`.
 - Constructor: `super(persistentObjectManager, messageBroker, controllerEmitter, securityService, entityProcessingRunnableFactory, jobQueueService, replicationService)`.
-- Endpoints, all named `<operation><X><Type>` so the OpenAPI operationIds stay **unique** (never use `GBaseExposedSystemsArchitectureController`'s generic names in a new handler):
+- Endpoints, every method decorated with its handled type name, `<operation><X><Type>`, as the operationId rule in §2.13 requires:
 
 | Endpoint | Implementation |
 |---|---|
@@ -443,7 +443,7 @@ public class <X>ContentManagementHandlerImpl extends
      - children for attachments and links
 
      Call `setOriginOn(result)` on every node.
-3. `controllers/<X>SearchServiceController extends BaseNativeSearchController<...>`, `@PreAuthorize("hasAnyRole('ADMIN','USER')") @RequestMapping("api/users/<X>SearchServiceController")`. Copy `JiraSearchServiceController` and rename every `rest...Jira` method to `rest...<X>`. The method names are the operationIds.
+3. `controllers/<X>SearchServiceController extends BaseNativeSearchController<...>`, `@PreAuthorize("hasAnyRole('ADMIN','USER')") @RequestMapping("api/users/<X>SearchServiceController")`. Copy `JiraSearchServiceController` and rename every `rest...Jira` method to `rest...<X>` (§2.13).
 4. Prompts: `config/<X>HandlerConfig` (`@ConfigurationProperties("ai.gebo.<x>")`, `@PropertySource(value = "classpath:/<x>-prompts-library/<x>-library.yml", factory = GeboYamlPropertySourceFactory.class)`) with `List<GPromptTemplateLibraryReference> library`, `List<GPromptUseInfo> uses`, and two `@Bean`s (`IGStaticPromptsProvider`, `IGStaticPromptUseInfoProvider`), each `new PromptTemplateProvidersImplementation(this, library, List.of(), uses)`.
    - The yml shape: see `jira-library.yml`. Each prompt use has `promptUse`, `langCode`, `systemReference`, `userReference`, `chatHistory`, `contextDocuments`, plus a `uses` entry documenting its placeholders.
    - Prompts must work on every supported model (gpt-4.1, Qwen ~100B, gpt-oss-120b...): ask for the structured format, do not rely on one vendor's behaviour.
@@ -460,6 +460,28 @@ public class <X>ContentManagementHandlerImpl extends
 - Guard with `isDebugEnabled()`/`isTraceEnabled()`.
 - Use the base classes' `LOGGER` (`LoggerFactory.getLogger(getClass())`) so the category is the runtime subclass.
 - Never drop an existing log line when rewriting code.
+
+### 2.13 Controller method names: always decorated with the type name (mandatory)
+springdoc uses the **Java method name as the OpenAPI operationId**. When two controllers both have
+an `insert`, a `delete` or a `findByCode`, springdoc renames the later ones `insert_1`, `delete_2`…
+The Angular and Java stub generators turn those into numbered methods (`delete1`, `findByCode2`),
+and the numbering shifts every time a controller is added, which breaks the generated clients.
+
+So in **every** controller of the module (systems, browsing, search), name each REST method
+`<operation><HandledTypeName>`, with the type name as the decorator:
+
+| Write | Never write |
+|---|---|
+| `insert<X>System`, `update<X>System`, `delete<X>System`, `test<X>System`, `find<X>SystemByCode`, `get<X>Systems` | `insert`, `update`, `delete`, `test`, `findByCode`, `getSystems` |
+| `insert<X>Endpoint`, `update<X>Endpoint`, `delete<X>Endpoint`, `publish<X>Endpoint`, `find<X>EndpointsByProject` | `insertEndpoint`, `deleteEndpoint`, `publish`, `findByProject` |
+| `get<X>Roots`, `browse<X>Path` | `getRoots`, `browse` |
+| `restSearch<X>`, `restNativeSearch<X>`, `restIsEnabled<X>` | `search`, `isEnabled` |
+
+- In the systems and browsing controllers the mapping path follows the method name (`@PostMapping("insert<X>System")`).
+- In the search controller the **paths stay generic** (`@GetMapping("isEnabled")`, `"getId"`…) because brain's `AbstractSearchServiceRestClient` (and its native subclass) calls those paths for every search service. Only the method names carry the type (`restIsEnabled<X>`). `BaseSearchController`/`BaseNativeSearchController` map nothing themselves: the subclass maps every method, as `JiraSearchServiceController` does.
+- Do not use `GBaseExposedSystemsArchitectureController` for a new handler: its exposed methods have generic names. Extend `GAbstractSystemsArchitectureController` and write each decorated endpoint over its protected methods.
+- An inherited mapped method keeps the base class's name and collides, so never map REST methods in a shared base class.
+- Check after booting: `SwaggerConfig.duplicatedOperationIdsReporter` (`gebo.architecture.swagger`) logs an ERROR listing every `_<n>` operationId, and logs "OpenAPI operationIds are all unique" at DEBUG. Also grep `/v3/api-docs` for `"operationId":"[^"]*_[0-9]+"` and expect no match.
 
 ---
 
@@ -489,8 +511,21 @@ The handler UI lives in `gebo.ui/projects/gebo-ai-admin-ui/src/lib/admin-ui/enti
 The shared bases and controls are in `gebo-ai-reusable-ui`. Read its `docs/01-architecture.md` (§2
 registering an editor, §3 writing an editor, §6 wizards) and `docs/03-forms-and-fields.md` first.
 
+> **Mandatory sequence, always in this order:**
+> 1. **Backend support** complete: controllers with decorated method names (§2.13), built with `-am`, booting with unique operationIds.
+> 2. **Regenerate the Angular REST stubs** with the `/regen-angular-stubs` skill. Never hand-write or hand-edit a service or model in `gebo-ai-rest-api`.
+> 3. **UI**, all four parts:
+>    - the **setup** section: wizard section + fast form (§4.3 item 3)
+>    - **entity editing** for the system and the data source: the editors and their `GEBO_UI_ENTITY_FORM_TOKEN` registrations (§4.2, §4.3 item 1)
+>    - **data source integration** in `gebo-ai-admin-ui/src/lib/admin-ui/gebo-ai-standard-modules-injections.module.ts`: the knowledge-base "add data source" entry and endpoint listing (§4.3 item 2)
+>    - the **icon**: an SVG (or other image format) asset with its CSS class (§4.3 item 4)
+>
+>    Then the en.json keys (§4.4).
+>
+> If the UI needs a backend change half way through, go back to step 1 and regenerate the stubs again. Never patch the stubs to bridge the gap.
+
 ### 4.1 Stubs first
-Regenerate the Angular REST stubs (`/regen-angular-stubs`) after the controllers exist. The UI then uses:
+Regenerate the Angular REST stubs with the `/regen-angular-stubs` skill after the controllers exist. The UI then uses:
 - `<X>SystemsControllerService`, `<X>BrowsingControllerService`
 - the models `G<X>System`, `G<X>ProjectEndpoint`, `OperationStatusG<X>System`, `Fast<X>SystemInsertRequest`
 
@@ -539,14 +574,32 @@ All of them extend `BaseEntityEditingComponent<T>`
    - a `GeboAI<X>ModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService`:
      - `findByProjectEndpoints(code)` → `find<X>EndpointsByProject`
      - `byProjectCreateAction(project, wizardSteps?, stepId?)` → NEW `G<X>ProjectEndpoint`, `target: {parentProjectCode}`, `contextType: "GProject"`, the wizard inputs in `targetFormInputs`
-   - a `GeboAIPluggableProjectEndpointModule` block (`moduleId`, `projecteEndpointClassName: "<pkg>.G<X>ProjectEndpoint"`, icon `"pi pi-<x>"`, label `"+<x>"`, title)
+   - a `GeboAIPluggableProjectEndpointModule` block, modelled on `webdavModuleConfigurationBlock`:
+     ```ts
+     const <x>ModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
+         moduleId: <X>_MODULE,
+         addProjectEndpointicon: "pi pi-<x>",            // the CSS class of item 4
+         addProjectEndpointLabel: "+<x>",
+         addProjectEndpointTitle: "add a <X> data source",
+         projecteEndpointClassName: "<pkg>.G<X>ProjectEndpoint",
+         service: GeboAI<X>ModuleProjectEndpointService
+     };
+     ```
    - provide the service and `{ provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: block, multi: true }` in **both** the `@NgModule` providers and `forRoot()`
 3. Setup wizard (`gebo-ai-admin-ui/src/lib/setup-wizard/<x>-wizard.component.ts/.html`):
    - `<X>StatusService` ("completed" = `get<X>Systems().length > 0`)
    - `<X>InstalledModuleService extends GeboRootInstalledModuleService` with `moduleCode = <X>_MODULE` (**its own** module: the Jira one wrongly says `CONFLUENCE_MODULE`)
    - `<X>WizardComponent extends BaseWizardSectionComponent`, implementing `reloadData()`: a systems table with edit (OPEN `G<X>System`) and a "+ <X> system" `p-dialog` containing the fast form
    - in `setup-wizards.module.ts`: the import, a `SetupWizardsSection` constant (`wizardSectionId: "<x>SystemSetupSection"`, `groupId: ENTERPRISE_INTEGRATIONS_SETUP_GROUP_ID`, `mandatory: false`, `orderEntry`, the services and the component), the declaration, the service providers and `{ provide: WIZARD_SECTION, useValue: section, multi: true }`
-4. Icons: a `.pi.pi-<x>` rule in `gebo-ai-reusable-ui/src/styles.scss` (SVG under `assets/3rdparty/`), and `G<X>ProjectEndpoint: "pi pi-<x>"` in the `iconsMapping` of `controls/vfilesystem-selector/vfilesystem-selector.component.ts`.
+4. Icon (mandatory: without it the add-data-source entry and the tree nodes show an empty box):
+   - Add the product's logo as `gebo.ui/projects/gebo-ai-reusable-ui/src/assets/3rdparty/<x>-<source>.svg`, next to `atlassian-jira-svgrepo-com.svg` and `webdav-folder-svgrepo-com.svg`. Prefer SVG; use PNG only if no vector logo exists. Take it from a source whose licence allows reuse (the product's press kit, or an svgrepo icon with a permissive licence), and keep it square and without a background.
+   - In `gebo-ai-reusable-ui/src/styles.scss`:
+     - add `.pi.pi-<x>` to the shared selector list (around `.pi.pi-jira`, `.pi.pi-webdav`), which gives every logo `display: inline-block`, `1.5em` square, `background-size: contain` and `filter: grayscale(100%)`
+     - add its own rule: `.pi.pi-<x> { background-image: url("assets/3rdparty/<x>-<source>.svg"); }`
+   - Use the class `"pi pi-<x>"` in:
+     - `addProjectEndpointicon` of the KB block (item 2)
+     - `G<X>ProjectEndpoint: "pi pi-<x>"` in the `iconsMapping` of `gebo-ai-reusable-ui/src/lib/controls/vfilesystem-selector/vfilesystem-selector.component.ts`
+   - Check that the asset is shipped: after `ng build`, the SVG must be in the library's `dist` assets and the icon must render in the add-data-source menu.
 5. `gebo-ai-admin-ui/src/public-api.ts`: export the components (the wizard too, if a downstream app must reuse it).
 6. Optionally, a flag in `GeboAIModules` (`gebo-ai-reusable-ui/src/lib/services/gebo-ai-modules.service.ts`), mapped from **the right** module id.
 
@@ -571,7 +624,7 @@ Every visible string needs an `id` and a gebo-ai directive. The Jira `<p-tab>` t
 5. Build: **one Maven build at a time**, with `-am` on the changed modules (`mvn -o -q install -pl gebo.systems.parent/gebo.<x>.handler -am`). Never build two reactors concurrently.
 6. Unit tests: seeder test (copy `WebdavDeclaredDataSourcesSeederTest`), NavigationUtil encode/decode round trips, query translator tests. Mock the generated `*Api` classes for paging tests.
 7. Boot the monolith jar on a throwaway DB, with `GEBO_HOME` set and `-D` options before `-jar`. Check that `logs/ai.gebo.monolithic.app.log` shows `Module: <MODULE> is enabled`, and that `/v3/api-docs` has the new controllers with unique operationIds.
-8. Stubs (§4.1) → UI (§4.2-4.4) → `ng build` of the libraries.
+8. Only now, the UI side, in the mandatory sequence of §4: regenerate the stubs with `/regen-angular-stubs` → setup wizard section + fast form → system and data source editors with their entity form registrations → data source integration in `gebo-ai-standard-modules-injections.module.ts` → icon SVG + CSS class → en.json keys → `ng build` of the libraries.
 9. Live check with `/gebo-backend-test` (insert a system through `fast<X>Config` against a real or sandbox instance, browse roots, insert an endpoint, publish, follow the job) and in the browser:
    - setup wizard section visible
    - "add data source" menu entry visible
@@ -594,7 +647,7 @@ Every visible string needs an `id` and a gebo-ai directive. The Jira `<p-tab>` t
 - [ ] seeder (+ test) · [ ] prompts library · [ ] search service + controller (opt.)
 - [ ] `GStandardModulesConstraints` (id + both lists) · [ ] systems parent pom · [ ] contentsystems.starter
 - [ ] microservice app + topology + gateway + searchservices client (if in scope)
-- [ ] stubs regenerated · [ ] 3 components · [ ] admin module + entity form tokens · [ ] pluggable KB module · [ ] wizard section · [ ] icons · [ ] public-api · [ ] en.json
+- [ ] backend done and booting · [ ] stubs regenerated with /regen-angular-stubs · [ ] wizard section + fast form · [ ] system + data source editors + entity form tokens · [ ] data source integration (standard-modules-injections) · [ ] icon SVG + `.pi.pi-<x>` CSS · [ ] public-api · [ ] en.json
 - [ ] build -am, tests, boot, live checks
 
 ---
@@ -606,6 +659,8 @@ Every visible string needs an `id` and a gebo-ai directive. The Jira `<p-tab>` t
 - Do not add caps, limits, page-size reductions or retries beyond what the remote API imposes without asking the user.
 - No model prices or vendor-specific prompt tricks.
 - Credentials only through the secrets service. Systems hold `secretCode` references.
+- Always backend first, then the stubs regenerated with `/regen-angular-stubs`, then the UI (setup, entity editing, data source integration, icon). Never start the UI on hand-written stubs.
+- Controller methods always carry the handled type name (`insert<X>System`, `delete<X>Endpoint`): never a bare `insert`/`delete`/`findByCode` (§2.13).
 - Commit or push only when the user asks.
 
 ---
