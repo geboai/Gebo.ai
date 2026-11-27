@@ -27,7 +27,6 @@ import org.testcontainers.containers.Container.ExecResult;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -47,17 +46,18 @@ import ai.gebo.secrets.model.GeboUsernamePasswordContent;
 /**
  * Ingestion of a GLPI entity through the {@code gebo.glpi.handler} module: the
  * LLMs are the fake ones of the base class, the ingestion, chunking and
- * embedding pipeline is the real one.
+ * embedding pipeline is the real one. Each subclass runs it on one GLPI
+ * release, with containers of its own.
  * <p>
- * The data source is a real GLPI 11 ({@code glpi/glpi} image, auto-installed
- * on a MySQL container) seeded by {@code GLPI-IT/seed-glpi.sh}, run inside the
- * GLPI container: the APIs on, an OAuth client for the password grant, an
+ * The data source is a real GLPI ({@code glpi/glpi} image, auto-installed on a
+ * MySQL container) seeded by {@code GLPI-IT/seed-glpi.sh}, run inside the GLPI
+ * container: the APIs on, an OAuth client for the password grant, an
  * entity with two tickets (follow-ups, a task, a solution and two attached
  * files, one of them a PDF) and two knowledge base articles. A data source
  * selecting the entity must ingest every ticket body, timeline item, attached
  * file and article as its own document, with their text in the vectors.
  */
-public class GlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
+public abstract class AbstractGlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	/** The default Super-Admin account of a fresh GLPI install */
 	private static final String GLPI_USER = "glpi";
 	private static final String GLPI_PASSWORD = "glpi";
@@ -65,25 +65,29 @@ public class GlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegratio
 	private static final String SEED_DIR = "/tmp/gebo-seed/";
 	private static final String DB_PASSWORD = "gebo-glpi-it-db";
 
-	private static final Network NETWORK = Network.newNetwork();
-
-	@Container
-	static final GenericContainer<?> GLPI_DB = new GenericContainer<>(DockerImageName.parse("mysql:8.4"))
-			.withNetwork(NETWORK).withNetworkAliases("db").withEnv("MYSQL_RANDOM_ROOT_PASSWORD", "yes")
-			.withEnv("MYSQL_DATABASE", "glpi").withEnv("MYSQL_USER", "glpi").withEnv("MYSQL_PASSWORD", DB_PASSWORD)
-			.waitingFor(Wait.forLogMessage(".*ready for connections.*port: 3306.*", 1)
-					.withStartupTimeout(Duration.ofMinutes(3)));
+	/** The MySQL database of a GLPI container, reached as "db" on the network */
+	protected static GenericContainer<?> glpiDatabase(Network network) {
+		return new GenericContainer<>(DockerImageName.parse("mysql:8.4")).withNetwork(network)
+				.withNetworkAliases("db").withEnv("MYSQL_RANDOM_ROOT_PASSWORD", "yes").withEnv("MYSQL_DATABASE", "glpi")
+				.withEnv("MYSQL_USER", "glpi").withEnv("MYSQL_PASSWORD", DB_PASSWORD)
+				.waitingFor(Wait.forLogMessage(".*ready for connections.*port: 3306.*", 1)
+						.withStartupTimeout(Duration.ofMinutes(3)));
+	}
 
 	/**
-	 * GLPI installs itself on first start (GLPI_DB_* all set); Apache starts
-	 * once the installation is done.
+	 * A GLPI container of the given image. GLPI installs itself on first start
+	 * (GLPI_DB_* all set); Apache starts once the installation is done.
 	 */
-	@Container
-	static final GenericContainer<?> GLPI = new GenericContainer<>(DockerImageName.parse("glpi/glpi:11.0.13"))
-			.withNetwork(NETWORK).dependsOn(GLPI_DB).withExposedPorts(80).withEnv("GLPI_DB_HOST", "db")
-			.withEnv("GLPI_DB_PORT", "3306").withEnv("GLPI_DB_NAME", "glpi").withEnv("GLPI_DB_USER", "glpi")
-			.withEnv("GLPI_DB_PASSWORD", DB_PASSWORD).waitingFor(Wait
-					.forLogMessage(".*resuming normal operations.*", 1).withStartupTimeout(Duration.ofMinutes(6)));
+	protected static GenericContainer<?> glpiServer(String image, Network network, GenericContainer<?> database) {
+		return new GenericContainer<>(DockerImageName.parse(image)).withNetwork(network).dependsOn(database)
+				.withExposedPorts(80).withEnv("GLPI_DB_HOST", "db").withEnv("GLPI_DB_PORT", "3306")
+				.withEnv("GLPI_DB_NAME", "glpi").withEnv("GLPI_DB_USER", "glpi").withEnv("GLPI_DB_PASSWORD", DB_PASSWORD)
+				.waitingFor(Wait.forLogMessage(".*resuming normal operations.*", 1)
+						.withStartupTimeout(Duration.ofMinutes(6)));
+	}
+
+	/** The GLPI container of the subclass */
+	protected abstract GenericContainer<?> glpi();
 
 	/**
 	 * Ticket "VPN drops every evening": body, 2 follow-ups, a task, a solution
@@ -99,12 +103,13 @@ public class GlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegratio
 
 	@Test
 	public void testGlpiIngestion() throws Exception {
-		if (!GLPI.isRunning()) {
-			GLPI.start();
+		final GenericContainer<?> glpi = glpi();
+		if (!glpi.isRunning()) {
+			glpi.start();
 		}
-		String baseUri = "http://" + GLPI.getHost() + ":" + GLPI.getMappedPort(80);
-		LOGGER.info("GLPI reachable at " + baseUri);
-		Seeded seeded = seed();
+		String baseUri = "http://" + glpi.getHost() + ":" + glpi.getMappedPort(80);
+		LOGGER.info("GLPI " + glpi.getDockerImageName() + " reachable at " + baseUri);
+		Seeded seeded = seed(glpi);
 
 		// the credentials as the GLPI fast setup stores them: the OAuth client and
 		// the GLPI user, two secrets
@@ -171,13 +176,13 @@ public class GlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegratio
 	 * Copies the seed script and the files to attach into the GLPI container and
 	 * runs it there; returns the entity and the OAuth client id it prints.
 	 */
-	private Seeded seed() throws Exception {
-		GLPI.copyFileToContainer(MountableFile.forClasspathResource("GLPI-IT/seed-glpi.sh"),
+	private Seeded seed(GenericContainer<?> glpi) throws Exception {
+		glpi.copyFileToContainer(MountableFile.forClasspathResource("GLPI-IT/seed-glpi.sh"),
 				SEED_DIR + "seed-glpi.sh");
-		GLPI.copyFileToContainer(MountableFile.forClasspathResource("GLPI-IT/vpn-firewall-log.txt"),
+		glpi.copyFileToContainer(MountableFile.forClasspathResource("GLPI-IT/vpn-firewall-log.txt"),
 				SEED_DIR + "vpn-firewall-log.txt");
-		GLPI.copyFileToContainer(MountableFile.forClasspathResource(TEST_001_PDF_FILE), SEED_DIR + "v4man.pdf");
-		ExecResult result = GLPI.execInContainer("bash", SEED_DIR + "seed-glpi.sh", GLPI_USER, GLPI_PASSWORD,
+		glpi.copyFileToContainer(MountableFile.forClasspathResource(TEST_001_PDF_FILE), SEED_DIR + "v4man.pdf");
+		ExecResult result = glpi.execInContainer("bash", SEED_DIR + "seed-glpi.sh", GLPI_USER, GLPI_PASSWORD,
 				OAUTH_CLIENT_SECRET, SEED_DIR);
 		assertEquals(0, result.getExitCode(), "The GLPI seed must succeed, stderr: " + result.getStderr());
 		LOGGER.info("GLPI seeded: " + result.getStdout().replaceAll("CLIENT_ID=\\S+", "CLIENT_ID=<hidden>"));
