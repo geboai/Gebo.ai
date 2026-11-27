@@ -92,6 +92,14 @@ public class ModelParameterRules {
 	 * {@link IGModelsLibraryDao#findInputModalities(String, String)}.
 	 */
 	private List<GModelInputModality> inputModalities = new ArrayList<>();
+	/**
+	 * The api of its provider the covered models are called through, for a provider
+	 * serving its models through several apis and these models through one only (OpenAI:
+	 * {@code responses}); null when the rule says nothing of it, the module then choosing
+	 * the api as it does without the library. Read apart from the parameters, see
+	 * {@link IGModelsLibraryDao#findApi(String, String)}.
+	 */
+	private String api = null;
 	/** Where the rule comes from: the provider page it was read on, and when. */
 	private String source = null;
 
@@ -133,10 +141,15 @@ public class ModelParameterRules {
 		return inputModalities != null && !inputModalities.isEmpty();
 	}
 
+	/** Whether the rule tells the api its models are called through. */
+	public boolean statesApi() {
+		return api != null && !api.isBlank();
+	}
+
 	/**
 	 * Whether the rule says anything of the request parameters. A rule that only tells
-	 * the input modalities does not, and is skipped when the parameter rules of a model
-	 * are looked for, so that it never hides the rule after it.
+	 * the input modalities or the api does not, and is skipped when the parameter rules
+	 * of a model are looked for, so that it never hides the rule after it.
 	 */
 	public boolean statesParameters() {
 		return sampling != null || knowsEfforts() || queryInputType != null || documentInputType != null
@@ -186,7 +199,7 @@ public class ModelParameterRules {
 	 * The rules of a model from what its provider's models api told (live) and from the
 	 * models library: the live efforts win when known, a live REJECTED sampling wins (the
 	 * api says the model takes no temperature), any other sampling is the library's when
-	 * it has one; the embedding and speech fields are the library's. Either may be null.
+	 * it has one; the embedding and speech fields and the api are the library's. Either may be null.
 	 */
 	public static ModelParameterRules merge(ModelParameterRules live, ModelParameterRules library) {
 		if (live == null)
@@ -205,6 +218,7 @@ public class ModelParameterRules {
 		merged.queryInputType = library.queryInputType;
 		merged.documentInputType = library.documentInputType;
 		merged.speechFormat = library.speechFormat;
+		merged.api = library.api;
 		merged.inputModalities = new ArrayList<>(live.knowsInputModalities() ? live.inputModalities
 				: library.inputModalities != null ? library.inputModalities : List.of());
 		merged.source = live.source + "; " + library.source;
@@ -222,6 +236,6 @@ public class ModelParameterRules {
 		return "ModelParameterRules[providerId=" + providerId + ", models=" + models + ", sampling=" + sampling
 				+ ", reasoningEfforts=" + reasoningEfforts + ", queryInputType=" + queryInputType
 				+ ", documentInputType=" + documentInputType + ", speechFormat=" + speechFormat
-				+ ", inputModalities=" + inputModalities + "]";
+				+ ", inputModalities=" + inputModalities + ", api=" + api + "]";
 	}
 }

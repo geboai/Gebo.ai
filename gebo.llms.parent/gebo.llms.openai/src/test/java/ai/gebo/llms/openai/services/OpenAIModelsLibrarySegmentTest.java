@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -98,8 +99,9 @@ class OpenAIModelsLibrarySegmentTest {
 			assertEquals(Sampling.REJECTED, rules.getSampling(), id + ": not named by the guide's sampling rule");
 			assertEquals(List.of("none", "low", "medium", "high", "xhigh"), rules.getReasoningEfforts(), id);
 		}
-		// the other variants stay on the family rule: no effort known, no sampling
-		for (String id : List.of("gpt-5.2-pro", "gpt-5.4-nano", "gpt-5.4")) {
+		// the models whose page lists no effort stay on the family rule: no effort known,
+		// no sampling
+		for (String id : List.of("gpt-5-mini", "gpt-5-nano", "gpt-5.6-cyber")) {
 			ModelParameterRules rules = library.findParameterRules("openai", id);
 			assertEquals(Sampling.REJECTED, rules.getSampling(), id);
 			assertFalse(rules.knowsEfforts(), id + ": the family rule");
@@ -117,6 +119,83 @@ class OpenAIModelsLibrarySegmentTest {
 		}
 		assertFalse(OpenAiApiRouting.usesResponsesApi("gpt-5.2"), "Chat Completions");
 		assertFalse(OpenAiApiRouting.usesResponsesApi("gpt-5.4-mini"), "Chat Completions");
+	}
+
+	@Test
+	void theModelsWhosePageGivesTheResponsesApiOnlyGoThroughIt() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+
+		// their pages mark Chat Completions "Not supported": the version their id carries
+		// would have sent the pro, codex and cyber models to Chat Completions
+		for (String id : List.of("gpt-5.5-pro", "gpt-5.4-pro", "gpt-5.2-pro", "gpt-5-pro", "o3-pro", "gpt-5.3-codex",
+				"gpt-5.6-cyber", "gpt-oss-120b", "gpt-oss-20b", "gpt-5-pro-2025-10-06", "o3-pro-2025-06-10")) {
+			assertEquals(OpenAiApiRouting.RESPONSES, library.findApi("openai", id), id);
+			assertTrue(OpenAiApiRouting.usesResponsesApi(library, id), id);
+		}
+		// the models taking both apis keep the version rule
+		for (String id : List.of("gpt-5.5", "gpt-5.6-sol", "gpt-5.2", "gpt-5.2-2025-12-11", "gpt-5.4-mini", "gpt-5",
+				"o3", "chat-latest", "gpt-4.1", "gpt-4o")) {
+			assertNull(library.findApi("openai", id), id);
+			assertFalse(OpenAiApiRouting.usesResponsesApi(library, id), id);
+		}
+		assertNull(library.findApi("openai", "gpt-6.1-sol"));
+		assertTrue(OpenAiApiRouting.usesResponsesApi(library, "gpt-6.1-sol"), "by its version");
+		assertNull(library.findApi("groq", "gpt-oss-120b"), "OpenAI's rule only");
+
+		// the api rule states no parameter: each model keeps the rule of its efforts
+		assertEquals(Sampling.REJECTED, library.findParameterRules("openai", "o3-pro").getSampling());
+		assertEquals(List.of("high"), library.findParameterRules("openai", "gpt-5-pro").getReasoningEfforts());
+		assertEquals(List.of("low", "medium", "high"),
+				library.findParameterRules("openai", "gpt-oss-120b").getReasoningEfforts());
+	}
+
+	@Test
+	void theReasoningEffortsAreTheOnesTheModelPagesList() throws Exception {
+		GModelsLibraryDaoImpl library = library();
+		final List<String> noneToMax = List.of("none", "low", "medium", "high", "xhigh", "max");
+		final List<String> noneToXhigh = List.of("none", "low", "medium", "high", "xhigh");
+
+		// the pro models take the highest efforts only: neither "no thinking" (none) nor low
+		// is sent them, the rule of gpt-5.5 listing both
+		for (String id : List.of("gpt-5.5-pro", "gpt-5.4-pro", "gpt-5.2-pro", "gpt-5.5-pro-2026-12-01")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertEquals(List.of("medium", "high", "xhigh"), rules.getReasoningEfforts(), id);
+			assertFalse(rules.acceptsEffort("none"), id);
+			assertFalse(rules.acceptsEffort("low"), id);
+			assertEquals(Sampling.REJECTED, rules.getSampling(), id);
+		}
+		assertEquals(List.of("high"), library.findParameterRules("openai", "gpt-5-pro-2025-10-06").getReasoningEfforts());
+		assertTrue(library.findParameterRules("openai", "gpt-5.5").acceptsEffort("none"), "gpt-5.5 keeps its rule");
+
+		// effort none listed: "no thinking" turns the reasoning off instead of leaving the
+		// medium default
+		for (String id : List.of("gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-6.1-terra")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertEquals(noneToMax, rules.getReasoningEfforts(), id);
+			assertEquals(Sampling.REJECTED, rules.getSampling(), id + ": sampling not documented");
+		}
+		assertFalse(library.findParameterRules("openai", "gpt-6.2-sol").knowsEfforts(), "the gpt-6 family rule");
+
+		// the GPT-5.4 guide gives gpt-5.4 the sampling at effort none, not its mini and nano
+		for (String id : List.of("gpt-5.4", "gpt-5.4-2026-03-05")) {
+			assertEquals(Sampling.WITHOUT_REASONING, library.findParameterRules("openai", id).getSampling(), id);
+			assertEquals(noneToXhigh, library.findParameterRules("openai", id).getReasoningEfforts(), id);
+		}
+		assertEquals(Sampling.REJECTED, library.findParameterRules("openai", "gpt-5.4-nano").getSampling());
+		assertEquals(noneToXhigh, library.findParameterRules("openai", "gpt-5.4-nano").getReasoningEfforts());
+		assertEquals(List.of("none", "low", "medium", "high"),
+				library.findParameterRules("openai", "gpt-5.1").getReasoningEfforts());
+		assertEquals(List.of("low", "medium", "high", "xhigh"),
+				library.findParameterRules("openai", "gpt-5.3-codex").getReasoningEfforts());
+		assertEquals(List.of("minimal", "low", "medium", "high"),
+				library.findParameterRules("openai", "gpt-5-2025-08-07").getReasoningEfforts(), "as gpt-5");
+
+		// gpt-oss: the efforts of its page, its sampling left unknown as it was
+		for (String id : List.of("gpt-oss-120b", "gpt-oss-20b")) {
+			ModelParameterRules rules = library.findParameterRules("openai", id);
+			assertEquals(List.of("low", "medium", "high"), rules.getReasoningEfforts(), id);
+			assertNull(rules.getSampling(), id);
+		}
 	}
 
 	@Test

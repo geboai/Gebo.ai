@@ -12,6 +12,8 @@ package ai.gebo.llms.openai.services;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ai.gebo.llms.models.metainfos.IGModelsLibraryDao;
+
 /**
  * Which OpenAI api a chat model is called through. OpenAI's reasoning guide
  * (developers.openai.com/api/docs/guides/reasoning, 2026-10-11) says "Chat Completions
@@ -20,8 +22,19 @@ import java.util.regex.Pattern;
  * set to none": the models of version 6 and later go through the Responses api (Spring
  * AI's {@code OpenAiResponsesChatModel}), the others keep Spring AI's Chat Completions
  * model.
+ * <p>
+ * The models library tells it first, for the models whose page marks one api only
+ * whatever their version ({@code gpt-5.5-pro}: Chat Completions "Not supported"): the
+ * {@code api} of the OpenAI rule covering the model, {@value #RESPONSES} or
+ * {@value #CHAT_COMPLETIONS}, see {@link IGModelsLibraryDao#findApi(String, String)}.
  */
 public final class OpenAiApiRouting {
+	/** The provider the library's rules are read for. */
+	static final String PROVIDER_ID = "openai";
+	/** The library's api of the models called through the Responses api. */
+	public static final String RESPONSES = "responses";
+	/** The library's api of the models called through Chat Completions. */
+	public static final String CHAT_COMPLETIONS = "chat-completions";
 	/** The first version of the models on the Responses api. */
 	static final double FIRST_RESPONSES_VERSION = 6.0;
 	private static final Pattern VERSION = Pattern.compile("\\d+(?:\\.\\d+)*");
@@ -30,7 +43,23 @@ public final class OpenAiApiRouting {
 	}
 
 	/**
-	 * Whether a model goes through the Responses API: the first run of digits and dots
+	 * Whether a model goes through the Responses API: as the models library's rules tell,
+	 * else by its version ({@link #usesResponsesApi(String)}).
+	 *
+	 * @param library the models library, may be null
+	 * @param modelId the model id the requests name
+	 */
+	public static boolean usesResponsesApi(IGModelsLibraryDao library, String modelId) {
+		final String api = library != null && modelId != null ? library.findApi(PROVIDER_ID, modelId) : null;
+		if (RESPONSES.equalsIgnoreCase(api))
+			return true;
+		if (CHAT_COMPLETIONS.equalsIgnoreCase(api))
+			return false;
+		return usesResponsesApi(modelId);
+	}
+
+	/**
+	 * Whether a model goes through the Responses API by its version: the first run of digits and dots
 	 * of its id read as a number ({@code gpt-6.1-sol} 6.1, {@code gpt-5.5} 5.5,
 	 * {@code gpt-4o} 4, {@code o3} 3) is 6 or more.
 	 */

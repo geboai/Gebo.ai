@@ -203,10 +203,11 @@ public class OpenAIChatModelConfigurationSupportService
 			OpenAiChatOptions options = builder.build();
 			ToolCallingManager toolCallingManager = functionsRepo.createToolCallingManager();
 			// The models of version 6 and later go through the Responses API, whose tool calls
-			// Chat Completions does not carry for them (OpenAiApiRouting): Spring AI's
-			// Responses model, configured as the Chat Completions one; the others stay on
-			// Spring AI's Chat Completions model
-			if (OpenAiApiRouting.usesResponsesApi(options.getModel())) {
+			// Chat Completions does not carry for them, and so do the ones the models library
+			// names as taking that api only (OpenAiApiRouting): Spring AI's Responses model,
+			// configured as the Chat Completions one; the others stay on Spring AI's Chat
+			// Completions model
+			if (OpenAiApiRouting.usesResponsesApi(modelsLibrary, options.getModel())) {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("Chat model {} ({}) goes through the OpenAI Responses API", config.getCode(),
 							options.getModel());
@@ -378,7 +379,7 @@ public class OpenAIChatModelConfigurationSupportService
 	 */
 	@Override
 	public GModelCarriedMediaTypes carriedMediaTypes(String modelCode) {
-		if (modelCode != null && OpenAiApiRouting.usesResponsesApi(modelCode)) {
+		if (modelCode != null && OpenAiApiRouting.usesResponsesApi(modelsLibrary, modelCode)) {
 			return GModelCarriedMediaTypes.none().images("image/*").documents("application/pdf");
 		}
 		return GModelCarriedMediaTypes.none().images("image/*").documents("application/pdf").audio("audio/mp3",

@@ -10,6 +10,7 @@
 package ai.gebo.llms.models.metainfos;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -66,6 +67,31 @@ class ProviderModelsLibrariesTest {
 		assertSame(installed, library.findParameterRules("alpha", "alpha-9"), "the installation first");
 		assertNull(library.findParameterRules("beta", "alpha-1"), "a rule is its provider's only");
 		assertNull(new GModelsLibraryDaoImpl(new ModelsLibraryConfig(), List.of()).findByModelId("alpha-1"));
+	}
+
+	@Test
+	void theApiOfAModelIsTheFirstRuleTellingItsAndHidesNoParameterRule() {
+		ModelParameterRules family = rule("alpha", "alpha-*", Sampling.REJECTED);
+		ModelParameterRules api = new ModelParameterRules();
+		api.setProviderId("alpha");
+		api.setModels(List.of("alpha-pro", "alpha-pro-20*"));
+		api.setApi("responses");
+		ModelParameterRules installed = new ModelParameterRules();
+		installed.setProviderId("alpha");
+		installed.setModels(List.of("alpha-pro-2026-01-01"));
+		installed.setApi("chat-completions");
+		ModelsLibraryConfig installation = new ModelsLibraryConfig();
+		installation.setParameterRules(List.of(installed));
+
+		GModelsLibraryDaoImpl library = new GModelsLibraryDaoImpl(installation, List.of(provider(null, api, family)));
+
+		assertEquals("responses", library.findApi("alpha", "alpha-pro"));
+		assertEquals("responses", library.findApi("alpha", "alpha-pro-2025-06-10"), "its dated variants with it");
+		assertEquals("chat-completions", library.findApi("alpha", "alpha-pro-2026-01-01"), "the installation first");
+		assertNull(library.findApi("alpha", "alpha-1"), "the family rule tells no api");
+		assertNull(library.findApi("beta", "alpha-pro"), "a rule is its provider's only");
+		assertFalse(api.statesParameters());
+		assertSame(family, library.findParameterRules("alpha", "alpha-pro"), "the api rule is read apart");
 	}
 
 	@Test
