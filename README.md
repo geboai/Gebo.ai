@@ -49,6 +49,7 @@ It's a "No AI vendor lock-in"  alternative to cloud vendors platform, it can wor
      - **Amazon AWS S3** buckets
      - **WebDAV** compatible servers (Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server...)
      - **Redmine** projects: issues, wiki pages and files
+     - **GLPI** service management: helpdesk tickets (with their follow-ups, tasks, solutions and documents) and knowledge base articles
  - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
  	- **Microsoft Entra**
  	- **Google auth**   
@@ -155,7 +156,7 @@ The platform can run either as a single **bootable jar** (monolith) or be deploy
 | Docker Compose microservices | 20 containerized microservices + infra (Mongo, Rabbit, Qdrant, Neo4j, OpenSearch, Eureka, gateway) | `dockers/gebo.microservices/docker-compose.yml` |
 | Kubernetes (Helm) | The same microservices stack as Helm charts with per-service install toggles, topology-synced ConfigMaps, and optional in-cluster observability | `deploy/helm/gebo-microservices` |
 
-**Microservices** — the full set of 20+ services (brain, vectorizator, graphicator, chunker, git, filesystem, uploads, userspace, sharepoint, confluence, jira, aws-s3, googledrive, webdav, mcpclient, integration, fulltextor, heimdall, tyr, gateway, eureka) is built with `mvn -P docker,swagger-on clean package jib:buildTar` and deployed via Docker Compose or Helm. Each service exposes its REST surface under a context-path (e.g. `/brain`); per-service Java and Angular client stubs are auto-generated from live OpenAPI specs under `gebo.api.clients/gebo.microservices.clients.parent`.
+**Microservices** — the full set of 20+ services (brain, vectorizator, graphicator, chunker, git, filesystem, uploads, userspace, sharepoint, confluence, jira, aws-s3, googledrive, webdav, glpi, mcpclient, integration, fulltextor, heimdall, tyr, gateway, eureka) is built with `mvn -P docker,swagger-on clean package jib:buildTar` and deployed via Docker Compose or Helm. Each service exposes its REST surface under a context-path (e.g. `/brain`); per-service Java and Angular client stubs are auto-generated from live OpenAPI specs under `gebo.api.clients/gebo.microservices.clients.parent`.
 
 **Kubernetes / Helm chart** — a production-ready Helm chart at `deploy/helm/gebo-microservices` deploys the entire microservices platform to any Kubernetes cluster. It mirrors the Docker Compose stack and adds:
 - **Per-service optional/mandatory install toggles** — disable connectors you don't need (e.g. `graphicator`, `fulltextor`, `jira`); mandatory services (heimdall, brain, tyr, chunker, vectorizator, eureka, gateway) are always rendered.

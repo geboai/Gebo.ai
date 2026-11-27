@@ -116,6 +116,7 @@ backends:
   integration:  { port: 13015, enabled: true }
   webdav:       { port: 13020, enabled: true }
   redmine:      { port: 13021, enabled: true }
+  glpi:         { port: 13022, enabled: true }
 
 # --- Stateful dependencies -------------------------------------------------
 # enabled:true  -> deployed in-cluster (StatefulSet + PVC + Service).

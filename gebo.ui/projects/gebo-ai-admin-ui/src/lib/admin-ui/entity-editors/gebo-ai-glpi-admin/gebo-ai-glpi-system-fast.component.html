@@ -1,0 +1,67 @@
+<p-blockUI id="BlockUI" [target]="glpiSystemCtrl" [blocked]="loading">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #glpiSystemCtrl header="Create GLPI system configuration" [formGroup]="formGroup">
+  <div class="geboButtonsBar" style="vertical-align: baseline;">
+    <div class="grid">
+      <div class="col-4">
+        <p-button id="CreateBtn" gebo-ai-label [outlined]="true" label="Create" (onClick)="doInsert()" icon="pi pi-save" severity="success"
+          styleClass="w-full" [disabled]="this.formGroup.invalid"></p-button>
+      </div>
+      <div class="col-4">
+        <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+          styleClass="w-full" />
+      </div>
+    </div>
+  </div>
+
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    <div class="grid">
+      <div class="col-6">
+        <gebo-ai-field id="description" label="Description" help="Enter the description of the GLPI system." [required]="true">
+          <input pInputText id="description" formControlName="description" maxlength="120" [required]="true" gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="baseUri" label="GLPI address" help="Address of the GLPI web interface (e.g. https://glpi.example.com)" [required]="true">
+          <input type="text" id="baseUri" pInputText formControlName="baseUri" class="col-12 required" [required]="true" gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-12">
+        <p-fieldset id="OauthClientFieldset" gebo-ai-label legend="OAuth client">
+          <small id="OauthClientHint" gebo-ai-text>Register an OAuth client in GLPI (Setup > OAuth clients) allowing the Password grant and the api scope, then copy here its client id and secret.</small>
+          <div class="grid">
+            <div class="col-6">
+              <gebo-ai-field id="clientId" label="Client id" help="Client id of the OAuth client registered in GLPI" [required]="true">
+                <input pInputText id="clientId" formControlName="clientId" class="col-12 required" [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="clientSecret" label="Client secret" help="Client secret of the OAuth client registered in GLPI" [required]="true">
+                <input type="password" pInputText id="clientSecret" formControlName="clientSecret" class="col-12 required" [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+      <div class="col-12">
+        <p-fieldset id="GlpiUserFieldset" gebo-ai-label legend="GLPI user">
+          <small id="GlpiUserHint" gebo-ai-text>The tickets and knowledge base articles this GLPI user can see in GLPI are the ones Gebo.ai reads.</small>
+          <div class="grid">
+            <div class="col-6">
+              <gebo-ai-field id="username" label="User name" help="Login of the GLPI user" [required]="true">
+                <input pInputText id="username" formControlName="username" class="col-12 required" [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+            <div class="col-6">
+              <gebo-ai-field id="password" label="Password" help="Password of the GLPI user" [required]="true">
+                <input type="password" pInputText id="password" formControlName="password" class="col-12 required" [required]="true" gebo-ai-field-element />
+              </gebo-ai-field>
+            </div>
+          </div>
+        </p-fieldset>
+      </div>
+    </div>
+  </div>
+</p-panel>

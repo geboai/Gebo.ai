@@ -123,6 +123,9 @@ export * from "./lib/admin-ui/entity-editors/gebo-ai-webdav-client-admin/gebo-ai
 export * from "./lib/admin-ui/entity-editors/gebo-ai-redmine-admin/gebo-ai-redmine-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-redmine-admin/gebo-ai-redmine-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-redmine-admin/gebo-ai-redmine-system-fast.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-system-admin.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-endpoint.component";
+export * from "./lib/admin-ui/entity-editors/gebo-ai-glpi-admin/gebo-ai-glpi-system-fast.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-endpoint.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-atlassian-admin/gebo-ai-jira-system-admin.component";
 export * from "./lib/admin-ui/entity-editors/gebo-ai-models-admin/gebo-ai-deepseek-chatmodel-admin.component";

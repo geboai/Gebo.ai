@@ -116,7 +116,8 @@ p-block-ui {
 .pi.pi-jira,
 .pi.pi-aws-s3,
 .pi.pi-webdav,
-.pi.pi-redmine {
+.pi.pi-redmine,
+.pi.pi-glpi {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
@@ -165,6 +166,10 @@ p-block-ui {
 
 .pi.pi-redmine {
   background-image: url("assets/3rdparty/redmine-issues-mark.svg");
+}
+
+.pi.pi-glpi {
+  background-image: url("assets/3rdparty/glpi-helpdesk-ticket.svg");
 }
 
 .pi.pi-deep-search {

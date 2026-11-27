@@ -97,6 +97,7 @@ Port → service map (from `dockers/gebo.microservices/docker-compose.yml`):
 13005 git         13012 aws-s3        13019 tyr
 13006 filesystem  13013 googledrive   13020 webdav
                                      13021 redmine
+                                      13022 glpi
 ```
 
 `gateway` and `eureka` never serve controllers — 0 paths is correct for both, not a
@@ -110,7 +111,7 @@ in this codebase's dev environment — a short 60–90s polling loop reports eve
 8+ minute total budget:
 
 ```bash
-ports="13001:brain 13002:vectorizator 13003:graphicator 13004:chunker 13005:git 13006:filesystem 13007:uploads 13008:userspace 13009:sharepoint 13010:confluence 13011:jira 13012:aws-s3 13013:googledrive 13014:mcpclient 13015:integration 13016:fulltextor 13018:heimdall 13019:tyr 13020:webdav 13021:redmine"
+ports="13001:brain 13002:vectorizator 13003:graphicator 13004:chunker 13005:git 13006:filesystem 13007:uploads 13008:userspace 13009:sharepoint 13010:confluence 13011:jira 13012:aws-s3 13013:googledrive 13014:mcpclient 13015:integration 13016:fulltextor 13018:heimdall 13019:tyr 13020:webdav 13021:redmine 13022:glpi"
 declare -A ready
 for tries in $(seq 1 50); do
   all_ready=1

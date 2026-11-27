@@ -46,5 +46,7 @@
 		<module>gebo.webdav-cms.handler</module>
 		<module>gebo.redmine.search.api</module>
 		<module>gebo.redmine.handler</module>
+		<module>gebo.glpi.search.api</module>
+		<module>gebo.glpi.handler</module>
 	</modules>
 </project>

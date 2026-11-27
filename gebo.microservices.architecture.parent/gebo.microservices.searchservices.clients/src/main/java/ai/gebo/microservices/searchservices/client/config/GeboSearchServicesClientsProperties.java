@@ -46,6 +46,8 @@ public class GeboSearchServicesClientsProperties {
 	private Endpoint redmine = Endpoint.of("redmine_gebo_ai", "api/users/RedmineSearchServiceController", "redmine",
 			"Redmine Search", "redmine", "redmine-module", "redmine-standard-query-extraction-prompt",
 			"redmine-native-query-extraction-prompt");
+	private Endpoint glpi = Endpoint.of("glpi_gebo_ai", "api/users/GlpiSearchServiceController", "glpi", "GLPI Search",
+			"glpi", "glpi-module", "glpi-standard-query-extraction-prompt", "glpi-native-query-extraction-prompt");
 
 	@Data
 	public static class Endpoint {

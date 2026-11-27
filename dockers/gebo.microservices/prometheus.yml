@@ -59,3 +59,5 @@ scrape_configs:
         labels: { service: webdav }
       - targets: ["redmine:13990"]
         labels: { service: redmine }
+      - targets: ["glpi:13990"]
+        labels: { service: glpi }

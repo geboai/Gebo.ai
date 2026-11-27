@@ -15,7 +15,7 @@
  * Exports constants representing different module identifiers used throughout the application.
  * These constants are used to identify various modules that can be plugged into the system.
  */
-import { AwsS3SystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GRedmineProjectEndpoint, GSharepointProjectEndpoint, GUploadsProjectEndpoint, GWebdavProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, RedmineSystemsControllerService, SharepointSystemsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { AwsS3SystemsControllerService, GGlpiProjectEndpoint, GlpiSystemsControllerService, ConfluenceSystemsControllerService, FileSystemsControllerService, FileUploadsControllerService, GAwsS3ProjectEndpoint, GConfluenceProjectEndpoint, GFilesystemProjectEndpoint, GGitProjectEndpoint, GitSystemsControllerService, GJiraProjectEndpoint, GoogleDriveSystemsControllerService, GProject, GRedmineProjectEndpoint, GSharepointProjectEndpoint, GUploadsProjectEndpoint, GWebdavProjectEndpoint, JiraSystemsControllerService, MCPClientProjectEndpoint, McpClientSystemsControllerService, RedmineSystemsControllerService, SharepointSystemsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, GeboActionType, GeboAIEntitiesSettingWizardConfiguration, GeboAIModulesModule, GeboAIPluggableProjectEndpointModule, GeboAIPluggableProjectEndpointModuleService, GeboUIActionRequest } from "@Gebo.ai/reusable-ui";
 import { Observable } from "rxjs";
 import { EnvironmentProviders, Injectable, ModuleWithProviders, NgModule, Provider, Type } from "@angular/core";
@@ -32,6 +32,7 @@ export const MCP_CLIENT_MODULE = "mcp-client-module";
 export const AWS_S3_MODULE = "aws-s3-module";
 export const WEBDAB_CMS_MODULE = "webdab-cms-module";
 export const REDMINE_MODULE = "redmine-module";
+export const GLPI_MODULE = "glpi-module";
 
 /**
  * Injectable service responsible for managing shared filesystem project endpoints.
@@ -795,6 +796,59 @@ const redmineModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
 };
 
 /**
+ * Injectable service responsible for managing GLPI project endpoints.
+ * Implements GeboAIPluggableProjectEndpointModuleService to provide functionality
+ * for connecting GLPI tickets and knowledge base articles as data sources.
+ */
+@Injectable({
+    providedIn: "root"
+})
+export class GeboAIGlpiModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService {
+    constructor(private glpiService: GlpiSystemsControllerService) {
+    }
+
+    findByProjectEndpoints(code: string): Observable<{
+        code?: string; description?: string; parentProjectCode?: string;
+    }[]> {
+        return this.glpiService.findGlpiEndpointsByProject(code);
+    }
+
+    byProjectCreateAction(project: GProject, wizardStepsConfigurations?: GeboAIEntitiesSettingWizardConfiguration[], actualWizardStepConfigrationId?: string): GeboUIActionRequest {
+        let nextStepsParams: any = undefined;
+        if (wizardStepsConfigurations && actualWizardStepConfigrationId) {
+            nextStepsParams = {
+                wizardStepsConfigurations: wizardStepsConfigurations,
+                actualWizardStepConfigrationId: actualWizardStepConfigrationId
+            };
+        }
+        const target: GGlpiProjectEndpoint = {
+            parentProjectCode: project.code
+        };
+        return {
+            actionType: GeboActionType.NEW,
+            context: project,
+            contextType: "GProject",
+            target: target,
+            targetType: "GGlpiProjectEndpoint",
+            targetFormInputs: nextStepsParams
+        };
+    }
+}
+
+/**
+ * Configuration object for the GLPI module.
+ * Defines UI elements, labels, icons and service to be used for GLPI connections.
+ */
+const glpiModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
+    moduleId: GLPI_MODULE,
+    addProjectEndpointicon: "pi pi-glpi",
+    addProjectEndpointLabel: "+glpi",
+    addProjectEndpointTitle: "add a GLPI data source (helpdesk tickets and knowledge base articles)",
+    projecteEndpointClassName: "ai.gebo.glpi.handler.GGlpiProjectEndpoint",
+    service: GeboAIGlpiModuleProjectEndpointService
+};
+
+/**
  * NgModule that handles the registration of all module services and configurations.
  * This module is responsible for injecting all the pluggable modules into the application
  * by providing their services and configuration blocks to the dependency injection system.
@@ -813,6 +867,7 @@ const redmineModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
         GeboAIAwsS3ModuleProjectEndpointService,
         GeboAIWebdavModuleProjectEndpointService,
         GeboAIRedmineModuleProjectEndpointService,
+        GeboAIGlpiModuleProjectEndpointService,
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -823,7 +878,8 @@ const redmineModuleConfigurationBlock: GeboAIPluggableProjectEndpointModule = {
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true },
         { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: webdavModuleConfigurationBlock, multi: true },
-        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: redmineModuleConfigurationBlock, multi: true }]
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: redmineModuleConfigurationBlock, multi: true },
+        { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: glpiModuleConfigurationBlock, multi: true }]
 })
 export class GeboAICommonModulesInjectionsModule {
 
@@ -842,6 +898,7 @@ export class GeboAICommonModulesInjectionsModule {
                 GeboAIAwsS3ModuleProjectEndpointService,
                 GeboAIWebdavModuleProjectEndpointService,
                 GeboAIRedmineModuleProjectEndpointService,
+                GeboAIGlpiModuleProjectEndpointService,
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: sharedFilesystemModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: gitModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: uploadsModuleConfigurationBlock, multi: true },
@@ -852,7 +909,8 @@ export class GeboAICommonModulesInjectionsModule {
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: mcpClientModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: awsS3ModuleConfigurationBlock, multi: true },
                 { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: webdavModuleConfigurationBlock, multi: true },
-                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: redmineModuleConfigurationBlock, multi: true }]
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: redmineModuleConfigurationBlock, multi: true },
+                { provide: GEBO_AI_PLUGGABLE_MODULE_UI_CONFIG, useValue: glpiModuleConfigurationBlock, multi: true }]
         }
         return moduleWithProv;
 

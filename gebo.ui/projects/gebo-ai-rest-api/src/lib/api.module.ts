@@ -84,6 +84,9 @@ import { GenericOpenAiapiTextToSpeechModelsConfigurationControllerService } from
 import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from './api/genericOpenAiapiTranscriptModelsConfigurationController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
+import { GlpiBrowsingControllerService } from './api/glpiBrowsingController.service';
+import { GlpiSearchServiceControllerService } from './api/glpiSearchServiceController.service';
+import { GlpiSystemsControllerService } from './api/glpiSystemsController.service';
 import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
 import { GoogleDriveSearchServiceControllerService } from './api/googleDriveSearchServiceController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
@@ -248,6 +251,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericOpenAiapiTranscriptModelsConfigurationControllerService,
     GenericalPublisherControllerService,
     GitSystemsControllerService,
+    GlpiBrowsingControllerService,
+    GlpiSearchServiceControllerService,
+    GlpiSystemsControllerService,
     GoogleDriveBrowsingControllerService,
     GoogleDriveSearchServiceControllerService,
     GoogleDriveSystemsControllerService,

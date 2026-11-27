@@ -282,6 +282,10 @@
         "label": "Redmine integration",
         "description": "Redmine projects: issues with their notes and attachments, wiki pages and files"
       },
+      "glpiSystemSetupSection": {
+        "label": "GLPI integration",
+        "description": "GLPI service management: helpdesk tickets with their follow-ups, tasks, solutions and documents, and knowledge base articles"
+      },
       "webSearchApiSetupSection": {
         "label": "Configure web search",
         "description": "Choose and configure one web search provider (Google, Tavily, Brave or SearXNG) for AI web searches"
@@ -567,6 +571,14 @@
       "ConfigCodeHeader": { "label": "Config code" },
       "DescriptionHeader": { "label": "Description" },
       "BaseUriHeader": { "label": "Server address" },
+      "EditBtn": { "label": "Edit system" }
+    },
+    "GlpiWizardComponent": {
+      "MainPanel": { "label": "Setup company GLPI systems" },
+      "GlpiSystemBtn": { "label": "GLPI system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "AddressHeader": { "label": "GLPI address" },
       "EditBtn": { "label": "Edit system" }
     },
     "McpServerWizardComponent": {
@@ -3921,6 +3933,10 @@
         "label": "+redmine",
         "help": "add a Redmine data source (issues, wiki pages and files)"
       },
+      "ai_gebo_glpi_handler_GGlpiProjectEndpoint": {
+        "label": "+glpi",
+        "help": "add a GLPI data source (helpdesk tickets and knowledge base articles)"
+      },
       "ai_gebo_git_content_handler_GGitProjectEndpoint": {
         "label": "+git repo",
         "help": "add a git repository data source like bitbucket,github or others"
@@ -5659,6 +5675,120 @@
       },
       "VisibilityNote": {
         "label": "Gebo.ai reads what this account can see in Redmine, private issues and private notes included: use an account limited to the projects you want to share."
+      }
+    }
+  },
+  "GeboAIGlpiModule": {
+    "GGlpiSystem": {
+      "MainPanel": { "label": "Editing GLPI system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the GLPI system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the GLPI system."
+      },
+      "baseUri": {
+        "label": "GLPI address",
+        "help": "Address of the GLPI web interface (e.g. https://glpi.example.com). The API is reached under its /api.php."
+      },
+      "oauthClientSecretCode": {
+        "label": "OAuth client",
+        "help": "Client id and secret of the OAuth client registered in GLPI (Setup > OAuth clients) with the password grant and the api scope.",
+        "placeholder": "Select or create the OAuth client"
+      },
+      "secretCode": {
+        "label": "GLPI user",
+        "help": "Username and password of the GLPI user: the tickets and articles it can see in GLPI are the ones read.",
+        "placeholder": "Select or create the GLPI user"
+      }
+    },
+    "GGlpiProjectEndpoint": {
+      "MainPanel": { "label": "Sharing GLPI tickets and knowledge base" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the GLPI data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
+      },
+      "glpiSystemCode": {
+        "label": "GLPI system",
+        "help": "Already configured GLPI system reference.",
+        "placeholder": "Select a GLPI system"
+      },
+      "tree": {
+        "label": "Selected GLPI entities, tickets and articles",
+        "help": "Select whole entities, their Tickets or Knowledge base sections, single tickets or single articles"
+      },
+      "openZips": {
+        "label": "Open zip files",
+        "help": "Enable zip files opening and content extraction"
+      },
+      "catalogingCriteria": {
+        "label": "Tickets and articles organization criteria",
+        "help": "Please explain here how entities, ticket categories and knowledge base articles are organized in the GLPI contents shared with Gebo.ai"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIGlpiSystemFastComponent": {
+      "MainPanel": { "label": "Create GLPI system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the GLPI system."
+      },
+      "baseUri": {
+        "label": "GLPI address",
+        "help": "Address of the GLPI web interface (e.g. https://glpi.example.com)"
+      },
+      "OauthClientFieldset": { "label": "OAuth client" },
+      "OauthClientHint": { "label": "Register an OAuth client in GLPI (Setup > OAuth clients) allowing the Password grant and the api scope, then copy here its client id and secret." },
+      "clientId": {
+        "label": "Client id",
+        "help": "Client id of the OAuth client registered in GLPI"
+      },
+      "clientSecret": {
+        "label": "Client secret",
+        "help": "Client secret of the OAuth client registered in GLPI"
+      },
+      "GlpiUserFieldset": { "label": "GLPI user" },
+      "GlpiUserHint": { "label": "The tickets and knowledge base articles this GLPI user can see in GLPI are the ones Gebo.ai reads." },
+      "username": {
+        "label": "User name",
+        "help": "Login of the GLPI user"
+      },
+      "password": {
+        "label": "Password",
+        "help": "Password of the GLPI user"
       }
     }
   },

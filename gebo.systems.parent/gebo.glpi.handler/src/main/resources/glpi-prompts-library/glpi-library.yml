@@ -1,0 +1,30 @@
+ai.gebo.glpi.library:
+  - promptUse: glpi-standard-query-extraction-prompt
+    langCode: en
+    systemReference: /glpi-prompts-library/en/glpi-standard-query-extraction-prompt-system-prompt.txt
+    userReference: /glpi-prompts-library/en/glpi-standard-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+  - promptUse: glpi-native-query-extraction-prompt
+    langCode: en
+    systemReference: /glpi-prompts-library/en/glpi-native-query-extraction-prompt-system-prompt.txt
+    userReference: /glpi-prompts-library/en/glpi-native-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+ai.gebo.glpi.uses:
+  - code: glpi-standard-query-extraction-prompt
+    description: Extracts a set of plain-text, operator-free search strings from the user's question, searched in the title and description of GLPI tickets and knowledge base articles.
+    module: glpi
+    placeholders:
+      - placeholder: format
+        description: The structured-output format/schema instructions the extracted search queries must comply with.
+      - placeholder: question
+        description: The user's current question or request text.
+  - code: glpi-native-query-extraction-prompt
+    description: Generates a structured GLPI search filter (as JSON) over tickets and knowledge base articles from the user's question and the available GLPI entities, later translated server-side into the RSQL filter of the GLPI API.
+    module: glpi
+    placeholders:
+      - placeholder: glpiEntities
+        description: Catalog of the GLPI entities available to be searched, with their numeric ids.
+      - placeholder: question
+        description: The user's current question or request text.
