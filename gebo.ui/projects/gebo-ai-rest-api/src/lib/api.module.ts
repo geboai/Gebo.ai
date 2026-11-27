@@ -129,6 +129,9 @@ import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { ProviderDealsControllerService } from './api/providerDealsController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
+import { RedmineBrowsingControllerService } from './api/redmineBrowsingController.service';
+import { RedmineSearchServiceControllerService } from './api/redmineSearchServiceController.service';
+import { RedmineSystemsControllerService } from './api/redmineSystemsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
 import { SecretsControllerService } from './api/secretsController.service';
@@ -290,6 +293,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     PromptTemplatesControllerService,
     ProviderDealsControllerService,
     RankerModelsControllerService,
+    RedmineBrowsingControllerService,
+    RedmineSearchServiceControllerService,
+    RedmineSystemsControllerService,
     ReindexingFrequencyOptionsControllerService,
     SearxngSearchConfigurationControllerService,
     SecretsControllerService,
