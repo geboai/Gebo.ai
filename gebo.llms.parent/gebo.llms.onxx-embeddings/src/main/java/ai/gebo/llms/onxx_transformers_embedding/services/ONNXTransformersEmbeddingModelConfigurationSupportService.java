@@ -100,6 +100,16 @@ public class ONNXTransformersEmbeddingModelConfigurationSupportService implement
 				GEmbeddingModelType type) throws LLMConfigException {
 
 			TransformersEmbeddingModel model = new TransformersEmbeddingModel(MetadataMode.EMBED);
+			// the model is built outside the Spring context, so nothing calls its
+			// InitializingBean hook: it is what loads the tokenizer and the ONNX model,
+			// without it every embed call fails on a null tokenizer
+			try {
+				LOGGER.debug("Loading the tokenizer and the ONNX model of {}", config.getCode());
+				model.afterPropertiesSet();
+				LOGGER.debug("Tokenizer and ONNX model of {} loaded", config.getCode());
+			} catch (Exception e) {
+				throw new LLMConfigException("Cannot load the ONNX embedding model of " + config.getCode(), e);
+			}
 			return model;
 		}
 
