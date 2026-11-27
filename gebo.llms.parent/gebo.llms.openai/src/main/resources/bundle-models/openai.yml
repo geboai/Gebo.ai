@@ -527,6 +527,13 @@ ai.gebo.models.providers.openai:
       sampling: WITHOUT_REASONING
       reasoningEfforts: [none, low, medium, high, xhigh, max]
       source: developers.openai.com/api/docs/models/gpt-6-sol and gpt-6-luna, 2026-10-11
+    # Its page lists effort none: without the efforts the family rule below left "no
+    # thinking" at the medium default. Its page says nothing of sampling: kept refused.
+    - providerId: openai
+      models: ["gpt-6.1-terra*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high, xhigh, max]
+      source: developers.openai.com/api/docs/models/gpt-6.1-terra, 2026-11-27
     # The family rule of the version 6 models, after the ones above that have a page of
     # their own: a model of the family the library does not name yet (gpt-6.2-sol answered
     # "400: Unsupported parameter: 'temperature' is not supported with this model" to the
@@ -537,6 +544,23 @@ ai.gebo.models.providers.openai:
       models: ["gpt-6*"]
       sampling: REJECTED
       source: temperature refused by gpt-6.2-sol, reported 2026-11-26; as the gpt-5 family rule below
+    # The pro models take the highest efforts only: their pages list no none and no low,
+    # which the rules below would have sent them. Sampling not documented: refused.
+    - providerId: openai
+      models: ["gpt-5.5-pro", "gpt-5.5-pro-20*", "gpt-5.4-pro", "gpt-5.4-pro-20*", "gpt-5.2-pro", "gpt-5.2-pro-20*"]
+      sampling: REJECTED
+      reasoningEfforts: [medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.5-pro, gpt-5.4-pro and gpt-5.2-pro, 2026-11-27
+    - providerId: openai
+      models: ["gpt-5-pro", "gpt-5-pro-20*"]
+      sampling: REJECTED
+      reasoningEfforts: [high]
+      source: developers.openai.com/api/docs/models/gpt-5-pro ("defaults to (and only supports) high"), 2026-11-27
+    - providerId: openai
+      models: ["gpt-5.6-sol*", "gpt-5.6-terra*", "gpt-5.6-luna*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high, xhigh, max]
+      source: developers.openai.com/api/docs/models/gpt-5.6-sol, gpt-5.6-terra and gpt-5.6-luna, 2026-11-27
     - providerId: openai
       models: ["gpt-5.5*"]
       sampling: REJECTED
@@ -550,18 +574,33 @@ ai.gebo.models.providers.openai:
       sampling: WITHOUT_REASONING
       reasoningEfforts: [none, low, medium, high, xhigh]
       source: developers.openai.com/api/docs/models/gpt-5.2 and guides/gpt-5.4, 2026-11-15
-    # The same efforts; the guide's sampling rule does not name the mini, so it is kept
-    # refused until a request shows it takes them at effort none.
     - providerId: openai
-      models: ["gpt-5.4-mini", "gpt-5.4-mini-2026-03-17"]
+      models: ["gpt-5.4", "gpt-5.4-20*"]
+      sampling: WITHOUT_REASONING
+      reasoningEfforts: [none, low, medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.4 (2026-11-27) and guides/gpt-5.4 (2026-11-15)
+    # The same efforts; the guide's sampling rule does not name the mini and the nano, so
+    # it is kept refused until a request shows they take them at effort none.
+    - providerId: openai
+      models: ["gpt-5.4-mini", "gpt-5.4-mini-2026-03-17", "gpt-5.4-nano", "gpt-5.4-nano-20*"]
       sampling: REJECTED
       reasoningEfforts: [none, low, medium, high, xhigh]
-      source: developers.openai.com/api/docs/models/gpt-5.4-mini and guides/gpt-5.4, 2026-11-15
+      source: developers.openai.com/api/docs/models/gpt-5.4-mini and guides/gpt-5.4, 2026-11-15; gpt-5.4-nano, 2026-11-27
     - providerId: openai
-      models: ["gpt-5"]
+      models: ["gpt-5.1", "gpt-5.1-20*"]
+      sampling: REJECTED
+      reasoningEfforts: [none, low, medium, high]
+      source: developers.openai.com/api/docs/models/gpt-5.1, 2026-11-27
+    - providerId: openai
+      models: ["gpt-5.3-codex", "gpt-5.3-codex-20*"]
+      sampling: REJECTED
+      reasoningEfforts: [low, medium, high, xhigh]
+      source: developers.openai.com/api/docs/models/gpt-5.3-codex, 2026-11-27
+    - providerId: openai
+      models: ["gpt-5", "gpt-5-20*"]
       sampling: REJECTED
       reasoningEfforts: [minimal, low, medium, high]
-      source: developers.openai.com/api/docs/models/gpt-5, 2026-10-11
+      source: developers.openai.com/api/docs/models/gpt-5, 2026-10-11 (its dated variants with it, 2026-11-27)
     - providerId: openai
       models: ["gpt-5*"]
       sampling: REJECTED
@@ -570,6 +609,12 @@ ai.gebo.models.providers.openai:
       models: ["o1*", "o3*", "o4*"]
       sampling: REJECTED
       source: temperature refused by o3 and o4-mini, tested 2026-10-11
+    # Their pages list low, medium and high and say nothing of sampling, which is left
+    # as it was (Groq documents the same models taking it).
+    - providerId: openai
+      models: ["gpt-oss-120b", "gpt-oss-120b-20*", "gpt-oss-20b", "gpt-oss-20b-20*"]
+      reasoningEfforts: [low, medium, high]
+      source: developers.openai.com/api/docs/models/gpt-oss-120b and gpt-oss-20b, 2026-11-27
     # Input modalities of the dated variants of the models above (a snapshot shares its
     # model's page). These rules state nothing of the parameters and are read apart.
     - providerId: openai
