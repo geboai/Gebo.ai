@@ -10,7 +10,10 @@ ai.gebo.llms.vendors.setup.config:
   # - a model left without a thinking level here gets it by the same rule when its
   #   integration tells what the model takes (GeboLLMSSetupService), else keeps the
   #   provider's default;
-  # - a preset model is not one its provider announces retiring within six months;
+  # - a preset model is not one its provider announces retiring within six months, nor
+  #   one its provider's pages declare obsolete in any way: deprecated even only for a
+  #   region, a data residency or a service tier, legacy, previous generation or flagship,
+  #   preview / not for production, or with a "use X instead";
   # - a context window is preset only where the provider's models list gives none
   #   (openai, aws-bedrock, xai, nvidia, llmax, profundoai): where it gives one
   #   (regolo.ai, groq, openrouter.ai, and the providers with their own lookup) the
@@ -113,32 +116,34 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatgpt-OpenAI
           doModelsLookup: true
           choices:
-            # gpt-4.1 and gpt-4.1-mini, preset until now, shut down on 2027-01-14
-            # (developers.openai.com/api/docs/deprecations, 2026-11-15). Their successors here
-            # are reasoning models whose default effort, none, turns the reasoning off; the
-            # temperature follows the models library's parameter rules
-            # (bundle-models/openai.yml), sent only where the model is known to take it.
-            # Both models have a 400,000 token window with up to 128,000 tokens of output, so
-            # 272,000 of input (the gpt-5.4-mini page states it): contextWindow is that input,
-            # so that the budgets never build a request larger than OpenAI accepts.
-            # gpt-5.2 runs the agentic chat: it reasons at effort medium, the chat default
-            # (efforts none, low, medium, high, xhigh). On Chat Completions the reasoning is not carried from one tool
-            # round to the next (the GPT-5.4 guide: passing it "exists only in the Responses
-            # API"), each round reasons again. Its temperature is taken only at effort none
-            # (the same guide), so none is sent while it reasons. The reasoning counts in the
-            # generated tokens.
-            - code: gpt-5.2
-              description: GPT-5.2
-              contextWindow: 272000
+            # gpt-4.1 and gpt-4.1-mini shut down on 2027-01-14; gpt-5.2 and gpt-5.4-mini, preset
+            # after them, are deprecated too: "GPT-5.2, GPT-5.4, and GPT-5.4 mini with EU data
+            # residency and `service_tier: fast` or `priority`" shut down on 2027-01-11, the
+            # replacement named being "the GPT-6.2 model family"
+            # (developers.openai.com/api/docs/deprecations, notice 2026-11-18, read 2026-11-27),
+            # and the gpt-5.2 page calls it the "Previous flagship model". The presets follow
+            # the models index (developers.openai.com/api/docs/models, 2026-11-27): "Choose
+            # GPT-6.2 Sol to balance intelligence and cost" and "GPT-6 Luna for cost-sensitive,
+            # high-volume workloads". Both are version 6 models, called through the Responses
+            # api (OpenAiApiRouting), where they call tools; contextWindow is the models
+            # library's contextLength of both (bundle-models/openai.yml), the most input a
+            # request may carry.
+            # gpt-6.2-sol runs the agentic chat at effort medium: its page says "The API
+            # rejects requests that set reasoning effort to `none`", so a chat model's medium is
+            # its working level. The library's version 6 family rule sends it no temperature
+            # and no top_p (it refused temperature, 2026-11-26).
+            - code: gpt-6.2-sol
+              description: GPT-6.2 Sol
+              contextWindow: 922000
               uses: CHAT
               thinking: MEDIUM_THINKING
               defaultChoice: true
-            # gpt-5.4-mini serves the internal services, short judgement calls: the reasoning
-            # is off (NO_THINKING sends effort none). The guide's temperature rule names
-            # gpt-5.4 and gpt-5.2 only, so no temperature is sent to it.
-            - code: gpt-5.4-mini
-              description: GPT-5.4 mini
-              contextWindow: 272000
+            # gpt-6-luna serves the internal services, short judgement calls: its page lists
+            # effort none, which NO_THINKING sends, and the library's rule for it takes the
+            # temperature while it does not reason, so the internal services run it at 0.
+            - code: gpt-6-luna
+              description: GPT-6 Luna
+              contextWindow: 922000
               uses: INTERNAL_SERVICES
               thinking: NO_THINKING
         - type: EMBEDDING

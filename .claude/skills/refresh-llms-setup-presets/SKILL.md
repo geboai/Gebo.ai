@@ -28,11 +28,21 @@ quoted with its URL and date; never from memory.**
 
 ## The rules a preset follows (stated at the top of library.yml)
 
-1. **Not retiring soon:** a preset model is not one its provider announces deprecated with
-   a shutdown, or retiring, within **six months** of today. A Vertex date "X or later" is
-   the earliest one: it counts. When the provider names a replacement, prefer it; when the
-   provider declares a newer generation, consider it (new defaults are the user's call:
-   ask before changing a vendor's `defaultChoice` to a model of another generation or cost).
+1. **Not obsolete in any way the provider declares:** a preset model is not one its
+   provider announces deprecated with a shutdown, or retiring, within **six months** of
+   today (a Vertex date "X or later" is the earliest one: it counts), and not one the
+   provider's pages declare obsolete otherwise. Read **the model's own page**, not only the
+   deprecations list. Each of these counts:
+   - a deprecation scoped to a region, a data residency (EU above all: Gebo.ai serves
+     European installations) or a service tier, e.g. OpenAI's "GPT-5.2, GPT-5.4, and
+     GPT-5.4 mini with EU data residency and `service_tier: fast` or `priority`", which
+     shut down 2027-01-11;
+   - "Legacy", "Previous generation", "Previous flagship model";
+   - "Preview", "not for production", "may be discontinued at short notice";
+   - "We recommend using X", "use X instead", "X is the successor to".
+   When the provider names a replacement, prefer it. Never keep a flagged model on your own
+   judgement: replacing a vendor's `defaultChoice`, or keeping a flagged one for a reason
+   (tool calling, cost), is the user's call, so ask.
 2. **Callable by its integration:** a replacement must be one the module's handler can call
    (endpoint, api, batching). Check the model page's endpoints against the handler before
    presetting it - e.g. OpenAI's TTS replacement `gpt-realtime-2.1-mini` takes only

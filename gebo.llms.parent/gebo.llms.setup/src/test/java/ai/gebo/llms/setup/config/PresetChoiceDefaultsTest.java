@@ -82,8 +82,8 @@ class PresetChoiceDefaultsTest {
 				.flatMap(v -> v.getPresets().stream()).filter(p -> p.getType() == ModelType.CHAT)
 				.flatMap(p -> p.getChoices().stream()).toList();
 
-		assertEquals(List.of("gpt-5.2", "gpt-5.4-mini"), chat.stream().map(LLMModelPresetChoice::getCode).toList(),
-				"gpt-4.1 and gpt-4.1-mini shut down on 2027-01-14");
+		assertEquals(List.of("gpt-6.2-sol", "gpt-6-luna"), chat.stream().map(LLMModelPresetChoice::getCode).toList(),
+				"gpt-5.2 and gpt-5.4-mini with EU data residency shut down on 2027-01-11");
 		LLMModelPresetChoice main = chat.get(0);
 		assertTrue(main.isDefaultChoice());
 		assertEquals(List.of(ChatModelsUses.CHAT), main.getUses());
@@ -94,7 +94,7 @@ class PresetChoiceDefaultsTest {
 		assertEquals(ChatModelThinkingOption.NO_THINKING, services.thinkingFor(services.getUses()),
 				"short judgement calls, no reasoning");
 		for (LLMModelPresetChoice choice : chat) {
-			assertEquals(272000, choice.getContextWindow(), choice.getCode() + ": the input OpenAI accepts");
+			assertEquals(922000, choice.getContextWindow(), choice.getCode() + ": the input OpenAI accepts");
 		}
 	}
 
