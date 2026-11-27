@@ -44,4 +44,17 @@ class GlpiApiClientFactoryTest {
 		assertThat(ticket.getStatus().getName()).isEqualTo("Processing (assigned)");
 		assertThat(ticket.getEntity().getCompletename()).isEqualTo("Root entity > Sales");
 	}
+
+	@Test
+	void theTicketOlaFieldsAreSkippedWhateverTheirShape() {
+		// GLPI 11 answers one OLA object, GLPI 12 an array of them
+		JsonMapper mapper = GlpiApiClientFactory.createMapper();
+		Ticket glpi11 = mapper.readValue("{\"id\":7,\"name\":\"VPN drops\",\"ola_ttr\":{\"id\":1,\"name\":\"4h\"},"
+				+ "\"ola_tto\":null}", Ticket.class);
+		Ticket glpi12 = mapper.readValue("{\"id\":8,\"name\":\"New laptop\",\"ola_ttr\":[],"
+				+ "\"ola_tto\":[{\"id\":1,\"name\":\"4h\"},{\"id\":2,\"name\":\"1d\"}]}", Ticket.class);
+		assertThat(glpi11.getName()).isEqualTo("VPN drops");
+		assertThat(glpi12.getName()).isEqualTo("New laptop");
+		assertThat(glpi12.getOlaTtr()).isNull();
+	}
 }

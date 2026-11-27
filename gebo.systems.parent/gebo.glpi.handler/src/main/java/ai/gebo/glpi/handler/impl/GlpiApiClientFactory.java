@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -25,6 +27,7 @@ import org.springframework.web.client.RestClient;
 import ai.gebo.architecture.search.model.SearchCallParameters;
 import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.glpi.client.invoker.ApiClient;
+import ai.gebo.glpi.client.model.Ticket;
 import ai.gebo.glpi.handler.GGlpiSystem;
 import ai.gebo.restintegration.abstraction.layer.GeboHttpClientObservations;
 import ai.gebo.secrets.model.AbstractGeboSecretContent;
@@ -149,11 +152,22 @@ public class GlpiApiClientFactory {
 	/**
 	 * The jackson mapper of the generated client, tolerant of enum values the
 	 * GLPI specification does not list (e.g. ticket priority 6, "major"): an
-	 * unknown value is read as null instead of failing the whole page
+	 * unknown value is read as null instead of failing the whole page. The ticket
+	 * OLA fields are skipped (see TicketIgnoredFields).
 	 */
 	static JsonMapper createMapper() {
 		return ApiClient.createDefaultMapper(null).rebuild().enable(EnumFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL)
-				.build();
+				.addMixIn(Ticket.class, TicketIgnoredFields.class).build();
+	}
+
+	/**
+	 * Ticket fields the handler does not read and whose shape differs between
+	 * GLPI releases on the same API version 2.3.0: ola_ttr and ola_tto are one
+	 * object on GLPI 11, an array on GLPI 12 (several OLAs per ticket), which
+	 * would fail every ticket page.
+	 */
+	@JsonIgnoreProperties({ "ola_ttr", "ola_tto" })
+	private abstract static class TicketIgnoredFields {
 	}
 
 	/** The RestClient of the calls, setting the bearer header once when a token supplier is given */
