@@ -569,6 +569,7 @@ All of them extend `BaseEntityEditingComponent<T>`
      - the same for `G<X>System`
 
      The alias is the Java FQCN. This is how `GeboUIActionRoutingService` opens an editor for "open/new G<X>…".
+     **Every entity editor must be registered this way**: the forms launcher (`GeboUIEntityFormsLauncherByInjectionService` → `gebo-ui-entity-forms-launcher.component.ts`) builds one form host per injected `GEBO_UI_ENTITY_FORM_TOKEN` entry and nothing else. Declaring the component is not enough: without the token entry, the wizard's edit button, the editable listbox "create new", and the knowledge-base tree's open/new actions find no form for `G<X>System` / `G<X>ProjectEndpoint` and open nothing.
 2. `gebo-ai-admin-ui/src/lib/admin-ui/gebo-ai-standard-modules-injections.module.ts` (the knowledge-base tree and "add data source" menu):
    - `export const <X>_MODULE = "<MODULE>"` (must equal the backend id)
    - a `GeboAI<X>ModuleProjectEndpointService implements GeboAIPluggableProjectEndpointModuleService`:
