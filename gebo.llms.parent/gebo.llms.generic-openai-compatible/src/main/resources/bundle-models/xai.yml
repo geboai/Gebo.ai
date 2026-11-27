@@ -59,6 +59,21 @@ ai.gebo.models.providers.xai:
       embeddingModel: false
       contextLength: 1000000
       informativeUrl: https://docs.x.ai/developers/models
+    # Checked again 2026-11-26 on docs.x.ai/developers/models: the windows above are
+    # unchanged, no page states a maximum of output or of input below the window (the
+    # api's max_completion_tokens "Defaults to 128,000 when unset"); a prompt from 200k
+    # tokens is billed at the long-context rate. Grok 4.20 Multi-Agent is the one model
+    # the library did not know; grok-4-1-fast, grok-4-fast, grok-4-0709, grok-code-fast-1
+    # and grok-3 were retired on 2026-05-15.
+    - providerId: xai
+      modelId: grok-4.20-multi-agent-0309
+      inputModalities: [TEXT, IMAGE]
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      supportsReasoning: true
+      description: Grok 4.20 Multi-Agent
+      informativeUrl: https://docs.x.ai/developers/models/grok-4.20-multi-agent-0309
   parameterRules:
     # xAI - docs.x.ai/developers/model-capabilities/text/reasoning, 2026-10-11: "Reasoning
     # cannot be disabled" (no effort none); presencePenalty, frequencyPenalty and stop are

@@ -11,6 +11,12 @@
 # Vertex model pages (docs.cloud.google.com/vertex-ai/generative-ai/docs/models/gemini/3-6-flash
 # and 3-7-flash, 2026-11-19), which name image, audio and video input; documents were
 # not read there and are not declared.
+# contextLength and maxOutputToken from the Vertex model pages (docs.cloud.google.com/
+# gemini-enterprise-agent-platform/models/gemini/<model>, 2026-11-26: "Context window
+# 1,048,576", "Maximum output tokens 65,536"); no Gemini chat page states a maximum of
+# input tokens below the window. The Vertex models api gives the input limit too: these
+# stand in when it leaves it out. 3.6 Flash and 3.7 Flash retire on 2027-01-28 for Gemini
+# 4 Hydrogen; the gemini-2.5 models went past their 2026-10-20 retirement.
 ai.gebo.models.providers.google-vertex:
   parameterRules:
     # docs.cloud.google.com/vertex-ai/generative-ai/docs/start/get-started-with-gemini-3
@@ -25,6 +31,8 @@ ai.gebo.models.providers.google-vertex:
   modelsInfo:
     - providerId: google-vertex
       modelId: gemini-2.5-pro
+      contextLength: 1048576
+      maxOutputToken: 65536
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       chatModel: true
       embeddingModel: false
@@ -34,6 +42,8 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-2.5-flash
+      contextLength: 1048576
+      maxOutputToken: 65536
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       chatModel: true
       embeddingModel: false
@@ -43,6 +53,8 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-2.5-flash-lite
+      contextLength: 1048576
+      maxOutputToken: 65536
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       chatModel: true
       embeddingModel: false
@@ -52,37 +64,116 @@ ai.gebo.models.providers.google-vertex:
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-3.6-flash
-      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO]
-      chatModel: true
-      embeddingModel: false
-      deprecated: true
-      retirementDate: "2026-11-19"
-      replacementModel: gemini-3.8-flash
-      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
-    - providerId: google-vertex
-      modelId: gemini-3.7-flash
+      contextLength: 1048576
+      maxOutputToken: 65536
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO]
       chatModel: true
       embeddingModel: false
       deprecated: true
       retirementDate: "2027-01-28"
-      replacementModel: gemini-3.8-flash
+      replacementModel: gemini-4-hydrogen
+      informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
+    - providerId: google-vertex
+      modelId: gemini-3.7-flash
+      contextLength: 1048576
+      maxOutputToken: 65536
+      inputModalities: [TEXT, IMAGE, AUDIO, VIDEO]
+      chatModel: true
+      embeddingModel: false
+      deprecated: true
+      retirementDate: "2027-01-28"
+      replacementModel: gemini-4-hydrogen
       informativeUrl: https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/model-versions
     - providerId: google-vertex
       modelId: gemini-3.8-flash
+      contextLength: 1048576
+      maxOutputToken: 65536
       chatModel: true
       embeddingModel: false
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       informativeUrl: https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash
     - providerId: google-vertex
       modelId: gemini-3.5-flash
+      contextLength: 1048576
+      maxOutputToken: 65536
       chatModel: true
       embeddingModel: false
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       informativeUrl: https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash
     - providerId: google-vertex
       modelId: gemini-3.1-flash-lite
+      contextLength: 1048576
+      maxOutputToken: 65536
       chatModel: true
       embeddingModel: false
       inputModalities: [TEXT, IMAGE, AUDIO, VIDEO, DOCUMENT]
       informativeUrl: https://ai.google.dev/gemini-api/docs/models/gemini-3.1-flash-lite
+    # The chat models the library did not know, from their Vertex model pages
+    # (2026-11-26); their input modalities were not read and are not declared.
+    - providerId: google-vertex
+      modelId: gemini-3.5-flash-lite
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite
+    - providerId: google-vertex
+      modelId: gemini-3.8-flash-cyber
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-8-flash-cyber
+    - providerId: google-vertex
+      modelId: gemini-3.1-pro-preview
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-pro
+    - providerId: google-vertex
+      modelId: gemini-3.1-pro-preview-customtools
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-1-pro
+    - providerId: google-vertex
+      modelId: gemini-3-flash-preview
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-flash
+    # Gemini 4: "a unified 1,048,576-token limit that includes both input and output
+    # tokens"; a segment generates up to 65,536 output tokens streaming (32,768 not
+    # streaming), long decodes up to 1,048,576 less the input. 4 Carbon and 4 Neon are
+    # for "Verified enterprise customers in select regions".
+    - providerId: google-vertex
+      modelId: gemini-4-argon
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-argon
+    - providerId: google-vertex
+      modelId: gemini-4-carbon
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-carbon
+    - providerId: google-vertex
+      modelId: gemini-4-hydrogen
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-hydrogen
+    - providerId: google-vertex
+      modelId: gemini-4-neon
+      contextLength: 1048576
+      maxOutputToken: 65536
+      chatModel: true
+      embeddingModel: false
+      informativeUrl: https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/4-neon

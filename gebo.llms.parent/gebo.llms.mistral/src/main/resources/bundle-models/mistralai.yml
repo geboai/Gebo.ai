@@ -5,6 +5,202 @@
 # Rules: the first one covering a model applies, so specific models come before family
 # patterns ("*" stands for any characters); unset fields are unknown.
 ai.gebo.models.providers.mistralai:
+  # The current models of docs.mistral.ai/getting-started/models (2026-11-26), every api
+  # id of each: their context from the model cards ("Context | 256K", the data behind it
+  # 256000); the output limit is stated for the third party models only. The lookup reads
+  # max_context_length live, these stand in when it leaves it out. Medium 3.5 and Large 3
+  # were deprecated on 2026-10-31 for Large 4; the models past their retirement are left
+  # out ("requests to its identifiers fail with a 404 error").
+  modelsInfo:
+    - providerId: mistralai
+      modelId: mistral-large-4
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: Mistral Large 4
+      informativeUrl: https://docs.mistral.ai/models/mistral-large-4-0
+    - providerId: mistralai
+      modelId: mistral-large-4-0
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: Mistral Large 4
+      informativeUrl: https://docs.mistral.ai/models/mistral-large-4-0
+    - providerId: mistralai
+      modelId: mistral-large-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: Mistral Large 4
+      informativeUrl: https://docs.mistral.ai/models/mistral-large-4-0
+    - providerId: mistralai
+      modelId: mistral-small-2603
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Mistral Small 4
+      informativeUrl: https://docs.mistral.ai/models/mistral-small-4-0-26-03
+    - providerId: mistralai
+      modelId: mistral-small-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Mistral Small 4
+      informativeUrl: https://docs.mistral.ai/models/mistral-small-4-0-26-03
+    - providerId: mistralai
+      modelId: mistral-medium-3-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      deprecated: true
+      retirementDate: "2027-04-30"
+      replacementModel: mistral-large-4
+      description: Mistral Medium 3.5
+      informativeUrl: https://docs.mistral.ai/models/mistral-medium-3-5-26-04
+    - providerId: mistralai
+      modelId: mistral-medium-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      deprecated: true
+      retirementDate: "2027-04-30"
+      replacementModel: mistral-large-4
+      description: Mistral Medium 3.5
+      informativeUrl: https://docs.mistral.ai/models/mistral-medium-3-5-26-04
+    - providerId: mistralai
+      modelId: mistral-large-2512
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      deprecated: true
+      retirementDate: "2027-04-30"
+      replacementModel: mistral-large-4
+      description: Mistral Large 3
+      informativeUrl: https://docs.mistral.ai/models/mistral-large-3-25-12
+    - providerId: mistralai
+      modelId: ministral-14b-2512
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Ministral 3 14B
+      informativeUrl: https://docs.mistral.ai/models/ministral-3-14b-25-12
+    - providerId: mistralai
+      modelId: ministral-14b-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Ministral 3 14B
+      informativeUrl: https://docs.mistral.ai/models/ministral-3-14b-25-12
+    - providerId: mistralai
+      modelId: ministral-8b-2512
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Ministral 3 8B
+      informativeUrl: https://docs.mistral.ai/models/ministral-3-8b-25-12
+    - providerId: mistralai
+      modelId: ministral-8b-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Ministral 3 8B
+      informativeUrl: https://docs.mistral.ai/models/ministral-3-8b-25-12
+    - providerId: mistralai
+      modelId: ministral-3b-2512
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Ministral 3 3B
+      informativeUrl: https://docs.mistral.ai/models/ministral-3-3b-25-12
+    - providerId: mistralai
+      modelId: ministral-3b-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 256000
+      description: Ministral 3 3B
+      informativeUrl: https://docs.mistral.ai/models/ministral-3-3b-25-12
+    - providerId: mistralai
+      modelId: codestral-2508
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      description: Codestral
+      informativeUrl: https://docs.mistral.ai/models/codestral-25-08
+    - providerId: mistralai
+      modelId: codestral-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 128000
+      description: Codestral
+      informativeUrl: https://docs.mistral.ai/models/codestral-25-08
+    - providerId: mistralai
+      modelId: zai-glm-5-3
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: GLM 5.3
+      informativeUrl: https://docs.mistral.ai/models/zai-glm-5-3
+    - providerId: mistralai
+      modelId: zai-glm-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: GLM 5.3
+      informativeUrl: https://docs.mistral.ai/models/zai-glm-5-3
+    - providerId: mistralai
+      modelId: zai-glm-latest
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: GLM 5.3
+      informativeUrl: https://docs.mistral.ai/models/zai-glm-5-3
+    - providerId: mistralai
+      modelId: zai-glm-5-3-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: GLM 5.3 Flash
+      informativeUrl: https://docs.mistral.ai/models/zai-glm-5-3-flash
+    - providerId: mistralai
+      modelId: deepseek-v4-1-flash-1017
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: DeepSeek V4.1 Flash 1017
+      informativeUrl: https://docs.mistral.ai/models/deepseek-v4-flash-1017
+    - providerId: mistralai
+      modelId: mistral-embed
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8000
+      description: Mistral Embed
+      informativeUrl: https://docs.mistral.ai/models/mistral-embed-23-12
+    - providerId: mistralai
+      modelId: mistral-embed-2312
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8000
+      description: Mistral Embed
+      informativeUrl: https://docs.mistral.ai/models/mistral-embed-23-12
+    - providerId: mistralai
+      modelId: codestral-embed
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8000
+      description: Codestral Embed
+      informativeUrl: https://docs.mistral.ai/models/codestral-embed-25-05
+    - providerId: mistralai
+      modelId: codestral-embed-2505
+      chatModel: false
+      embeddingModel: true
+      contextLength: 8000
+      description: Codestral Embed
+      informativeUrl: https://docs.mistral.ai/models/codestral-embed-25-05
   parameterRules:
     # Mistral - docs.mistral.ai/capabilities/reasoning: the models with adjustable reasoning
     # take high or none, zai-glm-5-3 takes low, high and max (no none). The other Mistral

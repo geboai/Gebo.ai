@@ -1,13 +1,106 @@
 # The regolo.ai piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # RegoloModelsLibrary under ai.gebo.models.providers.regolo.
-# No entry yet: model_info gives each model's context, prices and capability flags; its supported_openai_params is the same 33 parameters for every model (checked 2026-10-11), so no rule comes from it.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.regolo:
-#   parameterRules:
-#     - providerId: regolo.ai
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# model_info gives each model's context, prices and capability flags; its
+# supported_openai_params is the same 33 parameters for every model (checked 2026-10).
+# The lookup takes max_input_tokens as the context: the entries below, from the models
+# list of regolo.ai/models (2026-11-26: max_input_tokens, max_output_tokens), stand in when
+# it leaves it out. They are the serving limits, below some models' native window
+# (gpt-oss-120b: 30,000 of "~131k").
+ai.gebo.models.providers.regolo:
+  modelsInfo:
+    - providerId: regolo.ai
+      modelId: qwen3.5-122b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 120000
+      maxOutputToken: 120000
+      description: Qwen3.5 122B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: qwen3.8-27b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 120000
+      maxOutputToken: 120000
+      description: Qwen3.8 27B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: qwen3.5-9b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 80000
+      maxOutputToken: 120000
+      description: Qwen3.5 9B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: gpt-oss-120b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 30000
+      maxOutputToken: 90000
+      description: GPT-OSS 120B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: gpt-oss-20b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 30000
+      maxOutputToken: 90000
+      description: GPT-OSS 20B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: glm5.2
+      chatModel: true
+      embeddingModel: false
+      contextLength: 96000
+      maxOutputToken: 96000
+      description: GLM 5.2
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: deepseek-v4.1-flash
+      chatModel: true
+      embeddingModel: false
+      contextLength: 750000
+      maxOutputToken: 96000
+      description: DeepSeek V4.1 Flash
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: gemma4-31b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 100000
+      maxOutputToken: 100000
+      description: Gemma 4 31B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: mistral-small-4-119b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 60000
+      maxOutputToken: 60000
+      description: Mistral Small 4 119B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: apertus-70b
+      chatModel: true
+      embeddingModel: false
+      contextLength: 30000
+      maxOutputToken: 30000
+      description: Apertus 70B
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: brick-v1-beta
+      chatModel: true
+      embeddingModel: false
+      contextLength: 100000
+      maxOutputToken: 15000
+      description: Brick v1 (beta, not for production)
+      informativeUrl: https://regolo.ai/models/
+    - providerId: regolo.ai
+      modelId: Qwen3-Embedding-8B
+      chatModel: false
+      embeddingModel: true
+      contextLength: 32000
+      description: Qwen3 Embedding 8B ("embeddings up to 32K tokens")
+      informativeUrl: https://regolo.ai/models/

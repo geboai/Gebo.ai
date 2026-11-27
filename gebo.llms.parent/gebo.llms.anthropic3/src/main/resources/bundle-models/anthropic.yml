@@ -2,9 +2,185 @@
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # AnthropicModelsLibrary under ai.gebo.models.providers.anthropic.
 # The models, their context and the thinking they take come from the Anthropic Models API
-# when the models are looked up; these rules matter when it cannot be read.
+# when the models are looked up; the parameter rules matter when it cannot be read.
+# modelsInfo holds each model's limits for when the Models API leaves them out (a null
+# max_input_tokens): contextLength is the most a request may carry as input, the model's
+# context window - the docs state no other maximum of input tokens, and on the 4.5 models
+# and newer input plus max_tokens may exceed the window (platform.claude.com/docs/en/
+# build-with-claude/context-windows). The library matches a model id exactly: the 4.5
+# models have their dated id and their alias. Read on the model pages 2026-11-26; Claude
+# Mythos Preview has no id on them and no entry.
 # Rules: the first one covering a model applies; "*" stands for any characters.
 ai.gebo.models.providers.anthropic:
+  modelsInfo:
+    - providerId: anthropic
+      modelId: claude-fable-5-2
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Fable 5.2
+      informativeUrl: https://platform.claude.com/docs/en/models/fable-5-2/overview
+    - providerId: anthropic
+      modelId: claude-opus-5-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Opus 5.5
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-5-5/overview
+    - providerId: anthropic
+      modelId: claude-sonnet-5-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Sonnet 5.5
+      informativeUrl: https://platform.claude.com/docs/en/models/sonnet-5-5/overview
+    - providerId: anthropic
+      modelId: claude-haiku-5-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Haiku 5.5
+      informativeUrl: https://platform.claude.com/docs/en/models/haiku-5-5/overview
+    - providerId: anthropic
+      modelId: claude-mythos-5-2
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Mythos 5.2
+      informativeUrl: https://platform.claude.com/docs/en/models/mythos-5-2/overview
+    - providerId: anthropic
+      modelId: claude-fable-5-1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Fable 5.1
+      informativeUrl: https://platform.claude.com/docs/en/models/fable-5-1/overview
+    - providerId: anthropic
+      modelId: claude-mythos-5-1
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Mythos 5.1
+      informativeUrl: https://platform.claude.com/docs/en/models/mythos-5-1/overview
+    - providerId: anthropic
+      modelId: claude-fable-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Fable 5
+      informativeUrl: https://platform.claude.com/docs/en/models/fable-5/overview
+    - providerId: anthropic
+      modelId: claude-mythos-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Mythos 5
+      informativeUrl: https://platform.claude.com/docs/en/models/mythos-5/overview
+    - providerId: anthropic
+      modelId: claude-opus-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Opus 5
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-5/overview
+    - providerId: anthropic
+      modelId: claude-sonnet-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Sonnet 5
+      informativeUrl: https://platform.claude.com/docs/en/models/sonnet-5/overview
+    - providerId: anthropic
+      modelId: claude-opus-4-8
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Opus 4.8
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-4-8/overview
+    - providerId: anthropic
+      modelId: claude-opus-4-7
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Opus 4.7
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-4-7/overview
+    - providerId: anthropic
+      modelId: claude-opus-4-6
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Opus 4.6
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-4-6/overview
+    - providerId: anthropic
+      modelId: claude-sonnet-4-6
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      maxOutputToken: 128000
+      description: Claude Sonnet 4.6
+      informativeUrl: https://platform.claude.com/docs/en/models/sonnet-4-6/overview
+    - providerId: anthropic
+      modelId: claude-opus-4-5-20251101
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 64000
+      description: Claude Opus 4.5
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-4-5/overview
+    - providerId: anthropic
+      modelId: claude-opus-4-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 64000
+      description: Claude Opus 4.5
+      informativeUrl: https://platform.claude.com/docs/en/models/opus-4-5/overview
+    - providerId: anthropic
+      modelId: claude-sonnet-4-5-20250929
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 64000
+      description: Claude Sonnet 4.5
+      informativeUrl: https://platform.claude.com/docs/en/models/sonnet-4-5/overview
+    - providerId: anthropic
+      modelId: claude-sonnet-4-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 64000
+      description: Claude Sonnet 4.5
+      informativeUrl: https://platform.claude.com/docs/en/models/sonnet-4-5/overview
+    - providerId: anthropic
+      modelId: claude-haiku-4-5-20251001
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 64000
+      description: Claude Haiku 4.5
+      informativeUrl: https://platform.claude.com/docs/en/models/haiku-4-5/overview
+    - providerId: anthropic
+      modelId: claude-haiku-4-5
+      chatModel: true
+      embeddingModel: false
+      contextLength: 200000
+      maxOutputToken: 64000
+      description: Claude Haiku 4.5
+      informativeUrl: https://platform.claude.com/docs/en/models/haiku-4-5/overview
   parameterRules:
     # platform.claude.com/docs/en/build-with-claude/thinking (2026-10-11): Fable 5.1,
     # Mythos 5.1, Fable 5, Mythos 5, Opus 5.5 and Mythos Preview "reject thinking: {type:

@@ -242,15 +242,22 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chat-aws-bedrock
           doModelsLookup: true
           choices:
+            # The Bedrock models lookup gives no context: each model takes its window from
+            # here, its card's "Context window: 1M tokens" (docs.aws.amazon.com/bedrock/latest/
+            # userguide/model-card-anthropic-claude-<model>.html, 2026-11-26), which states no
+            # maximum of input tokens below it.
             - code: global.anthropic.claude-sonnet-5-5
               description: Anthropic Claude Sonnet 5.5 (global inference profile)
+              contextWindow: 1000000
               uses: CHAT
               defaultChoice: true
             - code: global.anthropic.claude-opus-5-5
               description: Anthropic Claude Opus 5.5 (global inference profile)
+              contextWindow: 1000000
               uses: CHAT
             - code: global.anthropic.claude-haiku-5-5
               description: Anthropic Claude Haiku 5.5 (global inference profile)
+              contextWindow: 1000000
               uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-aws-bedrock
@@ -415,20 +422,24 @@ ai.gebo.llms.vendors.setup.config:
           serviceHandler: chatmodel-nvidia
           doModelsLookup: true
           choices:
-            # From NVIDIA's live /v1/models (2026-10): the llama 3.x and deepseek r1 models
-            # preset before are no longer listed.
-            - code: nvidia/nemotron-3-super-120b-a12b
-              description: NVIDIA Nemotron 3 Super 120B
+            # From NVIDIA's live /v1/models (2026-11-26): nemotron-3-super-120b-a12b,
+            # deepseek-v4.1-flash, glm-5.3 and gpt-oss-20b, preset until now, were retired
+            # between 2026-08 and 2026-11 and are no longer listed. Each window from the
+            # model's page on docs.api.nvidia.com/nim/reference ("Up to 1M tokens"; GLM 5.3
+            # Flash "up to 1,048,576 tokens"); no thinking level is preset, each model
+            # keeps its own default.
+            - code: nvidia/nemotron-3-ultra-550b-a55b
+              description: NVIDIA Nemotron 3 Ultra 550B
+              contextWindow: 1000000
               defaultChoice: true
               uses: CHAT
-            - code: deepseek-ai/deepseek-v4.1-flash
-              description: DeepSeek V4.1 Flash
+            - code: z-ai/glm-5.3-flash
+              description: Z.ai GLM 5.3 Flash
+              contextWindow: 1048576
               uses: CHAT
-            - code: z-ai/glm-5.3
-              description: Z.ai GLM 5.3
-              uses: CHAT
-            - code: openai/gpt-oss-20b
-              description: OpenAI Gpt OSS 20b
+            - code: nvidia/nemotron-3.5-lightning-30b-a3b
+              description: NVIDIA Nemotron 3.5 Lightning 30B
+              contextWindow: 1000000
               uses: INTERNAL_SERVICES
         - type: EMBEDDING
           serviceHandler: embedding-nvidia
@@ -436,8 +447,10 @@ ai.gebo.llms.vendors.setup.config:
           choices:
             # Both take an input_type with every request (query or passage), which the
             # embedding handler sends from the models library's parameter rules.
-            - code: nvidia/nemotron-3-embed-1b
-              description: NVIDIA Nemotron 3 Embed 1B
+            # nemotron-3-embed-1b, preset until now, is "no longer supported from 11/23/2026"
+            # for nemotron-3.5-embed-1b.
+            - code: nvidia/nemotron-3.5-embed-1b
+              description: NVIDIA Nemotron 3.5 Embed 1B
               defaultChoice: true
             - code: nvidia/llama-3.2-nv-embedqa-1b-v1
               description: NVIDIA Llama 3.2 NV EmbedQA 1B

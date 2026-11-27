@@ -1,13 +1,29 @@
 # The llmax piece of the models library: what Gebo knows of this provider's models
 # (modelsInfo) and what they accept in a request (parameterRules), bound by
 # LlmaxModelsLibrary under ai.gebo.models.providers.llmax.
-# No entry yet: nothing is known of its models yet beyond what the models lookup returns.
-# An entry goes under the key below, for example:
-#
-# ai.gebo.models.providers.llmax:
-#   parameterRules:
-#     - providerId: llmax
-#       models: ["some-model-*"]
-#       sampling: REJECTED
-#       reasoningEfforts: [none, low, high]
-#       source: the provider page the rule was read on, and when
+# The models of llmax.ai/models (2026-11-26); the model behind each name changes over
+# time, "the name is stable". No maximum of output is stated. llmax-smart is routed to a
+# 262K or a 1M model: the smaller window is the one every request fits.
+ai.gebo.models.providers.llmax:
+  modelsInfo:
+    - providerId: llmax
+      modelId: llmax-all-round
+      chatModel: true
+      embeddingModel: false
+      contextLength: 262144
+      description: LLMax All-round
+      informativeUrl: https://llmax.ai/models
+    - providerId: llmax
+      modelId: llmax-smart
+      chatModel: true
+      embeddingModel: false
+      contextLength: 262144
+      description: LLMax Smart
+      informativeUrl: https://llmax.ai/models
+    - providerId: llmax
+      modelId: llmax-best
+      chatModel: true
+      embeddingModel: false
+      contextLength: 1000000
+      description: LLMax Best
+      informativeUrl: https://llmax.ai/models
