@@ -28,13 +28,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.FieldSource;
 import org.springframework.ai.document.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testcontainers.containers.Container.ExecResult;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
@@ -55,7 +55,7 @@ import tools.jackson.databind.json.JsonMapper;
  * class, the ingestion, chunking and embedding pipeline is the real one.
  * <p>
  * The data source is a real Redmine ({@code redmine} image on its default
- * SQLite database) started as a container, bootstrapped with a rails runner
+ * SQLite database) started as a container, once per supported release line, bootstrapped with a rails runner
  * script (default data, REST API on, the admin API key) and filled through its
  * REST API: two projects, a parent with a sub-issue, a closed issue, issue notes
  * and attachments, a wiki tree with an attachment and a project file. A data
@@ -65,10 +65,19 @@ import tools.jackson.databind.json.JsonMapper;
 public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String SECRET_KEY_BASE = "gebo-redmine-it-only-secret-key-base-0123456789abcdef";
 
-	@Container
-	static final GenericContainer<?> REDMINE = new GenericContainer<>(DockerImageName.parse("redmine:6.1.6"))
-			.withExposedPorts(3000).withEnv("REDMINE_SECRET_KEY_BASE", SECRET_KEY_BASE).withStartupAttempts(2)
-			.waitingFor(Wait.forHttp("/").forStatusCode(200).withStartupTimeout(Duration.ofMinutes(5)));
+	/**
+	 * Every Redmine release line the handler supports: the 7.0 line the client
+	 * spec describes and the 6.1 line still widely installed.
+	 */
+	static final String[] REDMINE_IMAGES = { "redmine:6.1.6", "redmine:7.0.3" };
+
+	private static GenericContainer<?> redmineContainer(String image) {
+		return new GenericContainer<>(DockerImageName.parse(image)).withExposedPorts(3000)
+				.withEnv("REDMINE_SECRET_KEY_BASE", SECRET_KEY_BASE).withStartupAttempts(2)
+				.waitingFor(Wait.forHttp("/").forStatusCode(200).withStartupTimeout(Duration.ofMinutes(5)));
+	}
+
+	private GenericContainer<?> redmine = null;
 
 	private static final JsonMapper JSON = JsonMapper.builder().build();
 	private final HttpClient http = HttpClient.newHttpClient();
@@ -85,13 +94,21 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 	 */
 	static final int EXPECTED_DOCUMENTS = 10;
 
-	@Test
-	public void testRedmineIngestion() throws Exception {
-		if (!REDMINE.isRunning()) {
-			REDMINE.start();
+	@ParameterizedTest(name = "{0}")
+	@FieldSource("REDMINE_IMAGES")
+	public void testRedmineIngestion(String image) throws Exception {
+		try (GenericContainer<?> container = redmineContainer(image)) {
+			container.start();
+			redmine = container;
+			ingest(image);
+		} finally {
+			redmine = null;
 		}
-		baseUri = "http://" + REDMINE.getHost() + ":" + REDMINE.getMappedPort(3000);
-		LOGGER.info("Redmine reachable at " + baseUri);
+	}
+
+	private void ingest(String image) throws Exception {
+		baseUri = "http://" + redmine.getHost() + ":" + redmine.getMappedPort(3000);
+		LOGGER.info(image + " reachable at " + baseUri);
 		apiKey = bootstrap();
 		seed();
 
@@ -102,7 +119,7 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 				RedmineContentManagementHandlerImpl.REDMINE);
 
 		GRedmineSystem system = new GRedmineSystem();
-		system.setDescription("Test Redmine system");
+		system.setDescription("Test Redmine system " + image);
 		system.setBaseUri(baseUri);
 		system.setSecretCode(secretId);
 		system.setUsedCapabilities(List.of(GSystemRole.DOCUMENTS_MANAGEMENT));
@@ -111,7 +128,7 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 		system.setContentManagementSystemType(RedmineContentManagementHandlerImpl.REDMINE);
 		system = persistentObjectManager.insert(system);
 
-		GRedmineProjectEndpoint endpoint = createAndPersist("Redmine ingestion test", GRedmineProjectEndpoint.class);
+		GRedmineProjectEndpoint endpoint = createAndPersist("Redmine ingestion test " + image.replace(':', ' '), GRedmineProjectEndpoint.class);
 		endpoint.setRedmineSystemCode(system.getCode());
 		List<VFilesystemReference> paths = new ArrayList<VFilesystemReference>();
 		for (String project : List.of("gebo-demo", "gebo-demo-sub")) {
@@ -148,9 +165,9 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 	 * it prints.
 	 */
 	private String bootstrap() throws Exception {
-		REDMINE.copyFileToContainer(MountableFile.forClasspathResource("REDMINE-IT/redmine-bootstrap.rb"),
+		redmine.copyFileToContainer(MountableFile.forClasspathResource("REDMINE-IT/redmine-bootstrap.rb"),
 				"/tmp/redmine-bootstrap.rb");
-		ExecResult result = REDMINE.execInContainer("bash", "-c", "cd /usr/src/redmine && SECRET_KEY_BASE="
+		ExecResult result = redmine.execInContainer("bash", "-c", "cd /usr/src/redmine && SECRET_KEY_BASE="
 				+ SECRET_KEY_BASE + " bin/rails runner -e production /tmp/redmine-bootstrap.rb");
 		Matcher m = Pattern.compile("ADMIN_KEY=(\\w+)").matcher(result.getStdout());
 		assertTrue(m.find(), "The Redmine bootstrap must print the admin API key, stderr: " + result.getStderr());
