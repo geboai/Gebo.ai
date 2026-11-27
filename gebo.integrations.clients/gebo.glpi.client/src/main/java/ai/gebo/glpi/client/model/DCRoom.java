@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Server Room
+ * Server room
  */
 @JsonPropertyOrder({
   DCRoom.JSON_PROPERTY_ID,

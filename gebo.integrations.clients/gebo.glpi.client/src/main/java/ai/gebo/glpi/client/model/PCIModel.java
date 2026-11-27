@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Other Component Model
+ * Other component model
  */
 @JsonPropertyOrder({
   PCIModel.JSON_PROPERTY_ID,

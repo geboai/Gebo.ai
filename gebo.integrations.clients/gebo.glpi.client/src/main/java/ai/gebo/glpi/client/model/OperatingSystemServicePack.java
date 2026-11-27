@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Service Pack
+ * Service pack
  */
 @JsonPropertyOrder({
   OperatingSystemServicePack.JSON_PROPERTY_ID,

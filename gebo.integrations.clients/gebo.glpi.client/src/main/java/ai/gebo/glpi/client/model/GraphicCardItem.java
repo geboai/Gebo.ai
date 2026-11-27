@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Graphics Card item
+ * Graphics card item
  */
 @JsonPropertyOrder({
   GraphicCardItem.JSON_PROPERTY_ID,

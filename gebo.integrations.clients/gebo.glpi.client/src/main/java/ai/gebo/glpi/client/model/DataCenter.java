@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Datacenter
+ * Data center
  */
 @JsonPropertyOrder({
   DataCenter.JSON_PROPERTY_ID,

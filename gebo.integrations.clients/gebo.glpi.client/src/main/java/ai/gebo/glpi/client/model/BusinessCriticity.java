@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Business Criticity
+ * Business criticity
  */
 @JsonPropertyOrder({
   BusinessCriticity.JSON_PROPERTY_ID,

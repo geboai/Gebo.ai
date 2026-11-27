@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * USB Vendor
+ * USB vendor
  */
 @JsonPropertyOrder({
   USBVendor.JSON_PROPERTY_ID,

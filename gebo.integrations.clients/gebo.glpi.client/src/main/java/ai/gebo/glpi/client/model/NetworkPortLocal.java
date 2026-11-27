@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Local Loop Port
+ * Local loop port
  */
 @JsonPropertyOrder({
   NetworkPortLocal.JSON_PROPERTY_ID,

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Fiber Channel Port
+ * Fiber channel port
  */
 @JsonPropertyOrder({
   NetworkPortFiberchannel.JSON_PROPERTY_ID,

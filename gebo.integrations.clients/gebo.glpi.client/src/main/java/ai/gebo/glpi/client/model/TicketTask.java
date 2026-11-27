@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Ticket Task
+ * Ticket task
  */
 @JsonPropertyOrder({
   TicketTask.JSON_PROPERTY_ID,

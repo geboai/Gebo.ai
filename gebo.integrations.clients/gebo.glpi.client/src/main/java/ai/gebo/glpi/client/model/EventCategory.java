@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Event Category
+ * Event category
  */
 @JsonPropertyOrder({
   EventCategory.JSON_PROPERTY_ID,

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * System Board item
+ * System board item
  */
 @JsonPropertyOrder({
   SystemboardItem.JSON_PROPERTY_ID,

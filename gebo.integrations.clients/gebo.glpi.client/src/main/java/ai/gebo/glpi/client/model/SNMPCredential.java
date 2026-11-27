@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * SNMP Credential
+ * SNMP credential
  */
 @JsonPropertyOrder({
   SNMPCredential.JSON_PROPERTY_ID,

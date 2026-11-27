@@ -47,9 +47,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
   SessionActiveProfileRights.JSON_PROPERTY_CONTRACT,
   SessionActiveProfileRights.JSON_PROPERTY_DASHBOARD,
   SessionActiveProfileRights.JSON_PROPERTY_DATABASE,
-  SessionActiveProfileRights.JSON_PROPERTY_DATABASEINSTANCE,
   SessionActiveProfileRights.JSON_PROPERTY_DATACENTER,
-  SessionActiveProfileRights.JSON_PROPERTY_DEFAULTFILTER,
   SessionActiveProfileRights.JSON_PROPERTY_DEVICE,
   SessionActiveProfileRights.JSON_PROPERTY_DEVICESIMCARD_PINPUK,
   SessionActiveProfileRights.JSON_PROPERTY_DOCUMENT,
@@ -87,11 +85,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
   SessionActiveProfileRights.JSON_PROPERTY_PERSONALIZATION,
   SessionActiveProfileRights.JSON_PROPERTY_PHONE,
   SessionActiveProfileRights.JSON_PROPERTY_PLANNING,
-  SessionActiveProfileRights.JSON_PROPERTY_PLUGIN_PDF,
-  SessionActiveProfileRights.JSON_PROPERTY_PLUGIN_SATISFACTION,
-  SessionActiveProfileRights.JSON_PROPERTY_PLUGIN_TAG_TAG,
-  SessionActiveProfileRights.JSON_PROPERTY_PLUGIN_TIMELINETICKET_TICKET,
-  SessionActiveProfileRights.JSON_PROPERTY_PLUGIN_USEDITEMSEXPORT_EXPORT,
   SessionActiveProfileRights.JSON_PROPERTY_PRINTER,
   SessionActiveProfileRights.JSON_PROPERTY_PROBLEM,
   SessionActiveProfileRights.JSON_PROPERTY_PROFILE,
@@ -182,7 +175,7 @@ public class SessionActiveProfileRights {
   private AgentEnum agent;
 
   /**
-   * Appliances rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Appliances rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum ApplianceEnum {
     NUMBER_1(1),
@@ -243,7 +236,7 @@ public class SessionActiveProfileRights {
   private Integer backup;
 
   /**
-   * Public Saved Searches rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Public saved searches rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum BookmarkPublicEnum {
     NUMBER_1(1),
@@ -286,7 +279,7 @@ public class SessionActiveProfileRights {
   private BookmarkPublicEnum bookmarkPublic;
 
   /**
-   * Budgets rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Budgets rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    */
   public enum BudgetEnum {
     NUMBER_1(1),
@@ -335,7 +328,7 @@ public class SessionActiveProfileRights {
   private BudgetEnum budget;
 
   /**
-   * Cables rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Cables rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum CableManagementEnum {
     NUMBER_1(1),
@@ -431,7 +424,7 @@ public class SessionActiveProfileRights {
   private CalendarEnum calendar;
 
   /**
-   * Cartridges rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Cartridges rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum CartridgeEnum {
     NUMBER_1(1),
@@ -488,7 +481,7 @@ public class SessionActiveProfileRights {
   private CartridgeEnum cartridge;
 
   /**
-   * Certificates rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Certificates rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum CertificateEnum {
     NUMBER_1(1),
@@ -545,7 +538,7 @@ public class SessionActiveProfileRights {
   private CertificateEnum certificate;
 
   /**
-   * Changes rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: See All - 131072: Reply to Survey (My Change)
+   * Changes rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: See all - 131072: Reply to survey (my change)
    */
   public enum ChangeEnum {
     NUMBER_1(1),
@@ -639,7 +632,7 @@ public class SessionActiveProfileRights {
   private ChangevalidationEnum changevalidation;
 
   /**
-   * Clusters rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Clusters rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum ClusterEnum {
     NUMBER_1(1),
@@ -692,7 +685,7 @@ public class SessionActiveProfileRights {
   private ClusterEnum cluster;
 
   /**
-   * Computers rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Computers rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum ComputerEnum {
     NUMBER_1(1),
@@ -788,7 +781,7 @@ public class SessionActiveProfileRights {
   private ConfigEnum config;
 
   /**
-   * Consumables rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Consumables rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum ConsumableEnum {
     NUMBER_1(1),
@@ -845,7 +838,7 @@ public class SessionActiveProfileRights {
   private ConsumableEnum consumable;
 
   /**
-   * Contacts / Suppliers rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Contacts / Suppliers rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    */
   public enum ContactEnterpriseEnum {
     NUMBER_1(1),
@@ -894,7 +887,7 @@ public class SessionActiveProfileRights {
   private ContactEnterpriseEnum contactEnterprise;
 
   /**
-   * Contracts rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Contracts rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    */
   public enum ContractEnum {
     NUMBER_1(1),
@@ -986,7 +979,7 @@ public class SessionActiveProfileRights {
   private DashboardEnum dashboard;
 
   /**
-   * Database Instances rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Database instances rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum DatabaseEnum {
     NUMBER_1(1),
@@ -1042,12 +1035,8 @@ public class SessionActiveProfileRights {
   @jakarta.annotation.Nullable
   private DatabaseEnum database;
 
-  public static final String JSON_PROPERTY_DATABASEINSTANCE = "databaseinstance";
-  @jakarta.annotation.Nullable
-  private Integer databaseinstance;
-
   /**
-   * Datacenters rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
+   * Data centers rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
    */
   public enum DatacenterEnum {
     NUMBER_1(1),
@@ -1090,49 +1079,6 @@ public class SessionActiveProfileRights {
   public static final String JSON_PROPERTY_DATACENTER = "datacenter";
   @jakarta.annotation.Nullable
   private DatacenterEnum datacenter;
-
-  /**
-   * Default filters rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
-   */
-  public enum DefaultfilterEnum {
-    NUMBER_1(1),
-    
-    NUMBER_2(2),
-    
-    NUMBER_4(4),
-    
-    NUMBER_16(16);
-
-    private Integer value;
-
-    DefaultfilterEnum(Integer value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public Integer getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static DefaultfilterEnum fromValue(Integer value) {
-      for (DefaultfilterEnum b : DefaultfilterEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
-  public static final String JSON_PROPERTY_DEFAULTFILTER = "defaultfilter";
-  @jakarta.annotation.Nullable
-  private DefaultfilterEnum defaultfilter;
 
   /**
    * Components rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
@@ -1178,7 +1124,7 @@ public class SessionActiveProfileRights {
   private DeviceEnum device;
 
   /**
-   * Simcard PIN/PUK rights. Possible values: - 1: View all - 2: Update All
+   * Simcard PIN/PUK rights. Possible values: - 1: View all - 2: Update all
    */
   public enum DevicesimcardPinpukEnum {
     NUMBER_1(1),
@@ -1217,7 +1163,7 @@ public class SessionActiveProfileRights {
   private DevicesimcardPinpukEnum devicesimcardPinpuk;
 
   /**
-   * Documents rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Documents rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    */
   public enum DocumentEnum {
     NUMBER_1(1),
@@ -1266,7 +1212,7 @@ public class SessionActiveProfileRights {
   private DocumentEnum document;
 
   /**
-   * Domains rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Domains rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum DomainEnum {
     NUMBER_1(1),
@@ -1323,7 +1269,7 @@ public class SessionActiveProfileRights {
   private DomainEnum domain;
 
   /**
-   * Global Dropdowns rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Global dropdowns rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum DropdownEnum {
     NUMBER_1(1),
@@ -1366,7 +1312,7 @@ public class SessionActiveProfileRights {
   private DropdownEnum dropdown;
 
   /**
-   * Entities rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: Read Parameters - 2048: Update Parameters
+   * Entities rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read notes - 64: Update notes - 1024: Read parameters - 2048: Update parameters
    */
   public enum EntityEnum {
     NUMBER_1(1),
@@ -1417,7 +1363,7 @@ public class SessionActiveProfileRights {
   private EntityEnum entity;
 
   /**
-   * External Events rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Manage Background Events
+   * External events rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: manage background events
    */
   public enum ExternaleventEnum {
     NUMBER_1(1),
@@ -1462,7 +1408,7 @@ public class SessionActiveProfileRights {
   private ExternaleventEnum externalevent;
 
   /**
-   * Followups rights. Possible values: - 1: See Public Ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update All - 2048: Add (associated groups) - 4096: Add to all items - 8192: See Private Ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
+   * Followups rights. Possible values: - 1: See public ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update all - 2048: Add (associated groups) - 4096: Add to all items - 8192: See private ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
    */
   public enum FollowupEnum {
     NUMBER_1(1),
@@ -1568,7 +1514,7 @@ public class SessionActiveProfileRights {
   private Integer globalValidation;
 
   /**
-   * Groups rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Groups rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read notes - 64: Update notes
    */
   public enum GroupEnum {
     NUMBER_1(1),
@@ -1615,7 +1561,7 @@ public class SessionActiveProfileRights {
   private GroupEnum group;
 
   /**
-   * Financial &amp; Administrative Information rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Financial and administrative information rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum InfocomEnum {
     NUMBER_1(1),
@@ -1658,7 +1604,7 @@ public class SessionActiveProfileRights {
   private InfocomEnum infocom;
 
   /**
-   * Internet rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge
+   * Internet rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge
    */
   public enum InternetEnum {
     NUMBER_1(1),
@@ -1744,7 +1690,7 @@ public class SessionActiveProfileRights {
   private InventoryEnum inventory;
 
   /**
-   * ITIL Categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * ITIL categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum ItilcategoryEnum {
     NUMBER_1(1),
@@ -1787,7 +1733,7 @@ public class SessionActiveProfileRights {
   private ItilcategoryEnum itilcategory;
 
   /**
-   * Followup Templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Followup templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum ItilfollowuptemplateEnum {
     NUMBER_1(1),
@@ -1916,7 +1862,7 @@ public class SessionActiveProfileRights {
   private ItilvalidationtemplateEnum itilvalidationtemplate;
 
   /**
-   * Knowledge Base rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Knowledge Base Administration - 2048: Read the FAQ - 4096: Publish in the FAQ - 8192: Comment KB entries
+   * Knowledge base rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Knowledge base administration - 2048: Read the FAQ - 4096: Publish in the FAQ - 8192: Comment KB entries
    */
   public enum KnowbaseEnum {
     NUMBER_1(1),
@@ -1967,7 +1913,7 @@ public class SessionActiveProfileRights {
   private KnowbaseEnum knowbase;
 
   /**
-   * Knowledgebase Categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Knowledge base categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum KnowbasecategoryEnum {
     NUMBER_1(1),
@@ -2010,7 +1956,7 @@ public class SessionActiveProfileRights {
   private KnowbasecategoryEnum knowbasecategory;
 
   /**
-   * Licenses rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Licenses rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum LicenseEnum {
     NUMBER_1(1),
@@ -2067,7 +2013,7 @@ public class SessionActiveProfileRights {
   private LicenseEnum license;
 
   /**
-   * Phone lines rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Phone lines rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum LineEnum {
     NUMBER_1(1),
@@ -2124,7 +2070,7 @@ public class SessionActiveProfileRights {
   private LineEnum line;
 
   /**
-   * Line Operators rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Line operators rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum LineoperatorEnum {
     NUMBER_1(1),
@@ -2167,7 +2113,7 @@ public class SessionActiveProfileRights {
   private LineoperatorEnum lineoperator;
 
   /**
-   * External Links rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * External links rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum LinkEnum {
     NUMBER_1(1),
@@ -2253,7 +2199,7 @@ public class SessionActiveProfileRights {
   private LocationEnum location;
 
   /**
-   * Locked Fields rights. Possible values: - 2: Update - 4: Create
+   * Locked fields rights. Possible values: - 2: Update - 4: Create
    */
   public enum LockedFieldEnum {
     NUMBER_2(2),
@@ -2329,7 +2275,7 @@ public class SessionActiveProfileRights {
   private LogsEnum logs;
 
   /**
-   * Monitors rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Monitors rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum MonitorEnum {
     NUMBER_1(1),
@@ -2386,7 +2332,7 @@ public class SessionActiveProfileRights {
   private MonitorEnum monitor;
 
   /**
-   * Network Devices rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Network devices rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum NetworkingEnum {
     NUMBER_1(1),
@@ -2533,7 +2479,7 @@ public class SessionActiveProfileRights {
   private Integer passwordUpdate;
 
   /**
-   * Pending Reasons rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Pending reasons rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum PendingreasonEnum {
     NUMBER_1(1),
@@ -2576,7 +2522,7 @@ public class SessionActiveProfileRights {
   private PendingreasonEnum pendingreason;
 
   /**
-   * Peripherals rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Peripherals rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum PeripheralEnum {
     NUMBER_1(1),
@@ -2672,7 +2618,7 @@ public class SessionActiveProfileRights {
   private PersonalizationEnum personalization;
 
   /**
-   * Phones rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Phones rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum PhoneEnum {
     NUMBER_1(1),
@@ -2769,28 +2715,8 @@ public class SessionActiveProfileRights {
   @jakarta.annotation.Nullable
   private PlanningEnum planning;
 
-  public static final String JSON_PROPERTY_PLUGIN_PDF = "plugin_pdf";
-  @jakarta.annotation.Nullable
-  private Integer pluginPdf;
-
-  public static final String JSON_PROPERTY_PLUGIN_SATISFACTION = "plugin_satisfaction";
-  @jakarta.annotation.Nullable
-  private Integer pluginSatisfaction;
-
-  public static final String JSON_PROPERTY_PLUGIN_TAG_TAG = "plugin_tag_tag";
-  @jakarta.annotation.Nullable
-  private Integer pluginTagTag;
-
-  public static final String JSON_PROPERTY_PLUGIN_TIMELINETICKET_TICKET = "plugin_timelineticket_ticket";
-  @jakarta.annotation.Nullable
-  private Integer pluginTimelineticketTicket;
-
-  public static final String JSON_PROPERTY_PLUGIN_USEDITEMSEXPORT_EXPORT = "plugin_useditemsexport_export";
-  @jakarta.annotation.Nullable
-  private Integer pluginUseditemsexportExport;
-
   /**
-   * Printers rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Printers rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum PrinterEnum {
     NUMBER_1(1),
@@ -2847,7 +2773,7 @@ public class SessionActiveProfileRights {
   private PrinterEnum printer;
 
   /**
-   * Problems rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: See All
+   * Problems rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: See all
    */
   public enum ProblemEnum {
     NUMBER_1(1),
@@ -2941,7 +2867,7 @@ public class SessionActiveProfileRights {
   private ProfileEnum profile;
 
   /**
-   * Projects rights. Possible values: - 1: See (Actor) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: See All
+   * Projects rights. Possible values: - 1: See (actor) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: See all
    */
   public enum ProjectEnum {
     NUMBER_1(1),
@@ -2992,7 +2918,7 @@ public class SessionActiveProfileRights {
   private ProjectEnum project;
 
   /**
-   * Project Tasks rights. Possible values: - 1: See (Actor) - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: Update (Actor)
+   * Project tasks rights. Possible values: - 1: See (actor) - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: Update (actor)
    */
   public enum ProjecttaskEnum {
     NUMBER_1(1),
@@ -3084,7 +3010,7 @@ public class SessionActiveProfileRights {
   private QueuednotificationEnum queuednotification;
 
   /**
-   * Recurring changes rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Recurrent changes rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum RecurrentchangeEnum {
     NUMBER_1(1),
@@ -3168,7 +3094,7 @@ public class SessionActiveProfileRights {
   private RefusedequipmentEnum refusedequipment;
 
   /**
-   * Public Reminders rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
+   * Public reminders rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
    */
   public enum ReminderPublicEnum {
     NUMBER_1(1),
@@ -3250,7 +3176,7 @@ public class SessionActiveProfileRights {
   private ReportsEnum reports;
 
   /**
-   * Reservable Items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Make a Reservation
+   * Reservable items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Make a reservation
    */
   public enum ReservationEnum {
     NUMBER_1(1),
@@ -3295,7 +3221,7 @@ public class SessionActiveProfileRights {
   private ReservationEnum reservation;
 
   /**
-   * Public RSS Feeds rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
+   * Public RSS feeds rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
    */
   public enum RssfeedPublicEnum {
     NUMBER_1(1),
@@ -3340,7 +3266,7 @@ public class SessionActiveProfileRights {
   private RssfeedPublicEnum rssfeedPublic;
 
   /**
-   * Business Rules for Assets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for assets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    */
   public enum RuleAssetEnum {
     NUMBER_1(1),
@@ -3385,7 +3311,7 @@ public class SessionActiveProfileRights {
   private RuleAssetEnum ruleAsset;
 
   /**
-   * Business Rules for Changes (Entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for changes (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    */
   public enum RuleChangeEnum {
     NUMBER_1(1),
@@ -3430,7 +3356,7 @@ public class SessionActiveProfileRights {
   private RuleChangeEnum ruleChange;
 
   /**
-   * Dropdowns Dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Dropdowns dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum RuleDictionnaryDropdownEnum {
     NUMBER_1(1),
@@ -3516,7 +3442,7 @@ public class SessionActiveProfileRights {
   private RuleDictionnaryPrinterEnum ruleDictionnaryPrinter;
 
   /**
-   * Software Dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Software dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum RuleDictionnarySoftwareEnum {
     NUMBER_1(1),
@@ -3688,7 +3614,7 @@ public class SessionActiveProfileRights {
   private RuleLocationEnum ruleLocation;
 
   /**
-   * Rules for assigning a ticket created through an email receiver rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Rules for assigning a ticket created through a mails receiver rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum RuleMailcollectorEnum {
     NUMBER_1(1),
@@ -3731,7 +3657,7 @@ public class SessionActiveProfileRights {
   private RuleMailcollectorEnum ruleMailcollector;
 
   /**
-   * Business rules for problems (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for problems (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    */
   public enum RuleProblemEnum {
     NUMBER_1(1),
@@ -3819,7 +3745,7 @@ public class SessionActiveProfileRights {
   private RuleSoftwarecategoriesEnum ruleSoftwarecategories;
 
   /**
-   * Business Rules for Tickets (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for tickets (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    */
   public enum RuleTicketEnum {
     NUMBER_1(1),
@@ -3864,7 +3790,7 @@ public class SessionActiveProfileRights {
   private RuleTicketEnum ruleTicket;
 
   /**
-   * Search Result Display rights. Possible values: - 1024: User Display - 2048: Default Display
+   * Search result display rights. Possible values: - 1024: User display - 2048: Default display
    */
   public enum SearchConfigEnum {
     NUMBER_1024(1024),
@@ -3952,7 +3878,7 @@ public class SessionActiveProfileRights {
   private SlmEnum slm;
 
   /**
-   * SNMP Credentials rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
+   * SNMP credentials rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
    */
   public enum SnmpcredentialEnum {
     NUMBER_1(1),
@@ -3997,7 +3923,7 @@ public class SessionActiveProfileRights {
   private SnmpcredentialEnum snmpcredential;
 
   /**
-   * Software rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Software rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    */
   public enum SoftwareEnum {
     NUMBER_1(1),
@@ -4054,7 +3980,7 @@ public class SessionActiveProfileRights {
   private SoftwareEnum software;
 
   /**
-   * Solution Templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Solution templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum SolutiontemplateEnum {
     NUMBER_1(1),
@@ -4097,7 +4023,7 @@ public class SessionActiveProfileRights {
   private SolutiontemplateEnum solutiontemplate;
 
   /**
-   * Status of Items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Statuses of items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum StateEnum {
     NUMBER_1(1),
@@ -4177,7 +4103,7 @@ public class SessionActiveProfileRights {
   private StatisticEnum statistic;
 
   /**
-   * System Logs rights. Possible values: - 1: Read
+   * System logs rights. Possible values: - 1: Read
    */
   public enum SystemLogsEnum {
     NUMBER_1(1);
@@ -4214,7 +4140,7 @@ public class SessionActiveProfileRights {
   private SystemLogsEnum systemLogs;
 
   /**
-   * Ticket Tasks rights. Possible values: - 1: See Public Ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update All - 2048: Add (associated groups) - 4096: Add to all items - 8192: See Private Ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
+   * Ticket tasks rights. Possible values: - 1: See public ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update all - 2048: Add (associated groups) - 4096: Add to all items - 8192: See private ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
    */
   public enum TaskEnum {
     NUMBER_1(1),
@@ -4271,7 +4197,7 @@ public class SessionActiveProfileRights {
   private TaskEnum task;
 
   /**
-   * Task Categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Task categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum TaskcategoryEnum {
     NUMBER_1(1),
@@ -4314,7 +4240,7 @@ public class SessionActiveProfileRights {
   private TaskcategoryEnum taskcategory;
 
   /**
-   * Task Templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Task templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum TasktemplateEnum {
     NUMBER_1(1),
@@ -4357,7 +4283,7 @@ public class SessionActiveProfileRights {
   private TasktemplateEnum tasktemplate;
 
   /**
-   * Tickets rights. Possible values: - 1: See My Ticket - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: See All Tickets - 2048: See Group Ticket - 4096: See Assigned - 8192: Assign - 16384: Steal - 32768: Be in charge - 65536: Change the Priority - 131072: Approve solution/Reply survey (my ticket) - 262144: View new tickets
+   * Tickets rights. Possible values: - 1: See my ticket - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: See all tickets - 2048: See group ticket - 4096: See assigned - 8192: Assign - 16384: Steal - 32768: Be in charge - 65536: Change the priority - 131072: Approve solution/Reply survey (my ticket) - 262144: View new tickets
    */
   public enum TicketEnum {
     NUMBER_1(1),
@@ -4463,7 +4389,7 @@ public class SessionActiveProfileRights {
   private TicketcostEnum ticketcost;
 
   /**
-   * Recurring tickets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Recurrent tickets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum TicketrecurrentEnum {
     NUMBER_1(1),
@@ -4506,7 +4432,7 @@ public class SessionActiveProfileRights {
   private TicketrecurrentEnum ticketrecurrent;
 
   /**
-   * Ticket approvals rights. Possible values: - 16: Purge - 1024: Create for Request - 2048: Create for Incident - 4096: Approve a request - 8192: Approve an incident
+   * Ticket approvals rights. Possible values: - 16: Purge - 1024: Create for request - 2048: Create for incident - 4096: Approve a request - 8192: Approve an incident
    */
   public enum TicketvalidationEnum {
     NUMBER_16(16),
@@ -4594,7 +4520,7 @@ public class SessionActiveProfileRights {
   private TransferEnum transfer;
 
   /**
-   * Document Types rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Document types rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    */
   public enum TypedocEnum {
     NUMBER_1(1),
@@ -4680,7 +4606,7 @@ public class SessionActiveProfileRights {
   private UnmanagedEnum unmanaged;
 
   /**
-   * Users rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: Add External - 2048: Read Auth - 4096: Update auth, sync and 2FA - 8192: Impersonate
+   * Users rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: Add external - 2048: Read auth - 4096: Update auth, sync and 2FA - 8192: Impersonate
    */
   public enum UserEnum {
     NUMBER_1(1),
@@ -4767,7 +4693,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Appliances rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Appliances rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return appliance
    */
   @jakarta.annotation.Nullable
@@ -4817,7 +4743,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Public Saved Searches rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Public saved searches rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return bookmarkPublic
    */
   @jakarta.annotation.Nullable
@@ -4842,7 +4768,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Budgets rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Budgets rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    * @return budget
    */
   @jakarta.annotation.Nullable
@@ -4867,7 +4793,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Cables rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Cables rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return cableManagement
    */
   @jakarta.annotation.Nullable
@@ -4917,7 +4843,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Cartridges rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Cartridges rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return cartridge
    */
   @jakarta.annotation.Nullable
@@ -4942,7 +4868,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Certificates rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Certificates rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return certificate
    */
   @jakarta.annotation.Nullable
@@ -4967,7 +4893,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Changes rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: See All - 131072: Reply to Survey (My Change)
+   * Changes rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: See all - 131072: Reply to survey (my change)
    * @return change
    */
   @jakarta.annotation.Nullable
@@ -5017,7 +4943,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Clusters rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Clusters rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return cluster
    */
   @jakarta.annotation.Nullable
@@ -5042,7 +4968,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Computers rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Computers rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return computer
    */
   @jakarta.annotation.Nullable
@@ -5092,7 +5018,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Consumables rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Consumables rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return consumable
    */
   @jakarta.annotation.Nullable
@@ -5117,7 +5043,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Contacts / Suppliers rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Contacts / Suppliers rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    * @return contactEnterprise
    */
   @jakarta.annotation.Nullable
@@ -5142,7 +5068,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Contracts rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Contracts rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    * @return contract
    */
   @jakarta.annotation.Nullable
@@ -5192,7 +5118,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Database Instances rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Database instances rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return database
    */
   @jakarta.annotation.Nullable
@@ -5210,31 +5136,6 @@ public class SessionActiveProfileRights {
     this.database = database;
   }
 
-  public SessionActiveProfileRights databaseinstance(@jakarta.annotation.Nullable Integer databaseinstance) {
-    
-    this.databaseinstance = databaseinstance;
-    return this;
-  }
-
-  /**
-   * Get databaseinstance
-   * @return databaseinstance
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DATABASEINSTANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getDatabaseinstance() {
-    return databaseinstance;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_DATABASEINSTANCE, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDatabaseinstance(@jakarta.annotation.Nullable Integer databaseinstance) {
-    this.databaseinstance = databaseinstance;
-  }
-
   public SessionActiveProfileRights datacenter(@jakarta.annotation.Nullable DatacenterEnum datacenter) {
     
     this.datacenter = datacenter;
@@ -5242,7 +5143,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Datacenters rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
+   * Data centers rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
    * @return datacenter
    */
   @jakarta.annotation.Nullable
@@ -5258,31 +5159,6 @@ public class SessionActiveProfileRights {
   @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
   public void setDatacenter(@jakarta.annotation.Nullable DatacenterEnum datacenter) {
     this.datacenter = datacenter;
-  }
-
-  public SessionActiveProfileRights defaultfilter(@jakarta.annotation.Nullable DefaultfilterEnum defaultfilter) {
-    
-    this.defaultfilter = defaultfilter;
-    return this;
-  }
-
-  /**
-   * Default filters rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
-   * @return defaultfilter
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_DEFAULTFILTER, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public DefaultfilterEnum getDefaultfilter() {
-    return defaultfilter;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_DEFAULTFILTER, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setDefaultfilter(@jakarta.annotation.Nullable DefaultfilterEnum defaultfilter) {
-    this.defaultfilter = defaultfilter;
   }
 
   public SessionActiveProfileRights device(@jakarta.annotation.Nullable DeviceEnum device) {
@@ -5317,7 +5193,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Simcard PIN/PUK rights. Possible values: - 1: View all - 2: Update All
+   * Simcard PIN/PUK rights. Possible values: - 1: View all - 2: Update all
    * @return devicesimcardPinpuk
    */
   @jakarta.annotation.Nullable
@@ -5342,7 +5218,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Documents rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Documents rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes
    * @return document
    */
   @jakarta.annotation.Nullable
@@ -5367,7 +5243,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Domains rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Domains rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return domain
    */
   @jakarta.annotation.Nullable
@@ -5392,7 +5268,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Global Dropdowns rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Global dropdowns rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return dropdown
    */
   @jakarta.annotation.Nullable
@@ -5417,7 +5293,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Entities rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: Read Parameters - 2048: Update Parameters
+   * Entities rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read notes - 64: Update notes - 1024: Read parameters - 2048: Update parameters
    * @return entity
    */
   @jakarta.annotation.Nullable
@@ -5442,7 +5318,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * External Events rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Manage Background Events
+   * External events rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: manage background events
    * @return externalevent
    */
   @jakarta.annotation.Nullable
@@ -5467,7 +5343,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Followups rights. Possible values: - 1: See Public Ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update All - 2048: Add (associated groups) - 4096: Add to all items - 8192: See Private Ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
+   * Followups rights. Possible values: - 1: See public ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update all - 2048: Add (associated groups) - 4096: Add to all items - 8192: See private ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
    * @return followup
    */
   @jakarta.annotation.Nullable
@@ -5542,7 +5418,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Groups rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read Notes - 64: Update Notes
+   * Groups rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 32: Read notes - 64: Update notes
    * @return group
    */
   @jakarta.annotation.Nullable
@@ -5567,7 +5443,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Financial &amp; Administrative Information rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Financial and administrative information rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return infocom
    */
   @jakarta.annotation.Nullable
@@ -5592,7 +5468,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Internet rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge
+   * Internet rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge
    * @return internet
    */
   @jakarta.annotation.Nullable
@@ -5642,7 +5518,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * ITIL Categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * ITIL categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return itilcategory
    */
   @jakarta.annotation.Nullable
@@ -5667,7 +5543,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Followup Templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Followup templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return itilfollowuptemplate
    */
   @jakarta.annotation.Nullable
@@ -5742,7 +5618,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Knowledge Base rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Knowledge Base Administration - 2048: Read the FAQ - 4096: Publish in the FAQ - 8192: Comment KB entries
+   * Knowledge base rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Knowledge base administration - 2048: Read the FAQ - 4096: Publish in the FAQ - 8192: Comment KB entries
    * @return knowbase
    */
   @jakarta.annotation.Nullable
@@ -5767,7 +5643,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Knowledgebase Categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Knowledge base categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return knowbasecategory
    */
   @jakarta.annotation.Nullable
@@ -5792,7 +5668,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Licenses rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Licenses rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return license
    */
   @jakarta.annotation.Nullable
@@ -5817,7 +5693,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Phone lines rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Phone lines rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return line
    */
   @jakarta.annotation.Nullable
@@ -5842,7 +5718,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Line Operators rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Line operators rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return lineoperator
    */
   @jakarta.annotation.Nullable
@@ -5867,7 +5743,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * External Links rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * External links rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return link
    */
   @jakarta.annotation.Nullable
@@ -5917,7 +5793,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Locked Fields rights. Possible values: - 2: Update - 4: Create
+   * Locked fields rights. Possible values: - 2: Update - 4: Create
    * @return lockedField
    */
   @jakarta.annotation.Nullable
@@ -5967,7 +5843,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Monitors rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Monitors rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return monitor
    */
   @jakarta.annotation.Nullable
@@ -5992,7 +5868,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Network Devices rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Network devices rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return networking
    */
   @jakarta.annotation.Nullable
@@ -6092,7 +5968,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Pending Reasons rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Pending reasons rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return pendingreason
    */
   @jakarta.annotation.Nullable
@@ -6117,7 +5993,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Peripherals rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Peripherals rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return peripheral
    */
   @jakarta.annotation.Nullable
@@ -6167,7 +6043,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Phones rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Phones rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return phone
    */
   @jakarta.annotation.Nullable
@@ -6210,131 +6086,6 @@ public class SessionActiveProfileRights {
     this.planning = planning;
   }
 
-  public SessionActiveProfileRights pluginPdf(@jakarta.annotation.Nullable Integer pluginPdf) {
-    
-    this.pluginPdf = pluginPdf;
-    return this;
-  }
-
-  /**
-   * Get pluginPdf
-   * @return pluginPdf
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_PDF, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPluginPdf() {
-    return pluginPdf;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_PDF, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPluginPdf(@jakarta.annotation.Nullable Integer pluginPdf) {
-    this.pluginPdf = pluginPdf;
-  }
-
-  public SessionActiveProfileRights pluginSatisfaction(@jakarta.annotation.Nullable Integer pluginSatisfaction) {
-    
-    this.pluginSatisfaction = pluginSatisfaction;
-    return this;
-  }
-
-  /**
-   * Get pluginSatisfaction
-   * @return pluginSatisfaction
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_SATISFACTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPluginSatisfaction() {
-    return pluginSatisfaction;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_SATISFACTION, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPluginSatisfaction(@jakarta.annotation.Nullable Integer pluginSatisfaction) {
-    this.pluginSatisfaction = pluginSatisfaction;
-  }
-
-  public SessionActiveProfileRights pluginTagTag(@jakarta.annotation.Nullable Integer pluginTagTag) {
-    
-    this.pluginTagTag = pluginTagTag;
-    return this;
-  }
-
-  /**
-   * Get pluginTagTag
-   * @return pluginTagTag
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_TAG_TAG, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPluginTagTag() {
-    return pluginTagTag;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_TAG_TAG, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPluginTagTag(@jakarta.annotation.Nullable Integer pluginTagTag) {
-    this.pluginTagTag = pluginTagTag;
-  }
-
-  public SessionActiveProfileRights pluginTimelineticketTicket(@jakarta.annotation.Nullable Integer pluginTimelineticketTicket) {
-    
-    this.pluginTimelineticketTicket = pluginTimelineticketTicket;
-    return this;
-  }
-
-  /**
-   * Get pluginTimelineticketTicket
-   * @return pluginTimelineticketTicket
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_TIMELINETICKET_TICKET, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPluginTimelineticketTicket() {
-    return pluginTimelineticketTicket;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_TIMELINETICKET_TICKET, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPluginTimelineticketTicket(@jakarta.annotation.Nullable Integer pluginTimelineticketTicket) {
-    this.pluginTimelineticketTicket = pluginTimelineticketTicket;
-  }
-
-  public SessionActiveProfileRights pluginUseditemsexportExport(@jakarta.annotation.Nullable Integer pluginUseditemsexportExport) {
-    
-    this.pluginUseditemsexportExport = pluginUseditemsexportExport;
-    return this;
-  }
-
-  /**
-   * Get pluginUseditemsexportExport
-   * @return pluginUseditemsexportExport
-   */
-  @jakarta.annotation.Nullable
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_USEDITEMSEXPORT_EXPORT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-
-  public Integer getPluginUseditemsexportExport() {
-    return pluginUseditemsexportExport;
-  }
-
-
-  @JsonProperty(value = JSON_PROPERTY_PLUGIN_USEDITEMSEXPORT_EXPORT, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setPluginUseditemsexportExport(@jakarta.annotation.Nullable Integer pluginUseditemsexportExport) {
-    this.pluginUseditemsexportExport = pluginUseditemsexportExport;
-  }
-
   public SessionActiveProfileRights printer(@jakarta.annotation.Nullable PrinterEnum printer) {
     
     this.printer = printer;
@@ -6342,7 +6093,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Printers rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Printers rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return printer
    */
   @jakarta.annotation.Nullable
@@ -6367,7 +6118,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Problems rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: See All
+   * Problems rights. Possible values: - 1: See (author) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: See all
    * @return problem
    */
   @jakarta.annotation.Nullable
@@ -6417,7 +6168,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Projects rights. Possible values: - 1: See (Actor) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: See All
+   * Projects rights. Possible values: - 1: See (actor) - 2: Update - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: See all
    * @return project
    */
   @jakarta.annotation.Nullable
@@ -6442,7 +6193,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Project Tasks rights. Possible values: - 1: See (Actor) - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 1024: Update (Actor)
+   * Project tasks rights. Possible values: - 1: See (actor) - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 1024: Update (actor)
    * @return projecttask
    */
   @jakarta.annotation.Nullable
@@ -6492,7 +6243,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Recurring changes rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Recurrent changes rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return recurrentchange
    */
   @jakarta.annotation.Nullable
@@ -6542,7 +6293,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Public Reminders rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
+   * Public reminders rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
    * @return reminderPublic
    */
   @jakarta.annotation.Nullable
@@ -6592,7 +6343,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Reservable Items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Make a Reservation
+   * Reservable items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Make a reservation
    * @return reservation
    */
   @jakarta.annotation.Nullable
@@ -6617,7 +6368,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Public RSS Feeds rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
+   * Public RSS feeds rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 128: Manage personal
    * @return rssfeedPublic
    */
   @jakarta.annotation.Nullable
@@ -6642,7 +6393,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Business Rules for Assets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for assets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    * @return ruleAsset
    */
   @jakarta.annotation.Nullable
@@ -6667,7 +6418,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Business Rules for Changes (Entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for changes (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    * @return ruleChange
    */
   @jakarta.annotation.Nullable
@@ -6692,7 +6443,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Dropdowns Dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Dropdowns dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return ruleDictionnaryDropdown
    */
   @jakarta.annotation.Nullable
@@ -6742,7 +6493,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Software Dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Software dictionary rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return ruleDictionnarySoftware
    */
   @jakarta.annotation.Nullable
@@ -6842,7 +6593,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Rules for assigning a ticket created through an email receiver rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Rules for assigning a ticket created through a mails receiver rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return ruleMailcollector
    */
   @jakarta.annotation.Nullable
@@ -6867,7 +6618,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Business rules for problems (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for problems (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    * @return ruleProblem
    */
   @jakarta.annotation.Nullable
@@ -6917,7 +6668,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Business Rules for Tickets (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent Business
+   * Business rules for tickets (entity) rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge - 1024: Parent business
    * @return ruleTicket
    */
   @jakarta.annotation.Nullable
@@ -6942,7 +6693,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Search Result Display rights. Possible values: - 1024: User Display - 2048: Default Display
+   * Search result display rights. Possible values: - 1024: User display - 2048: Default display
    * @return searchConfig
    */
   @jakarta.annotation.Nullable
@@ -7017,7 +6768,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * SNMP Credentials rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
+   * SNMP credentials rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge
    * @return snmpcredential
    */
   @jakarta.annotation.Nullable
@@ -7042,7 +6793,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Software rights. Possible values: - 1: View all - 2: Update All - 4: Create - 8: Delete - 16: Purge - 32: Read Notes - 64: Update Notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
+   * Software rights. Possible values: - 1: View all - 2: Update all - 4: Create - 8: Delete - 16: Purge - 32: Read notes - 64: Update notes - 256: View assigned - 512: Update assigned - 1024: View owned - 2048: Update owned
    * @return software
    */
   @jakarta.annotation.Nullable
@@ -7067,7 +6818,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Solution Templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Solution templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return solutiontemplate
    */
   @jakarta.annotation.Nullable
@@ -7092,7 +6843,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Status of Items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Statuses of items rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return state
    */
   @jakarta.annotation.Nullable
@@ -7142,7 +6893,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * System Logs rights. Possible values: - 1: Read
+   * System logs rights. Possible values: - 1: Read
    * @return systemLogs
    */
   @jakarta.annotation.Nullable
@@ -7167,7 +6918,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Ticket Tasks rights. Possible values: - 1: See Public Ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update All - 2048: Add (associated groups) - 4096: Add to all items - 8192: See Private Ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
+   * Ticket tasks rights. Possible values: - 1: See public ones - 2: Update (author) - 4: Add (requester) - 16: Purge - 1024: Update all - 2048: Add (associated groups) - 4096: Add to all items - 8192: See private ones - 16384: Add (observer) - 32768: Add (technician) - 65536: See private of my groups
    * @return task
    */
   @jakarta.annotation.Nullable
@@ -7192,7 +6943,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Task Categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Task categories rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return taskcategory
    */
   @jakarta.annotation.Nullable
@@ -7217,7 +6968,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Task Templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Task templates rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return tasktemplate
    */
   @jakarta.annotation.Nullable
@@ -7242,7 +6993,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Tickets rights. Possible values: - 1: See My Ticket - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: See All Tickets - 2048: See Group Ticket - 4096: See Assigned - 8192: Assign - 16384: Steal - 32768: Be in charge - 65536: Change the Priority - 131072: Approve solution/Reply survey (my ticket) - 262144: View new tickets
+   * Tickets rights. Possible values: - 1: See my ticket - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: See all tickets - 2048: See group ticket - 4096: See assigned - 8192: Assign - 16384: Steal - 32768: Be in charge - 65536: Change the priority - 131072: Approve solution/Reply survey (my ticket) - 262144: View new tickets
    * @return ticket
    */
   @jakarta.annotation.Nullable
@@ -7292,7 +7043,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Recurring tickets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Recurrent tickets rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return ticketrecurrent
    */
   @jakarta.annotation.Nullable
@@ -7317,7 +7068,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Ticket approvals rights. Possible values: - 16: Purge - 1024: Create for Request - 2048: Create for Incident - 4096: Approve a request - 8192: Approve an incident
+   * Ticket approvals rights. Possible values: - 16: Purge - 1024: Create for request - 2048: Create for incident - 4096: Approve a request - 8192: Approve an incident
    * @return ticketvalidation
    */
   @jakarta.annotation.Nullable
@@ -7367,7 +7118,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Document Types rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
+   * Document types rights. Possible values: - 1: Read - 2: Update - 4: Create - 16: Purge
    * @return typedoc
    */
   @jakarta.annotation.Nullable
@@ -7417,7 +7168,7 @@ public class SessionActiveProfileRights {
   }
 
   /**
-   * Users rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: Add External - 2048: Read Auth - 4096: Update auth, sync and 2FA - 8192: Impersonate
+   * Users rights. Possible values: - 1: Read - 2: Update - 4: Create - 8: Delete - 16: Purge - 1024: Add external - 2048: Read auth - 4096: Update auth, sync and 2FA - 8192: Impersonate
    * @return user
    */
   @jakarta.annotation.Nullable
@@ -7464,9 +7215,7 @@ public class SessionActiveProfileRights {
         Objects.equals(this.contract, sessionActiveProfileRights.contract) &&
         Objects.equals(this.dashboard, sessionActiveProfileRights.dashboard) &&
         Objects.equals(this.database, sessionActiveProfileRights.database) &&
-        Objects.equals(this.databaseinstance, sessionActiveProfileRights.databaseinstance) &&
         Objects.equals(this.datacenter, sessionActiveProfileRights.datacenter) &&
-        Objects.equals(this.defaultfilter, sessionActiveProfileRights.defaultfilter) &&
         Objects.equals(this.device, sessionActiveProfileRights.device) &&
         Objects.equals(this.devicesimcardPinpuk, sessionActiveProfileRights.devicesimcardPinpuk) &&
         Objects.equals(this.document, sessionActiveProfileRights.document) &&
@@ -7504,11 +7253,6 @@ public class SessionActiveProfileRights {
         Objects.equals(this.personalization, sessionActiveProfileRights.personalization) &&
         Objects.equals(this.phone, sessionActiveProfileRights.phone) &&
         Objects.equals(this.planning, sessionActiveProfileRights.planning) &&
-        Objects.equals(this.pluginPdf, sessionActiveProfileRights.pluginPdf) &&
-        Objects.equals(this.pluginSatisfaction, sessionActiveProfileRights.pluginSatisfaction) &&
-        Objects.equals(this.pluginTagTag, sessionActiveProfileRights.pluginTagTag) &&
-        Objects.equals(this.pluginTimelineticketTicket, sessionActiveProfileRights.pluginTimelineticketTicket) &&
-        Objects.equals(this.pluginUseditemsexportExport, sessionActiveProfileRights.pluginUseditemsexportExport) &&
         Objects.equals(this.printer, sessionActiveProfileRights.printer) &&
         Objects.equals(this.problem, sessionActiveProfileRights.problem) &&
         Objects.equals(this.profile, sessionActiveProfileRights.profile) &&
@@ -7557,7 +7301,7 @@ public class SessionActiveProfileRights {
 
   @Override
   public int hashCode() {
-    return Objects.hash(agent, appliance, backup, bookmarkPublic, budget, cableManagement, calendar, cartridge, certificate, change, changevalidation, cluster, computer, config, consumable, contactEnterprise, contract, dashboard, database, databaseinstance, datacenter, defaultfilter, device, devicesimcardPinpuk, document, domain, dropdown, entity, externalevent, followup, form, globalValidation, group, infocom, internet, inventory, itilcategory, itilfollowuptemplate, itiltemplate, itilvalidationtemplate, knowbase, knowbasecategory, license, line, lineoperator, link, location, lockedField, logs, monitor, networking, notification, oauthClient, passwordUpdate, pendingreason, peripheral, personalization, phone, planning, pluginPdf, pluginSatisfaction, pluginTagTag, pluginTimelineticketTicket, pluginUseditemsexportExport, printer, problem, profile, project, projecttask, queuednotification, recurrentchange, refusedequipment, reminderPublic, reports, reservation, rssfeedPublic, ruleAsset, ruleChange, ruleDictionnaryDropdown, ruleDictionnaryPrinter, ruleDictionnarySoftware, ruleImport, ruleLdap, ruleLocation, ruleMailcollector, ruleProblem, ruleSoftwarecategories, ruleTicket, searchConfig, showGroupHardware, slm, snmpcredential, software, solutiontemplate, state, statistic, systemLogs, task, taskcategory, tasktemplate, ticket, ticketcost, ticketrecurrent, ticketvalidation, transfer, typedoc, unmanaged, user);
+    return Objects.hash(agent, appliance, backup, bookmarkPublic, budget, cableManagement, calendar, cartridge, certificate, change, changevalidation, cluster, computer, config, consumable, contactEnterprise, contract, dashboard, database, datacenter, device, devicesimcardPinpuk, document, domain, dropdown, entity, externalevent, followup, form, globalValidation, group, infocom, internet, inventory, itilcategory, itilfollowuptemplate, itiltemplate, itilvalidationtemplate, knowbase, knowbasecategory, license, line, lineoperator, link, location, lockedField, logs, monitor, networking, notification, oauthClient, passwordUpdate, pendingreason, peripheral, personalization, phone, planning, printer, problem, profile, project, projecttask, queuednotification, recurrentchange, refusedequipment, reminderPublic, reports, reservation, rssfeedPublic, ruleAsset, ruleChange, ruleDictionnaryDropdown, ruleDictionnaryPrinter, ruleDictionnarySoftware, ruleImport, ruleLdap, ruleLocation, ruleMailcollector, ruleProblem, ruleSoftwarecategories, ruleTicket, searchConfig, showGroupHardware, slm, snmpcredential, software, solutiontemplate, state, statistic, systemLogs, task, taskcategory, tasktemplate, ticket, ticketcost, ticketrecurrent, ticketvalidation, transfer, typedoc, unmanaged, user);
   }
 
   @Override
@@ -7583,9 +7327,7 @@ public class SessionActiveProfileRights {
     sb.append("    contract: ").append(toIndentedString(contract)).append("\n");
     sb.append("    dashboard: ").append(toIndentedString(dashboard)).append("\n");
     sb.append("    database: ").append(toIndentedString(database)).append("\n");
-    sb.append("    databaseinstance: ").append(toIndentedString(databaseinstance)).append("\n");
     sb.append("    datacenter: ").append(toIndentedString(datacenter)).append("\n");
-    sb.append("    defaultfilter: ").append(toIndentedString(defaultfilter)).append("\n");
     sb.append("    device: ").append(toIndentedString(device)).append("\n");
     sb.append("    devicesimcardPinpuk: ").append(toIndentedString(devicesimcardPinpuk)).append("\n");
     sb.append("    document: ").append(toIndentedString(document)).append("\n");
@@ -7623,11 +7365,6 @@ public class SessionActiveProfileRights {
     sb.append("    personalization: ").append(toIndentedString(personalization)).append("\n");
     sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
     sb.append("    planning: ").append(toIndentedString(planning)).append("\n");
-    sb.append("    pluginPdf: ").append(toIndentedString(pluginPdf)).append("\n");
-    sb.append("    pluginSatisfaction: ").append(toIndentedString(pluginSatisfaction)).append("\n");
-    sb.append("    pluginTagTag: ").append(toIndentedString(pluginTagTag)).append("\n");
-    sb.append("    pluginTimelineticketTicket: ").append(toIndentedString(pluginTimelineticketTicket)).append("\n");
-    sb.append("    pluginUseditemsexportExport: ").append(toIndentedString(pluginUseditemsexportExport)).append("\n");
     sb.append("    printer: ").append(toIndentedString(printer)).append("\n");
     sb.append("    problem: ").append(toIndentedString(problem)).append("\n");
     sb.append("    profile: ").append(toIndentedString(profile)).append("\n");

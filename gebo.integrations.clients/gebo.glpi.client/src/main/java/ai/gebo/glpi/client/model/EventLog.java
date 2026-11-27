@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Event Log
+ * Event log
  */
 @JsonPropertyOrder({
   EventLog.JSON_PROPERTY_ID,

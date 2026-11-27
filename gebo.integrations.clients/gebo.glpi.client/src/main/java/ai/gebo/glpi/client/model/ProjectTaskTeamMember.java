@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Task Team
+ * Task team
  */
 @JsonPropertyOrder({
   ProjectTaskTeamMember.JSON_PROPERTY_ID,

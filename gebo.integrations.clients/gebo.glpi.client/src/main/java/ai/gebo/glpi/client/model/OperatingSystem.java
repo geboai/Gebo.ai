@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Operating System
+ * Operating system
  */
 @JsonPropertyOrder({
   OperatingSystem.JSON_PROPERTY_ID,

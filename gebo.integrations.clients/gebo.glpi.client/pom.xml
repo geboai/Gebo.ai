@@ -11,10 +11,13 @@
 	<description>GLPI 11 high-level API v2.3.0 (JSON spec) client, generated with OpenAPI Generator (java, restclient on Spring Boot 4 / Jackson 3).</description>
 	<properties>
 		<!-- Regenerate with: mvn -P generate-rest-api generate-sources
-		     (override the spec with -Dswagger.file=<url or path>) -->
+		     (override the spec with -Dswagger.file=<url>, file: urls included) -->
 		<!-- The profile downloads swagger.file and patches it here (see below) -->
 		<openapi.patched.spec>${project.build.directory}/openapi/spec.json</openapi.patched.spec>
-		<swagger.file>https://glpi.whitaker.company/api.php/v2.3.0/doc.json</swagger.file>
+		<!-- GLPI ships no static spec: each instance builds /api.php/v2.3.0/doc.json
+		     at runtime from its code and its plugins. This one is the doc.json of a
+		     plugin-free glpi/glpi:11.0.13 container, servers url set to localhost. -->
+		<swagger.file>file:${project.basedir}/api-spec/glpi-11.0.13-hlapi-2.3.0.json</swagger.file>
 	</properties>
 	<packaging>jar</packaging>
 	<dependencies>

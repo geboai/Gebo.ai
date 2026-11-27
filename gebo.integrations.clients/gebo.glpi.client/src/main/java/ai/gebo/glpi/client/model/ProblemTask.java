@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Problem Task
+ * Problem task
  */
 @JsonPropertyOrder({
   ProblemTask.JSON_PROPERTY_ID,

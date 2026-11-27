@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Power Supply item
+ * Power supply item
  */
 @JsonPropertyOrder({
   PowerSupplyItem.JSON_PROPERTY_ID,

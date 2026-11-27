@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Reservable Item
+ * Reservable item
  */
 @JsonPropertyOrder({
   ReservableItem.JSON_PROPERTY_ID,

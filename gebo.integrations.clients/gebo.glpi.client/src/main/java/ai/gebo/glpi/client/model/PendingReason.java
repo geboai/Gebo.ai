@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Pending Reason
+ * Pending reason
  */
 @JsonPropertyOrder({
   PendingReason.JSON_PROPERTY_ID,

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Blacklisted Mail Content
+ * Blacklisted mail content
  */
 @JsonPropertyOrder({
   DeniedMailContent.JSON_PROPERTY_ID,

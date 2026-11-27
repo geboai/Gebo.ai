@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Locked Field
+ * Locked field
  */
 @JsonPropertyOrder({
   LockedField.JSON_PROPERTY_ID,

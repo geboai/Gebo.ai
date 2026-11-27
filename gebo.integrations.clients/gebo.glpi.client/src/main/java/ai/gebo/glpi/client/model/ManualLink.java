@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Manual Link
+ * Manual link
  */
 @JsonPropertyOrder({
   ManualLink.JSON_PROPERTY_ID,

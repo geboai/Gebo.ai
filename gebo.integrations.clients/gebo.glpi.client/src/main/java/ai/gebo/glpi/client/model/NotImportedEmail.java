@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Refused Email
+ * Refused email
  */
 @JsonPropertyOrder({
   NotImportedEmail.JSON_PROPERTY_ID,

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Personal RSS Feed
+ * Personal RSS feed
  */
 @JsonPropertyOrder({
   RSSFeed.JSON_PROPERTY_ID,

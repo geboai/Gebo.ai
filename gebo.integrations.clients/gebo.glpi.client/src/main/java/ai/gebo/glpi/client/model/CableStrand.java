@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Cable Strand
+ * Cable strand
  */
 @JsonPropertyOrder({
   CableStrand.JSON_PROPERTY_ID,

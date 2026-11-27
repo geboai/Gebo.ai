@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Service Level
+ * Service level
  */
 @JsonPropertyOrder({
   SLM.JSON_PROPERTY_ID,

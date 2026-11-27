@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Alias Port
+ * Alias port
  */
 @JsonPropertyOrder({
   NetworkPortAlias.JSON_PROPERTY_ID,

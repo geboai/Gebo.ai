@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Socket Model
+ * Socket model
  */
 @JsonPropertyOrder({
   SocketModel.JSON_PROPERTY_ID,

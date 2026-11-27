@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Financial &amp; Administrative Information
+ * Financial and administrative information
  */
 @JsonPropertyOrder({
   Infocom.JSON_PROPERTY_ID,

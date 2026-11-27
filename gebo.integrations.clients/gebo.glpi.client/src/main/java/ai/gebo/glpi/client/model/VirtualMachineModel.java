@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Virtualization Model
+ * Virtualization model
  */
 @JsonPropertyOrder({
   VirtualMachineModel.JSON_PROPERTY_ID,

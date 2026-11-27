@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Notification Template
+ * Notification template
  */
 @JsonPropertyOrder({
   NotificationTemplate.JSON_PROPERTY_ID,

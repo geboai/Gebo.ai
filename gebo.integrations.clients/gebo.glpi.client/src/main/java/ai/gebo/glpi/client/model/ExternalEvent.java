@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * External Event
+ * External event
  */
 @JsonPropertyOrder({
   ExternalEvent.JSON_PROPERTY_ID,

@@ -30,7 +30,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Consumable Model
+ * Consumable model
  */
 @JsonPropertyOrder({
   ConsumableItem.JSON_PROPERTY_ID,

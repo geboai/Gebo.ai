@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Planning Reminder
+ * Planning reminder
  */
 @JsonPropertyOrder({
   PlanningReminder.JSON_PROPERTY_ID,
