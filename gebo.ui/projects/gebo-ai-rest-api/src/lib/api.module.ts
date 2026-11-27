@@ -128,6 +128,9 @@ import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openA
 import { OpenAiImageModelsConfigurationControllerService } from './api/openAiImageModelsConfigurationController.service';
 import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
+import { OpenProjectBrowsingControllerService } from './api/openProjectBrowsingController.service';
+import { OpenProjectSearchServiceControllerService } from './api/openProjectSearchServiceController.service';
+import { OpenProjectSystemsControllerService } from './api/openProjectSystemsController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { ProviderDealsControllerService } from './api/providerDealsController.service';
@@ -295,6 +298,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OpenAiImageModelsConfigurationControllerService,
     OpenAiTextToSpeechModelsConfigurationControllerService,
     OpenAiTranscriptModelsConfigurationControllerService,
+    OpenProjectBrowsingControllerService,
+    OpenProjectSearchServiceControllerService,
+    OpenProjectSystemsControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
     ProviderDealsControllerService,

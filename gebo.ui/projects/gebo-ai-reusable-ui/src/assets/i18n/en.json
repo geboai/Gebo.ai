@@ -581,6 +581,14 @@
       "AddressHeader": { "label": "GLPI address" },
       "EditBtn": { "label": "Edit system" }
     },
+    "OpenProjectWizardComponent": {
+      "MainPanel": { "label": "Setup company OpenProject systems" },
+      "OpenProjectSystemBtn": { "label": "OpenProject system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "BaseUriHeader": { "label": "Server address" },
+      "EditBtn": { "label": "Edit system" }
+    },
     "McpServerWizardComponent": {
       "McpAddBtn": { "label": "Add MCP Server" },
       "MainPanel": { "label": "Setup MCP Server Connections" },
@@ -5790,6 +5798,100 @@
         "label": "Password",
         "help": "Password of the GLPI user"
       }
+    }
+  },
+  "GeboAIOpenProjectModule": {
+    "GOpenProjectSystem": {
+      "MainPanel": { "label": "Editing OpenProject system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the OpenProject system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the OpenProject system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the OpenProject server without /api/v3, for example https://openproject.example.com. The API must be enabled in Administration, API and webhooks."
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "placeholder": "Select an identity",
+        "help": "The API key (token) of the OpenProject account Gebo.ai reads with. Gebo.ai sees what this account sees, internal comments included."
+      }
+    },
+    "GOpenProjectProjectEndpoint": {
+      "MainPanel": { "label": "Sharing OpenProject contents" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the OpenProject data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "placeholder": "Select a project",
+        "help": "Parent project reference."
+      },
+      "openProjectSystemCode": {
+        "label": "OpenProject system",
+        "placeholder": "Select an OpenProject server",
+        "help": "Already configured OpenProject system reference."
+      },
+      "tree": {
+        "label": "Selected OpenProject contents",
+        "help": "Projects, or their work packages, documents, meetings and news sections, single work packages (with their activity, attachments and children), documents, meetings and news"
+      },
+      "catalogingCriteria": {
+        "label": "Contents organization criteria",
+        "help": "Please explain here how the projects, work packages and documents shared with Gebo.ai are organized"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "openZips": {
+        "label": "Open zip attachments",
+        "help": "Read the documents inside zip attachments and files"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIOpenProjectSystemFastComponent": {
+      "MainPanel": { "label": "Create OpenProject system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the OpenProject system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the OpenProject server, without /api/v3 (e.g. https://openproject.example.com)"
+      },
+      "apiKey": {
+        "label": "API key",
+        "help": "API key of the OpenProject account Gebo.ai reads with: My account, Access tokens, API"
+      },
+      "VisibilityNote": { "label": "Gebo.ai reads what this account can see in OpenProject, internal comments included: use an account limited to the projects you want to share." }
     }
   },
   "GeboAIMcpClientAdminModule": {
