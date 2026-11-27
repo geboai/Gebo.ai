@@ -91,6 +91,27 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges, OnDes
      */
     private filledInputModalities?: string[];
 
+    /**
+     * What a saved configuration's model accepts as input, when the metadata stored with
+     * its chosen model predates them: resolved server side from that metadata, else the
+     * models library (ChatModelsController.getChatModelsInputs).
+     */
+    private loadSavedModelInputModalities(modelCode: string): void {
+        const code: string | undefined = this.formGroup?.controls["code"]?.value;
+        if (!code) return;
+        this.chatModelsController.getChatModelsInputs().subscribe({
+            next: (inputs) => {
+                const saved = (inputs ?? []).find(i => i.code === code && i.modelCode === modelCode);
+                const current = this.formGroup?.controls["choosedModel"]?.value;
+                if (!saved?.metadataInputModalities?.length || current?.code !== modelCode || this.modelInputModalities) return;
+                this.modelInputModalities = [...saved.metadataInputModalities];
+                this.fillInputModalitiesFromMetadata();
+                this.changeDetector.markForCheck();
+            },
+            error: () => { }
+        });
+    }
+
     /** Whether the form holds the modalities the chosen model's metadata filled in. */
     protected get inputModalitiesFromMetadata(): boolean {
         const control = this.formGroup?.controls["inputModalities"];
@@ -270,6 +291,9 @@ export class GeboAIStandardChatModelSettings implements OnInit, OnChanges, OnDes
         const meta: any = choosed?.metaInfos;
         this.modelInputModalities = meta?.inputModalities?.length ? [...meta.inputModalities]
             : meta?.supportsVision === true ? ["TEXT", "IMAGE"] : meta?.supportsVision === false ? ["TEXT"] : undefined;
+        if (!this.modelInputModalities && choosed?.code) {
+            this.loadSavedModelInputModalities(choosed.code);
+        }
         // after the patch the chosen model came with: a form loading a configuration sets
         // its other controls, the modalities among them, in the same patch
         queueMicrotask(() => {
