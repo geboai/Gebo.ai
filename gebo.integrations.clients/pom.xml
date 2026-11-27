@@ -10,6 +10,15 @@
 	<groupId>ai.gebo.integrations.clients</groupId>
 	<artifactId>gebo.integrations.clients.parent</artifactId>
 	<packaging>pom</packaging>
+	<properties>
+		<!-- OpenAPI Generator for the ticketing systems clients: java generator,
+		     restclient library on Spring Boot 4 / Jackson 3 (Spring Framework 7
+		     RestClient, the successor of RestTemplate, and tools.jackson JsonMapper).
+		     The plugin runs only in each module's generate-rest-api profile: the
+		     generated sources are versioned, so a normal build never reaches the
+		     remote specs. -->
+		<openapi-generator.version>7.28.0</openapi-generator.version>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>ai.gebo.architecture</groupId>
@@ -25,5 +34,43 @@
 		<module>gebo.atlassian.jira.cloud.client</module>
 		<module>gebo.ranker.api</module>
 		<module>gebo.openrouter.ai.client</module>
+		<module>gebo.openproject.client</module>
+		<module>gebo.glpi.client</module>
+		<module>gebo.gitlab.client</module>
+		<module>gebo.redmine.client</module>
+		<module>gebo.zammad.client</module>
 	</modules>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- Settings shared by every restclient client; each module's
+				     generate-rest-api profile adds its spec and its packages. -->
+				<plugin>
+					<groupId>org.openapitools</groupId>
+					<artifactId>openapi-generator-maven-plugin</artifactId>
+					<version>${openapi-generator.version}</version>
+					<configuration>
+						<generatorName>java</generatorName>
+						<library>restclient</library>
+						<output>${project.basedir}</output>
+						<generateApiTests>false</generateApiTests>
+						<generateModelTests>false</generateModelTests>
+						<generateApiDocumentation>false</generateApiDocumentation>
+						<generateModelDocumentation>false</generateModelDocumentation>
+						<configOptions>
+							<sourceFolder>src/main/java</sourceFolder>
+							<dateLibrary>java8</dateLibrary>
+							<useJakartaEe>true</useJakartaEe>
+							<useSpringBoot4>true</useSpringBoot4>
+							<useJackson3>true</useJackson3>
+							<openApiNullable>false</openApiNullable>
+							<annotationLibrary>none</annotationLibrary>
+							<documentationProvider>none</documentationProvider>
+							<hideGenerationTimestamp>true</hideGenerationTimestamp>
+						</configOptions>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

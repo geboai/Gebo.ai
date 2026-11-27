@@ -1,0 +1,98 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>ai.gebo.integrations.clients</groupId>
+		<artifactId>gebo.integrations.clients.parent</artifactId>
+		<version>1.0.7.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>gebo.openproject.client</artifactId>
+	<description>OpenProject API v3 (JSON spec) client, generated with OpenAPI Generator (java, restclient on Spring Boot 4 / Jackson 3).</description>
+	<properties>
+		<!-- Regenerate with: mvn -P generate-rest-api generate-sources
+		     (override the spec with -Dswagger.file=<url or path>) -->
+		<!-- The profile downloads swagger.file and patches it here (see below) -->
+		<openapi.patched.spec>${project.build.directory}/openapi/spec.json</openapi.patched.spec>
+		<swagger.file>https://community.openproject.org/api/v3/spec.json</swagger.file>
+	</properties>
+	<packaging>jar</packaging>
+	<dependencies>
+		<!-- Spring Framework 7 RestClient and Jackson 3 (versions from Spring Boot) -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>jakarta.annotation</groupId>
+			<artifactId>jakarta.annotation-api</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>generate-rest-api</id>
+			<build>
+				<plugins>
+					<!-- The spec declares OpenAPI 3.2.0, which swagger-parser 2.1.49 cannot read yet; 3.2
+					     only adds to 3.1, so the downloaded copy is relabelled 3.1.0 before generation.
+					     Drop this step once the generator parses 3.2. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>download-and-relabel-spec</id>
+								<phase>initialize</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<mkdir dir="${project.build.directory}/openapi" />
+										<get src="${swagger.file}" dest="${openapi.patched.spec}" />
+										<replaceregexp file="${openapi.patched.spec}" match="^\{&quot;openapi&quot;:&quot;3\.2\.0&quot;" replace="{&quot;openapi&quot;:&quot;3.1.0&quot;" flags="g" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>generate-openproject-client</id>
+								<phase>generate-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>${openapi.patched.spec}</inputSpec>
+									<modelPackage>ai.gebo.openproject.client.model</modelPackage>
+									<apiPackage>ai.gebo.openproject.client.api</apiPackage>
+									<invokerPackage>ai.gebo.openproject.client.invoker</invokerPackage>
+									<!-- HAL resources carry both `_type` and `type` (e.g. Relation):
+									     both would become the Java property `type`. -->
+									<nameMappings>_type=halType</nameMappings>
+									<!-- The spec declares OpenAPI 3.2.0, newer than the parser's
+									     validator: it reports thousands of false errors (every
+									     parameter schema "unexpected"), the generation itself works. -->
+									<skipValidateSpec>true</skipValidateSpec>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

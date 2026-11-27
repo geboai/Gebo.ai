@@ -1,0 +1,605 @@
+/*
+ * OpenProject API V3 (Stable)
+ * You're looking at the current **stable** documentation of the OpenProject APIv3. If you're interested in the current development version, please go to [github.com/opf](https://github.com/opf/openproject/tree/dev/docs/api/apiv3).  ## Introduction  The documentation for the APIv3 is written according to the [OpenAPI 3.1 Specification](https://swagger.io/specification/). You can either view the static version of this documentation on the [website](https://www.openproject.org/docs/api/introduction/) or the interactive version, rendered with [OpenAPI Explorer](https://github.com/Rhosys/openapi-explorer/blob/main/README.md), in your OpenProject installation under `/api/docs`. In the latter you can try out the various API endpoints directly interacting with our OpenProject data. Moreover you can access the specification source itself under `/api/v3/spec.json` and `/api/v3/spec.yml` (e.g. [here](https://community.openproject.org/api/v3/spec.yml)).  The APIv3 is a hypermedia REST API, a shorthand for \"Hypermedia As The Engine Of Application State\" (HATEOAS). This means that each endpoint of this API will have links to other resources or actions defined in the resulting body.  These related resources and actions for any given resource will be context sensitive. For example, only actions that the authenticated user can take are being rendered. This can be used to dynamically identify actions that the user might take for any given response.  As an example, if you fetch a work package through the [Work Package endpoint](https://www.openproject.org/docs/api/endpoints/work-packages/), the `update` link will only be present when the user you authenticated has been granted a permission to update the work package in the assigned project.  ## HAL+JSON  HAL is a simple format that gives a consistent and easy way to hyperlink between resources in your API. Read more in the following specification: [https://tools.ietf.org/html/draft-kelly-json-hal-08](https://tools.ietf.org/html/draft-kelly-json-hal-08)  **OpenProject API implementation of HAL+JSON format** enriches JSON and introduces a few meta properties:  - `_type` - specifies the type of the resource (e.g.: WorkPackage, Project) - `_links` - contains all related resource and action links available for the resource - `_embedded` - contains all embedded objects  HAL does not guarantee that embedded resources are embedded in their full representation, they might as well be partially represented (e.g. some properties can be left out). However in this API you have the guarantee that whenever a resource is **embedded**, it is embedded in its **full representation**.  ## API response structure  All API responses contain a single HAL+JSON object, even collections of objects are technically represented by a single HAL+JSON object that itself contains its members. More details on collections can be found in the [Collections Section](https://www.openproject.org/docs/api/collections/).  ## Authentication  The API supports the following authentication schemes:  * Session-based authentication * API tokens     * passed as Bearer token     * passed via Basic auth * OAuth 2.0     * using built-in authorization server     * using an external authorization server (RFC 9068)  Depending on the settings of the OpenProject instance many resources can be accessed without being authenticated. In case the instance requires authentication on all requests the client will receive an **HTTP 401** status code in response to any request.  Otherwise unauthenticated clients have all the permissions of the anonymous user.  ### Session-based authentication  This means you have to login to OpenProject via the Web-Interface to be authenticated in the API. This method is well-suited for clients acting within the browser, like the Angular-Client built into OpenProject.  Keep in mind that session-based authentication is only possible when accessing the API from the same origin. This is assured by checking the `Sec-Fetch-Site` HTTP header.  ### API token as bearer token  Users can authenticate towards the API v3 using an API token as a bearer token.  For example:  ```shell API_KEY=opapi-2519132cdf62dcf5a66fd96394672079f9e9cad1 curl -H \"Authorization: Bearer $API_KEY\" https://community.openproject.org/api/v3/users/42 ```  Users can generate API tokens on their account page.  ### API token through Basic Auth  API tokens can also be used with basic auth, using the user name `apikey` (NOT your login) and the API token as the password.  For example:  ```shell API_KEY=opapi-2519132cdf62dcf5a66fd96394672079f9e9cad1 curl -u apikey:$API_KEY https://community.openproject.org/api/v3/users/42 ```  ### OAuth 2.0 authentication  OpenProject allows authentication and authorization with OAuth2 with *Authorization code flow*, as well as *Client credentials* operation modes.  To get started, you first need to register an application in the OpenProject OAuth administration section of your installation. This will save an entry for your application with a client unique identifier (`client_id`) and an accompanying secret key (`client_secret`).  You can then use one the following guides to perform the supported OAuth 2.0 flows:  - [Authorization code flow](https://oauth.net/2/grant-types/authorization-code)  - [Authorization code flow with PKCE](https://doorkeeper.gitbook.io/guides/ruby-on-rails/pkce-flow), recommended for clients unable to keep the client_secret confidential  - [Client credentials](https://oauth.net/2/grant-types/client-credentials/) - Requires an application to be bound to an impersonating user for non-public access  ### OAuth 2.0 using an external authorization server  There is a possibility to use JSON Web Tokens (JWT) generated by an OIDC provider configured in OpenProject as a bearer token to do authenticated requests against the API. The following requirements must be met:  - OIDC provider must be configured in OpenProject with **jwks_uri** - JWT must be signed using RSA algorithm - JWT **iss** claim must be equal to OIDC provider **issuer** - JWT **aud** claim must contain the OpenProject **client ID** used at the OIDC provider - JWT **scope** claim must include a valid scope to access the desired API (e.g. `api_v3` for APIv3) - JWT must be actual (neither expired or too early to be used) - JWT must be passed in Authorization header like: `Authorization: Bearer {jwt}` - User from **sub** claim must be linked to OpenProject before (e.g. by logging in), otherwise it will be not authenticated  In more general terms, OpenProject should be compliant to [RFC 9068](https://www.rfc-editor.org/rfc/rfc9068) when validating access tokens.  ### Why not username and password?  The simplest way to do basic auth would be to use a user's username and password naturally. However, OpenProject already has supported API keys in the past for the API v2, though not through basic auth.  Using **username and password** directly would have some advantages:  * It is intuitive for the user who then just has to provide those just as they would when logging into OpenProject.  * No extra logic for token management necessary.  On the other hand using **API keys** has some advantages too, which is why we went for that:  * If compromised while saved on an insecure client the user only has to regenerate the API key instead of changing their password, too.  * They are naturally long and random which makes them invulnerable to dictionary attacks and harder to crack in general.  Most importantly users may not actually have a password to begin with. Specifically when they have registered through an OpenID Connect provider.  ## Cross-Origin Resource Sharing (CORS)  By default, the OpenProject API is _not_ responding with any CORS headers. If you want to allow cross-domain AJAX calls against your OpenProject instance, you need to enable CORS headers being returned.  Please see [our API settings documentation](https://www.openproject.org/docs/system-admin-guide/api-and-webhooks/) on how to selectively enable CORS.  ## Allowed HTTP methods  - `GET` - Get a single resource or collection of resources  - `POST` - Create a new resource or perform  - `PATCH` - Update a resource  - `DELETE` - Delete a resource  ## Compression  Responses are compressed if requested by the client. Currently [gzip](https://www.gzip.org/) and [deflate](https://tools.ietf.org/html/rfc1951) are supported. The client signals the desired compression by setting the [`Accept-Encoding` header](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.3). If no `Accept-Encoding` header is send, `Accept-Encoding: identity` is assumed which will result in the API responding uncompressed.
+ *
+ * The version of the OpenAPI document: 3
+ * 
+ *
+ * NOTE: This class is auto generated by OpenAPI Generator (https://openapi-generator.tech).
+ * https://openapi-generator.tech
+ * Do not edit the class manually.
+ */
+
+
+package ai.gebo.openproject.client.model;
+
+import java.util.Objects;
+import java.util.Arrays;
+import ai.gebo.openproject.client.model.SchemaPropertyModel;
+import ai.gebo.openproject.client.model.WorkspacesSchemaModelAttributeGroupsInner;
+import ai.gebo.openproject.client.model.WorkspacesSchemaModelLinks;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+/**
+ * A schema for a workspace. This schema defines the attributes of a workspace.
+ */
+@JsonPropertyOrder({
+  WorkspacesSchemaModel.JSON_PROPERTY_HAL_TYPE,
+  WorkspacesSchemaModel.JSON_PROPERTY_DEPENDENCIES,
+  WorkspacesSchemaModel.JSON_PROPERTY_ATTRIBUTE_GROUPS,
+  WorkspacesSchemaModel.JSON_PROPERTY_ID,
+  WorkspacesSchemaModel.JSON_PROPERTY_NAME,
+  WorkspacesSchemaModel.JSON_PROPERTY_IDENTIFIER,
+  WorkspacesSchemaModel.JSON_PROPERTY_DESCRIPTION,
+  WorkspacesSchemaModel.JSON_PROPERTY_PUBLIC,
+  WorkspacesSchemaModel.JSON_PROPERTY_ACTIVE,
+  WorkspacesSchemaModel.JSON_PROPERTY_STATUS,
+  WorkspacesSchemaModel.JSON_PROPERTY_STATUS_EXPLANATION,
+  WorkspacesSchemaModel.JSON_PROPERTY_PARENT,
+  WorkspacesSchemaModel.JSON_PROPERTY_CREATED_AT,
+  WorkspacesSchemaModel.JSON_PROPERTY_UPDATED_AT,
+  WorkspacesSchemaModel.JSON_PROPERTY_LINKS
+})
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.28.0")
+public class WorkspacesSchemaModel {
+  /**
+   * The type identifier for this resource
+   */
+  public enum HalTypeEnum {
+    SCHEMA(String.valueOf("Schema"));
+
+    private String value;
+
+    HalTypeEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static HalTypeEnum fromValue(String value) {
+      for (HalTypeEnum b : HalTypeEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  public static final String JSON_PROPERTY_HAL_TYPE = "_type";
+  @jakarta.annotation.Nullable
+  private HalTypeEnum halType;
+
+  public static final String JSON_PROPERTY_DEPENDENCIES = "_dependencies";
+  @jakarta.annotation.Nullable
+  private List<Object> dependencies = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_ATTRIBUTE_GROUPS = "_attributeGroups";
+  @jakarta.annotation.Nullable
+  private List<WorkspacesSchemaModelAttributeGroupsInner> attributeGroups = new ArrayList<>();
+
+  public static final String JSON_PROPERTY_ID = "id";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel id;
+
+  public static final String JSON_PROPERTY_NAME = "name";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel name;
+
+  public static final String JSON_PROPERTY_IDENTIFIER = "identifier";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel identifier;
+
+  public static final String JSON_PROPERTY_DESCRIPTION = "description";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel description;
+
+  public static final String JSON_PROPERTY_PUBLIC = "public";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel _public;
+
+  public static final String JSON_PROPERTY_ACTIVE = "active";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel active;
+
+  public static final String JSON_PROPERTY_STATUS = "status";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel status;
+
+  public static final String JSON_PROPERTY_STATUS_EXPLANATION = "statusExplanation";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel statusExplanation;
+
+  public static final String JSON_PROPERTY_PARENT = "parent";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel parent;
+
+  public static final String JSON_PROPERTY_CREATED_AT = "createdAt";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel createdAt;
+
+  public static final String JSON_PROPERTY_UPDATED_AT = "updatedAt";
+  @jakarta.annotation.Nullable
+  private SchemaPropertyModel updatedAt;
+
+  public static final String JSON_PROPERTY_LINKS = "_links";
+  @jakarta.annotation.Nullable
+  private WorkspacesSchemaModelLinks links;
+
+  public WorkspacesSchemaModel() {
+  }
+
+  public WorkspacesSchemaModel halType(@jakarta.annotation.Nullable HalTypeEnum halType) {
+    
+    this.halType = halType;
+    return this;
+  }
+
+  /**
+   * The type identifier for this resource
+   * @return halType
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_HAL_TYPE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public HalTypeEnum getHalType() {
+    return halType;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_HAL_TYPE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setHalType(@jakarta.annotation.Nullable HalTypeEnum halType) {
+    this.halType = halType;
+  }
+
+  public WorkspacesSchemaModel dependencies(@jakarta.annotation.Nullable List<Object> dependencies) {
+    
+    this.dependencies = dependencies;
+    return this;
+  }
+
+  public WorkspacesSchemaModel addDependenciesItem(Object dependenciesItem) {
+    if (this.dependencies == null) {
+      this.dependencies = new ArrayList<>();
+    }
+    this.dependencies.add(dependenciesItem);
+    return this;
+  }
+
+  /**
+   * Schema dependencies (currently empty for workspaces)
+   * @return dependencies
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_DEPENDENCIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<Object> getDependencies() {
+    return dependencies;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_DEPENDENCIES, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDependencies(@jakarta.annotation.Nullable List<Object> dependencies) {
+    this.dependencies = dependencies;
+  }
+
+  public WorkspacesSchemaModel attributeGroups(@jakarta.annotation.Nullable List<WorkspacesSchemaModelAttributeGroupsInner> attributeGroups) {
+    
+    this.attributeGroups = attributeGroups;
+    return this;
+  }
+
+  public WorkspacesSchemaModel addAttributeGroupsItem(WorkspacesSchemaModelAttributeGroupsInner attributeGroupsItem) {
+    if (this.attributeGroups == null) {
+      this.attributeGroups = new ArrayList<>();
+    }
+    this.attributeGroups.add(attributeGroupsItem);
+    return this;
+  }
+
+  /**
+   * Defines the organizational structure of project custom fields into sections for UI rendering.  Each attribute group represents a project attribute section containing related project attributes. The sections determine how project attributes are visually organized and grouped in forms.  **Key behaviors:** - Admin-only project attributes appear only for users with admin privileges - Empty sections (with no accessible project attributes) are omitted from the response - The order reflects the configured section positioning in admin settings - Each section contains only project attributes assigned to that specific section  **Example structure:** &#x60;&#x60;&#x60;json [   {     \&quot;_type\&quot;: \&quot;ProjectFormCustomFieldSection\&quot;,     \&quot;name\&quot;: \&quot;Project Details\&quot;,     \&quot;attributes\&quot;: [\&quot;customField1\&quot;, \&quot;customField3\&quot;]   },   {     \&quot;_type\&quot;: \&quot;ProjectFormCustomFieldSection\&quot;,     \&quot;name\&quot;: \&quot;Budget Information\&quot;,     \&quot;attributes\&quot;: [\&quot;customField2\&quot;, \&quot;customField4\&quot;]   } ] &#x60;&#x60;&#x60;
+   * @return attributeGroups
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ATTRIBUTE_GROUPS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public List<WorkspacesSchemaModelAttributeGroupsInner> getAttributeGroups() {
+    return attributeGroups;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ATTRIBUTE_GROUPS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setAttributeGroups(@jakarta.annotation.Nullable List<WorkspacesSchemaModelAttributeGroupsInner> attributeGroups) {
+    this.attributeGroups = attributeGroups;
+  }
+
+  public WorkspacesSchemaModel id(@jakarta.annotation.Nullable SchemaPropertyModel id) {
+    
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * Get id
+   * @return id
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getId() {
+    return id;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ID, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setId(@jakarta.annotation.Nullable SchemaPropertyModel id) {
+    this.id = id;
+  }
+
+  public WorkspacesSchemaModel name(@jakarta.annotation.Nullable SchemaPropertyModel name) {
+    
+    this.name = name;
+    return this;
+  }
+
+  /**
+   * Get name
+   * @return name
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getName() {
+    return name;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_NAME, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setName(@jakarta.annotation.Nullable SchemaPropertyModel name) {
+    this.name = name;
+  }
+
+  public WorkspacesSchemaModel identifier(@jakarta.annotation.Nullable SchemaPropertyModel identifier) {
+    
+    this.identifier = identifier;
+    return this;
+  }
+
+  /**
+   * Get identifier
+   * @return identifier
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_IDENTIFIER, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getIdentifier() {
+    return identifier;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_IDENTIFIER, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setIdentifier(@jakarta.annotation.Nullable SchemaPropertyModel identifier) {
+    this.identifier = identifier;
+  }
+
+  public WorkspacesSchemaModel description(@jakarta.annotation.Nullable SchemaPropertyModel description) {
+    
+    this.description = description;
+    return this;
+  }
+
+  /**
+   * Get description
+   * @return description
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_DESCRIPTION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getDescription() {
+    return description;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_DESCRIPTION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setDescription(@jakarta.annotation.Nullable SchemaPropertyModel description) {
+    this.description = description;
+  }
+
+  public WorkspacesSchemaModel _public(@jakarta.annotation.Nullable SchemaPropertyModel _public) {
+    
+    this._public = _public;
+    return this;
+  }
+
+  /**
+   * Get _public
+   * @return _public
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getPublic() {
+    return _public;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PUBLIC, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setPublic(@jakarta.annotation.Nullable SchemaPropertyModel _public) {
+    this._public = _public;
+  }
+
+  public WorkspacesSchemaModel active(@jakarta.annotation.Nullable SchemaPropertyModel active) {
+    
+    this.active = active;
+    return this;
+  }
+
+  /**
+   * Get active
+   * @return active
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_ACTIVE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getActive() {
+    return active;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_ACTIVE, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setActive(@jakarta.annotation.Nullable SchemaPropertyModel active) {
+    this.active = active;
+  }
+
+  public WorkspacesSchemaModel status(@jakarta.annotation.Nullable SchemaPropertyModel status) {
+    
+    this.status = status;
+    return this;
+  }
+
+  /**
+   * Get status
+   * @return status
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getStatus() {
+    return status;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_STATUS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatus(@jakarta.annotation.Nullable SchemaPropertyModel status) {
+    this.status = status;
+  }
+
+  public WorkspacesSchemaModel statusExplanation(@jakarta.annotation.Nullable SchemaPropertyModel statusExplanation) {
+    
+    this.statusExplanation = statusExplanation;
+    return this;
+  }
+
+  /**
+   * Get statusExplanation
+   * @return statusExplanation
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_STATUS_EXPLANATION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getStatusExplanation() {
+    return statusExplanation;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_STATUS_EXPLANATION, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setStatusExplanation(@jakarta.annotation.Nullable SchemaPropertyModel statusExplanation) {
+    this.statusExplanation = statusExplanation;
+  }
+
+  public WorkspacesSchemaModel parent(@jakarta.annotation.Nullable SchemaPropertyModel parent) {
+    
+    this.parent = parent;
+    return this;
+  }
+
+  /**
+   * Get parent
+   * @return parent
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_PARENT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getParent() {
+    return parent;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_PARENT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setParent(@jakarta.annotation.Nullable SchemaPropertyModel parent) {
+    this.parent = parent;
+  }
+
+  public WorkspacesSchemaModel createdAt(@jakarta.annotation.Nullable SchemaPropertyModel createdAt) {
+    
+    this.createdAt = createdAt;
+    return this;
+  }
+
+  /**
+   * Get createdAt
+   * @return createdAt
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getCreatedAt() {
+    return createdAt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_CREATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setCreatedAt(@jakarta.annotation.Nullable SchemaPropertyModel createdAt) {
+    this.createdAt = createdAt;
+  }
+
+  public WorkspacesSchemaModel updatedAt(@jakarta.annotation.Nullable SchemaPropertyModel updatedAt) {
+    
+    this.updatedAt = updatedAt;
+    return this;
+  }
+
+  /**
+   * Get updatedAt
+   * @return updatedAt
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public SchemaPropertyModel getUpdatedAt() {
+    return updatedAt;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_UPDATED_AT, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setUpdatedAt(@jakarta.annotation.Nullable SchemaPropertyModel updatedAt) {
+    this.updatedAt = updatedAt;
+  }
+
+  public WorkspacesSchemaModel links(@jakarta.annotation.Nullable WorkspacesSchemaModelLinks links) {
+    
+    this.links = links;
+    return this;
+  }
+
+  /**
+   * Get links
+   * @return links
+   */
+  @jakarta.annotation.Nullable
+  @JsonProperty(value = JSON_PROPERTY_LINKS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+
+  public WorkspacesSchemaModelLinks getLinks() {
+    return links;
+  }
+
+
+  @JsonProperty(value = JSON_PROPERTY_LINKS, required = false)
+  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
+  public void setLinks(@jakarta.annotation.Nullable WorkspacesSchemaModelLinks links) {
+    this.links = links;
+  }
+
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    WorkspacesSchemaModel workspacesSchemaModel = (WorkspacesSchemaModel) o;
+    return Objects.equals(this.halType, workspacesSchemaModel.halType) &&
+        Objects.equals(this.dependencies, workspacesSchemaModel.dependencies) &&
+        Objects.equals(this.attributeGroups, workspacesSchemaModel.attributeGroups) &&
+        Objects.equals(this.id, workspacesSchemaModel.id) &&
+        Objects.equals(this.name, workspacesSchemaModel.name) &&
+        Objects.equals(this.identifier, workspacesSchemaModel.identifier) &&
+        Objects.equals(this.description, workspacesSchemaModel.description) &&
+        Objects.equals(this._public, workspacesSchemaModel._public) &&
+        Objects.equals(this.active, workspacesSchemaModel.active) &&
+        Objects.equals(this.status, workspacesSchemaModel.status) &&
+        Objects.equals(this.statusExplanation, workspacesSchemaModel.statusExplanation) &&
+        Objects.equals(this.parent, workspacesSchemaModel.parent) &&
+        Objects.equals(this.createdAt, workspacesSchemaModel.createdAt) &&
+        Objects.equals(this.updatedAt, workspacesSchemaModel.updatedAt) &&
+        Objects.equals(this.links, workspacesSchemaModel.links);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(halType, dependencies, attributeGroups, id, name, identifier, description, _public, active, status, statusExplanation, parent, createdAt, updatedAt, links);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class WorkspacesSchemaModel {\n");
+    sb.append("    halType: ").append(toIndentedString(halType)).append("\n");
+    sb.append("    dependencies: ").append(toIndentedString(dependencies)).append("\n");
+    sb.append("    attributeGroups: ").append(toIndentedString(attributeGroups)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    identifier: ").append(toIndentedString(identifier)).append("\n");
+    sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    _public: ").append(toIndentedString(_public)).append("\n");
+    sb.append("    active: ").append(toIndentedString(active)).append("\n");
+    sb.append("    status: ").append(toIndentedString(status)).append("\n");
+    sb.append("    statusExplanation: ").append(toIndentedString(statusExplanation)).append("\n");
+    sb.append("    parent: ").append(toIndentedString(parent)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
+    sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    links: ").append(toIndentedString(links)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    return o == null ? "null" : o.toString().replace("\n", "\n    ");
+  }
+
+}
+
