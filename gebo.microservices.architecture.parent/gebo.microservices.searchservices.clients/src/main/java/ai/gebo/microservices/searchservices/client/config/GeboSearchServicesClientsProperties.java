@@ -43,6 +43,8 @@ public class GeboSearchServicesClientsProperties {
 	private Endpoint googledrive = Endpoint.of("googledrive_gebo_ai", "api/users/GoogleDriveSearchServiceController",
 			"google-drive", "Google Drive/Workspace Search", "google-drive", "google-drive-module",
 			"google-drive-standard-query-extraction-prompt", null);
+	private Endpoint glpi = Endpoint.of("glpi_gebo_ai", "api/users/GlpiSearchServiceController", "glpi", "GLPI Search",
+			"glpi", "glpi-module", "glpi-standard-query-extraction-prompt", "glpi-native-query-extraction-prompt");
 
 	@Data
 	public static class Endpoint {

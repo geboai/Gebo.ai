@@ -11,7 +11,7 @@
 #
 # App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id, so
 # nothing here NEEDS a host port except the gateway. Every microservice publishes
-# one anyway, on its own dedicated port from the 13000-13020 block, so each service
+# one anyway, on its own dedicated port from the 13000-13022 block, so each service
 # can be reached (and its /v3/api-docs scraped by the generated client stubs)
 # without going through the gateway:
 #
@@ -27,6 +27,7 @@
 #                                                       13018 heimdall (security)
 #                                                       13019 tyr (workflows/usage/jobs)
 #                                                       13020 webdav
+#                                                       13022 glpi
 #
 # 13018 extends what used to be a full 13000-13017 block; heimdall was added after
 # every slot in it was taken. 13019 (tyr) and 13020 (webdav) followed the same way.
@@ -180,6 +181,9 @@ services:
       - webdav-work:/v/webdav-work
       - aws-s3-work:/v/aws-s3-work
       - webdav-logs:/v/webdav-logs
+      - glpi-home:/v/glpi-home
+      - glpi-work:/v/glpi-work
+      - glpi-logs:/v/glpi-logs
       - graphicator-logs:/v/graphicator-logs
       - fulltextor-logs:/v/fulltextor-logs
       - jira-logs:/v/jira-logs
@@ -522,6 +526,16 @@ services:
     image: geboai/webdav.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
     ports:
       - "13020:13020"
+  glpi:
+    <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - glpi-home:/opt/gebo.ai/home
+      - glpi-work:/opt/gebo.ai/work
+      - glpi-logs:/opt/gebo.ai/logs
+    image: geboai/glpi.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
+    ports:
+      - "13022:13022"
   integration:
     <<: *microservice
     volumes:
@@ -641,6 +655,9 @@ volumes:
   webdav-home:
   webdav-work:
   webdav-logs:
+  glpi-home:
+  glpi-work:
+  glpi-logs:
   integration-home:
   integration-work:
   integration-logs:

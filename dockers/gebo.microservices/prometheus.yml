@@ -57,3 +57,5 @@ scrape_configs:
         labels: { service: tyr }
       - targets: ["webdav:13990"]
         labels: { service: webdav }
+      - targets: ["glpi:13990"]
+        labels: { service: glpi }

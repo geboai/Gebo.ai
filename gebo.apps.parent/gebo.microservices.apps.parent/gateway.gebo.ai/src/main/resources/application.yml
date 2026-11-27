@@ -307,6 +307,11 @@ gebo:
             - module-ioc-dispatcher-component
             - resources-dispose-component
             - system-settings-controller-component
+        glpi_gebo_ai:
+          glpi-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
         integration_gebo_ai:
           integration-module:
             - module-ioc-dispatcher-component

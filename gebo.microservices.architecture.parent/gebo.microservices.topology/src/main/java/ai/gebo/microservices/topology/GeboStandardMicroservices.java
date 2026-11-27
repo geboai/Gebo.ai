@@ -255,6 +255,12 @@ public final class GeboStandardMicroservices {
 							"async-publishing-job-component", "job-status-notifier")
 					.build(),
 
+			GeboMicroservice.named("glpi_gebo_ai")
+					.module("glpi-module", "module-ioc-dispatcher-component", "resources-dispose-component",
+							"system-settings-controller-component", "job-status-replicator",
+							"async-publishing-job-component", "job-status-notifier")
+					.build(),
+
 			GeboMicroservice.named("integration_gebo_ai")
 					.module("integration-module", "module-ioc-dispatcher-component", "resources-dispose-component",
 							"system-settings-controller-component", "job-status-replicator",
