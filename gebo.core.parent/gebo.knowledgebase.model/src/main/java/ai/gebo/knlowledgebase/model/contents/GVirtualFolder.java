@@ -12,6 +12,8 @@
 
 package ai.gebo.knlowledgebase.model.contents;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -20,6 +22,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * GVirtualFolder represents a virtual folder in a virtual filesystem.
  * It extends the GAbstractVirtualFilesystemObject to inherit common filesystem object properties.
  */
+// the browse of a folder by name, and the roots of an endpoint
+@CompoundIndexes({
+		@CompoundIndex(name = "parent_name", def = "{'parentVirtualFolderCode': 1, 'name': 1}"),
+		@CompoundIndex(name = "endpoint_parent_name", def = "{'projectEndpointReference.code': 1, 'projectEndpointReference.className': 1, 'parentVirtualFolderCode': 1, 'name': 1}") })
 @Document
 public class GVirtualFolder extends GAbstractVirtualFilesystemObject {
 

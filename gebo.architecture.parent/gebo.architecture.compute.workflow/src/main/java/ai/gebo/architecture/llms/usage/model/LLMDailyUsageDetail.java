@@ -1,5 +1,6 @@
 package ai.gebo.architecture.llms.usage.model;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import ai.gebo.core.messages.LLMCallOutcome;
 import java.util.UUID;
 
@@ -10,6 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import ai.gebo.model.ModelType;
 import lombok.Data;
 
+// the days of a month
+@CompoundIndex(name = "year_month_day", def = "{'year': 1, 'month': 1, 'day': 1}")
 @Data
 @Document
 public class LLMDailyUsageDetail {

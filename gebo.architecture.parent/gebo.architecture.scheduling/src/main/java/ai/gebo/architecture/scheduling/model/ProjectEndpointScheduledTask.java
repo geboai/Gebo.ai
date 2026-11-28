@@ -12,6 +12,8 @@
 
 package ai.gebo.architecture.scheduling.model;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import ai.gebo.knlowledgebase.model.projects.GCentralizedProjectEndpoint;
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GObjectRef;
@@ -23,6 +25,10 @@ import lombok.Setter;
  * This class extends the AbstractScheduledTask with a type parameter of GObjectRef of a GProjectEndpoint.
  * It's used in the scheduling system to handle tasks associated with project endpoints.
  */
+// the tasks of an endpoint, and the ones due
+@CompoundIndexes({
+		@CompoundIndex(name = "scheduledObject_launched", def = "{'scheduledObject.code': 1, 'scheduledObject.className': 1, 'launched': 1}"),
+		@CompoundIndex(name = "launched_scheduledTime", def = "{'launched': 1, 'scheduledTime': 1}") })
 @Getter
 @Setter
 public class ProjectEndpointScheduledTask extends AbstractScheduledTask<GObjectRef<GProjectEndpoint>> {

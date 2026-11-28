@@ -8,13 +8,13 @@
  */
 package ai.gebo.filesystem.content.handler;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
@@ -25,12 +25,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * restart. A look that finds many changes stores them in several entries, in the
  * order of their {@link #part}.
  */
+// the changes of an endpoint, in the order they are read
+@CompoundIndex(name = "endpointCode_detectedAt_part", def = "{'endpointCode': 1, 'detectedAt': 1, 'part': 1}")
 @Document
 public class GFilesystemChangesQueueEntry {
 	@Id
 	private String id = UUID.randomUUID().toString();
 	/** The code of the data source the folder is of. */
-	@Indexed
+	// indexed with detectedAt and part, the order the queue is read in (on the class)
 	private String endpointCode = null;
 	/** The absolute path of the folder. */
 	private String folder = null;
