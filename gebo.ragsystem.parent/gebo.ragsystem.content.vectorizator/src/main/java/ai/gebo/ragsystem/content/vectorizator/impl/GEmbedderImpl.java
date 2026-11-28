@@ -144,26 +144,27 @@ public class GEmbedderImpl implements IGEmbedder {
 		}
 
 		// Retrieve existing vectorized content for the documents
-		Stream<GVectorizedContent> vectorized = vectorizedContentRepository.findByIdDocReferenceCodeIn(ids);
+		try (Stream<GVectorizedContent> vectorized = vectorizedContentRepository.findByIdDocReferenceCodeIn(ids)) {
 
-		// Organize existing vectorized content by document code
-		vectorized.forEach(x -> {
-			if (!vectorizedMap.containsKey(x.getId().getDocReferenceCode())) {
-				vectorizedMap.put(x.getId().getDocReferenceCode(), new ArrayList<GVectorizedContent>());
-			}
-			vectorizedMap.get(x.getId().getDocReferenceCode()).add(x);
-			if (!vectorsToDeleteForVectorStoreId.containsKey(x.getId().getVectorStoreId())) {
-				vectorsToDeleteForVectorStoreId.put(x.getId().getVectorStoreId(), new ArrayList<String>());
-			}
-			// the contents', the file name's and the title's
-			vectorsToDeleteForVectorStoreId.get(x.getId().getVectorStoreId()).addAll(x.allVectorsId());
-			x.setVectorsId(new ArrayList<String>());
-			x.setFileNameVectorsId(null);
-			x.setTitleVectorsId(null);
-			x.setAuthorVectorsId(null);
+			// Organize existing vectorized content by document code
+			vectorized.forEach(x -> {
+				if (!vectorizedMap.containsKey(x.getId().getDocReferenceCode())) {
+					vectorizedMap.put(x.getId().getDocReferenceCode(), new ArrayList<GVectorizedContent>());
+				}
+				vectorizedMap.get(x.getId().getDocReferenceCode()).add(x);
+				if (!vectorsToDeleteForVectorStoreId.containsKey(x.getId().getVectorStoreId())) {
+					vectorsToDeleteForVectorStoreId.put(x.getId().getVectorStoreId(), new ArrayList<String>());
+				}
+				// the contents', the file name's and the title's
+				vectorsToDeleteForVectorStoreId.get(x.getId().getVectorStoreId()).addAll(x.allVectorsId());
+				x.setVectorsId(new ArrayList<String>());
+				x.setFileNameVectorsId(null);
+				x.setTitleVectorsId(null);
+				x.setAuthorVectorsId(null);
 
-		});
+			});
 
+		}
 		// Delete existing vectors from vector stores
 		for (IGConfigurableEmbeddingModel embeddingModel : embeddingModels) {
 			if (embeddingModel == null)

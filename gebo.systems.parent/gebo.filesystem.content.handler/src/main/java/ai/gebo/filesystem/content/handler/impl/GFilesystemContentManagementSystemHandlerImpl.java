@@ -46,6 +46,8 @@ import ai.gebo.systems.abstraction.layer.IGContentsAccessErrorConsumer;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.systems.abstraction.layer.IGProjectEndpointRuntimeConfigurationDao;
 import ai.gebo.systems.abstraction.layer.RemoteVirtualFileSystemContentConsumingSessionParam;
+import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
+import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAccessedObjectType;
 
 /**
  * AI generated comments
@@ -145,9 +147,15 @@ public class GFilesystemContentManagementSystemHandlerImpl extends
 			if (Files.exists(file)) {
 				this.consume(rootItem, contentManagementConfig, buildSystems, endpoint, file, predicate, consumer,
 						messagesConsumer, errorConsumer);
-			} else
-				throw new GeboContentHandlerSystemException(
-						"The configured endpoint must lead to an existent directory");
+			} else {
+				// a selected folder that is gone is told and counted as an error, and the
+				// other selected paths are read
+				LOGGER.error("The selected path " + file + " of the data source " + endpoint.getCode()
+						+ " does not exist");
+				errorConsumer.accept(ContentsAccessError.of(
+						new GeboContentHandlerSystemException("The configured endpoint must lead to an existent directory"),
+						ContentsAccessedObjectType.FOLDER, file.toString()));
+			}
 		}
 	}
 

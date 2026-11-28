@@ -219,14 +219,16 @@ public class GChatStorageAreaServiceImpl implements IGChatStorageAreaService {
 	public void deleteSessionContents(String userSessionCode) throws IOException {
 		this.checkBeingOwnerAndExists(userSessionCode);
 		Path path = getSessionPath(userSessionCode);
-		DirectoryStream<Path> data = Files.newDirectoryStream(path);
-		data.forEach(x -> {
-			try {
-				Files.deleteIfExists(x);
-			} catch (IOException e) {
-				LOGGER.error("Error deleting session content file " + x, e);
-			}
-		});
+		// closed before the folder itself is deleted: the stream holds its file handle
+		try (DirectoryStream<Path> data = Files.newDirectoryStream(path)) {
+			data.forEach(x -> {
+				try {
+					Files.deleteIfExists(x);
+				} catch (IOException e) {
+					LOGGER.error("Error deleting session content file " + x, e);
+				}
+			});
+		}
 		Files.deleteIfExists(path);
 		this.llmGeneratedResourceRepository.deleteByUserContextCode(userSessionCode);
 		this.uploadContentsRepository.deleteByUserContextCode(userSessionCode);

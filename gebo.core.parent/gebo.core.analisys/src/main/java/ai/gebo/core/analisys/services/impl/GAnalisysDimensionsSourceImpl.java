@@ -24,6 +24,8 @@ import ai.gebo.core.analisys.services.IGAnalisysProvider;
 import ai.gebo.core.analisys.services.IGAnalisysProviderRepositoryPattern;
 import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 import ai.gebo.knowledgebase.repositories.ProjectRepository;
+import java.util.stream.Stream;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 
 /**
  * AI generated comments
@@ -140,9 +142,11 @@ public class GAnalisysDimensionsSourceImpl implements IGAnalisysDimensionsSource
 
         case "ai.gebo.knlowledgebase.model.contents.GKnowledgeBase": {
             // Drill down into projects associated with the knowledge base
-            return provideAnalisys(pRepo.findByRootKnowledgeBaseCode(sh.getDimensionValue().getCode()).map(x -> {
-                return (GStatsHolder) GStatsHolder.of(x);
-            }).toList());
+            try (Stream<GProject> projects = pRepo.findByRootKnowledgeBaseCode(sh.getDimensionValue().getCode())) {
+                return provideAnalisys(projects.map(x -> {
+                    return (GStatsHolder) GStatsHolder.of(x);
+                }).toList());
+            }
         }
 
         }

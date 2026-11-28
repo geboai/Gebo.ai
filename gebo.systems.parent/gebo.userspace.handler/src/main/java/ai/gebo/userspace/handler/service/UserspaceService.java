@@ -306,19 +306,20 @@ public class UserspaceService {
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		final TreeMap<String, UserspaceFolderDto> folders = new TreeMap<String, UserspaceFolderDto>();
-		Stream<GProject> projects = projectRepository.findByRootKnowledgeBaseCode(userspaceKnowledgeBase);
-		projects.forEach(x -> {
-			UserspaceFolderDto folder = new UserspaceFolderDto();
-			folder.code = x.getCode();
-			folder.description = x.getDescription();
-			folder.parentUserspaceKnowledgebaseCode = userspaceKnowledgeBase;
-			folder.owner = x.getUserCreated() != null && x.getUserCreated().equals(owner);
-			List<GUserspaceProjectEndpoint> endpoints = endpointRepository.findByParentProjectCode(folder.code);
-			if (!endpoints.isEmpty()) {
-				folder.uploadCode = endpoints.get(0).getCode();
-				folders.put(folder.code, folder);
-			}
-		});
+		try (Stream<GProject> projects = projectRepository.findByRootKnowledgeBaseCode(userspaceKnowledgeBase)) {
+			projects.forEach(x -> {
+				UserspaceFolderDto folder = new UserspaceFolderDto();
+				folder.code = x.getCode();
+				folder.description = x.getDescription();
+				folder.parentUserspaceKnowledgebaseCode = userspaceKnowledgeBase;
+				folder.owner = x.getUserCreated() != null && x.getUserCreated().equals(owner);
+				List<GUserspaceProjectEndpoint> endpoints = endpointRepository.findByParentProjectCode(folder.code);
+				if (!endpoints.isEmpty()) {
+					folder.uploadCode = endpoints.get(0).getCode();
+					folders.put(folder.code, folder);
+				}
+			});
+		}
 		return new ArrayList<UserspaceFolderDto>(folders.values());
 	}
 
@@ -352,38 +353,42 @@ public class UserspaceService {
 			mappedFiles.put(x.getName(), x);
 		});
 		if (Files.exists(path) && Files.isDirectory(path) && Files.isReadable(path)) {
-			Stream<Path> paths = Files.list(path);
-			paths.forEach(x -> {
-				if (x.getFileName() != null) {
-					UserspaceFileDto userspacefile = new UserspaceFileDto();
-					userspacefile.name = x.getFileName().toString();
-					int lastDot = userspacefile.name.lastIndexOf(".");
-					userspacefile.extension = lastDot >= 0 ? userspacefile.name.substring(lastDot).toLowerCase() : null;
-					userspacefile.parentUserspaceUploadCode = endpoint.getCode();
-					userspacefile.owner = false;
-					File file = x.toFile();
-					if (file != null) {
-						userspacefile.size = file.length();
-						userspacefile.modificationTime = file.lastModified() > 0 ? new Date(file.lastModified()) : null;
+			// closed once listed: the stream holds the folder's file handle
+			try (Stream<Path> paths = Files.list(path)) {
+				paths.forEach(x -> {
+					if (x.getFileName() != null) {
+						UserspaceFileDto userspacefile = new UserspaceFileDto();
+						userspacefile.name = x.getFileName().toString();
+						int lastDot = userspacefile.name.lastIndexOf(".");
+						userspacefile.extension = lastDot >= 0 ? userspacefile.name.substring(lastDot).toLowerCase() : null;
+						userspacefile.parentUserspaceUploadCode = endpoint.getCode();
+						userspacefile.owner = false;
+						File file = x.toFile();
+						if (file != null) {
+							userspacefile.size = file.length();
+							userspacefile.modificationTime = file.lastModified() > 0 ? new Date(file.lastModified()) : null;
+						}
+						GUserspaceFile mappedFile = mappedFiles.get(userspacefile.name);
+						if (mappedFile != null && owner != null && mappedFile.getUserCreated() != null) {
+							userspacefile.owner = owner.equals(mappedFile.getUserCreated());
+						}
+						list.put(userspacefile.name, userspacefile);
 					}
-					GUserspaceFile mappedFile = mappedFiles.get(userspacefile.name);
-					if (mappedFile != null && owner != null && mappedFile.getUserCreated() != null) {
-						userspacefile.owner = owner.equals(mappedFile.getUserCreated());
+				});
+			}
+		}
+		// closed once read: the stream holds an open cursor on the database
+		try (Stream<GDocumentReference> documents = documentReferenceRepository.findByProjectEndpoint(endpoint)) {
+			documents.forEach(doc -> {
+				if (doc.getName() != null) {
+					UserspaceFileDto usfile = list.get(doc.getName());
+					if (usfile != null) {
+						usfile.code = doc.getCode();
+						usfile.processed = true;
 					}
-					list.put(userspacefile.name, userspacefile);
 				}
 			});
 		}
-		Stream<GDocumentReference> documents = documentReferenceRepository.findByProjectEndpoint(endpoint);
-		documents.forEach(doc -> {
-			if (doc.getName() != null) {
-				UserspaceFileDto usfile = list.get(doc.getName());
-				if (usfile != null) {
-					usfile.code = doc.getCode();
-					usfile.processed = true;
-				}
-			}
-		});
 		List<GUserspaceFile> filesObjects = filesRepository.findByUserspaceEndpointCode(endpoint.getCode());
 		filesObjects.forEach(x -> {
 			if (x.getName() != null) {

@@ -270,28 +270,31 @@ public class GContentDispatchingEvaluatorImpl implements IGContentDispatchingEva
 		if (!data.isHashableContent() || reference.getModificationDate() == null) {
 			return internalStream(reference, data, null);
 		}
-		Stream<ContentHandshakeData> feedbacks = chRepository.findByContentCode(reference.getCode());
 		TreeMap<Date, List<ContentHandshakeData>> bymodificationDate = new TreeMap<>();
 		List<ContentHandshakeData> withoutDate = new ArrayList<>();
-		if (feedbacks != null) {
-			feedbacks = feedbacks.filter(x -> {
-				return x.getProcessed() != null && x.getProcessed();
-			});
-			feedbacks.forEach(x -> {
-				if (x.getModificationDate() != null) {
-					if (!bymodificationDate.containsKey(x.getModificationDate())) {
-						bymodificationDate.put(x.getModificationDate(), new ArrayList<>());
+		// closed when read: the stream holds an open cursor on the database
+		try (Stream<ContentHandshakeData> found = chRepository.findByContentCode(reference.getCode())) {
+			Stream<ContentHandshakeData> feedbacks = found;
+			if (feedbacks != null) {
+				feedbacks = feedbacks.filter(x -> {
+					return x.getProcessed() != null && x.getProcessed();
+				});
+				feedbacks.forEach(x -> {
+					if (x.getModificationDate() != null) {
+						if (!bymodificationDate.containsKey(x.getModificationDate())) {
+							bymodificationDate.put(x.getModificationDate(), new ArrayList<>());
+						}
+						bymodificationDate.get(x.getModificationDate()).add(x);
+					} else if (x.getCreationdDate() != null) {
+						if (!bymodificationDate.containsKey(x.getCreationdDate())) {
+							bymodificationDate.put(x.getCreationdDate(), new ArrayList<>());
+						}
+						bymodificationDate.get(x.getCreationdDate()).add(x);
+					} else {
+						withoutDate.add(x);
 					}
-					bymodificationDate.get(x.getModificationDate()).add(x);
-				} else if (x.getCreationdDate() != null) {
-					if (!bymodificationDate.containsKey(x.getCreationdDate())) {
-						bymodificationDate.put(x.getCreationdDate(), new ArrayList<>());
-					}
-					bymodificationDate.get(x.getCreationdDate()).add(x);
-				} else {
-					withoutDate.add(x);
-				}
-			});
+				});
+			}
 		}
 		List<ContentHandshakeData> instances = bymodificationDate.get(reference.getModificationDate());
 		if (instances == null) {
