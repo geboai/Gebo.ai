@@ -56,7 +56,7 @@ http://<your-server-ip>:12999/
  - Most providers support **guided fast-setup** with ready-to-use model presets and automatic models lookup
  - Connect to **Model Context Protocol (MCP)** servers to give your chatbots extra tools & data sources, or expose Gebo.ai itself as an **MCP server**
  - **Agent-to-agent interoperability** — through the open **Agent2Agent (A2A) protocol**, Gebo.ai plugs into the wider agentic ecosystem in **both directions**: **connect external A2A agents** — whatever framework or vendor built them — and put them to work as tools and participants inside your own agent networks, or **publish your Gebo.ai agents, a single agent or an entire network of agents, as standards-compliant A2A agents** with their own Agent Card, ready to be consumed by any A2A-capable platform. It is **secure by default**: every import/export is admin-enabled, off and invisible until you switch it on, inbound calls are validated by the platform security chain (self-issued JWT / API key or corporate OAuth2) and run under the caller's own identity, and outbound credentials are handled by the platform secrets vault with OAuth2 token relay. The **"no AI vendor lock-in"** promise now reaches the agents themselves.
- - **Build your own AI agents and networks of agents from the admin console, without code.** Give each agent its job, its LLM, its prompt — the standard one or a copy customized in page — and the **tools it may call, picked from one catalogue**: knowledge base search and browsing, **Confluence**, **Jira**, **SharePoint/OneDrive** and **Google Drive** searches, **web search** and deep search, **MCP tools** and **external A2A agents**.
+ - **Build your own AI agents and networks of agents from the admin console, without code.** Give each agent its job, its LLM, its prompt — the standard one or a copy customized in page — and the **tools it may call, picked from one catalogue**: knowledge base search and browsing, **Confluence**, **Jira**, **SharePoint/OneDrive**, **Google Drive**, **GLPI**, **Redmine**, **OpenProject** and **Zammad** searches, **web search** and deep search, **MCP tools** and **external A2A agents**.
  - **Compose the network on a visual graph** — wire the agents, mark the **controller** that paces the loop — with every move checked against the rules the runtime enforces, then **choose which network answers each chat type and each chatbot profile**. Users see in the chat infos which agents work for them and which tools they may call.
  - Configure gebo.ai rag system to access several company documents repository and information sharing tools such as:
     - **Microsoft Onedrive/Sharepoint**
@@ -67,8 +67,10 @@ http://<your-server-ip>:12999/
     - Company shared filesystems
      - **Amazon AWS S3** buckets
      - **WebDAV** compatible servers (Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server...)
-     - **Redmine** projects: issues, wiki pages and files
-     - **GLPI** service management: helpdesk tickets (with their follow-ups, tasks, solutions and documents) and knowledge base articles
+    - **GLPI**
+    - **Redmine**
+    - **OpenProject**
+    - **Zammad**
  - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
  	- **Microsoft Entra**
  	- **Google auth**   
@@ -103,7 +105,7 @@ http://<your-server-ip>:12999/
  - Chat with uploaded documents/user documents uploaded in chat session (rag or normal chat sessions).
  - Browse company knowledge bases to select  documents to chat/work with  according to admin config.  
  - Generate **images** directly in chat using configured image generation models.
- - Run a **deep search** from the chat, choosing which sources to work on — company knowledge bases, Confluence, Jira, SharePoint/OneDrive, Google Drive and the web — see [Web search & deep search](#web-search--deep-search) below.
+ - Run a **deep search** from the chat, choosing which sources to work on — company knowledge bases, Confluence, Jira, SharePoint/OneDrive, Google Drive, GLPI, Redmine, OpenProject, Zammad and the web — see [Web search & deep search](#web-search--deep-search) below.
  - Voice interface (speech to text & text to speech) working with OpenAI provider.   
 
 ### Web search & deep search
@@ -125,6 +127,10 @@ http://<your-server-ip>:12999/
     - **Atlassian Jira** — searched by project, issue type, status, priority, affected/fix versions, labels, people
     - **Microsoft SharePoint/OneDrive** — searched by site, folder path, document type, title & text, people
     - **Google Workspaces/Drives**
+    - **GLPI**
+    - **Redmine**
+    - **OpenProject**
+    - **Zammad**
     - the **web**, through the configured provider
  - The user picks which sources to use for each question, and the administrator decides, per data source and per user/group, who is allowed to use them at all.
  - Web searches leave the company installation, so each active provider is listed among the external providers of the compliance data-flow register — see [Security & compliance](https://github.com/geboai/Gebo.ai#security--compliance).
