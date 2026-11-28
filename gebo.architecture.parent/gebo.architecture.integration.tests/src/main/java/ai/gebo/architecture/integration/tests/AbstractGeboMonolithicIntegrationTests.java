@@ -194,7 +194,11 @@ public abstract class AbstractGeboMonolithicIntegrationTests {
 
 		// withEnv("OPENSEARCH_INITIAL_ADMIN_PASSWORD", "dothesearch1973-Advanced").
 		// .withSecurityEnabled()
+		// the disk watermarks off: past 90% of the host disk OpenSearch refuses to
+		// create an index (index_create_block_exception), which failed every test at
+		// the application start for a reason the test has nothing to do with
 		opensearch.withExposedPorts(9200, 9600).withEnv("discovery.type", "single-node")
+				.withEnv("cluster.routing.allocation.disk.threshold_enabled", "false")
 				.withEnv("plugins.security.ssl.http.enabled", "false")
 				.withEnv("plugins.security.ssl.transport.enabled", "true")
 				.withStartupAttempts(CONTAINER_STARTUP_ATTEMPTS).withStartupTimeout(CONTAINER_STARTUP_TIMEOUT);
