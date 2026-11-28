@@ -9,9 +9,12 @@
 
 package ai.gebo.llms.ollama.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
 
 /** The configuration of an Ollama decision model: the server address and the model. */
+@Document
 public class GOllamaDecisionModelConfig extends GBaseDecisionModelConfig<GOllamaDecisionModelChoice> {
 
 	public GOllamaDecisionModelConfig() {

@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.openai_compat.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 
 /**
@@ -20,6 +22,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  * It extends the base embedding model configuration class, specifying the model choice
  * type as GenericOpenAIAPIEmbeddingModelChoice.
  */
+@Document
 public class GenericOpenAIAPIEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GenericOpenAIAPIEmbeddingModelChoice> {
 	
     /**

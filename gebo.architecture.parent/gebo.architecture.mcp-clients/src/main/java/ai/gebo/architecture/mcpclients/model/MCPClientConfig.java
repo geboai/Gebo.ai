@@ -1,5 +1,7 @@
 package ai.gebo.architecture.mcpclients.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class MCPClientConfig extends GBaseObject implements IAclGrantedResource, IGObjectWithSecurity {
 	// Base MCP Server url for example http://localhost:8081 .
 	// Required for the HTTP based transports (STREAMABLE_HTTP / SSE_LEGACY); it is

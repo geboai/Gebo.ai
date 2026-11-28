@@ -1,5 +1,7 @@
 package ai.gebo.knlowledgebase.model.contents;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
 @Data
+@Document
 public class GDocumentAttributeListValue extends GBaseObject {
 	@HashIndexed
 	private String documentAttributeTypeCode = null;

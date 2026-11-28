@@ -12,6 +12,8 @@
 
 package ai.gebo.knlowledgebase.model.projects;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.model.base.GObjectRef;
 import lombok.Data;
 
@@ -20,6 +22,7 @@ import lombok.Data;
  * Represents a centralized project endpoint that extends the capabilities of a general project endpoint.
  */
 @Data
+@Document
 public class GCentralizedProjectEndpoint extends GProjectEndpoint {
     // Reference to a remote project endpoint
     private GObjectRef<GProjectEndpoint> remoteProjectReference = null;

@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.aws_bedrock.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
 
 /**
@@ -16,6 +18,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseRankerModelConfig;
  * Rerank). The native platform ranker abstraction is backed here by the Bedrock
  * Agent Runtime {@code Rerank} operation via the AWS SDK.
  */
+@Document
 public class GBedrockRankerModelConfig extends GBaseRankerModelConfig<GBedrockRankerModelChoice> {
 
 	public GBedrockRankerModelConfig() {

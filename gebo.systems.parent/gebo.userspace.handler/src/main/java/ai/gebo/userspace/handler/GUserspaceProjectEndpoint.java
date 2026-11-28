@@ -12,6 +12,8 @@
 
 package ai.gebo.userspace.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,6 +22,7 @@ import jakarta.validation.constraints.NotNull;
  * Extends the base project endpoint class with user-specific information.
  * AI generated comments
  */
+@Document
 public class GUserspaceProjectEndpoint extends GProjectEndpoint {
 	/**
 	 * The username associated with this project endpoint.

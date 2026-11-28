@@ -1,11 +1,14 @@
 package ai.gebo.knlowledgebase.model.contents;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.base.GObjectRef;
 import lombok.Data;
 
 @Data
+@Document
 public class GDocumentAttributeType extends GBaseObject {
 	public static enum Cardinality {
 		ONE, MANY

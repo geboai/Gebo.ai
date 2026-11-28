@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.openai.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -21,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * This class extends the base chat model configuration and specifies
  * OpenAI-specific model choices.
  */
+@Document
 public class GOpenAIChatModelConfig extends GBaseChatModelConfig<GOpenAIChatModelChoice>{
 	
 	/**

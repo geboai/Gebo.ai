@@ -1,5 +1,7 @@
 package ai.gebo.integration.content.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import ai.gebo.knlowledgebase.model.projects.GProjectEndpoint;
 import lombok.Data;
 
 @Data
+@Document
 public class GIntegrationProjectEndpoint extends GProjectEndpoint {
 
 	public GIntegrationProjectEndpoint() {

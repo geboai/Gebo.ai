@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.openai_compat.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 
 /**
@@ -21,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
  * It extends the base text-to-speech model configuration and is specialized for
  * handling OpenAI's specific configuration options through the GOpenAITextToSpeechModelChoice type.
  */
+@Document
 public class GenericOpenAIAPITextToSpeechModelConfig extends GBaseTextToSpeachModelConfig<GenericOpenAIAPITextToSpeechModelChoice> {
 
 	/**

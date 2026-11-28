@@ -12,6 +12,8 @@
 
 package ai.gebo.uploads.content.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,7 @@ import ai.gebo.model.base.GBaseObject;
  * It extends GBaseObject to inherit base functionality and maintains
  * a list of uploaded content identifiers as strings.
  */
+@Document
 public class TmpUploadedContents extends GBaseObject {
 	/**
 	 * 

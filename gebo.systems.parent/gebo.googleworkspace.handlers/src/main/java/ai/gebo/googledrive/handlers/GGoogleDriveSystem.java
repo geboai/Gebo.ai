@@ -12,6 +12,8 @@
 
 package ai.gebo.googledrive.handlers;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 
 /**
@@ -19,6 +21,7 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
  * This class represents a Google Drive system that extends the base content management system.
  * It provides functionality to handle Google Drive specific attributes and operations.
  */
+@Document
 public class GGoogleDriveSystem extends GContentManagementSystem {
 	/** The access secret used for authenticating with Google Drive API */
 	private String driveAccessSecret=null;

@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.UUID;
 
 import ai.gebo.knlowledgebase.model.contents.UserUploadedContent;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class UserUploadContentServerSide extends UserUploadedContent {
 	public UserUploadContentServerSide() {
 		this.setCode(UUID.randomUUID().toString());

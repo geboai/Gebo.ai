@@ -2,7 +2,6 @@ package ai.gebo.architecture.documents.cache.service.impl.model;
 
 import java.util.Date;
 
-import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.model.base.GBaseObject;
@@ -15,7 +14,7 @@ import lombok.Data;
 @Document
 @Data
 public class ChunkingSession extends GBaseObject {
-	@HashIndexed
+	// its unique index is the one ChunkCacheIndexes creates
 	String chunkingReference = null;
 	Boolean canBeDeleted = null;
 	/**

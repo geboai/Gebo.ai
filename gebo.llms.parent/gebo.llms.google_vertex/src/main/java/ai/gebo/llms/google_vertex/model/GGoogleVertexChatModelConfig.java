@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.google_vertex.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -21,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * It extends the base chat model configuration class and specifies the Google Vertex
  * chat model choice type as its generic parameter.
  */
+@Document
 public class GGoogleVertexChatModelConfig extends GBaseChatModelConfig<GGoogleVertexChatModelChoice>{
 	
 	/**

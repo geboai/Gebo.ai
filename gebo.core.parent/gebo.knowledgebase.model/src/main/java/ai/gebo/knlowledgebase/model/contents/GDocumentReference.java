@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.model.base.GeboComponentInfo;
@@ -86,13 +87,14 @@ public class GDocumentReference extends GAbstractVirtualFilesystemObject impleme
 	private String artificiallyGeneratedContent = null;
 	@NotNull
 	private GeboComponentInfo originComponent = null;
-	@HashIndexed
+	// lists: MongoDB hashes no array, their indexes are multikey ones
+	@Indexed
 	private List<GDocumentAttributeValue> attributesValues = null;
 	@HashIndexed
 	private String langCode = null;
 	@HashIndexed
 	private String translationOfDocumentCode = null;
-	@HashIndexed
+	@Indexed
 	private List<String> categoryCodes = null;
 	@HashIndexed
 	private Date publishedDate = null;

@@ -45,6 +45,14 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     // Boolean to indicate if the MongoDB configuration is enabled
     Boolean enabled = true;
 
+    /**
+     * Whether the indexes the documents declare (@Indexed, @HashIndexed, @TextIndexed,
+     * @CompoundIndex...) are created in MongoDB once the application is ready, by
+     * {@link MongoDeclaredIndexes}. Without it none of them exists, and the queries on
+     * the fields they index read whole collections.
+     */
+    boolean autoIndexCreation = true;
+
     // The converters the modules contribute for their types
     @Autowired
     private ObjectProvider<IGMongoConverter> contributedConverters;
@@ -65,6 +73,25 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
     @Override
     protected String getDatabaseName() {
         return databaseName;
+    }
+
+    /**
+     * Never the index creation of Spring Data: it stops the application at the first
+     * index MongoDB refuses (a hashed index on a path through an array, an index
+     * conflicting with one already there), and those depend on the data. The declared
+     * indexes are created by {@link MongoDeclaredIndexes}, each on its own.
+     */
+    @Override
+    protected boolean autoIndexCreation() {
+        return false;
+    }
+
+    public boolean isAutoIndexCreation() {
+        return autoIndexCreation;
+    }
+
+    public void setAutoIndexCreation(boolean autoIndexCreation) {
+        this.autoIndexCreation = autoIndexCreation;
     }
 
     /**

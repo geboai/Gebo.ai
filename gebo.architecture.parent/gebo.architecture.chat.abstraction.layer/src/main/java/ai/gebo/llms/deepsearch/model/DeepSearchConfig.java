@@ -1,5 +1,7 @@
 package ai.gebo.llms.deepsearch.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Document
 public class DeepSearchConfig extends GBaseObject implements IGObjectWithSecurity {
 	@Data
 	@NoArgsConstructor

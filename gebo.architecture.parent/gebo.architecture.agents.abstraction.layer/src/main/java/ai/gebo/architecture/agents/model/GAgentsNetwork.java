@@ -1,5 +1,7 @@
 package ai.gebo.architecture.agents.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
 import org.springframework.data.annotation.Transient;
@@ -15,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class GAgentsNetwork extends GBaseObject
 		implements IJsonClonable<GAgentsNetwork>, IGObjectWithSecurity, IAclGrantedResource, IGCopiedEntity {
 	/*

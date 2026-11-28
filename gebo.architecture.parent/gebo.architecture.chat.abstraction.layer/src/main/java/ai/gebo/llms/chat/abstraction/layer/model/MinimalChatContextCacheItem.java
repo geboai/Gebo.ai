@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +15,7 @@ import ai.gebo.llms.chat.abstraction.layer.session.model.MinimalChatContext;
 import lombok.Data;
 
 @Data
+@Document
 public class MinimalChatContextCacheItem {
 	private static final String SEPARATOR = "-|-";
 	@NotNull

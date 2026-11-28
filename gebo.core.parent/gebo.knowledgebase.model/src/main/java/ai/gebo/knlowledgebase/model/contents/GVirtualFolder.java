@@ -12,12 +12,15 @@
 
 package ai.gebo.knlowledgebase.model.contents;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 /**
  * AI generated comments
  * 
  * GVirtualFolder represents a virtual folder in a virtual filesystem.
  * It extends the GAbstractVirtualFilesystemObject to inherit common filesystem object properties.
  */
+@Document
 public class GVirtualFolder extends GAbstractVirtualFilesystemObject {
 
     /**

@@ -12,6 +12,8 @@
 
 package ai.gebo.atlassian.confluence.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 
 /**
@@ -19,6 +21,7 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
  * Represents a Confluence system within the Gebo knowledge base framework.
  * This class extends the generic content management system to provide Confluence-specific functionality.
  */
+@Document
 public class GConfluenceSystem extends GContentManagementSystem {
 	/** The version of the Confluence instance */
 	private ConfluenceVersion confluenceVersion=null;

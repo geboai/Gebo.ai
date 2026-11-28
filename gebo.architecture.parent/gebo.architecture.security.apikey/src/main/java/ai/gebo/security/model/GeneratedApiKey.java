@@ -1,5 +1,7 @@
 package ai.gebo.security.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class GeneratedApiKey extends GBaseObject {
 	@NotNull
 	private String apiKey = null;

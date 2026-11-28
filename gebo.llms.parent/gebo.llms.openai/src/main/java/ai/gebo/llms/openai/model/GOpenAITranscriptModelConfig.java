@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.openai.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 
 /**
@@ -21,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
  * It extends the base transcript model configuration class and specializes it
  * for OpenAI-specific transcript model choices.
  */
+@Document
 public class GOpenAITranscriptModelConfig extends GBaseTranscriptModelConfig<GOpenAITranscriptModelChoice> {
 
 	/**

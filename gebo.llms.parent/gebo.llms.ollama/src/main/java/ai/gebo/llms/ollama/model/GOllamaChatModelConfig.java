@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.ollama.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -23,6 +25,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * This configuration is used to set up and customize Ollama chat model
  * behavior when generating responses.
  */
+@Document
 public class GOllamaChatModelConfig extends GBaseChatModelConfig<GOllamaChatModelChoice> {
 	
 	/**

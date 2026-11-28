@@ -1,7 +1,10 @@
 package ai.gebo.webdavcms.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 
+@Document
 public class GWebdavContentManagementSystem extends GContentManagementSystem {
 
 	private WebdavVersion webdavAuthType = null;

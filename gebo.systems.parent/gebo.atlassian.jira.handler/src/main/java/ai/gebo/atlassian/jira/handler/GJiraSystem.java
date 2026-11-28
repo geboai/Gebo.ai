@@ -12,6 +12,8 @@
 
 package ai.gebo.atlassian.jira.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import lombok.Data;
 
@@ -23,6 +25,7 @@ import lombok.Data;
  * The @Data annotation from Lombok automatically generates getters, setters, equals, hashCode, and toString methods.
  */
 @Data
+@Document
 public class GJiraSystem extends GContentManagementSystem {
 	/**
 	 * A secret code used for authentication or identification purposes within the Jira system.

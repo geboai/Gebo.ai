@@ -1,5 +1,7 @@
 package ai.gebo.systems.abstraction.layer.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import lombok.Data;
  * module/system plus the system configuration code.
  */
 @Data
+@Document
 public class SampledSystemCatalogues extends GBaseObject {
 	private static final String SEPARATOR = "-|-";
 	@NotNull

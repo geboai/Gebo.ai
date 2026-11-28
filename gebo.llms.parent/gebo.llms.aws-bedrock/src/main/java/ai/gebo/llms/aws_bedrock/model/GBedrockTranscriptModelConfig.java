@@ -9,12 +9,15 @@
 
 package ai.gebo.llms.aws_bedrock.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseTranscriptModelConfig;
 
 /**
  * Configuration for the AWS (Amazon Transcribe streaming) speech-to-text
  * provider.
  */
+@Document
 public class GBedrockTranscriptModelConfig extends GBaseTranscriptModelConfig<GBedrockTranscriptModelChoice> {
 
 	/** BCP-47 language code for the audio (e.g. {@code en-US}). */

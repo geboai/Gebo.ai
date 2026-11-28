@@ -9,6 +9,8 @@
 
 package ai.gebo.knlowledgebase.model.jobs;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
 import org.springframework.core.annotation.Order;
@@ -24,6 +26,7 @@ import lombok.Data;
  * Gebo.ai Commentor signature: AI generated comments
  */
 @Data
+@Document
 public class ContentsBatchProcessed {
 	/**
 	 * Unique identifier for the contents batch.

@@ -19,7 +19,7 @@ import java.util.UUID;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -45,7 +45,7 @@ public class AbstractScheduledTask<ScheduledType> {
      * Time at which the task is scheduled to run. This field is indexed for quick searches.
      * It is marked with the highest precedence order value.
      */
-    @HashIndexed
+    @Indexed
     @Order(value = Ordered.HIGHEST_PRECEDENCE)
     private Date scheduledTime = null;
 

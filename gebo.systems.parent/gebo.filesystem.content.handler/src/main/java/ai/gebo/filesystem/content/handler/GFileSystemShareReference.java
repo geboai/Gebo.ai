@@ -12,6 +12,8 @@
 
 package ai.gebo.filesystem.content.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.model.base.GBaseObject;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +25,7 @@ import jakarta.validation.constraints.NotNull;
  * It extends the GBaseObject base class and provides functionality to store and
  * manage a virtual filesystem reference along with its MongoDB configuration status.
  */
+@Document
 public class GFileSystemShareReference extends GBaseObject {
 	/** Flag indicating whether MongoDB is configured for this reference */
 	private Boolean mongoConfigured = false;

@@ -1,10 +1,13 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class LLMGeneratedResource  extends GBaseObject {
 	@NotNull
 	protected String fileName = null;
