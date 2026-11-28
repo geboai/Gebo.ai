@@ -203,13 +203,18 @@ and the java clients from **6635** `Object` fields to 58 — what remains is gen
 
 ### Cluster endpoints never appear in a spec — by design
 
-The service-to-service surfaces (`api/cluster/SecretsController`,
-`.../SecurityController`, `.../AclController`) are declared with `@ResponseBody` +
-`@RequestMapping`, **not** `@RestController`. Two consequences, both wanted: the
-`ai.gebo` component scan cannot publish them without their participants guard, and
-**springdoc does not document them** — so they can never leak into a generated stub and
-out to a browser. If a `/api/cluster/**` path ever shows up in a spec, that is a bug in
-the controller's annotations, not in the generator.
+The service-to-service surfaces heimdall serves (`api/cluster/SecretsController`,
+`.../SecurityController` with its `UsersAdmin` part, `.../AclController`) are
+`@RestController`s, switched on by their `ai.gebo.*.cluster.enabled` property, and every
+method checks the cluster participants guard. The other services call them through their
+own hand-written clients, never through a generated stub.
+
+They are kept out of the served specification by `springdoc.paths-to-exclude=/api/cluster/**`
+in `gebo-openapi-defaults.properties`, so they can never leak into a generated stub and out
+to a browser. Until 28 November 2026 heimdall's spec carried all four (35 endpoints) and its
+generated clients had them too. If a `/api/cluster/**` path ever shows up in a spec again,
+check that the defaults reach that service and that its own configuration does not set
+`springdoc.paths-to-exclude`.
 
 ---
 

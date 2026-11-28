@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SortObject
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:48.933840589+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:48.033728654+01:00[Europe/Rome]")
 
 public class SortObject {
   @JsonProperty("empty")

@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMUsageAggregationBucket
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:32:15.444091156+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:48.033728654+01:00[Europe/Rome]")
 
 public class LLMUsageAggregationBucket {
   @JsonProperty("providerId")

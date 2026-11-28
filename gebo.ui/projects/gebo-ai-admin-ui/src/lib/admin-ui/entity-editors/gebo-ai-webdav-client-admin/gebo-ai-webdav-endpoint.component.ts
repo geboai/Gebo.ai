@@ -7,7 +7,12 @@ import { forkJoin, map, Observable, of } from "rxjs";
 import { doSaveAndPublishCall } from '../utils/save-publish-callback';
 import { loadRootsObservableCallback, browsePathObservableCallback } from "@Gebo.ai/reusable-ui";
 
-const webdavCode: string = "webdab-cms-module";
+// the WebDAV system type code: the backend types the WebDAV systems with it and the
+// fast setup stores their secrets under it, so the identities are looked for there
+const webdavCode: string = "WEBDAB-CMS";
+// the identity context these editors used before: the identities created under it
+// stay listed
+const legacyWebdavIdentityContext: string = "webdab-cms-module";
 
 @Component({
     selector: "gebo-ai-webdav-endpoint-component",
@@ -103,11 +108,11 @@ export class GeboAIWebdavEndpointComponent extends BaseEntityEditingComponent<GW
     }
 
     public checkExistentAccountAndSystem(system?: GWebdavContentManagementSystem) {
-        const observables: [Observable<SecretInfo[]>, Observable<GWebdavContentManagementSystem[]>] = [this.secretControllerService.getSecretsByContextCode(this.actualIdentityContext), this.webdavControllerService.getWebdavSystems()];
+        const observables: [Observable<SecretInfo[]>, Observable<GWebdavContentManagementSystem[]>, Observable<SecretInfo[]>] = [this.secretControllerService.getSecretsByContextCode(this.actualIdentityContext), this.webdavControllerService.getWebdavSystems(), this.secretControllerService.getSecretsByContextCode(legacyWebdavIdentityContext)];
         this.loadingRelatedBackend = true;
         forkJoin(observables).subscribe({
             next: (data) => {
-                this.identities = data[0];
+                this.identities = [...(data[0] ?? []), ...(data[2] ?? []).filter(l => !(data[0] ?? []).some(c => c.code === l.code))];
                 this.webdavServersData = data[1];
                 this.noAccountsAndSystems = (!this.identities || this.identities.length === 0) && (!this.webdavServersData || this.webdavServersData.length === 0);
                 if (system && system.code) {

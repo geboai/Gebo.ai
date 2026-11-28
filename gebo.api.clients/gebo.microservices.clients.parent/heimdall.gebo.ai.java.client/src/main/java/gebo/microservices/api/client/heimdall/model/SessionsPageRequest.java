@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * SessionsPageRequest
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:31:38.818352780+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:38.516142171+01:00[Europe/Rome]")
 
 public class SessionsPageRequest {
   @JsonProperty("page")

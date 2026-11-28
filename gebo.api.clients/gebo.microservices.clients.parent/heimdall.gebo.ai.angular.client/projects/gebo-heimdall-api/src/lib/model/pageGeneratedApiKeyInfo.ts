@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageGeneratedApiKeyInfo { 
     totalPages?: number;
     totalElements?: number;
-    pageable?: PageableObject;
     size?: number;
     content?: Array<GeneratedApiKeyInfo>;
     number?: number;
     sort?: SortObject;
+    pageable?: PageableObject;
+    numberOfElements?: number;
     first?: boolean;
     last?: boolean;
-    numberOfElements?: number;
     empty?: boolean;
 }

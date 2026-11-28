@@ -45,16 +45,23 @@ public class WaitingConditionsAdminController {
 		return service.allWaiting();
 	}
 
-	/** Goes on without the named conditions of any block, or without every one still waiting. */
+	/**
+	 * Goes on without the named conditions of any block, or without every one still
+	 * waiting. Named apart from {@link WaitingConditionsController#goOnWithout}: the
+	 * method name is the operationId, and two equal ones get numbered in the stubs.
+	 */
 	@PostMapping(value = "goOnWithout", produces = MediaType.APPLICATION_JSON_VALUE)
-	public WaitingConditionsActionAck goOnWithout(@RequestParam String blockCode,
+	public WaitingConditionsActionAck adminGoOnWithout(@RequestParam String blockCode,
 			@RequestBody(required = false) List<String> conditionIds) {
 		return service.goOnWithout(blockCode, conditionIds, WaitingConditionsController.username(), true);
 	}
 
-	/** Drops any block, never to be respawned: its conversation is free. */
+	/**
+	 * Drops any block, never to be respawned: its conversation is free. Named apart
+	 * from {@link WaitingConditionsController#abandon} for the same reason.
+	 */
 	@PostMapping(value = "abandon", produces = MediaType.APPLICATION_JSON_VALUE)
-	public WaitingConditionsActionAck abandon(@RequestParam String blockCode) {
+	public WaitingConditionsActionAck adminAbandon(@RequestParam String blockCode) {
 		return service.abandon(blockCode, WaitingConditionsController.username(), true);
 	}
 }

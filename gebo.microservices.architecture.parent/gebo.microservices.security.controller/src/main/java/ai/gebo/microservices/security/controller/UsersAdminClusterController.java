@@ -95,8 +95,10 @@ public class UsersAdminClusterController {
 		return userAdminService.updateUser(user);
 	}
 
+	// method names apart from SecurityDirectoryClusterController's: the method name is
+	// the operationId, and two equal ones get numbered in the stubs
 	@GetMapping(value = "findUserByUsername", produces = MediaType.APPLICATION_JSON_VALUE)
-	public EditableUser infrastructureFindUserByUsername(@RequestParam("email") String email, HttpServletRequest request) {
+	public EditableUser infrastructureFindEditableUserByUsername(@RequestParam("email") String email, HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		return userAdminService.findUserByUsername(email);
 	}
@@ -117,7 +119,7 @@ public class UsersAdminClusterController {
 
 	@PostMapping(value = "findEditableUserByQbe", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public PageResult<UserInfos> infrastructureFindUserByQbe(@RequestBody @NotNull EditableUserQbeRequest req,
+	public PageResult<UserInfos> infrastructureFindEditableUserByQbe(@RequestBody @NotNull EditableUserQbeRequest req,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		Page<UserInfos> page = userAdminService.findUserByQbe(req.getQbe(), req.toPageable());
@@ -185,7 +187,7 @@ public class UsersAdminClusterController {
 	 */
 	@PostMapping(value = "createUserIfNotExists", consumes = MediaType.APPLICATION_JSON_VALUE,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public void infrastructureCreateUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest req,
+	public void infrastructureCreateEditableUserIfNotExists(@RequestBody @NotNull CreateUserIfNotExistsRequest req,
 			HttpServletRequest request) {
 		ClusterParticipantsGuard.check(participants, request);
 		SecurityEvent event = securityAuditLoggerService.newSecurityEvent();
