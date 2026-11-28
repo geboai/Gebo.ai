@@ -3909,7 +3909,15 @@
         "label": "Upload contents",
         "help": "Upload contents control"
       },
-      "FilesUploadPanel": { "label": "Files upload" }
+      "FilesUploadPanel": { "label": "Files upload" },
+      "DeleteSelectedFilesBtn": {
+        "label": "Delete selected files",
+        "help": "Delete the files you selected from this folder"
+      },
+      "DeleteSelectedFilesConfirmation": {
+        "header": "Delete files",
+        "message": "Delete the selected files from this folder? Their contents leave the knowledge base at the next publish of the folder."
+      }
     },
     "GeboAIUserspaceFolderComponent": {
       "description": {

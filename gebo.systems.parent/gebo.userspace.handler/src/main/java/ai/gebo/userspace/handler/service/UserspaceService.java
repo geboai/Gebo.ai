@@ -52,6 +52,7 @@ import ai.gebo.knlowledgebase.model.contents.ObjectSpaceType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knowledgebase.repositories.DocumentReferenceRepository;
+import ai.gebo.knowledgebase.repositories.KnowledgeBaseRepository;
 import ai.gebo.knowledgebase.repositories.ProjectRepository;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.OperationStatus;
@@ -93,6 +94,7 @@ public class UserspaceService {
 	final IGKnowledgebaseVisibilityService knowledgeBasesVisibilityService;
 	final IGSecurityService securityService;
 	final IGPersistentObjectManager persistentObjectManager;
+	final KnowledgeBaseRepository knowledgeBaseRepository;
 
 	public List<UserspaceKnowledgebaseDto> listChildPersonalKnowledgebases(@RequestBody List<String> codes) {
 		List<GKnowledgeBase> visibles = knowledgeBasesVisibilityService.visiblesAndChildKnowledgebases(codes);
@@ -207,6 +209,18 @@ public class UserspaceService {
 			throw new RuntimeException("Cannot update an object not owned");
 		}
 		return knowledgeBase;
+	}
+
+	/**
+	 * The knowledge bases the user made under one of their own: they go with it.
+	 *
+	 * @param knowledgeBase the knowledge base
+	 * @return its child knowledge bases the user owns
+	 */
+	public List<GKnowledgeBase> ownedChildKnowledgebases(GKnowledgeBase knowledgeBase) {
+		final String owner = securityService.getCurrentUser().getUsername();
+		return knowledgeBaseRepository.findByParentKnowledgebaseCode(knowledgeBase.getCode()).stream()
+				.filter(k -> owner != null && owner.equals(k.getUsername())).toList();
 	}
 
 	/**
@@ -470,10 +484,12 @@ public class UserspaceService {
 				if (endpoint == null) {
 					throw new RuntimeException("The folder of " + file.name + " does not exist");
 				}
-				if (!allowedToDelete.test(endpoint)) {
-					throw new GeboPersistenceException("Only the folder's owner or an administrator can delete its files");
-				}
 				endpoints.put(endpoint.getCode(), endpoint);
+			}
+			// the folder's owner or an administrator, or who uploaded the file
+			if (!allowedToDelete.test(endpoint) && !uploadedByCurrentUser(endpoint, file.name)) {
+				throw new GeboPersistenceException(
+						"Only the folder's owner, an administrator or who uploaded it can delete " + file.name);
 			}
 			final Path folder = Path.of(localFolderService.getLocalPersistentFolder(handler.getSystem(endpoint), endpoint))
 					.toAbsolutePath().normalize();
@@ -501,6 +517,39 @@ public class UserspaceService {
 	}
 
 	/**
+	 * Whether the current user uploaded the folder's file of this name.
+	 */
+	private boolean uploadedByCurrentUser(GUserspaceProjectEndpoint endpoint, String name) {
+		final UserInfos user = securityService.getCurrentUser();
+		final GUserspaceFile record = filesRepository.findById(endpoint.getCode() + "/" + Path.of(name).getFileName())
+				.orElse(null);
+		return user != null && record != null && record.getUserCreated() != null
+				&& record.getUserCreated().equals(user.getUsername());
+	}
+
+	/**
+	 * The uploads data source of a folder the current user can publish: whoever can
+	 * access its knowledge base, found from the data source itself and not from the
+	 * request.
+	 */
+	private GUserspaceProjectEndpoint publishableUploads(UserspaceFolderDto folder) throws GeboPersistenceException {
+		final GUserspaceProjectEndpoint endpoint = folder.uploadCode != null
+				? persistentObjectManager.findById(GUserspaceProjectEndpoint.class, folder.uploadCode)
+				: null;
+		if (endpoint == null) {
+			throw new RuntimeException("The folder's uploads do not exist");
+		}
+		final GProject project = persistentObjectManager.findById(GProject.class, endpoint.getParentProjectCode());
+		final GKnowledgeBase knowledgebase = project != null
+				? persistentObjectManager.findById(GKnowledgeBase.class, project.getRootKnowledgeBaseCode())
+				: null;
+		if (knowledgebase == null || !securityService.isCanAccess(knowledgebase, false)) {
+			throw new RuntimeException("Cannot modify or upload on this knowledge base");
+		}
+		return endpoint;
+	}
+
+	/**
 	 * Gets the publishing status of a folder
 	 * 
 	 * @param folder The folder DTO to check status for
@@ -509,14 +558,7 @@ public class UserspaceService {
 	 */
 
 	public PublishingStatus getPublishingStatus(UserspaceFolderDto folder) throws GeboPersistenceException {
-		GProject project = persistentObjectManager.findById(GProject.class, folder.code);
-		GKnowledgeBase knowledgebase = persistentObjectManager.findById(GKnowledgeBase.class,
-				folder.parentUserspaceKnowledgebaseCode);
-		if (!securityService.isCanAccess(knowledgebase, false)) {
-			throw new RuntimeException("Cannot modify or upload on this knowledge base");
-		}
-		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
-				folder.uploadCode);
+		GUserspaceProjectEndpoint endpoint = publishableUploads(folder);
 		boolean running = this.jobQueueService.isRunningSyncJob(endpoint);
 		PublishingStatus status = new PublishingStatus();
 		status.folder = folder;
@@ -534,14 +576,7 @@ public class UserspaceService {
 	 */
 
 	public OperationStatus<PublishingStatus> publishFolder(UserspaceFolderDto folder) throws GeboPersistenceException {
-		GProject project = persistentObjectManager.findById(GProject.class, folder.code);
-		GKnowledgeBase knowledgebase = persistentObjectManager.findById(GKnowledgeBase.class,
-				folder.parentUserspaceKnowledgebaseCode);
-		if (!securityService.isCanAccess(knowledgebase, false)) {
-			throw new RuntimeException("Cannot modify or upload on this knowledge base");
-		}
-		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
-				folder.uploadCode);
+		GUserspaceProjectEndpoint endpoint = publishableUploads(folder);
 		boolean running = this.jobQueueService.isRunningSyncJob(endpoint);
 		PublishingStatus status = new PublishingStatus();
 		status.folder = folder;
