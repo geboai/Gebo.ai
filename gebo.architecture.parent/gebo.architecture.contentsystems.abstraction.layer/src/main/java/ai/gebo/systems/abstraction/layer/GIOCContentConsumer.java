@@ -276,13 +276,13 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			}
 		}
 		if (checksWhatWasNotMet && !errorConsumer.hasErrors()) {
-			try {
-				Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
-						.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
-								endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode());
-				Stream<GVirtualFolder> foltersToCheckStream = virtualFolderRepository
-						.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
-								endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode());
+			// both streams are closed when the check is done: each holds an open cursor
+			try (Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
+					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
+							endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode());
+					Stream<GVirtualFolder> foltersToCheckStream = virtualFolderRepository
+							.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
+									endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode())) {
 				Stream<GAbstractVirtualFilesystemObject> documents = documentsToCheckStream.map(x -> x);
 				Stream<GAbstractVirtualFilesystemObject> folders = foltersToCheckStream.map(x -> x);
 				Stream<GAbstractVirtualFilesystemObject> updated = handler.checkUpdatedOrDeleted(endpoint,

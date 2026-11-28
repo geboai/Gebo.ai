@@ -178,10 +178,11 @@ public class VectorizatorDisposerMessageReceiverImpl extends GAbstractMessageRec
 				// original concrete endpoint reference (real class name + code) it points back to.
 				GObjectRef<GProjectEndpoint> endpointRef = payload.getEndpoint().getRemoteProjectReference();
 				LOGGER.info("Deleting vectors for endpoint=>" + endpointRef.getCode());
-				Stream<GVectorizedContent> vectorized = vectorizedContentRepository
-						.findByProjectEndpointRef(endpointRef);
+				try (Stream<GVectorizedContent> vectorized = vectorizedContentRepository
+						.findByProjectEndpointRef(endpointRef)) {
 
-				vectorized.forEach(deletingConsumer);
+					vectorized.forEach(deletingConsumer);
+				}
 				try {
 					vectorizedContentRepository.deleteByProjectEndpointRef(endpointRef);
 				} catch (Throwable th) {
@@ -194,9 +195,10 @@ public class VectorizatorDisposerMessageReceiverImpl extends GAbstractMessageRec
 				case DOCUMENTREF: {
 					// Handle document reference deletion
 					LOGGER.info("Deleting vectors for content ids=>" + payload.getCodes4deletion());
-					Stream<GVectorizedContent> vectorized = vectorizedContentRepository
-							.findByIdDocReferenceCodeIn(payload.getCodes4deletion());
-					vectorized.forEach(deletingConsumer);
+					try (Stream<GVectorizedContent> vectorized = vectorizedContentRepository
+							.findByIdDocReferenceCodeIn(payload.getCodes4deletion())) {
+						vectorized.forEach(deletingConsumer);
+					}
 					try {
 						vectorizedContentRepository.deleteByIdDocReferenceCodeIn(payload.getCodes4deletion());
 					} catch (Throwable th) {
@@ -210,9 +212,10 @@ public class VectorizatorDisposerMessageReceiverImpl extends GAbstractMessageRec
 				// Handle project deletion
 				GDeletedProjectPayload payload = (GDeletedProjectPayload) t.getPayload();
 				LOGGER.info("Deleting vectors for project=>" + payload.getProject().getCode());
-				Stream<GVectorizedContent> vectorized = vectorizedContentRepository
-						.findByParentProjectCode(payload.getProject().getCode());
-				vectorized.forEach(deletingConsumer);
+				try (Stream<GVectorizedContent> vectorized = vectorizedContentRepository
+						.findByParentProjectCode(payload.getProject().getCode())) {
+					vectorized.forEach(deletingConsumer);
+				}
 				try {
 					vectorizedContentRepository.deleteByParentProjectCode(payload.getProject().getCode());
 				} catch (Throwable th) {
@@ -222,9 +225,10 @@ public class VectorizatorDisposerMessageReceiverImpl extends GAbstractMessageRec
 				// Handle knowledge base deletion
 				GDeletedKnowledgeBasePayload payload = (GDeletedKnowledgeBasePayload) t.getPayload();
 				LOGGER.info("Deleting vectors for knowledgebase=>" + payload.getKnowledgeBase().getCode());
-				Stream<GVectorizedContent> vectorized = vectorizedContentRepository
-						.findByRootKnowledgebaseCode(payload.getKnowledgeBase().getCode());
-				vectorized.forEach(deletingConsumer);
+				try (Stream<GVectorizedContent> vectorized = vectorizedContentRepository
+						.findByRootKnowledgebaseCode(payload.getKnowledgeBase().getCode())) {
+					vectorized.forEach(deletingConsumer);
+				}
 				try {
 					vectorizedContentRepository.deleteByRootKnowledgebaseCode(payload.getKnowledgeBase().getCode());
 				} catch (Throwable th) {

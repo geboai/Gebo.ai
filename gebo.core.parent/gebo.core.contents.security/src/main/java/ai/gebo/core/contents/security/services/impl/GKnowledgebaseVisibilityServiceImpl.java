@@ -134,15 +134,19 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 
 	@Override
 	public List<GProject> getVisibleProjectsByKnowledgeBaseCode(@NotNull @NotEmpty String kbCode) {
-		Stream<GProject> stream = pjRepository.findByRootKnowledgeBaseCode(kbCode);
-		List<GProject> list = stream.toList();
+		final List<GProject> list;
+		try (Stream<GProject> stream = pjRepository.findByRootKnowledgeBaseCode(kbCode)) {
+			list = stream.toList();
+		}
 		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
 	}
 
 	@Override
 	public List<GProject> getVisibleProjectsByParentProjectCode(@NotNull @NotEmpty String pjCode) {
-		Stream<GProject> stream = pjRepository.findByParentProjectCode(pjCode);
-		List<GProject> list = stream.toList();
+		final List<GProject> list;
+		try (Stream<GProject> stream = pjRepository.findByParentProjectCode(pjCode)) {
+			list = stream.toList();
+		}
 		return securityService.filterCanDoAction(list, true, AclGrantType.READ);
 	}
 
@@ -167,15 +171,17 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 		boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
-			return virtualFoldersRepository
+			try (Stream<GVirtualFolder> roots = virtualFoldersRepository
 					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNullAndAclAliasesIn(
-							className, code, aclInfos.getAllOwnedAclAliases())
-					.toList();
+							className, code, aclInfos.getAllOwnedAclAliases())) {
+				return roots.toList();
+			}
 		} else {
-			return virtualFoldersRepository
+			try (Stream<GVirtualFolder> roots = virtualFoldersRepository
 					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
-							className, code)
-					.toList();
+							className, code)) {
+				return roots.toList();
+			}
 		}
 
 	}
@@ -186,10 +192,15 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 		boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
-			return virtualFoldersRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
-					aclInfos.getAllOwnedAclAliases()).toList();
+			try (Stream<GVirtualFolder> folders = virtualFoldersRepository
+					.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode, aclInfos.getAllOwnedAclAliases())) {
+				return folders.toList();
+			}
 		} else {
-			return virtualFoldersRepository.findByParentVirtualFolderCode(parentVirtualFolderCode).toList();
+			try (Stream<GVirtualFolder> folders = virtualFoldersRepository
+					.findByParentVirtualFolderCode(parentVirtualFolderCode)) {
+				return folders.toList();
+			}
 		}
 
 	}
@@ -200,10 +211,15 @@ public class GKnowledgebaseVisibilityServiceImpl implements IGKnowledgebaseVisib
 		boolean useAcl = securityService.isContentAclEnforced();
 		if (useAcl) {
 			IAclGrantedAccessor aclInfos = securityService.getCurrentAclGrantedAccessor(AclGrantType.READ);
-			return documentsRepository.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode,
-					aclInfos.getAllOwnedAclAliases()).toList();
+			try (Stream<GDocumentReference> documents = documentsRepository
+					.findByParentVirtualFolderCodeAndAclAliasesIn(parentVirtualFolderCode, aclInfos.getAllOwnedAclAliases())) {
+				return documents.toList();
+			}
 		} else {
-			return documentsRepository.findByParentVirtualFolderCode(parentVirtualFolderCode).toList();
+			try (Stream<GDocumentReference> documents = documentsRepository
+					.findByParentVirtualFolderCode(parentVirtualFolderCode)) {
+				return documents.toList();
+			}
 		}
 	}
 

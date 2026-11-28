@@ -306,19 +306,20 @@ public class UserspaceService {
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		final TreeMap<String, UserspaceFolderDto> folders = new TreeMap<String, UserspaceFolderDto>();
-		Stream<GProject> projects = projectRepository.findByRootKnowledgeBaseCode(userspaceKnowledgeBase);
-		projects.forEach(x -> {
-			UserspaceFolderDto folder = new UserspaceFolderDto();
-			folder.code = x.getCode();
-			folder.description = x.getDescription();
-			folder.parentUserspaceKnowledgebaseCode = userspaceKnowledgeBase;
-			folder.owner = x.getUserCreated() != null && x.getUserCreated().equals(owner);
-			List<GUserspaceProjectEndpoint> endpoints = endpointRepository.findByParentProjectCode(folder.code);
-			if (!endpoints.isEmpty()) {
-				folder.uploadCode = endpoints.get(0).getCode();
-				folders.put(folder.code, folder);
-			}
-		});
+		try (Stream<GProject> projects = projectRepository.findByRootKnowledgeBaseCode(userspaceKnowledgeBase)) {
+			projects.forEach(x -> {
+				UserspaceFolderDto folder = new UserspaceFolderDto();
+				folder.code = x.getCode();
+				folder.description = x.getDescription();
+				folder.parentUserspaceKnowledgebaseCode = userspaceKnowledgeBase;
+				folder.owner = x.getUserCreated() != null && x.getUserCreated().equals(owner);
+				List<GUserspaceProjectEndpoint> endpoints = endpointRepository.findByParentProjectCode(folder.code);
+				if (!endpoints.isEmpty()) {
+					folder.uploadCode = endpoints.get(0).getCode();
+					folders.put(folder.code, folder);
+				}
+			});
+		}
 		return new ArrayList<UserspaceFolderDto>(folders.values());
 	}
 

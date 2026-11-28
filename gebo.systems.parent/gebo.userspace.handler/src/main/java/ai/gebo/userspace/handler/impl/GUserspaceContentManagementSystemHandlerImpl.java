@@ -211,10 +211,11 @@ public class GUserspaceContentManagementSystemHandlerImpl extends
 		List<GUserspaceFile> files = filesRepository.findByUserspaceEndpointCodeAndDeletedIsTrue(endpoint.getCode());
 		if (!files.isEmpty()) {
 			List<String> names = files.stream().map(x -> x.getName()).toList();
-			Stream<GDocumentReference> docStream = documentRepository
-					.findByParentVirtualFolderCodeAndNameIn(root.getCode(), names);
-			List<GDocumentReference> toDelete = docStream.filter(x -> (x.getDeleted() == null || !x.getDeleted()))
-					.toList();
+			final List<GDocumentReference> toDelete;
+			try (Stream<GDocumentReference> docStream = documentRepository
+					.findByParentVirtualFolderCodeAndNameIn(root.getCode(), names)) {
+				toDelete = docStream.filter(x -> (x.getDeleted() == null || !x.getDeleted())).toList();
+			}
 			if (!toDelete.isEmpty()) {
 				toDelete.stream().map(x -> {
 					x.setDeleted(true);

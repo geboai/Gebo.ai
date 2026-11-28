@@ -267,31 +267,32 @@ public class GeboWorkflowsStatsServiceImpl implements IGeboWorkflowsStatsService
 			summary.setWorkflowStatus(status);
 			final List<ComputedWorkflowStatus> itemslist = handler.get(0).items(status.getRootStatus());
 			final TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>> stats = new TreeMap<Long, Map<String, JobWorkflowStepSummaryTimeSlotStats>>();
-			Stream<ContentsBatchProcessed> stream = contentsBatchRepo.findByJobId(jobId);
-			stream.forEach(processed -> {
-				Date timestamp = processed.getTimestamp();
-				if (timestamp != null) {
-					long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;
-					long minutesFloorEnd = minutesFloorStart + STATS_TIME_SLOT;
-					Long key = Long.valueOf(minutesFloorStart);
-					if (!stats.containsKey(key)) {
-						stats.put(key, new HashMap<String, JobWorkflowStepSummaryTimeSlotStats>());
-					}
-					String stepKey = (of(jobId) + "-" + of(processed.getWorkflowType()) + "-"
-							+ of(processed.getWorkflowId()) + "-" + processed.getWorkflowStepId()).toLowerCase();
+			try (Stream<ContentsBatchProcessed> stream = contentsBatchRepo.findByJobId(jobId)) {
+				stream.forEach(processed -> {
+					Date timestamp = processed.getTimestamp();
+					if (timestamp != null) {
+						long minutesFloorStart = (timestamp.getTime() / STATS_TIME_SLOT) * STATS_TIME_SLOT;
+						long minutesFloorEnd = minutesFloorStart + STATS_TIME_SLOT;
+						Long key = Long.valueOf(minutesFloorStart);
+						if (!stats.containsKey(key)) {
+							stats.put(key, new HashMap<String, JobWorkflowStepSummaryTimeSlotStats>());
+						}
+						String stepKey = (of(jobId) + "-" + of(processed.getWorkflowType()) + "-"
+								+ of(processed.getWorkflowId()) + "-" + processed.getWorkflowStepId()).toLowerCase();
 
-					if (!stats.get(key).containsKey(stepKey)) {
-						JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
-						statsEntry.setStartDateTime(new Date(minutesFloorStart));
-						statsEntry.setEndDateTime(new Date(minutesFloorEnd));
-						stats.get(key).put(stepKey, statsEntry);
-					}
+						if (!stats.get(key).containsKey(stepKey)) {
+							JobWorkflowStepSummaryTimeSlotStats statsEntry = new JobWorkflowStepSummaryTimeSlotStats();
+							statsEntry.setStartDateTime(new Date(minutesFloorStart));
+							statsEntry.setEndDateTime(new Date(minutesFloorEnd));
+							stats.get(key).put(stepKey, statsEntry);
+						}
 
-					stats.get(key).get(stepKey).incrementBy(processed);
-				} else {
-					LOGGER.error("Entry without timestamp");
-				}
-			});
+						stats.get(key).get(stepKey).incrementBy(processed);
+					} else {
+						LOGGER.error("Entry without timestamp");
+					}
+				});
+			}
 			if (!stats.isEmpty() && stats.firstKey() != null && stats.lastKey() != null) {
 				long startDateTime = stats.firstKey();
 				long endDateTime = stats.lastKey();

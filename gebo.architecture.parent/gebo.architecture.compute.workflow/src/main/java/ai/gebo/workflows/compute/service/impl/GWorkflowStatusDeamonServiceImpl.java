@@ -50,41 +50,43 @@ public class GWorkflowStatusDeamonServiceImpl {
 
 	@Scheduled(initialDelay = 10000, fixedRate = CHECK_JOB_STATUS_PERIOD)
 	public void checkJobsStatus() {
-		Stream<GJobStatusItem> processingStream = jobStatusRepository.findByProcessingTrue();
-		processingStream.forEach(status -> {
-			long now = System.currentTimeMillis();
-			// Every still-processing job is re-evaluated on every scheduled run, not just
-			// ones started within the last CHECK_JOB_STATUS_PERIOD - that used to gate
-			// entry into this block, but the batch-finished / timeout-passed checks below
-			// need to keep running for as long as a job stays in "processing" state
-			// (ingestion routinely takes longer than one CHECK_JOB_STATUS_PERIOD), and
-			// timeoutPassed - checked against the much longer EXECUTION_TIMEOUT - could
-			// never fire while gated behind the short recency window anyway.
-			if (status.getStartDateTime() != null) {
-				GWorkflowType wType = GWorkflowType.STANDARD;
-				try {
-					wType = GWorkflowType.valueOf(status.getWorkflowType());
-				} catch (Throwable t) {
-				}
-				List<IWorkflowStatusHandler> handlers = workflowStatusRepoPattern
-						.findByWorkflowsTypeAndWorkflowId(wType, status.getWorkflowId());
-				if (!handlers.isEmpty()) {
-					ComputedWorkflowResult measures = handlers.get(0).computeWorkflowStatus(status.getCode(),
-							status.getWorkflowType(), status.getWorkflowId());
-					if (measures == null) {
-						// deleted after it was listed: nothing left to close, go on with the others
-						return;
+		// closed when read: the stream holds an open cursor on the database
+		try (Stream<GJobStatusItem> processingStream = jobStatusRepository.findByProcessingTrue()) {
+			processingStream.forEach(status -> {
+				long now = System.currentTimeMillis();
+				// Every still-processing job is re-evaluated on every scheduled run, not just
+				// ones started within the last CHECK_JOB_STATUS_PERIOD - that used to gate
+				// entry into this block, but the batch-finished / timeout-passed checks below
+				// need to keep running for as long as a job stays in "processing" state
+				// (ingestion routinely takes longer than one CHECK_JOB_STATUS_PERIOD), and
+				// timeoutPassed - checked against the much longer EXECUTION_TIMEOUT - could
+				// never fire while gated behind the short recency window anyway.
+				if (status.getStartDateTime() != null) {
+					GWorkflowType wType = GWorkflowType.STANDARD;
+					try {
+						wType = GWorkflowType.valueOf(status.getWorkflowType());
+					} catch (Throwable t) {
 					}
-					// a job that found only deleted documents has no input and did its work too
-					boolean batchFinished = (measures.isFinished()
-							&& (measures.getRootStatus().getBatchDocumentsInput() > 0
-									|| measures.getRootStatus().getBatchDeletedDocuments() > 0));
-					boolean timeoutPassed = (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) <= now;
-					if (batchFinished || timeoutPassed) {
-						jobCloser.closeAndBroadcastEnded(status.getCode());
+					List<IWorkflowStatusHandler> handlers = workflowStatusRepoPattern
+							.findByWorkflowsTypeAndWorkflowId(wType, status.getWorkflowId());
+					if (!handlers.isEmpty()) {
+						ComputedWorkflowResult measures = handlers.get(0).computeWorkflowStatus(status.getCode(),
+								status.getWorkflowType(), status.getWorkflowId());
+						if (measures == null) {
+							// deleted after it was listed: nothing left to close, go on with the others
+							return;
+						}
+						// a job that found only deleted documents has no input and did its work too
+						boolean batchFinished = (measures.isFinished()
+								&& (measures.getRootStatus().getBatchDocumentsInput() > 0
+										|| measures.getRootStatus().getBatchDeletedDocuments() > 0));
+						boolean timeoutPassed = (status.getStartDateTime().getTime() + EXECUTION_TIMEOUT) <= now;
+						if (batchFinished || timeoutPassed) {
+							jobCloser.closeAndBroadcastEnded(status.getCode());
+						}
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 }
