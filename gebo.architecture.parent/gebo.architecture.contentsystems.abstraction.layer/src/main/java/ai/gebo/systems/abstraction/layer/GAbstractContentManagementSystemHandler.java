@@ -229,8 +229,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			}
 		} catch (Throwable th) {
 			try {
+				// the error consumer tells it to whoever follows the job
 				errorConsumer.accept(ContentsAccessError.of(th, ContentsAccessedObjectType.RESOURCE, file.toString()));
-				messagesConsumer.accept(GUserMessage.errorMessage("Error managing: " + file.getFileName(), th));
 			} catch (Throwable e) {
 			}
 			LOGGER.error("document extraction error", th);
@@ -347,9 +347,9 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 				}
 			}
 		} catch (Throwable e) {
+			// the error consumer tells it to whoever follows the job
 			errorConsumer.accept(ContentsAccessError.of(e, ContentsAccessedObjectType.FOLDER, file.toString()));
 			LOGGER.error("Error accessing archive " + file, e);
-			messagesConsumer.accept(GUserMessage.errorMessage("Error reading archive:" + file, e));
 		}
 	}
 
@@ -394,10 +394,9 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 				messagesConsumer.accept(GUserMessage.successMessage(
 						"Analyzed archive:" + zipFile.getName() + " entry: " + entry.getName(), "Done successfully"));
 			} catch (Throwable e) {
+				// the error consumer tells it to whoever follows the job
 				errorConsumer.accept(ContentsAccessError.of(e, ContentsAccessedObjectType.RESOURCE, path));
 				LOGGER.error("Error accessing archive " + originalFile.getFileName() + " entry: " + entry.getName(), e);
-				messagesConsumer.accept(GUserMessage
-						.errorMessage("Error reading archive:" + zipFile.getName() + " entry: " + entry.getName(), e));
 			}
 		}
 	}

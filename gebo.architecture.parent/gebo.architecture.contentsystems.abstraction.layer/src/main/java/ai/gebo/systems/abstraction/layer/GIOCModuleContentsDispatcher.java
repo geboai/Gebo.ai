@@ -264,7 +264,7 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 	@Override
 	public Consumers dispatchContentsConsumers(final ProjectEndpointType endpoint, ContentConsumingSessionParamType sessionParam, final GJobStatus jobStatus)
 			throws GeboContentHandlerSystemException {
-		final IGContentsAccessErrorConsumer errorConsumer = IGContentsAccessErrorConsumer.defaultImplementation();
+		final IGContentsAccessErrorConsumer heldErrors = IGContentsAccessErrorConsumer.defaultImplementation();
 		final boolean indexingServiceOnline = broker.checkReceivingComponentPresent(
 				GStandardModulesConstraints.FULLTEXT_MODULE, GStandardModulesConstraints.FULLTEXT_INDEXING_COMPONENT);
 		final IGUserMessagesConsumer userMessagesConsumer = new IGUserMessagesConsumer() {
@@ -283,6 +283,28 @@ public class GIOCModuleContentsDispatcher<SystemIntegrationType extends GContent
 			@Override
 			public void endConsuming() {
 
+			}
+		};
+		// a content that could not be read is told to whoever follows the job, as an
+		// error, besides being held for the end of the session (which counts it among
+		// the session's errors and does not tell deleted what was not met)
+		final IGContentsAccessErrorConsumer errorConsumer = new IGContentsAccessErrorConsumer() {
+
+			@Override
+			public void accept(ContentsAccessError error) {
+				heldErrors.accept(error);
+				userMessagesConsumer.accept(GUserMessage.errorMessage(
+						"Contents not read"
+								+ (error.getObjectType() != null
+										? " (" + error.getObjectType().name().toLowerCase() + ")"
+										: "")
+								+ (error.getResourceCode() != null ? ": " + error.getResourceCode() : ""),
+						error.getMsg() != null ? error.getMsg() : "No detail given"));
+			}
+
+			@Override
+			public List<ContentsAccessError> getErrors() {
+				return heldErrors.getErrors();
 			}
 		};
 

@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import ai.gebo.application.messaging.GAbstractMessageReceiverFactory;
-import ai.gebo.application.messaging.IGMessageBroker;
-import ai.gebo.application.messaging.IGMessageEmitter;
 import ai.gebo.application.messaging.IGMessageReceiver;
 import ai.gebo.application.messaging.IMessageEnvelopeFactory;
 import ai.gebo.application.messaging.SystemComponentType;
@@ -20,7 +18,6 @@ import ai.gebo.application.messaging.workflow.IWorkflowStatusHandlerRepositoryPa
 import ai.gebo.application.messaging.workflow.model.ComputedWorkflowResult;
 import ai.gebo.architecture.patterns.IGRuntimeBinder;
 import ai.gebo.core.messages.ComputeWorkflowEndPayload;
-import ai.gebo.core.messages.GFinishedWorkflowPayload;
 
 @Component
 @Scope("singleton")
@@ -52,16 +49,12 @@ public class GComputeEndOfWorkflowReceiverFactory extends GAbstractMessageReceiv
 					// that found only deleted documents did its work too
 					if (status != null && status.isFinished() && (status.getRootStatus().getBatchDocumentsInput() > 0
 							|| status.getRootStatus().getBatchDeletedDocuments() > 0)) {
-						LOGGER.info("Sending the finished work broadcast message for" + payload);
-						GFinishedWorkflowPayload finishedWorkflow = new GFinishedWorkflowPayload();
-						finishedWorkflow.setJobId(payload.getJobId());
-						finishedWorkflow.setWorkflowType(payload.getWorkflowType());
-						finishedWorkflow.setWorkflowId(payload.getWorkflowId());
-						IGMessageEmitter emitter = runtimeBinder.getImplementationOf(GWorkflowsConcentratorMessagesEmitterImpl.class);
-						IGMessageBroker broker = runtimeBinder.getImplementationOf(IGMessageBroker.class);
-						GMessageEnvelope<GFinishedWorkflowPayload> envelope = envelopeFactory.newMessageFrom(emitter,
-								finishedWorkflow);
-						broker.broadcast(envelope);
+						// the job is closed here, as soon as it is done: the status daemon finds it
+						// closed and does not broadcast its end a second time
+						if (runtimeBinder.getImplementationOf(GWorkflowJobCloser.class)
+								.closeAndBroadcastEnded(payload.getJobId())) {
+							LOGGER.info("Closed the job and broadcast its end for " + payload);
+						}
 					}
 				}
 			}

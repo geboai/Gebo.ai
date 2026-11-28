@@ -3,6 +3,7 @@ package ai.gebo.systems.abstraction.layer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -44,6 +45,7 @@ import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator.SendEvaluationPolicy;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.EnricherMappers;
 import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
+import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 
 /********************************************************************************************************************
  * Consumer that implements the IOC on the infrastructure via content system
@@ -324,7 +326,11 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			payload.setWorkflowId(jobStatus.getWorkflowId());
 			payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
 			payload.setBatchDocumentsInput(batchDocumentInput);
-			payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
+			// what could not be read is among the errors of the session, so the job shows
+			// them; the earlier stats messages never carry these, they are counted once here
+			final List<ContentsAccessError> accessErrors = errorConsumer.getErrors();
+			payload.setBatchDocumentsProcessingErrors(
+					batchDocumentsProcessingErrors + (accessErrors != null ? accessErrors.size() : 0));
 			payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
 			payload.setBatchSentToNextStep(batchSentToNextStep);
 			payload.setBatchDiscardedInput(batchDiscardedInput);
