@@ -50,14 +50,15 @@ knows ONE url and nothing else changes between targets.
 ## Accessors
 
 One per generated client, each returning that service's **own** `ApiClient`
-type — they are 21 unrelated classes, one per
+type — they are 25 unrelated classes, one per
 `gebo.microservices.api.client.<name>.invoker` package, so the compiler rejects
 handing brain's client to a heimdall API:
 
 `gateway()` `eureka()` `heimdall()` `brain()` `vectorizator()` `graphicator()`
 `chunker()` `git()` `filesystem()` `uploads()` `userspace()` `sharepoint()`
 `confluence()` `jira()` `awsS3()` `googledrive()` `mcpclient()` `webdav()`
-`integration()` `fulltextor()` `tyr()`
+`integration()` `fulltextor()` `tyr()` `redmine()` `glpi()` `openproject()`
+`zammad()`
 
 Plus `baseUrlFor(serviceId)`, `topology()`, `baseUrl()` and `resolver()` for
 anything the accessors do not cover.

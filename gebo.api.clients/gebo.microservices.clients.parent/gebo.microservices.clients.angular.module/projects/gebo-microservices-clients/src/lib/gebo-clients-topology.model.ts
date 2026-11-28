@@ -66,6 +66,10 @@ export const GeboMicroservices = {
   INTEGRATION: 'integration_gebo_ai',
   FULLTEXTOR: 'fulltextor_gebo_ai',
   TYR: 'tyr_gebo_ai',
+  REDMINE: 'redmine_gebo_ai',
+  GLPI: 'glpi_gebo_ai',
+  OPENPROJECT: 'openproject_gebo_ai',
+  ZAMMAD: 'zammad_gebo_ai',
 } as const;
 
 /** Any of the {@link GeboMicroservices} ids. */

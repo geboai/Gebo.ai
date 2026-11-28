@@ -18,8 +18,8 @@ microservice** — a Java `resttemplate` client and an Angular/TypeScript librar
 ```
 
 Each microservice **app** lives under
-`gebo.apps.parent/gebo.microservices.apps.parent/<name>.gebo.ai`. There are **21
-services** ↔ 21 Java clients ↔ 21 Angular clients.
+`gebo.apps.parent/gebo.microservices.apps.parent/<name>.gebo.ai`. There are **25
+services** ↔ 25 Java clients ↔ 25 Angular clients.
 
 Alongside them sit **two hand-written aggregators** — not generated, no
 `generate-rest-api` profile, untouched by a regeneration:
@@ -86,6 +86,10 @@ the `swagger.file` URLs resolve against a plain `docker compose up` with no over
 | heimdall     | 13018 | eureka, mongo |
 | tyr          | 13019 | eureka, rabbit, mongo |
 | webdav       | 13020 | eureka, rabbit, mongo |
+| redmine      | 13021 | eureka, rabbit, mongo |
+| glpi         | 13022 | eureka, rabbit, mongo |
+| openproject  | 13023 | eureka, rabbit, mongo |
+| zammad       | 13024 | eureka, rabbit, mongo |
 
 The ports are **not contiguous by theme** — `fulltextor` is 13016, not 13005, because it
 was added after the original block was allocated. Read them from each app's

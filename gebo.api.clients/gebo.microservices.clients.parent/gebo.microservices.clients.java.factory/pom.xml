@@ -146,6 +146,26 @@
 			<artifactId>tyr.gebo.ai.java.client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>redmine.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>glpi.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>openproject.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>zammad.gebo.ai.java.client</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

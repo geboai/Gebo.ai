@@ -37,14 +37,14 @@ actually answers on is a property of the deployment, not of the client:
 
 So the module asks the installation itself — `GET
 <baseUrl>/public/ClientsTopologyProviderController`, which both shapes publish at
-the same relative url — and provides all 21 `BASE_PATH` tokens from the answer.
+the same relative url — and provides all 25 `BASE_PATH` tokens from the answer.
 The app is configured with ONE url and nothing else changes between targets.
 
 ## Requirements
 
 - `HttpClient` provided (`HttpClientModule` or `provideHttpClient()`), which the
   generated `ApiModule`s already require.
-- The 21 `@Gebo.ai/*` client packages installed: they are **peer dependencies**,
+- The 25 `@Gebo.ai/*` client packages installed: they are **peer dependencies**,
   this library only wires them.
 - Imported once, in the root module.
 

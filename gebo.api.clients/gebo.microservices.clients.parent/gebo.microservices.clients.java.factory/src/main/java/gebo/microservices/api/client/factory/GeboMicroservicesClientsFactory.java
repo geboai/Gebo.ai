@@ -153,7 +153,7 @@ public class GeboMicroservicesClientsFactory {
 	// --- Per-service ApiClients ----------------------------------------------
 	//
 	// One accessor per generated client. Each returns that service's OWN
-	// ApiClient type (they are 21 unrelated classes, one per
+	// ApiClient type (they are 25 unrelated classes, one per
 	// gebo.microservices.api.client.<name>.invoker package), so the result plugs
 	// straight into that service's Api constructors and nothing else - the
 	// compiler rejects handing brain's client to a heimdall Api.
@@ -279,6 +279,26 @@ public class GeboMicroservicesClientsFactory {
 		return client(GeboMicroservices.TYR, gebo.microservices.api.client.tyr.invoker.ApiClient::new);
 	}
 
+	/** @return the Redmine content-handler client */
+	public gebo.microservices.api.client.redmine.invoker.ApiClient redmine() {
+		return client(GeboMicroservices.REDMINE, gebo.microservices.api.client.redmine.invoker.ApiClient::new);
+	}
+
+	/** @return the GLPI content-handler client */
+	public gebo.microservices.api.client.glpi.invoker.ApiClient glpi() {
+		return client(GeboMicroservices.GLPI, gebo.microservices.api.client.glpi.invoker.ApiClient::new);
+	}
+
+	/** @return the OpenProject content-handler client */
+	public gebo.microservices.api.client.openproject.invoker.ApiClient openproject() {
+		return client(GeboMicroservices.OPENPROJECT, gebo.microservices.api.client.openproject.invoker.ApiClient::new);
+	}
+
+	/** @return the Zammad content-handler client */
+	public gebo.microservices.api.client.zammad.invoker.ApiClient zammad() {
+		return client(GeboMicroservices.ZAMMAD, gebo.microservices.api.client.zammad.invoker.ApiClient::new);
+	}
+
 	// --- Internals -----------------------------------------------------------
 
 	/**
@@ -286,7 +306,7 @@ public class GeboMicroservicesClientsFactory {
 	 * the default headers.
 	 *
 	 * <p>
-	 * The 21 ApiClient classes share no supertype - they are independent
+	 * The 25 ApiClient classes share no supertype - they are independent
 	 * generated copies - so the cache is typed {@code Object} and the accessor
 	 * casts back. The cast is safe by construction: a serviceId is only ever
 	 * paired with its own supplier, in the accessor right above.
@@ -318,9 +338,9 @@ public class GeboMicroservicesClientsFactory {
 	 * Points one ApiClient at its resolved base url.
 	 *
 	 * <p>
-	 * Reflective because the 21 generated {@code ApiClient} classes are unrelated
+	 * Reflective because the 25 generated {@code ApiClient} classes are unrelated
 	 * types with no shared interface to call {@code setBasePath} through - the
-	 * alternative would be 21 near-identical private overloads. The method is
+	 * alternative would be 25 near-identical private overloads. The method is
 	 * part of every generated client, so a failure here means the stubs were
 	 * regenerated with a template that dropped it, which is worth surfacing
 	 * loudly rather than working around.
