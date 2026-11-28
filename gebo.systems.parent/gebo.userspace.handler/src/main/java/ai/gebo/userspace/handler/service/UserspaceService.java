@@ -352,27 +352,29 @@ public class UserspaceService {
 			mappedFiles.put(x.getName(), x);
 		});
 		if (Files.exists(path) && Files.isDirectory(path) && Files.isReadable(path)) {
-			Stream<Path> paths = Files.list(path);
-			paths.forEach(x -> {
-				if (x.getFileName() != null) {
-					UserspaceFileDto userspacefile = new UserspaceFileDto();
-					userspacefile.name = x.getFileName().toString();
-					int lastDot = userspacefile.name.lastIndexOf(".");
-					userspacefile.extension = lastDot >= 0 ? userspacefile.name.substring(lastDot).toLowerCase() : null;
-					userspacefile.parentUserspaceUploadCode = endpoint.getCode();
-					userspacefile.owner = false;
-					File file = x.toFile();
-					if (file != null) {
-						userspacefile.size = file.length();
-						userspacefile.modificationTime = file.lastModified() > 0 ? new Date(file.lastModified()) : null;
+			// closed once listed: the stream holds the folder's file handle
+			try (Stream<Path> paths = Files.list(path)) {
+				paths.forEach(x -> {
+					if (x.getFileName() != null) {
+						UserspaceFileDto userspacefile = new UserspaceFileDto();
+						userspacefile.name = x.getFileName().toString();
+						int lastDot = userspacefile.name.lastIndexOf(".");
+						userspacefile.extension = lastDot >= 0 ? userspacefile.name.substring(lastDot).toLowerCase() : null;
+						userspacefile.parentUserspaceUploadCode = endpoint.getCode();
+						userspacefile.owner = false;
+						File file = x.toFile();
+						if (file != null) {
+							userspacefile.size = file.length();
+							userspacefile.modificationTime = file.lastModified() > 0 ? new Date(file.lastModified()) : null;
+						}
+						GUserspaceFile mappedFile = mappedFiles.get(userspacefile.name);
+						if (mappedFile != null && owner != null && mappedFile.getUserCreated() != null) {
+							userspacefile.owner = owner.equals(mappedFile.getUserCreated());
+						}
+						list.put(userspacefile.name, userspacefile);
 					}
-					GUserspaceFile mappedFile = mappedFiles.get(userspacefile.name);
-					if (mappedFile != null && owner != null && mappedFile.getUserCreated() != null) {
-						userspacefile.owner = owner.equals(mappedFile.getUserCreated());
-					}
-					list.put(userspacefile.name, userspacefile);
-				}
-			});
+				});
+			}
 		}
 		Stream<GDocumentReference> documents = documentReferenceRepository.findByProjectEndpoint(endpoint);
 		documents.forEach(doc -> {
