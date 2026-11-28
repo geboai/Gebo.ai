@@ -206,7 +206,9 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			enableWorkflowSteps(persistentObjectManager.findById(GKnowledgeBase.class,
 					project.getRootKnowledgeBaseCode()), project, again);
 			assertEquals(endpoint.getCode(), again.getCode(), "the data source made again has the same code");
-			runAndWaitDoneCheckingResults(again, EXPECTED_DOCUMENTS, true);
+			// the deletion above erased the vectors on purpose (awaitDataSourceDeleted
+			// checked it): the test store keeps their ids, so no check that none was deleted
+			runAndWaitDoneCheckingResults(again, EXPECTED_DOCUMENTS, false);
 			assertContains(awaitSettledVectorStoreContent(getTestVectorStore(), x -> false),
 					"Mails over 10MB bounce since Monday", "the open ticket, indexed again");
 
