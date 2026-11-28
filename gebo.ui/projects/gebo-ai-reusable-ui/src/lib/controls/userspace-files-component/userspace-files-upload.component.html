@@ -21,10 +21,13 @@
         @for (file of entity?.userspaceFiles; track file) {
           <li style="list-style: none;">
             <p-checkbox name="choosed" id="choosed" [required]="true" formControlName="choosed"
-              [disabled]="!file.owner" [value]="file"></p-checkbox><label>{{file.name}}</label>
+              [disabled]="!(file.owner || entity?.userspaceFolder?.owner)" [value]="file"></p-checkbox><label>{{file.name}}</label>
             </li>
           }
         </ul>
+        <p-button id="DeleteSelectedFilesBtn" gebo-ai-label icon="pi pi-trash" severity="danger" [outlined]="true"
+          label="Delete selected files" title="Delete the files you selected from this folder"
+          [disabled]="!deleteFormGroup.value.choosed?.length || loading" (onClick)="deleteSelectedFiles()"></p-button>
       </div>
       <div class="col-12" [formGroup]="formGroup">
         <gebo-ai-field id="upload" label="Upload contents" help="Upload contents control" [required]="true">

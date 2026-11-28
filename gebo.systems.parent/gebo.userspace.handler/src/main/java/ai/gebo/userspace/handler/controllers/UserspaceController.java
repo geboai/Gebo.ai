@@ -148,7 +148,17 @@ public class UserspaceController
 	@PostMapping(value = "deleteUserKnowledgebase", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserKnowledgebase(@NotNull @Valid @RequestBody UserspaceKnowledgebaseDto object)
 			throws GeboPersistenceException {
-		final GKnowledgeBase knowledgeBase = userspaceService.ownedKnowledgebaseToDelete(object);
+		deleteKnowledgebase(userspaceService.ownedKnowledgebaseToDelete(object));
+	}
+
+	/**
+	 * Deletes a knowledge base: the knowledge bases the user made under it, its
+	 * folders, then itself. A child another person made under it stays theirs.
+	 */
+	private void deleteKnowledgebase(GKnowledgeBase knowledgeBase) throws GeboPersistenceException {
+		for (GKnowledgeBase child : userspaceService.ownedChildKnowledgebases(knowledgeBase)) {
+			deleteKnowledgebase(child);
+		}
 		for (GProject folder : userspaceService.foldersOf(knowledgeBase.getCode())) {
 			deleteFolder(folder);
 		}
@@ -338,7 +348,8 @@ public class UserspaceController
 	 * @return List of file DTOs
 	 */
 	@PostMapping(value = "findUserspaceFileByCodes", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<UserspaceFileDto> findUserspaceFileByCodes(@NotNull @Valid @RequestBody List<String> codes) {
+	public List<UserspaceFileDto> findUserspaceFileByCodes(@NotNull @Valid @RequestBody List<String> codes)
+			throws GeboPersistenceException {
 		return userspaceService.findUserspaceFileByCodes(codes);
 	}
 

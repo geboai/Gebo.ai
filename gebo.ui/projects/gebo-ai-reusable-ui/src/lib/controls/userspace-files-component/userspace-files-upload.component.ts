@@ -23,13 +23,14 @@ import { ConfirmationService } from "@openng/optimus-ui/api";
 import { map, Observable, of } from "rxjs";
 import { UserspaceFilesUploadModel, UserspaceFilesUploadModelService } from "./userspace-files-upload.service";
 import { FileBeforeUploadEvent, FileProgressEvent, FileUploadEvent } from "@openng/optimus-ui/fileupload";
-import { BASE_PATH, IngestionFileTypesLibraryControllerService } from "@Gebo.ai/gebo-ai-rest-api";
+import { BASE_PATH, IngestionFileTypesLibraryControllerService, UserspaceFileDto } from "@Gebo.ai/gebo-ai-rest-api";
 import { HttpEventType } from "@angular/common/http";
 import { BaseEntityEditingComponent } from "../base-entity-editing-component/base-entity-editing.component";
 import { GeboFormGroupsService } from "../../architecture/gebo-form-groups.service";
 import { GeboUIActionRoutingService } from "../../architecture/gebo-ui-action-routing.service";
 import { GeboUIOutputForwardingService } from "../../architecture/gebo-ui-output-forwarding.service";
 import { fieldHostComponentName, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE } from "../field-host-component-iface/field-host-component-iface";
+import { ExtendedConfirmation, GeboAITranslationService } from "../field-translation-container/gebo-translation.service";
 
 /**
  * Component responsible for managing file uploads to user workspace.
@@ -95,14 +96,15 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      */
     constructor(injector: Injector,
         geboFormGroupsService: GeboFormGroupsService,
-        confirmationService: ConfirmationService,
+        private filesConfirmationService: ConfirmationService,
         geboUIActionRoutingService: GeboUIActionRoutingService,
         private userspaceService: UserspaceFilesUploadModelService,
         @Inject(BASE_PATH)
         public baseUrl: string,
         private contentTypeService: IngestionFileTypesLibraryControllerService,
+        private filesTranslationService: GeboAITranslationService,
         outputForwardingService?: GeboUIOutputForwardingService) {
-        super(injector, geboFormGroupsService, confirmationService, geboUIActionRoutingService, outputForwardingService);
+        super(injector, geboFormGroupsService, filesConfirmationService, geboUIActionRoutingService, outputForwardingService);
         this.manageOperationStatus = true;
     }
 
@@ -233,6 +235,46 @@ export class GeboAIUserspaceFilesUploadComponent extends BaseEntityEditingCompon
      */
     override canBeDeleted(value: UserspaceFilesUploadModel): Observable<{ canBeDeleted: boolean; message: string; }> {
         return of({ canBeDeleted: true, message: "" });
+    }
+
+    /**
+     * Deletes the selected files after a confirmation: they leave the folder at once and the
+     * knowledge base at the folder's next publish.
+     */
+    deleteSelectedFiles() {
+        const files: UserspaceFileDto[] = this.deleteFormGroup.value.choosed ?? [];
+        if (!files.length) return;
+        const confirmation: ExtendedConfirmation = {
+            id: "DeleteSelectedFilesConfirmation",
+            header: "Delete files",
+            message: "Delete the selected files from this folder? Their contents leave the knowledge base at the next publish of the folder.",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => {
+                this.loadingRelatedBackend = true;
+                this.userspaceService.deleteFiles(files).subscribe({
+                    next: () => {
+                        this.deleteFormGroup.reset();
+                        this.doReloadByCode();
+                    },
+                    complete: () => {
+                        this.loadingRelatedBackend = false;
+                    },
+                    error: () => {
+                        this.loadingRelatedBackend = false;
+                    }
+                });
+            }
+        };
+        const translateSubscription = this.filesTranslationService.translateConfirmation("UserSpaceFilesModule", "GeboAIUserspaceFilesUploadComponent", confirmation).subscribe({
+            next: (translated) => {
+                this.filesConfirmationService.confirm(translated ? translated : confirmation);
+                try {
+                    translateSubscription.unsubscribe();
+                } catch (e) {
+                    // already closed
+                }
+            }
+        });
     }
 
     /**

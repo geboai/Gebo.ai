@@ -58,7 +58,11 @@ import ai.gebo.workflows.compute.model.JobSummary;
  * knowledge base at the folder's next publish; nobody else deletes them. A file
  * uploaded again after its deletion is ingested again (its upload used to fail on
  * the record the first upload left); an upload is refused to whoever cannot access
- * the folder's knowledge base and for a name leading out of the folder.
+ * the folder's knowledge base and for a name leading out of the folder. Who
+ * uploaded a file owns it and may delete it. A folder's publish and its status
+ * find the knowledge base from the folder, not from the request. A knowledge base
+ * goes with the knowledge bases its owner made under it. A folder, its files
+ * and its documents' files are read only by who can access its knowledge base.
  */
 public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String OWNER = "userspace.owner@gebo.ai";
@@ -247,6 +251,132 @@ public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegr
 
 		userspaceController.deleteUserKnowledgebase(first);
 		userspaceController.deleteUserKnowledgebase(other);
+	}
+
+	@Test
+	public void publishAndItsStatusFindTheKnowledgeBaseFromTheFolder() throws Exception {
+		actAs(OWNER);
+		final UserspaceKnowledgebaseDto knowledgeBase = newKnowledgeBase("knowledge base to publish");
+		final UserspaceFolderDto folder = newFolder(knowledgeBase, "folder to publish");
+		actAs(SOMEONE_ELSE);
+		final UserspaceKnowledgebaseDto other = newKnowledgeBase("someone else's knowledge base");
+		final UserspaceFolderDto forged = new UserspaceFolderDto();
+		forged.code = folder.code;
+		forged.uploadCode = folder.uploadCode;
+		forged.parentUserspaceKnowledgebaseCode = other.code;
+
+		assertThrows(RuntimeException.class, () -> userspaceController.publishFolder(forged),
+				"a folder is published only by who can access its own knowledge base");
+		assertThrows(RuntimeException.class, () -> userspaceController.getPublishingStatus(forged),
+				"and only they read its status");
+		actAs(OWNER);
+		assertNotNull(userspaceController.getPublishingStatus(folder), "its owner reads it");
+
+		userspaceController.deleteUserKnowledgebase(knowledgeBase);
+		actAs(SOMEONE_ELSE);
+		userspaceController.deleteUserKnowledgebase(other);
+	}
+
+	@Test
+	public void whoUploadedAFileOwnsItAndDeletesIt() throws Exception {
+		actAs(OWNER);
+		final UserspaceKnowledgebaseDto knowledgeBase = newKnowledgeBase("shared knowledge base");
+		final UserspaceFolderDto folder = newFolder(knowledgeBase, "shared folder");
+		final GKnowledgeBase shared = persistentObjectManager.findById(GKnowledgeBase.class, knowledgeBase.code);
+		shared.setAccessibleUsers(List.of(OWNER, SOMEONE_ELSE));
+		persistentObjectManager.update(shared);
+		final GUserspaceProjectEndpoint uploads = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
+				folder.uploadCode);
+		final Path files = Path.of(localFolderDiscoveryService.getLocalPersistentFolder(userspaceHandler.getSystem(uploads),
+				uploads));
+		final String ownersName = Path.of(TEST_001_DOCX_FILE).getFileName().toString();
+		final String theirsName = Path.of(TEST_001_ODT_FILE).getFileName().toString();
+		uploadService.manageUpload(uploads.getCode(), List.of(multipartOf(TEST_001_DOCX_FILE)));
+		actAs(SOMEONE_ELSE);
+		uploadService.manageUpload(uploads.getCode(), List.of(multipartOf(TEST_001_ODT_FILE)));
+
+		final List<UserspaceFileDto> listed = userspaceController.listUserspaceFiles(uploads.getCode());
+		assertTrue(listed.stream().anyMatch(x -> theirsName.equals(x.name) && x.owner), "the uploader owns their file");
+		assertTrue(listed.stream().anyMatch(x -> ownersName.equals(x.name) && !x.owner), "not the others'");
+		assertThrows(GeboPersistenceException.class,
+				() -> userspaceController.deleteUserspaceFiles(List.of(fileOf(uploads, ownersName))),
+				"who neither owns the folder nor uploaded the file cannot delete it");
+		assertTrue(Files.exists(files.resolve(ownersName)), "it stays");
+		userspaceController.deleteUserspaceFiles(List.of(fileOf(uploads, theirsName)));
+		assertFalse(Files.exists(files.resolve(theirsName)), "the uploader deletes their own");
+
+		actAs(OWNER);
+		assertTrue(userspaceController.listUserspaceFiles(uploads.getCode()).stream()
+				.anyMatch(x -> ownersName.equals(x.name) && x.owner), "the owner's file is theirs");
+		userspaceController.deleteUserKnowledgebase(knowledgeBase);
+	}
+
+	@Test
+	public void aKnowledgeBaseGoesWithTheKnowledgeBasesItsOwnerMadeUnderIt() throws Exception {
+		actAs(OWNER);
+		final UserspaceKnowledgebaseDto parent = newKnowledgeBase("parent knowledge base");
+		final UserspaceKnowledgebaseDto child = newChildKnowledgeBase(parent, "child knowledge base");
+		final UserspaceFolderDto childFolder = newFolder(child, "folder of the child");
+		actAs(SOMEONE_ELSE);
+		final UserspaceKnowledgebaseDto othersChild = newChildKnowledgeBase(parent, "someone else's child");
+
+		actAs(OWNER);
+		userspaceController.deleteUserKnowledgebase(parent);
+		assertNull(persistentObjectManager.findById(GKnowledgeBase.class, parent.code), "the knowledge base is gone");
+		assertNull(persistentObjectManager.findById(GKnowledgeBase.class, child.code),
+				"with the knowledge base its owner made under it");
+		assertNull(persistentObjectManager.findById(GProject.class, childFolder.code), "and that one's folders");
+		assertNotNull(persistentObjectManager.findById(GKnowledgeBase.class, othersChild.code),
+				"a child someone else made stays theirs");
+
+		actAs(SOMEONE_ELSE);
+		userspaceController.deleteUserKnowledgebase(othersChild);
+	}
+
+	@Test
+	public void aFolderAndItsFilesAreReadOnlyByWhoCanAccessItsKnowledgeBase() throws Exception {
+		actAs(OWNER);
+		final UserspaceKnowledgebaseDto knowledgeBase = newKnowledgeBase("knowledge base to read");
+		final UserspaceFolderDto folder = newFolder(knowledgeBase, "folder to read");
+		final GUserspaceProjectEndpoint uploads = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
+				folder.uploadCode);
+		uploadService.manageUpload(uploads.getCode(), List.of(multipartOf(TEST_001_DOCX_FILE)));
+		impersonateAdminUser();
+		enableWorkflowSteps(persistentObjectManager.findById(GKnowledgeBase.class, knowledgeBase.code),
+				persistentObjectManager.findById(GProject.class, folder.code), uploads);
+		awaitFinished(ingestionJobService.executeSyncJob(uploads, null, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name()));
+		final GDocumentReference document = documentNamed(uploads,
+				Path.of(TEST_001_DOCX_FILE).getFileName().toString());
+		assertNotNull(document, "the file is ingested");
+
+		actAs(SOMEONE_ELSE);
+		assertThrows(RuntimeException.class, () -> userspaceController.findUserspaceFolderByCode(folder.code),
+				"who cannot access the knowledge base does not read its folder");
+		assertThrows(RuntimeException.class, () -> userspaceController.listUserspaceFiles(uploads.getCode()),
+				"nor its files");
+		assertTrue(userspaceController.findUserspaceFileByCodes(List.of(document.getCode())).isEmpty(),
+				"nor its documents' files");
+
+		final GKnowledgeBase shared = persistentObjectManager.findById(GKnowledgeBase.class, knowledgeBase.code);
+		shared.setAccessibleUsers(List.of(OWNER, SOMEONE_ELSE));
+		persistentObjectManager.update(shared);
+		assertNotNull(userspaceController.findUserspaceFolderByCode(folder.code), "shared with them, they read it");
+		assertTrue(userspaceController.listUserspaceFiles(uploads.getCode()).size() == 1, "and its files");
+		assertTrue(userspaceController.findUserspaceFileByCodes(List.of(document.getCode())).size() == 1,
+				"and its documents' files");
+
+		actAs(OWNER);
+		assertNotNull(userspaceController.findUserspaceFolderByCode(folder.code), "its owner reads it");
+		userspaceController.deleteUserKnowledgebase(knowledgeBase);
+	}
+
+	private UserspaceKnowledgebaseDto newChildKnowledgeBase(UserspaceKnowledgebaseDto parent, String description)
+			throws Exception {
+		final UserspaceKnowledgebaseDto knowledgeBase = new UserspaceKnowledgebaseDto();
+		knowledgeBase.description = description;
+		knowledgeBase.parentKnowledgebaseCode = parent.code;
+		return userspaceController.newUserKnowledgebase(knowledgeBase);
 	}
 
 	private UserspaceKnowledgebaseDto newKnowledgeBase(String description) throws Exception {

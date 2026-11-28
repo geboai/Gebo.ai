@@ -95,6 +95,15 @@ export class UserspaceFilesUploadModelService {
     }
 
     /**
+     * Deletes files of a userspace folder: they leave the knowledge base at its next publish.
+     * @param files The files to delete
+     * @returns Observable completing when they are deleted
+     */
+    deleteFiles(files: UserspaceFileDto[]): Observable<any> {
+        return this.userspaceServiceController.deleteUserspaceFiles(files);
+    }
+
+    /**
      * Polls the publishing status of a userspace folder.
      * @param dto The UserspaceFolderDto to check status for
      * @returns Observable of the current publishing status

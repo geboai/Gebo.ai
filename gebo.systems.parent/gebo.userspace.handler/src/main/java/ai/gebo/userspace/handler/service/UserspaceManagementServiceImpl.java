@@ -15,6 +15,7 @@ package ai.gebo.userspace.handler.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,9 @@ public class UserspaceManagementServiceImpl {
 			userspacefile.setCode(endpoint.getCode() + "/" + movedfile.getName());
 			userspacefile.setName(movedfile.getName());
 			userspacefile.setUserspaceEndpointCode(endpoint.getCode());
+			// who uploaded it: the owner of the file in the folder's listing
+			userspacefile.setUserCreated(securityService.getCurrentUser().getUsername());
+			userspacefile.setDateCreated(new Date());
 			// Store the file record in the repository: a file uploaded again replaces
 			// its record, also the one its deletion left
 			filesRepository.save(userspacefile);
