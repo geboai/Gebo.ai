@@ -13,6 +13,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -632,8 +633,8 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 			}
 			final List<Path> folders = new ArrayList<Path>();
 			final List<Path> files = new ArrayList<Path>();
-			try {
-				DirectoryStream<Path> directoryStream = Files.newDirectoryStream(file);
+			// closed once listed: an open stream holds a file handle, one per folder read
+			try (DirectoryStream<Path> directoryStream = Files.newDirectoryStream(file)) {
 				directoryStream.forEach(x -> {
 					if (Files.isDirectory(x)) {
 						folders.add(x);
@@ -641,9 +642,13 @@ public abstract class GAbstractContentManagementSystemHandler<SystemIntegrationT
 						files.add(x);
 					}
 				});
-			} catch (IOException e) {
+			} catch (IOException | DirectoryIteratorException e) {
+				// a folder that cannot be listed is skipped and the rest of the data source is
+				// read: the error consumer tells it to whoever follows the job, counts it, and
+				// keeps the end of session check from telling its contents deleted
 				errorConsumer.accept(ContentsAccessError.of(e, ContentsAccessedObjectType.FOLDER, file.toString()));
-				throw new GeboContentHandlerSystemException("Cannot access path:" + file.toString(), e);
+				LOGGER.error("Cannot access path:" + file.toString(), e);
+				return;
 			}
 			if (!files.isEmpty()) {
 				for (Path actualfile : files) {
