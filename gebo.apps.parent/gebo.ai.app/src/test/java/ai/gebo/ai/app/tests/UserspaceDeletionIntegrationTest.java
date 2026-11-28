@@ -55,7 +55,10 @@ import ai.gebo.workflows.compute.model.JobSummary;
  * and delete nothing; the data source deletion they rely on was refused to anyone
  * not an administrator. A folder named next to another knowledge base is refused.
  * The owner deletes single files too: they leave the folder at once and the
- * knowledge base at the folder's next publish; nobody else deletes them.
+ * knowledge base at the folder's next publish; nobody else deletes them. A file
+ * uploaded again after its deletion is ingested again (its upload used to fail on
+ * the record the first upload left); an upload is refused to whoever cannot access
+ * the folder's knowledge base and for a name leading out of the folder.
  */
 public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String OWNER = "userspace.owner@gebo.ai";
@@ -132,6 +135,48 @@ public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegr
 		assertTrue(awaitVectors(deleted.getCode(), false), "and erases its vectors");
 		assertNotNull(documentNamed(uploads, keptName), "the other document stays");
 		assertTrue(awaitVectors(kept.getCode(), true), "with its vectors");
+
+		actAs(OWNER);
+		uploadService.manageUpload(uploads.getCode(), List.of(multipartOf(TEST_001_DOCX_FILE)));
+		assertTrue(Files.exists(files.resolve(deletedName)), "the deleted file is uploaded again");
+		final GUserspaceFile again = userspaceFiles.findById(uploads.getCode() + "/" + deletedName).orElse(null);
+		assertTrue(again != null && !Boolean.TRUE.equals(again.getDeleted()), "its record is live again");
+		impersonateAdminUser();
+		awaitFinished(ingestionJobService.executeSyncJob(uploads, null, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name()));
+		final GDocumentReference reingested = documentNamed(uploads, deletedName);
+		assertNotNull(reingested, "the next publish ingests it again");
+		assertTrue(awaitVectors(reingested.getCode(), true), "with its vectors");
+
+		actAs(OWNER);
+		userspaceController.deleteUserKnowledgebase(knowledgeBase);
+	}
+
+	@Test
+	public void anUploadIsRefusedToWhoCannotAccessTheFolderAndForANameLeavingIt() throws Exception {
+		actAs(OWNER);
+		final UserspaceKnowledgebaseDto knowledgeBase = newKnowledgeBase("knowledge base refusing uploads");
+		final UserspaceFolderDto folder = newFolder(knowledgeBase, "folder refusing uploads");
+		final GUserspaceProjectEndpoint uploads = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
+				folder.uploadCode);
+		final Path files = Path.of(localFolderDiscoveryService.getLocalPersistentFolder(userspaceHandler.getSystem(uploads),
+				uploads));
+		final MockMultipartFile leaving = new MockMultipartFile("files[]", "../leaving.docx", null,
+				multipartOf(TEST_001_DOCX_FILE).getBytes());
+
+		assertThrows(RuntimeException.class,
+				() -> uploadService.manageUpload(uploads.getCode(), List.of(multipartOf(TEST_001_ODT_FILE), leaving)),
+				"a name cannot lead out of the folder");
+		assertFalse(Files.exists(files.getParent().resolve("leaving.docx")), "nothing is written out of it");
+		assertFalse(Files.exists(files.resolve(Path.of(TEST_001_ODT_FILE).getFileName().toString())),
+				"nor in it: every name is checked first");
+
+		actAs(SOMEONE_ELSE);
+		assertThrows(RuntimeException.class,
+				() -> uploadService.manageUpload(uploads.getCode(), List.of(multipartOf(TEST_001_ODT_FILE))),
+				"who cannot access the knowledge base cannot upload into its folders");
+		assertFalse(Files.exists(files.resolve(Path.of(TEST_001_ODT_FILE).getFileName().toString())),
+				"the refused file is not written");
 
 		actAs(OWNER);
 		userspaceController.deleteUserKnowledgebase(knowledgeBase);
