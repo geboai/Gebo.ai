@@ -39,7 +39,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Network Device
+ * Network device
  */
 @JsonPropertyOrder({
   NetworkEquipment.JSON_PROPERTY_ID,

@@ -15,7 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.AddWatchersRequestObjectId;
 import ai.gebo.redmine.client.model.AddWatchersRequestWatcher;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -81,7 +80,7 @@ public class AddWatchersRequest {
 
   public static final String JSON_PROPERTY_OBJECT_ID = "object_id";
   @jakarta.annotation.Nonnull
-  private AddWatchersRequestObjectId objectId;
+  private java.lang.Object objectId;
 
   public static final String JSON_PROPERTY_WATCHER = "watcher";
   @jakarta.annotation.Nullable
@@ -119,7 +118,7 @@ public class AddWatchersRequest {
     this.objectType = objectType;
   }
 
-  public AddWatchersRequest objectId(@jakarta.annotation.Nonnull AddWatchersRequestObjectId objectId) {
+  public AddWatchersRequest objectId(@jakarta.annotation.Nonnull java.lang.Object objectId) {
     
     this.objectId = objectId;
     return this;
@@ -133,14 +132,14 @@ public class AddWatchersRequest {
   @JsonProperty(value = JSON_PROPERTY_OBJECT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public AddWatchersRequestObjectId getObjectId() {
+  public java.lang.Object getObjectId() {
     return objectId;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_OBJECT_ID, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setObjectId(@jakarta.annotation.Nonnull AddWatchersRequestObjectId objectId) {
+  public void setObjectId(@jakarta.annotation.Nonnull java.lang.Object objectId) {
     this.objectId = objectId;
   }
 

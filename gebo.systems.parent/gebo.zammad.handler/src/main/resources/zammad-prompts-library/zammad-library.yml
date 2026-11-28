@@ -1,0 +1,32 @@
+ai.gebo.zammad.library:
+  - promptUse: zammad-standard-query-extraction-prompt
+    langCode: en
+    systemReference: /zammad-prompts-library/en/zammad-standard-query-extraction-prompt-system-prompt.txt
+    userReference: /zammad-prompts-library/en/zammad-standard-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+  - promptUse: zammad-native-query-extraction-prompt
+    langCode: en
+    systemReference: /zammad-prompts-library/en/zammad-native-query-extraction-prompt-system-prompt.txt
+    userReference: /zammad-prompts-library/en/zammad-native-query-extraction-prompt-user-prompt.txt
+    chatHistory: REQUIRED
+    contextDocuments: NOT_REQUIRED
+ai.gebo.zammad.uses:
+  - code: zammad-standard-query-extraction-prompt
+    description: Extracts a few plain-text, operator-free search strings from the user's question for the Zammad search over the tickets (titles and messages) and the knowledge base answers.
+    module: zammad
+    placeholders:
+      - placeholder: format
+        description: The structured-output format the extracted search strings must comply with.
+      - placeholder: question
+        description: The user's current question or request text.
+  - code: zammad-native-query-extraction-prompt
+    description: Generates a structured Zammad tickets and knowledge base search filter (as JSON) from the user's question and the available Zammad groups, translated server side into a ticket search condition.
+    module: zammad
+    placeholders:
+      - placeholder: format
+        description: The JSON format of the Zammad tickets search filter.
+      - placeholder: zammadGroups
+        description: Catalog of the Zammad groups whose tickets can be searched.
+      - placeholder: question
+        description: The user's current question or request text.

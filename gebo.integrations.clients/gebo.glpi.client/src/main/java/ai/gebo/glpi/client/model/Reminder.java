@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Personal Reminder
+ * Personal reminder
  */
 @JsonPropertyOrder({
   Reminder.JSON_PROPERTY_ID,

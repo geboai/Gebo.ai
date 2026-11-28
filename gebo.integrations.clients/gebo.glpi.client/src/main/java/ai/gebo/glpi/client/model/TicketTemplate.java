@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Ticket Template
+ * Ticket template
  */
 @JsonPropertyOrder({
   TicketTemplate.JSON_PROPERTY_ID,

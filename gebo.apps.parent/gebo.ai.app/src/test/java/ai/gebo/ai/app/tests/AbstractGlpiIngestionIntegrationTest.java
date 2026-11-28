@@ -1,0 +1,249 @@
+/**
+ * This Source Code is subject to the terms of the
+ * Gebo.ai community version Mozilla Public License Version 2.0 (MPL-2.0) — With Data Protection Clauses
+ * If a copy of the LICENCE was not distributed with this file, You can obtain one at
+ * https://gebo.ai/gebo-ai-community-version-mozilla-public-license-version-2-0-mpl-2-0-with-data-protection-clauses/
+ * and https://mozilla.org/MPL/2.0/.
+ * Copyright (c) 2025+ Gebo.ai
+ */
+
+package ai.gebo.ai.app.tests;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.ai.document.Document;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.testcontainers.containers.Container.ExecResult;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.Network;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.utility.MountableFile;
+
+import ai.gebo.architecture.search.model.SearchQuery;
+import ai.gebo.architecture.search.model.SearchResult;
+import ai.gebo.architecture.search.model.SearchableSystemMetaData;
+import ai.gebo.glpi.handler.GGlpiProjectEndpoint;
+import ai.gebo.glpi.handler.GGlpiSystem;
+import ai.gebo.glpi.handler.controllers.GlpiSystemsController;
+import ai.gebo.glpi.handler.impl.GlpiContentManagementHandlerImpl;
+import ai.gebo.glpi.handler.impl.GlpiNavigationUtil;
+import ai.gebo.glpi.handler.impl.GlpiSearchService;
+import ai.gebo.glpi.handler.impl.GlpiSystemsTestService;
+import ai.gebo.glpi.handler.repositories.GlpiSystemRepository;
+import ai.gebo.glpi.search.api.GlpiSearchFilter;
+import ai.gebo.glpi.search.api.GlpiSearchFilter.GlpiItemKind;
+import ai.gebo.knlowledgebase.model.systems.GSystemRole;
+import ai.gebo.model.OperationStatus;
+import ai.gebo.model.base.TypedInputStream;
+import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.secrets.model.GeboOauth2SecretContent;
+import ai.gebo.secrets.model.GeboUsernamePasswordContent;
+
+/**
+ * Ingestion of a GLPI entity through the {@code gebo.glpi.handler} module: the
+ * LLMs are the fake ones of the base class, the ingestion, chunking and
+ * embedding pipeline is the real one. Each subclass runs it on one GLPI
+ * release, with containers of its own.
+ * <p>
+ * The data source is a real GLPI ({@code glpi/glpi} image, auto-installed on a
+ * MySQL container) seeded by {@code GLPI-IT/seed-glpi.sh}, run inside the GLPI
+ * container: the APIs on, an OAuth client for the password grant, an
+ * entity with two tickets (follow-ups, a task, a solution and two attached
+ * files, one of them a PDF) and two knowledge base articles. A data source
+ * selecting the entity must ingest every ticket body, timeline item, attached
+ * file and article as its own document, with their text in the vectors; the
+ * live search service then finds them and streams them back.
+ */
+public abstract class AbstractGlpiIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
+	/** The default Super-Admin account of a fresh GLPI install */
+	private static final String GLPI_USER = "glpi";
+	private static final String GLPI_PASSWORD = "glpi";
+	private static final String OAUTH_CLIENT_SECRET = "gebo-glpi-it-only-client-secret-0123456789";
+	private static final String SEED_DIR = "/tmp/gebo-seed/";
+	private static final String DB_PASSWORD = "gebo-glpi-it-db";
+
+	/** The MySQL database of a GLPI container, reached as "db" on the network */
+	protected static GenericContainer<?> glpiDatabase(Network network) {
+		return new GenericContainer<>(DockerImageName.parse("mysql:8.4")).withNetwork(network)
+				.withNetworkAliases("db").withEnv("MYSQL_RANDOM_ROOT_PASSWORD", "yes").withEnv("MYSQL_DATABASE", "glpi")
+				.withEnv("MYSQL_USER", "glpi").withEnv("MYSQL_PASSWORD", DB_PASSWORD)
+				.waitingFor(Wait.forLogMessage(".*ready for connections.*port: 3306.*", 1)
+						.withStartupTimeout(Duration.ofMinutes(3)));
+	}
+
+	/**
+	 * A GLPI container of the given image. GLPI installs itself on first start
+	 * (GLPI_DB_* all set); Apache starts once the installation is done.
+	 */
+	protected static GenericContainer<?> glpiServer(String image, Network network, GenericContainer<?> database) {
+		return new GenericContainer<>(DockerImageName.parse(image)).withNetwork(network).dependsOn(database)
+				.withExposedPorts(80).withEnv("GLPI_DB_HOST", "db").withEnv("GLPI_DB_PORT", "3306")
+				.withEnv("GLPI_DB_NAME", "glpi").withEnv("GLPI_DB_USER", "glpi").withEnv("GLPI_DB_PASSWORD", DB_PASSWORD)
+				.waitingFor(Wait.forLogMessage(".*resuming normal operations.*", 1)
+						.withStartupTimeout(Duration.ofMinutes(6)));
+	}
+
+	/** The GLPI container of the subclass */
+	protected abstract GenericContainer<?> glpi();
+
+	/**
+	 * Ticket "VPN drops every evening": body, 2 follow-ups, a task, a solution
+	 * and the firewall log file. Ticket "New laptop for the warehouse manager":
+	 * body, a follow-up and the PDF. The 2 knowledge base articles.
+	 */
+	static final int EXPECTED_DOCUMENTS = 11;
+
+	@Autowired
+	GlpiSystemRepository glpiSystemsRepository;
+	@Autowired
+	GlpiSystemsTestService glpiSystemsTestService;
+	@Autowired
+	GlpiSearchService glpiSearchService;
+
+	@Test
+	public void testGlpiIngestion() throws Exception {
+		final GenericContainer<?> glpi = glpi();
+		if (!glpi.isRunning()) {
+			glpi.start();
+		}
+		String baseUri = "http://" + glpi.getHost() + ":" + glpi.getMappedPort(80);
+		LOGGER.info("GLPI " + glpi.getDockerImageName() + " reachable at " + baseUri);
+		Seeded seeded = seed(glpi);
+
+		// the credentials as the GLPI fast setup stores them: the OAuth client and
+		// the GLPI user, two secrets
+		GeboOauth2SecretContent client = new GeboOauth2SecretContent();
+		client.setProviderName(GlpiSystemsController.GLPI_OAUTH2_PROVIDER_NAME);
+		client.setClientId(seeded.clientId);
+		client.setSecret(OAUTH_CLIENT_SECRET);
+		String clientSecretId = secretsAccessService.storeSecret(client, "GLPI integration test OAuth client",
+				GlpiContentManagementHandlerImpl.GLPI_SYSTEM_TYPE);
+		GeboUsernamePasswordContent user = new GeboUsernamePasswordContent();
+		user.setUsername(GLPI_USER);
+		user.setPassword(GLPI_PASSWORD);
+		String userSecretId = secretsAccessService.storeSecret(user, "GLPI integration test user",
+				GlpiContentManagementHandlerImpl.GLPI_SYSTEM_TYPE);
+
+		GGlpiSystem system = new GGlpiSystem();
+		system.setDescription("Test GLPI system");
+		system.setBaseUri(baseUri);
+		system.setOauthClientSecretCode(clientSecretId);
+		system.setSecretCode(userSecretId);
+		system.setUsedCapabilities(List.of(GSystemRole.DOCUMENTS_MANAGEMENT));
+		system.setCreationDate(new Date());
+		system.setModificationDate(new Date());
+		system.setContentManagementSystemType(GlpiContentManagementHandlerImpl.GLPI_SYSTEM_TYPE);
+		OperationStatus<GGlpiSystem> check = glpiSystemsTestService.testGlpiSystem(system);
+		assertFalse(check.isHasErrorMessages(), "The GLPI system test must pass: " + check.getMessages());
+		system = persistentObjectManager.insert(system);
+
+		GGlpiProjectEndpoint endpoint = createAndPersist("GLPI ingestion test", GGlpiProjectEndpoint.class);
+		endpoint.setGlpiSystemCode(system.getCode());
+		VFilesystemReference entity = new VFilesystemReference();
+		entity.root = GlpiNavigationUtil.toRoot(seeded.entityId, "Gebo IT test entity");
+		endpoint.setPaths(List.of(entity));
+		endpoint = persistentObjectManager.update(endpoint);
+
+		runAndWaitDoneCheckingResults(endpoint, EXPECTED_DOCUMENTS, true);
+
+		List<Document> stored = awaitSettledVectorStoreContent(getTestVectorStore(), x -> false);
+		assertContains(stored, "drops every evening around 18:00", "the body of the VPN ticket");
+		assertContains(stored, "Rekey lifetime set to 8 hours", "a follow-up of the VPN ticket");
+		assertContains(stored, "Check the VPN tunnel again tomorrow", "the task of the VPN ticket");
+		assertContains(stored, "Aligning the IKE rekey lifetime", "the solution of the VPN ticket");
+		assertContains(stored, "IKE SA rekey failed: lifetime mismatch", "the file attached to the VPN ticket");
+		assertContains(stored, "Bell Telephone Laboratories", "the PDF attached to the laptop ticket");
+		assertContains(stored, "Hold the reset button for ten seconds", "a knowledge base article");
+		assertNotNull(glpiSystemsRepository.findById(system.getCode()).orElse(null),
+				"The GLPI system must still be resolvable after ingestion");
+
+		// the live search the chat agents use, on the same GLPI: a text search, a
+		// native one, and the results streamed back as the ingestion reads them
+		final String systemCode = system.getCode();
+		SearchableSystemMetaData searchable = glpiSearchService.getSearchableSystems().stream()
+				.filter(m -> m.getSystemConfigurationReference() instanceof GGlpiSystem s
+						&& systemCode.equals(s.getCode()))
+				.findFirst().orElse(null);
+		assertNotNull(searchable, "The GLPI system must be among the searchable systems");
+		SearchQuery text = new SearchQuery();
+		text.setQueryText("VPN evening");
+		SearchResult vpnTicket = withTitle(glpiSearchService.search(text, searchable, 10), "VPN drops every evening");
+		assertEquals(5, vpnTicket.getChilds().size(),
+				"The VPN ticket result holds its solution, 2 follow-ups, task and document");
+		assertTrue(load(vpnTicket).contains("drops every evening around 18:00"),
+				"The VPN ticket result streams the ticket body");
+		SearchResult attachedLog = vpnTicket.getChilds().stream().filter(c -> c.getId().startsWith("glpi-document-"))
+				.findFirst().orElseThrow();
+		assertTrue(load(attachedLog).contains("IKE SA rekey failed: lifetime mismatch"),
+				"The document child streams the attached file");
+
+		GlpiSearchFilter articles = new GlpiSearchFilter();
+		articles.setItemKinds(List.of(GlpiItemKind.KB_ARTICLE));
+		articles.setTitleTerms(List.of("printer"));
+		List<SearchResult> found = glpiSearchService.nativeSearch(articles, searchable, 10);
+		assertEquals(1, found.size(), "One knowledge base article has \"printer\" in its title: " + found);
+		assertTrue(load(withTitle(found, "How to reset the office printer")).contains("Hold the reset button"),
+				"The article result streams the article");
+
+		cleanPersistent(endpoint);
+		persistentObjectManager.delete(system);
+		secretsAccessService.deleteSecret(clientSecretId);
+		secretsAccessService.deleteSecret(userSecretId);
+	}
+
+	private static SearchResult withTitle(List<SearchResult> results, String title) {
+		return results.stream()
+				.filter(r -> r.getResultReference() != null && r.getResultReference().getTitle() != null
+						&& r.getResultReference().getTitle().contains(title))
+				.findFirst().orElseThrow(() -> new AssertionError("No search result titled " + title + ": " + results));
+	}
+
+	private String load(SearchResult result) throws Exception {
+		TypedInputStream content = glpiSearchService.loadSearchResult(result);
+		assertNotNull(content, "The search result " + result.getId() + " must be loadable");
+		try (InputStream in = content.getInputStream()) {
+			return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+		}
+	}
+
+	private static void assertContains(List<Document> stored, String text, String what) {
+		assertTrue(stored.stream().anyMatch(d -> d.getText() != null && d.getText().contains(text)),
+				"The vectors must hold " + what + " (\"" + text + "\")");
+	}
+
+	private record Seeded(long entityId, String clientId) {
+	}
+
+	/**
+	 * Copies the seed script and the files to attach into the GLPI container and
+	 * runs it there; returns the entity and the OAuth client id it prints.
+	 */
+	private Seeded seed(GenericContainer<?> glpi) throws Exception {
+		glpi.copyFileToContainer(MountableFile.forClasspathResource("GLPI-IT/seed-glpi.sh"),
+				SEED_DIR + "seed-glpi.sh");
+		glpi.copyFileToContainer(MountableFile.forClasspathResource("GLPI-IT/vpn-firewall-log.txt"),
+				SEED_DIR + "vpn-firewall-log.txt");
+		glpi.copyFileToContainer(MountableFile.forClasspathResource(TEST_001_PDF_FILE), SEED_DIR + "v4man.pdf");
+		ExecResult result = glpi.execInContainer("bash", SEED_DIR + "seed-glpi.sh", GLPI_USER, GLPI_PASSWORD,
+				OAUTH_CLIENT_SECRET, SEED_DIR);
+		assertEquals(0, result.getExitCode(), "The GLPI seed must succeed, stderr: " + result.getStderr());
+		LOGGER.info("GLPI seeded: " + result.getStdout().replaceAll("CLIENT_ID=\\S+", "CLIENT_ID=<hidden>"));
+		Matcher entity = Pattern.compile("ENTITY_ID=(\\d+)").matcher(result.getStdout());
+		Matcher clientId = Pattern.compile("CLIENT_ID=(\\S+)").matcher(result.getStdout());
+		assertTrue(entity.find() && clientId.find(), "The GLPI seed must print the entity and the OAuth client id");
+		return new Seeded(Long.parseLong(entity.group(1)), clientId.group(1));
+	}
+}

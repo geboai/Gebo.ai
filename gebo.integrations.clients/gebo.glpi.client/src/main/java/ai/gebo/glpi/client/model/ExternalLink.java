@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * External Link
+ * External link
  */
 @JsonPropertyOrder({
   ExternalLink.JSON_PROPERTY_ID,

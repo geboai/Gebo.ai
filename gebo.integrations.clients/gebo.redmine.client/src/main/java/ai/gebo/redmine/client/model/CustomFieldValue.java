@@ -15,7 +15,6 @@ package ai.gebo.redmine.client.model;
 
 import java.util.Objects;
 import java.util.Arrays;
-import ai.gebo.redmine.client.model.CustomFieldResponseValueType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -51,7 +50,7 @@ public class CustomFieldValue {
 
   public static final String JSON_PROPERTY_VALUE = "value";
   @jakarta.annotation.Nonnull
-  private CustomFieldResponseValueType value;
+  private java.lang.Object value;
 
   public CustomFieldValue() {
   }
@@ -131,7 +130,7 @@ public class CustomFieldValue {
     this.multiple = multiple;
   }
 
-  public CustomFieldValue value(@jakarta.annotation.Nonnull CustomFieldResponseValueType value) {
+  public CustomFieldValue value(@jakarta.annotation.Nonnull java.lang.Object value) {
     
     this.value = value;
     return this;
@@ -145,14 +144,14 @@ public class CustomFieldValue {
   @JsonProperty(value = JSON_PROPERTY_VALUE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
 
-  public CustomFieldResponseValueType getValue() {
+  public java.lang.Object getValue() {
     return value;
   }
 
 
   @JsonProperty(value = JSON_PROPERTY_VALUE, required = true)
   @JsonInclude(value = JsonInclude.Include.ALWAYS)
-  public void setValue(@jakarta.annotation.Nonnull CustomFieldResponseValueType value) {
+  public void setValue(@jakarta.annotation.Nonnull java.lang.Object value) {
     this.value = value;
   }
 

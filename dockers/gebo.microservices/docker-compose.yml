@@ -11,7 +11,7 @@
 #
 # App-to-app calls resolve via Eureka + client-side LoadBalancer by service-id, so
 # nothing here NEEDS a host port except the gateway. Every microservice publishes
-# one anyway, on its own dedicated port from the 13000-13020 block, so each service
+# one anyway, on its own dedicated port from the 13000-13024 block, so each service
 # can be reached (and its /v3/api-docs scraped by the generated client stubs)
 # without going through the gateway:
 #
@@ -27,9 +27,13 @@
 #                                                       13018 heimdall (security)
 #                                                       13019 tyr (workflows/usage/jobs)
 #                                                       13020 webdav
+#                                                       13021 redmine
+#                                                       13022 glpi
+#                                                       13023 openproject
+#                                                       13024 zammad
 #
 # 13018 extends what used to be a full 13000-13017 block; heimdall was added after
-# every slot in it was taken. 13019 (tyr) and 13020 (webdav) followed the same way.
+# every slot in it was taken. 13019 (tyr), 13020 (webdav) and 13021 (redmine) followed the same way.
 #
 # Each port is fixed in that service's application.yml, so the container port and
 # the published port are the same number - no translation to keep in sync.
@@ -180,6 +184,18 @@ services:
       - webdav-work:/v/webdav-work
       - aws-s3-work:/v/aws-s3-work
       - webdav-logs:/v/webdav-logs
+      - redmine-home:/v/redmine-home
+      - redmine-work:/v/redmine-work
+      - redmine-logs:/v/redmine-logs
+      - glpi-home:/v/glpi-home
+      - glpi-work:/v/glpi-work
+      - glpi-logs:/v/glpi-logs
+      - openproject-home:/v/openproject-home
+      - openproject-work:/v/openproject-work
+      - openproject-logs:/v/openproject-logs
+      - zammad-home:/v/zammad-home
+      - zammad-work:/v/zammad-work
+      - zammad-logs:/v/zammad-logs
       - graphicator-logs:/v/graphicator-logs
       - fulltextor-logs:/v/fulltextor-logs
       - jira-logs:/v/jira-logs
@@ -522,6 +538,46 @@ services:
     image: geboai/webdav.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
     ports:
       - "13020:13020"
+  redmine:
+    <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - redmine-home:/opt/gebo.ai/home
+      - redmine-work:/opt/gebo.ai/work
+      - redmine-logs:/opt/gebo.ai/logs
+    image: geboai/redmine.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
+    ports:
+      - "13021:13021"
+  glpi:
+    <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - glpi-home:/opt/gebo.ai/home
+      - glpi-work:/opt/gebo.ai/work
+      - glpi-logs:/opt/gebo.ai/logs
+    image: geboai/glpi.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
+    ports:
+      - "13022:13022"
+  openproject:
+    <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - openproject-home:/opt/gebo.ai/home
+      - openproject-work:/opt/gebo.ai/work
+      - openproject-logs:/opt/gebo.ai/logs
+    image: geboai/openproject.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
+    ports:
+      - "13023:13023"
+  zammad:
+    <<: *microservice
+    volumes:
+      - ./config:/opt/gebo.ai/config:ro
+      - zammad-home:/opt/gebo.ai/home
+      - zammad-work:/opt/gebo.ai/work
+      - zammad-logs:/opt/gebo.ai/logs
+    image: geboai/zammad.gebo.ai:${GEBO_VERSION:-1.0.7.0-SNAPSHOT}
+    ports:
+      - "13024:13024"
   integration:
     <<: *microservice
     volumes:
@@ -641,6 +697,18 @@ volumes:
   webdav-home:
   webdav-work:
   webdav-logs:
+  redmine-home:
+  redmine-work:
+  redmine-logs:
+  glpi-home:
+  glpi-work:
+  glpi-logs:
+  openproject-home:
+  openproject-work:
+  openproject-logs:
+  zammad-home:
+  zammad-work:
+  zammad-logs:
   integration-home:
   integration-work:
   integration-logs:

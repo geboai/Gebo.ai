@@ -38,6 +38,10 @@ SERVICES = [
     ("heimdall", 13018, "heimdall-gebo-ai"),
     ("tyr", 13019, "tyr-gebo-ai"),
     ("webdav", 13020, "webdav-gebo-ai"),
+    ("redmine", 13021, "redmine-gebo-ai"),
+    ("glpi", 13022, "glpi-gebo-ai"),
+    ("openproject", 13023, "openproject-gebo-ai"),
+    ("zammad", 13024, "zammad-gebo-ai"),
 ]
 NO_CONTROLLER_SERVICES = {"gateway", "eureka"}
 NOTES_NO_CONTROLLERS = {

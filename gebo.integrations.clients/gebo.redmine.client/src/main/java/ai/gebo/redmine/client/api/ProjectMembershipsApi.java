@@ -2,7 +2,6 @@ package ai.gebo.redmine.client.api;
 
 import ai.gebo.redmine.client.invoker.ApiClient;
 
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.CreateMembership201Response;
 import ai.gebo.redmine.client.model.CreateMembershipRequest;
 import ai.gebo.redmine.client.model.Errors;
@@ -67,7 +66,7 @@ public class ProjectMembershipsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#POST">Create membership Documentation</a>
      */
-    private ResponseSpec createMembershipRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec createMembershipRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling createMembership", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -128,7 +127,7 @@ public class ProjectMembershipsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#POST">Create membership Documentation</a>
      */
-    public CreateMembership201Response createMembership(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public CreateMembership201Response createMembership(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<CreateMembership201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createMembershipRequestCreation(format, projectId, createMembershipRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -151,7 +150,7 @@ public class ProjectMembershipsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#POST">Create membership Documentation</a>
      */
-    public ResponseEntity<CreateMembership201Response> createMembershipWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<CreateMembership201Response> createMembershipWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<CreateMembership201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createMembershipRequestCreation(format, projectId, createMembershipRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -174,7 +173,7 @@ public class ProjectMembershipsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#POST">Create membership Documentation</a>
      */
-    public ResponseSpec createMembershipWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec createMembershipWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateMembershipRequest createMembershipRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return createMembershipRequestCreation(format, projectId, createMembershipRequest, xRedmineSwitchUser);
     }
 
@@ -428,7 +427,7 @@ public class ProjectMembershipsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#GET">List memberships Documentation</a>
      */
-    private ResponseSpec getMembershipsRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    private ResponseSpec getMembershipsRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getMemberships", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -494,7 +493,7 @@ public class ProjectMembershipsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#GET">List memberships Documentation</a>
      */
-    public GetMemberships200Response getMemberships(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    public GetMemberships200Response getMemberships(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         ParameterizedTypeReference<GetMemberships200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getMembershipsRequestCreation(format, projectId, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page).body(localVarReturnType);
     }
@@ -520,7 +519,7 @@ public class ProjectMembershipsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#GET">List memberships Documentation</a>
      */
-    public ResponseEntity<GetMemberships200Response> getMembershipsWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    public ResponseEntity<GetMemberships200Response> getMembershipsWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         ParameterizedTypeReference<GetMemberships200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getMembershipsRequestCreation(format, projectId, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page).toEntity(localVarReturnType);
     }
@@ -546,7 +545,7 @@ public class ProjectMembershipsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Memberships#GET">List memberships Documentation</a>
      */
-    public ResponseSpec getMembershipsWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
+    public ResponseSpec getMembershipsWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer offset, @jakarta.annotation.Nullable Integer limit, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa, @jakarta.annotation.Nullable Integer page) throws RestClientResponseException {
         return getMembershipsRequestCreation(format, projectId, offset, limit, nometa, xRedmineSwitchUser, xRedmineNometa, page);
     }
 

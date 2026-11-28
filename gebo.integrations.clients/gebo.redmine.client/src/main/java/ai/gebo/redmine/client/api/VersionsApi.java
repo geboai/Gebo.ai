@@ -2,7 +2,6 @@ package ai.gebo.redmine.client.api;
 
 import ai.gebo.redmine.client.invoker.ApiClient;
 
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.CreateVersion201Response;
 import ai.gebo.redmine.client.model.CreateVersionRequest;
 import ai.gebo.redmine.client.model.Errors;
@@ -67,7 +66,7 @@ public class VersionsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#POST">Create version Documentation</a>
      */
-    private ResponseSpec createVersionRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec createVersionRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling createVersion", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -128,7 +127,7 @@ public class VersionsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#POST">Create version Documentation</a>
      */
-    public CreateVersion201Response createVersion(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public CreateVersion201Response createVersion(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<CreateVersion201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createVersionRequestCreation(format, projectId, createVersionRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -151,7 +150,7 @@ public class VersionsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#POST">Create version Documentation</a>
      */
-    public ResponseEntity<CreateVersion201Response> createVersionWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<CreateVersion201Response> createVersionWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<CreateVersion201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return createVersionRequestCreation(format, projectId, createVersionRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -174,7 +173,7 @@ public class VersionsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#POST">Create version Documentation</a>
      */
-    public ResponseSpec createVersionWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec createVersionWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull CreateVersionRequest createVersionRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return createVersionRequestCreation(format, projectId, createVersionRequest, xRedmineSwitchUser);
     }
 
@@ -425,7 +424,7 @@ public class VersionsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#GET">List versions by project Documentation</a>
      */
-    private ResponseSpec getVersionsByProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    private ResponseSpec getVersionsByProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getVersionsByProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -485,7 +484,7 @@ public class VersionsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#GET">List versions by project Documentation</a>
      */
-    public GetVersionsByProject200Response getVersionsByProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    public GetVersionsByProject200Response getVersionsByProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         ParameterizedTypeReference<GetVersionsByProject200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getVersionsByProjectRequestCreation(format, projectId, nometa, xRedmineSwitchUser, xRedmineNometa).body(localVarReturnType);
     }
@@ -508,7 +507,7 @@ public class VersionsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#GET">List versions by project Documentation</a>
      */
-    public ResponseEntity<GetVersionsByProject200Response> getVersionsByProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    public ResponseEntity<GetVersionsByProject200Response> getVersionsByProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         ParameterizedTypeReference<GetVersionsByProject200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getVersionsByProjectRequestCreation(format, projectId, nometa, xRedmineSwitchUser, xRedmineNometa).toEntity(localVarReturnType);
     }
@@ -531,7 +530,7 @@ public class VersionsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Versions#GET">List versions by project Documentation</a>
      */
-    public ResponseSpec getVersionsByProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
+    public ResponseSpec getVersionsByProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable Integer nometa, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable Integer xRedmineNometa) throws RestClientResponseException {
         return getVersionsByProjectRequestCreation(format, projectId, nometa, xRedmineSwitchUser, xRedmineNometa);
     }
 

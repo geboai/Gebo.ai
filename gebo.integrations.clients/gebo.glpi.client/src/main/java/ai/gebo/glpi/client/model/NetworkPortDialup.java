@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Connection by dial up - Dialup Port
+ * Connection by dial line - Dialup Port
  */
 @JsonPropertyOrder({
   NetworkPortDialup.JSON_PROPERTY_ID,

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Close Time
+ * Close time
  */
 @JsonPropertyOrder({
   CloseTime.JSON_PROPERTY_ID,

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * PCI Device item
+ * PCI device item
  */
 @JsonPropertyOrder({
   PCIDeviceItem.JSON_PROPERTY_ID,

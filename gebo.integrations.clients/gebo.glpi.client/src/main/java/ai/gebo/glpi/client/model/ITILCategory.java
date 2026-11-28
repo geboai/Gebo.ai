@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * ITIL Category
+ * ITIL category
  */
 @JsonPropertyOrder({
   ITILCategory.JSON_PROPERTY_ID,

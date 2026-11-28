@@ -81,10 +81,10 @@ public class ApiClient extends JavaTimeFormatter {
     protected final HttpHeaders defaultHeaders = new HttpHeaders();
     protected final MultiValueMap<String, String> defaultCookies = new LinkedMultiValueMap<>();
 
-    protected String basePath = "https://glpi.whitaker.company/api.php";
+    protected String basePath = "http://localhost/api.php";
     protected List<ServerConfiguration> servers = new ArrayList<ServerConfiguration>(Arrays.asList(
         new ServerConfiguration(
-            "https://glpi.whitaker.company/api.php",
+            "http://localhost/api.php",
             "GLPI High-Level REST API",
             new HashMap<String, ServerVariable>()
         )

@@ -1,0 +1,54 @@
+<p-blockUI id="LockIconBlockUI" [target]="redmineSystemCtrl" [blocked]="loading || testing">
+  <i class="pi pi-lock" style="font-size: 3rem"></i>
+</p-blockUI>
+<p-panel id="MainPanel" gebo-ai-label #redmineSystemCtrl header="Editing Redmine system" [formGroup]="formGroup">
+  @if (!isWizardMode) {
+    <div class="geboButtonsBar" style="vertical-align: baseline;">
+      <div class="grid">
+        <div class="col-3">
+          <p-button id="SaveBtn" gebo-ai-label [outlined]="true" label="Save" (onClick)="doSave()" icon="pi pi-save" severity="success"
+            [disabled]="this.formGroup.invalid || canSave===false" styleClass="w-full"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="TestBtn" gebo-ai-label [outlined]="true" label="Test connection" (onClick)="doTest()" icon="pi pi-check-circle" severity="info"
+            [disabled]="this.formGroup.invalid || testing" styleClass="w-full"></p-button>
+        </div>
+        <div class="col-3">
+          <p-button id="CancelBtn" gebo-ai-label [outlined]="true" label="Cancel" severity="contrast" (onClick)="cancelAction.emit(true)"
+            styleClass="w-full" />
+        </div>
+        <div class="col-3">
+          <p-button id="DeleteBtn" gebo-ai-label [outlined]="true" label="Delete" severity="danger" icon="pi pi-trash" (onClick)="doDelete()"
+            styleClass="w-full" [disabled]="canDelete===false" />
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="geboDialogContent">
+    <gebo-ai-notifications [messages]="userMessages"></gebo-ai-notifications>
+    <div class="grid">
+      <div class="col-6">
+        <gebo-ai-field id="description" label="Description" help="Enter the description of the Redmine system." [required]="true">
+          <input id="description" formControlName="description" maxlength="120" [required]="true" pInputText gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="code" label="Unique Code" help="Automatically generated unique code of the Redmine system.">
+          <input id="code" formControlName="code" readonly="true" pInputText gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="baseUri" label="Base internet address" help="Address of the Redmine server, for example https://redmine.example.com. The REST web service must be enabled in Administration, Settings, API." [required]="true">
+          <input type="text" id="baseUri" formControlName="baseUri" class="col-12" [required]="true" pInputText gebo-ai-field-element />
+        </gebo-ai-field>
+      </div>
+      <div class="col-6">
+        <gebo-ai-field id="secretCode" label="Identity used" help="The Redmine account Gebo.ai reads with: an API key (token) or a username and password. Gebo.ai sees what this account sees, private notes and private issues included." [required]="true" placeholder="Select an identity">
+          <geboai-editable-listbox-component id="secretCode" formControlName="secretCode" [optionsObservable]="identitiesObservable" [required]="true" [createNewRecordRequest]="newSecretAction" gebo-ai-field-element>
+          </geboai-editable-listbox-component>
+        </gebo-ai-field>
+      </div>
+    </div>
+  </div>
+</p-panel>

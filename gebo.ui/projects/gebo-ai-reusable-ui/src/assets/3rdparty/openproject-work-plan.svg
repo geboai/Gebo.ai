@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Original Gebo.ai icon for the OpenProject data sources: a work plan with its bars -->
+  <rect x="3" y="5" width="26" height="22" rx="2" fill="#e8f1f8" stroke="#1f5f8b" stroke-width="1.5"/>
+  <path d="M3 10 h26" stroke="#1f5f8b" stroke-width="1.2"/>
+  <rect x="6" y="13" width="10" height="3" rx="1" fill="#1f5f8b"/>
+  <rect x="12" y="18" width="11" height="3" rx="1" fill="#7fb3d5"/>
+  <rect x="19" y="23" width="7" height="2.2" rx="1" fill="#1f5f8b"/>
+  <path d="M16 14.5 h1.5 v5" stroke="#1f5f8b" stroke-width="1" stroke-linecap="round"/>
+</svg>

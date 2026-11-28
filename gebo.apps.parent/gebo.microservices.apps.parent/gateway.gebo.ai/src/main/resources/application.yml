@@ -307,6 +307,26 @@ gebo:
             - module-ioc-dispatcher-component
             - resources-dispose-component
             - system-settings-controller-component
+        redmine_gebo_ai:
+          redmine-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        glpi_gebo_ai:
+          glpi-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        openproject_gebo_ai:
+          openproject-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
+        zammad_gebo_ai:
+          zammad-module:
+            - module-ioc-dispatcher-component
+            - resources-dispose-component
+            - system-settings-controller-component
         integration_gebo_ai:
           integration-module:
             - module-ioc-dispatcher-component

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Generic Device item
+ * Generic device item
  */
 @JsonPropertyOrder({
   GenericDeviceItem.JSON_PROPERTY_ID,

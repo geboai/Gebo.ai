@@ -132,13 +132,19 @@ public class Document {
   @JsonCreator
   public Document(
     @JsonProperty(JSON_PROPERTY_ID) Long id, 
+    @JsonProperty(JSON_PROPERTY_FILENAME) String filename, 
     @JsonProperty(JSON_PROPERTY_FILEPATH) String filepath, 
-    @JsonProperty(JSON_PROPERTY_DOWNLOAD_URL) String downloadUrl
+    @JsonProperty(JSON_PROPERTY_DOWNLOAD_URL) String downloadUrl, 
+    @JsonProperty(JSON_PROPERTY_MIME) String mime, 
+    @JsonProperty(JSON_PROPERTY_SHA1SUM) String sha1sum
   ) {
     this();
     this.id = id;
+    this.filename = filename;
     this.filepath = filepath;
     this.downloadUrl = downloadUrl;
+    this.mime = mime;
+    this.sha1sum = sha1sum;
   }
 
   /**
@@ -305,12 +311,6 @@ public class Document {
     this.isDeleted = isDeleted;
   }
 
-  public Document filename(@jakarta.annotation.Nullable String filename) {
-    
-    this.filename = filename;
-    return this;
-  }
-
   /**
    * Get filename
    * @return filename
@@ -324,11 +324,6 @@ public class Document {
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_FILENAME, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setFilename(@jakarta.annotation.Nullable String filename) {
-    this.filename = filename;
-  }
 
   /**
    * Get filepath
@@ -358,12 +353,6 @@ public class Document {
 
 
 
-  public Document mime(@jakarta.annotation.Nullable String mime) {
-    
-    this.mime = mime;
-    return this;
-  }
-
   /**
    * Get mime
    * @return mime
@@ -377,17 +366,6 @@ public class Document {
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_MIME, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setMime(@jakarta.annotation.Nullable String mime) {
-    this.mime = mime;
-  }
-
-  public Document sha1sum(@jakarta.annotation.Nullable String sha1sum) {
-    
-    this.sha1sum = sha1sum;
-    return this;
-  }
 
   /**
    * Get sha1sum
@@ -402,11 +380,6 @@ public class Document {
   }
 
 
-  @JsonProperty(value = JSON_PROPERTY_SHA1SUM, required = false)
-  @JsonInclude(value = JsonInclude.Include.USE_DEFAULTS)
-  public void setSha1sum(@jakarta.annotation.Nullable String sha1sum) {
-    this.sha1sum = sha1sum;
-  }
 
   public Document category(@jakarta.annotation.Nullable DocumentCategory category) {
     

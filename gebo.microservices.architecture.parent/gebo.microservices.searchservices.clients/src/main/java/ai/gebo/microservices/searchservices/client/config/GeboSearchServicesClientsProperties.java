@@ -43,6 +43,17 @@ public class GeboSearchServicesClientsProperties {
 	private Endpoint googledrive = Endpoint.of("googledrive_gebo_ai", "api/users/GoogleDriveSearchServiceController",
 			"google-drive", "Google Drive/Workspace Search", "google-drive", "google-drive-module",
 			"google-drive-standard-query-extraction-prompt", null);
+	private Endpoint redmine = Endpoint.of("redmine_gebo_ai", "api/users/RedmineSearchServiceController", "redmine",
+			"Redmine Search", "redmine", "redmine-module", "redmine-standard-query-extraction-prompt",
+			"redmine-native-query-extraction-prompt");
+	private Endpoint glpi = Endpoint.of("glpi_gebo_ai", "api/users/GlpiSearchServiceController", "glpi", "GLPI Search",
+			"glpi", "glpi-module", "glpi-standard-query-extraction-prompt", "glpi-native-query-extraction-prompt");
+	private Endpoint openproject = Endpoint.of("openproject_gebo_ai", "api/users/OpenProjectSearchServiceController",
+			"openproject", "OpenProject Search", "openproject", "openproject-module",
+			"openproject-standard-query-extraction-prompt", "openproject-native-query-extraction-prompt");
+	private Endpoint zammad = Endpoint.of("zammad_gebo_ai", "api/users/ZammadSearchServiceController", "zammad",
+			"Zammad Search", "zammad", "zammad-module", "zammad-standard-query-extraction-prompt",
+			"zammad-native-query-extraction-prompt");
 
 	@Data
 	public static class Endpoint {

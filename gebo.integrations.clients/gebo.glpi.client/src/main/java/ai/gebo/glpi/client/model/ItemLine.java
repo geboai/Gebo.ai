@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Line Item
+ * Line item
  */
 @JsonPropertyOrder({
   ItemLine.JSON_PROPERTY_ID,

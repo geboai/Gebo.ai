@@ -1,0 +1,33 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "gebo-glpi-api": {
+      "projectType": "library",
+      "root": "projects/gebo-glpi-api",
+      "sourceRoot": "projects/gebo-glpi-api/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "project": "projects/gebo-glpi-api/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/gebo-glpi-api/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/gebo-glpi-api/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        }
+      }
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

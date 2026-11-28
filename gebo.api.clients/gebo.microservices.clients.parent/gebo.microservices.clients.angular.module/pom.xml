@@ -162,6 +162,30 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>redmine.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>glpi.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>openproject.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>gebo.microservices.api.clients</groupId>
+			<artifactId>zammad.gebo.ai.angular.client</artifactId>
+			<version>${project.version}</version>
+			<scope>provided</scope>
+		</dependency>
 
 	</dependencies>
 

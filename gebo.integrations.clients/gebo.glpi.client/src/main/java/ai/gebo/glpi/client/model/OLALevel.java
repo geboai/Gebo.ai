@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Escalation Level
+ * Escalation level
  */
 @JsonPropertyOrder({
   OLALevel.JSON_PROPERTY_ID,

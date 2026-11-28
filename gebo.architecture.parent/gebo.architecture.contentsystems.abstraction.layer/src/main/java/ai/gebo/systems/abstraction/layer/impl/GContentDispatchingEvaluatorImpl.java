@@ -101,6 +101,51 @@ public class GContentDispatchingEvaluatorImpl implements IGContentDispatchingEva
 		chRepository.deleteByContentCodeIn(new java.util.ArrayList<String>(contentCodes));
 	}
 
+	@Override
+	public long forgetIngestedOfDataSource(String projectCode, String endpointCode) {
+		if (projectCode == null || endpointCode == null) {
+			LOGGER.warn("Cannot forget the ingestion acknowledgements of the data source " + endpointCode
+					+ " of project " + projectCode + ": a code is missing");
+			return 0;
+		}
+		final String regex = dataSourceContentsRegex(projectCode, endpointCode);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Forgetting the ingestion acknowledgements of the data source " + endpointCode
+					+ " of project " + projectCode + " (content codes matching " + regex + ")");
+		}
+		final long forgotten = chRepository.deleteByContentCodeMatching(regex);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Forgotten " + forgotten + " ingestion acknowledgement(s) of the data source " + endpointCode);
+		}
+		return forgotten;
+	}
+
+	/**
+	 * The regular expression of the codes of a data source's contents:
+	 * {@code <any knowledge base>/<project>/<data source>/} at the start, the codes
+	 * matched literally. A knowledge base code holds no {@code /}.
+	 */
+	static String dataSourceContentsRegex(String projectCode, String endpointCode) {
+		return "^[^/]+/" + literal(projectCode) + "/" + literal(endpointCode) + "/";
+	}
+
+	/**
+	 * The text as a literal of a regular expression: every character that is not a
+	 * letter or a digit escaped (a backslash before it is always literal, in Java
+	 * as in MongoDB's PCRE).
+	 */
+	private static String literal(String text) {
+		final StringBuilder sb = new StringBuilder(text.length() * 2);
+		for (int i = 0; i < text.length(); i++) {
+			final char c = text.charAt(i);
+			if (!Character.isLetterOrDigit(c)) {
+				sb.append('\\');
+			}
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+
 	/**
 	 * The newest acknowledgement first by when it was received (the ones stored
 	 * before it was recorded have none), then by the content's modification date.

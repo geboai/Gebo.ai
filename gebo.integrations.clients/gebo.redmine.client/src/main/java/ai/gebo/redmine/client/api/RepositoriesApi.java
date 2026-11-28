@@ -3,7 +3,6 @@ package ai.gebo.redmine.client.api;
 import ai.gebo.redmine.client.invoker.ApiClient;
 
 import ai.gebo.redmine.client.model.AddRelatedIssueRequest;
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.Errors;
 
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class RepositoriesApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    private ResponseSpec addRelatedIssueRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec addRelatedIssueRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling addRelatedIssue", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -133,7 +132,7 @@ public class RepositoriesApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public void addRelatedIssue(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void addRelatedIssue(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         addRelatedIssueRequestCreation(format, projectId, repositoryId, revision, addRelatedIssueRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -155,7 +154,7 @@ public class RepositoriesApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> addRelatedIssueWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> addRelatedIssueWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return addRelatedIssueRequestCreation(format, projectId, repositoryId, revision, addRelatedIssueRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -178,7 +177,7 @@ public class RepositoriesApi {
      * @return ResponseSpec
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseSpec addRelatedIssueWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec addRelatedIssueWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull AddRelatedIssueRequest addRelatedIssueRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return addRelatedIssueRequestCreation(format, projectId, repositoryId, revision, addRelatedIssueRequest, xRedmineSwitchUser);
     }
 
@@ -198,7 +197,7 @@ public class RepositoriesApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    private ResponseSpec removeRelatedIssueRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec removeRelatedIssueRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling removeRelatedIssue", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -264,7 +263,7 @@ public class RepositoriesApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public void removeRelatedIssue(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void removeRelatedIssue(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         removeRelatedIssueRequestCreation(format, projectId, repositoryId, revision, issueId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -285,7 +284,7 @@ public class RepositoriesApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> removeRelatedIssueWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> removeRelatedIssueWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return removeRelatedIssueRequestCreation(format, projectId, repositoryId, revision, issueId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -307,7 +306,7 @@ public class RepositoriesApi {
      * @return ResponseSpec
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseSpec removeRelatedIssueWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec removeRelatedIssueWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull java.lang.String repositoryId, @jakarta.annotation.Nonnull String revision, @jakarta.annotation.Nonnull Integer issueId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return removeRelatedIssueRequestCreation(format, projectId, repositoryId, revision, issueId, xRedmineSwitchUser);
     }
 }

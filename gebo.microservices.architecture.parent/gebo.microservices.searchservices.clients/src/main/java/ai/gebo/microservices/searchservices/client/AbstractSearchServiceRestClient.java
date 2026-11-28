@@ -50,7 +50,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * Topology-aware REST client base for a per-connector {@link ISearchService}
- * hosted on its own content microservice (jira/confluence/sharepoint/googledrive).
+ * hosted on its own content microservice (jira/confluence/sharepoint/googledrive/redmine).
  * Mirrors the secrets/ACL cluster-client pattern: the target base url is resolved
  * per call from {@link GeboMicroserviceUrlResolver} (so it follows the
  * deployment's load-balancer/gateway/direct strategy), the caller's bearer token

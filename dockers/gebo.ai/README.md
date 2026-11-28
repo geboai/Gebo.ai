@@ -71,6 +71,8 @@ http://<your-server-ip>:12999/
     - Company shared filesystems
      - **Amazon AWS S3** buckets
      - **WebDAV** compatible servers (Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server...)
+     - **Redmine** projects: issues, wiki pages and files
+     - **GLPI** service management: helpdesk tickets (with their follow-ups, tasks, solutions and documents) and knowledge base articles
  - Configure **company single sign** on (SSO) using one of the following oauth2 providers:
  	- **Microsoft Entra**
  	- **Google auth**   

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Fields Uniqueness
+ * Fields unicity
  */
 @JsonPropertyOrder({
   FieldUnicity.JSON_PROPERTY_ID,

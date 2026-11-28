@@ -40,7 +40,6 @@ src/main/java/ai/gebo/redmine/client/model/AddUserToGroupRequest.java
 src/main/java/ai/gebo/redmine/client/model/AddWatcher.java
 src/main/java/ai/gebo/redmine/client/model/AddWatcherAllOfWatcher.java
 src/main/java/ai/gebo/redmine/client/model/AddWatchersRequest.java
-src/main/java/ai/gebo/redmine/client/model/AddWatchersRequestObjectId.java
 src/main/java/ai/gebo/redmine/client/model/AddWatchersRequestWatcher.java
 src/main/java/ai/gebo/redmine/client/model/Attachment.java
 src/main/java/ai/gebo/redmine/client/model/CreateFileRequest.java
@@ -55,12 +54,8 @@ src/main/java/ai/gebo/redmine/client/model/CreateIssueCategoryRequestIssueCatego
 src/main/java/ai/gebo/redmine/client/model/CreateIssueRelation201Response.java
 src/main/java/ai/gebo/redmine/client/model/CreateIssueRelationRequest.java
 src/main/java/ai/gebo/redmine/client/model/CreateIssueRelationRequestRelation.java
-src/main/java/ai/gebo/redmine/client/model/CreateIssueRelationRequestRelationIssueToId.java
 src/main/java/ai/gebo/redmine/client/model/CreateIssueRequest.java
 src/main/java/ai/gebo/redmine/client/model/CreateIssueRequestIssue.java
-src/main/java/ai/gebo/redmine/client/model/CreateIssueRequestIssueAssignedToId.java
-src/main/java/ai/gebo/redmine/client/model/CreateIssueRequestIssueEstimatedHours.java
-src/main/java/ai/gebo/redmine/client/model/CreateIssueRequestIssueProjectId.java
 src/main/java/ai/gebo/redmine/client/model/CreateIssueUnderProjectRequest.java
 src/main/java/ai/gebo/redmine/client/model/CreateIssueUnderProjectRequestIssue.java
 src/main/java/ai/gebo/redmine/client/model/CreateMembership.java
@@ -74,7 +69,6 @@ src/main/java/ai/gebo/redmine/client/model/CreateProjectRequestProject.java
 src/main/java/ai/gebo/redmine/client/model/CreateTimeEntry201Response.java
 src/main/java/ai/gebo/redmine/client/model/CreateTimeEntryRequest.java
 src/main/java/ai/gebo/redmine/client/model/CreateTimeEntryRequestTimeEntry.java
-src/main/java/ai/gebo/redmine/client/model/CreateTimeEntryRequestTimeEntryHours.java
 src/main/java/ai/gebo/redmine/client/model/CreateTimeEntryUnderIssue404Response.java
 src/main/java/ai/gebo/redmine/client/model/CreateTimeEntryUnderIssueRequest.java
 src/main/java/ai/gebo/redmine/client/model/CreateTimeEntryUnderIssueRequestTimeEntry.java
@@ -88,8 +82,6 @@ src/main/java/ai/gebo/redmine/client/model/CreateVersionRequest.java
 src/main/java/ai/gebo/redmine/client/model/CreateVersionRequestVersion.java
 src/main/java/ai/gebo/redmine/client/model/CustomField.java
 src/main/java/ai/gebo/redmine/client/model/CustomFieldPossibleValuesInner.java
-src/main/java/ai/gebo/redmine/client/model/CustomFieldRequestValueType.java
-src/main/java/ai/gebo/redmine/client/model/CustomFieldResponseValueType.java
 src/main/java/ai/gebo/redmine/client/model/CustomFieldValue.java
 src/main/java/ai/gebo/redmine/client/model/CustomFieldsInner.java
 src/main/java/ai/gebo/redmine/client/model/DocumentCategory.java
@@ -149,6 +141,7 @@ src/main/java/ai/gebo/redmine/client/model/Pref.java
 src/main/java/ai/gebo/redmine/client/model/Project.java
 src/main/java/ai/gebo/redmine/client/model/ProjectSummary.java
 src/main/java/ai/gebo/redmine/client/model/Query.java
+src/main/java/ai/gebo/redmine/client/model/RedmineFile.java
 src/main/java/ai/gebo/redmine/client/model/Role.java
 src/main/java/ai/gebo/redmine/client/model/Search.java
 src/main/java/ai/gebo/redmine/client/model/TimeEntry.java
@@ -162,7 +155,6 @@ src/main/java/ai/gebo/redmine/client/model/UpdateIssueCategoryRequest.java
 src/main/java/ai/gebo/redmine/client/model/UpdateIssueCategoryRequestIssueCategory.java
 src/main/java/ai/gebo/redmine/client/model/UpdateIssueRequest.java
 src/main/java/ai/gebo/redmine/client/model/UpdateIssueRequestIssue.java
-src/main/java/ai/gebo/redmine/client/model/UpdateIssueRequestIssueAssignedToId.java
 src/main/java/ai/gebo/redmine/client/model/UpdateJournalRequest.java
 src/main/java/ai/gebo/redmine/client/model/UpdateJournalRequestJournal.java
 src/main/java/ai/gebo/redmine/client/model/UpdateMembershipRequest.java

@@ -24,7 +24,11 @@
     "@Gebo.ai/webdav": "*",
     "@Gebo.ai/integration": "*",
     "@Gebo.ai/fulltextor": "*",
-    "@Gebo.ai/tyr": "*"
+    "@Gebo.ai/tyr": "*",
+    "@Gebo.ai/redmine": "*",
+    "@Gebo.ai/glpi": "*",
+    "@Gebo.ai/openproject": "*",
+    "@Gebo.ai/zammad": "*"
   },
   "dependencies": {
     "tslib": "^2.3.0"

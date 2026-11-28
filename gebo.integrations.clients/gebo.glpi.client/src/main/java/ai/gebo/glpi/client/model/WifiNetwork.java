@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * WiFi Network
+ * Wifi network
  */
 @JsonPropertyOrder({
   WifiNetwork.JSON_PROPERTY_ID,

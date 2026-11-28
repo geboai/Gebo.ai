@@ -58,10 +58,14 @@ const iconsMapping:{[key:string]:string}={
     GGoogleDriveProjectEndpoint:"pi pi-google-drive",
     /*GFilesystemProjectEndpoint:"pi pi-folder",*/
     GJiraProjectEndpoint:"pi pi-jira",
+    GRedmineProjectEndpoint:"pi pi-redmine",
     GConfluenceProjectEndpoint:"pi pi-confluence",
     GSharepointProjectEndpoint:"pi pi-sharepoint",
     GUploadsProjectEndpoint:"pi pi-cloud-upload",
     GUserspaceProjectEndpoint:"pi pi-user",
+    GGlpiProjectEndpoint:"pi pi-glpi",
+    GOpenProjectProjectEndpoint:"pi pi-openproject",
+    GZammadProjectEndpoint:"pi pi-zammad",
     project:"pi pi-list-check",
     knowledgebase:"pi pi-sitemap"
 };

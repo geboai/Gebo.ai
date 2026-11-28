@@ -1,0 +1,5 @@
+Firewall log excerpt - sales office VPN tunnel
+2026-11-26 17:59:58 IKE SA rekey started, peer 203.0.113.10
+2026-11-26 18:00:03 IKE SA rekey failed: lifetime mismatch (local 28800 s, peer 3600 s)
+2026-11-26 18:00:03 tunnel down, 14 clients disconnected
+2026-11-26 18:00:41 tunnel re-established after manual restart

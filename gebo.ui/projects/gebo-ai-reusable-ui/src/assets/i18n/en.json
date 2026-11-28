@@ -278,6 +278,14 @@
         "label": "WebDAV integration",
         "description": "WebDAV compatible servers: Nextcloud, ownCloud, OpenCloud, Pydio Cells, Seafile/SeafDAV, ONLYOFFICE Workspace, Synology DSM WebDAV Server ..."
       },
+      "redmineSystemSetupSection": {
+        "label": "Redmine integration",
+        "description": "Redmine projects: issues with their notes and attachments, wiki pages and files"
+      },
+      "glpiSystemSetupSection": {
+        "label": "GLPI integration",
+        "description": "GLPI service management: helpdesk tickets with their follow-ups, tasks, solutions and documents, and knowledge base articles"
+      },
       "webSearchApiSetupSection": {
         "label": "Configure web search",
         "description": "Choose and configure one web search provider (Google, Tavily, Brave or SearXNG) for AI web searches"
@@ -555,6 +563,38 @@
       "ConfigCodeHeader": { "label": "Config code" },
       "DescriptionHeader": { "label": "Description" },
       "AuthTypeHeader": { "label": "Auth type" },
+      "EditBtn": { "label": "Edit system" }
+    },
+    "RedmineWizardComponent": {
+      "MainPanel": { "label": "Setup company Redmine systems" },
+      "RedmineSystemBtn": { "label": "Redmine system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "BaseUriHeader": { "label": "Server address" },
+      "EditBtn": { "label": "Edit system" }
+    },
+    "GlpiWizardComponent": {
+      "MainPanel": { "label": "Setup company GLPI systems" },
+      "GlpiSystemBtn": { "label": "GLPI system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "AddressHeader": { "label": "GLPI address" },
+      "EditBtn": { "label": "Edit system" }
+    },
+    "OpenProjectWizardComponent": {
+      "MainPanel": { "label": "Setup company OpenProject systems" },
+      "OpenProjectSystemBtn": { "label": "OpenProject system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "BaseUriHeader": { "label": "Server address" },
+      "EditBtn": { "label": "Edit system" }
+    },
+    "ZammadWizardComponent": {
+      "MainPanel": { "label": "Setup company Zammad systems" },
+      "ZammadSystemBtn": { "label": "Zammad system" },
+      "ConfigCodeHeader": { "label": "Config code" },
+      "DescriptionHeader": { "label": "Description" },
+      "BaseUriHeader": { "label": "Server address" },
       "EditBtn": { "label": "Edit system" }
     },
     "McpServerWizardComponent": {
@@ -3905,6 +3945,14 @@
         "label": "+jira",
         "help": "add an Atlassian Jira data source"
       },
+      "ai_gebo_redmine_handler_GRedmineProjectEndpoint": {
+        "label": "+redmine",
+        "help": "add a Redmine data source (issues, wiki pages and files)"
+      },
+      "ai_gebo_glpi_handler_GGlpiProjectEndpoint": {
+        "label": "+glpi",
+        "help": "add a GLPI data source (helpdesk tickets and knowledge base articles)"
+      },
       "ai_gebo_git_content_handler_GGitProjectEndpoint": {
         "label": "+git repo",
         "help": "add a git repository data source like bitbucket,github or others"
@@ -5531,6 +5579,421 @@
         "label": "Bearer token",
         "help": "Bearer token to access the WebDAV system"
       }
+    }
+  },
+  "GeboAIRedmineModule": {
+    "GRedmineSystem": {
+      "MainPanel": { "label": "Editing Redmine system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Redmine system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the Redmine system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Redmine server, for example https://redmine.example.com. The REST web service must be enabled in Administration, Settings, API."
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "help": "The Redmine account Gebo.ai reads with: an API key (token) or a username and password. Gebo.ai sees what this account sees, private notes and private issues included.",
+        "placeholder": "Select an identity"
+      }
+    },
+    "GRedmineProjectEndpoint": {
+      "MainPanel": { "label": "Sharing Redmine contents" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Redmine data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
+      },
+      "redmineSystemCode": {
+        "label": "Redmine system",
+        "help": "Already configured Redmine system reference.",
+        "placeholder": "Select a Redmine server"
+      },
+      "tree": {
+        "label": "Selected Redmine contents",
+        "help": "Projects, or their issues, wiki and files sections, single issues (with their notes, attachments and sub-issues), wiki pages (with their child pages) and files"
+      },
+      "catalogingCriteria": {
+        "label": "Contents organization criteria",
+        "help": "Please explain here how the projects, issues and wiki pages shared with Gebo.ai are organized"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "openZips": {
+        "label": "Open zip attachments",
+        "help": "Read the documents inside zip attachments and files"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIRedmineSystemFastComponent": {
+      "MainPanel": { "label": "Create Redmine system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Redmine system."
+      },
+      "authType": {
+        "label": "Authentication method",
+        "help": "How Gebo.ai signs in to Redmine. The API key is in My account, API access key, once the REST web service is enabled in Administration, Settings, API.",
+        "placeholder": "Select authentication method"
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Redmine server (e.g. https://redmine.example.com)"
+      },
+      "apiKeyUsername": {
+        "label": "Account",
+        "help": "Login of the Redmine account the API key belongs to (for reference only)"
+      },
+      "apiKey": {
+        "label": "API key",
+        "help": "API access key of the Redmine account Gebo.ai reads with"
+      },
+      "username": {
+        "label": "User name",
+        "help": "Login of the Redmine account Gebo.ai reads with"
+      },
+      "password": {
+        "label": "Password",
+        "help": "Password of the Redmine account"
+      },
+      "VisibilityNote": {
+        "label": "Gebo.ai reads what this account can see in Redmine, private issues and private notes included: use an account limited to the projects you want to share."
+      }
+    }
+  },
+  "GeboAIGlpiModule": {
+    "GGlpiSystem": {
+      "MainPanel": { "label": "Editing GLPI system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the GLPI system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the GLPI system."
+      },
+      "baseUri": {
+        "label": "GLPI address",
+        "help": "Address of the GLPI web interface (e.g. https://glpi.example.com). The API is reached under its /api.php."
+      },
+      "oauthClientSecretCode": {
+        "label": "OAuth client",
+        "help": "Client id and secret of the OAuth client registered in GLPI (Setup > OAuth clients) with the password grant and the api scope.",
+        "placeholder": "Select or create the OAuth client"
+      },
+      "secretCode": {
+        "label": "GLPI user",
+        "help": "Username and password of the GLPI user: the tickets and articles it can see in GLPI are the ones read.",
+        "placeholder": "Select or create the GLPI user"
+      }
+    },
+    "GGlpiProjectEndpoint": {
+      "MainPanel": { "label": "Sharing GLPI tickets and knowledge base" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the GLPI data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "help": "Parent project reference.",
+        "placeholder": "Select a project"
+      },
+      "glpiSystemCode": {
+        "label": "GLPI system",
+        "help": "Already configured GLPI system reference.",
+        "placeholder": "Select a GLPI system"
+      },
+      "tree": {
+        "label": "Selected GLPI entities, tickets and articles",
+        "help": "Select whole entities, their Tickets or Knowledge base sections, single tickets or single articles"
+      },
+      "openZips": {
+        "label": "Open zip files",
+        "help": "Enable zip files opening and content extraction"
+      },
+      "catalogingCriteria": {
+        "label": "Tickets and articles organization criteria",
+        "help": "Please explain here how entities, ticket categories and knowledge base articles are organized in the GLPI contents shared with Gebo.ai"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIGlpiSystemFastComponent": {
+      "MainPanel": { "label": "Create GLPI system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the GLPI system."
+      },
+      "baseUri": {
+        "label": "GLPI address",
+        "help": "Address of the GLPI web interface (e.g. https://glpi.example.com)"
+      },
+      "OauthClientFieldset": { "label": "OAuth client" },
+      "OauthClientHint": { "label": "Register an OAuth client in GLPI (Setup > OAuth clients) allowing the Password grant and the api scope, then copy here its client id and secret." },
+      "clientId": {
+        "label": "Client id",
+        "help": "Client id of the OAuth client registered in GLPI"
+      },
+      "clientSecret": {
+        "label": "Client secret",
+        "help": "Client secret of the OAuth client registered in GLPI"
+      },
+      "GlpiUserFieldset": { "label": "GLPI user" },
+      "GlpiUserHint": { "label": "The tickets and knowledge base articles this GLPI user can see in GLPI are the ones Gebo.ai reads." },
+      "username": {
+        "label": "User name",
+        "help": "Login of the GLPI user"
+      },
+      "password": {
+        "label": "Password",
+        "help": "Password of the GLPI user"
+      }
+    }
+  },
+  "GeboAIOpenProjectModule": {
+    "GOpenProjectSystem": {
+      "MainPanel": { "label": "Editing OpenProject system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the OpenProject system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the OpenProject system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the OpenProject server without /api/v3, for example https://openproject.example.com. The API must be enabled in Administration, API and webhooks."
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "placeholder": "Select an identity",
+        "help": "The API key (token) of the OpenProject account Gebo.ai reads with. Gebo.ai sees what this account sees, internal comments included."
+      }
+    },
+    "GOpenProjectProjectEndpoint": {
+      "MainPanel": { "label": "Sharing OpenProject contents" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the OpenProject data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "placeholder": "Select a project",
+        "help": "Parent project reference."
+      },
+      "openProjectSystemCode": {
+        "label": "OpenProject system",
+        "placeholder": "Select an OpenProject server",
+        "help": "Already configured OpenProject system reference."
+      },
+      "tree": {
+        "label": "Selected OpenProject contents",
+        "help": "Projects, or their work packages, documents, meetings and news sections, single work packages (with their activity, attachments and children), documents, meetings and news"
+      },
+      "catalogingCriteria": {
+        "label": "Contents organization criteria",
+        "help": "Please explain here how the projects, work packages and documents shared with Gebo.ai are organized"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "openZips": {
+        "label": "Open zip attachments",
+        "help": "Read the documents inside zip attachments and files"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIOpenProjectSystemFastComponent": {
+      "MainPanel": { "label": "Create OpenProject system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the OpenProject system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the OpenProject server, without /api/v3 (e.g. https://openproject.example.com)"
+      },
+      "apiKey": {
+        "label": "API key",
+        "help": "API key of the OpenProject account Gebo.ai reads with: My account, Access tokens, API"
+      },
+      "VisibilityNote": { "label": "Gebo.ai reads what this account can see in OpenProject, internal comments included: use an account limited to the projects you want to share." }
+    }
+  },
+  "GeboAIZammadModule": {
+    "GZammadSystem": {
+      "MainPanel": { "label": "Editing Zammad system" },
+      "SaveBtn": { "label": "Save" },
+      "TestBtn": { "label": "Test connection" },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Zammad system."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the Zammad system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Zammad server without /api/v1, for example https://helpdesk.example.com. Token access must be enabled in Settings, System, API."
+      },
+      "secretCode": {
+        "label": "Identity used",
+        "placeholder": "Select an identity",
+        "help": "The access token (or the username and password) of the Zammad account Gebo.ai reads with. Gebo.ai sees what this account sees, internal notes and internal answers included."
+      }
+    },
+    "GZammadProjectEndpoint": {
+      "MainPanel": { "label": "Sharing Zammad contents" },
+      "SaveBtn": { "label": "Save" },
+      "PublishBtn": {
+        "label": "Publish!",
+        "help": "Saves and let these contents be available in knowledge base for LLMs"
+      },
+      "CancelBtn": { "label": "Cancel" },
+      "DeleteBtn": { "label": "Delete" },
+      "SettingsTab": { "label": "Settings" },
+      "LogsTab": { "label": "Logs" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Zammad data source."
+      },
+      "code": {
+        "label": "Unique Code",
+        "help": "Automatically generated unique code of the contents."
+      },
+      "parentProjectCode": {
+        "label": "Project",
+        "placeholder": "Select a project",
+        "help": "Parent project reference."
+      },
+      "zammadSystemCode": {
+        "label": "Zammad system",
+        "placeholder": "Select a Zammad server",
+        "help": "Already configured Zammad system reference."
+      },
+      "tree": {
+        "label": "Selected Zammad contents",
+        "help": "Groups (all their tickets, each with its conversation and attachments) or single tickets; knowledge bases, their categories or single answers (published and internal ones, with their attachments)"
+      },
+      "catalogingCriteria": {
+        "label": "Contents organization criteria",
+        "help": "Please explain here how the groups, tickets and knowledge base answers shared with Gebo.ai are organized"
+      },
+      "programmedTables": {
+        "label": "Contents updates checks schedule",
+        "help": "Configure the scheduling of changed contents to keep the RAG system updated"
+      },
+      "openZips": {
+        "label": "Open zip attachments",
+        "help": "Read the documents inside zip attachments and files"
+      },
+      "personalData": {
+        "label": "Contains personal data",
+        "help": "Mark if this data source holds personal data (GDPR/NIS2). Data flows originating from it are treated as carrying personal data in the compliance register."
+      }
+    },
+    "GeboAIZammadSystemFastComponent": {
+      "MainPanel": { "label": "Create Zammad system configuration" },
+      "CreateBtn": { "label": "Create" },
+      "CancelBtn": { "label": "Cancel" },
+      "description": {
+        "label": "Description",
+        "help": "Enter the description of the Zammad system."
+      },
+      "baseUri": {
+        "label": "Base internet address",
+        "help": "Address of the Zammad server, without /api/v1 (e.g. https://helpdesk.example.com)"
+      },
+      "accessToken": {
+        "label": "Access token",
+        "help": "Access token of the Zammad account Gebo.ai reads with (Profile, Token Access), with the ticket.agent and knowledge_base.reader permissions. Token access must be enabled in Settings, System, API."
+      },
+      "VisibilityNote": { "label": "Gebo.ai reads what this account can see in Zammad, internal notes and internal answers included: use an agent limited to the groups you want to share." }
     }
   },
   "GeboAIMcpClientAdminModule": {

@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Interface Type (Hard drive...)
+ * Interface type (Hard drive...)
  */
 @JsonPropertyOrder({
   InterfaceType.JSON_PROPERTY_ID,

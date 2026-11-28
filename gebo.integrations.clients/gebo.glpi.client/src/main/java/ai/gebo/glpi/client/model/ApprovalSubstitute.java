@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Authorized Substitute
+ * Authorized substitute
  */
 @JsonPropertyOrder({
   ApprovalSubstitute.JSON_PROPERTY_ID,

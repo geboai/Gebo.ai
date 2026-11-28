@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Status of Item
+ * Status of items
  */
 @JsonPropertyOrder({
   State.JSON_PROPERTY_ID,

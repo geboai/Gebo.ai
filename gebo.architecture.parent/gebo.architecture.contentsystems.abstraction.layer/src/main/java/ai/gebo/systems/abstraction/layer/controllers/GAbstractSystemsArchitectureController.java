@@ -212,9 +212,21 @@ public GAbstractSystemsArchitectureController(IGPersistentObjectManager persiste
 		}
 	}
 
+	/**
+	 * Whether the current user may delete the data source: an administrator. A
+	 * module whose data sources belong to the persons who made them (the userspace)
+	 * lets their owner delete them too.
+	 *
+	 * @param endpoint the data source to delete
+	 * @return true when the current user may delete it
+	 */
+	protected boolean isCurrentUserAllowedToDelete(EndpointType endpoint) {
+		return securityService.isCurrentUserAdmin();
+	}
+
 	private void deleteEndpointInternal(EndpointType endpoint) throws GeboPersistenceException {
 		refuseIfDeclaredDataSource(endpoint);
-		if (!securityService.isCurrentUserAdmin())
+		if (!isCurrentUserAllowedToDelete(endpoint))
 			throw new GeboPersistenceException("User without ADMIN role cannot delete contents and endpoints");
 		String userid = securityService.getCurrentUser().getUsername();
 

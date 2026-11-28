@@ -115,7 +115,11 @@ p-block-ui {
 .pi.pi-confluence,
 .pi.pi-jira,
 .pi.pi-aws-s3,
-.pi.pi-webdav {
+.pi.pi-webdav,
+.pi.pi-redmine,
+.pi.pi-glpi,
+.pi.pi-openproject,
+.pi.pi-zammad {
   display: inline-block;
   width: 1.5em;
   height: 1.5em;
@@ -160,6 +164,22 @@ p-block-ui {
 
 .pi.pi-webdav {
   background-image: url("assets/3rdparty/webdav-folder-svgrepo-com.svg");
+}
+
+.pi.pi-redmine {
+  background-image: url("assets/3rdparty/redmine-issues-mark.svg");
+}
+
+.pi.pi-glpi {
+  background-image: url("assets/3rdparty/glpi-helpdesk-ticket.svg");
+}
+
+.pi.pi-openproject {
+  background-image: url("assets/3rdparty/openproject-work-plan.svg");
+}
+
+.pi.pi-zammad {
+  background-image: url("assets/3rdparty/zammad-helpdesk-chat.svg");
 }
 
 .pi.pi-deep-search {

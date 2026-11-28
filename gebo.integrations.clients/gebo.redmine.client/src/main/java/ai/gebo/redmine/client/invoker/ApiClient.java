@@ -81,10 +81,10 @@ public class ApiClient extends JavaTimeFormatter {
     protected final HttpHeaders defaultHeaders = new HttpHeaders();
     protected final MultiValueMap<String, String> defaultCookies = new LinkedMultiValueMap<>();
 
-    protected String basePath = "https://github.com";
+    protected String basePath = "http://localhost";
     protected List<ServerConfiguration> servers = new ArrayList<ServerConfiguration>(Arrays.asList(
         new ServerConfiguration(
-            "https://github.com",
+            "",
             "No description provided",
             new HashMap<String, ServerVariable>()
         )

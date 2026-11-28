@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Item Operating System
+ * Item operating system
  */
 @JsonPropertyOrder({
   OSInstallation.JSON_PROPERTY_ID,

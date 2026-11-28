@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Time Range
+ * Time range
  */
 @JsonPropertyOrder({
   CalendarTimeRange.JSON_PROPERTY_ID,

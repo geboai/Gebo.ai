@@ -33,7 +33,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Knowledge Base
+ * Knowledge base
  */
 @JsonPropertyOrder({
   KBArticle.JSON_PROPERTY_ID,

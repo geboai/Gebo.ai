@@ -24,15 +24,19 @@ import ai.gebo.architecture.documents.access.IGDocumentContentStreamer;
 import ai.gebo.microservices.cluster.auth.IGeboCallerTokenPropagator;
 import ai.gebo.microservices.cluster.config.GeboClusterCommonsAutoConfiguration;
 import ai.gebo.microservices.searchservices.client.ConfluenceSearchServiceRestClient;
+import ai.gebo.microservices.searchservices.client.GlpiSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.GoogleDriveSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.JiraSearchServiceRestClient;
+import ai.gebo.microservices.searchservices.client.OpenProjectSearchServiceRestClient;
+import ai.gebo.microservices.searchservices.client.ZammadSearchServiceRestClient;
+import ai.gebo.microservices.searchservices.client.RedmineSearchServiceRestClient;
 import ai.gebo.microservices.searchservices.client.SharePointSearchServiceRestClient;
 import ai.gebo.microservices.topology.GeboMicroserviceUrlResolver;
 import ai.gebo.microservices.topology.config.GeboMicroservicesTopologyAutoConfiguration;
 
 /**
- * Wires the four per-connector search-service REST clients (Jira, Confluence,
- * SharePoint native; Google Drive plain). Each bean is
+ * Wires the per-connector search-service REST clients (Jira, Confluence,
+ * SharePoint, GLPI, OpenProject, Zammad native; Google Drive plain). Each bean is
  * {@link ConditionalOnMissingBean @ConditionalOnMissingBean} on its concrete
  * client type: dropped onto a service that already owns the local search handler
  * (the monolith, or the content microservice itself) it stands aside; dropped
@@ -124,5 +128,44 @@ public class GeboSearchServicesClientsAutoConfiguration {
 			GeboSearchServicesClientsProperties properties) {
 		return new GoogleDriveSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
 				properties.getGoogledrive());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(RedmineSearchServiceRestClient.class)
+	public RedmineSearchServiceRestClient redmineSearchServiceRestClient(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
+			GeboSearchServicesClientsProperties properties) {
+		return new RedmineSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
+				properties.getRedmine());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(GlpiSearchServiceRestClient.class)
+	public GlpiSearchServiceRestClient glpiSearchServiceRestClient(@Qualifier(WEB_CLIENT_BEAN) WebClient webClient,
+			GeboMicroserviceUrlResolver urlResolver, IGeboCallerTokenPropagator tokenPropagator,
+			@Lazy IGDocumentContentStreamer documentContentStreamer, GeboSearchServicesClientsProperties properties) {
+		return new GlpiSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
+				properties.getGlpi());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(OpenProjectSearchServiceRestClient.class)
+	public OpenProjectSearchServiceRestClient openProjectSearchServiceRestClient(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
+			GeboSearchServicesClientsProperties properties) {
+		return new OpenProjectSearchServiceRestClient(webClient, urlResolver, tokenPropagator,
+				documentContentStreamer, properties.getOpenproject());
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(ZammadSearchServiceRestClient.class)
+	public ZammadSearchServiceRestClient zammadSearchServiceRestClient(
+			@Qualifier(WEB_CLIENT_BEAN) WebClient webClient, GeboMicroserviceUrlResolver urlResolver,
+			IGeboCallerTokenPropagator tokenPropagator, @Lazy IGDocumentContentStreamer documentContentStreamer,
+			GeboSearchServicesClientsProperties properties) {
+		return new ZammadSearchServiceRestClient(webClient, urlResolver, tokenPropagator, documentContentStreamer,
+				properties.getZammad());
 	}
 }

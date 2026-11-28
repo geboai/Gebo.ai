@@ -39,6 +39,10 @@ import { ApiModule as WebdavApiModule, BASE_PATH as WEBDAV_BASE_PATH } from '@Ge
 import { ApiModule as IntegrationApiModule, BASE_PATH as INTEGRATION_BASE_PATH } from '@Gebo.ai/integration';
 import { ApiModule as FulltextorApiModule, BASE_PATH as FULLTEXTOR_BASE_PATH } from '@Gebo.ai/fulltextor';
 import { ApiModule as TyrApiModule, BASE_PATH as TYR_BASE_PATH } from '@Gebo.ai/tyr';
+import { ApiModule as RedmineApiModule, BASE_PATH as REDMINE_BASE_PATH } from '@Gebo.ai/redmine';
+import { ApiModule as GlpiApiModule, BASE_PATH as GLPI_BASE_PATH } from '@Gebo.ai/glpi';
+import { ApiModule as OpenprojectApiModule, BASE_PATH as OPENPROJECT_BASE_PATH } from '@Gebo.ai/openproject';
+import { ApiModule as ZammadApiModule, BASE_PATH as ZAMMAD_BASE_PATH } from '@Gebo.ai/zammad';
 
 import { GeboMicroservices, GeboMicroservicesClientsOptions } from './gebo-clients-topology.model';
 import { GEBO_MICROSERVICES_CLIENTS_OPTIONS, GeboClientsTopologyService } from './gebo-clients-topology.service';
@@ -47,7 +51,7 @@ import { GEBO_MICROSERVICES_CLIENTS_OPTIONS, GeboClientsTopologyService } from '
  * Every generated client, paired with the service id the clients topology
  * publishes its web context under.
  *
- * Each library ships its OWN `BASE_PATH` injection token — 21 distinct
+ * Each library ships its OWN `BASE_PATH` injection token — 25 distinct
  * `InjectionToken` instances that merely share a description string — which is
  * exactly what makes per-service base paths possible in a single injector: they
  * never collide.
@@ -74,6 +78,10 @@ const GEBO_CLIENT_BASE_PATH_TOKENS: ReadonlyArray<readonly [InjectionToken<strin
   [INTEGRATION_BASE_PATH, GeboMicroservices.INTEGRATION],
   [FULLTEXTOR_BASE_PATH, GeboMicroservices.FULLTEXTOR],
   [TYR_BASE_PATH, GeboMicroservices.TYR],
+  [REDMINE_BASE_PATH, GeboMicroservices.REDMINE],
+  [GLPI_BASE_PATH, GeboMicroservices.GLPI],
+  [OPENPROJECT_BASE_PATH, GeboMicroservices.OPENPROJECT],
+  [ZAMMAD_BASE_PATH, GeboMicroservices.ZAMMAD],
 ];
 
 /**
@@ -106,7 +114,7 @@ const GEBO_CLIENT_BASE_PATH_TOKENS: ReadonlyArray<readonly [InjectionToken<strin
  * deployment: behind a gateway every service owns a web context (`/brain`,
  * `/heimdall`), on a monolith they all answer at the root. So this module asks
  * the installation itself — `/public/ClientsTopologyProviderController`, which
- * every shape publishes at the same relative url — and provides all 21
+ * every shape publishes at the same relative url — and provides all 25
  * `BASE_PATH` tokens from that answer. The app knows ONE url and nothing else
  * changes between a monolithic and a microservices target.
  *
@@ -120,13 +128,13 @@ const GEBO_CLIENT_BASE_PATH_TOKENS: ReadonlyArray<readonly [InjectionToken<strin
  *   builds the first client. A client injected from an initializer registered
  *   BEFORE this module's is the one case that can miss it — it falls back to the
  *   bare base url and warns.
- * - The 21 `@Gebo.ai/*` client packages are peer dependencies: the consuming app
+ * - The 25 `@Gebo.ai/*` client packages are peer dependencies: the consuming app
  *   installs them, this library only wires them.
  */
 @NgModule({
   imports: [
     // Importing them here is what makes the app's own module a one-liner: every
-    // generated service becomes injectable without the app listing 21 ApiModules
+    // generated service becomes injectable without the app listing 25 ApiModules
     // whose only purpose is to be given a base path.
     GatewayApiModule,
     EurekaApiModule,
@@ -149,6 +157,10 @@ const GEBO_CLIENT_BASE_PATH_TOKENS: ReadonlyArray<readonly [InjectionToken<strin
     IntegrationApiModule,
     FulltextorApiModule,
     TyrApiModule,
+    RedmineApiModule,
+    GlpiApiModule,
+    OpenprojectApiModule,
+    ZammadApiModule,
   ],
 })
 export class MicroservicesClientsModule {

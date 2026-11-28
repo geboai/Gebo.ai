@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * LDAP Directory
+ * LDAP directory
  */
 @JsonPropertyOrder({
   LDAPDirectory.JSON_PROPERTY_ID,

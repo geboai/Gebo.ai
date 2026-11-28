@@ -1,0 +1,7 @@
+OpenProject projects catalog (may be empty):
+
+{openprojectProjects}
+
+Last user question:
+
+{question}

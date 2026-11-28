@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Knowledgebase Category
+ * Knowledge base category
  */
 @JsonPropertyOrder({
   KBCategory.JSON_PROPERTY_ID,

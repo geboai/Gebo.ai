@@ -36,7 +36,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Passive Device
+ * Passive device
  */
 @JsonPropertyOrder({
   PassiveDCEquipment.JSON_PROPERTY_ID,

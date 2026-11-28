@@ -1,0 +1,7 @@
+Zammad groups catalog (may be empty):
+
+{zammadGroups}
+
+Last user question:
+
+{question}

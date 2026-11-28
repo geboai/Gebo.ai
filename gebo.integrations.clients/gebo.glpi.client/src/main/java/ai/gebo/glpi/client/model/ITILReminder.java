@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Automatic Reminder
+ * Automatic reminder
  */
 @JsonPropertyOrder({
   ITILReminder.JSON_PROPERTY_ITEMTYPE,

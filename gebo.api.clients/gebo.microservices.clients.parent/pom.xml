@@ -42,6 +42,10 @@
 		<module>integration.gebo.ai.java.client</module>
 		<module>fulltextor.gebo.ai.java.client</module>
 		<module>tyr.gebo.ai.java.client</module>
+		<module>redmine.gebo.ai.java.client</module>
+		<module>glpi.gebo.ai.java.client</module>
+		<module>openproject.gebo.ai.java.client</module>
+		<module>zammad.gebo.ai.java.client</module>
 		<!-- Hand-written aggregators over the generated clients: one base url in,
 		     every client already pointing at the right address out. Listed after
 		     the per-service modules they depend on. -->
@@ -68,6 +72,10 @@
 		<module>integration.gebo.ai.angular.client</module>
 		<module>fulltextor.gebo.ai.angular.client</module>
 		<module>tyr.gebo.ai.angular.client</module>
+		<module>redmine.gebo.ai.angular.client</module>
+		<module>glpi.gebo.ai.angular.client</module>
+		<module>openproject.gebo.ai.angular.client</module>
+		<module>zammad.gebo.ai.angular.client</module>
 		<module>gebo.microservices.clients.angular.module</module>
 	</modules>
 </project>

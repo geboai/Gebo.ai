@@ -36,11 +36,15 @@ public final class GeboMicroservices {
 	public static final String INTEGRATION = "integration_gebo_ai";
 	public static final String FULLTEXTOR = "fulltextor_gebo_ai";
 	public static final String TYR = "tyr_gebo_ai";
+	public static final String REDMINE = "redmine_gebo_ai";
+	public static final String GLPI = "glpi_gebo_ai";
+	public static final String OPENPROJECT = "openproject_gebo_ai";
+	public static final String ZAMMAD = "zammad_gebo_ai";
 
 	/** Every service this module ships a client for, in declaration order. */
 	public static final List<String> ALL = List.of(GATEWAY, EUREKA, HEIMDALL, BRAIN, VECTORIZATOR, GRAPHICATOR,
 			CHUNKER, GIT, FILESYSTEM, UPLOADS, USERSPACE, SHAREPOINT, CONFLUENCE, JIRA, AWS_S3, GOOGLEDRIVE,
-			MCPCLIENT, WEBDAV, INTEGRATION, FULLTEXTOR, TYR);
+			MCPCLIENT, WEBDAV, INTEGRATION, FULLTEXTOR, TYR, REDMINE, GLPI, OPENPROJECT, ZAMMAD);
 
 	private GeboMicroservices() {
 	}

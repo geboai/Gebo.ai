@@ -2,7 +2,6 @@ package ai.gebo.redmine.client.api;
 
 import ai.gebo.redmine.client.invoker.ApiClient;
 
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.Errors;
 import ai.gebo.redmine.client.model.GetWikiPage200Response;
 import ai.gebo.redmine.client.model.GetWikiPages200Response;
@@ -65,7 +64,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Deleting-a-wiki-page">Delete wiki page Documentation</a>
      */
-    private ResponseSpec deleteWikiPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec deleteWikiPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling deleteWikiPage", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -122,7 +121,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Deleting-a-wiki-page">Delete wiki page Documentation</a>
      */
-    public void deleteWikiPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void deleteWikiPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         deleteWikiPageRequestCreation(format, projectId, wikiPageTitle, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -144,7 +143,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Deleting-a-wiki-page">Delete wiki page Documentation</a>
      */
-    public ResponseEntity<Void> deleteWikiPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> deleteWikiPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return deleteWikiPageRequestCreation(format, projectId, wikiPageTitle, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -167,7 +166,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Deleting-a-wiki-page">Delete wiki page Documentation</a>
      */
-    public ResponseSpec deleteWikiPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec deleteWikiPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return deleteWikiPageRequestCreation(format, projectId, wikiPageTitle, xRedmineSwitchUser);
     }
 
@@ -191,7 +190,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki page Documentation</a>
      */
-    private ResponseSpec getWikiPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    private ResponseSpec getWikiPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getWikiPage", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -256,7 +255,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki page Documentation</a>
      */
-    public GetWikiPage200Response getWikiPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    public GetWikiPage200Response getWikiPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiPageRequestCreation(format, projectId, wikiPageTitle, xRedmineSwitchUser, include, version).body(localVarReturnType);
     }
@@ -281,7 +280,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki page Documentation</a>
      */
-    public ResponseEntity<GetWikiPage200Response> getWikiPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    public ResponseEntity<GetWikiPage200Response> getWikiPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiPageRequestCreation(format, projectId, wikiPageTitle, xRedmineSwitchUser, include, version).toEntity(localVarReturnType);
     }
@@ -306,7 +305,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki page Documentation</a>
      */
-    public ResponseSpec getWikiPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    public ResponseSpec getWikiPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         return getWikiPageRequestCreation(format, projectId, wikiPageTitle, xRedmineSwitchUser, include, version);
     }
 
@@ -330,7 +329,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-an-old-version-of-a-wiki-page">Show wiki page by specific version Documentation</a>
      */
-    private ResponseSpec getWikiPageByVersionRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    private ResponseSpec getWikiPageByVersionRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getWikiPageByVersion", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -399,7 +398,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-an-old-version-of-a-wiki-page">Show wiki page by specific version Documentation</a>
      */
-    public GetWikiPage200Response getWikiPageByVersion(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    public GetWikiPage200Response getWikiPageByVersion(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiPageByVersionRequestCreation(format, projectId, wikiPageTitle, versionId, xRedmineSwitchUser, include).body(localVarReturnType);
     }
@@ -424,7 +423,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-an-old-version-of-a-wiki-page">Show wiki page by specific version Documentation</a>
      */
-    public ResponseEntity<GetWikiPage200Response> getWikiPageByVersionWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    public ResponseEntity<GetWikiPage200Response> getWikiPageByVersionWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiPageByVersionRequestCreation(format, projectId, wikiPageTitle, versionId, xRedmineSwitchUser, include).toEntity(localVarReturnType);
     }
@@ -449,7 +448,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-an-old-version-of-a-wiki-page">Show wiki page by specific version Documentation</a>
      */
-    public ResponseSpec getWikiPageByVersionWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    public ResponseSpec getWikiPageByVersionWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull Integer versionId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         return getWikiPageByVersionRequestCreation(format, projectId, wikiPageTitle, versionId, xRedmineSwitchUser, include);
     }
 
@@ -469,7 +468,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-the-pages-list-of-a-wiki">List wiki pages Documentation</a>
      */
-    private ResponseSpec getWikiPagesRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec getWikiPagesRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getWikiPages", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -522,7 +521,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-the-pages-list-of-a-wiki">List wiki pages Documentation</a>
      */
-    public GetWikiPages200Response getWikiPages(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public GetWikiPages200Response getWikiPages(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPages200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiPagesRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -543,7 +542,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-the-pages-list-of-a-wiki">List wiki pages Documentation</a>
      */
-    public ResponseEntity<GetWikiPages200Response> getWikiPagesWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<GetWikiPages200Response> getWikiPagesWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPages200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiPagesRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -564,7 +563,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-the-pages-list-of-a-wiki">List wiki pages Documentation</a>
      */
-    public ResponseSpec getWikiPagesWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec getWikiPagesWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return getWikiPagesRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -587,7 +586,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki start page Documentation</a>
      */
-    private ResponseSpec getWikiStartPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    private ResponseSpec getWikiStartPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getWikiStartPage", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -646,7 +645,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki start page Documentation</a>
      */
-    public GetWikiPage200Response getWikiStartPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    public GetWikiPage200Response getWikiStartPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiStartPageRequestCreation(format, projectId, xRedmineSwitchUser, include, version).body(localVarReturnType);
     }
@@ -670,7 +669,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki start page Documentation</a>
      */
-    public ResponseEntity<GetWikiPage200Response> getWikiStartPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    public ResponseEntity<GetWikiPage200Response> getWikiStartPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getWikiStartPageRequestCreation(format, projectId, xRedmineSwitchUser, include, version).toEntity(localVarReturnType);
     }
@@ -694,7 +693,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Getting-a-wiki-page">Show wiki start page Documentation</a>
      */
-    public ResponseSpec getWikiStartPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
+    public ResponseSpec getWikiStartPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include, @jakarta.annotation.Nullable Integer version) throws RestClientResponseException {
         return getWikiStartPageRequestCreation(format, projectId, xRedmineSwitchUser, include, version);
     }
 
@@ -719,7 +718,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page Documentation</a>
      */
-    private ResponseSpec updateWikiPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec updateWikiPageRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling updateWikiPage", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -788,7 +787,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page Documentation</a>
      */
-    public GetWikiPage200Response updateWikiPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public GetWikiPage200Response updateWikiPage(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return updateWikiPageRequestCreation(format, projectId, wikiPageTitle, updateWikiPageRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -814,7 +813,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page Documentation</a>
      */
-    public ResponseEntity<GetWikiPage200Response> updateWikiPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<GetWikiPage200Response> updateWikiPageWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return updateWikiPageRequestCreation(format, projectId, wikiPageTitle, updateWikiPageRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -840,7 +839,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page Documentation</a>
      */
-    public ResponseSpec updateWikiPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec updateWikiPageWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return updateWikiPageRequestCreation(format, projectId, wikiPageTitle, updateWikiPageRequest, xRedmineSwitchUser);
     }
 
@@ -865,7 +864,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page (PATCH) Documentation</a>
      */
-    private ResponseSpec updateWikiPageViaPatchRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec updateWikiPageViaPatchRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling updateWikiPageViaPatch", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -934,7 +933,7 @@ public class WikiPagesApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page (PATCH) Documentation</a>
      */
-    public GetWikiPage200Response updateWikiPageViaPatch(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public GetWikiPage200Response updateWikiPageViaPatch(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return updateWikiPageViaPatchRequestCreation(format, projectId, wikiPageTitle, updateWikiPageRequest, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -960,7 +959,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page (PATCH) Documentation</a>
      */
-    public ResponseEntity<GetWikiPage200Response> updateWikiPageViaPatchWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<GetWikiPage200Response> updateWikiPageViaPatchWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<GetWikiPage200Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return updateWikiPageViaPatchRequestCreation(format, projectId, wikiPageTitle, updateWikiPageRequest, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -986,7 +985,7 @@ public class WikiPagesApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_WikiPages#Creating-or-updating-a-wiki-page">Create or update wiki page (PATCH) Documentation</a>
      */
-    public ResponseSpec updateWikiPageViaPatchWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec updateWikiPageViaPatchWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nonnull String wikiPageTitle, @jakarta.annotation.Nonnull UpdateWikiPageRequest updateWikiPageRequest, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return updateWikiPageViaPatchRequestCreation(format, projectId, wikiPageTitle, updateWikiPageRequest, xRedmineSwitchUser);
     }
 }

@@ -22,7 +22,7 @@
 # Usage, from dockers/gebo.microservices/:
 #
 #   export GEBO_SECURITY_LOG_BASE=/var/log/gebo-ai-microservices   # or put it in .env
-#   sudo mkdir -p "$GEBO_SECURITY_LOG_BASE"/{eureka,gateway,heimdall,tyr,brain,vectorizator,graphicator,chunker,fulltextor,git,filesystem,uploads,userspace,sharepoint,confluence,jira,aws-s3,googledrive,mcpclient,webdav,integration}
+#   sudo mkdir -p "$GEBO_SECURITY_LOG_BASE"/{eureka,gateway,heimdall,tyr,brain,vectorizator,graphicator,chunker,fulltextor,git,filesystem,uploads,userspace,sharepoint,confluence,jira,aws-s3,googledrive,mcpclient,webdav,redmine,glpi,openproject,zammad,integration}
 #   sudo chown -R 10001:10001 "$GEBO_SECURITY_LOG_BASE"
 #   docker compose -f docker-compose.yml \
 #                  -f ../../deploy/wazuh/docker/docker-compose.security-logs.override.yml \
@@ -124,6 +124,18 @@ services:
   webdav:
     volumes:
       - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/webdav:/opt/gebo.ai/logs
+  redmine:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/redmine:/opt/gebo.ai/logs
+  glpi:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/glpi:/opt/gebo.ai/logs
+  openproject:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/openproject:/opt/gebo.ai/logs
+  zammad:
+    volumes:
+      - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/zammad:/opt/gebo.ai/logs
   integration:
     volumes:
       - ${GEBO_SECURITY_LOG_BASE:-./security-logs}/integration:/opt/gebo.ai/logs

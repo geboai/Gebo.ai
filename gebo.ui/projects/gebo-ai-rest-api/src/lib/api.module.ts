@@ -84,6 +84,9 @@ import { GenericOpenAiapiTextToSpeechModelsConfigurationControllerService } from
 import { GenericOpenAiapiTranscriptModelsConfigurationControllerService } from './api/genericOpenAiapiTranscriptModelsConfigurationController.service';
 import { GenericalPublisherControllerService } from './api/genericalPublisherController.service';
 import { GitSystemsControllerService } from './api/gitSystemsController.service';
+import { GlpiBrowsingControllerService } from './api/glpiBrowsingController.service';
+import { GlpiSearchServiceControllerService } from './api/glpiSearchServiceController.service';
+import { GlpiSystemsControllerService } from './api/glpiSystemsController.service';
 import { GoogleDriveBrowsingControllerService } from './api/googleDriveBrowsingController.service';
 import { GoogleDriveSearchServiceControllerService } from './api/googleDriveSearchServiceController.service';
 import { GoogleDriveSystemsControllerService } from './api/googleDriveSystemsController.service';
@@ -125,10 +128,16 @@ import { OpenAiEmbeddingModelsConfigurationControllerService } from './api/openA
 import { OpenAiImageModelsConfigurationControllerService } from './api/openAiImageModelsConfigurationController.service';
 import { OpenAiTextToSpeechModelsConfigurationControllerService } from './api/openAiTextToSpeechModelsConfigurationController.service';
 import { OpenAiTranscriptModelsConfigurationControllerService } from './api/openAiTranscriptModelsConfigurationController.service';
+import { OpenProjectBrowsingControllerService } from './api/openProjectBrowsingController.service';
+import { OpenProjectSearchServiceControllerService } from './api/openProjectSearchServiceController.service';
+import { OpenProjectSystemsControllerService } from './api/openProjectSystemsController.service';
 import { ProjectsControllerService } from './api/projectsController.service';
 import { PromptTemplatesControllerService } from './api/promptTemplatesController.service';
 import { ProviderDealsControllerService } from './api/providerDealsController.service';
 import { RankerModelsControllerService } from './api/rankerModelsController.service';
+import { RedmineBrowsingControllerService } from './api/redmineBrowsingController.service';
+import { RedmineSearchServiceControllerService } from './api/redmineSearchServiceController.service';
+import { RedmineSystemsControllerService } from './api/redmineSystemsController.service';
 import { ReindexingFrequencyOptionsControllerService } from './api/reindexingFrequencyOptionsController.service';
 import { SearxngSearchConfigurationControllerService } from './api/searxngSearchConfigurationController.service';
 import { SecretsControllerService } from './api/secretsController.service';
@@ -158,6 +167,9 @@ import { WaitingConditionsControllerService } from './api/waitingConditionsContr
 import { WebdavBrowsingControllerService } from './api/webdavBrowsingController.service';
 import { WebdavSystemsControllerService } from './api/webdavSystemsController.service';
 import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdminLevelController.service';
+import { ZammadBrowsingControllerService } from './api/zammadBrowsingController.service';
+import { ZammadSearchServiceControllerService } from './api/zammadSearchServiceController.service';
+import { ZammadSystemsControllerService } from './api/zammadSystemsController.service';
 
 @NgModule({
   imports:      [],
@@ -245,6 +257,9 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     GenericOpenAiapiTranscriptModelsConfigurationControllerService,
     GenericalPublisherControllerService,
     GitSystemsControllerService,
+    GlpiBrowsingControllerService,
+    GlpiSearchServiceControllerService,
+    GlpiSystemsControllerService,
     GoogleDriveBrowsingControllerService,
     GoogleDriveSearchServiceControllerService,
     GoogleDriveSystemsControllerService,
@@ -286,10 +301,16 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     OpenAiImageModelsConfigurationControllerService,
     OpenAiTextToSpeechModelsConfigurationControllerService,
     OpenAiTranscriptModelsConfigurationControllerService,
+    OpenProjectBrowsingControllerService,
+    OpenProjectSearchServiceControllerService,
+    OpenProjectSystemsControllerService,
     ProjectsControllerService,
     PromptTemplatesControllerService,
     ProviderDealsControllerService,
     RankerModelsControllerService,
+    RedmineBrowsingControllerService,
+    RedmineSearchServiceControllerService,
+    RedmineSystemsControllerService,
     ReindexingFrequencyOptionsControllerService,
     SearxngSearchConfigurationControllerService,
     SecretsControllerService,
@@ -318,7 +339,10 @@ import { WorkflowStatsAdminLevelControllerService } from './api/workflowStatsAdm
     WaitingConditionsControllerService,
     WebdavBrowsingControllerService,
     WebdavSystemsControllerService,
-    WorkflowStatsAdminLevelControllerService ]
+    WorkflowStatsAdminLevelControllerService,
+    ZammadBrowsingControllerService,
+    ZammadSearchServiceControllerService,
+    ZammadSystemsControllerService ]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

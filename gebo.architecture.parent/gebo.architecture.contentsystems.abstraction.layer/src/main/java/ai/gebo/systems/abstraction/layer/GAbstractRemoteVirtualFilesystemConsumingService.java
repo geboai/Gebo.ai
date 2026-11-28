@@ -123,10 +123,15 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 		}
 
 		for (VFilesystemReference path : paths) {
+			// a handler can record the failure of resolving a path before throwing it: it
+			// is recorded once
+			final int recordedBeforeResolving = errorConsumer.getErrors().size();
+			boolean resolved = false;
 			try {
 				PositionsCoordinateType position = toNavigationPosition(path, environment);
 				List<ImplementativePositionObjectType> nativeCoordinates = toNativeCoordinates(position, system,
 						endpoint, root, consumer, messagesConsumer, errorConsumer, environment);
+				resolved = true;
 				if (nativeCoordinates != null && !nativeCoordinates.isEmpty()) {
 					List<ImplementativePositionObjectType> previusFolderCoordinates = nativeCoordinates.subList(0,
 							nativeCoordinates.size() - 1);
@@ -176,10 +181,14 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				}
 			} catch (GeboContentHandlerSystemException exc) {
 				LOGGER.error("Exception while managing:" + path.toString(), exc);
-				errorConsumer.accept(ContentsAccessError.of(exc, null, path.toString()));
+				if (resolved || errorConsumer.getErrors().size() == recordedBeforeResolving) {
+					errorConsumer.accept(ContentsAccessError.of(exc, null, path.toString()));
+				}
 			} catch (Throwable th) {
 				LOGGER.error("Untrappable Exception while managing:" + path.toString(), th);
-				errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
+				if (resolved || errorConsumer.getErrors().size() == recordedBeforeResolving) {
+					errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
+				}
 			}
 		}
 

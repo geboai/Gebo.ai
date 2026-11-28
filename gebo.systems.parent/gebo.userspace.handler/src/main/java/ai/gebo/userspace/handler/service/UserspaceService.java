@@ -16,9 +16,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -183,22 +185,50 @@ public class UserspaceService {
 	}
 
 	/**
-	 * Deletes a user knowledgebase
+	 * The user's own knowledge base the DTO names, before its deletion: refused when it is not theirs.
 	 * 
 	 * @param object The knowledgebase DTO to delete
+	 * @return the knowledge base to delete
 	 * @throws GeboPersistenceException If there's an error deleting from the
 	 *                                  database
 	 */
 
-	public void deleteUserKnowledgebase(UserspaceKnowledgebaseDto object) throws GeboPersistenceException {
+	public GKnowledgeBase ownedKnowledgebaseToDelete(UserspaceKnowledgebaseDto object)
+			throws GeboPersistenceException {
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		if (object.code == null)
 			throw new RuntimeException("Cannot update an object not having a code");
 		GKnowledgeBase knowledgeBase = persistentObjectManager.findById(GKnowledgeBase.class, object.code);
+		if (knowledgeBase == null) {
+			throw new RuntimeException("Knowledge base does not exist");
+		}
 		if (!(knowledgeBase.getUsername() != null && knowledgeBase.getUsername().equals(owner))) {
 			throw new RuntimeException("Cannot update an object not owned");
 		}
+		return knowledgeBase;
+	}
+
+	/**
+	 * The folders of a userspace knowledge base.
+	 *
+	 * @param knowledgeBaseCode the knowledge base code
+	 * @return its folders
+	 */
+	public List<GProject> foldersOf(String knowledgeBaseCode) {
+		try (Stream<GProject> projects = projectRepository.findByRootKnowledgeBaseCode(knowledgeBaseCode)) {
+			return projects.toList();
+		}
+	}
+
+	/**
+	 * The data sources holding the uploads of a userspace folder.
+	 *
+	 * @param folderCode the folder (project) code
+	 * @return its upload data sources
+	 */
+	public List<GUserspaceProjectEndpoint> uploadsOf(String folderCode) {
+		return endpointRepository.findByParentProjectCode(folderCode);
 	}
 
 	/**
@@ -261,14 +291,15 @@ public class UserspaceService {
 	}
 
 	/**
-	 * Deletes a userspace folder
+	 * The folder the DTO names, before its deletion: refused when its knowledge base is not the user's or it is not in it.
 	 * 
 	 * @param folderdto The folder DTO to delete
+	 * @return the folder (project) to delete
 	 * @throws GeboPersistenceException If there's an error deleting from the
 	 *                                  database
 	 */
 
-	public void deleteUserspaceFolder(UserspaceFolderDto folderdto) throws GeboPersistenceException {
+	public GProject ownedFolderToDelete(UserspaceFolderDto folderdto) throws GeboPersistenceException {
 		if (folderdto.code == null || folderdto.uploadCode == null
 				|| folderdto.parentUserspaceKnowledgebaseCode == null) {
 			throw new RuntimeException("Folder with null code or uploadCode or parentUserspaceKnowledgebaseCode");
@@ -285,8 +316,12 @@ public class UserspaceService {
 			throw new RuntimeException("Cannot update an object not owned");
 		}
 		GProject pj = persistentObjectManager.findById(GProject.class, folderdto.code);
-		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
-				folderdto.uploadCode);
+		// the folder has to be one of the user's own knowledge base: otherwise any
+		// folder could be named next to a knowledge base of one's own
+		if (pj == null || !folderdto.parentUserspaceKnowledgebaseCode.equals(pj.getRootKnowledgeBaseCode())) {
+			throw new RuntimeException("The folder is not in this knowledge base");
+		}
+		return pj;
 	}
 
 	/**
@@ -402,13 +437,67 @@ public class UserspaceService {
 	}
 
 	/**
-	 * Deletes userspace files
-	 * 
-	 * @param files The list of file DTOs to delete
+	 * Deletes userspace files: each is removed from its folder's files and its
+	 * upload record is marked deleted. As for any data source whose files go, the
+	 * knowledge base loses their documents at the folder's next publish: the
+	 * handler hands the documents of the deleted records over as deleted, and the
+	 * end of the ingestion erases their vectors, graph and full-text fragments.
+	 * Every file is checked before any is deleted.
+	 *
+	 * @param files           The list of file DTOs to delete
+	 * @param allowedToDelete whether the current user may delete the contents of a
+	 *                        folder's data source
+	 * @throws GeboPersistenceException          If a file is not one the user may
+	 *                                           delete, or the database fails
+	 * @throws GeboContentHandlerSystemException If the folder's files cannot be
+	 *                                           located
+	 * @throws IOException                       If a file cannot be deleted
 	 */
 
-	public void deleteUserspaceFiles(List<UserspaceFileDto> files) {
-		// Method implementation is empty
+	public void deleteUserspaceFiles(List<UserspaceFileDto> files,
+			Predicate<GUserspaceProjectEndpoint> allowedToDelete)
+			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
+		final Map<String, GUserspaceProjectEndpoint> endpoints = new HashMap<String, GUserspaceProjectEndpoint>();
+		final Map<UserspaceFileDto, Path> targets = new LinkedHashMap<UserspaceFileDto, Path>();
+		for (UserspaceFileDto file : files) {
+			if (file.parentUserspaceUploadCode == null || file.name == null) {
+				throw new RuntimeException("File with null name or parentUserspaceUploadCode");
+			}
+			GUserspaceProjectEndpoint endpoint = endpoints.get(file.parentUserspaceUploadCode);
+			if (endpoint == null) {
+				endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
+						file.parentUserspaceUploadCode);
+				if (endpoint == null) {
+					throw new RuntimeException("The folder of " + file.name + " does not exist");
+				}
+				if (!allowedToDelete.test(endpoint)) {
+					throw new GeboPersistenceException("Only the folder's owner or an administrator can delete its files");
+				}
+				endpoints.put(endpoint.getCode(), endpoint);
+			}
+			final Path folder = Path.of(localFolderService.getLocalPersistentFolder(handler.getSystem(endpoint), endpoint))
+					.toAbsolutePath().normalize();
+			final Path target = folder.resolve(file.name).normalize();
+			// only a file of this folder: a name cannot lead elsewhere
+			if (!folder.equals(target.getParent()) || Files.isDirectory(target)) {
+				throw new RuntimeException("The file " + file.name + " is not in this folder");
+			}
+			targets.put(file, target);
+		}
+		for (Map.Entry<UserspaceFileDto, Path> entry : targets.entrySet()) {
+			final UserspaceFileDto file = entry.getKey();
+			Files.deleteIfExists(entry.getValue());
+			final String recordCode = file.parentUserspaceUploadCode + "/" + entry.getValue().getFileName();
+			GUserspaceFile record = filesRepository.findById(recordCode).orElse(null);
+			if (record == null) {
+				record = new GUserspaceFile();
+				record.setCode(recordCode);
+				record.setName(entry.getValue().getFileName().toString());
+				record.setUserspaceEndpointCode(file.parentUserspaceUploadCode);
+			}
+			record.setDeleted(true);
+			filesRepository.save(record);
+		}
 	}
 
 	/**

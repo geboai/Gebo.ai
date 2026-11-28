@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Cartridge Type
+ * Cartridge type
  */
 @JsonPropertyOrder({
   CartridgeItemType.JSON_PROPERTY_ID,

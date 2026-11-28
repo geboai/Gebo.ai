@@ -25,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Domain Relation
+ * Domain relation
  */
 @JsonPropertyOrder({
   DomainRelation.JSON_PROPERTY_ID,

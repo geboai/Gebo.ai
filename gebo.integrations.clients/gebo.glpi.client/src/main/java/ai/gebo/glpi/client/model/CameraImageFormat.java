@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Image Format
+ * Image format
  */
 @JsonPropertyOrder({
   CameraImageFormat.JSON_PROPERTY_ID,

@@ -57,3 +57,11 @@ scrape_configs:
         labels: { service: tyr }
       - targets: ["webdav:13990"]
         labels: { service: webdav }
+      - targets: ["redmine:13990"]
+        labels: { service: redmine }
+      - targets: ["glpi:13990"]
+        labels: { service: glpi }
+      - targets: ["openproject:13990"]
+        labels: { service: openproject }
+      - targets: ["zammad:13990"]
+        labels: { service: zammad }

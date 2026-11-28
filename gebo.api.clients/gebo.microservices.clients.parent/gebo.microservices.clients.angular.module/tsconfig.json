@@ -95,6 +95,18 @@
       ],
       "@Gebo.ai/tyr": [
         "../tyr.gebo.ai.angular.client/dist/gebo-tyr-api"
+      ],
+      "@Gebo.ai/redmine": [
+        "../redmine.gebo.ai.angular.client/dist/gebo-redmine-api"
+      ],
+      "@Gebo.ai/glpi": [
+        "../glpi.gebo.ai.angular.client/dist/gebo-glpi-api"
+      ],
+      "@Gebo.ai/openproject": [
+        "../openproject.gebo.ai.angular.client/dist/gebo-openproject-api"
+      ],
+      "@Gebo.ai/zammad": [
+        "../zammad.gebo.ai.angular.client/dist/gebo-zammad-api"
       ]
     },
     "lib": [

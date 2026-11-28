@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Hard Drive item
+ * Hard drive item
  */
 @JsonPropertyOrder({
   HardDriveItem.JSON_PROPERTY_ID,

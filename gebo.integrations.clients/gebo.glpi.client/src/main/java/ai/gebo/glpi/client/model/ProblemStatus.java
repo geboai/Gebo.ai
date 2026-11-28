@@ -35,7 +35,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", comments = "Generator version: 7.28.0")
 public class ProblemStatus {
   /**
-   * - 1: New - 7: Accepted - 2: Processing (assigned) - 3: Processing (planned) - 4: Pending - 5: Solved - 8: Under Observation - 6: Closed 
+   * - 1: New - 7: Accepted - 2: Processing (assigned) - 3: Processing (planned) - 4: Pending - 5: Solved - 8: Under observation - 6: Closed 
    */
   public enum IdEnum {
     NUMBER_1(1l),
@@ -105,7 +105,7 @@ public class ProblemStatus {
   }
 
   /**
-   * - 1: New - 7: Accepted - 2: Processing (assigned) - 3: Processing (planned) - 4: Pending - 5: Solved - 8: Under Observation - 6: Closed 
+   * - 1: New - 7: Accepted - 2: Processing (assigned) - 3: Processing (planned) - 4: Pending - 5: Solved - 8: Under observation - 6: Closed 
    * @return id
    */
   @jakarta.annotation.Nullable

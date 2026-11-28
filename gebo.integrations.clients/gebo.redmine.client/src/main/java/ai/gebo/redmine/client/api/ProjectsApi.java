@@ -2,7 +2,6 @@ package ai.gebo.redmine.client.api;
 
 import ai.gebo.redmine.client.invoker.ApiClient;
 
-import ai.gebo.redmine.client.model.CreateIssueRequestIssueProjectId;
 import ai.gebo.redmine.client.model.CreateProject201Response;
 import ai.gebo.redmine.client.model.CreateProjectRequest;
 import ai.gebo.redmine.client.model.Errors;
@@ -66,7 +65,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project Documentation</a>
      */
-    private ResponseSpec archiveProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec archiveProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling archiveProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -119,7 +118,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project Documentation</a>
      */
-    public void archiveProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void archiveProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         archiveProjectRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -140,7 +139,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project Documentation</a>
      */
-    public ResponseEntity<Void> archiveProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> archiveProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return archiveProjectRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -162,7 +161,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project Documentation</a>
      */
-    public ResponseSpec archiveProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec archiveProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return archiveProjectRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -182,7 +181,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project (POST) Documentation</a>
      */
-    private ResponseSpec archiveProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec archiveProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling archiveProjectViaPost", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -235,7 +234,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project (POST) Documentation</a>
      */
-    public void archiveProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void archiveProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         archiveProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -256,7 +255,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project (POST) Documentation</a>
      */
-    public ResponseEntity<Void> archiveProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> archiveProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return archiveProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -278,7 +277,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Archiving-a-project">Archive project (POST) Documentation</a>
      */
-    public ResponseSpec archiveProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec archiveProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return archiveProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -295,7 +294,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    private ResponseSpec closeProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec closeProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling closeProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -343,7 +342,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public void closeProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void closeProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         closeProjectRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -361,7 +360,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> closeProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> closeProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return closeProjectRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -380,7 +379,7 @@ public class ProjectsApi {
      * @return ResponseSpec
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseSpec closeProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec closeProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return closeProjectRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -397,7 +396,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    private ResponseSpec closeProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec closeProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling closeProjectViaPost", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -445,7 +444,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public void closeProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void closeProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         closeProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -463,7 +462,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> closeProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> closeProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return closeProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -482,7 +481,7 @@ public class ProjectsApi {
      * @return ResponseSpec
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseSpec closeProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec closeProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return closeProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -617,7 +616,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Deleting-a-project">Delete project Documentation</a>
      */
-    private ResponseSpec deleteProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec deleteProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling deleteProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -667,7 +666,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Deleting-a-project">Delete project Documentation</a>
      */
-    public void deleteProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void deleteProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         deleteProjectRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -687,7 +686,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Deleting-a-project">Delete project Documentation</a>
      */
-    public ResponseEntity<Void> deleteProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> deleteProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return deleteProjectRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -708,7 +707,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Deleting-a-project">Delete project Documentation</a>
      */
-    public ResponseSpec deleteProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec deleteProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return deleteProjectRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -729,7 +728,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Showing-a-project">Show project Documentation</a>
      */
-    private ResponseSpec getProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    private ResponseSpec getProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling getProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -785,7 +784,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Showing-a-project">Show project Documentation</a>
      */
-    public CreateProject201Response getProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    public CreateProject201Response getProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         ParameterizedTypeReference<CreateProject201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getProjectRequestCreation(format, projectId, xRedmineSwitchUser, include).body(localVarReturnType);
     }
@@ -807,7 +806,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Showing-a-project">Show project Documentation</a>
      */
-    public ResponseEntity<CreateProject201Response> getProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    public ResponseEntity<CreateProject201Response> getProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         ParameterizedTypeReference<CreateProject201Response> localVarReturnType = new ParameterizedTypeReference<>() {};
         return getProjectRequestCreation(format, projectId, xRedmineSwitchUser, include).toEntity(localVarReturnType);
     }
@@ -829,7 +828,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Showing-a-project">Show project Documentation</a>
      */
-    public ResponseSpec getProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
+    public ResponseSpec getProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable List<String> include) throws RestClientResponseException {
         return getProjectRequestCreation(format, projectId, xRedmineSwitchUser, include);
     }
 
@@ -1055,7 +1054,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    private ResponseSpec reopenProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec reopenProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling reopenProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -1103,7 +1102,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public void reopenProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void reopenProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         reopenProjectRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -1121,7 +1120,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> reopenProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> reopenProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return reopenProjectRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -1140,7 +1139,7 @@ public class ProjectsApi {
      * @return ResponseSpec
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseSpec reopenProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec reopenProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return reopenProjectRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -1157,7 +1156,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    private ResponseSpec reopenProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec reopenProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling reopenProjectViaPost", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -1205,7 +1204,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public void reopenProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void reopenProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         reopenProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -1223,7 +1222,7 @@ public class ProjectsApi {
      * @param xRedmineSwitchUser The xRedmineSwitchUser parameter
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<Void> reopenProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> reopenProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return reopenProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -1242,7 +1241,7 @@ public class ProjectsApi {
      * @return ResponseSpec
      * @throws RestClientResponseException if an error occurs while attempting to invoke the API
      */
-    public ResponseSpec reopenProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec reopenProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return reopenProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -1261,7 +1260,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project Documentation</a>
      */
-    private ResponseSpec unarchiveProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec unarchiveProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling unarchiveProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -1311,7 +1310,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project Documentation</a>
      */
-    public void unarchiveProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void unarchiveProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         unarchiveProjectRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -1331,7 +1330,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project Documentation</a>
      */
-    public ResponseEntity<Void> unarchiveProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> unarchiveProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return unarchiveProjectRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -1352,7 +1351,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project Documentation</a>
      */
-    public ResponseSpec unarchiveProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec unarchiveProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return unarchiveProjectRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -1371,7 +1370,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project (POST) Documentation</a>
      */
-    private ResponseSpec unarchiveProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    private ResponseSpec unarchiveProjectViaPostRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling unarchiveProjectViaPost", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -1421,7 +1420,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project (POST) Documentation</a>
      */
-    public void unarchiveProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public void unarchiveProjectViaPost(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         unarchiveProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).body(localVarReturnType);
     }
@@ -1441,7 +1440,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project (POST) Documentation</a>
      */
-    public ResponseEntity<Void> unarchiveProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseEntity<Void> unarchiveProjectViaPostWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return unarchiveProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser).toEntity(localVarReturnType);
     }
@@ -1462,7 +1461,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Unarchiving-a-project">Unarchive project (POST) Documentation</a>
      */
-    public ResponseSpec unarchiveProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
+    public ResponseSpec unarchiveProjectViaPostWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser) throws RestClientResponseException {
         return unarchiveProjectViaPostRequestCreation(format, projectId, xRedmineSwitchUser);
     }
 
@@ -1483,7 +1482,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project Documentation</a>
      */
-    private ResponseSpec updateProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    private ResponseSpec updateProjectRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling updateProject", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -1539,7 +1538,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project Documentation</a>
      */
-    public void updateProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    public void updateProject(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         updateProjectRequestCreation(format, projectId, xRedmineSwitchUser, updateProjectRequest).body(localVarReturnType);
     }
@@ -1561,7 +1560,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project Documentation</a>
      */
-    public ResponseEntity<Void> updateProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    public ResponseEntity<Void> updateProjectWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return updateProjectRequestCreation(format, projectId, xRedmineSwitchUser, updateProjectRequest).toEntity(localVarReturnType);
     }
@@ -1584,7 +1583,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project Documentation</a>
      */
-    public ResponseSpec updateProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    public ResponseSpec updateProjectWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         return updateProjectRequestCreation(format, projectId, xRedmineSwitchUser, updateProjectRequest);
     }
 
@@ -1605,7 +1604,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project (PATCH) Documentation</a>
      */
-    private ResponseSpec updateProjectViaPatchRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    private ResponseSpec updateProjectViaPatchRequestCreation(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         // verify the required parameter 'format' is set
         if (format == null) {
             throw new RestClientResponseException("Missing the required parameter 'format' when calling updateProjectViaPatch", HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), null, null, null);
@@ -1661,7 +1660,7 @@ public class ProjectsApi {
     * 
     * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project (PATCH) Documentation</a>
      */
-    public void updateProjectViaPatch(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    public void updateProjectViaPatch(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         updateProjectViaPatchRequestCreation(format, projectId, xRedmineSwitchUser, updateProjectRequest).body(localVarReturnType);
     }
@@ -1683,7 +1682,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project (PATCH) Documentation</a>
      */
-    public ResponseEntity<Void> updateProjectViaPatchWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    public ResponseEntity<Void> updateProjectViaPatchWithHttpInfo(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         ParameterizedTypeReference<Void> localVarReturnType = new ParameterizedTypeReference<>() {};
         return updateProjectViaPatchRequestCreation(format, projectId, xRedmineSwitchUser, updateProjectRequest).toEntity(localVarReturnType);
     }
@@ -1706,7 +1705,7 @@ public class ProjectsApi {
      * 
      * @see <a href="https://www.redmine.org/projects/redmine/wiki/Rest_Projects#Updating-a-project">Update project (PATCH) Documentation</a>
      */
-    public ResponseSpec updateProjectViaPatchWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull CreateIssueRequestIssueProjectId projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
+    public ResponseSpec updateProjectViaPatchWithResponseSpec(@jakarta.annotation.Nonnull String format, @jakarta.annotation.Nonnull java.lang.String projectId, @jakarta.annotation.Nullable String xRedmineSwitchUser, @jakarta.annotation.Nullable UpdateProjectRequest updateProjectRequest) throws RestClientResponseException {
         return updateProjectViaPatchRequestCreation(format, projectId, xRedmineSwitchUser, updateProjectRequest);
     }
 }

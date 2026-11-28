@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * Network Card item
+ * Network card item
  */
 @JsonPropertyOrder({
   NetworkCardItem.JSON_PROPERTY_ID,
