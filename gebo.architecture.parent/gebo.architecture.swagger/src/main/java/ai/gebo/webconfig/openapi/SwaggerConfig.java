@@ -13,7 +13,9 @@
 package ai.gebo.webconfig.openapi;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
@@ -75,6 +77,12 @@ public class SwaggerConfig {
      * whose numbering changes as controllers are added, breaking the generated
      * clients. Every controller method must carry a unique, decorated name
      * (operation + handled type, or {@link GeboOpenAITypeDecoration}).
+     * <p>
+     * springdoc suffixes them in its own {@code OperationIdCustomizer}, an
+     * OpenApiCustomizer like this one, and the customizers run in no given order:
+     * when this one runs first, the duplicated operationIds are still equal and
+     * carry no suffix yet. So both are reported: equal operationIds, and the ones
+     * already suffixed.
      */
     @Bean
     public OpenApiCustomizer duplicatedOperationIdsReporter() {
@@ -82,13 +90,19 @@ public class SwaggerConfig {
             if (openApi.getPaths() == null) {
                 return;
             }
-            List<String> duplicated = new ArrayList<>();
+            Map<String, List<String>> byOperationId = new LinkedHashMap<>();
             openApi.getPaths().forEach((path, item) -> item.readOperationsMap().forEach((method, operation) -> {
-                if (operation.getOperationId() != null
-                        && DUPLICATED_OPERATION_ID.matcher(operation.getOperationId()).matches()) {
-                    duplicated.add(operation.getOperationId() + " (" + method + " " + path + ")");
+                if (operation.getOperationId() != null) {
+                    byOperationId.computeIfAbsent(operation.getOperationId(), id -> new ArrayList<>())
+                            .add(method + " " + path);
                 }
             }));
+            List<String> duplicated = new ArrayList<>();
+            byOperationId.forEach((operationId, operations) -> {
+                if (operations.size() > 1 || DUPLICATED_OPERATION_ID.matcher(operationId).matches()) {
+                    duplicated.add(operationId + " " + operations);
+                }
+            });
             if (!duplicated.isEmpty()) {
                 LOGGER.error("OpenAPI operationIds duplicated by controller method names, rename them with a unique"
                         + " decorated name: " + duplicated);

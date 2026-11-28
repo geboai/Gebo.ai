@@ -27,7 +27,7 @@ import java.util.List;
  * PageGUserSession
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T11:03:04.297667225+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:38.516142171+01:00[Europe/Rome]")
 
 public class PageGUserSession {
   @JsonProperty("totalPages")

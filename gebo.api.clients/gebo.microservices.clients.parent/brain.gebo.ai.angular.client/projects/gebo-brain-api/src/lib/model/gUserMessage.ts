@@ -11,11 +11,11 @@
  */
 
 export interface GUserMessage { 
-    severity: GUserMessage.SeverityEnum;
+    key?: string;
     summary: string;
     detail: string;
+    severity: GUserMessage.SeverityEnum;
     id: string;
-    key?: string;
     jobId: string;
     timestamp: number;
 }

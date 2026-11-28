@@ -407,7 +407,7 @@ public abstract class AbstractGeboMonolithicIntegrationTestsWithFakeLLMS
 		Map<Object, List<Document>> splittedForCodes = usedTestVectorStore
 				.getStoredForMetaAttribute(DocumentMetaInfos.CONTENT_CODE);
 		Assertions.assertFalse(splittedForCodes.isEmpty(), "The vector store has received 0 values splitted by code");
-		Assertions.assertEquals(splittedForCodes.size(), howManyFilesWait,
+		Assertions.assertEquals(howManyFilesWait, splittedForCodes.size(),
 				"The number of received files must be equal to the expected value");
 		Assertions.assertFalse(allData.isEmpty(), "All embedded entries cannot be empty");
 		long withoutMetaData = allData.stream().map(x -> x.getMetadata() == null || x.getMetadata().isEmpty()).count();

@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**messagingSystemId** | **String** |  |  [optional]
 **messagingModuleId** | **String** |  |  [optional]
+**messagingSystemId** | **String** |  |  [optional]
 **receiver** | **Boolean** |  |  [optional]
 **emitter** | **Boolean** |  |  [optional]
 **localSystem** | **Boolean** |  |  [optional]

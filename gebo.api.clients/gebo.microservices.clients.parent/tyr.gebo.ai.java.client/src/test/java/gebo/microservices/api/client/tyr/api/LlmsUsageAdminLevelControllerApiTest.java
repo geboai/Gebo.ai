@@ -45,4 +45,19 @@ public class LlmsUsageAdminLevelControllerApiTest {
 
         // TODO: test validations
     }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void adminExportExcelTest() {
+        LLMUsageDrillDownLevel body = null;
+        byte[] response = api.adminExportExcel(body);
+
+        // TODO: test validations
+    }
 }

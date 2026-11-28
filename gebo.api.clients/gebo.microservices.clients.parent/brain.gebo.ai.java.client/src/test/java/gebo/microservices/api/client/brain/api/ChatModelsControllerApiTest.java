@@ -14,6 +14,8 @@ package gebo.microservices.api.client.brain.api;
 
 import gebo.microservices.api.client.brain.model.ChatModelInputs;
 import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseChatModelConfig;
+import gebo.microservices.api.client.brain.model.GChatModelParametersSupport;
+import gebo.microservices.api.client.brain.model.GChatModelParametersSupportRequest;
 import gebo.microservices.api.client.brain.model.GChatModelType;
 import gebo.microservices.api.client.brain.model.GModelCarriedMediaTypes;
 import gebo.microservices.api.client.brain.model.OperationStatusListChatModelInputs;
@@ -60,6 +62,21 @@ public class ChatModelsControllerApiTest {
         String modelTypeCode = null;
         String modelCode = null;
         GModelCarriedMediaTypes response = api.getCarriedMediaTypes(modelTypeCode, modelCode);
+
+        // TODO: test validations
+    }
+    /**
+     * What a chat model takes of temperature, top_p and thinking, as its integration sends them
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void getChatModelParametersSupportTest() {
+        GChatModelParametersSupportRequest body = null;
+        GChatModelParametersSupport response = api.getChatModelParametersSupport(body);
 
         // TODO: test validations
     }

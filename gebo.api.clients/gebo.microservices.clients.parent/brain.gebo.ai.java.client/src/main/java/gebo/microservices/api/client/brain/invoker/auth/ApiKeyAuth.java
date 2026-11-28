@@ -3,7 +3,7 @@ package gebo.microservices.api.client.brain.invoker.auth;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.MultiValueMap;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:41.358449505+01:00[Europe/Rome]")
 public class ApiKeyAuth implements Authentication {
     private final String location;
     private final String paramName;

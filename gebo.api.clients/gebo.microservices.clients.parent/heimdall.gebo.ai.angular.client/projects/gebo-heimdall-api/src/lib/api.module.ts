@@ -3,7 +3,6 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 
-import { AclAliasesClusterControllerService } from './api/aclAliasesClusterController.service';
 import { AuthControllerService } from './api/authController.service';
 import { AuthProvidersControllerService } from './api/authProvidersController.service';
 import { GeboAngularFormGroupMetaInfoControllerService } from './api/geboAngularFormGroupMetaInfoController.service';
@@ -15,9 +14,7 @@ import { InstallationClusterControllerService } from './api/installationClusterC
 import { InternalMessagingTopologyControllerService } from './api/internalMessagingTopologyController.service';
 import { OAuth2AdminControllerService } from './api/oAuth2AdminController.service';
 import { Oauth2ModuleStatusControllerService } from './api/oauth2ModuleStatusController.service';
-import { SecretsClusterControllerService } from './api/secretsClusterController.service';
 import { SecretsControllerService } from './api/secretsController.service';
-import { SecurityDirectoryClusterControllerService } from './api/securityDirectoryClusterController.service';
 import { SecurityHeaderDataCompletionControllerService } from './api/securityHeaderDataCompletionController.service';
 import { SessionControllerService } from './api/sessionController.service';
 import { SessionsAdminControllerService } from './api/sessionsAdminController.service';
@@ -26,7 +23,6 @@ import { SystemMessagesControllerService } from './api/systemMessagesController.
 import { TokenRenewControllerService } from './api/tokenRenewController.service';
 import { UserControllerService } from './api/userController.service';
 import { UserWorkflowsControllerService } from './api/userWorkflowsController.service';
-import { UsersAdminClusterControllerService } from './api/usersAdminClusterController.service';
 import { UsersAdminControllerService } from './api/usersAdminController.service';
 
 @NgModule({
@@ -34,7 +30,6 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
   declarations: [],
   exports:      [],
   providers: [
-    AclAliasesClusterControllerService,
     AuthControllerService,
     AuthProvidersControllerService,
     GeboAngularFormGroupMetaInfoControllerService,
@@ -46,9 +41,7 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     InternalMessagingTopologyControllerService,
     OAuth2AdminControllerService,
     Oauth2ModuleStatusControllerService,
-    SecretsClusterControllerService,
     SecretsControllerService,
-    SecurityDirectoryClusterControllerService,
     SecurityHeaderDataCompletionControllerService,
     SessionControllerService,
     SessionsAdminControllerService,
@@ -57,7 +50,6 @@ import { UsersAdminControllerService } from './api/usersAdminController.service'
     TokenRenewControllerService,
     UserControllerService,
     UserWorkflowsControllerService,
-    UsersAdminClusterControllerService,
     UsersAdminControllerService ]
 })
 export class ApiModule {

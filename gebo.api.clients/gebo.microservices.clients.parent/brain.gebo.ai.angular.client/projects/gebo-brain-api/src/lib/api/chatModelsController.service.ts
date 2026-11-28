@@ -19,6 +19,8 @@ import { Observable }                                        from 'rxjs';
 
 import { ChatModelInputs } from '../model/chatModelInputs';
 import { ConfigurationEntryGBaseChatModelConfig } from '../model/configurationEntryGBaseChatModelConfig';
+import { GChatModelParametersSupport } from '../model/gChatModelParametersSupport';
+import { GChatModelParametersSupportRequest } from '../model/gChatModelParametersSupportRequest';
 import { GChatModelType } from '../model/gChatModelType';
 import { GModelCarriedMediaTypes } from '../model/gModelCarriedMediaTypes';
 import { OperationStatusListChatModelInputs } from '../model/operationStatusListChatModelInputs';
@@ -139,6 +141,53 @@ export class ChatModelsControllerService {
         return this.httpClient.request<GModelCarriedMediaTypes>('get',`${this.basePath}/api/admin/ChatModelsController/getCarriedMediaTypes`,
             {
                 params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * What a chat model takes of temperature, top_p and thinking, as its integration sends them
+     * 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public getChatModelParametersSupport(body: GChatModelParametersSupportRequest, observe?: 'body', reportProgress?: boolean): Observable<GChatModelParametersSupport>;
+    public getChatModelParametersSupport(body: GChatModelParametersSupportRequest, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<GChatModelParametersSupport>>;
+    public getChatModelParametersSupport(body: GChatModelParametersSupportRequest, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<GChatModelParametersSupport>>;
+    public getChatModelParametersSupport(body: GChatModelParametersSupportRequest, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (body === null || body === undefined) {
+            throw new Error('Required parameter body was null or undefined when calling getChatModelParametersSupport.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<GChatModelParametersSupport>('post',`${this.basePath}/api/admin/ChatModelsController/getChatModelParametersSupport`,
+            {
+                body: body,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

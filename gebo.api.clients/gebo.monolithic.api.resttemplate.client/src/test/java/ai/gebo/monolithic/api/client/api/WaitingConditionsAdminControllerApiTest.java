@@ -39,9 +39,25 @@ public class WaitingConditionsAdminControllerApiTest {
      *          if the Api call fails
      */
     @Test
-    public void abandon1Test() {
+    public void adminAbandonTest() {
         String blockCode = null;
-        WaitingConditionsActionAck response = api.abandon1(blockCode);
+        WaitingConditionsActionAck response = api.adminAbandon(blockCode);
+
+        // TODO: test validations
+    }
+    /**
+     * 
+     *
+     * 
+     *
+     * @throws ApiException
+     *          if the Api call fails
+     */
+    @Test
+    public void adminGoOnWithoutTest() {
+        String blockCode = null;
+        List<String> body = null;
+        WaitingConditionsActionAck response = api.adminGoOnWithout(blockCode, body);
 
         // TODO: test validations
     }
@@ -56,22 +72,6 @@ public class WaitingConditionsAdminControllerApiTest {
     @Test
     public void allWaitingConditionsTest() {
         List<WaitingBlockView> response = api.allWaitingConditions();
-
-        // TODO: test validations
-    }
-    /**
-     * 
-     *
-     * 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void goOnWithout1Test() {
-        String blockCode = null;
-        List<String> body = null;
-        WaitingConditionsActionAck response = api.goOnWithout1(blockCode, body);
 
         // TODO: test validations
     }

@@ -24,20 +24,20 @@ import java.util.Date;
  * GJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:41.358449505+01:00[Europe/Rome]")
 
 public class GJobStatusItem {
   @JsonProperty("description")
   private String description = null;
-
-  @JsonProperty("code")
-  private String code = null;
 
   @JsonProperty("workflowType")
   private String workflowType = null;
 
   @JsonProperty("workflowId")
   private String workflowId = null;
+
+  @JsonProperty("code")
+  private String code = null;
 
   @JsonProperty("projectEndpointReference")
   private GObjectRefGProjectEndpoint projectEndpointReference = null;
@@ -50,9 +50,6 @@ public class GJobStatusItem {
 
   @JsonProperty("endDateTime")
   private Date endDateTime = null;
-
-  @JsonProperty("processing")
-  private Boolean processing = null;
 
   /**
    * Gets or Sets jobType
@@ -89,6 +86,9 @@ public class GJobStatusItem {
   }  @JsonProperty("jobType")
   private JobTypeEnum jobType = null;
 
+  @JsonProperty("processing")
+  private Boolean processing = null;
+
   @JsonProperty("finished")
   private Boolean finished = null;
 
@@ -108,24 +108,6 @@ public class GJobStatusItem {
 
   public void setDescription(String description) {
     this.description = description;
-  }
-
-  public GJobStatusItem code(String code) {
-    this.code = code;
-    return this;
-  }
-
-   /**
-   * Get code
-   * @return code
-  **/
-  @Schema(description = "")
-  public String getCode() {
-    return code;
-  }
-
-  public void setCode(String code) {
-    this.code = code;
   }
 
   public GJobStatusItem workflowType(String workflowType) {
@@ -162,6 +144,24 @@ public class GJobStatusItem {
 
   public void setWorkflowId(String workflowId) {
     this.workflowId = workflowId;
+  }
+
+  public GJobStatusItem code(String code) {
+    this.code = code;
+    return this;
+  }
+
+   /**
+   * Get code
+   * @return code
+  **/
+  @Schema(description = "")
+  public String getCode() {
+    return code;
+  }
+
+  public void setCode(String code) {
+    this.code = code;
   }
 
   public GJobStatusItem projectEndpointReference(GObjectRefGProjectEndpoint projectEndpointReference) {
@@ -236,24 +236,6 @@ public class GJobStatusItem {
     this.endDateTime = endDateTime;
   }
 
-  public GJobStatusItem processing(Boolean processing) {
-    this.processing = processing;
-    return this;
-  }
-
-   /**
-   * Get processing
-   * @return processing
-  **/
-  @Schema(description = "")
-  public Boolean isProcessing() {
-    return processing;
-  }
-
-  public void setProcessing(Boolean processing) {
-    this.processing = processing;
-  }
-
   public GJobStatusItem jobType(JobTypeEnum jobType) {
     this.jobType = jobType;
     return this;
@@ -270,6 +252,24 @@ public class GJobStatusItem {
 
   public void setJobType(JobTypeEnum jobType) {
     this.jobType = jobType;
+  }
+
+  public GJobStatusItem processing(Boolean processing) {
+    this.processing = processing;
+    return this;
+  }
+
+   /**
+   * Get processing
+   * @return processing
+  **/
+  @Schema(description = "")
+  public Boolean isProcessing() {
+    return processing;
+  }
+
+  public void setProcessing(Boolean processing) {
+    this.processing = processing;
   }
 
   public GJobStatusItem finished(Boolean finished) {
@@ -301,21 +301,21 @@ public class GJobStatusItem {
     }
     GJobStatusItem gjobStatusItem = (GJobStatusItem) o;
     return Objects.equals(this.description, gjobStatusItem.description) &&
-        Objects.equals(this.code, gjobStatusItem.code) &&
         Objects.equals(this.workflowType, gjobStatusItem.workflowType) &&
         Objects.equals(this.workflowId, gjobStatusItem.workflowId) &&
+        Objects.equals(this.code, gjobStatusItem.code) &&
         Objects.equals(this.projectEndpointReference, gjobStatusItem.projectEndpointReference) &&
         Objects.equals(this.error, gjobStatusItem.error) &&
         Objects.equals(this.startDateTime, gjobStatusItem.startDateTime) &&
         Objects.equals(this.endDateTime, gjobStatusItem.endDateTime) &&
-        Objects.equals(this.processing, gjobStatusItem.processing) &&
         Objects.equals(this.jobType, gjobStatusItem.jobType) &&
+        Objects.equals(this.processing, gjobStatusItem.processing) &&
         Objects.equals(this.finished, gjobStatusItem.finished);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, code, workflowType, workflowId, projectEndpointReference, error, startDateTime, endDateTime, processing, jobType, finished);
+    return Objects.hash(description, workflowType, workflowId, code, projectEndpointReference, error, startDateTime, endDateTime, jobType, processing, finished);
   }
 
 
@@ -325,15 +325,15 @@ public class GJobStatusItem {
     sb.append("class GJobStatusItem {\n");
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    workflowType: ").append(toIndentedString(workflowType)).append("\n");
     sb.append("    workflowId: ").append(toIndentedString(workflowId)).append("\n");
+    sb.append("    code: ").append(toIndentedString(code)).append("\n");
     sb.append("    projectEndpointReference: ").append(toIndentedString(projectEndpointReference)).append("\n");
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    startDateTime: ").append(toIndentedString(startDateTime)).append("\n");
     sb.append("    endDateTime: ").append(toIndentedString(endDateTime)).append("\n");
-    sb.append("    processing: ").append(toIndentedString(processing)).append("\n");
     sb.append("    jobType: ").append(toIndentedString(jobType)).append("\n");
+    sb.append("    processing: ").append(toIndentedString(processing)).append("\n");
     sb.append("    finished: ").append(toIndentedString(finished)).append("\n");
     sb.append("}");
     return sb.toString();

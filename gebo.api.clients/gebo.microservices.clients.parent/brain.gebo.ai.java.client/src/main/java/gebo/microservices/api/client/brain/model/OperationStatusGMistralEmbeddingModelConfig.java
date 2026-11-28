@@ -26,7 +26,7 @@ import java.util.List;
  * OperationStatusGMistralEmbeddingModelConfig
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-10-12T22:17:58.760686001+02:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:41.358449505+01:00[Europe/Rome]")
 
 public class OperationStatusGMistralEmbeddingModelConfig {
   @JsonProperty("result")

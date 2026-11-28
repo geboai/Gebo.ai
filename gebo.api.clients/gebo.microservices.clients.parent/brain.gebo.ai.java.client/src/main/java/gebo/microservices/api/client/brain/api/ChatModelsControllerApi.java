@@ -4,6 +4,8 @@ import gebo.microservices.api.client.brain.invoker.ApiClient;
 
 import gebo.microservices.api.client.brain.model.ChatModelInputs;
 import gebo.microservices.api.client.brain.model.ConfigurationEntryGBaseChatModelConfig;
+import gebo.microservices.api.client.brain.model.GChatModelParametersSupport;
+import gebo.microservices.api.client.brain.model.GChatModelParametersSupportRequest;
 import gebo.microservices.api.client.brain.model.GChatModelType;
 import gebo.microservices.api.client.brain.model.GModelCarriedMediaTypes;
 import gebo.microservices.api.client.brain.model.OperationStatusListChatModelInputs;
@@ -26,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:19.167917390+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:41.358449505+01:00[Europe/Rome]")
 
 public class ChatModelsControllerApi {
     private ApiClient apiClient;
@@ -131,6 +133,52 @@ public class ChatModelsControllerApi {
 
         ParameterizedTypeReference<GModelCarriedMediaTypes> returnType = new ParameterizedTypeReference<GModelCarriedMediaTypes>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * What a chat model takes of temperature, top_p and thinking, as its integration sends them
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return GChatModelParametersSupport
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public GChatModelParametersSupport getChatModelParametersSupport(GChatModelParametersSupportRequest body) throws RestClientException {
+        return getChatModelParametersSupportWithHttpInfo(body).getBody();
+    }
+
+    /**
+     * What a chat model takes of temperature, top_p and thinking, as its integration sends them
+     * 
+     * <p><b>200</b> - OK
+     * @param body  (required)
+     * @return ResponseEntity&lt;GChatModelParametersSupport&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<GChatModelParametersSupport> getChatModelParametersSupportWithHttpInfo(GChatModelParametersSupportRequest body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'body' is set
+        if (body == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'body' when calling getChatModelParametersSupport");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/ChatModelsController/getChatModelParametersSupport").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<GChatModelParametersSupport> returnType = new ParameterizedTypeReference<GChatModelParametersSupport>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
     /**
      * 
