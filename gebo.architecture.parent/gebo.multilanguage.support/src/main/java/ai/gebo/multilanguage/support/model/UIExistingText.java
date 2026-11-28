@@ -1,5 +1,7 @@
 package ai.gebo.multilanguage.support.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
@@ -7,6 +9,7 @@ import org.springframework.data.annotation.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+@Document
 public class UIExistingText {
 	public static final String SEPARATOR = "-§-";
 

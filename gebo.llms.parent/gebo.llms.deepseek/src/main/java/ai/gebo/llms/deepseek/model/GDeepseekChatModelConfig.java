@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.deepseek.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -22,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * for Deepseek-specific implementations using GDeepseekChatModelChoice as
  * the type parameter for model choices.
  */
+@Document
 public class GDeepseekChatModelConfig extends GBaseChatModelConfig<GDeepseekChatModelChoice> {
 	
 	/**

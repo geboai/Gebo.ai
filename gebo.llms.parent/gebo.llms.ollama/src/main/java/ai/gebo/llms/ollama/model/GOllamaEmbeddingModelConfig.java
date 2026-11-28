@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.ollama.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 
 /**
@@ -22,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  * that it works with Ollama-specific embedding model choices.
  * No additional configuration parameters are required beyond what the base class provides.
  */
+@Document
 public class GOllamaEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GOllamaEmbeddingModelChoice> {
 	
     /**

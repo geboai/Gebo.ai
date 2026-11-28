@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.aws_bedrock.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
 
 /**
@@ -17,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseImageModelConfig;
  * has no dedicated Bedrock image model), so the height/width/quality/seed knobs
  * live here.
  */
+@Document
 public class GBedrockImageModelConfig extends GBaseImageModelConfig<GBedrockImageModelChoice> {
 
 	/** Generated image height in pixels. */

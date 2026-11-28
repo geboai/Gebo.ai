@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.onxx_transformers_embedding.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 
 /**
@@ -22,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  * It inherits configuration properties from GBaseEmbeddingModelConfig and
  * specifies GONNXTransformersEmbeddingModelChoice as its model choice type.
  */
+@Document
 public class GONNXTransformersEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GONNXTransformersEmbeddingModelChoice> {
 	
     /**

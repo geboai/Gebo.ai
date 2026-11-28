@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.mistralai.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 
 /**
@@ -22,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  * for Mistral AI specific embedding model choices.
  * It provides a way to configure and parameterize Mistral AI embedding operations.
  */
+@Document
 public class GMistralEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GMistralEmbeddingModelChoice> {
 	
     /**

@@ -4,7 +4,7 @@ import ai.gebo.core.messages.LLMCallOutcome;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -68,6 +68,6 @@ public class LLMUsageDetail {
 	 * key. Null in the records written before it existed.
 	 */
 	private String apiSecretCode;
-	@HashIndexed
+	@Indexed
 	private long timestamp = System.currentTimeMillis();
 }

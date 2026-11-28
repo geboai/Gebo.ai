@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.openai_compat.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
 
 /**
@@ -16,6 +18,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
  * provider's base url (the provider's own by default), the optional token and the
  * chosen model.
  */
+@Document
 public class GenericOpenAIAPIDecisionModelConfig extends GBaseDecisionModelConfig<GenericOpenAIAPIDecisionModelChoice> {
 
 }

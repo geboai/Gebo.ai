@@ -9,6 +9,8 @@
 
 package ai.gebo.security.sessions.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
 import ai.gebo.model.base.GBaseObject;
@@ -29,6 +31,7 @@ import lombok.Data;
  * of the session from the next request, before the token's own expiration.
  */
 @Data
+@Document
 public class GUserSession extends GBaseObject {
 
 	/** What opened the session. */

@@ -113,8 +113,10 @@ public class GNetworkOfAgentsSuspension extends GBaseObject {
 	/**
 	 * The earliest expiry among its conditions, written with the block and never
 	 * moved: the sweep reads the blocks due by it. Null when no condition expires.
+	 * The index is the one ConditionEventsIndexes creates (its name and sparse), so
+	 * whichever creates it first the other finds it as it is.
 	 */
-	@Indexed
+	@Indexed(name = "earliestExpiryAt_1", sparse = true)
 	private Date earliestExpiryAt = null;
 	/**
 	 * When the owner was told, and when the messages were taken back once the block

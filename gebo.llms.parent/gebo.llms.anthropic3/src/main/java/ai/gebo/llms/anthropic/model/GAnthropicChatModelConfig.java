@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.anthropic.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -22,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * configuration settings for Anthropic's language models.
  * It uses GAnthropicChatModelChoice as its choice type parameter.
  */
+@Document
 public class GAnthropicChatModelConfig extends GBaseChatModelConfig<GAnthropicChatModelChoice> {
 	
 	/**

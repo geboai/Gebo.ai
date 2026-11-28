@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.mistralai.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -22,6 +24,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * It currently provides basic functionality with a default constructor,
  * allowing for future extensions with Mistral-specific configuration options.
  */
+@Document
 public class GMistralChatModelConfig extends GBaseChatModelConfig<GMistralChatModelChoice>{
 	
 	

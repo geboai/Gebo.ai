@@ -12,6 +12,8 @@
 
 package ai.gebo.userspace.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.model.base.GBaseObject;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,6 +24,7 @@ import jakarta.validation.constraints.NotNull;
  * It extends GBaseObject which likely provides base functionality for all
  * Gebo system objects such as ID management and persistence.
  */
+@Document
 public class GUserspaceFile extends GBaseObject {
 	/**
 	 * The name of the file in the userspace. Cannot be null.

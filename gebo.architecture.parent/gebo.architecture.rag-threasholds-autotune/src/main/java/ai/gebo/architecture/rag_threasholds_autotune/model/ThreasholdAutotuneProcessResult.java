@@ -1,5 +1,7 @@
 package ai.gebo.architecture.rag_threasholds_autotune.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -12,6 +14,7 @@ import ai.gebo.model.base.GBaseObject;
 import lombok.Data;
 
 @Data
+@Document
 public class ThreasholdAutotuneProcessResult extends GBaseObject {
 	public static class ListOfJsonObjects extends ArrayList<LinkedHashMap<String, Object>> {
 

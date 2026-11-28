@@ -12,6 +12,8 @@
 
 package ai.gebo.git.content.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 
 /**
@@ -21,6 +23,7 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
  * Content Management System functionality. It provides additional properties specific
  * to Git repositories such as public access settings and default identity code.
  */
+@Document
 public class GGitContentManagementSystem extends GContentManagementSystem {
 	/** Flag indicating if the Git repository allows public access */
 	private Boolean publicAccess=null;

@@ -1,5 +1,7 @@
 package ai.gebo.llms.chat.abstraction.layer.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,6 +11,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class PromptsParametersCache {
 
 	public static final String SEPARATOR = "-|-";

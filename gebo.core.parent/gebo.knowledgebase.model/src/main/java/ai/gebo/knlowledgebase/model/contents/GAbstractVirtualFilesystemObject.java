@@ -134,7 +134,8 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 	 */
 	@HashIndexed
 	private String lastesJobId = null;
-	@HashIndexed
+	// a list: MongoDB hashes no array, its index is a multikey one
+	@Indexed
 	private List<Integer> aclAliases = null;
 	@HashIndexed
 	private String extIntegrationCode = null;

@@ -9,9 +9,12 @@
 
 package ai.gebo.llms.openai.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseDecisionModelConfig;
 
 /** The configuration of an OpenAI decision model: the token and the chosen model. */
+@Document
 public class GOpenAIDecisionModelConfig extends GBaseDecisionModelConfig<GOpenAIDecisionModelChoice> {
 
 	public GOpenAIDecisionModelConfig() {

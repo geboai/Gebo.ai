@@ -18,9 +18,12 @@
  */
 package ai.gebo.sharepoint.handler;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import jakarta.validation.constraints.NotNull;
 
+@Document
 public class GSharepointContentManagementSystem extends GContentManagementSystem {
 	/**
 	 * Secret code required for authentication with the Sharepoint system.

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.index.HashIndexed;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.architecture.documents.cache.model.AbstractChunkingSpecs;
@@ -25,7 +25,7 @@ import lombok.Data;
 @Data
 public class DocumentChunkOperation extends AbstractCachedEntry {
 
-	@HashIndexed
+	@Indexed(name = "originalDocumentCode_1") // the one ChunkCacheIndexes creates
 	private String originalDocumentCode = null;
 	private List<String> chunkSetsList = new ArrayList<String>();
 	private List<AbstractChunkingSpecs> chunkingSpecs = new ArrayList<AbstractChunkingSpecs>();
@@ -52,7 +52,7 @@ public class DocumentChunkOperation extends AbstractCachedEntry {
 	 * recorded.
 	 */
 	private String contentHash = null;
-	@HashIndexed
+	@Indexed(name = "chunkingSessionId_1") // the one ChunkCacheIndexes creates
 	private String chunkingSessionId = null;
 
 	public DocumentChunkOperation() {

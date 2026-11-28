@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.google_vertex.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 
 /**
@@ -21,6 +23,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
  * It extends the base embedding model configuration class and specializes it
  * for Google Vertex AI embeddings.
  */
+@Document
 public class GGoogleVertexEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GGoogleVertexEmbeddingModelChoice> {
 
 	/**

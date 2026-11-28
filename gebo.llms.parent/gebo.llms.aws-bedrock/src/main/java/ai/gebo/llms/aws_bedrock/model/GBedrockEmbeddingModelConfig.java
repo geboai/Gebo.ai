@@ -9,11 +9,14 @@
 
 package ai.gebo.llms.aws_bedrock.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseEmbeddingModelConfig;
 
 /**
  * Configuration for AWS Bedrock embedding models (Amazon Titan / Cohere).
  */
+@Document
 public class GBedrockEmbeddingModelConfig extends GBaseEmbeddingModelConfig<GBedrockEmbeddingModelChoice> {
 
 	public GBedrockEmbeddingModelConfig() {

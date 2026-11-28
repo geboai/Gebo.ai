@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.aws_bedrock.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
 
 /**
@@ -16,6 +18,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseTextToSpeachModelConfig;
  * model code maps to a Polly voice id; the engine selects the standard / neural
  * / long-form / generative synthesis engine.
  */
+@Document
 public class GBedrockTextToSpeechModelConfig extends GBaseTextToSpeachModelConfig<GBedrockTextToSpeechModelChoice> {
 
 	/** Polly voice id (e.g. {@code Joanna}). When null the chosen model code is used. */

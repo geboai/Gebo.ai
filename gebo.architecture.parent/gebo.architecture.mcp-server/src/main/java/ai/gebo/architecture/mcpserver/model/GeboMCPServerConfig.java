@@ -1,5 +1,7 @@
 package ai.gebo.architecture.mcpserver.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
 import ai.gebo.acl.IAclGrantedResource;
@@ -11,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
+@Document
 public class GeboMCPServerConfig extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
 	@NotNull
 	private String exportedUniqueRelativeUrl = null;

@@ -9,6 +9,8 @@
 
 package ai.gebo.llms.aws_bedrock.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
 
 /**
@@ -17,6 +19,7 @@ import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
  * Command, AI21 ...). The AWS region and credentials are both carried by the
  * referenced {@code AWS_CONNECTION} secret, so no region is stored here.
  */
+@Document
 public class GBedrockChatModelConfig extends GBaseChatModelConfig<GBedrockChatModelChoice> {
 
 	public GBedrockChatModelConfig() {

@@ -1,5 +1,7 @@
 package ai.gebo.architecture.a2aclients.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.List;
 
 import ai.gebo.acl.IAclGrantedResource;
@@ -26,6 +28,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Document
 public class A2ARemoteAgentConfig extends GBaseObject implements IAclGrantedResource, IGObjectWithSecurity {
 
 	/**
