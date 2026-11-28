@@ -34,8 +34,8 @@ import ai.gebo.systems.abstraction.layer.VirtualFilesystemBrowsingException;
 
 /**
  * Browses an OpenProject system for the data source editor tree: the projects are
- * the roots, then sections, work packages, documents, meetings, news and
- * attachments, with
+ * the roots, then sections, work packages, documents, meetings, news,
+ * attachments and internal comments, with
  * the same encoding the ingestion decodes. It rebuilds the tree of a saved
  * selection too, since the parent of a path is the path without its last
  * step.

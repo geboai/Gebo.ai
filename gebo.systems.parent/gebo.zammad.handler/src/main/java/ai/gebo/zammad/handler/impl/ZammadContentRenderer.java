@@ -24,8 +24,8 @@ import ai.gebo.zammad.client.model.TicketArticle;
 /**
  * Renders the Zammad tickets and knowledge base answers as small UTF-8 html
  * documents, read by the html reader of the ingestion: a title, the attributes
- * of the item as a list, then the conversation of a ticket (every article,
- * internal notes included and marked as such) or the body of an answer.
+ * of the item as a list, then the conversation of a ticket (its public
+ * articles), one internal note of a ticket, or the body of an answer.
  * <p>
  * The bodies are the html Zammad stores (e-mails, notes, answers) cleaned with
  * the relaxed jsoup safelist, so neither scripts nor event handlers of an
@@ -91,6 +91,52 @@ final class ZammadContentRenderer {
 		return article.getSender() != null ? article.getSender().getValue() : null;
 	}
 
+	/**
+	 * One article: a heading with its kind, type, author and date, then its
+	 * subject (when it is not the ticket's title), its recipients, its body and
+	 * the names of its attachments.
+	 */
+	private static void article(StringBuilder html, Ticket ticket, TicketArticle article, String prefix) {
+		StringBuilder heading = new StringBuilder().append(prefix);
+		heading.append(ZammadNodes.isInternal(article) ? "Internal note" : "Message");
+		if (article.getType() != null) {
+			heading.append(" (").append(article.getType()).append(")");
+		}
+		String author = author(article);
+		if (author != null) {
+			heading.append(" from ").append(author);
+		}
+		if (article.getCreatedAt() != null) {
+			heading.append(", ").append(article.getCreatedAt());
+		}
+		html.append("<h2>").append(escape(heading)).append("</h2>\n");
+		if (article.getSubject() != null && !article.getSubject().isBlank()
+				&& !article.getSubject().equals(ticket.getTitle())) {
+			html.append("<p><b>Subject:</b> ").append(escape(article.getSubject())).append("</p>\n");
+		}
+		if (article.getTo() != null && !article.getTo().isBlank()) {
+			html.append("<p><b>To:</b> ").append(escape(article.getTo())).append("</p>\n");
+		}
+		html.append("<div>\n").append(body(article.getBody(), article.getContentType() != null ? article.getContentType().getValue() : null)).append("\n</div>\n");
+		if (article.getAttachments() != null && !article.getAttachments().isEmpty()) {
+			html.append("<p><b>Attachments:</b></p>\n<ul>\n");
+			for (Attachment attachment : article.getAttachments()) {
+				html.append("<li>").append(escape(attachment.getFilename()));
+				Long size = ZammadNodes.parseSize(attachment.getSize());
+				if (size != null) {
+					html.append(" (").append(size).append(" bytes)");
+				}
+				html.append("</li>\n");
+			}
+			html.append("</ul>\n");
+		}
+	}
+
+	/**
+	 * The ticket's document: its attributes and its public articles. The internal
+	 * articles are left out, as Zammad keeps them from the customer: each one
+	 * with a body is a document of its own ({@link #renderInternalNote}).
+	 */
 	static String renderTicket(Ticket ticket, List<TicketArticle> articles, String baseUri) {
 		String title = ZammadNodes.ticketLabel(ticket);
 		StringBuilder html = open(title);
@@ -109,41 +155,33 @@ final class ZammadContentRenderer {
 		attributes(html, attributes);
 		int n = 0;
 		for (TicketArticle article : articles) {
+			if (ZammadNodes.isInternal(article)) {
+				continue;
+			}
 			n++;
-			StringBuilder heading = new StringBuilder().append(n).append(". ");
-			heading.append(Boolean.TRUE.equals(article.getInternal()) ? "Internal note" : "Message");
-			if (article.getType() != null) {
-				heading.append(" (").append(article.getType()).append(")");
-			}
-			String author = author(article);
-			if (author != null) {
-				heading.append(" from ").append(author);
-			}
-			if (article.getCreatedAt() != null) {
-				heading.append(", ").append(article.getCreatedAt());
-			}
-			html.append("<h2>").append(escape(heading)).append("</h2>\n");
-			if (article.getSubject() != null && !article.getSubject().isBlank()
-					&& !article.getSubject().equals(ticket.getTitle())) {
-				html.append("<p><b>Subject:</b> ").append(escape(article.getSubject())).append("</p>\n");
-			}
-			if (article.getTo() != null && !article.getTo().isBlank()) {
-				html.append("<p><b>To:</b> ").append(escape(article.getTo())).append("</p>\n");
-			}
-			html.append("<div>\n").append(body(article.getBody(), article.getContentType() != null ? article.getContentType().getValue() : null)).append("\n</div>\n");
-			if (article.getAttachments() != null && !article.getAttachments().isEmpty()) {
-				html.append("<p><b>Attachments:</b></p>\n<ul>\n");
-				for (Attachment attachment : article.getAttachments()) {
-					html.append("<li>").append(escape(attachment.getFilename()));
-					Long size = ZammadNodes.parseSize(attachment.getSize());
-					if (size != null) {
-						html.append(" (").append(size).append(" bytes)");
-					}
-					html.append("</li>\n");
-				}
-				html.append("</ul>\n");
-			}
+			article(html, ticket, article, n + ". ");
 		}
+		return close(html);
+	}
+
+	/**
+	 * An internal note alone: the ticket it belongs to, who wrote it and when,
+	 * then the note itself.
+	 */
+	static String renderInternalNote(Ticket ticket, TicketArticle article, String baseUri) {
+		String title = "Internal note " + article.getId() + " of " + ZammadNodes.ticketLabel(ticket);
+		StringBuilder html = open(title);
+		Map<String, Object> attributes = new LinkedHashMap<String, Object>();
+		attributes.put("Ticket", ticket.getNumber());
+		attributes.put("Ticket title", ticket.getTitle());
+		attributes.put("Group", extra(ticket, "group"));
+		attributes.put("Visibility", "internal");
+		attributes.put("Author", author(article));
+		attributes.put("Created", article.getCreatedAt());
+		attributes.put("Updated", article.getUpdatedAt());
+		attributes.put("URL", ZammadNodes.ticketUrl(baseUri, ticket.getId()));
+		attributes(html, attributes);
+		article(html, ticket, article, "");
 		return close(html);
 	}
 

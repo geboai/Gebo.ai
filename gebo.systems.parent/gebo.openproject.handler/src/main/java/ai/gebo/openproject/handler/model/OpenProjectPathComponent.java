@@ -11,8 +11,8 @@ package ai.gebo.openproject.handler.model;
 
 /**
  * One typed step of an OpenProject path: its node type and its id (a project id, a
- * section name, or the number of a work package, document, meeting, news or
- * attachment).
+ * section name, or the number of a work package, document, meeting, news,
+ * attachment or, for an internal comment, of its activity).
  */
 public class OpenProjectPathComponent {
 	public OpenProjectPathNodeType type = null;

@@ -41,10 +41,29 @@ final class ZammadTestData {
 				TicketArticle.class);
 	}
 
+	/** An internal note of the agent 3, carrying the relay configuration. */
 	static TicketArticle internalNote() {
 		return read("{'id':6,'ticket_id':2,'type':'note','sender':'Agent','from':'Admin Gebo',"
-				+ "'subject':'','content_type':'text/html','internal':true,"
+				+ "'subject':'','content_type':'text/html','internal':true,'created_by_id':3,"
 				+ "'body':'<p>Confirmed on production too, the relay limit is <b>10MB</b>.</p><script>alert(1)</script>',"
-				+ "'created_at':'2026-11-27T10:30:00Z','attachments':[]}", TicketArticle.class);
+				+ "'created_at':'2026-11-27T10:30:00Z','updated_at':'2026-11-27T10:40:00Z',"
+				+ "'attachments':[{'id':10,'filename':'relay-config.txt','size':'36','preferences':{'Content-Type':'text/plain'}}]}",
+				TicketArticle.class);
+	}
+
+	/** An internal article without a body, only its attachment: no note of its own. */
+	static TicketArticle emptyInternalArticle() {
+		return read("{'id':7,'ticket_id':2,'type':'note','sender':'Agent','content_type':'text/html','internal':true,"
+				+ "'created_by_id':3,'body':' ','created_at':'2026-11-27T10:50:00Z',"
+				+ "'attachments':[{'id':11,'filename':'screenshot.png','size':'1200','preferences':{'Content-Type':'image/png'}}]}",
+				TicketArticle.class);
+	}
+
+	/** The phone reply of an agent, public. */
+	static TicketArticle agentReply() {
+		return read("{'id':8,'ticket_id':2,'type':'phone','sender':'Agent','from':'Gebo Support',"
+				+ "'subject':'RE: SMTP relay rejects large mails','content_type':'text/html','internal':false,"
+				+ "'created_by_id':3,'body':'<p>A fix is planned for Friday.</p>','created_at':'2026-11-27T11:00:00Z',"
+				+ "'attachments':[]}", TicketArticle.class);
 	}
 }

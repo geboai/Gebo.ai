@@ -30,8 +30,10 @@ import ai.gebo.redmine.handler.model.RedminePathNodeType;
  * numeric project id is accepted too, by the API and here)</li>
  * <li>a path is the cumulative list of typed steps below the root, separated
  * by {@code |}: {@code SECTION:ISSUES|ISSUE:12|ATTACHMENT:34},
- * {@code SECTION:WIKI|WIKI_PAGE:Start|WIKI_CONTENT:Start}. Redmine wiki titles
- * cannot contain {@code |}, and issue and attachment ids are numbers.</li>
+ * {@code SECTION:WIKI|WIKI_PAGE:Start|WIKI_CONTENT:Start}, a private note
+ * under its issue by its journal id: {@code SECTION:ISSUES|ISSUE:12|PRIVATE_NOTE:56}.
+ * Redmine wiki titles cannot contain {@code |}, and issue, attachment and
+ * journal ids are numbers.</li>
  * </ul>
  * Once data sources are saved this encoding is a compatibility contract: the
  * stored paths are decoded with it.
@@ -121,6 +123,7 @@ public final class RedmineNavigationUtil {
 		switch (type) {
 		case ISSUE_CONTENT:
 		case WIKI_CONTENT:
+		case PRIVATE_NOTE:
 			return PathInfoMetaType.WEB_PAGE;
 		case ATTACHMENT:
 		case FILE:

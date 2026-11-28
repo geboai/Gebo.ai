@@ -12,12 +12,20 @@ package ai.gebo.zammad.handler.model;
 /**
  * The kinds of nodes of the Zammad virtual filesystem. The roots are the groups
  * (holding their tickets) and the knowledge bases (holding their categories); a
- * ticket holds its rendered conversation and the attachments of its articles, a
- * category its sub-categories and its answers, an answer its rendered body and
- * its attachments.
+ * ticket holds its rendered conversation (its public articles), each of its
+ * internal notes as a document of its own ({@link #INTERNAL_NOTE}) and the
+ * attachments of its articles, a category its sub-categories and its answers,
+ * an answer its rendered body and its attachments. The names are stored in the
+ * paths and the meta infos of the documents: values are only added.
  */
 public enum ZammadPathNodeType {
-	GROUP, KNOWLEDGE_BASE, TICKET, TICKET_CONTENT, CATEGORY, ANSWER, ANSWER_CONTENT, ATTACHMENT;
+	GROUP, KNOWLEDGE_BASE, TICKET, TICKET_CONTENT, CATEGORY, ANSWER, ANSWER_CONTENT, ATTACHMENT,
+	/**
+	 * An internal article of a ticket with a body, rendered alone: Zammad shows it
+	 * to the agents of the ticket's group, never to its customer. Its id is the
+	 * article id.
+	 */
+	INTERNAL_NOTE;
 
 	public boolean isFolder() {
 		return this == GROUP || this == KNOWLEDGE_BASE || this == TICKET || this == CATEGORY || this == ANSWER;

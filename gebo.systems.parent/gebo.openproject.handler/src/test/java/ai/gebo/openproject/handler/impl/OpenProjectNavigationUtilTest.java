@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import ai.gebo.model.virtualfs.PathInfoMetaType;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.openproject.handler.model.OpenProjectNativePositionObject;
 import ai.gebo.openproject.handler.model.OpenProjectNavigationCoordinates;
@@ -99,6 +100,23 @@ class OpenProjectNavigationUtilTest {
 		assertEquals("SECTION:WORK_PACKAGES|WORK_PACKAGE:12|WORK_PACKAGE_CONTENT:12",
 				coordinates.getBrowsingSteps().get(2).absolutePath);
 		assertEquals("#12 Crash on save.md", coordinates.getBrowsingSteps().get(2).name);
+	}
+
+	@Test
+	void anInternalCommentIsAPageUnderItsWorkPackage() {
+		VFilesystemReference comment = OpenProjectNavigationUtil.toReference("gebo-demo", "Gebo demo",
+				List.of(new OpenProjectPathComponent(OpenProjectPathNodeType.SECTION, "WORK_PACKAGES"),
+						new OpenProjectPathComponent(OpenProjectPathNodeType.WORK_PACKAGE, "38"),
+						new OpenProjectPathComponent(OpenProjectPathNodeType.INTERNAL_COMMENT, "57")),
+				"#38 internal comment 57.md");
+		assertEquals("SECTION:WORK_PACKAGES|WORK_PACKAGE:38|INTERNAL_COMMENT:57", comment.path.absolutePath);
+		assertFalse(comment.path.folder);
+		assertEquals(PathInfoMetaType.WEB_PAGE, comment.path.metaType);
+		OpenProjectNavigationCoordinates coordinates = OpenProjectNavigationUtil.toCoordinates(comment);
+		assertEquals(OpenProjectPathNodeType.INTERNAL_COMMENT, coordinates.getBrowsingStepsCustom().get(2).type);
+		assertEquals("internal comment 57 of the OpenProject project gebo-demo", coordinates.describe());
+		assertEquals("SECTION:WORK_PACKAGES|WORK_PACKAGE:38",
+				OpenProjectNavigationUtil.parentPath(comment.path.absolutePath));
 	}
 
 	@Test

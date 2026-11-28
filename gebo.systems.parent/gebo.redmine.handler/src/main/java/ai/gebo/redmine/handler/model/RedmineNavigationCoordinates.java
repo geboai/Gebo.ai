@@ -40,6 +40,7 @@ public class RedmineNavigationCoordinates extends AbstractNavigationCoordinates<
 		case WIKI_PAGE, WIKI_CONTENT -> "wiki page " + last.id;
 		case ATTACHMENT -> "attachment " + last.id;
 		case FILE -> "file " + last.id;
+		case PRIVATE_NOTE -> "private note " + last.id;
 		default -> last.toString();
 		};
 		return what + " of " + where;

@@ -49,8 +49,9 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
 
 /**
  * Reads the selected Zammad groups (their tickets) and knowledge bases (their
- * categories and answers) into a knowledge base. Each ticket and each answer
- * becomes an html document, attachments are streamed as they are.
+ * categories and answers) into a knowledge base. Each ticket (its public
+ * articles), each internal note of a ticket and each answer becomes an html
+ * document, attachments are streamed as they are.
  */
 public class GZammadRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GZammadSystem, GZammadProjectEndpoint, ZammadNativePositionObject, ZammadNavigationCoordinates, ZammadResourceReference>
@@ -255,8 +256,10 @@ public class GZammadRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	/**
-	 * Opens an item: tickets and answers (or their contents) as their html
-	 * rendering, attachments as they are.
+	 * Opens an item: tickets, internal notes and answers (or their contents) as
+	 * their html rendering, attachments as they are. An internal note is read
+	 * again from its ticket and article ids, and only while its article is still
+	 * an internal note.
 	 */
 	static InputStream open(ZammadResourceReference reference, ZammadRemoteTree tree)
 			throws GeboContentHandlerSystemException, IOException {
@@ -276,6 +279,19 @@ public class GZammadRemoteVirtualFilesystemConsumingServiceImpl extends
 			}
 			Ticket ticket = tree.ticket(reference.ticketId);
 			text = ZammadContentRenderer.renderTicket(ticket, tree.articles(reference.ticketId), base);
+		}
+			break;
+		case INTERNAL_NOTE: {
+			if (reference.ticketId == null || reference.articleId == null) {
+				throw new GeboContentHandlerSystemException("A Zammad internal note without its ids: " + reference);
+			}
+			Ticket ticket = tree.ticket(reference.ticketId);
+			TicketArticle article = tree.internalNote(reference.ticketId, reference.articleId);
+			if (article == null) {
+				throw new GeboContentHandlerSystemException(
+						"The Zammad ticket " + reference.ticketId + " has no internal note " + reference.articleId);
+			}
+			text = ZammadContentRenderer.renderInternalNote(ticket, article, base);
 		}
 			break;
 		case ANSWER:
@@ -360,8 +376,9 @@ public class GZammadRemoteVirtualFilesystemConsumingServiceImpl extends
 
 	/**
 	 * Whether a stored item is still part of its data source: a ticket that is
-	 * gone or moved to another group, an answer that is gone, archived or back to
-	 * draft, an attachment its ticket or answer no longer has. Anything else
+	 * gone or moved to another group, an internal note its ticket no longer has
+	 * (deleted, or no longer internal), an answer that is gone, archived or back
+	 * to draft, an attachment its ticket or answer no longer has. Anything else
 	 * (found, folders, other errors) gives no information, so the item is left
 	 * as it is.
 	 */
@@ -384,6 +401,9 @@ public class GZammadRemoteVirtualFilesystemConsumingServiceImpl extends
 					gone = "moved to the group " + ticket.getGroupId();
 				} else if (reference.type == ZammadPathNodeType.ATTACHMENT && !hasTicketAttachment(tree, reference)) {
 					gone = "no longer attached";
+				} else if (reference.type == ZammadPathNodeType.INTERNAL_NOTE && (reference.articleId == null
+						|| tree.internalNote(reference.ticketId, reference.articleId) == null)) {
+					gone = "no longer an internal note of its ticket";
 				}
 			} else if (reference.answerId != null) {
 				ZammadKnowledgeBaseIndex index = tree.knowledgeBases();

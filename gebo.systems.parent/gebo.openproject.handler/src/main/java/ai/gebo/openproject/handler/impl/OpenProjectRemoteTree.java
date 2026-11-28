@@ -30,8 +30,9 @@ import ai.gebo.openproject.handler.model.OpenProjectSection;
 /**
  * The OpenProject contents of one connection seen as a tree: projects hold the
  * Work packages, Documents, Meetings and News sections; a work package holds its
- * rendered content, its attachments and its child work packages of the same
- * project; documents and meetings hold their rendered content and attachments;
+ * rendered content, its attachments, its internal comments and its child work
+ * packages of the same project; documents and meetings hold their rendered
+ * content and attachments;
  * news are single documents. One tree lives for one job or one browsing call and
  * caches what it read (project ids, the work packages of a project, user names).
  */
@@ -221,6 +222,15 @@ public class OpenProjectRemoteTree {
 	}
 
 	/**
+	 * One activity of a work package, e.g. an internal comment; OpenProject answers
+	 * not found when it is gone or the account may not see it.
+	 */
+	public Map<String, Object> activity(String id) {
+		requireIdentity();
+		return connection.get("/activities/" + id);
+	}
+
+	/**
 	 * The relations a work package is part of, from either side. Read through
 	 * /relations with the involved filter: /work_packages/{id}/relations is
 	 * deprecated and answers a plain text redirect on OpenProject 17.
@@ -396,6 +406,11 @@ public class OpenProjectRemoteTree {
 			return OpenProjectNodes.news(base, projectId, news(step.id));
 		case ATTACHMENT:
 			return OpenProjectNodes.attachment(base, projectId, attachment(step.id));
+		case INTERNAL_COMMENT: {
+			Map<String, Object> activity = activity(step.id);
+			return OpenProjectNodes.internalComment(base, projectId, OpenProjectHal.linkId(activity, "workPackage"),
+					activity);
+		}
 		default:
 			throw new IllegalArgumentException("Unknown OpenProject path step " + step);
 		}
@@ -404,9 +419,9 @@ public class OpenProjectRemoteTree {
 	/**
 	 * The children of a node: a project holds its four sections; each section
 	 * the items of its module (the top level work packages for Work packages); a
-	 * work package its content, attachments and children; a document or a
-	 * meeting its content and attachments. Contents, news and attachments have
-	 * no children.
+	 * work package its content, attachments, internal comments and children; a
+	 * document or a meeting its content and attachments. Contents, news,
+	 * attachments and internal comments have no children.
 	 */
 	public List<OpenProjectNativePositionObject> children(String projectId, OpenProjectPathNodeType type, String id) {
 		requireIdentity();
@@ -446,6 +461,11 @@ public class OpenProjectRemoteTree {
 			Map<String, Object> wp = workPackage(id);
 			children.add(OpenProjectNodes.workPackageContent(base, projectId, wp));
 			addAttachments(children, base, projectId, "/work_packages/" + id);
+			for (Map<String, Object> activity : activities(id)) {
+				if (OpenProjectNodes.isInternalComment(activity)) {
+					children.add(OpenProjectNodes.internalComment(base, projectId, id, activity));
+				}
+			}
 			for (Map<String, Object> child : childWorkPackages(projectId, id)) {
 				children.add(OpenProjectNodes.workPackage(base, projectId, child));
 			}

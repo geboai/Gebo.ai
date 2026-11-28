@@ -64,8 +64,14 @@ public class OpenProjectMarkdownRendererTest {
 				Map.of("comment", Map.of("raw", ""), "details", List.of(Map.of("raw", "Type set to Bug")), "createdAt",
 						"2026-11-27T19:06:47Z", "_links", Map.of("user", link("/api/v3/users/4", null))),
 				Map.of("comment", Map.of("raw", "Confirmed on production too."), "details", List.of(), "internal",
-						true, "createdAt", "2026-11-27T19:07:00Z", "_links",
-						Map.of("user", link("/api/v3/users/5", "Read Only"))));
+						false, "createdAt", "2026-11-27T19:07:00Z", "_links",
+						Map.of("user", link("/api/v3/users/5", "Read Only"))),
+				Map.of("id", 57, "comment", Map.of("raw", "The customer is on the old contract."), "details",
+						List.of(), "internal", true, "createdAt", "2026-11-27T19:08:00Z", "_links",
+						Map.of("user", link("/api/v3/users/6", "Support Lead"))),
+				Map.of("id", 58, "comment", Map.of("raw", "Escalated, do not tell the requester."), "details",
+						List.of(Map.of("raw", "Priority changed from Normal to High")), "internal", true, "createdAt",
+						"2026-11-27T19:09:00Z", "_links", Map.of("user", link("/api/v3/users/6", "Support Lead"))));
 		String md = OpenProjectMarkdownRenderer.renderWorkPackage(workPackage(), relations, children, attachments,
 				activities, USERS, BASE);
 		assertTrue(md.startsWith("# Bug #38: SMTP relay drops attachments"), md);
@@ -82,8 +88,31 @@ public class OpenProjectMarkdownRendererTest {
 		assertTrue(md.contains("- blocks #50 Release 1.1"), md);
 		assertTrue(md.contains("- relay.log (58 bytes)"), md);
 		assertTrue(md.contains("- Type set to Bug"), md);
-		assertTrue(md.contains("### Read Only, 2026-11-27T19:07:00Z (internal comment)"), md);
+		assertTrue(md.contains("### Read Only, 2026-11-27T19:07:00Z"), md);
 		assertTrue(md.contains("Confirmed on production too."), md);
+		// internal comments are documents of their own: their text never reaches the work package's
+		assertFalse(md.contains("The customer is on the old contract."), md);
+		assertFalse(md.contains("Escalated, do not tell the requester."), md);
+		assertFalse(md.contains("internal comment"), md);
+		assertFalse(md.contains("### Support Lead, 2026-11-27T19:08:00Z"), md);
+		// the changes an internal activity made stay, as every change does
+		assertTrue(md.contains("### Support Lead, 2026-11-27T19:09:00Z\n\n- Priority changed from Normal to High"), md);
+	}
+
+	@Test
+	public void internalCommentIsADocumentOfItsOwn() {
+		Map<String, Object> activity = Map.of("_type", "Activity::Comment", "id", 57, "comment",
+				Map.of("format", "markdown", "raw", "The customer is on the old contract."), "details", List.of(),
+				"internal", true, "createdAt", "2026-11-27T19:08:00Z", "updatedAt", "2026-11-27T19:08:00Z",
+				"_links", Map.of("workPackage", link("/api/v3/work_packages/38", "SMTP relay drops attachments"),
+						"user", link("/api/v3/users/6", null)));
+		String md = OpenProjectMarkdownRenderer.renderInternalComment(activity, "38", USERS, BASE);
+		assertTrue(md.startsWith("# Internal comment 57 on work package #38"), md);
+		assertTrue(md.contains("- Work package: #38 SMTP relay drops attachments"), md);
+		assertTrue(md.contains("- Author: user #6"), md);
+		assertTrue(md.contains("- Created at: 2026-11-27T19:08:00Z"), md);
+		assertTrue(md.contains("- URL: http://op.test/work_packages/38"), md);
+		assertTrue(md.contains("## Comment\n\nThe customer is on the old contract."), md);
 	}
 
 	@Test

@@ -102,6 +102,23 @@ class RedmineNavigationUtilTest {
 	}
 
 	@Test
+	void aPrivateNoteIsAWebPageUnderItsIssue() {
+		VFilesystemReference note = RedmineNavigationUtil.toReference("gebo-demo", "Gebo demo",
+				List.of(new RedminePathComponent(RedminePathNodeType.SECTION, "ISSUES"),
+						new RedminePathComponent(RedminePathNodeType.ISSUE, "12"),
+						new RedminePathComponent(RedminePathNodeType.PRIVATE_NOTE, "56")),
+				"#12 private note 56.md");
+		assertEquals("SECTION:ISSUES|ISSUE:12|PRIVATE_NOTE:56", note.path.absolutePath);
+		assertFalse(note.path.folder);
+		assertEquals(ai.gebo.model.virtualfs.PathInfoMetaType.WEB_PAGE, note.path.metaType);
+		assertEquals("SECTION:ISSUES|ISSUE:12", RedmineNavigationUtil.parentPath(note.path.absolutePath));
+		RedmineNavigationCoordinates coordinates = RedmineNavigationUtil.toCoordinates(note);
+		assertEquals(RedminePathNodeType.PRIVATE_NOTE, coordinates.getBrowsingStepsCustom().get(2).type);
+		assertEquals("56", coordinates.getBrowsingStepsCustom().get(2).id);
+		assertEquals("private note 56 of the Redmine project gebo-demo", coordinates.describe());
+	}
+
+	@Test
 	void namesLoseTheCharactersFilesCannotHold() {
 		assertEquals("#7 a-b-c-d", RedmineNavigationUtil.sanitizeName("#7 a/b:c|d"));
 	}

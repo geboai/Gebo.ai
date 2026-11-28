@@ -28,6 +28,12 @@ public class RedmineNativePositionObject extends AbstractNativePositionObject {
 	public static final String REDMINE_ATTACHMENT_ID = "REDMINE-ATTACHMENT-ID";
 	public static final String REDMINE_FILE_NAME = "REDMINE-FILE-NAME";
 	public static final String REDMINE_CONTENT_TYPE = "REDMINE-CONTENT-TYPE";
+	/** The id of the journal a private note is. */
+	public static final String REDMINE_JOURNAL_ID = "REDMINE-JOURNAL-ID";
+	/** "true" on a private note: only its author and who may view private notes see it. */
+	public static final String REDMINE_PRIVATE_NOTE = "REDMINE-PRIVATE-NOTE";
+	/** The id of the Redmine user who wrote a private note. */
+	public static final String REDMINE_NOTE_AUTHOR_ID = "REDMINE-NOTE-AUTHOR-ID";
 
 	private RedminePathNodeType type = null;
 	/** The id of the node within its type (see {@link RedminePathComponent}). */

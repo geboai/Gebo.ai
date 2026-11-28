@@ -133,6 +133,38 @@ final class OpenProjectNodes {
 				baseUri + "/news/" + id, projectId).meta(OpenProjectNativePositionObject.OPENPROJECT_NEWS_ID, id), news);
 	}
 
+	/**
+	 * Whether an activity of a work package is an internal comment: OpenProject
+	 * flags it {@code internal} and it has a text. Its text is never rendered in the
+	 * work package's content: it is a document of its own.
+	 */
+	static boolean isInternalComment(Map<String, Object> activity) {
+		return OpenProjectHal.bool(activity, "internal") && OpenProjectHal.text(activity, "comment.raw") != null;
+	}
+
+	/** "#12 internal comment 57": the work package, then the activity. */
+	static String internalCommentLabel(String workPackageId, String activityId) {
+		return OpenProjectNavigationUtil.sanitizeName("#" + workPackageId + " internal comment " + activityId);
+	}
+
+	/**
+	 * An internal comment of a work package as a markdown document under the work
+	 * package, flagged internal in its meta infos with the id of its author, so the
+	 * enterprise ACL import gives it the audience of internal comments instead of
+	 * the work package's.
+	 */
+	static OpenProjectNativePositionObject internalComment(String baseUri, String projectId, String workPackageId,
+			Map<String, Object> activity) {
+		String id = OpenProjectHal.string(activity, "id");
+		return markdown(node(OpenProjectPathNodeType.INTERNAL_COMMENT, id, "internal-comment-" + id + ".md",
+				internalCommentLabel(workPackageId, id) + ".md", workPackageUrl(baseUri, workPackageId), projectId)
+				.meta(OpenProjectNativePositionObject.OPENPROJECT_WORK_PACKAGE_ID, workPackageId)
+				.meta(OpenProjectNativePositionObject.OPENPROJECT_ACTIVITY_ID, id)
+				.meta(OpenProjectNativePositionObject.OPENPROJECT_INTERNAL_COMMENT, Boolean.TRUE)
+				.meta(OpenProjectNativePositionObject.OPENPROJECT_COMMENT_AUTHOR_ID,
+						OpenProjectHal.linkId(activity, "user")), activity);
+	}
+
 	static OpenProjectNativePositionObject attachment(String baseUri, String projectId, Map<String, Object> attachment) {
 		String id = OpenProjectHal.string(attachment, "id");
 		String fileName = OpenProjectHal.text(attachment, "fileName");

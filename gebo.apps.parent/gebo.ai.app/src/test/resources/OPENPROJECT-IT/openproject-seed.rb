@@ -1,7 +1,9 @@
 # Test data of OpenProjectIngestionIntegrationTest, run once with rails runner
 # inside a fresh openproject container. The API v3 cannot create documents,
 # meetings or agenda items, so the whole seed goes through the models.
-# Prints the admin API key as ADMIN_KEY=<key>.
+# Prints the admin API key as ADMIN_KEY=<key>, the admin's id as ADMIN_ID=<id>,
+# the SMTP work package as SMTP_WORK_PACKAGE=<id> and its internal comment as
+# INTERNAL_COMMENT=<activity id>.
 admin = User.find_by!(login: "admin")
 admin.update_columns(force_password_change: false)
 User.current = admin
@@ -45,6 +47,13 @@ Relation.create!(from: pdf, to: smtp, relation_type: "relates")
 smtp.journal_notes = "Confirmed on production too, the limit is 10 MB."
 smtp.journal_user = admin
 smtp.save!(validate: false)
+# an internal comment (a restricted journal), for the roles with view_internal_comments only
+smtp.journal_notes = "Internal: the customer is still on the old contract, keep the relay limit until March."
+smtp.journal_user = admin
+smtp.journal_internal = true
+smtp.save!(validate: false)
+internal_comment = Journal.where(journable_type: "WorkPackage", journable_id: smtp.id, restricted: true)
+  .order(:id).last
 wp(sub, task, st_new, prio, admin, "Sub project task about slash commands", "Slash commands in the chat window.")
 wp(secret, bug, st_new, prio, admin, "Secret bug outside the data source", "Not selected by the data source.")
 
@@ -66,3 +75,6 @@ News.create!(project: demo, title: "Gebo demo goes live", summary: "Launch notic
 
 Token::API.where(user: admin).destroy_all
 puts "ADMIN_KEY=#{Token::API.create!(user: admin).plain_value}"
+puts "ADMIN_ID=#{admin.id}"
+puts "SMTP_WORK_PACKAGE=#{smtp.id}"
+puts "INTERNAL_COMMENT=#{internal_comment.id}"

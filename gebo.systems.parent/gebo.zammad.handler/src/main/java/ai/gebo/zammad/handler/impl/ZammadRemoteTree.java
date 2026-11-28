@@ -44,8 +44,9 @@ import ai.gebo.zammad.handler.model.ZammadPathNodeType;
 
 /**
  * The Zammad contents of one connection seen as a tree: a group holds its
- * tickets, a ticket its rendered conversation and the attachments of its
- * articles; a knowledge base holds its top categories, a category its
+ * tickets, a ticket its rendered conversation (the public articles), each of
+ * its internal notes and the attachments of its articles; a knowledge base
+ * holds its top categories, a category its
  * sub-categories and its answers, an answer its rendered body and its
  * attachments. Only the published and the internal answers are part of the
  * tree: drafts and archived answers are not. One tree lives for one job or one
@@ -345,8 +346,8 @@ public class ZammadRemoteTree {
 
 	/**
 	 * The node a path step addresses, read from Zammad. {@code parentId} is the
-	 * id of the step before (the ticket of an attachment, the answer of an
-	 * attachment).
+	 * id of the step before (the ticket of an internal note or an attachment, the
+	 * answer of an attachment).
 	 */
 	public ZammadNativePositionObject node(ZammadPathComponent root, ZammadPathComponent step, String parentId) {
 		String base = getBaseUri();
@@ -359,6 +360,14 @@ public class ZammadRemoteTree {
 			return ZammadNodes.ticket(base, rootCode, ticket(id(step.id)));
 		case TICKET_CONTENT:
 			return ZammadNodes.ticketContent(base, rootCode, ticket(id(step.id)));
+		case INTERNAL_NOTE: {
+			Ticket ticket = ticket(id(parentId));
+			TicketArticle article = internalNote(ticket.getId(), id(step.id));
+			if (article == null) {
+				throw notFound("internal note " + step.id + " of the ticket " + parentId);
+			}
+			return ZammadNodes.internalNote(base, rootCode, ticket, article);
+		}
 		case CATEGORY: {
 			Long kbId = id(root.id);
 			Long categoryId = id(step.id);
@@ -383,8 +392,7 @@ public class ZammadRemoteTree {
 					if (ids[0].equals(article.getId()) && article.getAttachments() != null) {
 						for (Attachment attachment : article.getAttachments()) {
 							if (ids[1].equals(attachment.getId())) {
-								return ZammadNodes.ticketAttachment(base, rootCode, ticket, article.getId(), attachment,
-										ZammadNodes.date(article.getCreatedAt()));
+								return ZammadNodes.ticketAttachment(base, rootCode, ticket, article, attachment);
 							}
 						}
 					}
@@ -412,8 +420,22 @@ public class ZammadRemoteTree {
 	}
 
 	/**
-	 * The children of a node: a group holds its tickets; a ticket its content and
-	 * the attachments of its articles; a knowledge base its top categories; a
+	 * The article of a ticket that is an internal note (internal, with a body),
+	 * null when the ticket has no such article any more or it is not internal.
+	 */
+	public TicketArticle internalNote(Long ticketId, Long articleId) {
+		for (TicketArticle article : articles(ticketId)) {
+			if (articleId.equals(article.getId())) {
+				return ZammadNodes.isInternalNote(article) ? article : null;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * The children of a node: a group holds its tickets; a ticket its content, its
+	 * internal notes and the attachments of its articles (those of an internal
+	 * article flagged internal); a knowledge base its top categories; a
 	 * category its sub-categories and its answers; an answer its content and its
 	 * attachments. Contents and attachments have no children.
 	 */
@@ -432,10 +454,12 @@ public class ZammadRemoteTree {
 			Ticket ticket = ticket(id(id));
 			children.add(ZammadNodes.ticketContent(base, rootCode, ticket));
 			for (TicketArticle article : articles(ticket.getId())) {
+				if (ZammadNodes.isInternalNote(article)) {
+					children.add(ZammadNodes.internalNote(base, rootCode, ticket, article));
+				}
 				if (article.getAttachments() != null) {
 					for (Attachment attachment : article.getAttachments()) {
-						children.add(ZammadNodes.ticketAttachment(base, rootCode, ticket, article.getId(), attachment,
-								ZammadNodes.date(article.getCreatedAt())));
+						children.add(ZammadNodes.ticketAttachment(base, rootCode, ticket, article, attachment));
 					}
 				}
 			}

@@ -11,8 +11,8 @@ package ai.gebo.zammad.handler.model;
 
 /**
  * One typed step of a Zammad path: its node type and its id (a group, knowledge
- * base, ticket, category or answer id; an attachment of a ticket is
- * {@code <article id>-<attachment id>}).
+ * base, ticket, category or answer id; an internal note is its article id; an
+ * attachment of a ticket is {@code <article id>-<attachment id>}).
  */
 public class ZammadPathComponent {
 	public ZammadPathNodeType type = null;

@@ -21,9 +21,11 @@ import org.junit.jupiter.api.Test;
 class ZammadContentRendererTest {
 
 	@Test
-	void ticketWithItsConversation() {
+	void ticketWithItsPublicConversation() {
 		String html = ZammadContentRenderer.renderTicket(ZammadTestData.ticket(),
-				List.of(ZammadTestData.customerMessage(), ZammadTestData.internalNote()), "http://zammad");
+				List.of(ZammadTestData.customerMessage(), ZammadTestData.internalNote(),
+						ZammadTestData.emptyInternalArticle(), ZammadTestData.agentReply()),
+				"http://zammad");
 		assertTrue(html.contains("<title>#97002 SMTP relay rejects large mails</title>"), html);
 		assertTrue(html.contains("Gebo Support"), html);
 		assertTrue(html.contains("3 high"), html);
@@ -32,10 +34,38 @@ class ZammadContentRendererTest {
 		assertTrue(html.contains("1. Message (web) from Carla &lt;carla@acme.test&gt;"), html);
 		assertTrue(html.contains("The relay rejects my mails:<br>\nmessage too large (12MB)"), html);
 		assertTrue(html.contains("relay.log (58 bytes)"), html);
-		assertTrue(html.contains("2. Internal note (note) from Admin Gebo"), html);
-		assertTrue(html.contains("the relay limit is <b>10MB</b>"), html);
-		assertFalse(html.contains("<script"), "html bodies are cleaned");
+		assertTrue(html.contains("2. Message (phone) from Gebo Support"), html);
+		assertTrue(html.contains("A fix is planned for Friday."), html);
 		assertFalse(html.contains("<b>Subject:</b> SMTP relay"), "a subject equal to the title is not repeated");
+	}
+
+	@Test
+	void theTicketDocumentLeavesTheInternalArticlesOut() {
+		String html = ZammadContentRenderer.renderTicket(ZammadTestData.ticket(),
+				List.of(ZammadTestData.customerMessage(), ZammadTestData.internalNote(),
+						ZammadTestData.emptyInternalArticle(), ZammadTestData.agentReply()),
+				"http://zammad");
+		assertFalse(html.contains("Internal note"), html);
+		assertFalse(html.contains("Confirmed on production too"), html);
+		assertFalse(html.contains("relay-config.txt"), "the attachments of an internal article are not named");
+		assertFalse(html.contains("screenshot.png"), "the attachments of an internal article are not named");
+	}
+
+	@Test
+	void anInternalNoteAlone() {
+		String html = ZammadContentRenderer.renderInternalNote(ZammadTestData.ticket(), ZammadTestData.internalNote(),
+				"http://zammad");
+		assertTrue(html.contains("<title>Internal note 6 of #97002 SMTP relay rejects large mails</title>"), html);
+		assertTrue(html.contains("<li><b>Ticket:</b> 97002</li>"), html);
+		assertTrue(html.contains("<li><b>Visibility:</b> internal</li>"), html);
+		assertTrue(html.contains("<li><b>Author:</b> Admin Gebo</li>"), html);
+		assertTrue(html.contains("<li><b>Created:</b> 2026-11-27T10:30Z</li>"), html);
+		assertTrue(html.contains("http://zammad/#ticket/zoom/2"), html);
+		assertTrue(html.contains("Internal note (note) from Admin Gebo, 2026-11-27T10:30Z"), html);
+		assertTrue(html.contains("the relay limit is <b>10MB</b>"), html);
+		assertTrue(html.contains("relay-config.txt (36 bytes)"), html);
+		assertFalse(html.contains("<script"), "html bodies are cleaned");
+		assertFalse(html.contains("The relay rejects my mails"), "only the note");
 	}
 
 	@Test
