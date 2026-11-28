@@ -146,6 +146,9 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			// handed over live after being reported deleted in this session: it is there
 			deletedBySource.remove(docref.getCode());
 			batchDocumentInput++;
+			// a document this session already met (the same code): it was sent to the
+			// ingestion at its first arrival, this one is input the session discards
+			boolean alreadyMet = false;
 			if (docref.getCode() != null) {
 				if (!docsCounters.containsKey(docref.getCode())) {
 					docsCounters.put(docref.getCode(), 1);
@@ -153,12 +156,15 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					Integer count = docsCounters.get(docref.getCode());
 					count = count.intValue() + 1;
 					docsCounters.put(docref.getCode(), count);
-					LOGGER.warn("Duplicated code:" + docref.getCode() + " count=" + count);
+					alreadyMet = true;
+					LOGGER.warn("Duplicated code:" + docref.getCode() + " count=" + count
+							+ ", not sent to the ingestion again");
 				}
 			}
 
 			// skipped vectorization contents are not sent to vectorization or indexing
-			if (docref.getSkippedVectorizationContent() == null || !docref.getSkippedVectorizationContent()) {
+			if (!alreadyMet && (docref.getSkippedVectorizationContent() == null
+					|| !docref.getSkippedVectorizationContent())) {
 				try {
 
 					boolean forwardIngestionHandling = evaluator.isProcessable(evaluationPolicy, docref, handler,
