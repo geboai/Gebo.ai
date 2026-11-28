@@ -376,16 +376,18 @@ public class UserspaceService {
 				});
 			}
 		}
-		Stream<GDocumentReference> documents = documentReferenceRepository.findByProjectEndpoint(endpoint);
-		documents.forEach(doc -> {
-			if (doc.getName() != null) {
-				UserspaceFileDto usfile = list.get(doc.getName());
-				if (usfile != null) {
-					usfile.code = doc.getCode();
-					usfile.processed = true;
+		// closed once read: the stream holds an open cursor on the database
+		try (Stream<GDocumentReference> documents = documentReferenceRepository.findByProjectEndpoint(endpoint)) {
+			documents.forEach(doc -> {
+				if (doc.getName() != null) {
+					UserspaceFileDto usfile = list.get(doc.getName());
+					if (usfile != null) {
+						usfile.code = doc.getCode();
+						usfile.processed = true;
+					}
 				}
-			}
-		});
+			});
+		}
 		List<GUserspaceFile> filesObjects = filesRepository.findByUserspaceEndpointCode(endpoint.getCode());
 		filesObjects.forEach(x -> {
 			if (x.getName() != null) {
