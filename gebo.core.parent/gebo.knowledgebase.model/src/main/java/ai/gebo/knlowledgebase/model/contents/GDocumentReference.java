@@ -9,12 +9,13 @@
 
 package ai.gebo.knlowledgebase.model.contents;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.mongodb.core.index.HashIndexed;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.model.base.GeboComponentInfo;
@@ -27,6 +28,10 @@ import lombok.Data;
  * filesystem. This includes properties such as extension, content type, file
  * size, etc. The document is stored and indexed in a MongoDB database.
  */
+// the browse of a folder by name, and the roots of an endpoint
+@CompoundIndexes({
+		@CompoundIndex(name = "parent_name", def = "{'parentVirtualFolderCode': 1, 'name': 1}"),
+		@CompoundIndex(name = "endpoint_parent_name", def = "{'projectEndpointReference.code': 1, 'projectEndpointReference.className': 1, 'parentVirtualFolderCode': 1, 'name': 1}") })
 @Document
 @Data
 public class GDocumentReference extends GAbstractVirtualFilesystemObject implements IGComponentOriginatedDocument {
@@ -44,14 +49,14 @@ public class GDocumentReference extends GAbstractVirtualFilesystemObject impleme
 	/**
 	 * File extension (e.g., 'pdf', 'docx'). Indexed with a hash for fast lookup.
 	 */
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String extension = null;
 
 	/**
 	 * Content type of the file (e.g., 'text/plain', 'application/pdf'). Indexed
 	 * with a hash for fast lookup.
 	 */
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String contentType = null;
 
 	/**
@@ -87,18 +92,17 @@ public class GDocumentReference extends GAbstractVirtualFilesystemObject impleme
 	private String artificiallyGeneratedContent = null;
 	@NotNull
 	private GeboComponentInfo originComponent = null;
-	// lists: MongoDB hashes no array, their indexes are multikey ones
-	@Indexed
+	// no query reads by it (a multikey index of whole subdocuments would serve none): not indexed
 	private List<GDocumentAttributeValue> attributesValues = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String langCode = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String translationOfDocumentCode = null;
-	@Indexed
+	// no query reads by it: not indexed
 	private List<String> categoryCodes = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private Date publishedDate = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String author = null;
 
 }

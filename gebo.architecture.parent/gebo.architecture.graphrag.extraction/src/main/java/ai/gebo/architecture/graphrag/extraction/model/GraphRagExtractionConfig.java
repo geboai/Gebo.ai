@@ -28,7 +28,7 @@ public class GraphRagExtractionConfig extends GBaseObject implements Cloneable{
 	@HashIndexed
 	private Boolean defaultConfiguration = null;
 	private Boolean graphRagAllSources = null;
-	@HashIndexed
+	// no query matches the whole reference: its code and className are indexed
 	private GObjectRef<GProjectEndpoint> endpoint = null;
 	private String extractionPrompt = null;
 	private List<GraphObjectType> customEntityTypes = null;

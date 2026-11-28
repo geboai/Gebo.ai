@@ -9,6 +9,8 @@
 
 package ai.gebo.knlowledgebase.model.jobs;
 
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +29,8 @@ import lombok.Data;
  * AI generated comments Represents the status of a job process within the
  * system, tracking various stages such as processing and vectorization.
  */
+// the jobs of an endpoint by type, the latest first
+@CompoundIndex(name = "endpoint_jobType_start", def = "{'projectEndpointReference.code': 1, 'projectEndpointReference.className': 1, 'jobType': 1, 'startDateTime': -1}")
 @Document
 @Data
 public class GJobStatus extends GBaseObject {
@@ -47,6 +51,7 @@ public class GJobStatus extends GBaseObject {
 	private String workflowId = null;
 
 	// Indicates whether the job is currently in processing state
+	@Indexed
 	private Boolean processing = null;
 
 	// Indicates whether the job has finished execution

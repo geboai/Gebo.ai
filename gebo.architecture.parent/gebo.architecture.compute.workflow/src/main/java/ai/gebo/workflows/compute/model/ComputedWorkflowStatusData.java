@@ -1,5 +1,6 @@
 package ai.gebo.workflows.compute.model;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,6 +18,7 @@ import lombok.Data;
 public class ComputedWorkflowStatusData {
 	@Id
 	private String id = UUID.randomUUID().toString();
+	@Indexed
 	private String jobId = null;
 	private GObjectRef<GProjectEndpoint> projectEndpointReference = null;
 	/** Parent project of the referred project endpoint. */

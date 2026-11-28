@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.UUID;
@@ -10,6 +11,8 @@ import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+// the uploads of a user context
+@CompoundIndex(name = "userContextCode", def = "{'userContextCode': 1}")
 @Data
 @Document
 public class UserUploadContentServerSide extends UserUploadedContent {

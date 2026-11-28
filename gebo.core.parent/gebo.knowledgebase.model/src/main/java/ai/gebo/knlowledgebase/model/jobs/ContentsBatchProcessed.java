@@ -39,11 +39,11 @@ public class ContentsBatchProcessed {
 	 */
 	@HashIndexed
 	private String jobId = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String workflowType = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String workflowId = null;
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String workflowStepId = null;
 
 	/**

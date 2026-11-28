@@ -12,6 +12,8 @@
 
 package ai.gebo.llms.abstraction.layer.vectorstores.model;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +27,10 @@ import ai.gebo.model.base.GObjectRef;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+// the finders on a part of the composite id, which the _id index does not serve
+@CompoundIndexes({
+		@CompoundIndex(name = "docReferenceCode", def = "{'_id.docReferenceCode': 1}"),
+		@CompoundIndex(name = "vectorStoreId_rootKnowledgebaseCode", def = "{'_id.vectorStoreId': 1, 'rootKnowledgebaseCode': 1}") })
 @Document
 @Data
 public class GVectorizedContent {
@@ -71,7 +77,7 @@ public class GVectorizedContent {
         }
     };
 
-    @HashIndexed
+    // no query matches the whole reference: its code and className are indexed
     @NotNull
     private GObjectRef<GProjectEndpoint> projectEndpointReference = null;
     @HashIndexed

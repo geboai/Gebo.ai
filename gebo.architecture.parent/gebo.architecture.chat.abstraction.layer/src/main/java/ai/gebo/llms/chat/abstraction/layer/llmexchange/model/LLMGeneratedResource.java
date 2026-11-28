@@ -1,5 +1,6 @@
 package ai.gebo.llms.chat.abstraction.layer.llmexchange.model;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.model.base.GBaseObject;
@@ -16,5 +17,6 @@ public class LLMGeneratedResource  extends GBaseObject {
 	protected Long fileSize = null;
 	protected Long tokensCount = null;
 	@NotNull
+	@Indexed
 	protected String userContextCode = null;
 }

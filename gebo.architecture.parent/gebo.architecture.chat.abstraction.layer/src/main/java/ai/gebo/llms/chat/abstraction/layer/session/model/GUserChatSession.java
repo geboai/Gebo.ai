@@ -9,13 +9,14 @@
 
 package ai.gebo.llms.chat.abstraction.layer.session.model;
 
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.mongodb.core.index.HashIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import ai.gebo.llms.abstraction.layer.model.GBaseChatModelConfig;
@@ -37,13 +38,17 @@ import lombok.Data;
  * abstraction layer model. Stores details about chat interactions and
  * configurations for a user.
  */
+// the chats of a user, in a context or not, and the purge of the transient ones
+@CompoundIndexes({
+		@CompoundIndex(name = "username_contextCode_transientRun", def = "{'username': 1, 'contextCode': 1, 'transientRun': 1}"),
+		@CompoundIndex(name = "transientRun_dateCreated", def = "{'transientRun': 1, 'dateCreated': 1}") })
 @Document
 @Data
 public class GUserChatSession extends GBaseObject implements IGObjectWithSecurity, IAclGrantedResource {
 
 	private static final String EMPTY_TEXT = "<<empty text>>";
 	private Date chatCreationDateTime = null; // Timestamp for chat creation
-	@HashIndexed
+	// indexed with contextCode and transientRun, as the finders read it (on the class)
 	private String username = null; // Username for the chat context
 
 	/**
@@ -80,7 +85,7 @@ public class GUserChatSession extends GBaseObject implements IGObjectWithSecurit
 
 	/** The access control lists this conversation is granted through. */
 	private List<Integer> aclAliases = null;
-	@HashIndexed
+	// indexed with username and transientRun (on the class)
 	private String contextCode = null; // Code of the external context this chat belongs to
 	/**
 	 * True for a conversation a run from outside a chat (an MCP tool, a single A2A

@@ -100,13 +100,13 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 	/**
 	 * ID of the messaging module associated with this filesystem object.
 	 */
-	@HashIndexed
+	// no query reads by it: not indexed
 	private String messagingModuleId = null;
 
 	/**
 	 * Reference to the project endpoint associated with this filesystem object.
 	 */
-	@HashIndexed
+	// no query matches the whole reference: its code and className are indexed
 	private GObjectRef<GProjectEndpoint> projectEndpointReference = null;
 
 	/**
@@ -132,7 +132,7 @@ public abstract class GAbstractVirtualFilesystemObject extends GBaseVersionableO
 	/**
 	 * The ID of the latest job associated with this filesystem object.
 	 */
-	@HashIndexed
+	// only read with $ne, within an endpoint: the endpoint_parent_name index serves it
 	private String lastesJobId = null;
 	// a list: MongoDB hashes no array, its index is a multikey one
 	@Indexed
