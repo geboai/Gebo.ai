@@ -16,6 +16,7 @@ import java.util.Map;
 import ai.gebo.zammad.client.model.Attachment;
 import ai.gebo.zammad.client.model.Group;
 import ai.gebo.zammad.client.model.Ticket;
+import ai.gebo.zammad.client.model.TicketArticle;
 import ai.gebo.zammad.handler.model.ZammadNativePositionObject;
 import ai.gebo.zammad.handler.model.ZammadPathNodeType;
 
@@ -117,6 +118,44 @@ final class ZammadNodes {
 				updated != null ? updated : date(ticket.getCreatedAt()));
 	}
 
+	/** Whether Zammad keeps an article from the ticket's customer: it is internal. */
+	static boolean isInternal(TicketArticle article) {
+		return Boolean.TRUE.equals(article.getInternal());
+	}
+
+	/** Whether an article becomes an internal note document: internal, with a body. */
+	static boolean isInternalNote(TicketArticle article) {
+		return isInternal(article) && article.getBody() != null && !article.getBody().isBlank();
+	}
+
+	/** The internal flag and the author of an internal article, on its note or its attachment. */
+	private static ZammadNativePositionObject internalMeta(ZammadNativePositionObject node, TicketArticle article) {
+		return isInternal(article)
+				? node.meta(ZammadNativePositionObject.ZAMMAD_INTERNAL_NOTE, Boolean.TRUE)
+						.meta(ZammadNativePositionObject.ZAMMAD_NOTE_AUTHOR_ID, article.getCreatedById())
+				: node;
+	}
+
+	/** "#97002 internal note 6". */
+	static String internalNoteLabel(Ticket ticket, Long articleId) {
+		String number = ticket.getNumber() != null ? ticket.getNumber() : String.valueOf(ticket.getId());
+		return ZammadNavigationUtil.sanitizeName("#" + number + " internal note " + articleId);
+	}
+
+	/**
+	 * An internal note of a ticket (see {@link #isInternalNote}), a document of
+	 * its own: its id is the article id.
+	 */
+	static ZammadNativePositionObject internalNote(String baseUri, String rootCode, Ticket ticket,
+			TicketArticle article) {
+		String id = String.valueOf(article.getId());
+		Date updated = date(article.getUpdatedAt());
+		return internalMeta(rendered(ticketMeta(node(ZammadPathNodeType.INTERNAL_NOTE, id, "internal-note-" + id,
+				internalNoteLabel(ticket, article.getId()) + ".html", ticketUrl(baseUri, ticket.getId()), rootCode),
+				ticket).meta(ZammadNativePositionObject.ZAMMAD_ARTICLE_ID, article.getId()),
+				updated != null ? updated : date(article.getCreatedAt())), article);
+	}
+
 	static ZammadNativePositionObject category(String baseUri, String rootCode, Long knowledgeBaseId,
 			String localeCode, Long categoryId, String title) {
 		String id = String.valueOf(categoryId);
@@ -166,6 +205,16 @@ final class ZammadNodes {
 				attachment.getFilename(), contentTypeOf(attachment.getPreferences()), attachment.getSize(), created),
 				ticket).meta(ZammadNativePositionObject.ZAMMAD_ARTICLE_ID, articleId)
 				.meta(ZammadNativePositionObject.ZAMMAD_ATTACHMENT_ID, attachment.getId());
+	}
+
+	/**
+	 * The attachment of a ticket article as the tree lists it: an attachment of an
+	 * internal article is flagged internal, as its article is.
+	 */
+	static ZammadNativePositionObject ticketAttachment(String baseUri, String rootCode, Ticket ticket,
+			TicketArticle article, Attachment attachment) {
+		return internalMeta(ticketAttachment(baseUri, rootCode, ticket, article.getId(), attachment,
+				date(article.getCreatedAt())), article);
 	}
 
 	/**

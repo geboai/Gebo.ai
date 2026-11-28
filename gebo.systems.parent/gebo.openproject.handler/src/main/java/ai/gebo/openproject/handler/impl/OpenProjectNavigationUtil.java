@@ -30,8 +30,9 @@ import ai.gebo.openproject.handler.model.OpenProjectPathNodeType;
  * accepted too, by the API and here)</li>
  * <li>a path is the cumulative list of typed steps below the root, separated
  * by {@code |}: {@code SECTION:WORK_PACKAGES|WORK_PACKAGE:12|ATTACHMENT:34},
- * {@code SECTION:MEETINGS|MEETING:3|MEETING_CONTENT:3}. Every step id is a
- * number, except the section names.</li>
+ * {@code SECTION:WORK_PACKAGES|WORK_PACKAGE:12|INTERNAL_COMMENT:57} (the id of
+ * the comment's activity), {@code SECTION:MEETINGS|MEETING:3|MEETING_CONTENT:3}.
+ * Every step id is a number, except the section names.</li>
  * </ul>
  * Once data sources are saved this encoding is a compatibility contract: the
  * stored paths are decoded with it.
@@ -123,6 +124,7 @@ public final class OpenProjectNavigationUtil {
 		case DOCUMENT_CONTENT:
 		case MEETING_CONTENT:
 		case NEWS:
+		case INTERNAL_COMMENT:
 			return PathInfoMetaType.WEB_PAGE;
 		case ATTACHMENT:
 			return PathInfoMetaType.FILE;

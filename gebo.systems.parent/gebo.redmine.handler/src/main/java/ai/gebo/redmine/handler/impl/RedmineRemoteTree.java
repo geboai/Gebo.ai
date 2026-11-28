@@ -26,6 +26,7 @@ import ai.gebo.redmine.client.model.GetProjects200Response;
 import ai.gebo.redmine.client.model.IdName;
 import ai.gebo.redmine.client.model.Issue;
 import ai.gebo.redmine.client.model.IssueChild;
+import ai.gebo.redmine.client.model.IssueJournalsInner;
 import ai.gebo.redmine.client.model.IssueSummary;
 import ai.gebo.redmine.client.model.Project;
 import ai.gebo.redmine.client.model.ProjectSummary;
@@ -48,7 +49,9 @@ public class RedmineRemoteTree {
 	/** The largest page the Redmine REST API returns. */
 	static final int REDMINE_PAGE_SIZE = 100;
 	static final List<String> ISSUE_CONTENT_INCLUDES = List.of("journals", "attachments", "children", "relations");
-	static final List<String> ISSUE_CHILDREN_INCLUDES = List.of("attachments", "children");
+	/** The journals tell the issue's private notes, documents of their own. */
+	static final List<String> ISSUE_CHILDREN_INCLUDES = List.of("attachments", "children", "journals");
+	static final List<String> PRIVATE_NOTE_INCLUDES = List.of("journals");
 	static final List<String> WIKI_INCLUDES = List.of("attachments");
 	private final RedmineConnection connection;
 	private final Map<String, List<String>> projectModules = new HashMap<String, List<String>>();
@@ -156,6 +159,16 @@ public class RedmineRemoteTree {
 	 * The node a path step addresses, read from Redmine.
 	 */
 	public RedmineNativePositionObject node(String projectId, RedminePathComponent step) {
+		return node(projectId, null, step);
+	}
+
+	/**
+	 * The node a path step addresses, read from Redmine; a private note step needs
+	 * the issue step it is under as its parent, and gives null when the issue has
+	 * no such private note any more.
+	 */
+	public RedmineNativePositionObject node(String projectId, RedminePathComponent parent,
+			RedminePathComponent step) {
 		String base = getBaseUri();
 		switch (step.type) {
 		case PROJECT:
@@ -185,6 +198,14 @@ public class RedmineRemoteTree {
 			return RedmineNodes.fileNode(RedminePathNodeType.FILE, base, projectId, file.getId(), file.getFilename(),
 					file.getContentType(), file.getFilesize(), file.getCreatedOn());
 		}
+		case PRIVATE_NOTE: {
+			if (parent == null || parent.type != RedminePathNodeType.ISSUE) {
+				throw new IllegalArgumentException("The Redmine private note " + step + " is not under its issue");
+			}
+			Issue issue = issue(Integer.valueOf(parent.id), PRIVATE_NOTE_INCLUDES);
+			IssueJournalsInner journal = RedmineNodes.privateNote(issue, Integer.valueOf(step.id));
+			return journal != null ? RedmineNodes.privateNote(base, projectId, issue.getId(), journal) : null;
+		}
 		default:
 			throw new IllegalArgumentException("Unknown Redmine path step " + step);
 		}
@@ -193,9 +214,9 @@ public class RedmineRemoteTree {
 	/**
 	 * The children of a node: a project holds its enabled sections; the Issues
 	 * section its top level issues (sub-issues are under their parents); an
-	 * issue its content, attachments and sub-issues; the Wiki section its top
-	 * level pages; a page its content, attachments and child pages; the Files
-	 * section its files. Contents and files have no children.
+	 * issue its content, attachments, private notes and sub-issues; the Wiki
+	 * section its top level pages; a page its content, attachments and child
+	 * pages; the Files section its files. Contents and files have no children.
 	 */
 	public List<RedmineNativePositionObject> children(String projectId, RedminePathNodeType type, String id) {
 		requireIdentity();
@@ -248,6 +269,13 @@ public class RedmineRemoteTree {
 			if (issue.getAttachments() != null) {
 				for (Attachment attachment : issue.getAttachments()) {
 					children.add(RedmineNodes.attachment(base, projectId, attachment));
+				}
+			}
+			if (issue.getJournals() != null) {
+				for (IssueJournalsInner journal : issue.getJournals()) {
+					if (RedmineNodes.isPrivateNote(journal)) {
+						children.add(RedmineNodes.privateNote(base, projectId, issue.getId(), journal));
+					}
 				}
 			}
 			if (issue.getChildren() != null) {

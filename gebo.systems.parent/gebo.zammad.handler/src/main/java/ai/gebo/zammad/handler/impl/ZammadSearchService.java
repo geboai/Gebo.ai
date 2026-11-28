@@ -275,7 +275,10 @@ public class ZammadSearchService extends
 		String base = tree.getBaseUri();
 		String uri = ZammadNodes.ticketUrl(base, id);
 		String label = ZammadNodes.ticketLabel(ticket);
-		List<TicketArticle> articles = tree.articles(ticket.getId());
+		// the internal notes are not shown: the ticket's content leaves them out, and a
+		// live search has no ACL of its own to keep them from the customer's side
+		List<TicketArticle> articles = tree.articles(ticket.getId()).stream()
+				.filter(article -> !Boolean.TRUE.equals(article.getInternal())).toList();
 		String first = articles.isEmpty() ? null : articles.get(0).getBody();
 		String state = extra(ticket, "state");
 		String text = label + (state != null ? " [" + state + "]" : "")

@@ -15,6 +15,8 @@ import java.time.OffsetDateTime;
 import java.util.Date;
 
 import ai.gebo.redmine.client.model.Attachment;
+import ai.gebo.redmine.client.model.Issue;
+import ai.gebo.redmine.client.model.IssueJournalsInner;
 import ai.gebo.redmine.client.model.RedmineFile;
 import ai.gebo.redmine.handler.model.RedmineNativePositionObject;
 import ai.gebo.redmine.handler.model.RedminePathNodeType;
@@ -81,6 +83,56 @@ final class RedmineNodes {
 				projectId).meta(RedmineNativePositionObject.REDMINE_ISSUE_ID, issueId);
 		node.setResourceContentType(MARKDOWN);
 		node.setResourceModificationTime(toDate(updatedOn));
+		return node;
+	}
+
+	/**
+	 * Whether a journal is a private note: its notes are private and say
+	 * something. Such a note is a document of its own, never part of the issue
+	 * content.
+	 */
+	static boolean isPrivateNote(IssueJournalsInner journal) {
+		return journal != null && Boolean.TRUE.equals(journal.getPrivateNotes()) && journal.getNotes() != null
+				&& !journal.getNotes().isBlank();
+	}
+
+	/**
+	 * The private note of an issue with the given journal id, or null when the
+	 * issue (read with its journals) has none: the journal is gone, its notes were
+	 * made public or emptied, or the account may not view it any more.
+	 */
+	static IssueJournalsInner privateNote(Issue issue, Integer journalId) {
+		if (issue == null || journalId == null || issue.getJournals() == null) {
+			return null;
+		}
+		for (IssueJournalsInner journal : issue.getJournals()) {
+			if (journalId.equals(journal.getId()) && isPrivateNote(journal)) {
+				return journal;
+			}
+		}
+		return null;
+	}
+
+	static String privateNoteName(Integer issueId, Integer journalId) {
+		return RedmineNavigationUtil.sanitizeName("#" + issueId + " private note " + journalId) + ".md";
+	}
+
+	/**
+	 * A private note of an issue, a markdown document under the issue folder that
+	 * says it is private and who wrote it.
+	 */
+	static RedmineNativePositionObject privateNote(String baseUri, String projectId, Integer issueId,
+			IssueJournalsInner journal) {
+		RedmineNativePositionObject node = node(RedminePathNodeType.PRIVATE_NOTE, String.valueOf(journal.getId()),
+				"private-note-" + journal.getId(), privateNoteName(issueId, journal.getId()),
+				baseUri + "/issues/" + issueId, projectId).meta(RedmineNativePositionObject.REDMINE_ISSUE_ID, issueId)
+				.meta(RedmineNativePositionObject.REDMINE_JOURNAL_ID, journal.getId())
+				.meta(RedmineNativePositionObject.REDMINE_PRIVATE_NOTE, Boolean.TRUE)
+				.meta(RedmineNativePositionObject.REDMINE_NOTE_AUTHOR_ID,
+						journal.getUser() != null ? journal.getUser().getId() : null);
+		node.setResourceContentType(MARKDOWN);
+		node.setResourceModificationTime(
+				toDate(journal.getUpdatedOn() != null ? journal.getUpdatedOn() : journal.getCreatedOn()));
 		return node;
 	}
 

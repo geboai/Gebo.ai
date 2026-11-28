@@ -32,6 +32,8 @@ import ai.gebo.crypting.services.GeboCryptSecretException;
 import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.model.virtualfs.VFilesystemReference;
+import ai.gebo.redmine.client.model.Issue;
+import ai.gebo.redmine.client.model.IssueJournalsInner;
 import ai.gebo.redmine.handler.GRedmineProjectEndpoint;
 import ai.gebo.redmine.handler.GRedmineSystem;
 import ai.gebo.redmine.handler.IGRedmineVirtualFilesystemConsumingService;
@@ -48,7 +50,11 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
 /**
  * Reads the selected Redmine projects, sections, issues, wiki pages and files
  * into a knowledge base. Issues and wiki pages become markdown documents,
- * attachments and files are streamed as they are.
+ * attachments and files are streamed as they are. Each private note of an
+ * issue is a markdown document of its own, flagged private with its author
+ * ({@link RedmineNativePositionObject#REDMINE_PRIVATE_NOTE},
+ * {@link RedmineNativePositionObject#REDMINE_NOTE_AUTHOR_ID}), and is not part
+ * of the issue content.
  */
 public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GRedmineSystem, GRedmineProjectEndpoint, RedmineNativePositionObject, RedmineNavigationCoordinates, RedmineResourceReference>
@@ -123,8 +129,15 @@ public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 		try {
 			RedmineNativePositionObject project = tree.project(projectId);
 			natives.add(project);
+			RedminePathComponent parent = null;
 			for (RedminePathComponent step : position.getBrowsingStepsCustom()) {
-				natives.add(tree.node(project.getId(), step));
+				RedmineNativePositionObject node = tree.node(project.getId(), parent, step);
+				if (node == null) {
+					LOGGER.warn("The Redmine item {} does not exist any more", position);
+					return List.of();
+				}
+				natives.add(node);
+				parent = step;
 			}
 		} catch (RestClientException e) {
 			if (RedmineRemoteTree.isNotFound(e)) {
@@ -228,6 +241,7 @@ public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 		reference.issueId = metaInteger(metas, RedmineNativePositionObject.REDMINE_ISSUE_ID);
 		reference.wikiTitle = metaString(metas, RedmineNativePositionObject.REDMINE_WIKI_TITLE);
 		reference.attachmentId = metaInteger(metas, RedmineNativePositionObject.REDMINE_ATTACHMENT_ID);
+		reference.journalId = metaInteger(metas, RedmineNativePositionObject.REDMINE_JOURNAL_ID);
 		reference.contentType = metaString(metas, RedmineNativePositionObject.REDMINE_CONTENT_TYPE);
 		return reference;
 	}
@@ -250,8 +264,9 @@ public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	/**
-	 * Opens an item: an issue (or its content) and a wiki page (or its content)
-	 * as their markdown rendering, attachments and files as they are.
+	 * Opens an item: an issue (or its content), a private note and a wiki page
+	 * (or its content) as their markdown rendering, attachments and files as they
+	 * are.
 	 */
 	private InputStream open(RedmineResourceReference reference, RedmineRemoteTree tree)
 			throws GeboContentHandlerSystemException, IOException {
@@ -273,6 +288,16 @@ public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 			text = RedmineMarkdownRenderer.renderWikiPage(
 					tree.wikiPage(reference.projectId, reference.wikiTitle, RedmineRemoteTree.WIKI_INCLUDES),
 					reference.projectId, tree.getBaseUri());
+			break;
+		case PRIVATE_NOTE: {
+			Issue issue = tree.issue(reference.issueId, RedmineRemoteTree.PRIVATE_NOTE_INCLUDES);
+			IssueJournalsInner journal = RedmineNodes.privateNote(issue, reference.journalId);
+			if (journal == null) {
+				throw new GeboContentHandlerSystemException("The Redmine issue #" + reference.issueId
+						+ " has no private note " + reference.journalId + " any more");
+			}
+			text = RedmineMarkdownRenderer.renderPrivateNote(issue, journal, tree.getBaseUri());
+		}
 			break;
 		case ATTACHMENT:
 		case FILE:
@@ -338,8 +363,10 @@ public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 
 	/**
 	 * An issue, wiki page, attachment or file Redmine answers "not found" for is
-	 * reported deleted; anything else (found, folders, other errors) gives no
-	 * information, so the item is left as it is.
+	 * reported deleted, and so is a private note its issue no longer holds as a
+	 * private note (deleted, made public or emptied: a public note is in the issue
+	 * content); anything else (found, folders, other errors) gives no information,
+	 * so the item is left as it is.
 	 */
 	@Override
 	protected GAbstractVirtualFilesystemObject verifyRemoteObjectExistence(GRedmineSystem system,
@@ -360,6 +387,20 @@ public class GRedmineRemoteVirtualFilesystemConsumingServiceImpl extends
 			case ATTACHMENT:
 			case FILE:
 				tree.attachment(reference.attachmentId);
+				break;
+			case PRIVATE_NOTE:
+				if (reference.journalId == null) {
+					return null;
+				}
+				if (RedmineNodes.privateNote(tree.issue(reference.issueId, RedmineRemoteTree.PRIVATE_NOTE_INCLUDES),
+						reference.journalId) == null) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("The Redmine item {} is not a private note any more, the document {} is deleted",
+								reference, doc.getCode());
+					}
+					doc.setDeleted(true);
+					return doc;
+				}
 				break;
 			default:
 				return null;

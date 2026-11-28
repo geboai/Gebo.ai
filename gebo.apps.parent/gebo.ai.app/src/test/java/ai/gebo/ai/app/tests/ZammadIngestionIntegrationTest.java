@@ -12,11 +12,14 @@ package ai.gebo.ai.app.tests;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -58,16 +61,19 @@ import ai.gebo.zammad.handler.repositories.ZammadSystemRepository;
  * seeded by a rails runner script:
  * <ul>
  * <li>the group "Gebo Support", in the data source, with an open ticket holding
- * a customer message (carrying relay.log), an internal note and a phone reply,
- * and a closed ticket;</li>
+ * a customer message (carrying relay.log), an internal note (carrying
+ * relay-config.txt) and a phone reply, and a closed ticket;</li>
  * <li>the group "Gebo Secret", out of the data source, with its ticket;</li>
  * <li>a knowledge base with a category and a sub-category, a published answer
  * with an attachment, a second published answer, an internal answer, a draft
  * and an archived answer.</li>
  * </ul>
  * A data source selecting the support group and the knowledge base must ingest
- * every ticket conversation, attachment and listed answer as its own document,
- * and nothing of the secret group, of the draft or of the archived answer.
+ * every ticket conversation, internal note, attachment and listed answer as its
+ * own document, and nothing of the secret group, of the draft or of the
+ * archived answer. The internal note is a document of its own, flagged internal
+ * with its author, as the attachment of its article is: the conversation of its
+ * ticket, which the ticket's customer may see in Zammad, does not hold it.
  */
 public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String ZAMMAD_IMAGE = "ghcr.io/zammad/zammad:7.3.0-0001";
@@ -116,11 +122,11 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 
 	/**
 	 * The documents of the seeded data: in the support group the open ticket's
-	 * conversation and relay.log, the closed ticket's conversation; in the
-	 * knowledge base the install guide and its checklist, the proxy settings and
-	 * the internal answer.
+	 * conversation, relay.log, its internal note and relay-config.txt, the closed
+	 * ticket's conversation; in the knowledge base the install guide and its
+	 * checklist, the proxy settings and the internal answer.
 	 */
-	static final int EXPECTED_DOCUMENTS = 7;
+	static final int EXPECTED_DOCUMENTS = 9;
 
 	@Test
 	public void testZammadIngestion() throws Exception {
@@ -166,6 +172,7 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			assertContains(stored, "Confirmed on production too", "the internal note of the open ticket");
 			assertContains(stored, "a fix is planned for", "the phone reply of the open ticket");
 			assertContains(stored, "message too large (12MB)", "the attachment of the open ticket");
+			assertContains(stored, "smtpd_message_size_limit", "the attachment of the internal note");
 			assertContains(stored, "Write the mail limits page", "the closed ticket");
 			assertContains(stored, "open the port 8080", "the published install guide");
 			assertContains(stored, "open the browser on the gebo host", "the attachment of the install guide");
@@ -176,6 +183,7 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			assertAbsent(stored, "Archived text of an old release", "The archived answer");
 			assertNotNull(zammadSystemsRepository.findById(system.getCode()).orElse(null),
 					"The Zammad system must still be resolvable after ingestion");
+			assertInternalNoteApart(endpoint);
 
 			// deleted through its controller, as the admin UI does: the data source, its
 			// documents, their vectors and the acknowledgements of their ingestion all go
@@ -243,6 +251,63 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			}
 		}
 		assertTrue(gone, "the data source, its documents and their vectors have to be deleted");
+	}
+
+	private static String meta(GDocumentReference document, String key) {
+		Map<String, Object> metas = document.getCustomMetaInfos();
+		Object value = metas != null ? metas.get(key) : null;
+		return value != null ? value.toString() : null;
+	}
+
+	private static GDocumentReference single(List<GDocumentReference> documents, String what,
+			Predicate<GDocumentReference> which) {
+		List<GDocumentReference> found = documents.stream().filter(which).toList();
+		assertEquals(1, found.size(), "one document for " + what + " among "
+				+ documents.stream().map(GDocumentReference::getName).toList());
+		return found.get(0);
+	}
+
+	/** The vectors of one document, read from the store's data (not its index). */
+	private List<Document> vectorsOf(GDocumentReference document) {
+		return getTestVectorStore().getAllData().stream().filter(x -> x.getMetadata() != null
+				&& document.getCode().equals(x.getMetadata().get(DocumentMetaInfos.CONTENT_CODE))).toList();
+	}
+
+	/**
+	 * The internal note of the open ticket is a document of its own, flagged
+	 * internal with its author, and the ticket's conversation does not hold it;
+	 * the attachment of the note is flagged internal too, the customer's is not.
+	 */
+	private void assertInternalNoteApart(GZammadProjectEndpoint endpoint) {
+		final List<GDocumentReference> documents;
+		try (Stream<GDocumentReference> found = documentReferenceRepository
+				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(endpoint.getClass().getName(),
+						endpoint.getCode())) {
+			documents = found.toList();
+		}
+		final String objectType = "ZAMMAD-OBJECT-TYPE";
+		final String internal = "ZAMMAD-INTERNAL-NOTE";
+		GDocumentReference note = single(documents, "the internal note",
+				d -> ZammadPathNodeType.INTERNAL_NOTE.name().equals(meta(d, objectType)));
+		assertTrue(note.getName().matches("#\\d+ internal note \\d+\\.html"), "the note's name: " + note.getName());
+		assertEquals("true", meta(note, internal), "the note is flagged internal");
+		assertNotNull(meta(note, "ZAMMAD-NOTE-AUTHOR-ID"), "the note names its author");
+		GDocumentReference conversation = single(documents, "the open ticket's conversation",
+				d -> ZammadPathNodeType.TICKET_CONTENT.name().equals(meta(d, objectType))
+						&& d.getName().contains("SMTP relay rejects large mails"));
+		assertNull(meta(conversation, internal), "the conversation is not internal");
+		assertEquals("true", meta(single(documents, "relay-config.txt", d -> "relay-config.txt".equals(d.getName())),
+				internal), "the attachment of the internal note is flagged internal");
+		assertNull(meta(single(documents, "relay.log", d -> "relay.log".equals(d.getName())), internal),
+				"the attachment of the customer message is not internal");
+
+		List<Document> noteVectors = vectorsOf(note);
+		List<Document> conversationVectors = vectorsOf(conversation);
+		assertContains(noteVectors, "Confirmed on production too", "the internal note, in its own document");
+		assertContains(conversationVectors, "Mails over 10MB bounce since Monday", "the conversation");
+		assertContains(conversationVectors, "a fix is planned for", "the conversation");
+		assertAbsent(conversationVectors, "Confirmed on production too", "The internal note in the conversation");
+		assertAbsent(conversationVectors, "relay-config.txt", "The attachment of the internal note in the conversation");
 	}
 
 	private static void assertContains(List<Document> stored, String text, String what) {

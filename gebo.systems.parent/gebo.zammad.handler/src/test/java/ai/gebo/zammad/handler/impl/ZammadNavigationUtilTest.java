@@ -115,6 +115,21 @@ class ZammadNavigationUtilTest {
 	}
 
 	@Test
+	void anInternalNoteIsADocumentStepUnderItsTicket() {
+		VFilesystemReference reference = ZammadNavigationUtil.toReference(ZammadPathNodeType.GROUP, "2",
+				"Tickets of Gebo Support", List.of(new ZammadPathComponent(ZammadPathNodeType.TICKET, "2"),
+						new ZammadPathComponent(ZammadPathNodeType.INTERNAL_NOTE, "6")),
+				"#97002 internal note 6.html");
+		assertEquals("TICKET:2|INTERNAL_NOTE:6", reference.path.absolutePath);
+		assertFalse(reference.path.folder);
+		ZammadNavigationCoordinates coordinates = ZammadNavigationUtil.toCoordinates(reference);
+		assertEquals(ZammadPathNodeType.INTERNAL_NOTE, coordinates.getBrowsingStepsCustom().get(1).type);
+		assertEquals("6", coordinates.getBrowsingStepsCustom().get(1).id);
+		assertEquals("internal note 6 of the Zammad group 2", coordinates.describe());
+		assertEquals("TICKET:2", ZammadNavigationUtil.parentPath(reference.path.absolutePath));
+	}
+
+	@Test
 	void namesLoseTheCharactersFilesCannotHold() {
 		assertEquals("#7 a-b-c-d", ZammadNavigationUtil.sanitizeName("#7 a/b:c|d"));
 	}

@@ -33,6 +33,14 @@ public class ZammadNativePositionObject extends AbstractNativePositionObject {
 	public static final String ZAMMAD_ATTACHMENT_ID = "ZAMMAD-ATTACHMENT-ID";
 	public static final String ZAMMAD_FILE_NAME = "ZAMMAD-FILE-NAME";
 	public static final String ZAMMAD_CONTENT_TYPE = "ZAMMAD-CONTENT-TYPE";
+	/**
+	 * {@code true} on an internal note and on an attachment of an internal article:
+	 * Zammad shows them to the agents of the ticket's group, never to its customer.
+	 * Absent on everything else.
+	 */
+	public static final String ZAMMAD_INTERNAL_NOTE = "ZAMMAD-INTERNAL-NOTE";
+	/** The id of the Zammad user who wrote an internal article ({@code created_by_id}), next to {@link #ZAMMAD_INTERNAL_NOTE}. */
+	public static final String ZAMMAD_NOTE_AUTHOR_ID = "ZAMMAD-NOTE-AUTHOR-ID";
 
 	private ZammadPathNodeType type = null;
 	/** The id of the node within its type (see {@link ZammadPathComponent}). */

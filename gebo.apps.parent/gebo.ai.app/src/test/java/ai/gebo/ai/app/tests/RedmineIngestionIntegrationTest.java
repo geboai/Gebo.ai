@@ -10,6 +10,7 @@
 package ai.gebo.ai.app.tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -45,6 +46,7 @@ import ai.gebo.application.messaging.workflow.GWorkflowType;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
 import ai.gebo.knowledgebase.repositories.UserMessageRepository;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.GUserMessage;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.redmine.handler.GRedmineProjectEndpoint;
@@ -65,9 +67,11 @@ import tools.jackson.databind.json.JsonMapper;
  * SQLite database) started as a container, once per supported release line, bootstrapped with a rails runner
  * script (default data, REST API on, the admin API key) and filled through its
  * REST API: two projects, a parent with a sub-issue, a closed issue, issue notes
- * and attachments, a wiki tree with an attachment and a project file. A data
- * source selecting both projects must ingest every one of them as its own
- * document, with the issue history and the attachments' text in the vectors.
+ * (one of them private) and attachments, a wiki tree with an attachment and a
+ * project file. A data source selecting both projects must ingest every one of
+ * them as its own document, with the issue history and the attachments' text in
+ * the vectors, and the private note as a document of its own that the issue
+ * content does not hold.
  */
 public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String SECRET_KEY_BASE = "gebo-redmine-it-only-secret-key-base-0123456789abcdef";
@@ -97,11 +101,17 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 	UserMessageRepository userMessageRepository;
 
 	/**
-	 * The documents of the seeded data: issues #1 (with its attachment), #2 (sub-issue
-	 * of #1) and #3 (closed) of gebo-demo, #4 of gebo-demo-sub, the wiki pages Wiki,
-	 * Install_guide (with its attachment) and Linux_setup, and the project file.
+	 * The documents of the seeded data: issues #1 (with its attachment and its
+	 * private note), #2 (sub-issue of #1) and #3 (closed) of gebo-demo, #4 of
+	 * gebo-demo-sub, the wiki pages Wiki, Install_guide (with its attachment) and
+	 * Linux_setup, and the project file.
 	 */
-	static final int EXPECTED_DOCUMENTS = 10;
+	static final int EXPECTED_DOCUMENTS = 11;
+	static final String PUBLIC_NOTE = "Reproduced on version 6.0";
+	static final String PRIVATE_NOTE = "Internal only: Contoso Pharma reported this crash under its support contract.";
+	/** The issue the notes are on and the journal of its private note, as seeded. */
+	private int crashIssue = 0;
+	private int privateNoteJournal = 0;
 
 	@ParameterizedTest(name = "{0}")
 	@FieldSource("REDMINE_IMAGES")
@@ -151,7 +161,8 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 		runAndWaitDoneCheckingResults(endpoint, EXPECTED_DOCUMENTS, true);
 
 		List<Document> stored = awaitSettledVectorStoreContent(getTestVectorStore(), x -> false);
-		assertContains(stored, "Reproduced on version 6.0", "the notes of issue #1");
+		assertContains(stored, PUBLIC_NOTE, "the notes of issue #1");
+		assertPrivateNoteIsADocumentOfItsOwn(stored);
 		assertContains(stored, "NullPointerException at Exporter.save", "the attachment of issue #1");
 		assertContains(stored, "configure the mail server", "the Install_guide wiki page");
 		assertContains(stored, "first public release with the PDF export", "the project file");
@@ -230,6 +241,35 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 			return messages.filter(m -> m.getSeverity() == GUserMessage.MsgServerity.error)
 					.collect(Collectors.toList());
 		}
+	}
+
+	/**
+	 * The private note is in one document only, its own, and the issue content
+	 * keeps the public note without it.
+	 */
+	private void assertPrivateNoteIsADocumentOfItsOwn(List<Document> stored) {
+		Map<String, String> textByDocument = new LinkedHashMap<String, String>();
+		for (Document vector : stored) {
+			Object code = vector.getMetadata() != null ? vector.getMetadata().get(DocumentMetaInfos.CONTENT_CODE)
+					: null;
+			if (code != null && vector.getText() != null) {
+				textByDocument.merge(code.toString(), vector.getText(), (a, b) -> a + "\n" + b);
+			}
+		}
+		List<String> holdingThePrivateNote = textByDocument.entrySet().stream()
+				.filter(e -> e.getValue().contains(PRIVATE_NOTE)).map(Map.Entry::getKey).toList();
+		assertEquals(1, holdingThePrivateNote.size(),
+				"The private note must be in one document only: " + holdingThePrivateNote);
+		assertTrue(holdingThePrivateNote.get(0).endsWith("/private-note-" + privateNoteJournal),
+				"The private note must be its own document: " + holdingThePrivateNote.get(0));
+		List<String> issueContents = textByDocument.keySet().stream()
+				.filter(code -> code.endsWith("/issue-" + crashIssue + ".md")).toList();
+		assertEquals(1, issueContents.size(), "One content document of issue #" + crashIssue + ": "
+				+ textByDocument.keySet());
+		String issueContent = textByDocument.get(issueContents.get(0));
+		assertTrue(issueContent.contains(PUBLIC_NOTE), "The issue content keeps its public note");
+		assertFalse(issueContent.contains(PRIVATE_NOTE), "The issue content must not hold the private note");
+		assertFalse(issueContent.contains("private note"), "The issue content must not tell of the private note");
 	}
 
 	private static void assertContains(List<Document> stored, String text, String what) {
@@ -333,7 +373,17 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 				List.of(upload("crash-log.txt", "java.lang.NullPointerException at Exporter.save(Exporter.java:42)\n")),
 				null);
 		call("PUT", "/issues/" + crash + ".json",
-				Map.of("issue", Map.of("notes", "Reproduced on version 6.0 with the title 'Q1/Q2 report'.")));
+				Map.of("issue", Map.of("notes", PUBLIC_NOTE + " with the title 'Q1/Q2 report'.")));
+		call("PUT", "/issues/" + crash + ".json",
+				Map.of("issue", Map.of("notes", PRIVATE_NOTE, "private_notes", true)));
+		crashIssue = crash;
+		for (JsonNode journal : call("GET", "/issues/" + crash + ".json?include=journals", null).path("issue")
+				.path("journals")) {
+			if (journal.path("private_notes").asBoolean() && PRIVATE_NOTE.equals(journal.path("notes").asString())) {
+				privateNoteJournal = journal.path("id").asInt();
+			}
+		}
+		assertTrue(privateNoteJournal > 0, "The private note of issue #" + crash + " must be seeded");
 		issue(demo, 2, "Add a regression test for slashes in titles",
 				"Cover titles with '/', '\\' and ':' in the exporter test suite.", crash, null, null);
 		issue(demo, 2, "Export issues to PDF", "Users want a PDF export of the issue list.", null, null, 5);

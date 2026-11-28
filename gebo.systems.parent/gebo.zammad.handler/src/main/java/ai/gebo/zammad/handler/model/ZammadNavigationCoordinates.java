@@ -41,6 +41,7 @@ public class ZammadNavigationCoordinates extends AbstractNavigationCoordinates<Z
 		case CATEGORY -> "category " + last.id;
 		case ANSWER, ANSWER_CONTENT -> "answer " + last.id;
 		case ATTACHMENT -> "attachment " + last.id;
+		case INTERNAL_NOTE -> "internal note " + last.id;
 		default -> last.toString();
 		};
 		return what + " of " + where;

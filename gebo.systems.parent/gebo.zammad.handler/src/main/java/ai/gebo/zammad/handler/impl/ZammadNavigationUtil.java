@@ -29,6 +29,7 @@ import ai.gebo.zammad.handler.model.ZammadPathNodeType;
  * {@code GROUP:<group id>} or {@code KNOWLEDGE_BASE:<knowledge base id>}</li>
  * <li>a path is the cumulative list of typed steps below the root, separated
  * by {@code |}: {@code TICKET:12|ATTACHMENT:40-7} (article 40, attachment 7),
+ * {@code TICKET:12|INTERNAL_NOTE:41} (the internal article 41),
  * {@code CATEGORY:1|CATEGORY:2|ANSWER:5|ANSWER_CONTENT:5}. Every step id is a
  * number, or two numbers for a ticket attachment.</li>
  * </ul>
@@ -127,6 +128,7 @@ public final class ZammadNavigationUtil {
 	public static PathInfoMetaType metaTypeOf(ZammadPathNodeType type) {
 		switch (type) {
 		case TICKET_CONTENT:
+		case INTERNAL_NOTE:
 		case ANSWER_CONTENT:
 			return PathInfoMetaType.WEB_PAGE;
 		case ATTACHMENT:

@@ -18,7 +18,9 @@ import java.util.function.BiFunction;
  * item's fields, its text (OpenProject keeps descriptions as markdown already)
  * and what hangs from it (relations, children, attachments, comments and
  * changes, agenda items). Users are named through a resolver, since the API
- * gives some links without their titles.
+ * gives some links without their titles. The text of an internal comment is
+ * never part of its work package's document: it is rendered as a document of
+ * its own.
  */
 final class OpenProjectMarkdownRenderer {
 
@@ -134,17 +136,15 @@ final class OpenProjectMarkdownRenderer {
 		}
 		StringBuilder history = new StringBuilder();
 		for (Map<String, Object> activity : activities) {
-			String comment = OpenProjectHal.text(activity, "comment.raw");
+			// the text of an internal comment is a document of its own, its changes stay here
+			String comment = OpenProjectHal.bool(activity, "internal") ? null
+					: OpenProjectHal.text(activity, "comment.raw");
 			List<Map<String, Object>> details = OpenProjectHal.list(activity, "details");
 			if (comment == null && details.isEmpty()) {
 				continue;
 			}
 			history.append("\n### ").append(nonNull(users.apply(activity, "user"))).append(", ")
-					.append(nonNull(OpenProjectHal.text(activity, "createdAt")));
-			if (OpenProjectHal.bool(activity, "internal")) {
-				history.append(" (internal comment)");
-			}
-			history.append("\n\n");
+					.append(nonNull(OpenProjectHal.text(activity, "createdAt"))).append("\n\n");
 			for (Map<String, Object> detail : details) {
 				String change = OpenProjectHal.text(detail, "raw");
 				if (change != null) {
@@ -158,6 +158,25 @@ final class OpenProjectMarkdownRenderer {
 		if (!history.isEmpty()) {
 			out.append("\n## Activity\n").append(history);
 		}
+	}
+
+	/**
+	 * An internal comment of a work package: the work package it belongs to, its
+	 * author, its dates and its text.
+	 */
+	static String renderInternalComment(Map<String, Object> activity, String workPackageId, UserNames users,
+			String baseUri) {
+		StringBuilder out = new StringBuilder();
+		out.append("# Internal comment ").append(nonNull(OpenProjectHal.string(activity, "id")))
+				.append(" on work package #").append(workPackageId).append("\n\n");
+		field(out, "Work package",
+				("#" + workPackageId + " " + nonNull(OpenProjectHal.linkTitle(activity, "workPackage"))).trim());
+		field(out, "Author", users.apply(activity, "user"));
+		field(out, "Created at", OpenProjectHal.text(activity, "createdAt"));
+		field(out, "Updated at", OpenProjectHal.text(activity, "updatedAt"));
+		field(out, "URL", OpenProjectNodes.workPackageUrl(baseUri, workPackageId));
+		text(out, "Comment", OpenProjectHal.text(activity, "comment.raw"));
+		return out.toString();
 	}
 
 	static String renderDocument(Map<String, Object> document, List<Map<String, Object>> attachments, String baseUri) {

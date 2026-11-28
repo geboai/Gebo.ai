@@ -19,13 +19,18 @@ import ai.gebo.systems.abstraction.layer.IGRemoteVirtualFilesystemResourceRefere
 public class OpenProjectResourceReference implements IGRemoteVirtualFilesystemResourceReference {
 	public OpenProjectPathNodeType type = null;
 	public String projectId = null;
-	/** The number of the work package, document, meeting, news or attachment. */
+	/**
+	 * The number of the work package, document, meeting, news or attachment, the
+	 * activity id of an internal comment.
+	 */
 	public String itemId = null;
+	/** The work package the item is or belongs to, when it is one or hangs from one. */
+	public String workPackageId = null;
 	public String contentType = null;
 
 	@Override
 	public String toString() {
-		return "{type=" + type + ", projectId=" + projectId + ", itemId=" + itemId + ", contentType=" + contentType
-				+ "}";
+		return "{type=" + type + ", projectId=" + projectId + ", itemId=" + itemId + ", workPackageId="
+				+ workPackageId + ", contentType=" + contentType + "}";
 	}
 }

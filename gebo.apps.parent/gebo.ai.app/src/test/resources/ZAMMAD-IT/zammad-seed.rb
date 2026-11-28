@@ -3,7 +3,8 @@
 # It prints ADMIN_KEY=<api token of an agent able to read both groups and the
 # knowledge base>. The data: the group "Gebo Support" (in the data source) with
 # an open ticket holding a customer message, an internal note and an agent
-# phone reply, the customer message carrying relay.log; a closed ticket; the group
+# phone reply, the customer message carrying relay.log and the internal note
+# relay-config.txt; a closed ticket; the group
 # "Gebo Secret" (out of the data source) with its ticket; a knowledge base with
 # a category, a sub-category, a published answer with an attachment, an
 # internal answer, a draft and an archived answer.
@@ -44,8 +45,11 @@ first = Ticket::Article.create!(ticket: smtp, type: web, sender: by_customer,
 Store.create!(object: 'Ticket::Article', o_id: first.id, filename: 'relay.log',
               data: "2026-11-02 09:14:03 relay[2231]: 552 5.3.4 message too large (12MB)\n",
               preferences: { 'Content-Type' => 'text/plain' })
-Ticket::Article.create!(ticket: smtp, type: note, sender: by_agent, internal: true, content_type: 'text/html',
-                        subject: 'internal', body: '<p>Confirmed on production too, the relay limit is <b>10MB</b>.</p>')
+internal_note = Ticket::Article.create!(ticket: smtp, type: note, sender: by_agent, internal: true,
+                                        content_type: 'text/html', subject: 'internal',
+                                        body: '<p>Confirmed on production too, the relay limit is <b>10MB</b>.</p>')
+Store.create!(object: 'Ticket::Article', o_id: internal_note.id, filename: 'relay-config.txt',
+              data: "smtpd_message_size_limit = 10240000\n", preferences: { 'Content-Type' => 'text/plain' })
 Ticket::Article.create!(ticket: smtp, type: phone, sender: by_agent, internal: false, content_type: 'text/html',
                         from: 'Gebo Support <support@example.com>', to: 'carla@example.com',
                         subject: "RE: #{smtp.title}",

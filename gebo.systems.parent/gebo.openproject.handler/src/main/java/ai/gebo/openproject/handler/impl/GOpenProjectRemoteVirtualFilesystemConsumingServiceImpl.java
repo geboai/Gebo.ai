@@ -48,7 +48,9 @@ import ai.gebo.systems.abstraction.layer.model.ContentsAccessError.ContentsAcces
 /**
  * Reads the selected OpenProject projects, sections, work packages, documents,
  * meetings and news into a knowledge base. Each item becomes a markdown document,
- * attachments are streamed as they are.
+ * attachments are streamed as they are, and every internal comment of a work
+ * package is a markdown document of its own, flagged internal in its meta infos
+ * ({@link OpenProjectNativePositionObject#OPENPROJECT_INTERNAL_COMMENT}).
  */
 public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 		GAbstractRemoteVirtualFilesystemConsumingService<GOpenProjectSystem, GOpenProjectProjectEndpoint, OpenProjectNativePositionObject, OpenProjectNavigationCoordinates, OpenProjectResourceReference>
@@ -219,6 +221,8 @@ public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 			return metaString(metas, OpenProjectNativePositionObject.OPENPROJECT_NEWS_ID);
 		case ATTACHMENT:
 			return metaString(metas, OpenProjectNativePositionObject.OPENPROJECT_ATTACHMENT_ID);
+		case INTERNAL_COMMENT:
+			return metaString(metas, OpenProjectNativePositionObject.OPENPROJECT_ACTIVITY_ID);
 		default:
 			return null;
 		}
@@ -241,6 +245,7 @@ public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 		}
 		reference.projectId = metaString(metas, OpenProjectNativePositionObject.OPENPROJECT_PROJECT_ID);
 		reference.itemId = itemIdOf(reference.type, metas);
+		reference.workPackageId = metaString(metas, OpenProjectNativePositionObject.OPENPROJECT_WORK_PACKAGE_ID);
 		reference.contentType = metaString(metas, OpenProjectNativePositionObject.OPENPROJECT_CONTENT_TYPE);
 		return reference;
 	}
@@ -263,8 +268,8 @@ public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	/**
-	 * Opens an item: work packages, documents, meetings (or their contents) and
-	 * news as their markdown rendering, attachments as they are.
+	 * Opens an item: work packages, documents, meetings (or their contents), news
+	 * and internal comments as their markdown rendering, attachments as they are.
 	 */
 	static InputStream open(OpenProjectResourceReference reference, OpenProjectRemoteTree tree)
 			throws GeboContentHandlerSystemException, IOException {
@@ -299,6 +304,13 @@ public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 			break;
 		case NEWS:
 			text = OpenProjectMarkdownRenderer.renderNews(tree.news(id), tree::userName, base);
+			break;
+		case INTERNAL_COMMENT: {
+			Map<String, Object> activity = tree.activity(id);
+			String workPackage = reference.workPackageId != null ? reference.workPackageId
+					: OpenProjectHal.linkId(activity, "workPackage");
+			text = OpenProjectMarkdownRenderer.renderInternalComment(activity, workPackage, tree::userName, base);
+		}
 			break;
 		case ATTACHMENT:
 			return tree.download(id);
@@ -362,9 +374,11 @@ public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 	}
 
 	/**
-	 * A work package, document, meeting, news or attachment OpenProject answers "not found" for is
-	 * reported deleted; anything else (found, folders, other errors) gives no
-	 * information, so the item is left as it is.
+	 * A work package, document, meeting, news, attachment or internal comment
+	 * OpenProject answers "not found" for is reported deleted, and so is an internal
+	 * comment that is no longer internal or has no text any more (the work package's
+	 * content carries it then); anything else (found, folders, other errors) gives
+	 * no information, so the item is left as it is.
 	 */
 	@Override
 	protected GAbstractVirtualFilesystemObject verifyRemoteObjectExistence(GOpenProjectSystem system,
@@ -390,6 +404,16 @@ public class GOpenProjectRemoteVirtualFilesystemConsumingServiceImpl extends
 				break;
 			case ATTACHMENT:
 				tree.attachment(reference.itemId);
+				break;
+			case INTERNAL_COMMENT:
+				if (!OpenProjectNodes.isInternalComment(tree.activity(reference.itemId))) {
+					if (LOGGER.isDebugEnabled()) {
+						LOGGER.debug("The OpenProject item {} is no longer an internal comment, the document {} is deleted",
+								reference, doc.getCode());
+					}
+					doc.setDeleted(true);
+					return doc;
+				}
 				break;
 			default:
 				return null;

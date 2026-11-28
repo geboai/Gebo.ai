@@ -30,6 +30,15 @@ public class OpenProjectNativePositionObject extends AbstractNativePositionObjec
 	public static final String OPENPROJECT_ATTACHMENT_ID = "OPENPROJECT-ATTACHMENT-ID";
 	public static final String OPENPROJECT_FILE_NAME = "OPENPROJECT-FILE-NAME";
 	public static final String OPENPROJECT_CONTENT_TYPE = "OPENPROJECT-CONTENT-TYPE";
+	/** The id of the activity an internal comment is. */
+	public static final String OPENPROJECT_ACTIVITY_ID = "OPENPROJECT-ACTIVITY-ID";
+	/**
+	 * {@code true} on an internal comment: OpenProject shows it only to the roles
+	 * with {@code view_internal_comments}, not to whoever sees the work package.
+	 */
+	public static final String OPENPROJECT_INTERNAL_COMMENT = "OPENPROJECT-INTERNAL-COMMENT";
+	/** The id of the OpenProject user who wrote an internal comment. */
+	public static final String OPENPROJECT_COMMENT_AUTHOR_ID = "OPENPROJECT-COMMENT-AUTHOR-ID";
 
 	private OpenProjectPathNodeType type = null;
 	/** The id of the node within its type (see {@link OpenProjectPathComponent}). */

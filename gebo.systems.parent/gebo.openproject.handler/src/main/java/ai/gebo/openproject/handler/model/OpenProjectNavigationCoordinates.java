@@ -41,6 +41,7 @@ public class OpenProjectNavigationCoordinates extends AbstractNavigationCoordina
 		case MEETING, MEETING_CONTENT -> "meeting " + last.id;
 		case NEWS -> "news " + last.id;
 		case ATTACHMENT -> "attachment " + last.id;
+		case INTERNAL_COMMENT -> "internal comment " + last.id;
 		default -> last.toString();
 		};
 		return what + " of " + where;

@@ -23,8 +23,10 @@ import ai.gebo.redmine.client.model.WikiPage;
 
 /**
  * Renders a Redmine issue (its fields, description, related issues,
- * attachments and notes) and a wiki page as markdown documents. Redmine text
- * is kept as written (textile or markdown, as the server is configured).
+ * attachments and public notes), a private note of an issue and a wiki page as
+ * markdown documents. Redmine text is kept as written (textile or markdown, as
+ * the server is configured). The text of a private note is never part of the
+ * issue: it is a document of its own.
  */
 final class RedmineMarkdownRenderer {
 	private static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
@@ -91,22 +93,52 @@ final class RedmineMarkdownRenderer {
 		}
 		renderAttachments(out, issue.getAttachments());
 		List<IssueJournalsInner> journals = issue.getJournals();
-		if (journals != null && journals.stream().anyMatch(j -> j.getNotes() != null && !j.getNotes().isBlank())) {
+		if (journals != null && journals.stream().anyMatch(RedmineMarkdownRenderer::isPublicNote)) {
 			out.append("\n## Notes\n");
 			for (IssueJournalsInner journal : journals) {
-				if (journal.getNotes() == null || journal.getNotes().isBlank()) {
+				if (!isPublicNote(journal)) {
 					continue;
 				}
 				out.append("\n### ").append(journal.getUser() != null ? journal.getUser().getName() : "Unknown");
 				if (journal.getCreatedOn() != null) {
 					out.append(", ").append(DATE_TIME.format(journal.getCreatedOn()));
 				}
-				if (Boolean.TRUE.equals(journal.getPrivateNotes())) {
-					out.append(" (private note)");
-				}
 				out.append("\n\n").append(journal.getNotes().trim()).append('\n');
 			}
 		}
+		return out.toString();
+	}
+
+	/**
+	 * A journal whose notes the issue content shows: not private, and saying
+	 * something.
+	 */
+	private static boolean isPublicNote(IssueJournalsInner journal) {
+		return !Boolean.TRUE.equals(journal.getPrivateNotes()) && journal.getNotes() != null
+				&& !journal.getNotes().isBlank();
+	}
+
+	/**
+	 * A private note of an issue: the issue it belongs to, who wrote it and when,
+	 * and the note.
+	 */
+	static String renderPrivateNote(Issue issue, IssueJournalsInner journal, String baseUri) {
+		StringBuilder out = new StringBuilder();
+		out.append("# Private note on ")
+				.append(issue.getTracker() != null ? issue.getTracker().getName() + " " : "").append("#")
+				.append(issue.getId()).append(": ").append(issue.getSubject() != null ? issue.getSubject() : "")
+				.append("\n\n");
+		field(out, "Project", name(issue.getProject()));
+		field(out, "Issue", "#" + issue.getId());
+		field(out, "Author", name(journal.getUser()));
+		field(out, "Created on", journal.getCreatedOn() != null ? DATE_TIME.format(journal.getCreatedOn()) : null);
+		field(out, "Updated on", journal.getUpdatedOn() != null && !journal.getUpdatedOn().equals(journal.getCreatedOn())
+				? DATE_TIME.format(journal.getUpdatedOn())
+				: null);
+		field(out, "Visibility", "private note");
+		field(out, "URL", baseUri + "/issues/" + issue.getId());
+		out.append("\n## Note\n\n").append(journal.getNotes() != null ? journal.getNotes().trim() : "")
+				.append('\n');
 		return out.toString();
 	}
 

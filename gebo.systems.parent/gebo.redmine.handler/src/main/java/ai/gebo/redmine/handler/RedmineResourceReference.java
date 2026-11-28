@@ -22,11 +22,13 @@ public class RedmineResourceReference implements IGRemoteVirtualFilesystemResour
 	public Integer issueId = null;
 	public String wikiTitle = null;
 	public Integer attachmentId = null;
+	/** The journal of a private note. */
+	public Integer journalId = null;
 	public String contentType = null;
 
 	@Override
 	public String toString() {
 		return "{type=" + type + ", projectId=" + projectId + ", issueId=" + issueId + ", wikiTitle=" + wikiTitle
-				+ ", attachmentId=" + attachmentId + ", contentType=" + contentType + "}";
+				+ ", attachmentId=" + attachmentId + ", journalId=" + journalId + ", contentType=" + contentType + "}";
 	}
 }
