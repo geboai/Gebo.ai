@@ -27,7 +27,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.FieldSource;
 import org.springframework.ai.document.Document;
@@ -38,7 +40,12 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
+import ai.gebo.application.messaging.workflow.GStandardWorkflow;
+import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
+import ai.gebo.knowledgebase.repositories.UserMessageRepository;
+import ai.gebo.model.GUserMessage;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.redmine.handler.GRedmineProjectEndpoint;
 import ai.gebo.redmine.handler.GRedmineSystem;
@@ -86,6 +93,8 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 
 	@Autowired
 	RedmineSystemRepository redmineSystemsRepository;
+	@Autowired
+	UserMessageRepository userMessageRepository;
 
 	/**
 	 * The documents of the seeded data: issues #1 (with its attachment), #2 (sub-issue
@@ -153,6 +162,74 @@ public class RedmineIngestionIntegrationTest extends AbstractBaseTestLLmsIntegra
 		cleanPersistent(endpoint);
 		persistentObjectManager.delete(system);
 		secretsAccessService.deleteSecret(secretId);
+	}
+
+	/**
+	 * A selected project of a Redmine that cannot be reached is one failure: the
+	 * handler records it, with what the administrator can do, and the shared walk
+	 * does not record it a second time; it used to be told three times (the
+	 * handler's error, its own message and the walk's error).
+	 */
+	@Test
+	public void aRedmineThatCannotBeReachedIsToldOnce() throws Exception {
+		GeboTokenContent token = new GeboTokenContent();
+		token.setToken("not-a-key");
+		String secretId = secretsAccessService.storeSecret(token, "Unreachable Redmine test account",
+				RedmineContentManagementHandlerImpl.REDMINE);
+		String unreachable = "http://localhost:1";
+		GRedmineSystem system = new GRedmineSystem();
+		system.setDescription("Unreachable Redmine system");
+		system.setBaseUri(unreachable);
+		system.setSecretCode(secretId);
+		system.setUsedCapabilities(List.of(GSystemRole.DOCUMENTS_MANAGEMENT));
+		system.setCreationDate(new Date());
+		system.setModificationDate(new Date());
+		system.setContentManagementSystemType(RedmineContentManagementHandlerImpl.REDMINE);
+		system = persistentObjectManager.insert(system);
+		GRedmineProjectEndpoint endpoint = createAndPersist("Unreachable Redmine data source",
+				GRedmineProjectEndpoint.class);
+		endpoint.setRedmineSystemCode(system.getCode());
+		VFilesystemReference reference = new VFilesystemReference();
+		reference.root = RedmineNavigationUtil.toRoot("gebo-demo", "gebo-demo", unreachable + "/projects/gebo-demo");
+		endpoint.setPaths(new ArrayList<VFilesystemReference>(List.of(reference)));
+		endpoint = persistentObjectManager.update(endpoint);
+
+		GJobStatus job = ingestionJobService.executeSyncJob(endpoint, null, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name());
+		List<GUserMessage> errors = awaitErrorMessages(job.getCode());
+
+		assertEquals(1, errors.size(), "one failure, one error message: " + errors.stream()
+				.map(m -> m.getSummary() + " / " + m.getDetail()).collect(Collectors.joining(" | ")));
+		assertTrue(errors.get(0).getSummary().contains("the Redmine project gebo-demo"),
+				"it names the project as the administrator reads it: " + errors.get(0).getSummary());
+		assertTrue(errors.get(0).getDetail().contains("Cannot connect to " + unreachable),
+				"it tells what to check: " + errors.get(0).getDetail());
+
+		cleanPersistent(endpoint);
+		persistentObjectManager.delete(system);
+		secretsAccessService.deleteSecret(secretId);
+	}
+
+	private List<GUserMessage> awaitErrorMessages(String jobCode) throws InterruptedException {
+		List<GUserMessage> errors = List.of();
+		// the jobs master stores the user messages in batches, flushed when its queue
+		// waits for a while: a message can take some tens of seconds to be stored
+		for (int i = 0; i < 60 && errors.isEmpty(); i++) {
+			errors = errorMessagesOf(jobCode);
+			if (errors.isEmpty()) {
+				Thread.sleep(1000);
+			}
+		}
+		// a few more seconds for a second message, if one were sent
+		Thread.sleep(5000);
+		return errorMessagesOf(jobCode);
+	}
+
+	private List<GUserMessage> errorMessagesOf(String jobCode) {
+		try (var messages = userMessageRepository.findByJobId(jobCode)) {
+			return messages.filter(m -> m.getSeverity() == GUserMessage.MsgServerity.error)
+					.collect(Collectors.toList());
+		}
 	}
 
 	private static void assertContains(List<Document> stored, String text, String what) {

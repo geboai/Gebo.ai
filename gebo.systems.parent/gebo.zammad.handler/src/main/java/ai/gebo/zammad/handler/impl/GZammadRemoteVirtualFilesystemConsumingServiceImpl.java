@@ -33,7 +33,6 @@ import ai.gebo.knlowledgebase.model.contents.GAbstractVirtualFilesystemObject;
 import ai.gebo.knlowledgebase.model.contents.GVirtualFolder;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.zammad.handler.GZammadProjectEndpoint;
-import ai.gebo.model.GUserMessage;
 import ai.gebo.zammad.handler.GZammadSystem;
 import ai.gebo.zammad.handler.IGZammadVirtualFilesystemConsumingService;
 import ai.gebo.zammad.handler.ZammadResourceReference;
@@ -152,11 +151,11 @@ public class GZammadRemoteVirtualFilesystemConsumingServiceImpl extends
 			return resolve(position, environment);
 		} catch (RestClientException | IllegalArgumentException e) {
 			LOGGER.error("Cannot read the Zammad item " + position, e);
-			errorConsumer.accept(ContentsAccessError.of(e, ContentsAccessedObjectType.FOLDER, position.toString()));
-			// the shared consuming loop only logs this exception: the job's messages are
-			// where the administrator reads why nothing was ingested
-			messagesConsumer.accept(GUserMessage.errorMessage("Cannot read " + position.describe(),
-					ZammadErrors.of(e, system.getBaseUri())));
+			// recorded once, as the administrator reads it in the job messages
+			final ContentsAccessError error = ContentsAccessError.of(e, ContentsAccessedObjectType.FOLDER,
+					position.describe());
+			error.setMsg(ZammadErrors.of(e, system.getBaseUri()));
+			errorConsumer.accept(error);
 			throw new GeboContentHandlerSystemException("Cannot read the Zammad item " + position, e);
 		}
 	}
