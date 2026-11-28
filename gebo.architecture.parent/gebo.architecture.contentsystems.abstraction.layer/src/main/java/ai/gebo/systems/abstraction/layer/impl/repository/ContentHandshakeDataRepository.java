@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 
 import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
 
@@ -51,4 +52,13 @@ public interface ContentHandshakeDataRepository extends MongoRepository<ContentH
      * @param s A list of strings representing the content codes to delete.
      */
     public void deleteByContentCodeIn(List<String> s);
+
+    /**
+     * Deletes the acknowledgements whose content code matches a regular expression.
+     *
+     * @param regex the regular expression the content codes match
+     * @return the number of acknowledgements deleted
+     */
+    @Query(value = "{ 'contentCode': { $regex: ?0 } }", delete = true)
+    public long deleteByContentCodeMatching(String regex);
 }

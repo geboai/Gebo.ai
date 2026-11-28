@@ -93,4 +93,18 @@ public interface IGContentDispatchingEvaluator {
      */
     public void forgetIngested(java.util.Collection<String> contentCodes);
 
+    /**
+     * Forgets the acknowledgements of every content of a data source: the data
+     * source is deleted, its stores erased. Its contents are found by their codes,
+     * which all start with {@code <knowledge base>/<project>/<data source>/}, so
+     * this works once the document references are gone too. A data source made
+     * again under the same name, and so with the same code, then ingests its
+     * contents as never seen, instead of skipping the unchanged ones.
+     *
+     * @param projectCode  the code of the data source's project
+     * @param endpointCode the code of the data source
+     * @return the number of acknowledgements forgotten
+     */
+    public long forgetIngestedOfDataSource(String projectCode, String endpointCode);
+
 }

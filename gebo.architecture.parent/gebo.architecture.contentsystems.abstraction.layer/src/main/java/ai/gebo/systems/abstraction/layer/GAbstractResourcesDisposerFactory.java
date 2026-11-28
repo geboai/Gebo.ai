@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileSystemUtils;
 
 import ai.gebo.application.messaging.IGMessageReceiver;
@@ -30,7 +31,7 @@ import ai.gebo.knlowledgebase.model.systems.GContentManagementSystem;
 import ai.gebo.knowledgebase.repositories.IGBaseMongoDBProjectEndpointRepository;
 import ai.gebo.knowledgebase.repositories.JobStatusRepository;
 import ai.gebo.model.base.GObjectRef;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * AI generated comments An abstract factory class for creating instances that
@@ -41,7 +42,7 @@ import lombok.AllArgsConstructor;
  * @param <EndpointType> The type of endpoint that this factory can create
  *                       resource disposers for.
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GProjectEndpoint>
 		implements IGMessageReceiverFactory {
 
@@ -63,6 +64,13 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 	protected final JobStatusRepository jobStatusRepo;
 
 	protected final IGPersistentObjectManager persistentObjectManager;
+
+	/**
+	 * Forgets the ingestion acknowledgements of a deleted data source's contents;
+	 * injected, so the subclasses' constructors stay as they are.
+	 */
+	@Autowired(required = false)
+	protected IGContentDispatchingEvaluator ingestionAcknowledgements;
 
 	/**
 	 * Gets the type of system component managed by this factory.
@@ -192,6 +200,32 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 	}
 
 	/**
+	 * Forgets the ingestion acknowledgements of a deleted data source's contents:
+	 * its stores are erased, and a data source made again under the same name gets
+	 * the same code, so its unchanged contents would otherwise be skipped as
+	 * already ingested. A failure is logged and does not stop the deletion.
+	 *
+	 * @param projectCode  the code of the data source's project
+	 * @param endpointCode the code of the data source
+	 */
+	protected void forgetIngested(String projectCode, String endpointCode) {
+		if (ingestionAcknowledgements == null) {
+			LOGGER.warn("No ingestion acknowledgements service: those of the data source " + endpointCode
+					+ " are kept");
+			return;
+		}
+		try {
+			final long forgotten = ingestionAcknowledgements.forgetIngestedOfDataSource(projectCode, endpointCode);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Deleted data source " + endpointCode + " of project " + projectCode + ": " + forgotten
+						+ " ingestion acknowledgement(s) forgotten");
+			}
+		} catch (Throwable th) {
+			LOGGER.error("Problem forgetting the ingestion acknowledgements of the data source " + endpointCode, th);
+		}
+	}
+
+	/**
 	 * Creates an instance of IGMessageReceiver to handle incoming messages.
 	 *
 	 * @return A new instance of IGMessageReceiver.
@@ -222,6 +256,7 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 						GCentralizedProjectEndpoint endpoint = payload.getEndpoint();
 						GObjectRef<GProjectEndpoint> ref = endpoint.getRemoteProjectReference();
 						jobStatusRepo.deleteByProjectEndpointReference(ref);
+						forgetIngested(endpoint.getParentProjectCode(), ref != null ? ref.getCode() : endpoint.getCode());
 						EndpointType realEndpoint = (EndpointType) persistentObjectManager.findByReference(ref,
 								GProjectEndpoint.class);
 						if (isCanBeDisposedResources(realEndpoint)) {
@@ -241,6 +276,7 @@ public abstract class GAbstractResourcesDisposerFactory<EndpointType extends GPr
 					for (EndpointType endpoint : endpoints) {
 						GObjectRef<GProjectEndpoint> ref = GObjectRef.of(endpoint);
 						jobStatusRepo.deleteByProjectEndpointReference(ref);
+						forgetIngested(endpoint.getParentProjectCode(), endpoint.getCode());
 						if (isCanBeDisposedResources(endpoint)) {
 							LOGGER.info("Disposing resources for:" + msg.toString());
 							disposeResources(endpoint, null);
