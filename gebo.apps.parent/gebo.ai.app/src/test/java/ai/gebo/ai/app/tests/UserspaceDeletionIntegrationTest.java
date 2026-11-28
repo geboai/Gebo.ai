@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -21,23 +22,30 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
 import ai.gebo.application.messaging.workflow.GStandardWorkflow;
 import ai.gebo.application.messaging.workflow.GWorkflowType;
+import ai.gebo.architecture.persistence.GeboPersistenceException;
 import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
 import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
 import ai.gebo.knlowledgebase.model.jobs.GJobStatus;
 import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.security.config.GeboAISecurityConfig;
+import ai.gebo.userspace.handler.GUserspaceFile;
 import ai.gebo.userspace.handler.GUserspaceProjectEndpoint;
 import ai.gebo.userspace.handler.IGUserspaceContentManagementSystemHandler;
 import ai.gebo.userspace.handler.controllers.UserspaceController;
+import ai.gebo.userspace.handler.dto.UserspaceFileDto;
 import ai.gebo.userspace.handler.dto.UserspaceFolderDto;
 import ai.gebo.userspace.handler.dto.UserspaceKnowledgebaseDto;
+import ai.gebo.userspace.handler.repository.UserspaceFileRepository;
+import ai.gebo.userspace.handler.service.UserspaceManagementServiceImpl;
 import ai.gebo.workflows.compute.model.JobSummary;
 
 /**
@@ -46,20 +54,87 @@ import ai.gebo.workflows.compute.model.JobSummary;
  * then the folder and the knowledge base. Both deletions used to check the owner
  * and delete nothing; the data source deletion they rely on was refused to anyone
  * not an administrator. A folder named next to another knowledge base is refused.
+ * The owner deletes single files too: they leave the folder at once and the
+ * knowledge base at the folder's next publish; nobody else deletes them.
  */
 public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegrationTests {
 	private static final String OWNER = "userspace.owner@gebo.ai";
+	private static final String SOMEONE_ELSE = "userspace.someone.else@gebo.ai";
 
 	@Autowired
 	UserspaceController userspaceController;
 	@Autowired
 	IGUserspaceContentManagementSystemHandler userspaceHandler;
+	@Autowired
+	UserspaceManagementServiceImpl uploadService;
+	@Autowired
+	UserspaceFileRepository userspaceFiles;
 
 	@Override
 	protected void beforeEachCallback() throws Exception {
 		if (getUser(OWNER) == null) {
 			createUser(OWNER, List.of(GeboAISecurityConfig.USER_ROLE));
 		}
+		if (getUser(SOMEONE_ELSE) == null) {
+			createUser(SOMEONE_ELSE, List.of(GeboAISecurityConfig.USER_ROLE));
+		}
+	}
+
+	@Test
+	public void theOwnerDeletesAFileAndTheNextPublishRemovesItsDocument() throws Exception {
+		actAs(OWNER);
+		final UserspaceKnowledgebaseDto knowledgeBase = newKnowledgeBase("knowledge base with files");
+		final UserspaceFolderDto folder = newFolder(knowledgeBase, "folder with files");
+		final GUserspaceProjectEndpoint uploads = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
+				folder.uploadCode);
+		final Path files = Path.of(localFolderDiscoveryService.getLocalPersistentFolder(userspaceHandler.getSystem(uploads),
+				uploads));
+		uploadService.manageUpload(uploads.getCode(),
+				List.of(multipartOf(TEST_001_DOCX_FILE), multipartOf(TEST_001_ODT_FILE)));
+		final String deletedName = Path.of(TEST_001_DOCX_FILE).getFileName().toString();
+		final String keptName = Path.of(TEST_001_ODT_FILE).getFileName().toString();
+
+		impersonateAdminUser();
+		enableWorkflowSteps(persistentObjectManager.findById(GKnowledgeBase.class, knowledgeBase.code),
+				persistentObjectManager.findById(GProject.class, folder.code), uploads);
+		awaitFinished(ingestionJobService.executeSyncJob(uploads, null, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name()));
+		final GDocumentReference deleted = documentNamed(uploads, deletedName);
+		final GDocumentReference kept = documentNamed(uploads, keptName);
+		assertNotNull(deleted, "the first file is ingested");
+		assertNotNull(kept, "the second file is ingested");
+		assertTrue(awaitVectors(deleted.getCode(), true), "the first file is indexed");
+		assertTrue(awaitVectors(kept.getCode(), true), "the second file is indexed");
+
+		actAs(SOMEONE_ELSE);
+		assertThrows(GeboPersistenceException.class,
+				() -> userspaceController.deleteUserspaceFiles(List.of(fileOf(uploads, deletedName))),
+				"only the folder's owner or an administrator deletes its files");
+		actAs(OWNER);
+		assertThrows(RuntimeException.class,
+				() -> userspaceController.deleteUserspaceFiles(
+						List.of(fileOf(uploads, deletedName), fileOf(uploads, "../" + keptName))),
+				"a name cannot lead out of the folder");
+		assertTrue(Files.exists(files.resolve(deletedName)), "a refused request deletes nothing");
+
+		userspaceController.deleteUserspaceFiles(List.of(fileOf(uploads, deletedName)));
+		assertFalse(Files.exists(files.resolve(deletedName)), "the file leaves the folder");
+		assertTrue(Files.exists(files.resolve(keptName)), "the other file stays");
+		final GUserspaceFile record = userspaceFiles.findById(uploads.getCode() + "/" + deletedName).orElse(null);
+		assertTrue(record != null && Boolean.TRUE.equals(record.getDeleted()), "its upload record is deleted");
+		assertTrue(userspaceController.listUserspaceFiles(uploads.getCode()).stream()
+				.noneMatch(x -> deletedName.equals(x.name)), "it is no longer listed");
+
+		impersonateAdminUser();
+		awaitFinished(ingestionJobService.executeSyncJob(uploads, null, GWorkflowType.STANDARD.name(),
+				GStandardWorkflow.INGESTION.name()));
+		assertNull(documentNamed(uploads, deletedName), "the next publish deletes its document");
+		assertTrue(awaitVectors(deleted.getCode(), false), "and erases its vectors");
+		assertNotNull(documentNamed(uploads, keptName), "the other document stays");
+		assertTrue(awaitVectors(kept.getCode(), true), "with its vectors");
+
+		actAs(OWNER);
+		userspaceController.deleteUserKnowledgebase(knowledgeBase);
 	}
 
 	@Test
@@ -142,6 +217,24 @@ public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegr
 		return userspaceController.newUserspaceFolder(folder);
 	}
 
+	private GDocumentReference documentNamed(GUserspaceProjectEndpoint endpoint, String name) throws Exception {
+		return documentsOf(endpoint).stream().filter(d -> name.equals(d.getName())).findFirst().orElse(null);
+	}
+
+	private static UserspaceFileDto fileOf(GUserspaceProjectEndpoint endpoint, String name) {
+		final UserspaceFileDto file = new UserspaceFileDto();
+		file.parentUserspaceUploadCode = endpoint.getCode();
+		file.name = name;
+		return file;
+	}
+
+	private MultipartFile multipartOf(String classPathElement) throws Exception {
+		try (InputStream stream = getClass().getClassLoader().getResourceAsStream(classPathElement)) {
+			return new MockMultipartFile("files[]", Path.of(classPathElement).getFileName().toString(), null,
+					stream.readAllBytes());
+		}
+	}
+
 	private List<GDocumentReference> documentsOf(GUserspaceProjectEndpoint endpoint) throws Exception {
 		return persistentObjectManager.findAll(GDocumentReference.class).stream()
 				.filter(d -> d.getProjectEndpointReference() != null
@@ -179,7 +272,11 @@ public class UserspaceDeletionIntegrationTest extends AbstractBaseTestLLmsIntegr
 	}
 
 	private static void actAsTheOwner() {
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(OWNER,
+		actAs(OWNER);
+	}
+
+	private static void actAs(String username) {
+		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(username,
 				"NOPASSWORD", List.of(new SimpleGrantedAuthority(GeboAISecurityConfig.USER_ROLE))));
 	}
 }

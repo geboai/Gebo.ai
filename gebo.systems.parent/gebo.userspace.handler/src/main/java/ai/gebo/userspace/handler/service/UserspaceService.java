@@ -16,9 +16,11 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -430,13 +432,67 @@ public class UserspaceService {
 	}
 
 	/**
-	 * Deletes userspace files
-	 * 
-	 * @param files The list of file DTOs to delete
+	 * Deletes userspace files: each is removed from its folder's files and its
+	 * upload record is marked deleted. As for any data source whose files go, the
+	 * knowledge base loses their documents at the folder's next publish: the
+	 * handler hands the documents of the deleted records over as deleted, and the
+	 * end of the ingestion erases their vectors, graph and full-text fragments.
+	 * Every file is checked before any is deleted.
+	 *
+	 * @param files           The list of file DTOs to delete
+	 * @param allowedToDelete whether the current user may delete the contents of a
+	 *                        folder's data source
+	 * @throws GeboPersistenceException          If a file is not one the user may
+	 *                                           delete, or the database fails
+	 * @throws GeboContentHandlerSystemException If the folder's files cannot be
+	 *                                           located
+	 * @throws IOException                       If a file cannot be deleted
 	 */
 
-	public void deleteUserspaceFiles(List<UserspaceFileDto> files) {
-		// Method implementation is empty
+	public void deleteUserspaceFiles(List<UserspaceFileDto> files,
+			Predicate<GUserspaceProjectEndpoint> allowedToDelete)
+			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
+		final Map<String, GUserspaceProjectEndpoint> endpoints = new HashMap<String, GUserspaceProjectEndpoint>();
+		final Map<UserspaceFileDto, Path> targets = new LinkedHashMap<UserspaceFileDto, Path>();
+		for (UserspaceFileDto file : files) {
+			if (file.parentUserspaceUploadCode == null || file.name == null) {
+				throw new RuntimeException("File with null name or parentUserspaceUploadCode");
+			}
+			GUserspaceProjectEndpoint endpoint = endpoints.get(file.parentUserspaceUploadCode);
+			if (endpoint == null) {
+				endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
+						file.parentUserspaceUploadCode);
+				if (endpoint == null) {
+					throw new RuntimeException("The folder of " + file.name + " does not exist");
+				}
+				if (!allowedToDelete.test(endpoint)) {
+					throw new GeboPersistenceException("Only the folder's owner or an administrator can delete its files");
+				}
+				endpoints.put(endpoint.getCode(), endpoint);
+			}
+			final Path folder = Path.of(localFolderService.getLocalPersistentFolder(handler.getSystem(endpoint), endpoint))
+					.toAbsolutePath().normalize();
+			final Path target = folder.resolve(file.name).normalize();
+			// only a file of this folder: a name cannot lead elsewhere
+			if (!folder.equals(target.getParent()) || Files.isDirectory(target)) {
+				throw new RuntimeException("The file " + file.name + " is not in this folder");
+			}
+			targets.put(file, target);
+		}
+		for (Map.Entry<UserspaceFileDto, Path> entry : targets.entrySet()) {
+			final UserspaceFileDto file = entry.getKey();
+			Files.deleteIfExists(entry.getValue());
+			final String recordCode = file.parentUserspaceUploadCode + "/" + entry.getValue().getFileName();
+			GUserspaceFile record = filesRepository.findById(recordCode).orElse(null);
+			if (record == null) {
+				record = new GUserspaceFile();
+				record.setCode(recordCode);
+				record.setName(entry.getValue().getFileName().toString());
+				record.setUserspaceEndpointCode(file.parentUserspaceUploadCode);
+			}
+			record.setDeleted(true);
+			filesRepository.save(record);
+		}
 	}
 
 	/**
