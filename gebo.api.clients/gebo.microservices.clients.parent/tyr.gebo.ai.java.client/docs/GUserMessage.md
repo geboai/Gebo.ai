@@ -3,11 +3,11 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**severity** | [**SeverityEnum**](#SeverityEnum) |  | 
+**key** | **String** |  |  [optional]
 **summary** | **String** |  | 
 **detail** | **String** |  | 
+**severity** | [**SeverityEnum**](#SeverityEnum) |  | 
 **id** | **String** |  | 
-**key** | **String** |  |  [optional]
 **jobId** | **String** |  | 
 **timestamp** | **Long** |  | 
 

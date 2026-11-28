@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-22T12:47:04.961577598+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:18:29.494262946+01:00[Europe/Rome]")
 
 public class WaitingConditionsAdminControllerApi {
     private ApiClient apiClient;
@@ -51,8 +51,8 @@ public class WaitingConditionsAdminControllerApi {
      * @return WaitingConditionsActionAck
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public WaitingConditionsActionAck abandon1(String blockCode) throws RestClientException {
-        return abandon1WithHttpInfo(blockCode).getBody();
+    public WaitingConditionsActionAck adminAbandon(String blockCode) throws RestClientException {
+        return adminAbandonWithHttpInfo(blockCode).getBody();
     }
 
     /**
@@ -63,11 +63,11 @@ public class WaitingConditionsAdminControllerApi {
      * @return ResponseEntity&lt;WaitingConditionsActionAck&gt;
      * @throws RestClientException if an error occurs while attempting to invoke the API
      */
-    public ResponseEntity<WaitingConditionsActionAck> abandon1WithHttpInfo(String blockCode) throws RestClientException {
+    public ResponseEntity<WaitingConditionsActionAck> adminAbandonWithHttpInfo(String blockCode) throws RestClientException {
         Object postBody = null;
         // verify the required parameter 'blockCode' is set
         if (blockCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'blockCode' when calling abandon1");
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'blockCode' when calling adminAbandon");
         }
         String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WaitingConditionsAdminController/abandon").build().toUriString();
         
@@ -81,6 +81,55 @@ public class WaitingConditionsAdminControllerApi {
          };
         final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
         final String[] contentTypes = {  };
+        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
+
+        String[] authNames = new String[] {  };
+
+        ParameterizedTypeReference<WaitingConditionsActionAck> returnType = new ParameterizedTypeReference<WaitingConditionsActionAck>() {};
+        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
+    }
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param blockCode  (required)
+     * @param body  (optional)
+     * @return WaitingConditionsActionAck
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public WaitingConditionsActionAck adminGoOnWithout(String blockCode, List<String> body) throws RestClientException {
+        return adminGoOnWithoutWithHttpInfo(blockCode, body).getBody();
+    }
+
+    /**
+     * 
+     * 
+     * <p><b>200</b> - OK
+     * @param blockCode  (required)
+     * @param body  (optional)
+     * @return ResponseEntity&lt;WaitingConditionsActionAck&gt;
+     * @throws RestClientException if an error occurs while attempting to invoke the API
+     */
+    public ResponseEntity<WaitingConditionsActionAck> adminGoOnWithoutWithHttpInfo(String blockCode, List<String> body) throws RestClientException {
+        Object postBody = body;
+        // verify the required parameter 'blockCode' is set
+        if (blockCode == null) {
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'blockCode' when calling adminGoOnWithout");
+        }
+        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WaitingConditionsAdminController/goOnWithout").build().toUriString();
+        
+        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
+        final HttpHeaders headerParams = new HttpHeaders();
+        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
+        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "blockCode", blockCode));
+
+        final String[] accepts = { 
+            "application/json"
+         };
+        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
+        final String[] contentTypes = { 
+            "application/json"
+         };
         final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
 
         String[] authNames = new String[] {  };
@@ -125,54 +174,5 @@ public class WaitingConditionsAdminControllerApi {
 
         ParameterizedTypeReference<List<WaitingBlockView>> returnType = new ParameterizedTypeReference<List<WaitingBlockView>>() {};
         return apiClient.invokeAPI(localVarPath, HttpMethod.GET, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
-    }
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @param blockCode  (required)
-     * @param body  (optional)
-     * @return WaitingConditionsActionAck
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public WaitingConditionsActionAck goOnWithout1(String blockCode, List<String> body) throws RestClientException {
-        return goOnWithout1WithHttpInfo(blockCode, body).getBody();
-    }
-
-    /**
-     * 
-     * 
-     * <p><b>200</b> - OK
-     * @param blockCode  (required)
-     * @param body  (optional)
-     * @return ResponseEntity&lt;WaitingConditionsActionAck&gt;
-     * @throws RestClientException if an error occurs while attempting to invoke the API
-     */
-    public ResponseEntity<WaitingConditionsActionAck> goOnWithout1WithHttpInfo(String blockCode, List<String> body) throws RestClientException {
-        Object postBody = body;
-        // verify the required parameter 'blockCode' is set
-        if (blockCode == null) {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Missing the required parameter 'blockCode' when calling goOnWithout1");
-        }
-        String localVarPath = UriComponentsBuilder.fromPath("/api/admin/WaitingConditionsAdminController/goOnWithout").build().toUriString();
-        
-        final MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<String, String>();
-        final HttpHeaders headerParams = new HttpHeaders();
-        final MultiValueMap<String, Object> formParams = new LinkedMultiValueMap<String, Object>();
-        queryParams.putAll(apiClient.parameterToMultiValueMap(null, "blockCode", blockCode));
-
-        final String[] accepts = { 
-            "application/json"
-         };
-        final List<MediaType> accept = apiClient.selectHeaderAccept(accepts);
-        final String[] contentTypes = { 
-            "application/json"
-         };
-        final MediaType contentType = apiClient.selectHeaderContentType(contentTypes);
-
-        String[] authNames = new String[] {  };
-
-        ParameterizedTypeReference<WaitingConditionsActionAck> returnType = new ParameterizedTypeReference<WaitingConditionsActionAck>() {};
-        return apiClient.invokeAPI(localVarPath, HttpMethod.POST, queryParams, postBody, headerParams, formParams, accept, contentType, authNames, returnType);
     }
 }

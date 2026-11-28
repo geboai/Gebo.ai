@@ -11,8 +11,8 @@
  */
 
 export interface GUserChatInfo { 
-    username?: string;
     description?: string;
+    username?: string;
     code?: string;
     chatProfileCode?: string;
     chatModelCode?: string;

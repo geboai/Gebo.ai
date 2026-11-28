@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost:13019/tyr*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**adminDrillDown**](LlmsUsageAdminLevelControllerApi.md#adminDrillDown) | **POST** /api/admin/LLMSUsageAdminLevelController/drillDown | 
+[**adminExportExcel**](LlmsUsageAdminLevelControllerApi.md#adminExportExcel) | **POST** /api/admin/LLMSUsageAdminLevelController/exportExcel | 
 
 <a name="adminDrillDown"></a>
 # **adminDrillDown**
@@ -48,4 +49,47 @@ No authorization required
 
  - **Content-Type**: application/json
  - **Accept**: application/json
+
+<a name="adminExportExcel"></a>
+# **adminExportExcel**
+> byte[] adminExportExcel(body)
+
+
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.tyr.invoker.ApiException;
+//import gebo.microservices.api.client.tyr.api.LlmsUsageAdminLevelControllerApi;
+
+
+LlmsUsageAdminLevelControllerApi apiInstance = new LlmsUsageAdminLevelControllerApi();
+LLMUsageDrillDownLevel body = new LLMUsageDrillDownLevel(); // LLMUsageDrillDownLevel | 
+try {
+    byte[] result = apiInstance.adminExportExcel(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling LlmsUsageAdminLevelControllerApi#adminExportExcel");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**LLMUsageDrillDownLevel**](LLMUsageDrillDownLevel.md)|  |
+
+### Return type
+
+**byte[]**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
 

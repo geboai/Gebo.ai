@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
  * LLMCredentialsCreationData
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-16T08:30:36.725189957+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:41.358449505+01:00[Europe/Rome]")
 
 public class LLMCredentialsCreationData {
   /**

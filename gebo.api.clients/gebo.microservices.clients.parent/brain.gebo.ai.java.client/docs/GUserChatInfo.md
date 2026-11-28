@@ -3,8 +3,8 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**username** | **String** |  |  [optional]
 **description** | **String** |  |  [optional]
+**username** | **String** |  |  [optional]
 **code** | **String** |  |  [optional]
 **chatProfileCode** | **String** |  |  [optional]
 **chatModelCode** | **String** |  |  [optional]

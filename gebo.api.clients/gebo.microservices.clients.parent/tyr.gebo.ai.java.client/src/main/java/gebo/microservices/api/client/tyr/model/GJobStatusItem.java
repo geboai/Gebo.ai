@@ -24,17 +24,17 @@ import java.util.Date;
  * GJobStatusItem
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-25T09:35:48.933840589+01:00[Europe/Rome]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2026-11-28T08:23:48.033728654+01:00[Europe/Rome]")
 
 public class GJobStatusItem {
   @JsonProperty("description")
   private String description = null;
 
-  @JsonProperty("error")
-  private Boolean error = null;
-
   @JsonProperty("code")
   private String code = null;
+
+  @JsonProperty("error")
+  private Boolean error = null;
 
   @JsonProperty("workflowId")
   private String workflowId = null;
@@ -110,24 +110,6 @@ public class GJobStatusItem {
     this.description = description;
   }
 
-  public GJobStatusItem error(Boolean error) {
-    this.error = error;
-    return this;
-  }
-
-   /**
-   * Get error
-   * @return error
-  **/
-  @Schema(description = "")
-  public Boolean isError() {
-    return error;
-  }
-
-  public void setError(Boolean error) {
-    this.error = error;
-  }
-
   public GJobStatusItem code(String code) {
     this.code = code;
     return this;
@@ -144,6 +126,24 @@ public class GJobStatusItem {
 
   public void setCode(String code) {
     this.code = code;
+  }
+
+  public GJobStatusItem error(Boolean error) {
+    this.error = error;
+    return this;
+  }
+
+   /**
+   * Get error
+   * @return error
+  **/
+  @Schema(description = "")
+  public Boolean isError() {
+    return error;
+  }
+
+  public void setError(Boolean error) {
+    this.error = error;
   }
 
   public GJobStatusItem workflowId(String workflowId) {
@@ -301,8 +301,8 @@ public class GJobStatusItem {
     }
     GJobStatusItem gjobStatusItem = (GJobStatusItem) o;
     return Objects.equals(this.description, gjobStatusItem.description) &&
-        Objects.equals(this.error, gjobStatusItem.error) &&
         Objects.equals(this.code, gjobStatusItem.code) &&
+        Objects.equals(this.error, gjobStatusItem.error) &&
         Objects.equals(this.workflowId, gjobStatusItem.workflowId) &&
         Objects.equals(this.workflowType, gjobStatusItem.workflowType) &&
         Objects.equals(this.projectEndpointReference, gjobStatusItem.projectEndpointReference) &&
@@ -315,7 +315,7 @@ public class GJobStatusItem {
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, error, code, workflowId, workflowType, projectEndpointReference, startDateTime, processing, finished, endDateTime, jobType);
+    return Objects.hash(description, code, error, workflowId, workflowType, projectEndpointReference, startDateTime, processing, finished, endDateTime, jobType);
   }
 
 
@@ -325,8 +325,8 @@ public class GJobStatusItem {
     sb.append("class GJobStatusItem {\n");
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    code: ").append(toIndentedString(code)).append("\n");
+    sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    workflowId: ").append(toIndentedString(workflowId)).append("\n");
     sb.append("    workflowType: ").append(toIndentedString(workflowType)).append("\n");
     sb.append("    projectEndpointReference: ").append(toIndentedString(projectEndpointReference)).append("\n");

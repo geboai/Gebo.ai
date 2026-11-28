@@ -47,6 +47,7 @@ import ai.gebo.security.services.IGSecurityAuditLoggerService;
 import ai.gebo.security.services.IGSecurityAuditLoggerService.SecurityEvent;
 import ai.gebo.security.services.SecurityAuditTaxonomy;
 import jakarta.validation.constraints.NotNull;
+import java.util.stream.Stream;
 
 /**
  * AI generated comments Controller for managing project-related operations for
@@ -394,12 +395,14 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "getRootFolders", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<VFolderInfo> getRootFolders(@NotNull @RequestBody GObjectRef<GProjectEndpoint> endpointRef) {
-		List<VFolderInfo> sorted = new ArrayList<>(this.vfolderRepository
+		final List<VFolderInfo> sorted;
+		try (Stream<GVirtualFolder> folders = this.vfolderRepository
 				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
-						endpointRef.getClassName(), endpointRef.getCode())
-				.map(x -> {
-					return new VFolderInfo(x);
-				}).toList());
+						endpointRef.getClassName(), endpointRef.getCode())) {
+			sorted = new ArrayList<>(folders.map(x -> {
+				return new VFolderInfo(x);
+			}).toList());
+		}
 		sorted.sort(folderComparator);
 		return sorted;
 	}
@@ -412,12 +415,13 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "getRootDocuments", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<VDocumentInfo> getRootDocuments(@NotNull @RequestBody GObjectRef<GProjectEndpoint> endpointRef) {
-		return this.docRepository
+		try (Stream<GDocumentReference> documents = this.docRepository
 				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCodeIsNull(
-						endpointRef.getClassName(), endpointRef.getCode())
-				.map(x -> {
-					return new VDocumentInfo(x);
-				}).toList();
+						endpointRef.getClassName(), endpointRef.getCode())) {
+			return documents.map(x -> {
+				return new VDocumentInfo(x);
+			}).toList();
+		}
 	}
 
 	/**
@@ -442,12 +446,14 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "getChildFolders", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<VFolderInfo> getChildFolders(@NotNull @RequestBody ChildVirtualFSParam dir) {
-		List<VFolderInfo> sorted = new ArrayList<>(this.vfolderRepository
+		final List<VFolderInfo> sorted;
+		try (Stream<GVirtualFolder> folders = this.vfolderRepository
 				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCode(
-						dir.endpointRef.getClassName(), dir.endpointRef.getCode(), dir.folder.code)
-				.map(x -> {
-					return new VFolderInfo(x);
-				}).toList());
+						dir.endpointRef.getClassName(), dir.endpointRef.getCode(), dir.folder.code)) {
+			sorted = new ArrayList<>(folders.map(x -> {
+				return new VFolderInfo(x);
+			}).toList());
+		}
 		sorted.sort(folderComparator);
 		return sorted;
 	}
@@ -460,12 +466,13 @@ public class ProjectsController {
 	 */
 	@PostMapping(value = "getChildDocuments", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public List<VDocumentInfo> getChildDocuments(@NotNull @RequestBody ChildVirtualFSParam dir) {
-		return this.docRepository
+		try (Stream<GDocumentReference> documents = this.docRepository
 				.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndParentVirtualFolderCode(
-						dir.endpointRef.getClassName(), dir.endpointRef.getCode(), dir.folder.code)
-				.map(x -> {
-					return new VDocumentInfo(x);
-				}).toList();
+						dir.endpointRef.getClassName(), dir.endpointRef.getCode(), dir.folder.code)) {
+			return documents.map(x -> {
+				return new VDocumentInfo(x);
+			}).toList();
+		}
 	}
 
 	/**

@@ -116,12 +116,13 @@ public class GCoreMessagesEmitterImpl implements IGMessageEmitter {
 	 * @param payload the deleted knowledge base payload.
 	 */
 	public void sendDeletingPayload(GDeletedKnowledgeBasePayload payload) {
-		Stream<GProject> stream = this.projectsRepo.findByRootKnowledgeBaseCode(payload.getKnowledgeBase().getCode());
-		stream.forEach(x -> {
-			GDeletedProjectPayload projectPayload = new GDeletedProjectPayload();
-			projectPayload.setProject(x);
-			this.sendDeletingPayloadToResourceDisposeComponents(projectPayload);
-		});
+		try (Stream<GProject> stream = this.projectsRepo.findByRootKnowledgeBaseCode(payload.getKnowledgeBase().getCode())) {
+			stream.forEach(x -> {
+				GDeletedProjectPayload projectPayload = new GDeletedProjectPayload();
+				projectPayload.setProject(x);
+				this.sendDeletingPayloadToResourceDisposeComponents(projectPayload);
+			});
+		}
 		this.sendDeletingPayloadToCoreMongoDocuments(payload);
 		this.sendDeletingPayloadToStoreDisposers(payload);
 		projectsRepo.deleteByRootKnowledgeBaseCode(payload.getKnowledgeBase().getCode());

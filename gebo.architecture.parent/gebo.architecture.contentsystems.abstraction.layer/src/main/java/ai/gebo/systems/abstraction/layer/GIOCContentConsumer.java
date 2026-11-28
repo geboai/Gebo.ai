@@ -3,6 +3,7 @@ package ai.gebo.systems.abstraction.layer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -44,6 +45,7 @@ import ai.gebo.model.base.GBaseVersionableObject;
 import ai.gebo.systems.abstraction.layer.IGContentDispatchingEvaluator.SendEvaluationPolicy;
 import ai.gebo.systems.abstraction.layer.IGDocumentReferenceEnricherMapFactory.EnricherMappers;
 import ai.gebo.systems.abstraction.layer.model.ContentHandshakeData;
+import ai.gebo.systems.abstraction.layer.model.ContentsAccessError;
 
 /********************************************************************************************************************
  * Consumer that implements the IOC on the infrastructure via content system
@@ -146,6 +148,9 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			// handed over live after being reported deleted in this session: it is there
 			deletedBySource.remove(docref.getCode());
 			batchDocumentInput++;
+			// a document this session already met (the same code): it was sent to the
+			// ingestion at its first arrival, this one is input the session discards
+			boolean alreadyMet = false;
 			if (docref.getCode() != null) {
 				if (!docsCounters.containsKey(docref.getCode())) {
 					docsCounters.put(docref.getCode(), 1);
@@ -153,12 +158,15 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 					Integer count = docsCounters.get(docref.getCode());
 					count = count.intValue() + 1;
 					docsCounters.put(docref.getCode(), count);
-					LOGGER.warn("Duplicated code:" + docref.getCode() + " count=" + count);
+					alreadyMet = true;
+					LOGGER.warn("Duplicated code:" + docref.getCode() + " count=" + count
+							+ ", not sent to the ingestion again");
 				}
 			}
 
 			// skipped vectorization contents are not sent to vectorization or indexing
-			if (docref.getSkippedVectorizationContent() == null || !docref.getSkippedVectorizationContent()) {
+			if (!alreadyMet && (docref.getSkippedVectorizationContent() == null
+					|| !docref.getSkippedVectorizationContent())) {
 				try {
 
 					boolean forwardIngestionHandling = evaluator.isProcessable(evaluationPolicy, docref, handler,
@@ -268,13 +276,13 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			}
 		}
 		if (checksWhatWasNotMet && !errorConsumer.hasErrors()) {
-			try {
-				Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
-						.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
-								endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode());
-				Stream<GVirtualFolder> foltersToCheckStream = virtualFolderRepository
-						.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
-								endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode());
+			// both streams are closed when the check is done: each holds an open cursor
+			try (Stream<GDocumentReference> documentsToCheckStream = documentReferenceRepository
+					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
+							endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode());
+					Stream<GVirtualFolder> foltersToCheckStream = virtualFolderRepository
+							.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCodeAndDeletedFalseAndLastesJobIdNot(
+									endpoint.getClass().getName(), endpoint.getCode(), jobStatus.getCode())) {
 				Stream<GAbstractVirtualFilesystemObject> documents = documentsToCheckStream.map(x -> x);
 				Stream<GAbstractVirtualFilesystemObject> folders = foltersToCheckStream.map(x -> x);
 				Stream<GAbstractVirtualFilesystemObject> updated = handler.checkUpdatedOrDeleted(endpoint,
@@ -318,7 +326,11 @@ class GIOCContentConsumer<SystemIntegrationType extends GContentManagementSystem
 			payload.setWorkflowId(jobStatus.getWorkflowId());
 			payload.setWorkflowStepId(GStandardWorkflowStep.DOCUMENT_DISCOVERY.name());
 			payload.setBatchDocumentsInput(batchDocumentInput);
-			payload.setBatchDocumentsProcessingErrors(batchDocumentsProcessingErrors);
+			// what could not be read is among the errors of the session, so the job shows
+			// them; the earlier stats messages never carry these, they are counted once here
+			final List<ContentsAccessError> accessErrors = errorConsumer.getErrors();
+			payload.setBatchDocumentsProcessingErrors(
+					batchDocumentsProcessingErrors + (accessErrors != null ? accessErrors.size() : 0));
 			payload.setBatchDocumentsProcessed(batchDocumentsProcessed);
 			payload.setBatchSentToNextStep(batchSentToNextStep);
 			payload.setBatchDiscardedInput(batchDiscardedInput);

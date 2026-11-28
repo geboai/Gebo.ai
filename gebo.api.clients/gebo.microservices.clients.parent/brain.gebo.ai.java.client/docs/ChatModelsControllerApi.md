@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**applyModelsMetadataInputModalities**](ChatModelsControllerApi.md#applyModelsMetadataInputModalities) | **POST** /api/admin/ChatModelsController/applyModelsMetadataInputModalities | 
 [**getCarriedMediaTypes**](ChatModelsControllerApi.md#getCarriedMediaTypes) | **GET** /api/admin/ChatModelsController/getCarriedMediaTypes | 
+[**getChatModelParametersSupport**](ChatModelsControllerApi.md#getChatModelParametersSupport) | **POST** /api/admin/ChatModelsController/getChatModelParametersSupport | What a chat model takes of temperature, top_p and thinking, as its integration sends them
 [**getChatModelTypes**](ChatModelsControllerApi.md#getChatModelTypes) | **GET** /api/admin/ChatModelsController/getChatModelTypes | 
 [**getChatModelsInputs**](ChatModelsControllerApi.md#getChatModelsInputs) | **GET** /api/admin/ChatModelsController/getChatModelsInputs | 
 [**getFileKindsSentToModels**](ChatModelsControllerApi.md#getFileKindsSentToModels) | **GET** /api/admin/ChatModelsController/getFileKindsSentToModels | 
@@ -93,6 +94,49 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getChatModelParametersSupport"></a>
+# **getChatModelParametersSupport**
+> GChatModelParametersSupport getChatModelParametersSupport(body)
+
+What a chat model takes of temperature, top_p and thinking, as its integration sends them
+
+### Example
+```java
+// Import classes:
+//import gebo.microservices.api.client.brain.invoker.ApiException;
+//import gebo.microservices.api.client.brain.api.ChatModelsControllerApi;
+
+
+ChatModelsControllerApi apiInstance = new ChatModelsControllerApi();
+GChatModelParametersSupportRequest body = new GChatModelParametersSupportRequest(); // GChatModelParametersSupportRequest | 
+try {
+    GChatModelParametersSupport result = apiInstance.getChatModelParametersSupport(body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling ChatModelsControllerApi#getChatModelParametersSupport");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **body** | [**GChatModelParametersSupportRequest**](GChatModelParametersSupportRequest.md)|  |
+
+### Return type
+
+[**GChatModelParametersSupport**](GChatModelParametersSupport.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="getChatModelTypes"></a>

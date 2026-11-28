@@ -16,13 +16,13 @@ import { SortObject } from './sortObject';
 export interface PageGUserSession { 
     totalPages?: number;
     totalElements?: number;
-    pageable?: PageableObject;
-    sort?: SortObject;
-    first?: boolean;
-    last?: boolean;
-    number?: number;
-    numberOfElements?: number;
     size?: number;
     content?: Array<GUserSession>;
+    number?: number;
+    sort?: SortObject;
+    pageable?: PageableObject;
+    numberOfElements?: number;
+    first?: boolean;
+    last?: boolean;
     empty?: boolean;
 }

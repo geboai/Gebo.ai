@@ -2,7 +2,6 @@ package ai.gebo.workflows.compute.service.impl;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -101,14 +100,14 @@ class DeletedJobWorkflowStatusTest {
 
 		assertDoesNotThrow(() -> factory.create().accept(envelope));
 		verify(binder, never()).getImplementationOf(IGMessageBroker.class);
+		verify(binder, never()).getImplementationOf(GWorkflowJobCloser.class);
 		verifyNoInteractions(envelopes);
 	}
 
 	@Test
 	void aJobDeletedWhileProcessingDoesNotStopTheOthersFromBeingClosed() throws Exception {
-		IGPersistentObjectManager persistence = mock(IGPersistentObjectManager.class);
 		JobStatusRepository jobs = mock(JobStatusRepository.class);
-		WorkflowStatusEmitter emitter = mock(WorkflowStatusEmitter.class);
+		GWorkflowJobCloser closer = mock(GWorkflowJobCloser.class);
 		IWorkflowStatusHandlerRepositoryPattern handlers = mock(IWorkflowStatusHandlerRepositoryPattern.class);
 		IWorkflowStatusHandler handler = mock(IWorkflowStatusHandler.class);
 		when(handlers.findByWorkflowsTypeAndWorkflowId(GWorkflowType.STANDARD, WORKFLOW_ID))
@@ -124,18 +123,12 @@ class DeletedJobWorkflowStatusTest {
 		done.setFinished(true);
 		done.setRootStatus(root);
 		when(handler.computeWorkflowStatus("finished-job", WORKFLOW_TYPE, WORKFLOW_ID)).thenReturn(done);
-		GJobStatus finishedJob = new GJobStatus();
-		finishedJob.setCode("finished-job");
-		finishedJob.setProcessing(true);
-		when(persistence.findById(GJobStatus.class, "finished-job")).thenReturn(finishedJob);
-		when(persistence.update(any(GJobStatus.class))).thenAnswer(invocation -> invocation.getArgument(0));
 		when(jobs.findByProcessingTrue()).thenReturn(Stream.of(deleted, finished));
 
-		new GWorkflowStatusDeamonServiceImpl(persistence, jobs, emitter, handlers).checkJobsStatus();
+		new GWorkflowStatusDeamonServiceImpl(jobs, closer, handlers).checkJobsStatus();
 
-		verify(persistence).update(finishedJob);
-		verify(emitter).broadcastEnded(finishedJob);
-		verify(persistence, never()).findById(GJobStatus.class, "deleted-job");
+		verify(closer).closeAndBroadcastEnded("finished-job");
+		verify(closer, never()).closeAndBroadcastEnded("deleted-job");
 	}
 
 	private static GJobStatusItem processing(String code) {

@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost:13999*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**abandon1**](WaitingConditionsAdminControllerApi.md#abandon1) | **POST** /api/admin/WaitingConditionsAdminController/abandon | 
+[**adminAbandon**](WaitingConditionsAdminControllerApi.md#adminAbandon) | **POST** /api/admin/WaitingConditionsAdminController/abandon | 
+[**adminGoOnWithout**](WaitingConditionsAdminControllerApi.md#adminGoOnWithout) | **POST** /api/admin/WaitingConditionsAdminController/goOnWithout | 
 [**allWaitingConditions**](WaitingConditionsAdminControllerApi.md#allWaitingConditions) | **GET** /api/admin/WaitingConditionsAdminController/allWaitingConditions | 
-[**goOnWithout1**](WaitingConditionsAdminControllerApi.md#goOnWithout1) | **POST** /api/admin/WaitingConditionsAdminController/goOnWithout | 
 
-<a name="abandon1"></a>
-# **abandon1**
-> WaitingConditionsActionAck abandon1(blockCode)
+<a name="adminAbandon"></a>
+# **adminAbandon**
+> WaitingConditionsActionAck adminAbandon(blockCode)
 
 
 
@@ -24,10 +24,10 @@ Method | HTTP request | Description
 WaitingConditionsAdminControllerApi apiInstance = new WaitingConditionsAdminControllerApi();
 String blockCode = "blockCode_example"; // String | 
 try {
-    WaitingConditionsActionAck result = apiInstance.abandon1(blockCode);
+    WaitingConditionsActionAck result = apiInstance.adminAbandon(blockCode);
     System.out.println(result);
 } catch (ApiException e) {
-    System.err.println("Exception when calling WaitingConditionsAdminControllerApi#abandon1");
+    System.err.println("Exception when calling WaitingConditionsAdminControllerApi#adminAbandon");
     e.printStackTrace();
 }
 ```
@@ -49,6 +49,51 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="adminGoOnWithout"></a>
+# **adminGoOnWithout**
+> WaitingConditionsActionAck adminGoOnWithout(blockCode, body)
+
+
+
+### Example
+```java
+// Import classes:
+//import ai.gebo.monolithic.api.client.invoker.ApiException;
+//import ai.gebo.monolithic.api.client.api.WaitingConditionsAdminControllerApi;
+
+
+WaitingConditionsAdminControllerApi apiInstance = new WaitingConditionsAdminControllerApi();
+String blockCode = "blockCode_example"; // String | 
+List<String> body = Arrays.asList("body_example"); // List<String> | 
+try {
+    WaitingConditionsActionAck result = apiInstance.adminGoOnWithout(blockCode, body);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling WaitingConditionsAdminControllerApi#adminGoOnWithout");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **blockCode** | **String**|  |
+ **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
+
+### Return type
+
+[**WaitingConditionsActionAck**](WaitingConditionsActionAck.md)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
  - **Accept**: application/json
 
 <a name="allWaitingConditions"></a>
@@ -88,50 +133,5 @@ No authorization required
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
-
-<a name="goOnWithout1"></a>
-# **goOnWithout1**
-> WaitingConditionsActionAck goOnWithout1(blockCode, body)
-
-
-
-### Example
-```java
-// Import classes:
-//import ai.gebo.monolithic.api.client.invoker.ApiException;
-//import ai.gebo.monolithic.api.client.api.WaitingConditionsAdminControllerApi;
-
-
-WaitingConditionsAdminControllerApi apiInstance = new WaitingConditionsAdminControllerApi();
-String blockCode = "blockCode_example"; // String | 
-List<String> body = Arrays.asList("body_example"); // List<String> | 
-try {
-    WaitingConditionsActionAck result = apiInstance.goOnWithout1(blockCode, body);
-    System.out.println(result);
-} catch (ApiException e) {
-    System.err.println("Exception when calling WaitingConditionsAdminControllerApi#goOnWithout1");
-    e.printStackTrace();
-}
-```
-
-### Parameters
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **blockCode** | **String**|  |
- **body** | [**List&lt;String&gt;**](String.md)|  | [optional]
-
-### Return type
-
-[**WaitingConditionsActionAck**](WaitingConditionsActionAck.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
- - **Content-Type**: application/json
  - **Accept**: application/json
 

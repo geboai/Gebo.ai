@@ -11,7 +11,7 @@
  */
 
 export interface SortObject { 
-    sorted?: boolean;
     empty?: boolean;
+    sorted?: boolean;
     unsorted?: boolean;
 }

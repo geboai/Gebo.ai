@@ -63,13 +63,13 @@ export class WaitingConditionsAdminControllerService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public abandon1(blockCode: string, observe?: 'body', reportProgress?: boolean): Observable<WaitingConditionsActionAck>;
-    public abandon1(blockCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WaitingConditionsActionAck>>;
-    public abandon1(blockCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WaitingConditionsActionAck>>;
-    public abandon1(blockCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public adminAbandon(blockCode: string, observe?: 'body', reportProgress?: boolean): Observable<WaitingConditionsActionAck>;
+    public adminAbandon(blockCode: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WaitingConditionsActionAck>>;
+    public adminAbandon(blockCode: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WaitingConditionsActionAck>>;
+    public adminAbandon(blockCode: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
         if (blockCode === null || blockCode === undefined) {
-            throw new Error('Required parameter blockCode was null or undefined when calling abandon1.');
+            throw new Error('Required parameter blockCode was null or undefined when calling adminAbandon.');
         }
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -94,6 +94,61 @@ export class WaitingConditionsAdminControllerService {
 
         return this.httpClient.request<WaitingConditionsActionAck>('post',`${this.basePath}/api/admin/WaitingConditionsAdminController/abandon`,
             {
+                params: queryParameters,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * 
+     * 
+     * @param blockCode 
+     * @param body 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public adminGoOnWithout(blockCode: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<WaitingConditionsActionAck>;
+    public adminGoOnWithout(blockCode: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WaitingConditionsActionAck>>;
+    public adminGoOnWithout(blockCode: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WaitingConditionsActionAck>>;
+    public adminGoOnWithout(blockCode: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+
+        if (blockCode === null || blockCode === undefined) {
+            throw new Error('Required parameter blockCode was null or undefined when calling adminGoOnWithout.');
+        }
+
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (blockCode !== undefined && blockCode !== null) {
+            queryParameters = queryParameters.set('blockCode', <any>blockCode);
+        }
+
+        let headers = this.defaultHeaders;
+
+        // to determine the Accept header
+        let httpHeaderAccepts: string[] = [
+            'application/json'
+        ];
+        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        if (httpHeaderAcceptSelected != undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected != undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
+        return this.httpClient.request<WaitingConditionsActionAck>('post',`${this.basePath}/api/admin/WaitingConditionsAdminController/goOnWithout`,
+            {
+                body: body,
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
@@ -131,61 +186,6 @@ export class WaitingConditionsAdminControllerService {
 
         return this.httpClient.request<Array<WaitingBlockView>>('get',`${this.basePath}/api/admin/WaitingConditionsAdminController/allWaitingConditions`,
             {
-                withCredentials: this.configuration.withCredentials,
-                headers: headers,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * 
-     * 
-     * @param blockCode 
-     * @param body 
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public goOnWithout1(blockCode: string, body?: Array<string>, observe?: 'body', reportProgress?: boolean): Observable<WaitingConditionsActionAck>;
-    public goOnWithout1(blockCode: string, body?: Array<string>, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<WaitingConditionsActionAck>>;
-    public goOnWithout1(blockCode: string, body?: Array<string>, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<WaitingConditionsActionAck>>;
-    public goOnWithout1(blockCode: string, body?: Array<string>, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
-
-        if (blockCode === null || blockCode === undefined) {
-            throw new Error('Required parameter blockCode was null or undefined when calling goOnWithout1.');
-        }
-
-
-        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
-        if (blockCode !== undefined && blockCode !== null) {
-            queryParameters = queryParameters.set('blockCode', <any>blockCode);
-        }
-
-        let headers = this.defaultHeaders;
-
-        // to determine the Accept header
-        let httpHeaderAccepts: string[] = [
-            'application/json'
-        ];
-        const httpHeaderAcceptSelected: string | undefined = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        if (httpHeaderAcceptSelected != undefined) {
-            headers = headers.set('Accept', httpHeaderAcceptSelected);
-        }
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'application/json'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected != undefined) {
-            headers = headers.set('Content-Type', httpContentTypeSelected);
-        }
-
-        return this.httpClient.request<WaitingConditionsActionAck>('post',`${this.basePath}/api/admin/WaitingConditionsAdminController/goOnWithout`,
-            {
-                body: body,
-                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,

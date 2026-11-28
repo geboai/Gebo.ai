@@ -3,10 +3,15 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { GWebdavContentManagementSystem, SecretInfo, SecretsControllerService, WebdavSystemsControllerService } from "@Gebo.ai/gebo-ai-rest-api";
 import { BaseEntityEditingComponent, GEBO_AI_FIELD_HOST, GEBO_AI_MODULE, GeboFormGroupsService, GeboUIActionRoutingService, GeboUIOutputForwardingService } from "@Gebo.ai/reusable-ui";
 import { ConfirmationService } from "@openng/optimus-ui/api";
-import { map, Observable, of } from "rxjs";
+import { forkJoin, map, Observable, of } from "rxjs";
 import { newSecretActionRequest } from "../utils/gebo-ai-create-secret-action-request-factory";
 
-const webdavCode: string = "webdab-cms-module";
+// the WebDAV system type code: the backend types the WebDAV systems with it and the
+// fast setup stores their secrets under it, so the identities are looked for there
+const webdavCode: string = "WEBDAB-CMS";
+// the identity context these editors used before: the identities created under it
+// stay listed
+const legacyWebdavIdentityContext: string = "webdab-cms-module";
 
 @Component({
     selector: "gebo-ai-webdav-admin-component",
@@ -36,7 +41,10 @@ export class GeboAIWebdavAdminComponent extends BaseEntityEditingComponent<GWebd
     });
 
     private actualIdentityContext: string = webdavCode;
-    public identitiesObservable: Observable<SecretInfo[]> = this.secretControllerService.getSecretsByContextCode(this.actualIdentityContext);
+    public identitiesObservable: Observable<SecretInfo[]> = forkJoin([
+        this.secretControllerService.getSecretsByContextCode(this.actualIdentityContext),
+        this.secretControllerService.getSecretsByContextCode(legacyWebdavIdentityContext)
+    ]).pipe(map(([current, legacy]) => [...(current ?? []), ...(legacy ?? []).filter(l => !(current ?? []).some(c => c.code === l.code))]));
 
     authTypes: { code: GWebdavContentManagementSystem.WebdavAuthTypeEnum, description: string }[] = [
         { code: "NONE", description: "No authentication" },

@@ -176,6 +176,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 				}
 			} catch (GeboContentHandlerSystemException exc) {
 				LOGGER.error("Exception while managing:" + path.toString(), exc);
+				errorConsumer.accept(ContentsAccessError.of(exc, null, path.toString()));
 			} catch (Throwable th) {
 				LOGGER.error("Untrappable Exception while managing:" + path.toString(), th);
 				errorConsumer.accept(ContentsAccessError.of(th, null, getMessagingModuleId()));
@@ -291,7 +292,7 @@ public abstract class GAbstractRemoteVirtualFilesystemConsumingService<SystemTyp
 			String msg = "Problem accessing remote system for "
 					+ describeProjectEndpoint(system, endpoint, environment);
 			LOGGER.error(msg, th);
-			messagesConsumer.accept(GUserMessage.errorMessage(msg, th));
+			// the error consumer tells it to whoever follows the job
 			errorConsumer.accept(ContentsAccessError.of(th, ContentsAccessedObjectType.FOLDER, position.toString()));
 			return;
 		}

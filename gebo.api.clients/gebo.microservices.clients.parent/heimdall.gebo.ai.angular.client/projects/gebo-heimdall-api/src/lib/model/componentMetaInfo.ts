@@ -12,8 +12,8 @@
 import { GDataFlowMetaInfos } from './gDataFlowMetaInfos';
 
 export interface ComponentMetaInfo { 
-    messagingSystemId?: string;
     messagingModuleId?: string;
+    messagingSystemId?: string;
     receiver?: boolean;
     emitter?: boolean;
     localSystem?: boolean;
