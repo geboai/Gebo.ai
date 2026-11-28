@@ -24,7 +24,7 @@ bitten once in this codebase's history (see the gotchas inline) — don't skip s
 ## 0. Preconditions
 
 - Docker daemon running (`docker version`).
-- Check host memory before starting: `free -h`. Building 21 Spring Boot modules while
+- Check host memory before starting: `free -h`. Building 25 Spring Boot modules while
   ~21+ containers are already running from a previous stack can OOM-kill the Maven
   process outright (seen in this codebase — `mvn clean install` was silently `kill`ed
   mid-reactor with no error, just a `status: killed` on the background task). If
@@ -58,7 +58,7 @@ immediately. `-P swagger-on` is equally load-bearing — without it, `gebo.archi
 (springdoc) is off the classpath, `/v3/api-docs` serves nothing, and every service in the
 doc below would show 0 controllers regardless of what's actually mapped.
 
-Expect ~5 minutes for all 21 modules.
+Expect ~5 minutes for all 25 modules.
 
 ## 3. Load images and bring the stack up
 
@@ -104,7 +104,7 @@ Port → service map (from `dockers/gebo.microservices/docker-compose.yml`):
 
 `gateway` and `eureka` never serve controllers — 0 paths is correct for both, not a
 failure (gateway is a pure proxy with no `@RestController`; eureka is the registry, not
-a `swagger-on` service). Poll only the other 22.
+a `swagger-on` service). Poll only the other 23.
 
 **Startup is slow under load, not stuck.** With 24 containers cold-starting on one host,
 individual JVMs have taken 150–300+ seconds to finish `Started XApplication in N seconds`

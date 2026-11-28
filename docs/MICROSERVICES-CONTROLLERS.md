@@ -6,6 +6,26 @@ Generated from each running microservice's live `/v3/api-docs` (springdoc), afte
 
 ### What changed this round
 
+Regenerated on 28 November 2026 from `feature/ticketing-systems-handlers-impl` (develop
+1.0.7.0-SNAPSHOT), every service built with `swagger-on` and run in four batches beside the
+infrastructure, `eureka`, `heimdall` and `gateway`, as in the round below. The specs of each
+batch were saved while it ran and the tables written from the saved copies.
+
+- **Four new ticketing content handlers**, each with 9 controllers and 46 endpoints:
+  `redmine` (13021), `glpi` (13022), `openproject` (13023) and `zammad` (13024). Their
+  controllers are the ones every remote content handler serves (browsing, systems, search
+  service, publishing, job launching, contents reset, document streaming, messaging
+  topology, form metadata), named after the product.
+- **`brain`: 499 → 500 endpoints**, controllers still 99: the sampling and reasoning
+  parameters each chat model accepts (`ChatModelsController.getChatModelParametersSupport`).
+- **`tyr`: 18 → 20 endpoints**, controllers still 10: the spreadsheet export of the LLM usage,
+  for administrators (`LLMSUsageAdminLevelController.exportExcel`) and for users
+  (`LLMSUsageUserLevelController.exportExcel`).
+
+The four services got their clients in the same pass (`<name>.gebo.ai.java.client` and
+`<name>.gebo.ai.angular.client`, registered in both aggregators). The clients of `brain` and
+`tyr` were not regenerated, so they still lack the three operations above.
+
 Regenerated on 25 November 2026 from `fix/audit-corrections` (develop 1.0.7.0-SNAPSHOT), every
 service built with `swagger-on` and run in four batches beside the infrastructure, `eureka` and
 `heimdall`, rather than all together. `brain` goes from 490 to 499 endpoints, its
@@ -62,7 +82,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 | Service | Port | Context-path | Controllers | Endpoints |
 |---|---|---|---|---|
 | gateway.gebo.ai | 13000 | `—` | 1 | 1 |
-| brain.gebo.ai | 13001 | `/brain` | 99 | 499 |
+| brain.gebo.ai | 13001 | `/brain` | 99 | 500 |
 | vectorizator.gebo.ai | 13002 | `/vectorizator` | 3 | 6 |
 | graphicator.gebo.ai | 13003 | `/graphicator` | 3 | 13 |
 | chunker.gebo.ai | 13004 | `/chunker` | 5 | 17 |
@@ -80,8 +100,12 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 | fulltextor.gebo.ai | 13016 | `/fulltextor` | 2 | 4 |
 | eureka.gebo.ai | 13017 | `—` | 0 | 0 |
 | heimdall.gebo.ai | 13018 | `/heimdall` | 25 | 102 |
-| tyr.gebo.ai | 13019 | `/tyr` | 10 | 18 |
+| tyr.gebo.ai | 13019 | `/tyr` | 10 | 20 |
 | webdav.gebo.ai | 13020 | `/webdav` | 8 | 29 |
+| redmine.gebo.ai | 13021 | `/redmine` | 9 | 46 |
+| glpi.gebo.ai | 13022 | `/glpi` | 9 | 46 |
+| openproject.gebo.ai | 13023 | `/openproject` | 9 | 46 |
+| zammad.gebo.ai | 13024 | `/zammad` | 9 | 46 |
 
 
 ## gateway.gebo.ai — port 13000 (`gateway-gebo-ai`)
@@ -96,7 +120,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 
 ## brain.gebo.ai — port 13001 (`brain-gebo-ai`) — context-path `/brain`
 
-99 controller(s), 499 endpoint(s):
+99 controller(s), 500 endpoint(s):
 
 
 ### `a-2-a-client-config-controller`
@@ -203,6 +227,7 @@ the same pass. Only brain, heimdall and tyr changed beyond the generation dates 
 |---|---|---|
 | POST | `/brain/api/admin/ChatModelsController/applyModelsMetadataInputModalities` | applyModelsMetadataInputModalities |
 | GET | `/brain/api/admin/ChatModelsController/getCarriedMediaTypes` | getCarriedMediaTypes |
+| POST | `/brain/api/admin/ChatModelsController/getChatModelParametersSupport` | getChatModelParametersSupport |
 | GET | `/brain/api/admin/ChatModelsController/getChatModelTypes` | getChatModelTypes |
 | GET | `/brain/api/admin/ChatModelsController/getChatModelsInputs` | getChatModelsInputs |
 | GET | `/brain/api/admin/ChatModelsController/getFileKindsSentToModels` | getFileKindsSentToModels |
@@ -2117,7 +2142,7 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 
 ## tyr.gebo.ai — port 13019 (`tyr-gebo-ai`) — context-path `/tyr`
 
-10 controller(s), 18 endpoint(s):
+10 controller(s), 20 endpoint(s):
 
 
 ### `gebo-angular-form-group-meta-info-controller`
@@ -2155,11 +2180,13 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/tyr/api/admin/LLMSUsageAdminLevelController/drillDown` | adminDrillDown |
+| POST | `/tyr/api/admin/LLMSUsageAdminLevelController/exportExcel` | adminExportExcel |
 
 ### `llms-usage-user-level-controller`
 | Method | Path | Operation |
 |---|---|---|
 | POST | `/tyr/api/users/LLMSUsageUserLevelController/drillDown` | userDrillDown |
+| POST | `/tyr/api/users/LLMSUsageUserLevelController/exportExcel` | userExportExcel |
 
 ### `reindexing-frequency-options-controller`
 | Method | Path | Operation |
@@ -2243,3 +2270,351 @@ _The Eureka **registry** itself; it is not a `swagger-on` service and exposes no
 | POST | `/webdav/api/admin/WebdavSystemsController/testWebdavSystem` | testWebdavSystem |
 | POST | `/webdav/api/admin/WebdavSystemsController/updateWebdavEndpoint` | updateWebdavEndpoint |
 | POST | `/webdav/api/admin/WebdavSystemsController/updateWebdavSystem` | updateWebdavSystem |
+
+## redmine.gebo.ai — port 13021 (`redmine-gebo-ai`) — context-path `/redmine`
+
+9 controller(s), 46 endpoint(s):
+
+
+### `contents-reset-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+
+### `document-content-streamer-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/redmine/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/redmine/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/redmine/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
+### `generical-publisher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/redmine/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
+### `job-launcher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/redmine/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/redmine/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/redmine/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+### `redmine-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/admin/RedmineBrowsingController/browseRedminePath` | browseRedminePath |
+| POST | `/redmine/api/admin/RedmineBrowsingController/getRedmineNavigationStatus` | getRedmineNavigationStatus |
+| GET | `/redmine/api/admin/RedmineBrowsingController/getRedmineRoots` | getRedmineRoots |
+
+### `redmine-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/users/RedmineSearchServiceController/aggregate` | restAggregateRedmine |
+| POST | `/redmine/api/users/RedmineSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapRedmine |
+| POST | `/redmine/api/users/RedmineSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/findSystemById` | restFindSystemByIdRedmine |
+| POST | `/redmine/api/users/RedmineSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getDescription` | restGetDescriptionRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getId` | restGetIdRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getProductId` | restGetProductIdRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/getSearchableSystems` | restGetSearchableSystemsRedmine |
+| GET | `/redmine/api/users/RedmineSearchServiceController/isEnabled` | restIsEnabledRedmine |
+| POST | `/redmine/api/users/RedmineSearchServiceController/nativeSearch` | restNativeSearchRedmine |
+| POST | `/redmine/api/users/RedmineSearchServiceController/search` | restSearchRedmine |
+
+### `redmine-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/redmine/api/admin/RedmineSystemsController/deleteRedmineEndpoint` | deleteRedmineEndpoint |
+| POST | `/redmine/api/admin/RedmineSystemsController/deleteRedmineSystem` | deleteRedmineSystem |
+| POST | `/redmine/api/admin/RedmineSystemsController/fastRedmineConfig` | fastRedmineConfig |
+| GET | `/redmine/api/admin/RedmineSystemsController/findRedmineEndpointByCode` | findRedmineEndpointByCode |
+| GET | `/redmine/api/admin/RedmineSystemsController/findRedmineEndpointsByProject` | findRedmineEndpointsByProject |
+| POST | `/redmine/api/admin/RedmineSystemsController/findRedmineEndpointsByQbe` | findRedmineEndpointsByQbe |
+| GET | `/redmine/api/admin/RedmineSystemsController/findRedmineSystemByCode` | findRedmineSystemByCode |
+| GET | `/redmine/api/admin/RedmineSystemsController/getRedmineSystemType` | getRedmineSystemType |
+| GET | `/redmine/api/admin/RedmineSystemsController/getRedmineSystems` | getRedmineSystems |
+| POST | `/redmine/api/admin/RedmineSystemsController/insertRedmineEndpoint` | insertRedmineEndpoint |
+| POST | `/redmine/api/admin/RedmineSystemsController/insertRedmineSystem` | insertRedmineSystem |
+| POST | `/redmine/api/admin/RedmineSystemsController/publishRedmineEndpoint` | publishRedmineEndpoint |
+| POST | `/redmine/api/admin/RedmineSystemsController/testRedmineSystem` | testRedmineSystem |
+| POST | `/redmine/api/admin/RedmineSystemsController/updateRedmineEndpoint` | updateRedmineEndpoint |
+| POST | `/redmine/api/admin/RedmineSystemsController/updateRedmineSystem` | updateRedmineSystem |
+
+## glpi.gebo.ai — port 13022 (`glpi-gebo-ai`) — context-path `/glpi`
+
+9 controller(s), 46 endpoint(s):
+
+
+### `contents-reset-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+
+### `document-content-streamer-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/glpi/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/glpi/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/glpi/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
+### `generical-publisher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+
+### `glpi-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/admin/GlpiBrowsingController/browseGlpiPath` | browseGlpiPath |
+| POST | `/glpi/api/admin/GlpiBrowsingController/getGlpiNavigationStatus` | getGlpiNavigationStatus |
+| GET | `/glpi/api/admin/GlpiBrowsingController/getGlpiRoots` | getGlpiRoots |
+
+### `glpi-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/users/GlpiSearchServiceController/aggregate` | restAggregateGlpi |
+| POST | `/glpi/api/users/GlpiSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapGlpi |
+| POST | `/glpi/api/users/GlpiSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/findSystemById` | restFindSystemByIdGlpi |
+| POST | `/glpi/api/users/GlpiSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getDescription` | restGetDescriptionGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getId` | restGetIdGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getProductId` | restGetProductIdGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/getSearchableSystems` | restGetSearchableSystemsGlpi |
+| GET | `/glpi/api/users/GlpiSearchServiceController/isEnabled` | restIsEnabledGlpi |
+| POST | `/glpi/api/users/GlpiSearchServiceController/nativeSearch` | restNativeSearchGlpi |
+| POST | `/glpi/api/users/GlpiSearchServiceController/search` | restSearchGlpi |
+
+### `glpi-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/glpi/api/admin/GlpiSystemsController/deleteGlpiEndpoint` | deleteGlpiEndpoint |
+| POST | `/glpi/api/admin/GlpiSystemsController/deleteGlpiSystem` | deleteGlpiSystem |
+| POST | `/glpi/api/admin/GlpiSystemsController/fastGlpiConfig` | fastGlpiConfig |
+| GET | `/glpi/api/admin/GlpiSystemsController/findGlpiEndpointsByCode` | findGlpiEndpointsByCode |
+| GET | `/glpi/api/admin/GlpiSystemsController/findGlpiEndpointsByProject` | findGlpiEndpointsByProject |
+| POST | `/glpi/api/admin/GlpiSystemsController/findGlpiEndpointsByQbe` | findGlpiEndpointsByQbe |
+| GET | `/glpi/api/admin/GlpiSystemsController/findGlpiSystemByCode` | findGlpiSystemByCode |
+| GET | `/glpi/api/admin/GlpiSystemsController/getGlpiSystemType` | getGlpiSystemType |
+| GET | `/glpi/api/admin/GlpiSystemsController/getGlpiSystems` | getGlpiSystems |
+| POST | `/glpi/api/admin/GlpiSystemsController/insertGlpiEndpoint` | insertGlpiEndpoint |
+| POST | `/glpi/api/admin/GlpiSystemsController/insertGlpiSystem` | insertGlpiSystem |
+| POST | `/glpi/api/admin/GlpiSystemsController/publishGlpiEndpoint` | publishGlpiEndpoint |
+| POST | `/glpi/api/admin/GlpiSystemsController/testGlpiSystem` | testGlpiSystem |
+| POST | `/glpi/api/admin/GlpiSystemsController/updateGlpiEndpoint` | updateGlpiEndpoint |
+| POST | `/glpi/api/admin/GlpiSystemsController/updateGlpiSystem` | updateGlpiSystem |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/glpi/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
+### `job-launcher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/glpi/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/glpi/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/glpi/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+## openproject.gebo.ai — port 13023 (`openproject-gebo-ai`) — context-path `/openproject`
+
+9 controller(s), 46 endpoint(s):
+
+
+### `contents-reset-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+
+### `document-content-streamer-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/openproject/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/openproject/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/openproject/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
+### `generical-publisher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/openproject/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
+### `job-launcher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/openproject/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/openproject/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/openproject/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+### `open-project-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/admin/OpenProjectBrowsingController/browseOpenProjectPath` | browseOpenProjectPath |
+| POST | `/openproject/api/admin/OpenProjectBrowsingController/getOpenProjectNavigationStatus` | getOpenProjectNavigationStatus |
+| GET | `/openproject/api/admin/OpenProjectBrowsingController/getOpenProjectRoots` | getOpenProjectRoots |
+
+### `open-project-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/users/OpenProjectSearchServiceController/aggregate` | restAggregateOpenProject |
+| POST | `/openproject/api/users/OpenProjectSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapOpenProject |
+| POST | `/openproject/api/users/OpenProjectSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/findSystemById` | restFindSystemByIdOpenProject |
+| POST | `/openproject/api/users/OpenProjectSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getDescription` | restGetDescriptionOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getId` | restGetIdOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getProductId` | restGetProductIdOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/getSearchableSystems` | restGetSearchableSystemsOpenProject |
+| GET | `/openproject/api/users/OpenProjectSearchServiceController/isEnabled` | restIsEnabledOpenProject |
+| POST | `/openproject/api/users/OpenProjectSearchServiceController/nativeSearch` | restNativeSearchOpenProject |
+| POST | `/openproject/api/users/OpenProjectSearchServiceController/search` | restSearchOpenProject |
+
+### `open-project-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/openproject/api/admin/OpenProjectSystemsController/deleteOpenProjectEndpoint` | deleteOpenProjectEndpoint |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/deleteOpenProjectSystem` | deleteOpenProjectSystem |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/fastOpenProjectConfig` | fastOpenProjectConfig |
+| GET | `/openproject/api/admin/OpenProjectSystemsController/findOpenProjectEndpointByCode` | findOpenProjectEndpointByCode |
+| GET | `/openproject/api/admin/OpenProjectSystemsController/findOpenProjectEndpointsByProject` | findOpenProjectEndpointsByProject |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/findOpenProjectEndpointsByQbe` | findOpenProjectEndpointsByQbe |
+| GET | `/openproject/api/admin/OpenProjectSystemsController/findOpenProjectSystemByCode` | findOpenProjectSystemByCode |
+| GET | `/openproject/api/admin/OpenProjectSystemsController/getOpenProjectSystemType` | getOpenProjectSystemType |
+| GET | `/openproject/api/admin/OpenProjectSystemsController/getOpenProjectSystems` | getOpenProjectSystems |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/insertOpenProjectEndpoint` | insertOpenProjectEndpoint |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/insertOpenProjectSystem` | insertOpenProjectSystem |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/publishOpenProjectEndpoint` | publishOpenProjectEndpoint |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/testOpenProjectSystem` | testOpenProjectSystem |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/updateOpenProjectEndpoint` | updateOpenProjectEndpoint |
+| POST | `/openproject/api/admin/OpenProjectSystemsController/updateOpenProjectSystem` | updateOpenProjectSystem |
+
+## zammad.gebo.ai — port 13024 (`zammad-gebo-ai`) — context-path `/zammad`
+
+9 controller(s), 46 endpoint(s):
+
+
+### `contents-reset-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/admin/ContentsResetController/resetContentsIngestion` | resetContentsIngestion |
+
+### `document-content-streamer-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/users/DocumentContentStreamerController/streamDocumentReference` | streamDocumentReference |
+| POST | `/zammad/api/users/DocumentContentStreamerController/streamSearchResult` | streamSearchResult |
+
+### `gebo-angular-form-group-meta-info-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/admin/AngularFormGroupController/checkDeletableByGObjectRef` | checkDeletableByGObjectRef |
+| POST | `/zammad/api/admin/AngularFormGroupController/checkDeletableBySimpleGObjectRef` | checkDeletableBySimpleObjectRef |
+| GET | `/zammad/api/admin/AngularFormGroupController/getFormGroupsMetaInfos` | getFormGroupsMetaInfos |
+
+### `generical-publisher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/admin/GenericalPublisherController/publishCentralizedEndpoint` | publishCentralizedEndpoint |
+
+### `internal-messaging-topology-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/zammad/api/admin/InternalMessagingTopologyController/getLocalTopology` | getLocalTopology |
+
+### `job-launcher-controller`
+| Method | Path | Operation |
+|---|---|---|
+| GET | `/zammad/api/admin/JobLauncherController/abortJob` | abortJob |
+| POST | `/zammad/api/admin/JobLauncherController/createJob` | createJob |
+| POST | `/zammad/api/admin/JobLauncherController/getHasRunningJobs` | getHasRunningJobs |
+
+### `zammad-browsing-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/admin/ZammadBrowsingController/browseZammadPath` | browseZammadPath |
+| POST | `/zammad/api/admin/ZammadBrowsingController/getZammadNavigationStatus` | getZammadNavigationStatus |
+| GET | `/zammad/api/admin/ZammadBrowsingController/getZammadRoots` | getZammadRoots |
+
+### `zammad-search-service-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/users/ZammadSearchServiceController/aggregate` | restAggregateZammad |
+| POST | `/zammad/api/users/ZammadSearchServiceController/createCustomTemplateParamsMap` | restCreateCustomTemplateParamsMapZammad |
+| POST | `/zammad/api/users/ZammadSearchServiceController/extractRelatedAnalisysReferences` | restExtractRelatedAnalisysReferencesZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/findSystemById` | restFindSystemByIdZammad |
+| POST | `/zammad/api/users/ZammadSearchServiceController/findSystemBySearchResult` | restFindSystemBySearchResultZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getCachedCatalogues` | restGetCachedCataloguesZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getCataloguesListSample` | restGetCataloguesListSampleZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getDescription` | restGetDescriptionZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getId` | restGetIdZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getMessagingModuleId` | restGetMessagingModuleIdZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getNativePromptTemplateUseCode` | restGetNativePromptTemplateUseCodeZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getProductId` | restGetProductIdZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getQueriesGenerationPromptUseCode` | restGetQueriesGenerationPromptUseCodeZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/getSearchableSystems` | restGetSearchableSystemsZammad |
+| GET | `/zammad/api/users/ZammadSearchServiceController/isEnabled` | restIsEnabledZammad |
+| POST | `/zammad/api/users/ZammadSearchServiceController/nativeSearch` | restNativeSearchZammad |
+| POST | `/zammad/api/users/ZammadSearchServiceController/search` | restSearchZammad |
+
+### `zammad-systems-controller`
+| Method | Path | Operation |
+|---|---|---|
+| POST | `/zammad/api/admin/ZammadSystemsController/deleteZammadEndpoint` | deleteZammadEndpoint |
+| POST | `/zammad/api/admin/ZammadSystemsController/deleteZammadSystem` | deleteZammadSystem |
+| POST | `/zammad/api/admin/ZammadSystemsController/fastZammadConfig` | fastZammadConfig |
+| GET | `/zammad/api/admin/ZammadSystemsController/findZammadEndpointByCode` | findZammadEndpointByCode |
+| GET | `/zammad/api/admin/ZammadSystemsController/findZammadEndpointsByProject` | findZammadEndpointsByProject |
+| POST | `/zammad/api/admin/ZammadSystemsController/findZammadEndpointsByQbe` | findZammadEndpointsByQbe |
+| GET | `/zammad/api/admin/ZammadSystemsController/findZammadSystemByCode` | findZammadSystemByCode |
+| GET | `/zammad/api/admin/ZammadSystemsController/getZammadSystemType` | getZammadSystemType |
+| GET | `/zammad/api/admin/ZammadSystemsController/getZammadSystems` | getZammadSystems |
+| POST | `/zammad/api/admin/ZammadSystemsController/insertZammadEndpoint` | insertZammadEndpoint |
+| POST | `/zammad/api/admin/ZammadSystemsController/insertZammadSystem` | insertZammadSystem |
+| POST | `/zammad/api/admin/ZammadSystemsController/publishZammadEndpoint` | publishZammadEndpoint |
+| POST | `/zammad/api/admin/ZammadSystemsController/testZammadSystem` | testZammadSystem |
+| POST | `/zammad/api/admin/ZammadSystemsController/updateZammadEndpoint` | updateZammadEndpoint |
+| POST | `/zammad/api/admin/ZammadSystemsController/updateZammadSystem` | updateZammadSystem |
