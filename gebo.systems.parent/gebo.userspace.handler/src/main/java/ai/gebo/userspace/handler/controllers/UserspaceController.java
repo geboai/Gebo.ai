@@ -348,7 +348,8 @@ public class UserspaceController
 	 * @return List of file DTOs
 	 */
 	@PostMapping(value = "findUserspaceFileByCodes", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<UserspaceFileDto> findUserspaceFileByCodes(@NotNull @Valid @RequestBody List<String> codes) {
+	public List<UserspaceFileDto> findUserspaceFileByCodes(@NotNull @Valid @RequestBody List<String> codes)
+			throws GeboPersistenceException {
 		return userspaceService.findUserspaceFileByCodes(codes);
 	}
 

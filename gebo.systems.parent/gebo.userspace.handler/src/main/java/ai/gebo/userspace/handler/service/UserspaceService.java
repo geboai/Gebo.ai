@@ -259,6 +259,9 @@ public class UserspaceService {
 		GProject project = persistentObjectManager.findById(GProject.class, code);
 		if (project == null)
 			return null;
+		if (!isAccessible(project)) {
+			throw new RuntimeException("Cannot access this userspace");
+		}
 		UserspaceFolderDto folder = new UserspaceFolderDto();
 		folder.code = project.getCode();
 		folder.description = project.getDescription();
@@ -388,8 +391,7 @@ public class UserspaceService {
 	public List<UserspaceFileDto> listUserspaceFiles(String userspaceUploadCode)
 			throws GeboPersistenceException, GeboContentHandlerSystemException, IOException {
 
-		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
-				userspaceUploadCode);
+		GUserspaceProjectEndpoint endpoint = accessibleUploads(userspaceUploadCode, "Cannot access this userspace");
 		String folder = localFolderService.getLocalPersistentFolder(handler.getSystem(endpoint), endpoint);
 		final TreeMap<String, UserspaceFileDto> list = new TreeMap<String, UserspaceFileDto>();
 		final UserInfos user = securityService.getCurrentUser();
@@ -528,25 +530,36 @@ public class UserspaceService {
 	}
 
 	/**
-	 * The uploads data source of a folder the current user can publish: whoever can
+	 * The uploads data source of a folder the current user can access: whoever can
 	 * access its knowledge base, found from the data source itself and not from the
 	 * request.
+	 *
+	 * @param uploadCode the code of the folder's uploads data source
+	 * @param refusal    the message of the refusal
 	 */
-	private GUserspaceProjectEndpoint publishableUploads(UserspaceFolderDto folder) throws GeboPersistenceException {
-		final GUserspaceProjectEndpoint endpoint = folder.uploadCode != null
-				? persistentObjectManager.findById(GUserspaceProjectEndpoint.class, folder.uploadCode)
+	private GUserspaceProjectEndpoint accessibleUploads(String uploadCode, String refusal)
+			throws GeboPersistenceException {
+		final GUserspaceProjectEndpoint endpoint = uploadCode != null
+				? persistentObjectManager.findById(GUserspaceProjectEndpoint.class, uploadCode)
 				: null;
 		if (endpoint == null) {
 			throw new RuntimeException("The folder's uploads do not exist");
 		}
-		final GProject project = persistentObjectManager.findById(GProject.class, endpoint.getParentProjectCode());
-		final GKnowledgeBase knowledgebase = project != null
-				? persistentObjectManager.findById(GKnowledgeBase.class, project.getRootKnowledgeBaseCode())
-				: null;
-		if (knowledgebase == null || !securityService.isCanAccess(knowledgebase, false)) {
-			throw new RuntimeException("Cannot modify or upload on this knowledge base");
+		if (!isAccessible(persistentObjectManager.findById(GProject.class, endpoint.getParentProjectCode()))) {
+			throw new RuntimeException(refusal);
 		}
 		return endpoint;
+	}
+
+	/**
+	 * Whether the current user can access a userspace folder: they can access its
+	 * knowledge base (as listing the knowledge base's folders requires).
+	 */
+	private boolean isAccessible(GProject folder) throws GeboPersistenceException {
+		final GKnowledgeBase knowledgebase = folder != null && folder.getRootKnowledgeBaseCode() != null
+				? persistentObjectManager.findById(GKnowledgeBase.class, folder.getRootKnowledgeBaseCode())
+				: null;
+		return knowledgebase != null && securityService.isCanAccess(knowledgebase, false);
 	}
 
 	/**
@@ -558,7 +571,8 @@ public class UserspaceService {
 	 */
 
 	public PublishingStatus getPublishingStatus(UserspaceFolderDto folder) throws GeboPersistenceException {
-		GUserspaceProjectEndpoint endpoint = publishableUploads(folder);
+		GUserspaceProjectEndpoint endpoint = accessibleUploads(folder.uploadCode,
+				"Cannot modify or upload on this knowledge base");
 		boolean running = this.jobQueueService.isRunningSyncJob(endpoint);
 		PublishingStatus status = new PublishingStatus();
 		status.folder = folder;
@@ -576,7 +590,8 @@ public class UserspaceService {
 	 */
 
 	public OperationStatus<PublishingStatus> publishFolder(UserspaceFolderDto folder) throws GeboPersistenceException {
-		GUserspaceProjectEndpoint endpoint = publishableUploads(folder);
+		GUserspaceProjectEndpoint endpoint = accessibleUploads(folder.uploadCode,
+				"Cannot modify or upload on this knowledge base");
 		boolean running = this.jobQueueService.isRunningSyncJob(endpoint);
 		PublishingStatus status = new PublishingStatus();
 		status.folder = folder;
@@ -613,7 +628,7 @@ public class UserspaceService {
 	 * @return List of file DTOs
 	 */
 
-	public List<UserspaceFileDto> findUserspaceFileByCodes(List<String> codes) {
+	public List<UserspaceFileDto> findUserspaceFileByCodes(List<String> codes) throws GeboPersistenceException {
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		List<UserspaceFileDto> files = new ArrayList<UserspaceFileDto>();
@@ -636,6 +651,10 @@ public class UserspaceService {
 		if (!sameEndpoint.isEmpty()) {
 			List<GUserspaceProjectEndpoint> endpoints = endpointRepository.findAllById(sameEndpoint.keySet());
 			for (GUserspaceProjectEndpoint endpoint : endpoints) {
+				// only the files of the folders the user can access
+				if (!isAccessible(persistentObjectManager.findById(GProject.class, endpoint.getParentProjectCode()))) {
+					continue;
+				}
 				List<GDocumentReference> documentList = sameEndpoint.get(endpoint.getCode());
 				List<GUserspaceFile> uploadedFiles = filesRepository.findByUserspaceEndpointCode(endpoint.getCode());
 				for (GDocumentReference doc : documentList) {
