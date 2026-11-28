@@ -9,6 +9,7 @@
 
 package ai.gebo.ai.app.tests;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.ai.document.Document;
@@ -30,11 +32,17 @@ import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.utility.DockerImageName;
 import org.testcontainers.utility.MountableFile;
 
+import ai.gebo.knlowledgebase.model.contents.GDocumentReference;
+import ai.gebo.knlowledgebase.model.contents.GKnowledgeBase;
+import ai.gebo.knlowledgebase.model.projects.GProject;
 import ai.gebo.knlowledgebase.model.systems.GSystemRole;
+import ai.gebo.model.DocumentMetaInfos;
 import ai.gebo.model.virtualfs.VFilesystemReference;
 import ai.gebo.secrets.model.GeboTokenContent;
+import ai.gebo.systems.abstraction.layer.impl.repository.ContentHandshakeDataRepository;
 import ai.gebo.zammad.handler.GZammadProjectEndpoint;
 import ai.gebo.zammad.handler.GZammadSystem;
+import ai.gebo.zammad.handler.controllers.ZammadSystemsController;
 import ai.gebo.zammad.handler.impl.ZammadContentManagementHandlerImpl;
 import ai.gebo.zammad.handler.impl.ZammadNavigationUtil;
 import ai.gebo.zammad.handler.model.ZammadPathNodeType;
@@ -100,6 +108,12 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 	@Autowired
 	ZammadSystemRepository zammadSystemsRepository;
 
+	@Autowired
+	ZammadSystemsController zammadSystemsController;
+
+	@Autowired
+	ContentHandshakeDataRepository acknowledgements;
+
 	/**
 	 * The documents of the seeded data: in the support group the open ticket's
 	 * conversation and relay.log, the closed ticket's conversation; in the
@@ -163,7 +177,40 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			assertNotNull(zammadSystemsRepository.findById(system.getCode()).orElse(null),
 					"The Zammad system must still be resolvable after ingestion");
 
-			cleanPersistent(endpoint);
+			// deleted through its controller, as the admin UI does: the data source, its
+			// documents, their vectors and the acknowledgements of their ingestion all go
+			final List<String> codes;
+			try (Stream<GDocumentReference> documents = documentReferenceRepository
+					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(
+							endpoint.getClass().getName(), endpoint.getCode())) {
+				codes = documents.map(GDocumentReference::getCode).toList();
+			}
+			assertFalse(codes.isEmpty(), "the data source's documents");
+			zammadSystemsController.deleteZammadEndpoint(endpoint);
+			awaitDataSourceDeleted(endpoint, codes);
+			for (String code : codes) {
+				try (Stream<?> left = acknowledgements.findByContentCode(code)) {
+					assertEquals(0, left.count(), "no acknowledgement of " + code + " left");
+				}
+			}
+
+			// made again under the same name in the same project: the same code, and its
+			// contents, unchanged since, ingested again as never seen
+			GZammadProjectEndpoint again = new GZammadProjectEndpoint();
+			again.setDescription(endpoint.getDescription());
+			again.setParentProjectCode(endpoint.getParentProjectCode());
+			again.setZammadSystemCode(system.getCode());
+			again.setPaths(endpoint.getPaths());
+			again = persistentObjectManager.insert(again);
+			final GProject project = getProject(again);
+			enableWorkflowSteps(persistentObjectManager.findById(GKnowledgeBase.class,
+					project.getRootKnowledgeBaseCode()), project, again);
+			assertEquals(endpoint.getCode(), again.getCode(), "the data source made again has the same code");
+			runAndWaitDoneCheckingResults(again, EXPECTED_DOCUMENTS, true);
+			assertContains(awaitSettledVectorStoreContent(getTestVectorStore(), x -> false),
+					"Mails over 10MB bounce since Monday", "the open ticket, indexed again");
+
+			cleanPersistent(again);
 			persistentObjectManager.delete(system);
 			secretsAccessService.deleteSecret(secretId);
 		} finally {
@@ -173,6 +220,27 @@ public class ZammadIngestionIntegrationTest extends AbstractBaseTestLLmsIntegrat
 			REDIS.stop();
 			POSTGRES.stop();
 		}
+	}
+
+	/**
+	 * Waits for the deletion messages to have removed the data source, its documents
+	 * and their vectors.
+	 */
+	private void awaitDataSourceDeleted(GZammadProjectEndpoint endpoint, List<String> codes) throws Exception {
+		final long deadline = System.currentTimeMillis() + 60_000l;
+		boolean gone = false;
+		while (!gone && System.currentTimeMillis() < deadline) {
+			Thread.sleep(1000);
+			try (Stream<GDocumentReference> documents = documentReferenceRepository
+					.findByProjectEndpointReferenceClassNameAndProjectEndpointReferenceCode(
+							endpoint.getClass().getName(), endpoint.getCode())) {
+				gone = persistentObjectManager.findById(GZammadProjectEndpoint.class, endpoint.getCode()) == null
+						&& documents.findAny().isEmpty()
+						&& getTestVectorStore().getAllData().stream().noneMatch(x -> x.getMetadata() != null
+								&& codes.contains(x.getMetadata().get(DocumentMetaInfos.CONTENT_CODE)));
+			}
+		}
+		assertTrue(gone, "the data source, its documents and their vectors have to be deleted");
 	}
 
 	private static void assertContains(List<Document> stored, String text, String what) {

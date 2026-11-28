@@ -204,7 +204,8 @@ the WebDAV layout:
 <pkg>/model/                <X>NativePositionObject, <X>NavigationCoordinates, <X>PathComponent, <X>PathNodeType
 <pkg>/impl/                 handler impl, consuming impl, browsing service, navigation util, client factory,
                             systems DAO + dynamic source, endpoint DAO + dynamic source, seeder, test service,
-                            G<X>DefaultBeansConfig, G<X>ContentsDispatcherConfig, job trio
+                            G<X>DefaultBeansConfig, G<X>ContentsDispatcherConfig, job trio,
+                            G<X>ResourcesDisposerFactoryImpl
 <pkg>/controllers/          <X>SystemsController, <X>BrowsingController (+ <X>SearchServiceController)
 src/main/resources/<x>-prompts-library/<x>-library.yml   (+ en/*.txt when there is a search service)
 ```
@@ -387,6 +388,7 @@ public class <X>ContentManagementHandlerImpl extends
   - `<X>JobStatusReplicatorService extends AbstractJobStatusReplicatorService`
 
   In the monolith the `Monolithic*` trio takes over; copy the three Jira classes and change the constant.
+- **Resources disposer, mandatory:** `impl/G<X>ResourcesDisposerFactoryImpl extends GAbstractResourcesDisposerFactory<G<X>ProjectEndpoint>` (`@Component @Scope("singleton")`), constructor `(IGLocalPersistentFolderDiscoveryService, IG<X>ContentManagementSystemHandler, <X>ProjectEndpointRepository, JobStatusRepository, IGPersistentObjectManager)` passed to `super`, `getMessagingModuleId()` returning `<MODULE>`. It is the only receiver of a data source deletion (and of a project deletion) that removes the data source itself, its jobs and the ingestion acknowledgements of its contents: without it the delete answers 200 and the data source stays. A handler keeping no local files returns false from `isCanBeDisposedResources` and leaves `disposeResources` empty (copy `GZammadResourcesDisposerFactoryImpl`); one keeping files returns true and calls `disposeFileSystem` (copy `GSharepointResourcesDisposerFactoryImpl`). `DataSourceDeletionReceiversTest` in `gebo.ai.app` fails for a systems controller whose module has none.
 
 ### 2.9 Browsing service and controller
 - `<X>BrowsingContext implements IGVirtualFileSystemContext` (holds `systemCode`, `of(code)`).
@@ -643,7 +645,7 @@ Every visible string needs an `id` and a gebo-ai directive. The Jira `<p-tab>` t
 - [ ] entities + repositories · [ ] systems/datasources config · [ ] systems DAO + dynamic source · [ ] endpoint DAO + dynamic source
 - [ ] client factory (DAO lookups, every secret type) · [ ] test service
 - [ ] NavigationUtil + native/coordinates/path/resource model
-- [ ] consuming service (paging everywhere, streaming, meta infos) · [ ] handler · [ ] default beans · [ ] dispatcher · [ ] job trio
+- [ ] consuming service (paging everywhere, streaming, meta infos) · [ ] handler · [ ] default beans · [ ] dispatcher · [ ] job trio · [ ] resources disposer
 - [ ] browsing service + controller · [ ] systems controller (+ emitter, fast config, test, publish, declared guard)
 - [ ] seeder (+ test) · [ ] prompts library · [ ] search service + controller (opt.)
 - [ ] `GStandardModulesConstraints` (id + both lists) · [ ] systems parent pom · [ ] contentsystems.starter
