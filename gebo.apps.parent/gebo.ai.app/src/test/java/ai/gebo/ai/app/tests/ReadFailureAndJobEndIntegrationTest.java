@@ -135,8 +135,7 @@ public class ReadFailureAndJobEndIntegrationTest extends AbstractBaseTestLLmsInt
 
 			GDocumentReference behindTheLock = documentNamed(endpoint, "behind-the-lock.docx");
 			assertFalse(Boolean.TRUE.equals(behindTheLock.getDeleted()), "a file not read is not told deleted");
-			assertFalse(getTestVectorStore().getStoredForMetaAttributeAndValue(DocumentMetaInfos.CONTENT_CODE,
-					lockedCode).isEmpty(), "and its vectors stay");
+			assertFalse(vectorsOf(lockedCode).isEmpty(), "and its vectors stay");
 		} finally {
 			Files.setPosixFilePermissions(locked, PosixFilePermissions.fromString("rwxr-xr-x"));
 			cleanPersistent(endpoint);
@@ -204,8 +203,7 @@ public class ReadFailureAndJobEndIntegrationTest extends AbstractBaseTestLLmsInt
 	private List<Document> awaitVectors(String documentCode) throws InterruptedException {
 		List<Document> vectors = List.of();
 		for (int i = 0; i < 60 && vectors.isEmpty(); i++) {
-			vectors = getTestVectorStore().getStoredForMetaAttributeAndValue(DocumentMetaInfos.CONTENT_CODE,
-					documentCode);
+			vectors = vectorsOf(documentCode);
 			if (vectors.isEmpty()) {
 				Thread.sleep(1000);
 			}
@@ -213,9 +211,21 @@ public class ReadFailureAndJobEndIntegrationTest extends AbstractBaseTestLLmsInt
 		return vectors;
 	}
 
+	/**
+	 * The document's vectors in the test store, read from its data: its metadata
+	 * index keeps the vectors it deleted, so it would not show one gone.
+	 */
+	private List<Document> vectorsOf(String documentCode) {
+		return getTestVectorStore().getAllData().stream().filter(
+				x -> x.getMetadata() != null && documentCode.equals(x.getMetadata().get(DocumentMetaInfos.CONTENT_CODE)))
+				.toList();
+	}
+
 	private List<GUserMessage> awaitErrorMessages(String jobCode) throws InterruptedException {
 		List<GUserMessage> errors = List.of();
-		for (int i = 0; i < 20 && errors.isEmpty(); i++) {
+		// the jobs master stores the user messages in batches, flushed when its queue
+		// waits for a while: a message can take some tens of seconds to be stored
+		for (int i = 0; i < 60 && errors.isEmpty(); i++) {
 			errors = userMessageRepository.findByJobId(jobCode)
 					.filter(m -> m.getSeverity() == GUserMessage.MsgServerity.error).collect(Collectors.toList());
 			if (errors.isEmpty()) {
