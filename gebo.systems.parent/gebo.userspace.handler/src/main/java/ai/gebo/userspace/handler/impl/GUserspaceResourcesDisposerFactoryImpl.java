@@ -19,12 +19,13 @@ import ai.gebo.systems.abstraction.layer.GAbstractResourcesDisposerFactory;
 import ai.gebo.systems.abstraction.layer.IGLocalPersistentFolderDiscoveryService;
 import ai.gebo.userspace.handler.GUserspaceProjectEndpoint;
 import ai.gebo.userspace.handler.IGUserspaceContentManagementSystemHandler;
+import ai.gebo.userspace.handler.repository.UserspaceFileRepository;
 import ai.gebo.userspace.handler.repository.UserspaceProjectEndpointRepository;
 
 /**
  * Disposes what a deleted userspace data source leaves: its jobs, the ingestion
- * acknowledgements of its contents, the data source itself and the local folder
- * holding the files uploaded to it. A userspace knowledge base or folder deleted
+ * acknowledgements of its contents, the data source itself, the local folder
+ * holding the files uploaded to it and the records of those files. A userspace knowledge base or folder deleted
  * through the core (project or knowledge base deletion) reaches every module's
  * dispose component: without this one the userspace data sources were left behind.
  * The documents and stores are erased by the other receivers of the deletion.
@@ -33,12 +34,14 @@ import ai.gebo.userspace.handler.repository.UserspaceProjectEndpointRepository;
 @Scope("singleton")
 public class GUserspaceResourcesDisposerFactoryImpl
 		extends GAbstractResourcesDisposerFactory<GUserspaceProjectEndpoint> {
+	private final UserspaceFileRepository filesRepository;
 
 	public GUserspaceResourcesDisposerFactoryImpl(IGLocalPersistentFolderDiscoveryService persistenceFolderDiscoverer,
 			IGUserspaceContentManagementSystemHandler moduleHandler,
 			UserspaceProjectEndpointRepository endpointRepository, JobStatusRepository jobStatusRepo,
-			IGPersistentObjectManager persistentObjectManager) {
+			IGPersistentObjectManager persistentObjectManager, UserspaceFileRepository filesRepository) {
 		super(persistenceFolderDiscoverer, moduleHandler, endpointRepository, jobStatusRepo, persistentObjectManager);
+		this.filesRepository = filesRepository;
 	}
 
 	@Override
@@ -55,5 +58,10 @@ public class GUserspaceResourcesDisposerFactoryImpl
 	@Override
 	protected void disposeResources(GUserspaceProjectEndpoint endpoint, String contentManagementSystemCode) {
 		super.disposeFileSystem(endpoint, contentManagementSystemCode);
+		try {
+			filesRepository.deleteAll(filesRepository.findByUserspaceEndpointCode(endpoint.getCode()));
+		} catch (Throwable th) {
+			LOGGER.error("Problem deleting the uploaded files records of " + endpoint.getCode(), th);
+		}
 	}
 }

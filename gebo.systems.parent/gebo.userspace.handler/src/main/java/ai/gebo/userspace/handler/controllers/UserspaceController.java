@@ -148,7 +148,11 @@ public class UserspaceController
 	@PostMapping(value = "deleteUserKnowledgebase", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserKnowledgebase(@NotNull @Valid @RequestBody UserspaceKnowledgebaseDto object)
 			throws GeboPersistenceException {
-		userspaceService.deleteUserKnowledgebase(object);
+		final GKnowledgeBase knowledgeBase = userspaceService.ownedKnowledgebaseToDelete(object);
+		for (GProject folder : userspaceService.foldersOf(knowledgeBase.getCode())) {
+			deleteFolder(folder);
+		}
+		persistentObjectManager.delete(knowledgeBase);
 	}
 
 	/**
@@ -223,7 +227,31 @@ public class UserspaceController
 	@PostMapping(value = "deleteUserspaceFolder", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void deleteUserspaceFolder(@NotNull @Valid @RequestBody UserspaceFolderDto folderdto)
 			throws GeboPersistenceException {
-		userspaceService.deleteUserspaceFolder(folderdto);
+		deleteFolder(userspaceService.ownedFolderToDelete(folderdto));
+	}
+
+	/**
+	 * Deletes a folder: the data source of its uploads as any data source deletion
+	 * does (the deletion messages remove the data source, its documents and their
+	 * stores, its jobs, the acknowledgements of its ingestion and its local files),
+	 * then the folder itself.
+	 */
+	private void deleteFolder(GProject folder) throws GeboPersistenceException {
+		for (GUserspaceProjectEndpoint uploads : userspaceService.uploadsOf(folder.getCode())) {
+			deleteEndpoint(uploads);
+		}
+		persistentObjectManager.delete(folder);
+	}
+
+	/**
+	 * A userspace data source belongs to the person who made it: its owner may
+	 * delete it, as an administrator may.
+	 */
+	@Override
+	protected boolean isCurrentUserAllowedToDelete(GUserspaceProjectEndpoint endpoint) {
+		final UserInfos user = securityService.getCurrentUser();
+		return super.isCurrentUserAllowedToDelete(endpoint) || (user != null && endpoint.getUsername() != null
+				&& endpoint.getUsername().equals(user.getUsername()));
 	}
 
 	/**

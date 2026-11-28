@@ -183,22 +183,50 @@ public class UserspaceService {
 	}
 
 	/**
-	 * Deletes a user knowledgebase
+	 * The user's own knowledge base the DTO names, before its deletion: refused when it is not theirs.
 	 * 
 	 * @param object The knowledgebase DTO to delete
+	 * @return the knowledge base to delete
 	 * @throws GeboPersistenceException If there's an error deleting from the
 	 *                                  database
 	 */
 
-	public void deleteUserKnowledgebase(UserspaceKnowledgebaseDto object) throws GeboPersistenceException {
+	public GKnowledgeBase ownedKnowledgebaseToDelete(UserspaceKnowledgebaseDto object)
+			throws GeboPersistenceException {
 		final UserInfos user = securityService.getCurrentUser();
 		final String owner = user.getUsername();
 		if (object.code == null)
 			throw new RuntimeException("Cannot update an object not having a code");
 		GKnowledgeBase knowledgeBase = persistentObjectManager.findById(GKnowledgeBase.class, object.code);
+		if (knowledgeBase == null) {
+			throw new RuntimeException("Knowledge base does not exist");
+		}
 		if (!(knowledgeBase.getUsername() != null && knowledgeBase.getUsername().equals(owner))) {
 			throw new RuntimeException("Cannot update an object not owned");
 		}
+		return knowledgeBase;
+	}
+
+	/**
+	 * The folders of a userspace knowledge base.
+	 *
+	 * @param knowledgeBaseCode the knowledge base code
+	 * @return its folders
+	 */
+	public List<GProject> foldersOf(String knowledgeBaseCode) {
+		try (Stream<GProject> projects = projectRepository.findByRootKnowledgeBaseCode(knowledgeBaseCode)) {
+			return projects.toList();
+		}
+	}
+
+	/**
+	 * The data sources holding the uploads of a userspace folder.
+	 *
+	 * @param folderCode the folder (project) code
+	 * @return its upload data sources
+	 */
+	public List<GUserspaceProjectEndpoint> uploadsOf(String folderCode) {
+		return endpointRepository.findByParentProjectCode(folderCode);
 	}
 
 	/**
@@ -261,14 +289,15 @@ public class UserspaceService {
 	}
 
 	/**
-	 * Deletes a userspace folder
+	 * The folder the DTO names, before its deletion: refused when its knowledge base is not the user's or it is not in it.
 	 * 
 	 * @param folderdto The folder DTO to delete
+	 * @return the folder (project) to delete
 	 * @throws GeboPersistenceException If there's an error deleting from the
 	 *                                  database
 	 */
 
-	public void deleteUserspaceFolder(UserspaceFolderDto folderdto) throws GeboPersistenceException {
+	public GProject ownedFolderToDelete(UserspaceFolderDto folderdto) throws GeboPersistenceException {
 		if (folderdto.code == null || folderdto.uploadCode == null
 				|| folderdto.parentUserspaceKnowledgebaseCode == null) {
 			throw new RuntimeException("Folder with null code or uploadCode or parentUserspaceKnowledgebaseCode");
@@ -285,8 +314,12 @@ public class UserspaceService {
 			throw new RuntimeException("Cannot update an object not owned");
 		}
 		GProject pj = persistentObjectManager.findById(GProject.class, folderdto.code);
-		GUserspaceProjectEndpoint endpoint = persistentObjectManager.findById(GUserspaceProjectEndpoint.class,
-				folderdto.uploadCode);
+		// the folder has to be one of the user's own knowledge base: otherwise any
+		// folder could be named next to a knowledge base of one's own
+		if (pj == null || !folderdto.parentUserspaceKnowledgebaseCode.equals(pj.getRootKnowledgeBaseCode())) {
+			throw new RuntimeException("The folder is not in this knowledge base");
+		}
+		return pj;
 	}
 
 	/**
